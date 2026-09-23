@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.3 -->
+<!-- Nidus — Personal Qbank · v6.4 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -348,6 +348,25 @@ img{max-width:100%}
 
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* ---------- whole-screen changes (Motion.morph) ----------
+   A theme, palette or contrast change is composited rather than repainted:
+   the old screen and the new one are two snapshots, and the new one spreads
+   out from the point the finger touched. Without a touch point it is a plain
+   crossfade on the emphasized curve. */
+::view-transition-old(root),::view-transition-new(root){
+  animation-duration:var(--m3-dur-long);
+  animation-timing-function:var(--m3-ease-emphasized);
+}
+html.vt-reveal::view-transition-old(root){animation:none;z-index:0}
+html.vt-reveal::view-transition-new(root){
+  z-index:1;mix-blend-mode:normal;
+  animation:m3Reveal 560ms var(--m3-ease-emphasized) both;
+}
+@keyframes m3Reveal{
+  from{clip-path:circle(0 at var(--vt-x,50%) var(--vt-y,50%))}
+  to{clip-path:circle(var(--vt-r,150%) at var(--vt-x,50%) var(--vt-y,50%))}
 }
 
 /* ---------- 4. type scale ----------
@@ -958,20 +977,24 @@ input[type=checkbox]{
   transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
              border-color var(--m3-dur-medium) var(--m3-ease-standard);
 }
+/* The thumb is one 28px disc that is only ever moved and scaled. It used to
+   spring its width, height and left, and each of those re-laid-out the switch
+   on every frame of an overshooting spring — the thumb shimmered on its way
+   across. Centres and sizes are unchanged: 16px at 12px off, 24px at 34px,
+   28px while pressed. */
 input[type=checkbox]::before{
-  content:"";position:absolute;top:50%;left:4px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--md-outline);transform:translateY(-50%);
-  transition:width var(--m3-spatial) var(--m3-spring-expressive),
-             height var(--m3-spatial) var(--m3-spring-expressive),
-             left var(--m3-spatial) var(--m3-spring-expressive),
+  content:"";position:absolute;top:50%;left:-2px;
+  width:28px;height:28px;margin-top:-14px;border-radius:50%;
+  background:var(--md-outline);
+  transform:translateX(0) scale(.5714);
+  transition:transform var(--m3-spatial) var(--m3-spring-expressive),
              background-color var(--m3-dur-medium) var(--m3-ease-standard);
 }
 input[type=checkbox]:checked{
   background:var(--md-primary);border-color:var(--md-primary);
 }
 input[type=checkbox]:checked::before{
-  width:24px;height:24px;left:22px;background:var(--md-on-primary);
+  transform:translateX(22px) scale(.8571);background:var(--md-on-primary);
   -webkit-mask:none;mask:none;
 }
 input[type=checkbox]:checked::after{
@@ -980,8 +1003,12 @@ input[type=checkbox]:checked::after{
   background:var(--md-primary);
   -webkit-mask:var(--m3-check) center/16px 16px no-repeat;
           mask:var(--m3-check) center/16px 16px no-repeat;
+  /* the tick is placed with the thumb, not printed under it */
+  animation:m3Tick var(--m3-spatial) var(--m3-spring-expressive);
 }
-input[type=checkbox]:active::before{width:28px;height:28px}
+@keyframes m3Tick{from{scale:.3;opacity:0}to{scale:1;opacity:1}}
+input[type=checkbox]:active::before{transform:translateX(6px) scale(1);transition-duration:var(--m3-spatial-fast),var(--m3-dur-medium)}
+input[type=checkbox]:checked:active::before{transform:translateX(24px) scale(1)}
 input[type=checkbox]:disabled{opacity:.38;pointer-events:none}
 
 /* ---------- radio ---------- */
@@ -2012,8 +2039,13 @@ h3.sec > .ib{vertical-align:-3px}
 /* moving between peer destinations is a fade-through — the incoming screen
    grows the last few per cent into place. A 12px slide is a web reveal. */
 @keyframes m3FadeThrough{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+/* A destination is a whole screenful, and the fade-through's scale made the
+   browser re-rasterise every glyph in it on every frame — the same shimmer
+   the panes were cured of. It now arrives on opacity and a short lift, both
+   of which the compositor moves without repainting a single line of text. */
+@keyframes m3ViewIn{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:none}}
 
-.view.on{animation:m3FadeThrough var(--m3-dur-medium2) var(--m3-ease-emphasized-decel)}
+.view.on{animation:m3ViewIn var(--m3-dur-medium2) var(--m3-ease-emphasized-decel)}
 .player.on{animation:m3Fade var(--m3-dur-medium) var(--m3-ease-standard)}
 /* the player's own content rises under the fixed chrome, so the app bar and
    the action bar stay put while the reading column arrives */
@@ -2925,12 +2957,11 @@ body.hasmig{padding-bottom:64px}
 /* the ripple itself, spawned at the point of contact */
 .m3-ripple{
   position:absolute;border-radius:50%;pointer-events:none;z-index:2;
-  background:currentColor;opacity:var(--m3-state-press);transform:scale(0);
-  animation:m3RippleGrow 450ms var(--m3-ease-emphasized-decel) forwards;
+  background:currentColor;opacity:var(--m3-state-press);transform:scale(.14);
+  contain:strict;
+  /* grow and fade are driven by the motion engine (Motion.ripple) on the
+     compositor; the stylesheet only describes the disc itself */
 }
-.m3-ripple.fade{animation:m3RippleFade 200ms linear forwards}
-@keyframes m3RippleGrow{to{transform:scale(1)}}
-@keyframes m3RippleFade{to{opacity:0}}
 
 /* ============================================================
    MOTION POLISH
@@ -3862,7 +3893,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.3</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.4</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
       <div class="card">
         <div class="row" style="margin-bottom:14px">
           <span class="chip" id="syncChip">Off</span>
@@ -3900,7 +3931,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h3 class="sec">About Nidus</h3>
       <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       <div class="setsheet" style="margin-top:14px">
-        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.3 · sharded store</span></div></div>
+        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.4 · sharded store</span></div></div>
         <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
         <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
         <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
@@ -4420,6 +4451,341 @@ If the bank runs to more than a handful of items, or if the user asks for a file
 
 <script>
 /* ============================================================
+   NIDUS — the motion engine
+   ------------------------------------------------------------
+   Every moving thing in the app used to own its own clock. A
+   dialog, the player's tools menu and the overflow menu each
+   played a CSS exit and then removed their classes on a
+   hard-coded 150 ms timer, whatever the animation actually
+   lasted. On phones the dialog leaves as a bottom sheet over
+   250 ms, so the timer tore it off the screen at 60% of its
+   slide. The ripple read one reduced-motion flag at load time
+   and kept it forever. Sliders repainted the whole generated
+   palette on every input event, several times a frame.
+
+   One engine now, and everything that moves asks it:
+
+     Motion.leave(el)    play the exit, then clean up WHEN THE
+                         EXIT HAS ACTUALLY FINISHED — measured
+                         from the running animations, never
+                         guessed. Re-opening mid-exit cancels it.
+     Motion.cancel(el)   abandon a pending leave
+     Motion.frame(k,fn)  coalesce work to one run per frame
+     Motion.morph(fn)    run a whole-screen state change inside
+                         a view transition (theme, palette), with
+                         a circular reveal from the finger
+     Motion.pulse(el)    a small acknowledgement "bump"
+     Motion.ripple       the one touch ripple, for every surface
+     Motion.reduced      live, follows the OS setting as it moves
+
+   The durations and curves are not repeated here: they are
+   read from the same --m3-* tokens the stylesheet uses, so the
+   CSS and the script can never drift apart again.
+   ============================================================ */
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var now = function () { return (window.performance && performance.now) ? performance.now() : Date.now(); };
+
+  /* ---------- reduced motion, live ---------- */
+  var mqR = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var M = { reduced: !!(mqR && mqR.matches) };
+  function syncReduced() {
+    M.reduced = !!(mqR && mqR.matches);
+    root.classList.toggle('m-reduce', M.reduced);
+  }
+  syncReduced();
+  if (mqR) {
+    if (mqR.addEventListener) mqR.addEventListener('change', syncReduced);
+    else if (mqR.addListener) mqR.addListener(syncReduced);
+  }
+
+  /* ---------- tokens, read from the stylesheet ---------- */
+  var tokCache = {};
+  function token(name) {
+    if (tokCache[name] !== undefined) return tokCache[name];
+    var v = '';
+    try { v = getComputedStyle(root).getPropertyValue('--m3-' + name).trim(); } catch (e) {}
+    return (tokCache[name] = v);
+  }
+  M.ms = function (name, fallback) {
+    var v = token(name), n = parseFloat(v);
+    if (!v || isNaN(n)) return fallback || 0;
+    return /ms$/.test(v) ? n : n * 1000;
+  };
+  M.ease = function (name) {
+    return token(name) || 'cubic-bezier(.2,0,0,1)';
+  };
+
+  /* ---------- per-frame coalescing ---------- */
+  var queued = {}, order = [], raf = 0;
+  function flush() {
+    raf = 0;
+    var jobs = order; order = [];
+    var q = queued; queued = {};
+    for (var i = 0; i < jobs.length; i++) {
+      try { q[jobs[i]](); } catch (e) { setTimeout(function () { throw e; }); }
+    }
+  }
+  M.frame = function (key, fn) {
+    if (!queued[key]) order.push(key);
+    queued[key] = fn;
+    if (!raf) raf = requestAnimationFrame(flush);
+  };
+
+  /* ---------- waiting on what is really running ---------- */
+  function finite(a) {
+    try {
+      if (a.playState === 'finished' || a.playState === 'idle') return false;
+      var t = a.effect && a.effect.getComputedTiming();
+      return !!t && isFinite(t.endTime) && t.endTime > 0;
+    } catch (e) { return false; }
+  }
+  /* resolves once every finite animation and transition on the element and
+     inside it has played out; infinite loops (a pulsing sync dot inside a
+     dialog) are not waited on, and a cap guards against anything odd */
+  M.settle = function (el, fallback, cap) {
+    return new Promise(function (res) {
+      if (M.reduced || !el) return res();
+      if (!el.getAnimations) return setTimeout(res, fallback || 150);
+      var list;
+      try { list = el.getAnimations({ subtree: true }).filter(finite); } catch (e) { list = []; }
+      if (!list.length) return res();
+      var done = false, fin = function () { if (!done) { done = true; res(); } };
+      setTimeout(fin, cap || 900);
+      Promise.all(list.map(function (a) { return a.finished.catch(function () {}); })).then(fin);
+    });
+  };
+
+  M.cancel = function (el) { if (el) el.__mv = (el.__mv || 0) + 1; };
+  M.leaving = function (el) { return !!(el && el.__mvLeaving); };
+
+  /* play an exit and clean up after it. o.add: the class that plays the exit
+     (default "out"); o.drop: classes removed once it is over (default
+     on + out); o.done: called then. A later Motion.cancel() — which every
+     "open" does — makes the pending cleanup a no-op. */
+  M.leave = function (el, o) {
+    if (!el) return Promise.resolve(false);
+    o = o || {};
+    var add = o.add || 'out', drop = o.drop || ['on', 'out'];
+    var tok = el.__mv = (el.__mv || 0) + 1;
+    el.__mvLeaving = true;
+    el.classList.add(add);
+    return M.settle(el, o.fallback, o.cap).then(function () {
+      if (el.__mv !== tok) return false;
+      el.__mvLeaving = false;
+      for (var i = 0; i < drop.length; i++) el.classList.remove(drop[i]);
+      if (o.done) o.done();
+      return true;
+    });
+  };
+  /* the other half: cancel any pending leave and play the entrance again from
+     its first frame, even if the element never finished leaving */
+  M.enter = function (el, cls, strip) {
+    if (!el) return;
+    M.cancel(el);
+    el.__mvLeaving = false;
+    el.classList.remove.apply(el.classList, strip || ['out']);
+    if (el.classList.contains(cls || 'on')) return;
+    el.classList.add(cls || 'on');
+  };
+  M.replay = function (el, cls) {
+    if (!el) return;
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  };
+
+  /* ---------- a small acknowledgement ---------- */
+  /* the individual `scale` property composes with whatever transform the
+     element already carries (the snackbar is centred with one), so a bump
+     never knocks it out of place */
+  M.pulse = function (el, amount) {
+    if (M.reduced || !el || !el.animate) return;
+    try {
+      el.animate([{ scale: String(amount || .96) }, { scale: '1' }],
+        { duration: M.ms('spatial', 260), easing: M.ease('spring-expressive') });
+    } catch (e) {}
+  };
+
+  /* ---------- whole-screen state changes ---------- */
+  /* a theme or palette change repaints every surface at once; inside a view
+     transition the old and new screens are composited over each other
+     instead, and when a finger started it the new theme spreads out from the
+     point it touched. Without view-transition support, or with reduced
+     motion, the change simply lands. */
+  var lastPt = { x: 0, y: 0, t: -1e9 };
+  var vtBusy = null;
+  M.morph = function (fn, o) {
+    o = o || {};
+    if (M.reduced || !document.startViewTransition || document.hidden || vtBusy) { fn(); return; }
+    var fresh = now() - lastPt.t < 1200;
+    var reveal = o.reveal !== false && fresh;
+    if (reveal) {
+      var x = lastPt.x, y = lastPt.y, w = innerWidth, h = innerHeight;
+      var r = Math.ceil(Math.hypot(Math.max(x, w - x), Math.max(y, h - y)));
+      root.style.setProperty('--vt-x', x + 'px');
+      root.style.setProperty('--vt-y', y + 'px');
+      root.style.setProperty('--vt-r', r + 'px');
+      root.classList.add('vt-reveal');
+    } else root.classList.add('vt-fade');
+    try {
+      vtBusy = document.startViewTransition(fn);
+      var clear = function () { vtBusy = null; root.classList.remove('vt-reveal', 'vt-fade'); };
+      vtBusy.finished.then(clear, clear);
+    } catch (e) {
+      vtBusy = null;
+      root.classList.remove('vt-reveal', 'vt-fade');
+      fn();
+    }
+  };
+
+  /* ============================================================
+     THE RIPPLE
+     ------------------------------------------------------------
+     · It covers the surface from wherever you touched it: the
+       radius is the distance to the FARTHEST corner, so a tap
+       near one edge of a wide card still reaches the other one,
+       and a tap in the middle of a small chip doesn't overshoot
+       into a disc twice its size.
+     · Touches wait out Android's tap timeout (~70 ms) before
+       drawing, because most touches that start on a list row are
+       the start of a scroll. A scroll that begins inside that
+       window draws nothing at all; a quick tap that ends inside
+       it still gets its ripple, drawn and released at once.
+     · A ripple is held at least long enough to be seen: a fast
+       tap no longer flashes a sliver and vanishes.
+     · Grow and fade run on the compositor through the Web
+       Animations API, and the listeners live on the document, so
+       nothing is attached to a button per press.
+     · Keyboard activation (Enter / Space) ripples from the
+       centre, the way Android draws it for a D-pad press.
+     ============================================================ */
+  var RIPPLE_SEL = '.btn,.tool,button.pill,.seg button,.conf button,.calcpad button,' +
+    /* .tabbar button is deliberately absent: a navigation item draws its own
+       state layer in the shape of its indicator (see the .tabbar rules). */
+    '.subtabs button,' +
+    '.nav button,.navstrip button,.setnav button,.qrow,.pool,.ch,.fab,.fabitem,' +
+    /* .galtile .gph, not .galtile: the photo box is the part that already
+       clips and is positioned, so the ripple lands inside the picture */
+    '.galtile .gph,.galsec .galh,' +
+    '.cday,.esec > .eh,.figplate,.syncbar,.figbar button';
+  var TAP_DELAY = 70, SLOP = 10, MIN_HOLD = 220, MAX_PER_HOST = 3;
+  var pending = null, live = {};
+
+  function hostOf(t) {
+    var h = t && t.closest && t.closest(RIPPLE_SEL);
+    if (!h || h.disabled || h.getAttribute('aria-disabled') === 'true') return null;
+    return h;
+  }
+  function draw(host, cx, cy) {
+    var r = host.getBoundingClientRect();
+    if (!r.width || !r.height) return null;
+    var px = cx == null ? r.width / 2 : cx - r.left;
+    var py = cy == null ? r.height / 2 : cy - r.top;
+    var rad = Math.hypot(Math.max(px, r.width - px), Math.max(py, r.height - py)) + 1;
+    var old = host.querySelectorAll(':scope > .m3-ripple');
+    for (var i = 0; i <= old.length - MAX_PER_HOST; i++) old[i].remove();
+    var s = document.createElement('span');
+    s.className = 'm3-ripple';
+    s.style.cssText = 'left:' + (px - rad) + 'px;top:' + (py - rad) + 'px;' +
+                      'width:' + (rad * 2) + 'px;height:' + (rad * 2) + 'px';
+    host.appendChild(s);
+    /* a bigger surface takes a little longer to cover, so the edge travels at
+       a similar speed on a chip and on a full-width card */
+    var grow = Math.max(280, Math.min(560, 200 + rad * 1.6));
+    try {
+      s.animate([{ transform: 'scale(.14)' }, { transform: 'scale(1)' }],
+        { duration: grow, easing: M.ease('ease-emphasized-decel'), fill: 'forwards' });
+    } catch (e) { s.style.transform = 'none'; }
+    return { s: s, t0: now() };
+  }
+  function release(rp) {
+    if (!rp || rp.gone) return;
+    rp.gone = true;
+    var hold = Math.max(0, MIN_HOLD - (now() - rp.t0));
+    var s = rp.s;
+    try {
+      var a = s.animate([{ opacity: 0 }],
+        { duration: 240, delay: hold, easing: 'linear', fill: 'forwards' });
+      a.onfinish = function () { s.remove(); };
+      a.oncancel = function () { s.remove(); };
+    } catch (e) { setTimeout(function () { s.remove(); }, hold + 240); }
+    setTimeout(function () { if (s.isConnected) s.remove(); }, hold + 800);
+  }
+  function commit(p) {
+    var rp = draw(p.host, p.x, p.y);
+    if (rp) live[p.id] = rp;
+    return rp;
+  }
+  function endPending(e, draw_) {
+    if (!pending || (e && e.pointerId !== pending.id)) return false;
+    clearTimeout(pending.timer);
+    var p = pending; pending = null;
+    if (draw_) commit(p);
+    return true;
+  }
+
+  document.addEventListener('pointerdown', function (e) {
+    lastPt = { x: e.clientX, y: e.clientY, t: now() };
+    if (M.reduced || e.button) return;
+    if (e.target && e.target.classList && e.target.classList.contains('m3-ripple')) return;
+    var host = hostOf(e.target);
+    if (!host) return;
+    endPending(null, false);
+    var p = { host: host, x: e.clientX, y: e.clientY, id: e.pointerId };
+    if (e.pointerType === 'touch') {
+      pending = p;
+      p.timer = setTimeout(function () { if (pending === p) { pending = null; commit(p); } }, TAP_DELAY);
+    } else commit(p);
+  }, true);
+
+  document.addEventListener('pointermove', function (e) {
+    if (pending && e.pointerId === pending.id &&
+        Math.hypot(e.clientX - pending.x, e.clientY - pending.y) > SLOP) endPending(e, false);
+  }, { capture: true, passive: true });
+
+  function up(e) {
+    /* a quick tap that ended inside the tap timeout still earns its ripple */
+    endPending(e, e.type === 'pointerup');
+    var rp = live[e.pointerId];
+    if (rp) { delete live[e.pointerId]; release(rp); }
+  }
+  document.addEventListener('pointerup', up, true);
+  document.addEventListener('pointercancel', up, true);
+  /* dragging off the surface with a mouse lets the ripple go, as Android does */
+  document.addEventListener('pointerout', function (e) {
+    var rp = live[e.pointerId];
+    if (!rp || e.pointerType === 'touch') return;
+    var host = rp.s.parentNode;
+    if (host && e.relatedTarget && host.contains(e.relatedTarget)) return;
+    delete live[e.pointerId]; release(rp);
+  }, true);
+  window.addEventListener('blur', function () {
+    for (var k in live) { release(live[k]); delete live[k]; }
+  });
+
+  /* keyboard: a centred ripple for Enter / Space on a focused surface */
+  var keyRp = null;
+  document.addEventListener('keydown', function (e) {
+    if (M.reduced || e.repeat || (e.key !== 'Enter' && e.key !== ' ')) return;
+    var t = document.activeElement;
+    if (!t || t !== e.target || !t.matches || !t.matches(RIPPLE_SEL)) return;
+    release(keyRp);
+    keyRp = draw(t, null, null);
+  }, true);
+  document.addEventListener('keyup', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { release(keyRp); keyRp = null; }
+  }, true);
+
+  M.ripple = { selector: RIPPLE_SEL, at: draw, release: release };
+
+  window.Motion = M;
+})();
+</script>
+
+<script>
+/* ============================================================
    NIDUS — core
    ============================================================ */
 'use strict';
@@ -4437,7 +4803,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.3';
+const APP_VERSION='6.4';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -4983,13 +5349,20 @@ function linksHTML(q,heading){
 
 /* ---------- toast / modal ---------- */
 let toastT,maskT;
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
+function toast(msg){const t=$('#toast'),was=t.classList.contains('on');t.textContent=msg;t.classList.add('on');
+  /* a second message landing on a snackbar that is already up gets a small
+     bump, so the change of text reads as a new message rather than a glitch */
+  if(was)Motion.pulse(t,.97);
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
 function modal(title,bodyHTML,footHTML){
   $('#mTitle').textContent=title;$('#mBody').innerHTML=bodyHTML;$('#mFoot').innerHTML=footHTML||'<button class="btn" data-close>Close</button>';
-  clearTimeout(maskT);$('#mask').classList.remove('out');$('#mask').classList.add('on');
+  /* re-opening mid-exit cancels the pending cleanup and replays the entrance */
+  Motion.enter($('#mask'),'on');
 }
-function closeModal(){const m=$('#mask');if(!m.classList.contains('on'))return;
-  m.classList.add('out');clearTimeout(maskT);maskT=setTimeout(()=>m.classList.remove('on','out'),150)}
+/* the exit is waited out, not guessed: on phones the dialog leaves as a bottom
+   sheet over 250 ms, and the old 150 ms timer tore it off mid-slide */
+function closeModal(){const m=$('#mask');if(!m.classList.contains('on')||Motion.leaving(m))return;
+  Motion.leave(m)}
 $('#mask').addEventListener('click',e=>{const t=e.target;if(!t||!t.closest)return;if(t.id==='mask'||t.closest('[data-close]')||t.closest('#mClose'))closeModal()});
 
 /* ============================================================
@@ -7232,7 +7605,7 @@ function renderQ(){
     else if(x.chosen)cls+=' ans';
     if(st.flag)cls+=' flag';
     return `<button class="${cls}" data-i="${i}">${i+1}</button>`}).join('');
-  const cb=$('#pStrip button.cur');if(cb)cb.scrollIntoView({block:'nearest',inline:'center'});
+  const cb=$('#pStrip button.cur');if(cb)cb.scrollIntoView({block:'nearest',inline:'center',behavior:Motion.reduced?'auto':'smooth'});
   // meta
   const st=ST(q.id);
   metaPeek=false;
@@ -7735,14 +8108,13 @@ function closeTools(){
   clearTimeout(toolsT);clearTimeout(toolsSettleT);
   /* it leaves on the accelerate curve, collapsing back toward the button it
      grew out of, exactly as the home overflow does */
-  p.classList.add('out');
+  Motion.leave(p,{drop:['on','out','settled']});
   $('#pMore').classList.remove('act');
   $('#pMore').setAttribute('aria-expanded','false');
-  toolsT=setTimeout(()=>p.classList.remove('on','out','settled'),150);
 }
 function openTools(){
   const p=$('#pMorePop');
-  clearTimeout(toolsT);clearTimeout(toolsSettleT);
+  clearTimeout(toolsT);clearTimeout(toolsSettleT);Motion.cancel(p);
   /* clear the classes and force a reflow, so re-opening during the close
      replays the entrance instead of leaving the menu sitting there */
   p.classList.remove('on','out','settled');
@@ -7891,7 +8263,9 @@ function bindSettings(root){
     const k=el.dataset.rng,v=parseFloat(el.value);
     DB.settings[k]=v;
     const lbl=root.querySelector('[data-val="'+k+'"]');if(lbl)lbl.textContent=v+(k==='lh'?'':'px');
-    applySettings();save();
+    /* a drag fires input several times a frame, and every applySettings
+       regenerates the whole palette — collapse them to one per frame */
+    Motion.frame('settings',()=>{applySettings();save()});
   }));
   root.querySelectorAll('[data-seg]').forEach(g=>g.addEventListener('click',e=>{
     const b=e.target.closest('[data-v]');if(!b)return;
@@ -7899,7 +8273,11 @@ function bindSettings(root){
     const row=SETTINGS_SPEC.reduce((f,s)=>f||((s.rows||[]).find(r=>r.k===k)),null);
     DB.settings[k]=(row&&row.bool)?(v==='1'):v;
     g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
-    applySettings();save();repaint(row&&row.rerender);
+    /* theme, palette and contrast repaint every surface at once — composite
+       the change instead, spreading out from the finger */
+    if(k==='theme'||k==='palette'||k==='contrast')Motion.morph(()=>{applySettings();repaint(row&&row.rerender)});
+    else{applySettings();repaint(row&&row.rerender)}
+    save();
   }));
   root.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',()=>{
     DB.settings[c.dataset.chk]=c.checked;applySettings();save()}));
@@ -8648,7 +9026,15 @@ function renderBank(reset){
     :`<div class="empty"><h4>${DB.questions.length?'Nothing matches':'The bank is empty'}</h4><p class="tiny">${DB.questions.length?'Try a different filter or search term.':'Run a paper through the extractor prompt, then import the JSON.'}</p></div>`;
   $('#bankMore').style.display=list.length>bankShown?'inline-flex':'none';
 }
-$('#bankSearch').addEventListener('input',()=>renderBank(true));
+/* a full-text filter over a large bank is a few milliseconds per question set;
+   one per keystroke made typing stutter. Small banks still filter on the very
+   next frame; large ones wait for a short pause in the typing. */
+let bankTypeT=0;
+$('#bankSearch').addEventListener('input',()=>{
+  clearTimeout(bankTypeT);
+  const run=()=>Motion.frame('bank',()=>renderBank(true));
+  if(DB.questions.length>400)bankTypeT=setTimeout(run,120);else run();
+});
 $('#bankFilter').addEventListener('change',()=>renderBank(true));
 $('#bankMore').onclick=()=>{bankShown+=60;renderBank(false)};
 function dupPairRow(p){
@@ -9902,8 +10288,8 @@ document.addEventListener('change',e=>{
 
 $('#wipeAll').onclick=()=>modal('Delete everything?','<p class="tiny">Every question, answer, note and session is removed from this browser. Export a backup first if there is any doubt.</p>',
   '<button class="btn ghost" data-close>Cancel</button><button class="btn danger" id="doWipe">Delete everything</button>');
-function toggleTheme(){DB.settings.theme=(DB.settings.theme==='dark')?'light':'dark';applySettings();save();
-  if(VIEW==='settings')renderSettings()}
+function toggleTheme(){DB.settings.theme=(DB.settings.theme==='dark')?'light':'dark';save();
+  Motion.morph(()=>{applySettings();if(VIEW==='settings')renderSettings()})}
 $('#themeBtn').onclick=toggleTheme;$('#themeBtnM').onclick=toggleTheme;
 $('#helpBtn').onclick=()=>modal('Keyboard shortcuts',
   `<table class="lab keys"><tbody>
@@ -13348,11 +13734,12 @@ window.TOOLS=TOOLS;
         el.addEventListener('input', function () {
           var lbl = root.querySelector('[data-val="hue"]');
           if (lbl) lbl.textContent = Math.round(parseFloat(el.value)) + '°';
-          applyM3Theme();
+          /* the core binder has already queued applySettings — which carries
+             applyM3Theme — for this frame; nothing more to do here */
         });
       });
-      root.querySelectorAll('[data-seg="palette"],[data-seg="contrast"],[data-seg="theme"]')
-        .forEach(function (g) { g.addEventListener('click', function () { setTimeout(applyM3Theme, 0); }); });
+      /* theme, palette and contrast segments are repainted by the core binder,
+         inside Motion.morph, so they need no second pass here */
     };
   }
 
@@ -13387,48 +13774,9 @@ window.TOOLS=TOOLS;
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  /* ---------- 6. the touch ripple ---------- */
-  var RIPPLE_SEL = '.btn,.tool,button.pill,.seg button,.conf button,.calcpad button,' +
-    /* .tabbar button is deliberately absent: a navigation item draws its own
-       state layer in the shape of its indicator (see the .tabbar rules).
-       .subtabs button IS present: it used to rely on :active alone, which the
-       browser holds back until it knows the touch is not a scroll, so the
-       feedback arrived late and vanished on the smallest finger drift. The
-       ripple fires on pointerdown and owes nothing to that decision. */
-    '.subtabs button,' +
-    '.nav button,.navstrip button,.setnav button,.qrow,.pool,.ch,.fab,.fabitem,' +
-    /* .galtile .gph, not .galtile: the photo box is the part that already
-       clips and is positioned, so the ripple lands inside the picture instead
-       of washing across the caption underneath it. */
-    '.galtile .gph,.galsec .galh,' +
-    '.cday,.esec > .eh,.figplate,.syncbar,.figbar button';
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  document.addEventListener('pointerdown', function (e) {
-    if (reduced || e.button) return;
-    var t = e.target.closest && e.target.closest(RIPPLE_SEL);
-    if (!t || t.disabled || t.classList.contains('m3-ripple')) return;
-    var r = t.getBoundingClientRect();
-    if (!r.width || !r.height) return;
-    var size = Math.max(r.width, r.height) * 2.1;
-    var x = e.clientX - r.left, y = e.clientY - r.top;
-    var s = document.createElement('span');
-    s.className = 'm3-ripple';
-    s.style.cssText = 'left:' + (x - size / 2) + 'px;top:' + (y - size / 2) + 'px;' +
-                      'width:' + size + 'px;height:' + size + 'px';
-    t.appendChild(s);
-    var done = false;
-    var kill = function () {
-      if (done) return; done = true;
-      s.classList.add('fade');
-      s.addEventListener('animationend', function () { s.remove(); });
-      setTimeout(function () { s.remove(); }, 600);
-    };
-    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
-      t.addEventListener(ev, kill, { once: true });
-    });
-    setTimeout(kill, 900);
-  }, true);
+  /* ---------- 6. the touch ripple ----------
+     Moved into the motion engine (Motion.ripple), which also handles the
+     tap timeout, the farthest-corner radius and the minimum hold. */
 
   /* ---------- 7. sliders paint their own active track ---------- */
   function syncRange(el) {
@@ -13954,7 +14302,10 @@ window.TOOLS=TOOLS;
   /* what is actually on screen, not what is stored: applyM3Theme resolves
      "System" onto the root element, so the switch stays right under it too */
   function isDark() {
-    return document.documentElement.dataset.theme !== 'light';
+    var d = db(), t = d && d.settings ? d.settings.theme : 'dark';
+    if (t === 'light') return false;
+    if (t === 'auto') return !(window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+    return true;
   }
 
   var ovMenu, ovScrim;
@@ -14013,7 +14364,7 @@ window.TOOLS=TOOLS;
   function ovOpenNow() { return !!(ovMenu && ovMenu.classList.contains('on') && !ovMenu.classList.contains('out')); }
   function openOverflow() {
     if (!ovMenu) return;
-    clearTimeout(ovT); clearTimeout(ovSettleT);
+    clearTimeout(ovT); clearTimeout(ovSettleT); Motion.cancel(ovMenu);
     paintOverflow();
     ovMenu.classList.remove('out', 'settled');
     ovMenu.classList.add('on');
@@ -14027,11 +14378,10 @@ window.TOOLS=TOOLS;
     if (f) f.focus();
   }
   function closeOverflow() {
-    if (!ovMenu || !ovMenu.classList.contains('on')) return;
+    if (!ovMenu || !ovMenu.classList.contains('on') || Motion.leaving(ovMenu)) return;
     clearTimeout(ovT); clearTimeout(ovSettleT);
-    ovMenu.classList.add('out');
+    Motion.leave(ovMenu, { drop: ['on', 'out', 'settled'] });
     ovScrim.classList.remove('on');
-    ovT = setTimeout(function () { ovMenu.classList.remove('on', 'out', 'settled'); }, 150);
     var btn = el('overflowBtn');
     if (btn) { btn.setAttribute('aria-expanded', 'false'); }
   }
