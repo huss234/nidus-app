@@ -355,15 +355,25 @@ img{max-width:100%}
    the old screen and the new one are two snapshots, and the new one spreads
    out from the point the finger touched. Without a touch point it is a plain
    crossfade on the emphasized curve. */
+html.m-snap *,html.m-snap *::before,html.m-snap *::after{transition:none!important}
 ::view-transition-old(root),::view-transition-new(root){
   animation-duration:var(--m3-dur-long);
   animation-timing-function:var(--m3-ease-emphasized);
 }
-html.vt-reveal::view-transition-old(root){animation:none;z-index:0}
+/* the snapshots are flat images; the UA's plus-lighter blend and its own
+   fades are not wanted under a clip */
+html.vt-reveal::view-transition-image-pair(root){isolation:auto}
+html.vt-reveal::view-transition-old(root){animation:none;z-index:0;mix-blend-mode:normal}
 html.vt-reveal::view-transition-new(root){
   z-index:1;mix-blend-mode:normal;
-  animation:m3Reveal 560ms var(--m3-ease-emphasized) both;
+  animation:m3Reveal 620ms cubic-bezier(.45,0,.2,1) both;
 }
+/* The circle's AREA is what the eye reads, and area grows with the square of
+   the radius. On the emphasized curve — which does most of its travel in the
+   first tenth — the new theme flooded the screen in about 80 ms and then
+   crept across the last corner for half a second: a jump, then a stall. A
+   symmetric ease-in-out over a slightly longer time spreads the change
+   evenly: it starts under the finger, sweeps, and settles. */
 @keyframes m3Reveal{
   from{clip-path:circle(0 at var(--vt-x,50%) var(--vt-y,50%))}
   to{clip-path:circle(var(--vt-r,150%) at var(--vt-x,50%) var(--vt-y,50%))}
@@ -4616,9 +4626,35 @@ If the bank runs to more than a handful of items, or if the user asks for a file
      motion, the change simply lands. */
   var lastPt = { x: 0, y: 0, t: -1e9 };
   var vtBusy = null;
+  /* Nearly every surface here eases its colours (background-color and color
+     on a 250 ms transition), which is right for a hover and wrong for a theme
+     change. Inside a view transition the "new" screen is live, so those fades
+     played INSIDE the growing circle: the reveal uncovered buttons still
+     sliding from the old palette to the new one, two animations on top of
+     each other. While a theme lands, every transition is switched off and
+     the style is flushed, so the new screen is already its final colour when
+     it is revealed. Removing the class afterwards starts nothing, because no
+     value changes at that point. */
+  function snap(fn) {
+    root.classList.add('m-snap');
+    try { fn(); }
+    finally {
+      try { void getComputedStyle(root).color; void document.body.offsetWidth; } catch (e) {}
+    }
+  }
+  function unsnap() {
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () { root.classList.remove('m-snap'); });
+    });
+  }
+  /* returns a promise that settles once the change is fully on screen, so
+     callers can hold heavy work (a save, a sync) until the animation is over */
   M.morph = function (fn, o) {
     o = o || {};
-    if (M.reduced || !document.startViewTransition || document.hidden || vtBusy) { fn(); return; }
+    if (M.reduced || !document.startViewTransition || document.hidden || vtBusy) {
+      snap(fn); unsnap();
+      return Promise.resolve();
+    }
     var fresh = now() - lastPt.t < 1200;
     var reveal = o.reveal !== false && fresh;
     if (reveal) {
@@ -4630,14 +4666,27 @@ If the bank runs to more than a handful of items, or if the user asks for a file
       root.classList.add('vt-reveal');
     } else root.classList.add('vt-fade');
     try {
-      vtBusy = document.startViewTransition(fn);
-      var clear = function () { vtBusy = null; root.classList.remove('vt-reveal', 'vt-fade'); };
-      vtBusy.finished.then(clear, clear);
+      var vt = vtBusy = document.startViewTransition(function () { snap(fn); });
+      var clear = function () {
+        vtBusy = null;
+        root.classList.remove('vt-reveal', 'vt-fade');
+        unsnap();
+      };
+      return vt.finished.then(clear, clear);
     } catch (e) {
       vtBusy = null;
       root.classList.remove('vt-reveal', 'vt-fade');
-      fn();
+      snap(fn); unsnap();
+      return Promise.resolve();
     }
+  };
+  /* apply a colour change with no easing at all — for changes that already
+     move continuously under the finger, like the accent-colour slider */
+  M.snap = function (fn) { snap(fn); unsnap(); };
+  /* run fn once any whole-screen change in flight has finished */
+  M.after = function (fn) {
+    if (vtBusy) vtBusy.finished.then(fn, fn);
+    else fn();
   };
 
   /* ============================================================
@@ -8265,7 +8314,9 @@ function bindSettings(root){
     const lbl=root.querySelector('[data-val="'+k+'"]');if(lbl)lbl.textContent=v+(k==='lh'?'':'px');
     /* a drag fires input several times a frame, and every applySettings
        regenerates the whole palette — collapse them to one per frame */
-    Motion.frame('settings',()=>{applySettings();save()});
+    /* and snapped: easing each surface's colour over 250 ms made the palette
+       trail a quarter-second behind the accent slider under the thumb */
+    Motion.frame('settings',()=>{Motion.snap(applySettings);save()});
   }));
   root.querySelectorAll('[data-seg]').forEach(g=>g.addEventListener('click',e=>{
     const b=e.target.closest('[data-v]');if(!b)return;
@@ -8275,9 +8326,8 @@ function bindSettings(root){
     g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
     /* theme, palette and contrast repaint every surface at once — composite
        the change instead, spreading out from the finger */
-    if(k==='theme'||k==='palette'||k==='contrast')Motion.morph(()=>{applySettings();repaint(row&&row.rerender)});
-    else{applySettings();repaint(row&&row.rerender)}
-    save();
+    if(k==='theme'||k==='palette'||k==='contrast')Motion.morph(()=>{applySettings();repaint(row&&row.rerender)}).then(save);
+    else{applySettings();repaint(row&&row.rerender);save()}
   }));
   root.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',()=>{
     DB.settings[c.dataset.chk]=c.checked;applySettings();save()}));
@@ -10288,8 +10338,10 @@ document.addEventListener('change',e=>{
 
 $('#wipeAll').onclick=()=>modal('Delete everything?','<p class="tiny">Every question, answer, note and session is removed from this browser. Export a backup first if there is any doubt.</p>',
   '<button class="btn ghost" data-close>Cancel</button><button class="btn danger" id="doWipe">Delete everything</button>');
-function toggleTheme(){DB.settings.theme=(DB.settings.theme==='dark')?'light':'dark';save();
-  Motion.morph(()=>{applySettings();if(VIEW==='settings')renderSettings()})}
+/* the save — a structured clone of the whole bank — is held until the reveal
+   has finished, so it can never land a long frame in the middle of it */
+function toggleTheme(){DB.settings.theme=(DB.settings.theme==='dark')?'light':'dark';
+  Motion.morph(()=>{applySettings();if(VIEW==='settings')renderSettings()}).then(save)}
 $('#themeBtn').onclick=toggleTheme;$('#themeBtnM').onclick=toggleTheme;
 $('#helpBtn').onclick=()=>modal('Keyboard shortcuts',
   `<table class="lab keys"><tbody>
