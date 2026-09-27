@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.5 -->
+<!-- Nidus — Personal Qbank · v6.6 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3947,7 +3947,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.5</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.6</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
       <div class="card">
         <div class="row" style="margin-bottom:14px">
           <span class="chip" id="syncChip">Off</span>
@@ -3985,7 +3985,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h3 class="sec">About Nidus</h3>
       <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       <div class="setsheet" style="margin-top:14px">
-        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.5 · sharded store</span></div></div>
+        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.6 · sharded store</span></div></div>
         <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
         <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
         <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
@@ -4883,7 +4883,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.5';
+const APP_VERSION='6.6';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10824,12 +10824,14 @@ const NET=(function(){
     const h=Object.assign({'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28',
       'Authorization':'Bearer '+c.token},(opts&&opts.headers)||{});
     const r=await fetch(url.charAt(0)==='/'?API+url:url,Object.assign({cache:'no-store'},opts||{},{headers:h}));
-    note(r);
+    /* GraphQL has its own budget; letting it overwrite the REST numbers would
+       make the brake below read the wrong ledger */
+    if(url!=='/graphql')note(r);
     return r;
   }
   async function api(url,opts){
     const m=String((opts&&opts.method)||'GET').toUpperCase();
-    const L=(opts&&opts.lane==='bulk')?bulkLane:(m==='GET'||m==='HEAD')?readLane:writeLane;
+    const L=(opts&&opts.lane==='bulk')?bulkLane:(opts&&opts.lane==='read')?readLane:(m==='GET'||m==='HEAD')?readLane:writeLane;
     return L(async()=>{
       await etagLoad();
       await hold();
@@ -10952,9 +10954,57 @@ const NET=(function(){
     return out;
   }
 
+  /* ---------- GraphQL ----------
+     v6.6 — the two things Engram does that make its sync fast are both here.
+     A read of forty files is one request instead of forty, and a commit is one
+     request instead of six. Errors are sorted into the kinds the callers act
+     on: conflict (the branch moved), rate, big, forbidden, and everything else. */
+  async function gql(query,variables,lane){
+    const r=await api('/graphql',{method:'POST',lane:lane,headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query:query,variables:variables||{}})});
+    if(!r.ok){
+      const e=new Error(await errMsg(r));e.status=r.status;
+      let m='';try{m=((await r.clone().json())||{}).message||''}catch(_){}
+      e.kind=r.status===413?'big':(r.status===403||r.status===429)?(/rate limit|secondary|abuse/i.test(m)||r.headers.get('retry-after')?'rate':'forbidden'):r.status===401?'auth':'http';
+      throw e;
+    }
+    let j=null;try{j=await r.json()}catch(_){}
+    const errs=(j&&j.errors)||[];
+    if(errs.length){
+      const t=(errs[0]&&errs[0].type)||'', m=(errs[0]&&errs[0].message)||'';
+      const e=new Error(m||'GitHub GraphQL error');
+      e.kind=(t==='STALE_DATA'||/expected branch to point to|expectedHeadOid|head.*(moved|changed)/i.test(m))?'conflict'
+        :(t==='RATE_LIMITED'||/rate limit/i.test(m))?'rate'
+        :(t==='FORBIDDEN'||/not accessible|permission/i.test(m))?'forbidden'
+        :(/too large|payload|body.*size/i.test(m))?'big':'gql';
+      throw e;
+    }
+    return (j&&j.data)||null;
+  }
+  /* Many text files at one commit (or branch) in one request. Each answer is
+     the text, null for a path that is not there — the same answer getText
+     gives on a 404 — or undefined when GraphQL would not hand over the whole
+     file, which tells the caller to read that one over REST instead. */
+  async function readMany(repo,ref,paths){
+    const out={};
+    if(!paths.length)return out;
+    const vars={o:owner(),r:repo};
+    const decl=paths.map((p,k)=>'$e'+k+':String!').join(',');
+    const body=paths.map((p,k)=>{vars['e'+k]=ref+':'+p;
+      return 'f'+k+':object(expression:$e'+k+'){... on Blob{text isTruncated isBinary}}'}).join(' ');
+    const d=await gql('query($o:String!,$r:String!,'+decl+'){repository(owner:$o,name:$r){'+body+'}}',vars,'read');
+    if(!d||!d.repository)throw new Error('Not found — check the username, repository name and branch');
+    paths.forEach((p,k)=>{
+      const b=d.repository['f'+k];
+      out[p]=!b?null:(b.isTruncated||b.isBinary||b.text==null)?undefined:b.text;
+    });
+    return out;
+  }
+
   return {api:api,errMsg:errMsg,ready:ready,owner:owner,branch:branch,
     repoData:repoData,repoMedia:repoMedia,
     getText:getText,getJSON:getJSON,getMedia:getMedia,exists:exists,listDir:listDir,
+    gql:gql,readMany:readMany,
     head:head,changedPaths:changedPaths,UNCHANGED:UNCHANGED,
     etagClear:etagClear,forget:forget,
     limits:()=>({remaining:lastRemaining,reset:lastReset,cooldown:cooldownUntil})};
@@ -11016,14 +11066,69 @@ const GIT=(function(){
     if(!r.ok)throw new Error(await NET.errMsg(r));
     return (await r.json()).tree.sha;
   }
+  function b64text(t){return b64bytes(new TextEncoder().encode(t).buffer)}
+  const noRepo=repo=>new Error('That repository has no commits yet — add a README to '+repo+' so it has a branch, then sync again');
   /* files: [{path, text}] | [{path, blob}] | [{path, remove:true}]
      returns the new commit sha, or the string 'conflict' when the branch
-     moved underneath us and the caller needs to merge again. */
-  async function commit(repo,files,message){
+     moved underneath us and the caller needs to merge again.
+     opts.expect is the commit the caller merged against: when it is given,
+     the branch has to still be there or the answer is 'conflict'. */
+  async function commit(repo,files,message,opts){
     files=(files||[]).filter(Boolean);
     if(!files.length)return null;
+    const expect=(opts&&opts.expect)||null;
+    const fast=await commitGql(repo,files,message,expect);
+    if(fast!==undefined)return fast;
+    return await commitTree(repo,files,message,expect);
+  }
+  /* v6.6 — THE ONE-REQUEST COMMIT, the way Engram writes.
+     createCommitOnBranch takes every addition and deletion at once and moves
+     the branch only if it still points at expectedHeadOid, which is the same
+     concurrency check PATCH force:false gave the chain below. Same atomic
+     commit, same files, one request instead of blobs + tree + commit + ref.
+     Returns undefined to hand the job to the proven chain instead: a commit
+     too big for one GraphQL body (the storage upgrade, a photo backlog), an
+     empty file, which createCommitOnBranch is not proven to accept, or any
+     error that is not a conflict or a rate limit. */
+  const GQL_MAX=5e6;
+  let gqlOff=false;
+  async function commitGql(repo,files,message,expect){
+    if(gqlOff)return undefined;
+    if(files.some(f=>!f.remove&&!f.blob&&!String(f.text==null?'':f.text).length))return undefined;
+    const adds=[],dels=[];let bytes=0;
+    for(const f of files){
+      if(f.remove){dels.push({path:f.path});continue}
+      const c=f.blob?b64bytes(await f.blob.arrayBuffer()):b64text(String(f.text));
+      bytes+=c.length;
+      if(bytes>GQL_MAX)return undefined;
+      adds.push({path:f.path,contents:c});
+    }
+    const parent=expect||await headRef(repo);
+    if(!parent)throw noRepo(repo);
+    const fc={};
+    if(adds.length)fc.additions=adds;
+    if(dels.length)fc.deletions=dels;
+    try{
+      const d=await NET.gql('mutation($input:CreateCommitOnBranchInput!){createCommitOnBranch(input:$input){commit{oid}}}',
+        {input:{branch:{repositoryNameWithOwner:NET.owner()+'/'+repo,branchName:NET.branch()},
+          expectedHeadOid:parent,message:{headline:message||'nidus'},fileChanges:fc}});
+      const c=d&&d.createCommitOnBranch&&d.createCommitOnBranch.commit;
+      return (c&&c.oid)||undefined;
+    }catch(e){
+      if(e.kind==='conflict')return 'conflict';
+      if(e.kind==='rate')throw e;
+      /* a token that may not use GraphQL writes will not start being allowed
+         to on the next pass; stop asking for the rest of this page's life */
+      if(e.kind==='forbidden')gqlOff=true;
+      return undefined;
+    }
+  }
+  async function commitTree(repo,files,message,expect){
     const parent=await headRef(repo);
-    if(!parent)throw new Error('That repository has no commits yet — add a README to '+repo+' so it has a branch, then sync again');
+    if(!parent)throw noRepo(repo);
+    /* the fast path may have landed and only its answer been lost; building
+       on a head the caller never merged is exactly what expect forbids */
+    if(expect&&parent!==expect)return 'conflict';
     const base=await treeOf(repo,parent);
     /* v5.9 — blobs went up one at a time, and a blob depends on nothing: not
        on the parent commit, not on the tree, not on each other. Twelve photos
@@ -12085,7 +12190,9 @@ const V3=(function(){
     if(head===last)return {head:head,paths:[]};
     if(last){
       const ch=await NET.changedPaths(RD(),last,head);
-      if(ch)return {head:head,paths:ch.map(x=>x.path).filter(p=>p.indexOf(root()+'/')===0)};
+      /* manifest.json and live/ are never merged by a pull — the beacon has
+         its own poll — so asking for them was two requests for nothing */
+      if(ch)return {head:head,paths:ch.map(x=>x.path).filter(p=>p.indexOf(root()+'/')===0&&p!==P.manifest()&&p.indexOf(root()+'/live/')!==0)};
       /* 404 (history rewritten) or too wide to be cheap — fall through */
     }
     return {head:head,paths:null};
@@ -12278,21 +12385,41 @@ const V3=(function(){
      waves follow the sorted list, a log can never be merged before the rules
      file that governs it. The wave is bounded so a full resync does not hold
      five hundred parsed shards in memory at once. */
-  const WAVE=8;
-  async function fetchPath(p,rel){
-    if(/^progress\/log\/[0-9]{4}-[0-9]{2}\.jsonl$/.test(rel))return await NET.getText(RD(),p);
-    return await NET.getJSON(RD(),p);
+  /* v6.6 — with a commit to read at, a wave is ONE GraphQL request, so it
+     can be as wide as Engram's; without one it is the old eight REST reads */
+  const WAVE=8, GQL_WAVE=40;
+  async function fetchPath(p,rel,fresh){
+    const o=fresh?{fresh:true}:undefined;
+    if(/^progress\/log\/[0-9]{4}-[0-9]{2}\.jsonl$/.test(rel))return await NET.getText(RD(),p,o);
+    return await NET.getJSON(RD(),p,o);
   }
-  async function pullPaths(paths,manifest){
+  /* the same answer fetchPath gives, from text GraphQL already delivered */
+  function parsePath(p,rel,t){
+    if(t===null)return null;
+    if(/^progress\/log\/[0-9]{4}-[0-9]{2}\.jsonl$/.test(rel))return t;
+    try{return JSON.parse(t)}
+    catch(e){throw new Error('The file '+p+' in the repository is not valid JSON — open it on GitHub and check the last commit')}
+  }
+  async function pullPaths(paths,manifest,ref){
     let changed=false, failed=0;
     const touchedQ=new Set();
     const fps=await fpLoad();
     let dirtyOrder=false;
     const order=pullOrder(paths);
-    for(let w=0;w<order.length;w+=WAVE){
-    const got=await Promise.all(order.slice(w,w+WAVE).map(async p=>{
+    const step=ref?GQL_WAVE:WAVE;
+    for(let w=0;w<order.length;w+=step){
+    const wave=order.slice(w,w+step);
+    let texts=null;
+    if(ref){try{texts=await NET.readMany(RD(),ref,wave)}catch(e){texts=null}}
+    /* A file GraphQL did not deliver goes the old way, without If-None-Match:
+       reads by GraphQL leave no ETag behind, so an old one could answer 304
+       for bytes this device has since replaced with newer ones. */
+    const got=await Promise.all(wave.map(async p=>{
       const rel=p.slice(root().length+1);
-      try{return {p:p,rel:rel,val:await fetchPath(p,rel)}}
+      try{
+        if(texts&&texts[p]!==undefined)return {p:p,rel:rel,val:parsePath(p,rel,texts[p])};
+        return {p:p,rel:rel,val:await fetchPath(p,rel,!!ref)};
+      }
       catch(e){return {p:p,rel:rel,err:e}}
     }));
     for(const g of got){
@@ -12387,7 +12514,7 @@ const V3=(function(){
   /* Everything this pass wants to write, gathered into ONE commit. A
      40-question session used to be ~400 commits and would hit the 80/minute
      secondary limit halfway through the block. It is now about four. */
-  async function push(){
+  async function push(expect){
     const fps=await fpLoad();
     /* the manifest is merged into, never replaced: writing only the paths this
        commit touched would silently drop every other file from the index */
@@ -12445,7 +12572,7 @@ const V3=(function(){
       writeBeacon._last=beaconSig(bd);
       beaconed=true;
     }catch(e){}
-    const sha=await GIT.commit(RD(),out,commitMessage(out));
+    const sha=await GIT.commit(RD(),out,commitMessage(out),{expect:expect||null});
     if(sha==='conflict')return {ok:false,conflict:true};
     Object.keys(marks).forEach(p=>{fps[p]=marks[p]});
     lastManifest=man;
@@ -12515,10 +12642,10 @@ const V3=(function(){
       const d=await discover();
       if(d.paths===null){
         const mp=await manifestPaths();
-        if(mp.paths.length){const r=await pullPaths(mp.paths,mp.manifest);changed=r.changed||changed;failed+=r.failed}
+        if(mp.paths.length){const r=await pullPaths(mp.paths,mp.manifest,d.head||null);changed=r.changed||changed;failed+=r.failed}
         try{await reconcileLedger(mp.manifest)}catch(e){}
       }else if(d.paths.length){
-        const r=await pullPaths(d.paths,null);changed=r.changed||changed;failed+=r.failed;
+        const r=await pullPaths(d.paths,null,d.head||null);changed=r.changed||changed;failed+=r.failed;
       }
       /* THE COMMIT POINTER IS A PROMISE. Storing it says "everything up to
          this commit has been merged into this device", and the next pass only
@@ -12531,7 +12658,11 @@ const V3=(function(){
       /* media goes to its own repository in its own commit — pushing a blob
          into the data repo's tree would put photos back inside the bank */
       try{await flushMedia('background')}catch(e){}
-      const r=await push();
+      /* v6.6 — the commit goes on top of the head this pass merged, or not at
+         all. Building on whatever the branch holds by now could overwrite a
+         shard another device wrote in between. A head known only from a 304,
+         or a pass with a file missing, keeps the old rule. */
+      const r=await push((d.head&&!d.unchanged&&!failed)?d.head:null);
       if(r.conflict){
         if((depth||0)>=3)throw new Error('Another device kept writing — try Sync now again in a moment');
         /* re-read against the new remote state and rebuild the commit; the
@@ -12767,7 +12898,7 @@ const V3=(function(){
     lastManifest=null;
     const man=await listAll();
     const paths=Object.keys(man);
-    const r=await pullPaths(paths,man);
+    const r=await pullPaths(paths,man,NET.branch());
     try{await reconcileLedger(man)}catch(e){}
     if(!r.failed){const h=await NET.head(RD());if(h&&h!==NET.UNCHANGED){c.sha=c.sha||{};c.sha[RD()]=h;SYNC.saveCfg()}}
     health={failed:r.failed,at:Date.now()};
