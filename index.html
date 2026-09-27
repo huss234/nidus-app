@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.7 -->
+<!-- Nidus — Personal Qbank · v6.8 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -523,6 +523,7 @@ html.m-snap .seg button::before{transition:width var(--m3-spatial) var(--m3-spri
 .syncbtn.morph .sl{flex-shrink:0;text-overflow:clip}
 .syncbtn .sl-old{position:absolute;pointer-events:none}
 .sync-split.st-busy .syncbtn .sl{font-variant-numeric:tabular-nums}
+.sync-split.compact .syncbtn{padding:0 10px;gap:0}
 button.syncbtn:active{border-radius:var(--m3-corner-press);transform:scale(.97);transition-duration:var(--m3-shape-in)}
 .sync-split.open .syncbtn{border-radius:20px var(--m3-corner-xs) var(--m3-corner-xs) 20px}
 .sync-split.open .syncbtn:active{border-radius:var(--m3-corner-press) var(--m3-corner-xs) var(--m3-corner-xs) var(--m3-corner-press)}
@@ -4018,7 +4019,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.7</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.8</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
       <div class="card">
         <div class="row" style="margin-bottom:14px">
           <span class="chip" id="syncChip">Off</span>
@@ -4056,7 +4057,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h3 class="sec">About Nidus</h3>
       <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       <div class="setsheet" style="margin-top:14px">
-        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.7 · sharded store</span></div></div>
+        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.8 · sharded store</span></div></div>
         <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
         <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
         <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
@@ -4954,7 +4955,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.7';
+const APP_VERSION='6.8';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5619,7 +5620,7 @@ const NOTES={
     `<p class="tiny">Point Nidus at a <b>private</b> GitHub repository and it keeps a second copy of your bank there.</p>
      <p class="tiny" style="margin-top:12px">Changes from your other devices are merged in rather than overwritten: answers, notes and sessions are treated as append-only logs, and every save is a commit, so any earlier state can be recovered from the repository's own history.</p>
      <p class="tiny" style="margin-top:12px">The token is stored in this browser only. It is never written into the app file, into a backup export, or into the public repository — so it has to be entered once on each device.</p>
-     <p class="tiny" style="margin-top:12px">The sync button in the top bar, or at the foot of the drawer, says where sync stands. Tap it to sync now. The arrow that slides out beside it, or holding the button, opens the details: what is still waiting to upload, how many questions your other device holds, and the sync log.</p>
+     <p class="tiny" style="margin-top:12px">The sync button in the top bar, or at the foot of the drawer, says where sync stands, and once everything is synced it settles to just its icon. Tap it to sync now. The arrow that slides out beside it, or holding the button, opens the details: what is still waiting to upload, how many questions your other device holds, and the sync log.</p>
      <p class="tiny" style="margin-top:12px"><b>Setup guide</b> below walks through the repositories, the token and the permissions it needs.</p>`],
 
   companion:['What this panel is',
@@ -13223,6 +13224,8 @@ window.V3=V3;
                    other device holds, the log. It folds away 4.5 s
                    after the sync settles, and stays out showing "!"
                    while sync needs attention.
+     settled       4.5 s after "Synced" the word goes too, and the
+                   button is just its icon until there is news
      hold          the details sheet, straight away
 
    While a pass runs, the icon becomes the Material 3 Expressive
@@ -13237,7 +13240,7 @@ const SYNCUI=(function(){
   const FOLD=4500, HOLD=550;
   const SPRING='cubic-bezier(.34,1.5,.6,1)';  /* ICON MOTION's arrival curve */
   const root=document.documentElement;
-  let open=false, foldT=0, lastSt=null, counts={pending:null,photos:null}, countSeq=0;
+  let open=false, compact=false, foldT=0, lastSt=null, counts={pending:null,photos:null}, countSeq=0;
   const reduced=()=>!!(window.Motion&&Motion.reduced)||root.classList.contains('m-reduce');
   const tok=(k,f)=>(getComputedStyle(root).getPropertyValue(k)||'').trim()||f;
   const dur=(k,f)=>parseFloat(tok(k,''))||f;
@@ -13278,18 +13281,22 @@ const SYNCUI=(function(){
     const on=!!(window.SYNC&&SYNC.connected()),ph=st.phase||'off';
     const icon=ph==='busy'?null:ph==='ok'?'cloudok':ph==='err'?'alert'
       :(ph==='off'||navigator.onLine===false)?'cloudoff':'cloudup';
-    return {ph:ph,icon:icon,label:st.short||'Sync',msg:st.msg||st.short||'',on:on,attn:on&&ph==='err'};
+    /* the time of the last sync belongs in the details, not on the button */
+    return {ph:ph,icon:icon,label:ph==='ok'?'Synced':(st.short||'Sync'),msg:st.msg||st.short||'',on:on,attn:on&&ph==='err'};
   }
   function html(where,v){
     const bar=where==='bar'||where==='rail',o=bar&&v.on&&(open||v.attn);
+    /* settled and synced: the button keeps its colour and icon and lets the
+       word go, so a quiet sync is a quiet control */
+    const small=bar&&compact&&v.ph==='ok';
     const more=bar&&v.on
       ?'<button class="sync-more" type="button" data-sync-more aria-label="'+(v.attn?'Sync needs attention: details':'Sync details')+
         '" tabindex="'+(o?0:-1)+'" aria-hidden="'+!o+'"><svg class="ic"><use href="#i-'+(v.attn?'priority':'chev')+'"/></svg></button>':'';
     const aria=v.label+'. '+(v.on?'Tap to sync, hold for details':'Tap to set up');
-    return '<div class="sync-split st-'+v.ph+(o?' open':'')+(v.attn?' attn':'')+'" data-sync="'+where+'" title="'+esc(v.msg)+'">'+
+    return '<div class="sync-split st-'+v.ph+(o?' open':'')+(v.attn?' attn':'')+(small?' compact':'')+'" data-sync="'+where+'" title="'+esc(v.msg)+'">'+
       '<button class="syncbtn" type="button" data-sync-tap aria-label="'+esc(aria)+'"><span class="sic">'+
       '<svg class="ic'+(v.icon?'':' off')+'"><use href="#i-'+(v.icon||'cloudup')+'"/></svg>'+(v.icon?'':ldHtml())+
-      '</span><span class="sl">'+esc(v.label)+'</span></button>'+more+'</div>';
+      '</span><span class="sl">'+(small?'':esc(v.label))+'</span></button>'+more+'</div>';
   }
 
   /* ---------- the icon slot ----------
@@ -13397,6 +13404,11 @@ const SYNCUI=(function(){
 
   function update(st){
     const prev=lastSt;lastSt=st;
+    const ph=st&&st.phase;
+    /* anything but "synced" has something to say, so the words come back;
+       arriving at "synced" starts the one timer that folds everything */
+    if(ph!=='ok')compact=false;
+    else if(!prev||prev.phase!=='ok')arm();
     const v=view(st);
     document.querySelectorAll('.sync-split[data-sync]').forEach(el=>morph(el,v));
     if(document.getElementById('syncSheet')){
@@ -13409,7 +13421,7 @@ const SYNCUI=(function(){
     foldT=setTimeout(()=>{
       const st=SYNC.status();
       if(st&&st.phase==='busy')return arm();
-      open=false;update(SYNC.status());
+      open=false;compact=!!(st&&st.phase==='ok');update(st);
     },FOLD);
   }
   function expand(){open=true;update(SYNC.status());arm()}
