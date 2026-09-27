@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.6 -->
+<!-- Nidus — Personal Qbank · v6.7 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -490,40 +490,106 @@ html.m-snap .seg button::before{transition:width var(--m3-spatial) var(--m3-spri
   color:inherit;font-variant-numeric:tabular-nums;
 }
 
-/* the sync row sits at the foot of the drawer as a list item */
-.syncbar{
-  display:flex;align-items:center;gap:12px;width:100%;
-  min-height:52px;padding:0 16px;border-radius:var(--m3-corner-full);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  color:var(--md-on-surface-variant);text-align:left;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard);
+/* ---------- the sync control ----------
+   One split button, the one Engram carries. The main segment says where
+   sync stands, in words, and a tap syncs. That tap also slides a second
+   segment out which opens the details; it folds away a few seconds after
+   the sync settles, and stays out showing "!" while sync needs you. The
+   colours are the roles this app already gives the states: success,
+   warning, primary while working, error. */
+.syncfoot{padding:8px 4px 0}
+.sync-split{display:inline-flex;align-items:center;gap:2px;flex:none;min-width:0;max-width:100%}
+.syncbtn,.sync-more{
+  height:40px;border:none;
+  background-color:var(--md-surface-container-high);color:var(--md-on-surface-variant);
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;
 }
-.syncbar span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.syncdot{
-  width:10px;height:10px;border-radius:50%;background:var(--md-outline);
-  flex:0 0 auto;display:inline-block;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             box-shadow var(--m3-dur-medium) var(--m3-ease-standard);
+.syncbtn{
+  display:inline-flex;align-items:center;gap:8px;min-width:0;
+  padding:0 16px 0 12px;border-radius:20px;
+  font-size:14px;line-height:20px;font-weight:600;letter-spacing:.1px;white-space:nowrap;
+  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),
+             background-color var(--m3-dur-medium) var(--m3-ease-standard),
+             color var(--m3-dur-medium) var(--m3-ease-standard),
+             transform var(--m3-spatial) var(--m3-spring-expressive);
 }
-.syncdot.s-ok{background:var(--md-success);box-shadow:0 0 0 4px var(--md-success-container)}
-.syncdot.s-busy{background:var(--md-primary);box-shadow:0 0 0 4px var(--md-primary-container);animation:m3Pulse 1.6s var(--m3-ease-standard) infinite}
-.syncdot.s-err{background:var(--md-error);box-shadow:0 0 0 4px var(--md-error-container)}
-.syncdot.s-idle{background:var(--md-warning);box-shadow:0 0 0 4px var(--md-warning-container)}
+.syncbtn .sic{width:20px;height:20px;flex:0 0 auto;display:grid;place-items:center}
+.syncbtn .sic > *{grid-area:1/1}
+.syncbtn .ic{width:20px;height:20px}
+.syncbtn .ic.off{display:none}
+.syncbtn .sl{overflow:hidden;text-overflow:ellipsis;min-width:0}
+/* while the width moves the words keep their full width, so they are
+   uncovered by the edge instead of being cut to an ellipsis */
+.syncbtn.morph .sl{flex-shrink:0;text-overflow:clip}
+.syncbtn .sl-old{position:absolute;pointer-events:none}
+.sync-split.st-busy .syncbtn .sl{font-variant-numeric:tabular-nums}
+button.syncbtn:active{border-radius:var(--m3-corner-press);transform:scale(.97);transition-duration:var(--m3-shape-in)}
+.sync-split.open .syncbtn{border-radius:20px var(--m3-corner-xs) var(--m3-corner-xs) 20px}
+.sync-split.open .syncbtn:active{border-radius:var(--m3-corner-press) var(--m3-corner-xs) var(--m3-corner-xs) var(--m3-corner-press)}
+.sync-more{
+  width:0;margin-left:-2px;padding:0;flex:none;
+  display:grid;place-items:center;
+  border-radius:var(--m3-corner-xs) 20px 20px var(--m3-corner-xs);
+  opacity:0;pointer-events:none;
+  transition:width var(--m3-spatial-slow) var(--m3-spring-spatial),
+             margin var(--m3-spatial-slow) var(--m3-spring-spatial),
+             opacity var(--m3-dur-short2) linear,
+             border-radius var(--m3-shape-out) var(--m3-shape-ease),
+             background-color var(--m3-dur-medium) var(--m3-ease-standard),
+             color var(--m3-dur-medium) var(--m3-ease-standard),
+             transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sync-split.open .sync-more{width:40px;margin-left:0;opacity:1;pointer-events:auto}
+.sync-more .ic{width:20px;height:20px;transform:scale(.2) rotate(-150deg);
+  transition:transform var(--m3-spatial-slow) var(--m3-spring-expressive)}
+.sync-split.open .sync-more .ic{transform:none}
+.sync-more:active{border-radius:20px;transform:scale(.97);transition-duration:var(--m3-shape-in)}
+.sync-split.st-ok > *{background-color:var(--md-success-container);color:var(--md-on-success-container)}
+.sync-split.st-idle > *{background-color:var(--md-warning-container);color:var(--md-on-warning-container)}
+.sync-split.st-busy > *{background-color:var(--md-primary-container);color:var(--md-on-primary-container)}
+.sync-split.st-err > *{background-color:var(--md-error-container);color:var(--md-on-error-container)}
+/* syncing: the Material 3 Expressive loading indicator, a shape that morphs
+   and turns about a fixed centre (the keyframes are built by SYNCUI) */
+.sync-ld{width:20px;height:20px;display:grid;place-items:center}
+.sync-ld svg{width:20px;height:20px;overflow:visible;fill:currentColor;animation:nxLdTurn 4550ms linear infinite}
+.sync-ld g{transform-origin:12px 12px;animation:nxLdStep 4550ms infinite}
+.sync-ld path{animation:nxLdMorph 4550ms infinite}
+.sync-ld.still svg,.sync-ld.still g,.sync-ld.still path{animation:none}
+@keyframes nxLdTurn{to{transform:rotate(360deg)}}
 /* a breath rather than a blink — Android's indeterminate indicators never
    flash to near-transparent, they ease between two close states */
 @keyframes m3Pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.82)}}
-.synckey{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:14px}
-.synckey span{display:inline-flex;align-items:center;gap:10px;font-size:14px;color:var(--md-on-surface-variant)}
+.synckey{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.synckey .syncbtn{height:32px;padding:0 12px 0 10px;font-weight:500}
+.synckey .syncbtn .sic,.synckey .syncbtn .ic,.synckey .sync-ld,.synckey .sync-ld svg{width:18px;height:18px}
+/* the details sheet: settings rows, set tighter, value on the same line */
+.syncsheet-top{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0 0 14px}
+.syncinfo .setrow{padding:12px 0;flex-wrap:nowrap;align-items:center}
+.syncinfo .setrow > .lb{font-size:14px;line-height:20px;letter-spacing:.25px;flex:1 1 auto}
+.syncinfo .setrow > .lb small{font-size:12px;line-height:16px;letter-spacing:.4px}
+.syncinfo .setrow .ctl{width:auto;margin-left:auto;justify-content:flex-end;flex:0 1 auto;min-width:0}
+.syncinfo .sv{font-size:14px;line-height:20px;color:var(--md-on-surface);text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.syncinfo .sv.ok{color:var(--md-success)}
+.syncinfo .sv.bad{color:var(--md-error)}
+.synclog{display:flex;flex-direction:column}
+.synclog > div{padding:10px 0;border-bottom:1px solid var(--md-outline-variant);display:flex;flex-direction:column;gap:2px}
+.synclog > div:last-child{border-bottom:none}
+.synclog time{font-size:12px;line-height:16px;letter-spacing:.4px;color:var(--md-on-surface-variant)}
+.synclog span{font-size:14px;line-height:20px;color:var(--md-on-surface)}
+.synclog .none{font-size:14px;line-height:20px;color:var(--md-on-surface-variant)}
 
 .modal .nav{overflow:visible;flex:none;padding:0}
 .railfoot{display:flex;gap:8px;align-items:center;padding:8px 8px 0}
 
-/* the badge Material puts on an icon that needs attention */
-#syncBtnM{position:relative}
-.syncdot.badge{
-  position:absolute;top:6px;right:6px;width:10px;height:10px;
-  border:2px solid var(--md-surface);box-shadow:none!important;
-}
+/* in the top bar the control gives way to the screen title, never the
+   other way round, and the words end in an ellipsis before they crowd it */
+.mobhead h1{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mobhead .sync-split{margin-right:4px;max-width:min(52vw,260px)}
+/* Home carries only the short wordmark, so the words fit beside it. Every
+   other screen has a title to show, and there the control keeps its colour
+   and its icon and gives the words up: they stay in its label and title. */
+body:not(:has(#v-dash.on)) .mobhead .syncbtn{padding:0 10px;gap:0}
+body:not(:has(#v-dash.on)) .mobhead .syncbtn .sl{display:none}
 
 /* ---------- content column ---------- */
 .main{flex:1;min-width:0;display:flex;flex-direction:column;position:relative}
@@ -2988,7 +3054,7 @@ body.hasmig{padding-bottom:64px}
 }
 .btn,.tool,.pill,.seg button,.conf button,.calcpad button,.nav button,
 .tabbar button,.navstrip button,.setnav button,.qrow,.pool,.ch,
-.cday,.esec > .eh,.figplate,.syncbar,.stat,.figbar button,.ch .x,.plate i{
+.cday,.esec > .eh,.figplate,.syncbtn,.sync-more,.stat,.figbar button,.ch .x,.plate i{
   position:relative;overflow:hidden;
 }
 @media (hover:hover){
@@ -2996,7 +3062,7 @@ body.hasmig{padding-bottom:64px}
   .calcpad button:hover,.nav button:hover,.navstrip button:hover,
   .setnav button:hover,.qrow:hover,.pool:hover,.ch:hover,.fab:hover,.fabitem:hover,
   .cday:hover,
-  .esec > .eh:hover,.figplate:hover,.syncbar:hover,.figbar button:hover,.ch .x:hover{
+  .esec > .eh:hover,.figplate:hover,button.syncbtn:hover,.sync-more:hover,.figbar button:hover,.ch .x:hover{
     background-image:var(--m3-wash-hover);
   }
 }
@@ -3004,7 +3070,7 @@ body.hasmig{padding-bottom:64px}
 .calcpad button:active,.nav button:active,.navstrip button:active,
 .setnav button:active,.qrow:active,.pool:active,.ch:active,.fab:active,.fabitem:active,
 .cday:active,
-.esec > .eh:active,.figplate:active,.syncbar:active,.figbar button:active,.ch .x:active{
+.esec > .eh:active,.figplate:active,button.syncbtn:active,.sync-more:active,.figbar button:active,.ch .x:active{
   background-image:var(--m3-wash-press);
 }
 /* the ripple itself, spawned at the point of contact */
@@ -3464,6 +3530,11 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 <symbol id="i-prev" viewBox="0 0 24 24"><path d="m14.6 5.4-6.6 6.6 6.6 6.6"/></symbol>
 <symbol id="i-next" viewBox="0 0 24 24"><path d="m9.4 5.4 6.6 6.6-6.6 6.6"/></symbol>
 <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M6.6 19.2a4.5 4.5 0 0 1-.95-8.9 6.5 6.5 0 0 1 12.4 1.75 3.6 3.6 0 0 1 .35 7.15z"/><path d="M12 10.6v5.4"/><path d="m9.7 13.7 2.3 2.3 2.3-2.3"/></symbol>
+<symbol id="i-cloudok" viewBox="0 0 24 24"><path d="M6.6 19.2a4.5 4.5 0 0 1-.95-8.9 6.5 6.5 0 0 1 12.4 1.75 3.6 3.6 0 0 1 .35 7.15z"/><path d="m9.3 14.5 2 2 3.6-3.7"/></symbol>
+<symbol id="i-cloudup" viewBox="0 0 24 24"><path d="M6.6 19.2a4.5 4.5 0 0 1-.95-8.9 6.5 6.5 0 0 1 12.4 1.75 3.6 3.6 0 0 1 .35 7.15z"/><path d="M12 16.4V11"/><path d="m9.7 13.3 2.3-2.3 2.3 2.3"/></symbol>
+<symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M15.62 19.2L6.4 19.2L6 19.16L5.22 18.99L4.66 18.77L4.14 18.47L3.51 17.98L3.1 17.54L2.76 17.05L2.56 16.7L2.27 15.96L2.14 15.37L2.09 14.78L2.12 14.18L2.23 13.59L2.42 13.02L2.68 12.48L3.13 11.82L3.4 11.53L3.85 11.13L4.53 10.7L5.08 10.46L5.65 10.3L5.92 9.76"/><path d="M9.33 6.81L10.09 6.58L11.08 6.42L12.08 6.42L12.48 6.46L13.07 6.57L13.64 6.73L14.57 7.11L15.09 7.41L15.42 7.64L16.18 8.28L16.59 8.72L16.95 9.2L17.27 9.71L17.45 10.06L17.62 10.43L17.82 10.99L17.93 11.38L18.04 11.97L18.17 12.06L18.76 12.16L19.14 12.29L19.5 12.45L19.85 12.65L20.31 13.03L20.59 13.32L20.94 13.81L21.12 14.16L21.27 14.53L21.4 15.12L21.44 15.72L21.38 16.31L21.22 16.89L21.06 17.26L20.75 17.77L20.49 18.08"/><path d="M3.8 4.4 20.2 20.8"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.7v5.2"/><circle cx="12" cy="16.1" r="1.05" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-priority" viewBox="0 0 24 24"><path d="M12 5.4v8.6"/><circle cx="12" cy="18.4" r="1.3" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.2" y="3" width="11" height="14" rx="2"/><path d="M4.4 7.4v11.4a2.2 2.2 0 0 0 2.2 2.2h8.8"/></symbol>
 <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></symbol>
 <symbol id="i-shrink" viewBox="0 0 24 24"><path d="M3.4 9.2h5.8V3.4"/><path d="M20.6 9.2h-5.8V3.4"/><path d="M14.8 20.6v-5.8h5.8"/><path d="M9.2 20.6v-5.8H3.4"/></symbol>
@@ -3502,7 +3573,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <button data-go="import"><svg class="ic"><use href="#i-import"/></svg>Import &amp; prompt</button>
       <button data-go="settings"><svg class="ic"><use href="#i-settings"/></svg>Settings</button>
     </nav>
-    <button class="syncbar" id="syncBar" title="Cloud sync"><span class="syncdot" id="syncDot"></span><span class="t" id="syncTxt">Sync off</span></button>
+    <div class="syncfoot"><div class="sync-split st-off" data-sync="rail" title="Not connected"><button class="syncbtn" type="button" data-sync-tap aria-label="Sync off. Tap to set up"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Sync off</span></button></div></div>
     <div class="railfoot">
       <button class="btn ghost sm" id="themeBtn" title="Switch theme"><svg class="ic"><use href="#i-theme"/></svg>Theme</button>
       <button class="btn ghost sm" id="helpBtn" title="Keyboard shortcuts"><svg class="ic"><use href="#i-keys"/></svg>Keys</button>
@@ -3517,7 +3588,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h1 id="barTitle">Home</h1>
       <div class="spacer">
         <button id="themeBtnM" hidden aria-hidden="true" tabindex="-1"></button>
-        <button class="tool" id="syncBtnM" title="Cloud sync" aria-label="Cloud sync"><svg class="ic"><use href="#i-cloud"/></svg><span class="syncdot badge" id="syncDotM"></span></button>
+        <div class="sync-split st-off" data-sync="bar" title="Not connected"><button class="syncbtn" type="button" data-sync-tap aria-label="Sync off. Tap to set up"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Sync off</span></button></div>
         <button class="tool" id="overflowBtn" title="More options" aria-label="More options" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
       </div>
     </header>
@@ -3947,18 +4018,18 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.6</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.7</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
       <div class="card">
         <div class="row" style="margin-bottom:14px">
           <span class="chip" id="syncChip">Off</span>
           <span class="tiny muted" id="syncMsg">Not connected</span>
         </div>
         <div class="synckey" style="margin-bottom:16px">
-          <span><i class="syncdot s-ok"></i>Everything synced</span>
-          <span><i class="syncdot s-busy"></i>Syncing right now</span>
-          <span><i class="syncdot s-idle"></i>Changes still to upload</span>
-          <span><i class="syncdot s-err"></i>Needs attention</span>
-          <span><i class="syncdot"></i>Not connected</span>
+          <span class="sync-split st-ok"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudok"/></svg></span><span class="sl">Everything synced</span></span></span>
+          <span class="sync-split st-busy"><span class="syncbtn"><span class="sic"><span class="sync-ld still" data-ld></span></span><span class="sl">Syncing right now</span></span></span>
+          <span class="sync-split st-idle"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudup"/></svg></span><span class="sl">Changes still to upload</span></span></span>
+          <span class="sync-split st-err"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-alert"/></svg></span><span class="sl">Needs attention</span></span></span>
+          <span class="sync-split st-off"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Not connected</span></span></span>
         </div>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px">
           <label class="fld"><span>GitHub username</span><input type="text" id="ghOwner" placeholder="your-username" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
@@ -3985,7 +4056,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h3 class="sec">About Nidus</h3>
       <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       <div class="setsheet" style="margin-top:14px">
-        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.6 · sharded store</span></div></div>
+        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.7 · sharded store</span></div></div>
         <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
         <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
         <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
@@ -4596,7 +4667,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
     } catch (e) { return false; }
   }
   /* resolves once every finite animation and transition on the element and
-     inside it has played out; infinite loops (a pulsing sync dot inside a
+     inside it has played out; infinite loops (the sync loader inside a
      dialog) are not waited on, and a cap guards against anything odd */
   M.settle = function (el, fallback, cap) {
     return new Promise(function (res) {
@@ -4749,7 +4820,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
     /* .galtile .gph, not .galtile: the photo box is the part that already
        clips and is positioned, so the ripple lands inside the picture */
     '.galtile .gph,.galsec .galh,' +
-    '.cday,.esec > .eh,.figplate,.syncbar,.figbar button';
+    '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button';
   var TAP_DELAY = 70, SLOP = 10, MIN_HOLD = 220, MAX_PER_HOST = 3;
   var pending = null, live = {};
 
@@ -4883,7 +4954,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.6';
+const APP_VERSION='6.7';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5548,6 +5619,7 @@ const NOTES={
     `<p class="tiny">Point Nidus at a <b>private</b> GitHub repository and it keeps a second copy of your bank there.</p>
      <p class="tiny" style="margin-top:12px">Changes from your other devices are merged in rather than overwritten: answers, notes and sessions are treated as append-only logs, and every save is a commit, so any earlier state can be recovered from the repository's own history.</p>
      <p class="tiny" style="margin-top:12px">The token is stored in this browser only. It is never written into the app file, into a backup export, or into the public repository — so it has to be entered once on each device.</p>
+     <p class="tiny" style="margin-top:12px">The sync button in the top bar, or at the foot of the drawer, says where sync stands. Tap it to sync now. The arrow that slides out beside it, or holding the button, opens the details: what is still waiting to upload, how many questions your other device holds, and the sync log.</p>
      <p class="tiny" style="margin-top:12px"><b>Setup guide</b> below walks through the repositories, the token and the permissions it needs.</p>`],
 
   companion:['What this panel is',
@@ -11597,6 +11669,26 @@ const SYNC=(function(){
 
   /* ---------- the run loop ---------- */
   function setState(phase,short,msg){st={phase:phase,short:short,msg:msg||short};paint()}
+  /* ---------- the sync log ----------
+     What the details sheet lists under "Sync log": the last forty things a
+     pass did, newest first, kept on this device only. A problem repeated by
+     every retry is one line whose time moves on, not forty copies of it. */
+  const LOG='nidus_sync_log';
+  let logRows=null;
+  function logList(){
+    if(!logRows){try{logRows=JSON.parse(localStorage.getItem(LOG)||'[]')}catch(e){logRows=[]}
+      if(!Array.isArray(logRows))logRows=[]}
+    return logRows;
+  }
+  function log(text){
+    const L=logList(),now=Date.now();
+    if(L[0]&&L[0].text===text&&now-L[0].at<3600000)L[0].at=now;
+    else L.unshift({at:now,text:String(text)});
+    if(L.length>40)L.length=40;
+    try{localStorage.setItem(LOG,JSON.stringify(L))}catch(e){}
+    if(window.SYNCUI)SYNCUI.update(st);
+  }
+  const nfiles=n=>n+' file'+(n===1?'':'s');
   /* A request that arrives while a pass is running is held, not dropped. The
      old code returned silently, so pressing Sync now at the wrong half-second
      did nothing at all and the status went on reading "Synced". */
@@ -11623,7 +11715,10 @@ const SYNC=(function(){
         /* "Synced" has to mean synced. A pass that could not read some of its
            files is a pass that left something behind, and saying so is the
            difference between a bad minute and a question nobody misses. */
+        const lp=(V3.lastPass&&V3.lastPass())||null;
+        if(lp&&(lp.sent||lp.received))log('Synced · '+nfiles(lp.sent)+' sent, '+nfiles(lp.received)+' received');
         if(h.failed){
+          log(nfiles(h.failed)+' did not come through — trying again');
           retry=Math.min(retry+1,4);
           setState('err','Sync incomplete',h.failed+' file'+(h.failed===1?' did':'s did')+' not come through — Nidus will try again');
           clearTimeout(timer);timer=setTimeout(()=>run('retry'),Math.min(60000,5000*Math.pow(2,retry)));
@@ -11647,6 +11742,7 @@ const SYNC=(function(){
       }
       changed=await syncOne('bank',0);
       changed=(await syncOne('progress',0))||changed;
+      if(changed)log('Synced · changes from another device merged in');
       applying=true;await doSave();applying=false;
       cfg.lastAt=Date.now();saveCfg();retry=0;
       setState('ok','Synced '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
@@ -11656,6 +11752,7 @@ const SYNC=(function(){
     }catch(e){
       applying=false;
       setState('err','Sync failed',(e&&e.message)||'Sync failed');
+      log('Problem: '+((e&&e.message)||'sync failed'));
       if(reason==='manual')toast((e&&e.message)||'Sync failed.');
       /* transient trouble: back off and try again rather than going quiet */
       if(retry<4&&cfg.auto){retry++;clearTimeout(timer);timer=setTimeout(()=>run('retry'),Math.min(60000,5000*Math.pow(2,retry)))}
@@ -11688,14 +11785,9 @@ const SYNC=(function(){
 
   /* ---------- status painting ---------- */
   function paint(){
-    const d=document.getElementById('syncDot'),t=document.getElementById('syncTxt'),
-          dm=document.getElementById('syncDotM'),mb=document.getElementById('syncBtnM'),
-          bar=document.getElementById('syncBar');
-    if(d)d.className='syncdot s-'+st.phase;
-    if(dm)dm.className='syncdot badge s-'+st.phase;
-    if(t)t.textContent=st.short;
-    if(bar)bar.title=st.msg;
-    if(mb)mb.title='Cloud sync — '+st.msg;
+    /* the split button in the drawer and the top bar, and the details sheet
+       when it is open, all follow from here (SYNCUI) */
+    if(window.SYNCUI)SYNCUI.update(st);
     const chip=document.getElementById('syncChip'),msg=document.getElementById('syncMsg');
     if(chip){
       const names={off:'Off',idle:'Pending',busy:'Working',ok:'Connected',err:'Problem'};
@@ -11911,9 +12003,6 @@ const SYNC=(function(){
     if(g('ghAuto'))g('ghAuto').onchange=()=>{if(!cfg)return;cfg.auto=g('ghAuto').checked;saveCfg();
       toast(cfg.auto?'Automatic sync on.':'Automatic sync off — use Sync now.')};
     document.addEventListener('click',e=>{if(e.target.id==='ghDoForget'){closeModal();forget()}});
-    const jump=()=>{if(on())run('manual');else window.openSettingsSection('sync')};
-    if(g('syncBar'))g('syncBar').onclick=jump;
-    if(g('syncBtnM'))g('syncBtnM').onclick=jump;
 
     document.addEventListener('visibilitychange',()=>{
       if(!on()||!cfg.auto)return;
@@ -11943,6 +12032,7 @@ const SYNC=(function(){
      rather than picked, a finished session still outranks an open one. Handing
      over the functions rather than reimplementing them is what guarantees it. */
   return {boot:boot,schedule:schedule,render:renderSync,now:()=>run('manual'),guide:guide,connected:on,
+    status:()=>st,log:log,logList:logList,
     kick:r=>run(r||'beacon'),
     cfg:()=>cfg,saveCfg:saveCfg,branch:branch,dir:()=>((cfg&&cfg.dir)||'nidus').replace(/^\/+|\/+$/g,''),
     state:setState,paint:paint,clearBase:clearBase,readLegacy:readFile,snap:snap,apply:apply,fp:fp,
@@ -11988,6 +12078,7 @@ const V3=(function(){
   let lastManifest=null;
   let beaconTimer=null, beaconSeq=0;
   const beaconSeen=Object.create(null);
+  const peers=Object.create(null);          /* deviceId -> {label, bank, ts} from its beacon */
   const photoHints=Object.create(null);   /* qid -> [{fid,media}] learned from another device's beacon */
 
   const cfg=()=>SYNC.cfg();
@@ -12401,7 +12492,7 @@ const V3=(function(){
     catch(e){throw new Error('The file '+p+' in the repository is not valid JSON — open it on GitHub and check the last commit')}
   }
   async function pullPaths(paths,manifest,ref){
-    let changed=false, failed=0;
+    let changed=false, failed=0, arrived=0;
     const touchedQ=new Set();
     const fps=await fpLoad();
     let dirtyOrder=false;
@@ -12465,6 +12556,7 @@ const V3=(function(){
           if(j&&j!==NET.UNCHANGED){META=j;if(j.prompt!==undefined&&!DB.prompt)DB.prompt=j.prompt;
             if(j.taxVersion)DB.taxVersion=Math.max(DB.taxVersion||1,j.taxVersion)}
         }
+        if(g.val!==NET.UNCHANGED&&g.val!==null)arrived++;
         if(manifest&&manifest[p])fps['@remote:'+p]=manifest[p];
       }catch(e){
         /* one unreadable file must not stop the other 255 from arriving */
@@ -12498,7 +12590,7 @@ const V3=(function(){
     /* every question must have a stats row, exactly as before */
     (DB.questions||[]).forEach(q=>{if(!DB.stats[q.id])DB.stats[q.id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]}});
     if(changed)reindex();
-    return {changed:changed,failed:failed};
+    return {changed:changed,failed:failed,arrived:arrived};
   }
 
   function commitMessage(files){
@@ -12578,7 +12670,7 @@ const V3=(function(){
     lastManifest=man;
     const c=cfg();c.sha=c.sha||{};c.sha[RD()]=sha;SYNC.saveCfg();
     await fpSave();
-    return {ok:true,sha:sha,beaconed:beaconed};
+    return {ok:true,sha:sha,beaconed:beaconed,sent:Object.keys(marks).length};
   }
 
   /* ---------- what this device is holding that the repository is not ----------
@@ -12596,6 +12688,18 @@ const V3=(function(){
       out[(fps[p]===undefined?'new:':'')+f.kind]=1;
     });
     return out;
+  }
+
+  /* how many files this device would write on the next push, for the details
+     sheet; null outside the sharded store */
+  async function pendingCount(){
+    if(MODE!=='v3')return null;
+    /* shard keys first: a question whose key is not known yet would be
+       filed under 00 and every shard would look changed */
+    await warmAll();await fpLoad();
+    const files=localFiles();let n=0;
+    Object.keys(files).forEach(p=>{if(localFp[p]!==files[p].fp)n++});
+    return n;
   }
 
   /* The upload ledger records what this device has already written. It is an
@@ -12625,6 +12729,10 @@ const V3=(function(){
      pass finishes, and everybody waiting on it gets the same answer. */
   let runQ=null;
   let health={failed:0,at:0};
+  /* what the last whole pass moved, for the sync log: files written, and
+     files that came in with something in them (a retry after a conflict
+     adds to the same pass) */
+  let lastPass=null, passGot=0;
   async function run(reason,depth,readOnly){
     if(MODE!=='v3')return false;
     if(running&&!depth){
@@ -12634,6 +12742,7 @@ const V3=(function(){
       return p;
     }
     running=true;
+    if(!depth)passGot=0;
     try{
       await warmAll();
       await fpLoad();
@@ -12642,10 +12751,10 @@ const V3=(function(){
       const d=await discover();
       if(d.paths===null){
         const mp=await manifestPaths();
-        if(mp.paths.length){const r=await pullPaths(mp.paths,mp.manifest,d.head||null);changed=r.changed||changed;failed+=r.failed}
+        if(mp.paths.length){const r=await pullPaths(mp.paths,mp.manifest,d.head||null);changed=r.changed||changed;failed+=r.failed;passGot+=r.arrived}
         try{await reconcileLedger(mp.manifest)}catch(e){}
       }else if(d.paths.length){
-        const r=await pullPaths(d.paths,null,d.head||null);changed=r.changed||changed;failed+=r.failed;
+        const r=await pullPaths(d.paths,null,d.head||null);changed=r.changed||changed;failed+=r.failed;passGot+=r.arrived;
       }
       /* THE COMMIT POINTER IS A PROMISE. Storing it says "everything up to
          this commit has been merged into this device", and the next pass only
@@ -12654,7 +12763,7 @@ const V3=(function(){
          about it. So it moves only when the whole pass landed. */
       if(d.head&&!failed){const c=cfg();c.sha=c.sha||{};c.sha[RD()]=d.head;SYNC.saveCfg()}
       health={failed:failed,at:Date.now()};
-      if(readOnly){await fpSave();return changed}
+      if(readOnly){await fpSave();lastPass={sent:0,received:passGot,failed:failed,at:Date.now()};return changed}
       /* media goes to its own repository in its own commit — pushing a blob
          into the data repo's tree would put photos back inside the bank */
       try{await flushMedia('background')}catch(e){}
@@ -12673,6 +12782,7 @@ const V3=(function(){
       }
       await fpSave();
       if(!r.beaconed)await writeBeacon();
+      lastPass={sent:r.none?0:(r.sent||0),received:passGot,failed:failed,at:Date.now()};
       return changed;
     }finally{
       running=false;
@@ -12714,6 +12824,7 @@ const V3=(function(){
       'nidus media: '+files.length+' file'+(files.length===1?'':'s')+' — '+((cfg().label||'device')));
     if(sha==='conflict')return;                 /* content-addressed: retry is always safe */
     await markUploaded(files);
+    try{const n=new Set(files.map(f=>f._hash)).size;SYNC.log('Uploaded '+n+' photo'+(n===1?'':'s'))}catch(e){}
     try{MEDIA.evict()}catch(e){}
   }
 
@@ -12739,6 +12850,7 @@ const V3=(function(){
           'nidus media: photo for '+String(q.id).slice(0,12)+' — '+(cfg().label||'device'));
         if(sha==='conflict')return;
         await markUploaded(files);
+        try{SYNC.log('Uploaded a photo for a question')}catch(e){}
       }
       /* now, and only now, the reference and the announcement */
       beaconEvents.push({t:'photo',qid:q.id,fid:filled[0]&&filled[0].fid,media:filled[0]&&filled[0].media,ts:Date.now()});
@@ -12811,6 +12923,8 @@ const V3=(function(){
       let j;
       try{j=await NET.getJSON(RD(),it.path,{fresh:true})}catch(e){continue}
       if(!j||j===NET.UNCHANGED)continue;
+      /* how many questions the other device holds, for the details sheet */
+      peers[dev]={label:j.label||'device',bank:j.bank|0,ts:j.ts||Date.now()};
       (j.events||[]).forEach(ev=>{
         if(ev.t!=='photo'||!ev.qid||!ev.media)return;
         const seenKey=dev+'|'+ev.qid+'|'+ev.media;
@@ -12923,6 +13037,7 @@ const V3=(function(){
       try{await doSave()}catch(e){}
       const n=(DB.questions||[]).length;
       toast('Storage index rebuilt — '+n+' question'+(n===1?'':'s')+' in the bank on this device.');
+      try{SYNC.log('Storage index rebuilt — '+n+' question'+(n===1?'':'s')+' on this device')}catch(e){}
       return true;
     }catch(e){return false}
   }
@@ -13093,9 +13208,329 @@ const V3=(function(){
     logDoc:logDoc,parseLog:parseLog,monthRows:monthRows,bankDoc:bankDoc,stateDoc:stateDoc,
     warmAll:warmAll,shardWarm:shardWarm,mergeLegacyIn:mergeLegacyIn,VERSION:VERSION,
     fullResync:fullResync,dirtyKinds:dirtyKinds,health:()=>health,listAll:listAll,
-    inspect:inspect,forcePushAll:forcePushAll,unTombstone:unTombstone};
+    inspect:inspect,forcePushAll:forcePushAll,unTombstone:unTombstone,
+    lastPass:()=>lastPass,pendingCount:pendingCount,peers:()=>peers};
 })();
-window.V3=V3;/* ============================================================
+window.V3=V3;
+/* ============================================================
+   SYNC CONTROL — the split button and the details sheet
+   ------------------------------------------------------------
+   The part of Engram's sync that people see, carried over: one
+   split button, in the drawer and in the top bar.
+
+     tap           sync now. A second segment slides out beside it
+     that segment  the details sheet: what is waiting, what the
+                   other device holds, the log. It folds away 4.5 s
+                   after the sync settles, and stays out showing "!"
+                   while sync needs attention.
+     hold          the details sheet, straight away
+
+   While a pass runs, the icon becomes the Material 3 Expressive
+   loading indicator. A change of words is never a jump: the width
+   travels to the new words on the app's spatial spring, the old
+   words rise out, the new ones rise in once the edge has passed
+   them, and a new icon grows in through ICON MOTION.
+   Every state still comes from SYNC's setState; this only draws it.
+   ============================================================ */
+const SYNCUI=(function(){
+  const LD=[5,4,6,1,7,2,3];                 /* the shapes the indicator morphs through */
+  const FOLD=4500, HOLD=550;
+  const SPRING='cubic-bezier(.34,1.5,.6,1)';  /* ICON MOTION's arrival curve */
+  const root=document.documentElement;
+  let open=false, foldT=0, lastSt=null, counts={pending:null,photos:null}, countSeq=0;
+  const reduced=()=>!!(window.Motion&&Motion.reduced)||root.classList.contains('m-reduce');
+  const tok=(k,f)=>(getComputedStyle(root).getPropertyValue(k)||'').trim()||f;
+  const dur=(k,f)=>parseFloat(tok(k,''))||f;
+  const fmt=x=>Number(x||0).toLocaleString();
+  const nfiles=n=>fmt(n)+' file'+(n===1?'':'s');
+
+  /* ---------- the loading indicator ----------
+     Material 3 Expressive's polar "cookie" shapes. Every shape but the
+     circle is drawn with the same 97 points, so any two of them morph. */
+  function shapePath(kind,size){
+    const presets=[[0,0],[4,.1],[6,.07],[7,.075],[9,.055],[12,.04],[5,.09],[8,.06]];
+    const pr=presets[kind%presets.length],n=pr[0],a=pr[1];
+    const R=size/2,pts=[];
+    if(!n)return 'M'+(R-R*.98)+','+R+'a'+R*.98+','+R*.98+' 0 1,0 '+R*1.96+',0a'+R*.98+','+R*.98+' 0 1,0 -'+R*1.96+',0';
+    for(let i=0;i<=96;i++){
+      const t=i/96*Math.PI*2,r=R*(1-a)*(1+a*Math.cos(n*t));
+      pts.push((R+r*Math.cos(t-Math.PI/2)).toFixed(2)+','+(R+r*Math.sin(t-Math.PI/2)).toFixed(2));
+    }
+    return 'M'+pts.join('L')+'Z';
+  }
+  function ldCss(){
+    if(document.getElementById('sync-ld-css'))return;
+    const e=tok('--m3-spring-expressive','cubic-bezier(.2,0,0,1)'),n=LD.length,at=i=>(i/n*100).toFixed(3)+'%';
+    const morph=LD.concat(LD[0]).map((k,i)=>at(i)+'{d:path("'+shapePath(k,24)+'");animation-timing-function:'+e+'}').join('');
+    const step=LD.concat(0).map((k,i)=>at(i)+'{transform:rotate('+(i*720/n).toFixed(2)+'deg);animation-timing-function:'+e+'}').join('');
+    const el=document.createElement('style');el.id='sync-ld-css';
+    el.textContent='@keyframes nxLdMorph{'+morph+'}@keyframes nxLdStep{'+step+'}';
+    document.head.appendChild(el);
+  }
+  function ldHtml(still){
+    ldCss();
+    return '<span class="sync-ld'+(still?' still':'')+'" aria-hidden="true"><svg viewBox="-1 -1 26 26"><g><path d="'+shapePath(LD[0],24)+'"/></g></svg></span>';
+  }
+
+  /* ---------- what a state looks like ---------- */
+  function view(st){
+    st=st||{phase:'off',short:'Sync off',msg:'Not connected'};
+    const on=!!(window.SYNC&&SYNC.connected()),ph=st.phase||'off';
+    const icon=ph==='busy'?null:ph==='ok'?'cloudok':ph==='err'?'alert'
+      :(ph==='off'||navigator.onLine===false)?'cloudoff':'cloudup';
+    return {ph:ph,icon:icon,label:st.short||'Sync',msg:st.msg||st.short||'',on:on,attn:on&&ph==='err'};
+  }
+  function html(where,v){
+    const bar=where==='bar'||where==='rail',o=bar&&v.on&&(open||v.attn);
+    const more=bar&&v.on
+      ?'<button class="sync-more" type="button" data-sync-more aria-label="'+(v.attn?'Sync needs attention: details':'Sync details')+
+        '" tabindex="'+(o?0:-1)+'" aria-hidden="'+!o+'"><svg class="ic"><use href="#i-'+(v.attn?'priority':'chev')+'"/></svg></button>':'';
+    const aria=v.label+'. '+(v.on?'Tap to sync, hold for details':'Tap to set up');
+    return '<div class="sync-split st-'+v.ph+(o?' open':'')+(v.attn?' attn':'')+'" data-sync="'+where+'" title="'+esc(v.msg)+'">'+
+      '<button class="syncbtn" type="button" data-sync-tap aria-label="'+esc(aria)+'"><span class="sic">'+
+      '<svg class="ic'+(v.icon?'':' off')+'"><use href="#i-'+(v.icon||'cloudup')+'"/></svg>'+(v.icon?'':ldHtml())+
+      '</span><span class="sl">'+esc(v.label)+'</span></button>'+more+'</div>';
+  }
+
+  /* ---------- the icon slot ----------
+     The sprite icon stays in place under the indicator, so leaving the
+     working state is an href swap that ICON MOTION animates like any other. */
+  function swapIcon(sic,v){
+    if(!sic)return;
+    const svg=sic.querySelector('svg.ic'),use=svg&&svg.querySelector('use');
+    let ld=sic.querySelector('.sync-ld:not(.gone)');
+    const anim=!reduced()&&sic.getBoundingClientRect().width>0;
+    if(!v.icon){
+      if(ld)return;
+      if(svg)svg.classList.add('off');
+      sic.insertAdjacentHTML('beforeend',ldHtml());
+      ld=sic.lastElementChild;
+      if(anim)ld.animate([{transform:'scale(.6)',opacity:0},{transform:'none',opacity:1}],{duration:380,easing:SPRING});
+      return;
+    }
+    if(ld){
+      ld.classList.add('gone');
+      if(anim){
+        const a=ld.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.6)'}],
+          {duration:dur('--m3-dur-short2',150),easing:tok('--m3-ease-emphasized-accel','ease-in'),fill:'forwards'});
+        a.onfinish=()=>ld.remove();
+      }else ld.remove();
+    }
+    if(!svg||!use)return;
+    const was=svg.classList.contains('off');
+    svg.classList.remove('off');
+    const href='#i-'+v.icon;
+    if(use.getAttribute('href')!==href)use.setAttribute('href',href);
+    else if(was&&anim)svg.animate([{transform:'scale(.6)',opacity:0},{transform:'none',opacity:1}],{duration:380,easing:SPRING});
+  }
+
+  /* how far into an easing's run it stays past progress p (0–1) */
+  function reach(p,easing){
+    if(!(p>0))return 0;
+    const a=new Animation(new KeyframeEffect(null,null,{duration:1000,easing:easing}));
+    let last=0;
+    for(let t=0;t<1000;t+=20){a.currentTime=t;if(a.effect.getComputedTiming().progress<Math.min(p,1))last=t+20}
+    return last/1000;
+  }
+
+  /* ---------- one control, updated in place ---------- */
+  function morph(el,v){
+    const box=document.createElement('div');box.innerHTML=html(el.dataset.sync,v);
+    const fresh=box.firstElementChild;
+    const op=el.querySelector('.syncbtn'),np=fresh.querySelector('.syncbtn');
+    const om=el.querySelector('.sync-more'),nm=fresh.querySelector('.sync-more');
+    if(!op||!np||!!om!==!!nm){el.replaceWith(fresh);return}
+    const w0=op.getBoundingClientRect().width;
+    /* a width morph still running would keep pulling toward its old target
+       and hide the real new width, so it stops here and the next one starts
+       from wherever it is on screen */
+    op.getAnimations().forEach(a=>{if(a.id==='sync-w')a.cancel()});
+    const phOf=x=>Array.from(x.classList).find(c=>c.indexOf('st-')===0);
+    const s0=phOf(el)!==phOf(fresh);
+    const ol=op.querySelector('.sl:not(.sl-old)');
+    const t0=ol?ol.textContent:'',ox=ol?ol.offsetLeft:0,oy=ol?ol.offsetTop:0,a0=ol?+getComputedStyle(ol).opacity:1;
+    el.className=fresh.className;el.title=fresh.title;
+    op.setAttribute('aria-label',np.getAttribute('aria-label'));
+    swapIcon(op.querySelector('.sic'),v);
+    const nl0=np.querySelector('.sl');
+    if(ol&&nl0&&ol.textContent!==nl0.textContent)ol.textContent=nl0.textContent;
+    if(om){
+      ['aria-label','tabindex','aria-hidden'].forEach(a=>om.setAttribute(a,nm.getAttribute(a)));
+      const u=om.querySelector('use'),nu=nm.querySelector('use');
+      if(u&&nu&&u.getAttribute('href')!==nu.getAttribute('href'))u.setAttribute('href',nu.getAttribute('href'));
+    }
+    if(reduced()||!w0||!el.isConnected)return;
+    try{
+      const w1=op.getBoundingClientRect().width,nl=op.querySelector('.sl:not(.sl-old)'),t1=nl?nl.textContent:'';
+      /* new words cross-fade, except a number ticking over, which just changes */
+      const swap=!!(nl&&t0&&t0!==t1&&(s0||!/\d/.test(t0)||!/\d/.test(t1)));
+      /* no visible word may be cut by the edge: a shrink waits while the old
+         words fade, and on a grow the new words arrive once the edge has
+         passed them */
+      const fe=dur('--m3-dur-short2',150),wd=dur('--m3-spatial-slow',400),ease=tok('--m3-spring-spatial','cubic-bezier(.2,0,0,1)');
+      const fading=Math.max(0,...Array.from(op.querySelectorAll('.sl-old')).flatMap(g=>g.getAnimations())
+        .map(a=>a.effect.getComputedTiming().endTime-(a.currentTime||0)));
+      const hold=w1<w0-1?Math.max(swap&&a0>.05?fe*1.3:0,fading?fading+30:0):0;
+      let enter=swap?fe/2:0;
+      if(Math.abs(w1-w0)>1){
+        op.classList.add('morph');
+        const wa=op.animate([{width:w0+'px'},{width:w1+'px'}],{duration:wd,delay:hold,fill:'backwards',easing:ease,id:'sync-w'});
+        const settle=()=>{if(!op.getAnimations().some(a=>a!==wa&&a.id==='sync-w'&&a.playState==='running'))op.classList.remove('morph')};
+        wa.onfinish=settle;wa.oncancel=settle;
+        if(w1>w0&&nl&&t0!==t1)enter=Math.max(enter,reach((nl.offsetLeft+nl.offsetWidth-w0)/(w1-w0),ease)*wd);
+      }
+      /* the old words leave from however visible they were, and not at all
+         if they had not arrived yet */
+      if(swap&&a0>.05){
+        const g=document.createElement('span');g.className='sl sl-old';g.textContent=t0;g.setAttribute('aria-hidden','true');
+        g.style.left=ox+'px';g.style.top=oy+'px';op.appendChild(g);
+        g.animate([{opacity:a0,transform:'none'},{opacity:0,transform:'translateY(-8px)'}],
+          {duration:fe,easing:tok('--m3-ease-emphasized-accel','ease-in'),fill:'forwards'}).onfinish=()=>g.remove();
+      }
+      if(nl&&enter){
+        nl.getAnimations().forEach(a=>a.cancel());
+        nl.animate([{opacity:0,transform:swap?'translateY(8px)':'none'},{opacity:1,transform:'none'}],
+          {duration:dur('--m3-dur-medium',250),delay:enter,fill:'backwards',easing:tok('--m3-ease-emphasized-decel','ease-out')});
+      }
+    }catch(e){}
+  }
+
+  function update(st){
+    const prev=lastSt;lastSt=st;
+    const v=view(st);
+    document.querySelectorAll('.sync-split[data-sync]').forEach(el=>morph(el,v));
+    if(document.getElementById('syncSheet')){
+      if(prev&&prev.phase==='busy'&&st&&st.phase!=='busy')refreshCounts();
+      else drawSheet();
+    }
+  }
+  function arm(){
+    clearTimeout(foldT);
+    foldT=setTimeout(()=>{
+      const st=SYNC.status();
+      if(st&&st.phase==='busy')return arm();
+      open=false;update(SYNC.status());
+    },FOLD);
+  }
+  function expand(){open=true;update(SYNC.status());arm()}
+
+  /* ---------- the details sheet ---------- */
+  function when(t){
+    const d=new Date(t),today=new Date();
+    const hm=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    if(d.toDateString()===today.toDateString())return 'Today '+hm;
+    return d.toLocaleDateString([],{day:'numeric',month:'short'})+' '+hm;
+  }
+  function ago(t){
+    const s=Math.max(0,(Date.now()-t)/1000);
+    if(s<60)return 'just now';
+    if(s<3600)return Math.round(s/60)+' min ago';
+    if(s<86400)return Math.round(s/3600)+' h ago';
+    return when(t);
+  }
+  function infoRows(){
+    const c=SYNC.cfg()||{},mode=(window.V3&&V3.mode)?V3.mode():'legacy';
+    const row=(k,val,sub,cls)=>'<div class="setrow"><div class="lb">'+k+(sub?'<small>'+sub+'</small>':'')+
+      '</div><div class="ctl"><span class="sv'+(cls?' '+cls:'')+'">'+val+'</span></div></div>';
+    const n=(DB.questions||[]).length,out=[];
+    out.push(row('This device',esc(c.label||'device'),'id '+esc(String(c.deviceId||'').slice(0,8))));
+    out.push(row('Last sync',c.lastAt?esc(when(c.lastAt)):'Not yet'));
+    if(mode==='v3')out.push(row('Waiting to upload',counts.pending==null?'…':counts.pending?nfiles(counts.pending):'Nothing',
+      'Files this device has changed since its last push'));
+    out.push(row('Photos waiting to upload',counts.photos==null?'…':counts.photos?fmt(counts.photos):'None'));
+    out.push(row('Questions on this device',fmt(n)));
+    /* the other devices, as their own beacons last reported them */
+    const P=(window.V3&&V3.peers)?V3.peers():{};
+    Object.keys(P).map(k=>P[k]).sort((a,b)=>b.ts-a.ts).forEach(p=>{
+      const same=p.bank===n;
+      out.push(row(esc(p.label),fmt(p.bank)+(same?' ✓':''),
+        'Questions on that device · heard from '+esc(ago(p.ts))+(same?'':' · it may still be syncing'),same?'ok':''));
+    });
+    const h=(window.V3&&V3.health)?V3.health():null;
+    if(mode==='v3'&&h&&h.at)out.push(row('Last pass',h.failed?nfiles(h.failed)+' did not arrive':'Every file arrived','',h.failed?'bad':'ok'));
+    const lim=NET.limits?NET.limits():null;
+    out.push(row('GitHub requests left',lim&&lim.remaining!=null?fmt(lim.remaining):'—',
+      lim&&lim.reset?'This hour · resets '+esc(new Date(lim.reset).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})):'This hour'));
+    out.push(row('Questions and results',esc((c.owner||'')+'/'+(c.repo||'')),'Branch '+esc(c.branch||'main')));
+    out.push(row('Photos',esc((c.owner||'')+'/'+(c.mrepo||'nidus-media'))));
+    out.push(row('Storage layout',mode==='v3'?'Sharded store':mode==='locked'?'Old format, read only':'Two files'));
+    return out.join('');
+  }
+  function logHtml(){
+    const L=SYNC.logList();
+    return L.length?L.map(r=>'<div><time>'+esc(when(r.at))+'</time><span>'+esc(r.text)+'</span></div>').join('')
+      :'<div class="none">Nothing yet.</div>';
+  }
+  function drawSheet(){
+    const sh=document.getElementById('syncSheet');if(!sh)return;
+    const st=SYNC.status()||{};
+    if(!sh.firstElementChild){
+      sh.innerHTML='<div class="syncsheet-top">'+html('sheet',view(st))+'<div class="tiny muted" id="syncSheetMsg"></div></div>'+
+        '<div class="setsheet syncinfo" id="syncSheetInfo"></div>'+
+        '<div class="row" style="margin-top:16px;gap:8px">'+
+          '<button class="btn sm" type="button" id="syncSheetRepair">Repair sync</button>'+
+          '<button class="btn ghost sm" type="button" id="syncSheetSet">Sync settings</button></div>'+
+        '<p class="figsub" style="margin-top:24px">Sync log</p><div class="synclog" id="syncSheetLog"></div>';
+    }
+    const m=document.getElementById('syncSheetMsg');if(m&&m.textContent!==(st.msg||''))m.textContent=st.msg||'';
+    const i=document.getElementById('syncSheetInfo'),li=infoRows();if(i&&i.innerHTML!==li)i.innerHTML=li;
+    const g=document.getElementById('syncSheetLog'),lg=logHtml();if(g&&g.innerHTML!==lg)g.innerHTML=lg;
+  }
+  async function refreshCounts(){
+    const my=++countSeq;
+    let pending=null,photos=null;
+    try{pending=(window.V3&&V3.pendingCount)?await V3.pendingCount():null}catch(e){}
+    try{photos=(IDB.v2&&MEDIA.pending)?(await MEDIA.pending()).length:0}catch(e){}
+    if(my!==countSeq)return;
+    counts={pending:pending,photos:photos};drawSheet();
+  }
+  function details(){
+    if(!SYNC.connected()){window.openSettingsSection('sync');return}
+    counts={pending:null,photos:null};
+    modal('Sync','<div id="syncSheet"></div>',
+      '<button class="btn" data-close>Close</button><button class="btn pri" type="button" id="syncSheetNow">Sync now</button>');
+    drawSheet();refreshCounts();
+  }
+
+  /* ---------- input ---------- */
+  let held=false,holdT=0,hx=0,hy=0;
+  const cancel=()=>{clearTimeout(holdT);holdT=0};
+  document.addEventListener('pointerdown',e=>{
+    const b=e.target.closest&&e.target.closest('[data-sync-tap]');if(!b)return;
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    held=false;hx=e.clientX;hy=e.clientY;cancel();
+    holdT=setTimeout(()=>{holdT=0;held=true;details()},HOLD);
+  });
+  document.addEventListener('pointerup',cancel);
+  document.addEventListener('pointercancel',cancel);
+  document.addEventListener('pointermove',e=>{if(holdT&&Math.abs(e.clientX-hx)+Math.abs(e.clientY-hy)>8)cancel()});
+  /* a hold opens the sheet; the click that ends it must not also sync */
+  document.addEventListener('click',e=>{
+    const t=e.target.closest&&e.target.closest('[data-sync-tap],[data-sync-more]');if(!t)return;
+    if(held){held=false;e.preventDefault();e.stopPropagation();return}
+    if(t.hasAttribute('data-sync-more')){arm();details();return}
+    if(!SYNC.connected()){window.openSettingsSection('sync');return}
+    const host=t.closest('[data-sync]');
+    if(host&&host.dataset.sync!=='sheet')expand();
+    SYNC.now();
+  },true);
+  document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('[data-sync-tap]'))e.preventDefault()});
+  document.addEventListener('click',e=>{
+    const t=e.target.closest&&e.target.closest('#syncSheetNow,#syncSheetRepair,#syncSheetSet');if(!t)return;
+    if(t.id==='syncSheetNow')SYNC.now();
+    else if(t.id==='syncSheetRepair'){const r=document.getElementById('ghRepair');if(r)r.click()}
+    else{closeModal();window.openSettingsSection('sync')}
+  });
+  window.addEventListener('online',()=>update(SYNC.status()));
+  window.addEventListener('offline',()=>update(SYNC.status()));
+
+  /* the legend in Settings draws the indicator standing still */
+  document.querySelectorAll('[data-ld]').forEach(x=>{x.outerHTML=ldHtml(true)});
+
+  return {update:update,details:details,expand:expand};
+})();
+window.SYNCUI=SYNCUI;
+/* ============================================================
    MIGRATION — copy forward, never convert in place
    ------------------------------------------------------------
    Four rules, and every line below serves one of them:
@@ -14782,8 +15217,9 @@ window.TOOLS=TOOLS;
     sync: function () {
       var on = false;
       try { on = !!(window.SYNC && window.SYNC.connected()); } catch (e) {}
-      var t = el('syncTxt');
-      return on ? (t && t.textContent ? t.textContent : 'Connected') : 'Not connected';
+      var st = null;
+      try { st = window.SYNC.status(); } catch (e) {}
+      return on ? (st && st.short ? st.short : 'Connected') : 'Not connected';
     },
     data: function () {
       var m = { indexeddb: 'IndexedDB', localstorage: 'localStorage', memory: 'Memory only — not saved' };
@@ -15211,6 +15647,27 @@ svg.ic > use.icsrc{display:none}
     cloud: function (m, p) {
       m.bounce(p[0], 'scale(1.05)');
       m.bounce([p[1], p[2]], 'translateY(2.4px)', { delay: 40 });
+    },
+    cloudok: function (m, p) {
+      m.bounce(p[0], 'scale(1.05)');
+      m.draw(p[1], { delay: 60 });
+    },
+    cloudup: function (m, p) {
+      m.bounce(p[0], 'scale(1.05)');
+      m.bounce([p[1], p[2]], 'translateY(-2.4px)', { delay: 40 });
+    },
+    cloudoff: function (m, p) {
+      m.bounce([p[0], p[1]], 'scale(1.05)');
+      m.draw(p[2], { delay: 60 });
+    },
+    priority: function (m, p) {
+      m.bounce(p[0], 'scaleY(.7)', { at: '50% 0%' });
+      m.bounce(p[1], 'translateY(2.4px)', { delay: 30 });
+    },
+    alert: function (m, p) {
+      m.bounce(p[0], 'scale(.92)');
+      m.bounce(p[1], 'scaleY(.7)', { at: '50% 0%', delay: 40 });
+      m.bounce(p[2], 'translateY(2.4px)', { delay: 20 });
     },
     copy: function (m, p) {
       m.bounce(p[0], 'translate(-1.4px,-1.4px)');
