@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.8 -->
+<!-- Nidus — Personal Qbank · v6.9 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4019,7 +4019,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.8</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.9</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
       <div class="card">
         <div class="row" style="margin-bottom:14px">
           <span class="chip" id="syncChip">Off</span>
@@ -4044,6 +4044,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
           <button class="btn pri" id="ghSave">Save and connect</button>
           <button class="btn" id="ghSyncNow">Sync now</button>
           <label class="pill"><input type="checkbox" id="ghAuto" checked style="width:auto;margin-right:6px"> Sync automatically</label>
+          <button class="btn ghost sm" id="ghDevCopy">Settings from another device</button>
           <button class="btn ghost sm" id="ghRepair">Repair sync</button>
           <button class="btn ghost sm" id="ghHelp">Setup guide</button>
           <button class="btn ghost sm" id="ghForget">Disconnect this device</button>
@@ -4057,7 +4058,7 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
       <h3 class="sec">About Nidus</h3>
       <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       <div class="setsheet" style="margin-top:14px">
-        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.8 · sharded store</span></div></div>
+        <div class="setrow"><div class="lb">Version<small>This build — check it matches on every device</small></div><div class="ctl"><span class="chip" id="verChip">v6.9 · sharded store</span></div></div>
         <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
         <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
         <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
@@ -4955,7 +4956,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.8';
+const APP_VERSION='6.9';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5619,6 +5620,7 @@ const NOTES={
   sync:['How syncing works',
     `<p class="tiny">Point Nidus at a <b>private</b> GitHub repository and it keeps a second copy of your bank there.</p>
      <p class="tiny" style="margin-top:12px">Changes from your other devices are merged in rather than overwritten: answers, notes and sessions are treated as append-only logs, and every save is a commit, so any earlier state can be recovered from the repository's own history.</p>
+     <p class="tiny" style="margin-top:12px">Settings are kept per device, so a phone and a tablet can be set up differently. Each device saves its own reading, explanation, copying and appearance settings, automatic sync and photo cache limit to its own file in the repository, and never changes another device's. Your name, app title, daily goal and exam date are shared by every device. A device that starts empty takes back the settings of the last phone or tablet like it on its first sync; <b>Settings from another device</b> copies them by hand.</p>
      <p class="tiny" style="margin-top:12px">The token is stored in this browser only. It is never written into the app file, into a backup export, or into the public repository — so it has to be entered once on each device.</p>
      <p class="tiny" style="margin-top:12px">The sync button in the top bar, or at the foot of the drawer, says where sync stands, and once everything is synced it settles to just its icon. Tap it to sync now. The arrow that slides out beside it, or holding the button, opens the details: what is still waiting to upload, how many questions your other device holds, and the sync log.</p>
      <p class="tiny" style="margin-top:12px"><b>Setup guide</b> below walks through the repositories, the token and the permissions it needs.</p>`],
@@ -8377,6 +8379,40 @@ const SETTINGS_SPEC=[
 ];
 const SETSEC=id=>SETTINGS_SPEC.find(s=>s.id===id);
 function setVal(k){const s=DB.settings,d=DEFAULTS.settings;return s[k]===undefined||s[k]===null?d[k]:s[k]}
+
+/* ---------- settings that belong to one device ----------
+   The phone and the tablet are set up differently on purpose, so a setting
+   is this device's own unless it is listed in SHARED_SETTINGS. Those few
+   describe the person and the exam, not the screen, and still reach every
+   device through progress/settings.json. Everything else in DB.settings —
+   any row added to the spec later included — plus automatic sync and the
+   photo cache limit, is saved to GitHub in v3/devices/<deviceId>.json, a
+   file only this device ever writes. A device that starts with nothing
+   (cleared browser, new install) takes back the newest copy saved by a
+   device of the same kind, phone or tablet, on its first sync. */
+const SHARED_SETTINGS=['name','brand','goal','examDate'];
+const DEVSET={
+  RESTORE:'nidus_dev_restore',
+  pick(s){const o={};Object.keys(s||{}).forEach(k=>{if(SHARED_SETTINGS.indexOf(k)<0&&s[k]!==undefined)o[k]=s[k]});return o},
+  form(){return Math.min(screen.width,screen.height)>=600?'tablet':'phone'},
+  budget(){try{return Number(localStorage.getItem('nidus_media_budget')||0)||0}catch(e){return 0}},
+  doc(){
+    const c=(window.SYNC&&SYNC.cfg())||{};
+    return {v:1,deviceId:c.deviceId||'',label:c.label||'',form:this.form(),auto:c.auto!==false,
+      mediaBudget:this.budget(),settings:this.pick(DB.settings)};
+  },
+  apply(rec){
+    DB.settings=Object.assign({},DEFAULTS.settings,DB.settings,this.pick(rec&&rec.settings));
+    const c=window.SYNC&&SYNC.cfg();
+    if(c&&typeof rec.auto==='boolean'){c.auto=rec.auto;SYNC.saveCfg()}
+    if(rec.mediaBudget>0)try{MEDIA.setBudget(rec.mediaBudget)}catch(e){}
+    applySettings();save();
+    try{SYNC.render()}catch(e){}
+    if(VIEW==='settings')renderSettings();
+  },
+  fresh(){try{return localStorage.getItem(this.RESTORE)==='1'}catch(e){return false}},
+  markFresh(v){try{v?localStorage.setItem(this.RESTORE,'1'):localStorage.removeItem(this.RESTORE)}catch(e){}}
+};
 
 /* ---------- one row renderer, used by both surfaces ---------- */
 function setRowHTML(r){
@@ -11622,7 +11658,8 @@ const SYNC=(function(){
       DB.stats=m.stats;DB.sessions=m.sessions;
       if(m.dataRules)DB.dataRules=m.dataRules;
       DR();drSync();
-      DB.settings=Object.assign({},DEFAULTS.settings,m.settings);
+      /* this device's own settings stay; only the shared ones come in */
+      DB.settings=Object.assign({},DEFAULTS.settings,m.settings,DEVSET.pick(DB.settings));
       /* keep the live session object identity so its writes still land */
       if(S&&S.id){const i=DB.sessions.findIndex(x=>x.id===S.id);if(i>=0)DB.sessions[i]=S;else DB.sessions.push(S)}
       applySettings();
@@ -11823,6 +11860,7 @@ const SYNC=(function(){
               ? 'Reading <span class="mono">'+esc(fpath('bank'))+'</span> and <span class="mono">'+esc(fpath('progress'))+'</span>, writing nothing, until the storage upgrade runs.'
               : 'Files <span class="mono">'+esc(fpath('bank'))+'</span> and <span class="mono">'+esc(fpath('progress'))+'</span>')+'<br>'+
           'This device <span class="mono">'+esc(String(cfg.deviceId||'').slice(0,8))+'</span> · <b>'+esc(APP_BUILD)+'</b>'+
+          (mode==='v3'?' · its own settings in <span class="mono">'+esc(dir)+'/v3/devices/'+esc(String(cfg.deviceId||'').slice(0,8))+'….json</span>':'')+
           (cfg.lastAt?' · last synced '+new Date(cfg.lastAt).toLocaleString():' · not synced yet');
       }
     }
@@ -12001,7 +12039,14 @@ const SYNC=(function(){
       if(!(window.V3&&V3.mode&&V3.mode()==='v3'))return toast('Repair only applies to the new storage layout.');
       repairPanel();
     };
+    if(g('ghDevCopy'))g('ghDevCopy').onclick=()=>{
+      if(!on())return toast('Connect a repository first.');
+      V3.devicePicker();
+    };
+    /* auto is one of this device's saved settings, so the change is written
+       even when it turns automatic sync off */
     if(g('ghAuto'))g('ghAuto').onchange=()=>{if(!cfg)return;cfg.auto=g('ghAuto').checked;saveCfg();
+      clearTimeout(timer);timer=setTimeout(()=>run('auto'),DEBOUNCE);
       toast(cfg.auto?'Automatic sync on.':'Automatic sync off — use Sync now.')};
     document.addEventListener('click',e=>{if(e.target.id==='ghDoForget'){closeModal();forget()}});
 
@@ -12094,6 +12139,7 @@ const V3=(function(){
     sess:id=>root()+'/progress/sessions/s_'+id+'.json',
     rules:()=>root()+'/progress/rules.json',
     settings:()=>root()+'/progress/settings.json',
+    device:dev=>root()+'/devices/'+dev+'.json',
     live:dev=>root()+'/live/'+dev+'.json',
     legacyBank:()=>dir()+'/bank.json',
     legacyProgress:()=>dir()+'/progress.json'
@@ -12266,7 +12312,15 @@ const V3=(function(){
       files[P.sess(s.id)]={kind:'sess',id:s.id,fp:'e'+h32(fpSess(s)),doc:s};
     });
     files[P.rules()]={kind:'rules',fp:'r'+h32(JSON.stringify(DB.dataRules||null)),doc:DB.dataRules||null};
+    /* still the whole object, so a device on an older build that merges every
+       key reads no missing key as "deleted" and falls back to the defaults.
+       This build takes only SHARED_SETTINGS back out of it. */
     files[P.settings()]={kind:'settings',fp:'c'+h32(JSON.stringify(DB.settings||{})),doc:DB.settings||{}};
+    const c=cfg();
+    if(c&&c.deviceId){
+      const dv=DEVSET.doc();
+      files[P.device(c.deviceId)]={kind:'device',fp:'d'+h32(JSON.stringify(dv)),doc:Object.assign(dv,{at:Date.now()})};
+    }
     return files;
   }
 
@@ -12284,7 +12338,8 @@ const V3=(function(){
       const ch=await NET.changedPaths(RD(),last,head);
       /* manifest.json and live/ are never merged by a pull — the beacon has
          its own poll — so asking for them was two requests for nothing */
-      if(ch)return {head:head,paths:ch.map(x=>x.path).filter(p=>p.indexOf(root()+'/')===0&&p!==P.manifest()&&p.indexOf(root()+'/live/')!==0)};
+      /* devices/ is never merged either: each file is one device's own settings */
+      if(ch)return {head:head,paths:ch.map(x=>x.path).filter(p=>p.indexOf(root()+'/')===0&&p!==P.manifest()&&p.indexOf(root()+'/live/')!==0&&p.indexOf(root()+'/devices/')!==0)};
       /* 404 (history rewritten) or too wide to be cheap — fall through */
     }
     return {head:head,paths:null};
@@ -12304,7 +12359,7 @@ const V3=(function(){
     if(Object.keys(man).length)lastManifest=Object.assign({},lastManifest||{},man);
     const fps=await fpLoad();
     const out=[];
-    Object.keys(man).forEach(p=>{if(man[p]!==(fps['@remote:'+p]||''))out.push(p)});
+    Object.keys(man).forEach(p=>{if(p.indexOf(root()+'/devices/')!==0&&man[p]!==(fps['@remote:'+p]||''))out.push(p)});
     /* a file we hold but the repository does not mention is also news */
     Object.keys(fps).forEach(k=>{
       if(k.indexOf('@remote:')!==0)return;
@@ -12318,7 +12373,9 @@ const V3=(function(){
      round trips to learn almost nothing. */
   async function listAll(){
     const man={};
-    const dirs=[root()+'/bank',root()+'/progress/state',root()+'/progress/log',root()+'/progress/sessions'];
+    /* devices/ is listed only so reconcileLedger can see this device's own
+       settings file arrived; manifestPaths never pulls from it */
+    const dirs=[root()+'/bank',root()+'/progress/state',root()+'/progress/log',root()+'/progress/sessions',root()+'/devices'];
     const lists=await Promise.all(dirs.map(d=>NET.listDir(RD(),d)));
     lists.forEach(items=>{
       (items||[]).forEach(it=>{if(it.type==='file')man[it.path]=it.sha});
@@ -12453,6 +12510,48 @@ const V3=(function(){
     });
   }
 
+  /* ---------- the other devices' settings, read on demand ----------
+     Nothing merges these files. They are read only to restore a device that
+     starts empty, or when the user asks to copy one device's settings. */
+  async function devRecords(){
+    const own=P.device(cfg().deviceId);
+    const items=await NET.listDir(RD(),root()+'/devices');
+    const want=(items||[]).filter(it=>it.type==='file'&&it.path!==own&&/\.json$/.test(it.path));
+    const got=await Promise.all(want.map(it=>NET.getJSON(RD(),it.path,{fresh:true}).catch(()=>null)));
+    return got.filter(j=>j&&j!==NET.UNCHANGED&&j.settings&&typeof j.settings==='object')
+      .sort((a,b)=>(b.at||0)-(a.at||0));
+  }
+  async function restoreDevice(){
+    let list;
+    try{list=await devRecords()}catch(e){return}
+    DEVSET.markFresh(false);
+    const form=DEVSET.form(), label=cfg().label||'';
+    const rec=list.find(r=>r.form===form&&r.label===label)||list.find(r=>r.form===form);
+    if(!rec)return;
+    DEVSET.apply(rec);
+    toast('Settings for this '+form+' restored from GitHub.');
+    try{SYNC.log('Settings for this '+form+' restored from '+(rec.label||'another device'))}catch(e){}
+  }
+  function devWhen(r){return r.at?new Date(r.at).toLocaleString():'date unknown'}
+  async function devicePicker(){
+    if(MODE!=='v3')return toast('Connect a repository first.');
+    let list;
+    try{list=await devRecords()}catch(e){return toast((e&&e.message)||'Could not read the other devices.')}
+    if(!list.length)return toast('No other device has saved its settings yet.');
+    modal('Settings from another device',
+      '<p class="tiny">Reading, explanations, copying, appearance and the other settings of the device you pick replace the ones on this device. That device keeps its own. Your name, app title, daily goal and exam date are shared already and do not change.</p>'+
+      '<div class="setsheet" style="margin-top:14px">'+list.slice(0,8).map((r,i)=>
+        '<div class="setrow"><div class="lb">'+esc((r.label||'Device')+' · '+(r.form||'device'))+
+        '<small>Saved '+esc(devWhen(r))+' · <span class="mono">'+esc(String(r.deviceId||'').slice(0,8))+'</span></small></div>'+
+        '<div class="ctl"><button class="btn sm" data-devpick="'+i+'">Use these</button></div></div>').join('')+'</div>',
+      '<button class="btn ghost" data-close>Cancel</button>');
+    document.querySelectorAll('[data-devpick]').forEach(b=>b.onclick=()=>{
+      const r=list[+b.dataset.devpick];if(!r)return;
+      closeModal();DEVSET.apply(r);
+      toast('Settings from '+(r.label||'that device')+' ('+(r.form||'device')+') now used here.');
+    });
+  }
+
   /* ============================================================
      ONE SYNC PASS
      ============================================================ */
@@ -12545,10 +12644,12 @@ const V3=(function(){
         }else if(rel==='progress/settings.json'){
           const j=g.val;
           if(j===NET.UNCHANGED||j===null)continue;
-          const base=fps['@base:'+P.settings()]||{};
-          const out={};
-          Array.from(new Set(Object.keys(DB.settings||{}).concat(Object.keys(j||{}))))
-            .forEach(k=>{out[k]=M().m3(base[k],(DB.settings||{})[k],(j||{})[k])});
+          /* only the shared keys come in; the rest are this device's own.
+             With no base yet, the defaults stand in for it: a value this
+             device never changed does not outvote one another device set. */
+          const base=fps['@base:'+P.settings()]||DEFAULTS.settings;
+          const out=DEVSET.pick(DB.settings);
+          SHARED_SETTINGS.forEach(k=>{const v=M().m3(base[k],(DB.settings||{})[k],(j||{})[k]);if(v!==undefined)out[k]=v});
           DB.settings=Object.assign({},DEFAULTS.settings,out);
           fps['@base:'+P.settings()]=Object.assign({},DB.settings);
           applySettings();changed=true;
@@ -12668,6 +12769,11 @@ const V3=(function(){
     const sha=await GIT.commit(RD(),out,commitMessage(out),{expect:expect||null});
     if(sha==='conflict')return {ok:false,conflict:true};
     Object.keys(marks).forEach(p=>{fps[p]=marks[p]});
+    /* settings.json as just written is what both sides now agree on, so it is
+       the base the next pull merges against — without it, a device that wrote
+       the file last kept its own value over any later change from elsewhere */
+    const sw=out.find(f=>f.path===P.settings());
+    if(sw)try{fps['@base:'+P.settings()]=JSON.parse(sw.text)}catch(e){}
     lastManifest=man;
     const c=cfg();c.sha=c.sha||{};c.sha[RD()]=sha;SYNC.saveCfg();
     await fpSave();
@@ -12765,6 +12871,9 @@ const V3=(function(){
       if(d.head&&!failed){const c=cfg();c.sha=c.sha||{};c.sha[RD()]=d.head;SYNC.saveCfg()}
       health={failed:failed,at:Date.now()};
       if(readOnly){await fpSave();lastPass={sent:0,received:passGot,failed:failed,at:Date.now()};return changed}
+      /* a device that started with nothing takes its own settings back before
+         the push below, so what is saved for it is not the defaults */
+      if(DEVSET.fresh())await restoreDevice();
       /* media goes to its own repository in its own commit — pushing a blob
          into the data repo's tree would put photos back inside the bank */
       try{await flushMedia('background')}catch(e){}
@@ -13012,7 +13121,7 @@ const V3=(function(){
     Object.keys(fps).forEach(k=>{if(k.indexOf('@remote:')===0)delete fps[k]});
     lastManifest=null;
     const man=await listAll();
-    const paths=Object.keys(man);
+    const paths=Object.keys(man).filter(p=>p.indexOf(root()+'/devices/')!==0);
     const r=await pullPaths(paths,man,NET.branch());
     try{await reconcileLedger(man)}catch(e){}
     if(!r.failed){const h=await NET.head(RD());if(h&&h!==NET.UNCHANGED){c.sha=c.sha||{};c.sha[RD()]=h;SYNC.saveCfg()}}
@@ -13210,7 +13319,7 @@ const V3=(function(){
     warmAll:warmAll,shardWarm:shardWarm,mergeLegacyIn:mergeLegacyIn,VERSION:VERSION,
     fullResync:fullResync,dirtyKinds:dirtyKinds,health:()=>health,listAll:listAll,
     inspect:inspect,forcePushAll:forcePushAll,unTombstone:unTombstone,
-    lastPass:()=>lastPass,pendingCount:pendingCount,peers:()=>peers};
+    lastPass:()=>lastPass,pendingCount:pendingCount,peers:()=>peers,devicePicker:devicePicker};
 })();
 window.V3=V3;
 /* ============================================================
@@ -14035,6 +14144,7 @@ const TOOLS=(function(){
     if(sl)sl.oninput=()=>{
       const v=parseInt(sl.value,10)*1048576;
       MEDIA.setBudget(v);
+      try{SYNC.schedule()}catch(e){}     /* the limit is saved with this device's settings */
       const tx=g('mediaCapTxt');if(tx)tx.textContent=mb(v);
       clearTimeout(bind._t);bind._t=setTimeout(()=>{MEDIA.evict().then(renderMedia)},600);
     };
@@ -14054,6 +14164,7 @@ window.TOOLS=TOOLS;
   const loaded=await loadDB();
   if(loaded&&loaded.questions){DB=Object.assign(JSON.parse(JSON.stringify(DEFAULTS)),loaded);
     DB.settings=Object.assign({},DEFAULTS.settings,loaded.settings||{});}
+  else if(!loaded)DEVSET.markFresh(true);   /* nothing saved here: take this device's settings back from GitHub */
   DB.questions.forEach(q=>{if(!DB.stats[q.id])DB.stats[q.id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null}});
   migrateTaxonomy();
   DR();drSync();                       /* the study ledger, before anything reads it */
