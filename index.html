@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.11 -->
+<!-- Nidus — Personal Qbank · v6.12 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -986,8 +986,8 @@ body:has(#mask.on) .fabscrim{display:none}
    directly beneath it, so it is gone — on every tab, and on the session
    report. Only the eyebrows that label a section *inside* a screen
    ("Pool", "Mode", "Choices", "My note") are left, because those are the
-   ones still doing work. The markup stays put so #todayStr, #rangeSpan
-   and #setCrumb keep their targets. */
+   ones still doing work. The markup stays put so #todayStr and
+   #rangeSpan keep their targets. */
 .view > .eyebrow:first-child,
 #rBody > .eyebrow:first-child{display:none}
 h2.vt{
@@ -2001,27 +2001,8 @@ h3.sec > .ib{vertical-align:-3px}
 /* ============================================================
    SETTINGS
    ============================================================ */
-.setwrap{display:grid;grid-template-columns:260px 1fr;gap:32px;align-items:start;margin-top:24px}
-.setnav{position:sticky;top:24px;display:flex;flex-direction:column;gap:4px}
-.setnav .setgrp{margin:16px 0 6px;padding:0 16px}
-.setnav .setgrp:first-child{margin-top:0}
-.setnav button{
-  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
-  min-height:52px;padding:0 20px 0 16px;
-  border-radius:var(--m3-corner-full);border:none;
-  color:var(--md-on-surface-variant);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard);
-}
-.setnav button .ic{width:24px;height:24px;flex:0 0 24px}
-.setnav button.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-weight:600}
-.setmain{min-width:0}
-.setpanel{display:none}
-.setpanel.on{display:block;animation:m3FadeThrough var(--m3-dur-medium2) var(--m3-ease-emphasized-decel)}
-.setpanel > h3.sec:first-child{margin-top:0}
-.setfoot{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-
+/* the settings screen itself is the v6.12 block at the foot of this
+   stylesheet; these rows remain for the sheets that still use them */
 .setsheet{
   display:flex;flex-direction:column;
   background:var(--md-surface-container-low);
@@ -2272,7 +2253,7 @@ h3.sec > .ib{vertical-align:-3px}
 
 /* press feedback that is not covered by the state layer */
 .pill,.tool,.seg button,.conf button,.calcpad button,.nav button,.tabbar button,
-.navstrip button,.plate i,.ch .x,.kbd,.chip,.setnav button{
+.navstrip button,.plate i,.ch .x,.kbd,.chip,.sx-cg button{
   -webkit-user-select:none;user-select:none;
 }
 
@@ -3126,14 +3107,14 @@ body.hasmig{padding-bottom:64px}
   --m3-wash-press:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
 }
 .btn,.tool,.pill,.seg button,.conf button,.calcpad button,.nav button,
-.tabbar button,.navstrip button,.setnav button,.qrow,.pool,.ch,
+.tabbar button,.navstrip button,.qrow,.pool,.ch,
 .cday,.esec > .eh,.figplate,.syncbtn,.sync-more,.stat,.figbar button,.ch .x,.plate i{
   position:relative;overflow:hidden;
 }
 @media (hover:hover){
   .btn:hover,.tool:hover,button.pill:hover,.seg button:hover,.conf button:hover,
   .calcpad button:hover,.nav button:hover,.navstrip button:hover,
-  .setnav button:hover,.qrow:hover,.pool:hover,.ch:hover,.fab:hover,.fabitem:hover,
+  .qrow:hover,.pool:hover,.ch:hover,.fab:hover,.fabitem:hover,
   .cday:hover,
   .esec > .eh:hover,.figplate:hover,button.syncbtn:hover,.sync-more:hover,.figbar button:hover,.ch .x:hover{
     background-image:var(--m3-wash-hover);
@@ -3141,7 +3122,7 @@ body.hasmig{padding-bottom:64px}
 }
 .btn:active,.tool:active,button.pill:active,.seg button:active,.conf button:active,
 .calcpad button:active,.nav button:active,.navstrip button:active,
-.setnav button:active,.qrow:active,.pool:active,.ch:active,.fab:active,.fabitem:active,
+.qrow:active,.pool:active,.ch:active,.fab:active,.fabitem:active,
 .cday:active,
 .esec > .eh:active,.figplate:active,button.syncbtn:active,.sync-more:active,.figbar button:active,.ch .x:active{
   background-image:var(--m3-wash-press);
@@ -3261,24 +3242,6 @@ body.hasmig{padding-bottom:64px}
   .modal .mb{padding:0 20px 8px}
   .modal .mh{padding-left:20px;padding-right:20px}
 
-  /* settings navigation collapses to a scrolling chip row */
-  .setwrap{grid-template-columns:1fr;gap:16px}
-  .setnav{
-    position:sticky;top:var(--m3-appbar-h);z-index:5;
-    flex-direction:row;gap:8px;overflow-x:auto;
-    padding:10px 16px;margin:0 -16px;
-    background:var(--md-surface);
-    -webkit-overflow-scrolling:touch;scrollbar-width:none;
-  }
-  .setnav::-webkit-scrollbar{display:none}
-  .setnav .setgrp{display:none}
-  .setnav button{
-    width:auto;flex:0 0 auto;min-height:40px;padding:0 16px;
-    border:1px solid var(--md-outline);white-space:nowrap;
-    border-radius:var(--m3-corner-s);
-  }
-  .setnav button.on{background:var(--md-secondary-container);border-color:transparent}
-  .setnav button .ic{width:20px;height:20px;flex-basis:20px}
   .setsheet{padding:4px 16px}
   .setrow{padding:14px 0}
   .setrow > .lb{font-size:16px;flex-basis:150px}
@@ -3479,85 +3442,246 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 @media (hover:hover){.ovmenu button:hover::after{opacity:var(--m3-state-hover)}}
 .ovmenu hr{border:none;border-top:1px solid var(--md-outline-variant);margin:8px 10px}
 
-/* ---- settings as an Android 16 list -> detail ---- */
-.setlist{display:flex;flex-direction:column;gap:2px}
-.setlist .setgrp{margin:24px 0 8px;padding:0 4px}
-.setlist .setgrp:first-child{margin-top:4px}
-.setitem{
-  position:relative;display:flex;align-items:center;gap:16px;width:100%;
-  padding:14px 16px;border:none;cursor:pointer;overflow:hidden;text-align:left;
-  background:var(--md-surface-container-low);
-  border-radius:var(--m3-corner-s);
-  font-family:inherit;color:var(--md-on-surface);
-  transition:background var(--m3-dur-short2) var(--m3-ease-standard),
-             border-radius var(--m3-dur-short2) var(--m3-ease-standard);
+/* ============================================================
+   v6.12 — SETTINGS, REBUILT AS A MATERIAL 3 SETTINGS SCREEN
+   One list of sections and one detail page. Side by side when there
+   is room (the list-detail canonical layout), one at a time on a
+   phone. Every row is an M3 list item inside a grouped container:
+   large outer corners, small inner ones, 2dp between rows. Controls
+   are the stock M3 set — switch, slider, connected button group,
+   radio list, text field — and nothing else.
+   ============================================================ */
+.sx{display:grid;grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:24px;align-items:start;margin-top:16px}
+.sx-list{
+  position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;
+  overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px;
 }
-/* a group of rows reads as one card: only the outer corners are large */
-.setitem + .setitem{margin-top:2px}
-.setlist .setitem:first-of-type{border-radius:var(--m3-corner-l) var(--m3-corner-l) var(--m3-corner-s) var(--m3-corner-s)}
-.setgrp + .setitem{border-radius:var(--m3-corner-l) var(--m3-corner-l) var(--m3-corner-s) var(--m3-corner-s)}
-.setitem.lastin{border-radius:var(--m3-corner-s) var(--m3-corner-s) var(--m3-corner-l) var(--m3-corner-l)}
-.setitem.onlyin{border-radius:var(--m3-corner-l)}
-.setitem::after{
-  content:'';position:absolute;inset:0;background:currentColor;opacity:0;
-  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard);
-}
-.setitem:active::after{opacity:var(--m3-state-press)}
-.setitem:active{border-radius:var(--m3-corner-press)}
-@media (hover:hover){.setitem:hover::after{opacity:var(--m3-state-hover)}}
-.setitem .lead{
-  flex:0 0 40px;width:40px;height:40px;border-radius:var(--m3-corner-full);
-  display:flex;align-items:center;justify-content:center;
-  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
-}
-.setitem .lead .ic{width:22px;height:22px}
-.setitem .txt{flex:1;min-width:0;display:block}
-.setitem .t{display:block;font-size:16px;line-height:22px;font-weight:500;letter-spacing:.15px}
-.setitem .v{
-  display:block;
-  font-size:13px;line-height:18px;letter-spacing:.25px;margin-top:3px;
-  color:var(--md-on-surface-variant);
+.sx-list::-webkit-scrollbar{display:none}
+.sx-list input[type=search]{margin-bottom:8px}
+.sx-detail{min-width:0;max-width:760px}
+.setpanel{display:none}
+.setpanel.on{display:block}
+
+/* the hand-off: what is on screen leaves first, then the next arrives */
+.sx-list,.sx-detail,.setpanel{transition:opacity 90ms var(--m3-ease-emphasized-accel)}
+.sx-leave{opacity:0!important}
+.sx-arrive{animation:sxArrive 300ms var(--m3-ease-emphasized-decel) backwards}
+@keyframes sxArrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes sxFade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.sx-arrive{animation-name:sxFade}}
+
+/* detail top bar: back, title, info */
+.sx-bar{display:flex;align-items:center;gap:4px;min-height:64px;margin:0 0 4px}
+.sx-title{
+  flex:1;min-width:0;margin:0;color:var(--md-on-surface);
+  font-size:28px;line-height:36px;font-weight:400;letter-spacing:0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
-.setitem .chev{flex:0 0 20px;width:20px;height:20px;transform:rotate(-90deg);color:var(--md-on-surface-variant);opacity:.7}
-.setitem.danger .lead{background:var(--md-error-container,#5f1412);color:var(--md-on-error-container,#ffdad6)}
+.sx-bar .sx-icb{width:48px;height:48px;flex-basis:48px}
+.sx-bar .sx-icb[hidden]{display:none}
 
-/* search over every preference in the app */
-.setsearch{position:relative;margin:0 0 4px}
-.setsearch input{
-  width:100%;height:52px;padding:0 16px 0 48px;border:none;
-  background:var(--md-surface-container-high);
-  border-radius:var(--m3-corner-full);
-  font-family:inherit;font-size:15px;color:var(--md-on-surface);
+/* subheader */
+.sx-sub{
+  margin:24px 16px 8px;color:var(--md-primary);
+  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
 }
-.setsearch .ic{
-  position:absolute;left:16px;top:50%;transform:translateY(-50%);
-  width:20px;height:20px;color:var(--md-on-surface-variant);pointer-events:none;
-}
-.sethint{margin:10px 4px 0;font-size:12px;line-height:16px;color:var(--md-on-surface-variant)}
+.sx-list .sx-sub:first-of-type{margin-top:16px}
 
-/* detail page: a back affordance above the section */
-.setback{
-  display:inline-flex;align-items:center;gap:8px;margin:0 0 8px;padding:8px 16px 8px 12px;
-  background:none;border:none;border-radius:var(--m3-corner-full);cursor:pointer;
-  font-family:inherit;font-size:14px;font-weight:600;color:var(--md-primary);
-}
-.setback .ic{width:20px;height:20px}
-@media (hover:hover){.setback:hover{background:var(--md-surface-container)}}
+/* the grouped container */
+.sx-grp{display:flex;flex-direction:column;gap:2px;margin:0 0 16px}
+.sx-grp:empty{display:none}
 
-/* on phones the settings screen is one column, list or detail, never both */
-@media (max-width:860px){
-  .setwrap{display:block;margin-top:16px}
-  .setnav{display:none}
-  .setback{display:none}
-  body.setdetail .setlist,body.setdetail .setsearch{display:none}
-  body.setdetail .setback{display:inline-flex}
-  body:not(.setdetail) .setmain{display:none}
+/* list item */
+.sx-item{
+  position:relative;display:flex;align-items:center;gap:16px;width:100%;
+  min-height:56px;padding:12px 16px;margin:0;
+  background:var(--md-surface-container);color:var(--md-on-surface);
+  border:0;border-radius:4px;text-align:left;font:inherit;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
+             color var(--m3-dur-medium) var(--m3-ease-standard);
 }
-/* on desktop the rail already shows all nine sections at once, so the list
-   and its search would be a second copy of something fully visible */
+.sx-grp > .sx-item:first-child{border-top-left-radius:24px;border-top-right-radius:24px}
+.sx-grp > .sx-item:last-child{border-bottom-left-radius:24px;border-bottom-right-radius:24px}
+button.sx-item,label.sx-item,.sx-date{cursor:pointer}
+button.sx-item::after,label.sx-item:not(.sx-in)::after,.sx-date::after,
+.sx-radios button::after,.sx-icb::after,.sx-btn::after,.sx-cg button::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:currentColor;opacity:0;
+  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard);
+}
+@media (hover:hover){
+  button.sx-item:hover::after,label.sx-item:not(.sx-in):hover::after,.sx-date:hover::after,
+  .sx-radios button:hover::after,.sx-icb:hover::after,.sx-btn:hover::after,.sx-cg button:hover::after{opacity:var(--m3-state-hover)}
+}
+button.sx-item:active::after,label.sx-item:not(.sx-in):active::after,.sx-date:active::after,
+.sx-radios button:active::after,.sx-icb:active::after,.sx-btn:active::after,.sx-cg button:active::after{opacity:var(--m3-state-press)}
+button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
+.sx-cg button:focus-visible,.sx-radios button:focus-visible{outline:2px solid var(--md-secondary);outline-offset:-2px}
+.sx-item[disabled]{opacity:.38;pointer-events:none}
+
+.sx-tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
+.sx-t{font-size:16px;line-height:24px;letter-spacing:.5px;color:inherit}
+.sx-s{
+  font-size:14px;line-height:20px;letter-spacing:.25px;
+  color:var(--md-on-surface-variant);overflow-wrap:anywhere;
+}
+.sx-s b{font-weight:500;color:var(--md-on-surface)}
+.sx-ic{flex:0 0 24px;width:24px;height:24px;color:var(--md-on-surface-variant)}
+.sx-val{
+  flex:0 0 auto;white-space:nowrap;color:var(--md-on-surface-variant);
+  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;font-variant-numeric:tabular-nums;
+}
+.sx-err,.sx-err .sx-ic{color:var(--md-error)}
+.sx-tag{
+  display:inline-block;vertical-align:2px;margin-left:8px;padding:0 8px;border-radius:8px;
+  background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);
+  font-size:12px;line-height:20px;font-weight:500;letter-spacing:.5px;
+}
+
+/* the section list: a tonal icon, the title, what it is set to */
+.sx-lead{
+  flex:0 0 40px;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+}
+.sx-lead .ic{width:24px;height:24px}
+.sx-nav .sx-s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sx-empty{margin:16px;font-size:14px;line-height:20px;color:var(--md-on-surface-variant)}
+
+/* a row whose control sits under its label */
+.sx-col{flex-direction:column;align-items:stretch;gap:8px;padding-top:16px;padding-bottom:16px}
+.sx-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.sx-col input[type=range]{width:100%}
+
+/* connected button group */
+.sx-cg{display:flex;gap:2px;width:100%}
+.sx-cg button{
+  position:relative;flex:1 1 0;min-width:0;height:48px;padding:0 12px;overflow:hidden;
+  border:0;border-radius:8px;
+  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
+  white-space:nowrap;text-overflow:ellipsis;
+  transition:border-radius var(--m3-spatial) var(--m3-spring-expressive),
+             background-color var(--m3-dur-medium) var(--m3-ease-standard),
+             color var(--m3-dur-medium) var(--m3-ease-standard);
+}
+.sx-cg button:first-child{border-radius:24px 8px 8px 24px}
+.sx-cg button:last-child{border-radius:8px 24px 24px 8px}
+.sx-cg button.on{background:var(--md-primary);color:var(--md-on-primary);border-radius:24px}
+.sx-cg button:active{border-radius:4px;transition-duration:var(--m3-spatial-fast),var(--m3-dur-medium),var(--m3-dur-medium)}
+
+/* radio list */
+.sx-radios{display:flex;flex-direction:column;margin:0 -16px -8px}
+.sx-radios button{
+  position:relative;display:flex;align-items:center;gap:16px;min-height:48px;padding:0 16px;
+  border:0;background:none;color:var(--md-on-surface);text-align:left;overflow:hidden;
+  font-size:16px;line-height:24px;letter-spacing:.5px;
+}
+.sx-rd{
+  position:relative;flex:0 0 20px;width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--md-on-surface-variant);
+  transition:border-color var(--m3-dur-medium) var(--m3-ease-standard);
+}
+.sx-rd::after{
+  content:"";position:absolute;inset:3px;border-radius:50%;background:var(--md-primary);
+  transform:scale(0);transition:transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sx-radios button.on .sx-rd{border-color:var(--md-primary)}
+.sx-radios button.on .sx-rd::after{transform:scale(1)}
+
+/* a text field that is the row itself */
+.sx-in{flex-direction:column;align-items:stretch;gap:0;padding-top:10px;padding-bottom:10px;cursor:text}
+.sx-lab{
+  font-size:12px;line-height:16px;letter-spacing:.4px;color:var(--md-on-surface-variant);
+  transition:color var(--m3-dur-short2) var(--m3-ease-standard);
+}
+.sx-in input,.sx-in input:focus{
+  width:100%;height:auto;margin:0;padding:2px 0;
+  background:none;border:0;border-radius:0;box-shadow:none;outline:none;
+  color:var(--md-on-surface);font-size:16px;line-height:24px;letter-spacing:.5px;
+}
+.sx-in::before{
+  content:"";position:absolute;left:16px;right:16px;bottom:6px;height:2px;border-radius:1px;
+  background:var(--md-primary);transform:scaleX(0);
+  transition:transform var(--m3-dur-medium) var(--m3-ease-emphasized-decel);
+}
+.sx-in:focus-within::before{transform:scaleX(1)}
+.sx-in:focus-within .sx-lab{color:var(--md-primary)}
+
+/* stepper */
+.sx-step{display:flex;align-items:center;gap:4px;flex:0 0 auto}
+.sx-step input,.sx-step input:focus{
+  width:52px;height:40px;padding:0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;
+  text-align:center;color:var(--md-on-surface);font-size:16px;line-height:24px;font-weight:500;
+  font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield;
+}
+.sx-step input::-webkit-inner-spin-button,.sx-step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+/* a date row: the whole row opens the system date picker */
+.sx-date input[type=date]{
+  position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;padding:0;
+  border:0;opacity:0;cursor:pointer;
+}
+.sx-date .sx-icb{z-index:2}
+
+/* icon button */
+.sx-icb{
+  position:relative;display:inline-grid;place-items:center;flex:0 0 40px;width:40px;height:40px;
+  padding:0;border:0;border-radius:20px;background:none;color:var(--md-on-surface-variant);overflow:hidden;
+  transition:border-radius var(--m3-spatial-fast) var(--m3-spring-expressive);
+}
+.sx-icb.tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.sx-icb:active{border-radius:12px}
+.sx-icb .ic,.sx-gl{width:24px;height:24px}
+.sx-gl{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+
+/* buttons */
+.sx-acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.sx-btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:0 0 auto;
+  height:40px;padding:0 24px;border:0;border-radius:20px;overflow:hidden;white-space:nowrap;
+  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
+  transition:border-radius var(--m3-spatial-fast) var(--m3-spring-expressive);
+}
+.sx-btn.filled{background:var(--md-primary);color:var(--md-on-primary)}
+.sx-btn.tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.sx-btn.sm{height:32px;padding:0 12px;border-radius:16px}
+.sx-btn:active{border-radius:8px}
+.sx-btn[disabled]{
+  background:color-mix(in srgb,var(--md-on-surface) 12%,transparent);
+  color:color-mix(in srgb,var(--md-on-surface) 38%,transparent);pointer-events:none;
+}
+
+/* linear progress */
+.sx-prog{display:flex;gap:4px;height:4px}
+.sx-prog i{border-radius:2px;background:var(--md-primary)}
+.sx-prog b{flex:1;border-radius:2px;background:var(--md-secondary-container)}
+
+.sx-foot{margin:8px 16px 16px;font-size:14px;line-height:20px;letter-spacing:.25px;color:var(--md-on-surface-variant)}
+.sx-detail .preview{margin:0 0 16px;border-radius:24px}
+
+/* the reading/session sheet inside a study session */
+.sx-sheet .sx-sub.sx-sec{margin:20px 4px 8px;color:var(--md-on-surface);font-size:16px;line-height:24px;letter-spacing:.15px}
+.sx-sheet .sx-sub.sx-sec:first-child{margin-top:4px}
+.sx-sheet .sx-sub:not(.sx-sec){margin-left:4px}
+.sx-sheet .sx-item{background:var(--md-surface-container-highest)}
+.sx-sheet .sx-cg button:not(.on){background:var(--md-surface-container)}
+
+/* list-detail on large screens; one pane at a time on a phone */
 @media (min-width:861px){
-  .setlist,.setback,.setsearch{display:none}
+  .sx-back{display:none!important}
+  .sx-nav.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+  .sx-nav.on .sx-s{color:inherit;opacity:.8}
+}
+@media (max-width:860px){
+  .sx{display:block;margin-top:0}
+  .sx-list{position:static;max-height:none;overflow:visible;padding-bottom:0}
+  body:not(.setdetail) .sx-detail{display:none}
+  body.setdetail .sx-list{display:none}
+  .sx-bar{margin:-8px 0 4px -8px}
+  .sx-title{font-size:22px;line-height:28px}
+  .sx-acts .sx-btn{flex:1 1 0}
 }
 #themeBtnM[hidden]{display:none!important}
 
@@ -4021,15 +4145,24 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
     </section>
 
     <!-- ============ SETTINGS ============ -->
+    <!-- One list of sections and one detail page: side by side when there is
+         room, one at a time on a phone. The preference panels are filled from
+         SETTINGS_SPEC, so the gear inside a session and this screen can never
+         drift apart; the other panels carry their own rows here. -->
     <section class="view" id="v-settings">
-      <p class="eyebrow">Configuration <span class="rule"></span> <span id="setCrumb"></span></p>
       <h2 class="vt">Settings</h2>
-      <div class="setwrap">
-        <nav class="setnav" id="setNav"></nav>
-        <div class="setmain" id="setMain">
+      <div class="sx" id="sx">
+        <div class="sx-list" id="sxList">
+          <input type="search" id="setSearch" placeholder="Search settings" autocomplete="off" aria-label="Search settings">
+          <div id="setList"></div>
+        </div>
+        <div class="sx-detail" id="setMain">
+          <header class="sx-bar">
+            <button class="sx-icb sx-back" id="setBack" aria-label="All settings"><svg class="ic"><use href="#i-back"/></svg></button>
+            <h3 class="sx-title" id="setCrumb"></h3>
+            <button class="sx-icb" id="setInfo" data-note="" aria-label="About this section"><svg class="ic"><use href="#i-info"/></svg></button>
+          </header>
 
-      <!-- preference panels: filled from SETTINGS_SPEC so the gear inside a
-           session and this screen can never drift apart again -->
       <div class="setpanel" data-sec="reading"></div>
       <div class="setpanel" data-sec="explanations"></div>
       <div class="setpanel" data-sec="session"></div>
@@ -4038,107 +4171,95 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 
       <!-- ---- bank & classification ---- -->
       <div class="setpanel" data-sec="bank">
-      <h3 class="sec">Bank &amp; classification<button class="ib" data-note="bankclass" aria-label="About reclassifying"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="tiny muted" id="classInfo"></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" id="reclassBtn">Reclassify the bank</button>
-        <button class="btn" id="reclassForce">Reclassify, including locked ones</button>
-        <button class="btn" id="dupScan2">Scan for duplicates</button>
-      </div>
+        <div class="sx-grp" id="classInfo"></div>
+        <div class="sx-grp">
+          <button class="sx-item" id="reclassBtn"><svg class="ic sx-ic"><use href="#i-review"/></svg><span class="sx-tx"><span class="sx-t">Reclassify the bank</span></span></button>
+          <button class="sx-item" id="reclassForce"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Reclassify, including locked ones</span></span></button>
+          <button class="sx-item" id="dupScan2"><svg class="ic sx-ic"><use href="#i-copy"/></svg><span class="sx-tx"><span class="sx-t">Scan for duplicates</span></span></button>
+        </div>
       </div>
 
       <!-- ---- study data: which answers count ---- -->
       <div class="setpanel" data-sec="studydata">
-      <h3 class="sec">Study data<button class="ib" data-note="studydata" aria-label="Which answers count"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <p class="blurb">Answers given while testing the app are still answers, and nothing about them looks different afterwards. Say which days and which sessions were real studying, and every figure in Nidus recounts itself.</p>
-      <div id="sdSummary"></div>
-
-      <h3 class="sec">Start counting from</h3>
-      <div class="setsheet" id="sdBefore"></div>
-
-      <h3 class="sec">Day by day</h3>
-      <div id="sdDays"></div>
-
-      <h3 class="sec">Session by session</h3>
-      <div id="sdSess"></div>
+        <div id="sdSummary"></div>
+        <h4 class="sx-sub">Start counting from</h4>
+        <div class="sx-grp" id="sdBefore"></div>
+        <h4 class="sx-sub">Day by day</h4>
+        <div id="sdDays"></div>
+        <h4 class="sx-sub">Session by session</h4>
+        <div id="sdSess"></div>
       </div>
 
       <!-- ---- data & storage ---- -->
       <div class="setpanel" data-sec="data">
-      <h3 class="sec">Data &amp; storage<button class="ib" data-note="storage" aria-label="Where all this lives"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="tiny muted" id="storeInfo"></div>
-      <div class="row" style="margin-top:10px">
-        <button class="btn" data-go="import">Backup &amp; export…</button>
-        <button class="btn" data-setsec="studydata">Study data…</button>
-        <button class="btn" id="resetStats">Reset all statistics</button>
-        <button class="btn danger" id="wipeAll">Delete everything</button>
-      </div>
-
-      <h3 class="sec" style="margin-top:26px">Photos on this device</h3>
-      <div class="card">
-        <div class="tiny muted" id="mediaInfo">Reading…</div>
-        <label class="fld" style="margin-top:12px"><span>How much room photos may use here — <b id="mediaCapTxt">250 MB</b></span>
-          <input type="range" id="mediaCap" min="50" max="2000" step="50" value="250"></label>
-        <p class="tiny muted" style="margin:0 0 12px;line-height:1.7">Photos are <b>cached</b>, not mirrored. Anything dropped to stay inside this is fetched again the moment you open the question. Thumbnails are never dropped, and neither is anything still waiting to upload.</p>
-        <div class="row">
-          <button class="btn" id="mediaUp">Upload anything waiting</button>
-          <button class="btn ghost" id="mediaClean">Clean unused media…</button>
-          <button class="btn ghost" id="mediaUpgrade">Storage format…</button>
+        <div class="sx-grp" id="storeInfo"></div>
+        <div class="sx-grp">
+          <button class="sx-item" data-go="import"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Backup &amp; export</span></span></button>
+          <button class="sx-item" data-setsec="studydata"><svg class="ic sx-ic"><use href="#i-history"/></svg><span class="sx-tx"><span class="sx-t">Study data</span></span></button>
         </div>
-      </div>
+        <div class="sx-grp">
+          <button class="sx-item sx-err" id="resetStats"><svg class="ic sx-ic"><use href="#i-stats"/></svg><span class="sx-tx"><span class="sx-t">Reset all statistics</span></span></button>
+          <button class="sx-item sx-err" id="wipeAll"><svg class="ic sx-ic"><use href="#i-trash"/></svg><span class="sx-tx"><span class="sx-t">Delete everything</span></span></button>
+        </div>
+        <h4 class="sx-sub">Photos on this device</h4>
+        <div class="sx-grp">
+          <div class="sx-item sx-col">
+            <div class="sx-row"><span class="sx-t">Room for photos</span><span class="sx-val" id="mediaCapTxt">250 MB</span></div>
+            <input type="range" id="mediaCap" min="50" max="2000" step="50" value="250" aria-label="Room for photos">
+            <span class="sx-s" id="mediaInfo">Reading…</span>
+          </div>
+          <button class="sx-item" id="mediaUp"><svg class="ic sx-ic"><use href="#i-cloudup"/></svg><span class="sx-tx"><span class="sx-t">Upload anything waiting</span></span></button>
+          <button class="sx-item" id="mediaClean"><svg class="ic sx-ic"><use href="#i-image"/></svg><span class="sx-tx"><span class="sx-t">Clean unused media…</span></span></button>
+          <button class="sx-item" id="mediaUpgrade"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Storage format…</span></span></button>
+        </div>
       </div>
 
       <!-- ---- cloud sync ---- -->
       <div class="setpanel" data-sec="sync">
-      <h3 class="sec">Cloud sync<span class="chip" style="margin-left:10px" id="buildChip">v6.11</span><button class="ib" data-note="sync" aria-label="How syncing works"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="card">
-        <div class="row" style="margin-bottom:14px">
-          <span class="chip" id="syncChip">Off</span>
-          <span class="tiny muted" id="syncMsg">Not connected</span>
+        <div class="sx-grp">
+          <div class="sx-item"><svg class="ic sx-ic"><use href="#i-cloud"/></svg><span class="sx-tx"><span class="sx-t" id="syncMsg">Not connected</span></span><span class="chip" id="syncChip">Off</span></div>
         </div>
-        <div class="synckey" style="margin-bottom:16px">
-          <span class="sync-split st-ok"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudok"/></svg></span><span class="sl">Everything synced</span></span></span>
-          <span class="sync-split st-busy"><span class="syncbtn"><span class="sic"><span class="sync-ld still" data-ld></span></span><span class="sl">Syncing right now</span></span></span>
-          <span class="sync-split st-idle"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudup"/></svg></span><span class="sl">Changes still to upload</span></span></span>
-          <span class="sync-split st-err"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-alert"/></svg></span><span class="sl">Needs attention</span></span></span>
-          <span class="sync-split st-off"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Not connected</span></span></span>
+        <h4 class="sx-sub">Repository</h4>
+        <div class="sx-grp">
+          <label class="sx-item sx-in"><span class="sx-lab">GitHub username</span><input type="text" id="ghOwner" placeholder="your-username" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Private data repository</span><input type="text" id="ghRepo" placeholder="nidus-data" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Private media repository</span><input type="text" id="ghMRepo" placeholder="nidus-media" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Branch</span><input type="text" id="ghBranch" placeholder="main" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Folder inside the repo</span><input type="text" id="ghDir" placeholder="nidus" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Fine-grained token · contents: read and write</span><input type="password" id="ghToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
         </div>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:0 14px">
-          <label class="fld"><span>GitHub username</span><input type="text" id="ghOwner" placeholder="your-username" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="fld"><span>Private data repository</span><input type="text" id="ghRepo" placeholder="nidus-data" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="fld"><span>Private media repository</span><input type="text" id="ghMRepo" placeholder="nidus-media" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="fld"><span>Branch</span><input type="text" id="ghBranch" placeholder="main" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="fld"><span>Folder inside the repo</span><input type="text" id="ghDir" placeholder="nidus" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+        <div class="sx-acts">
+          <button class="sx-btn filled" id="ghSave">Save and connect</button>
+          <button class="sx-btn tonal" id="ghSyncNow">Sync now</button>
         </div>
-        <label class="fld"><span>Fine-grained token — contents: read and write</span><input type="password" id="ghToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
-        <div class="row">
-          <button class="btn pri" id="ghSave">Save and connect</button>
-          <button class="btn" id="ghSyncNow">Sync now</button>
-          <label class="pill"><input type="checkbox" id="ghAuto" checked style="width:auto;margin-right:6px"> Sync automatically</label>
-          <button class="btn ghost sm" id="ghDevCopy">Settings from another device</button>
-          <button class="btn ghost sm" id="ghRepair">Repair sync</button>
-          <button class="btn ghost sm" id="ghHelp">Setup guide</button>
-          <button class="btn ghost sm" id="ghForget">Disconnect this device</button>
+        <div class="sx-grp">
+          <label class="sx-item"><span class="sx-tx"><span class="sx-t">Sync automatically</span></span><input type="checkbox" id="ghAuto" checked></label>
+          <button class="sx-item" id="ghDevCopy"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Settings from another device</span></span></button>
+          <button class="sx-item" id="ghRepair"><svg class="ic sx-ic"><use href="#i-review"/></svg><span class="sx-tx"><span class="sx-t">Repair sync</span></span></button>
+          <button class="sx-item" id="ghHelp"><svg class="ic sx-ic"><use href="#i-link"/></svg><span class="sx-tx"><span class="sx-t">Setup guide</span></span></button>
+          <button class="sx-item sx-err" id="ghForget"><svg class="ic sx-ic"><use href="#i-cloudoff"/></svg><span class="sx-tx"><span class="sx-t">Disconnect this device</span></span></button>
         </div>
-        <div class="tiny muted" id="ghDetail" style="margin-top:14px"></div>
-      </div>
+        <h4 class="sx-sub">This device</h4>
+        <div class="sx-grp">
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.12</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
+        </div>
       </div>
 
       <!-- ---- about ---- -->
       <div class="setpanel" data-sec="about">
-      <h3 class="sec">About Nidus</h3>
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.11 · sharded store</span>
+        <span class="chip" id="verChip">v6.12 · sharded store</span>
       </div>
-      <p class="blurb">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
-      <div class="setsheet" style="margin-top:14px">
-        <div class="setrow" id="installRow"><div class="lb">Install app<small id="installSub">Put Nidus on the home screen and run it without browser chrome</small></div><div class="ctl"><button class="btn sm" id="installBtn">Install</button></div></div>
-        <div class="setrow"><div class="lb">Keyboard shortcuts<small>Everything the player responds to</small></div><div class="ctl"><button class="btn sm" id="helpBtn3">Show shortcuts</button></div></div>
-        <div class="setrow"><div class="lb">Extractor prompt<small>The prompt that turns a PDF into importable JSON</small></div><div class="ctl"><button class="btn sm" data-go="prompt">Open</button></div></div>
-        <div class="setrow"><div class="lb">Where things live<small>Storage mode, question and answer counts</small></div><div class="ctl"><button class="btn sm" data-setsec="data">Data &amp; storage</button></div></div>
-      </div>
+        <div class="sx-grp">
+          <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
+          <button class="sx-item" id="helpBtn3"><svg class="ic sx-ic"><use href="#i-keys"/></svg><span class="sx-tx"><span class="sx-t">Keyboard shortcuts</span></span></button>
+          <button class="sx-item" data-go="prompt"><svg class="ic sx-ic"><use href="#i-prompt"/></svg><span class="sx-tx"><span class="sx-t">Extractor prompt</span></span></button>
+          <button class="sx-item" data-setsec="data"><svg class="ic sx-ic"><use href="#i-bank"/></svg><span class="sx-tx"><span class="sx-t">Where things live</span></span></button>
+        </div>
+        <p class="sx-foot">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       </div>
 
         </div>
@@ -4893,7 +5014,9 @@ If the bank runs to more than a handful of items, or if the user asks for a file
     /* .tabbar button is deliberately absent: a navigation item draws its own
        state layer in the shape of its indicator (see the .tabbar rules). */
     '.subtabs button,' +
-    '.nav button,.navstrip button,.setnav button,.qrow,.pool,.ch,.fab,.fabitem,' +
+    '.nav button,.navstrip button,.qrow,.pool,.ch,.fab,.fabitem,' +
+    /* settings: list items, their buttons and the date rows that open a picker */
+    'button.sx-item,label.sx-item:not(.sx-in),.sx-date,.sx-cg button,.sx-radios button,.sx-icb,.sx-btn,' +
     /* .galtile .gph, not .galtile: the photo box is the part that already
        clips and is positioned, so the ripple lands inside the picture */
     '.galtile .gph,.galsec .galh,' +
@@ -5031,7 +5154,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.11';
+const APP_VERSION='6.12';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5690,7 +5813,8 @@ const NOTES={
 
   storage:['Where all this lives',
     `<p class="tiny">Everything lives in this browser, on this device. Nothing is sent anywhere unless you connect cloud sync yourself.</p>
-     <p class="tiny" style="margin-top:12px">Backups, exports and restores are on the Import screen. The two buttons here destroy data on this device and cannot be undone — export first if there is any doubt.</p>`],
+     <p class="tiny" style="margin-top:12px">Backups, exports and restores are on the Import screen. The two red rows here destroy data on this device and cannot be undone — export first if there is any doubt.</p>
+     <p class="tiny" style="margin-top:12px"><b>Room for photos</b> — photos are <b>cached</b>, not mirrored. Anything dropped to stay inside this is fetched again the moment you open the question. Thumbnails are never dropped, and neither is anything still waiting to upload.</p>`],
 
   sync:['How syncing works',
     `<p class="tiny">Point Nidus at a <b>private</b> GitHub repository and it keeps a second copy of your bank there.</p>
@@ -5698,6 +5822,13 @@ const NOTES={
      <p class="tiny" style="margin-top:12px">Settings are kept per device, so a phone and a tablet can be set up differently. Each device saves its own reading, explanation, copying and appearance settings, automatic sync and photo cache limit to its own file in the repository, and never changes another device's. Your name, app title, daily goal and exam date are shared by every device. A device that starts empty takes back the settings of the last phone or tablet like it on its first sync; <b>Settings from another device</b> copies them by hand.</p>
      <p class="tiny" style="margin-top:12px">The token is stored in this browser only. It is never written into the app file, into a backup export, or into the public repository — so it has to be entered once on each device.</p>
      <p class="tiny" style="margin-top:12px">The sync button in the top bar, or at the foot of the drawer, says where sync stands, and once everything is synced it settles to just its icon. Tap it to sync now. The arrow that slides out beside it, or holding the button, opens the details: what is still waiting to upload, how many questions your other device holds, and the sync log.</p>
+     <div class="synckey">
+       <span class="sync-split st-ok"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudok"/></svg></span><span class="sl">Everything synced</span></span></span>
+       <span class="sync-split st-busy"><span class="syncbtn"><span class="sic"><span class="sync-ld still" data-ld></span></span><span class="sl">Syncing right now</span></span></span>
+       <span class="sync-split st-idle"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudup"/></svg></span><span class="sl">Changes still to upload</span></span></span>
+       <span class="sync-split st-err"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-alert"/></svg></span><span class="sl">Needs attention</span></span></span>
+       <span class="sync-split st-off"><span class="syncbtn"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Not connected</span></span></span>
+     </div>
      <p class="tiny" style="margin-top:12px"><b>Setup guide</b> below walks through the repositories, the token and the permissions it needs.</p>`],
 
   companion:['What this panel is',
@@ -8406,10 +8537,6 @@ const COPYFIELDS=[
   ['refs','References','Citations carried on the question'],
   ['note','My own note','']
 ];
-function seg(key,opts,cur){
-  return '<div class="seg" data-seg="'+key+'">'+opts.map(o=>
-    '<button data-v="'+o[0]+'" class="'+(cur===o[0]?'on':'')+'">'+esc(o[1])+'</button>').join('')+'</div>';
-}
 /* row kinds: range | seg | toggle | text | number | copy */
 const SETTINGS_SPEC=[
   {id:'reading',icon:'i-text',title:'Reading',group:'Study',session:true,preview:true,
@@ -8489,34 +8616,70 @@ const DEVSET={
   markFresh(v){try{v?localStorage.setItem(this.RESTORE,'1'):localStorage.removeItem(this.RESTORE)}catch(e){}}
 };
 
-/* ---------- one row renderer, used by both surfaces ---------- */
+/* ---------- one row renderer, used by both surfaces ----------
+   Every row is a Material 3 list item. A choice of up to three short
+   options is a connected button group under its label, anything longer
+   a radio list. Hints are not printed under the rows: they are collected
+   into the section's (i) note instead (setNoteHTML). */
+const SX_MINUS='<svg class="sx-gl" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>';
+const SX_PLUS='<svg class="sx-gl" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>';
+const sxTx=(t,s)=>'<span class="sx-tx"><span class="sx-t">'+t+'</span>'+(s?'<span class="sx-s">'+s+'</span>':'')+'</span>';
+const sxStat=(t,v,s)=>'<div class="sx-item">'+sxTx(t,s)+(v!==undefined?'<span class="sx-val">'+v+'</span>':'')+'</div>';
+const sxDate=v=>new Date(v+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
 function setRowHTML(r){
-  if(r.kind==='grp')return '<div class="setgrp subhd">'+esc(r.label)+'</div>';
   const s=DB.settings,co=Object.assign({},DEFAULTS.settings.copyOpts,s.copyOpts||{});
-  let ctl='';
+  const L=esc(r.label);
   if(r.kind==='range'){
     const v=setVal(r.k);
-    ctl='<input type="range" data-rng="'+r.k+'" min="'+r.min+'" max="'+r.max+'" step="'+r.step+'" value="'+v+'">'+
-        '<span class="val" data-val="'+r.k+'">'+v+(r.unit||'')+'</span>';
-  }else if(r.kind==='seg'){
-    const v=r.bool?(setVal(r.k)===false?'0':'1'):setVal(r.k);
-    ctl=seg(r.k,r.opts,v);
-  }else if(r.kind==='toggle'){
-    ctl='<label class="pill"><input type="checkbox" data-chk="'+r.k+'" style="width:auto;margin-right:6px"'+(setVal(r.k)?' checked':'')+'> '+esc(r.on||'On')+'</label>';
-  }else if(r.kind==='copy'){
-    ctl='<label class="pill"><input type="checkbox" data-copy="'+r.k+'" style="width:auto;margin-right:6px"'+(co[r.k]!==false?' checked':'')+'> '+esc(r.on||'Include')+'</label>';
-  }else if(r.kind==='text'){
-    ctl='<input type="text" data-txt="'+r.k+'" value="'+esc(String(setVal(r.k)||''))+'" placeholder="'+esc(r.ph||'')+'">';
-  }else if(r.kind==='date'){
-    ctl='<input type="date" data-date="'+r.k+'" value="'+esc(String(setVal(r.k)||''))+'">'+
-        (setVal(r.k)?'<button class="btn ghost sm" data-dateclr="'+r.k+'">Clear</button>':'');
-  }else if(r.kind==='number'){
-    ctl='<input type="number" data-num="'+r.k+'" value="'+esc(String(setVal(r.k)||0))+'"'+
-        (r.min!==undefined?' min="'+r.min+'"':'')+(r.step?' step="'+r.step+'"':'')+'>';
+    return '<div class="sx-item sx-col"><div class="sx-row"><span class="sx-t">'+L+'</span>'+
+      '<span class="sx-val" data-val="'+r.k+'">'+v+(r.unit||'')+'</span></div>'+
+      '<input type="range" data-rng="'+r.k+'" min="'+r.min+'" max="'+r.max+'" step="'+r.step+'" value="'+v+'" aria-label="'+L+'"></div>';
   }
-  return '<div class="setrow"><div class="lb">'+esc(r.label)+(r.hint?'<small>'+esc(r.hint)+'</small>':'')+'</div><div class="ctl">'+ctl+'</div></div>';
+  if(r.kind==='seg'){
+    const v=r.bool?(setVal(r.k)===false?'0':'1'):setVal(r.k);
+    const short=r.opts.length<=3&&r.opts.reduce((n,o)=>n+o[1].length,0)<=24;
+    return '<div class="sx-item sx-col"><span class="sx-t">'+L+'</span>'+
+      '<div class="'+(short?'sx-cg':'sx-radios')+'" data-seg="'+r.k+'" role="radiogroup" aria-label="'+L+'">'+
+      r.opts.map(o=>'<button type="button" role="radio" aria-checked="'+(v===o[0])+'" data-v="'+o[0]+'"'+(v===o[0]?' class="on"':'')+'>'+
+        (short?'':'<span class="sx-rd"></span>')+esc(o[1])+'</button>').join('')+'</div></div>';
+  }
+  if(r.kind==='toggle'||r.kind==='copy'){
+    const on=r.kind==='copy'?co[r.k]!==false:!!setVal(r.k);
+    return '<label class="sx-item">'+sxTx(L)+'<input type="checkbox" '+(r.kind==='copy'?'data-copy':'data-chk')+'="'+r.k+'"'+(on?' checked':'')+'></label>';
+  }
+  if(r.kind==='text')
+    return '<label class="sx-item sx-in"><span class="sx-lab">'+L+'</span>'+
+      '<input type="text" data-txt="'+r.k+'" value="'+esc(String(setVal(r.k)||''))+'" placeholder="'+esc(r.ph||'')+'"></label>';
+  if(r.kind==='number')
+    return '<div class="sx-item">'+sxTx(L)+'<span class="sx-step">'+
+      '<button type="button" class="sx-icb tonal" data-stepdn="'+r.k+'" aria-label="Fewer">'+SX_MINUS+'</button>'+
+      '<input type="number" inputmode="numeric" data-num="'+r.k+'" value="'+esc(String(setVal(r.k)||0))+'"'+
+        (r.min!==undefined?' min="'+r.min+'"':'')+(r.step?' step="'+r.step+'"':'')+' aria-label="'+L+'">'+
+      '<button type="button" class="sx-icb tonal" data-stepup="'+r.k+'" aria-label="More">'+SX_PLUS+'</button></span></div>';
+  if(r.kind==='date'){
+    const v=String(setVal(r.k)||'');
+    return '<div class="sx-item sx-date">'+sxTx(L,v?esc(sxDate(v)):'Not set')+
+      '<input type="date" data-date="'+r.k+'" value="'+esc(v)+'" aria-label="'+L+'">'+
+      (v?'<button type="button" class="sx-icb" data-dateclr="'+r.k+'" aria-label="Clear '+L+'"><svg class="ic"><use href="#i-close"/></svg></button>':'')+'</div>';
+  }
+  return '';
 }
-function setSheetHTML(sec){return '<div class="setsheet">'+sec.rows.map(setRowHTML).join('')+'</div>'}
+/* a heading row closes one grouped container and opens the next */
+function setSheetHTML(sec){
+  let html='',open=false;
+  sec.rows.forEach(r=>{
+    if(r.kind==='grp'){if(open)html+='</div>';html+='<h4 class="sx-sub">'+esc(r.label)+'</h4><div class="sx-grp">';open=true;return}
+    if(!open){html+='<div class="sx-grp">';open=true}
+    html+=setRowHTML(r);
+  });
+  return html+(open?'</div>':'');
+}
+/* what the section's (i) says: its blurb, then every row that has a hint */
+function setNoteHTML(sec){
+  return (sec.blurb?'<p class="tiny">'+esc(sec.blurb)+'</p>':'')+
+    sec.rows.filter(r=>r.hint).map(r=>'<p class="tiny" style="margin-top:12px"><b>'+esc(r.label)+'</b> — '+esc(r.hint)+'</p>').join('')+
+    (sec.session?'<p class="tiny" style="margin-top:12px">Also on the gear inside a session.</p>':'');
+}
 const SET_PREVIEW='<div class="preview">A 54-year-old man presents with three days of pleuritic chest pain.<span>The explanation reads at this size — long enough to judge before you commit to it.</span></div>';
 
 /* ---------- one binder, used by both surfaces ---------- */
@@ -8538,7 +8701,7 @@ function bindSettings(root){
     const k=g.dataset.seg,v=b.dataset.v;
     const row=SETTINGS_SPEC.reduce((f,s)=>f||((s.rows||[]).find(r=>r.k===k)),null);
     DB.settings[k]=(row&&row.bool)?(v==='1'):v;
-    const mark=()=>g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    const mark=()=>g.querySelectorAll('button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-checked',String(x===b))});
     /* theme, palette and contrast repaint every surface at once — composite
        the change instead, growing out of the chosen segment. The segment is
        marked inside the change, so the old snapshot still shows the old one */
@@ -8553,8 +8716,16 @@ function bindSettings(root){
     DB.settings[t.dataset.txt]=t.value;applySettings();save()}));
   root.querySelectorAll('[data-num]').forEach(n=>n.addEventListener('input',()=>{
     DB.settings[n.dataset.num]=parseInt(n.value||'0',10)||0;applySettings();save()}));
+  /* the stepper's buttons move the field by its step and let it report */
+  root.querySelectorAll('[data-stepup],[data-stepdn]').forEach(b=>b.addEventListener('click',()=>{
+    const k=b.dataset.stepup||b.dataset.stepdn,n=root.querySelector('[data-num="'+k+'"]');if(!n)return;
+    const st=parseFloat(n.step)||1,mn=n.min===''?-Infinity:parseFloat(n.min);
+    n.value=Math.max(mn,(parseInt(n.value||'0',10)||0)+(b.dataset.stepup?st:-st));
+    n.dispatchEvent(new Event('input',{bubbles:true}));
+  }));
   root.querySelectorAll('[data-date]').forEach(d=>d.addEventListener('change',()=>{
     DB.settings[d.dataset.date]=d.value||'';applySettings();save();
+    const sub=d.closest('.sx-date')&&d.closest('.sx-date').querySelector('.sx-s');if(sub)sub.textContent=d.value?sxDate(d.value):'Not set';
     if(VIEW==='dash')renderDash();if(VIEW==='settings')renderSettings()}));
   root.querySelectorAll('[data-dateclr]').forEach(b=>b.addEventListener('click',()=>{
     DB.settings[b.dataset.dateclr]='';applySettings();save();
@@ -8578,8 +8749,8 @@ function resetSection(id,quiet){
 function openSessionSettings(){
   const secs=SETTINGS_SPEC.filter(s=>s.session);
   modal('Reading & session settings',
-    '<div class="setsheet">'+
-    secs.map(sec=>'<div class="setgrp">'+esc(sec.title)+'</div>'+sec.rows.map(setRowHTML).join('')).join('')+
+    '<div class="sx-sheet">'+
+    secs.map(sec=>'<h4 class="sx-sub sx-sec">'+esc(sec.title)+'</h4>'+setSheetHTML(sec)).join('')+
     '</div>'+SET_PREVIEW,
     '<button class="btn ghost" id="setReset">Reset to defaults</button><button class="btn pri" data-close>Done</button>');
   const body=$('#mBody');
@@ -10347,47 +10518,81 @@ $('#restorePrompt').onclick=()=>{DB.prompt=null;save();renderPrompt();toast('Def
 /* ============================================================
    SETTINGS + INIT
    ============================================================ */
-/* ---------- surface 2: the Settings screen ---------- */
-let SET_SEC='reading';
-function renderSetNav(){
-  let html='',lastGrp=null;
-  SETTINGS_SPEC.forEach(sec=>{
-    if(sec.group!==lastGrp){html+='<div class="setgrp">'+esc(sec.group)+'</div>';lastGrp=sec.group}
-    html+='<button data-setsec="'+sec.id+'" class="'+(sec.id===SET_SEC?'on':'')+'">'+
-          '<svg class="ic"><use href="#'+sec.icon+'"/></svg>'+esc(sec.title)+'</button>';
-  });
-  $('#setNav').innerHTML=html;
-}
-function showSetSection(id,scroll){
+/* ---------- surface 2: the Settings screen ----------
+   The list (#setList, drawn by renderSetList further down) and one
+   section at a time in #setMain. On a phone body.setdetail says which
+   of the two is on screen; on a large screen both are. */
+let SET_SEC='reading',SET_FX=0,SET_LISTY=0;
+/* the static panels already have a note of their own */
+const SET_NOTE={bank:'bankclass',studydata:'studydata',data:'storage',sync:'sync'};
+const setPhone=()=>matchMedia('(max-width:860px)').matches;
+function showSetSection(id){
   if(!SETSEC(id))id='reading';
   SET_SEC=id;
-  $$('#setNav button').forEach(b=>b.classList.toggle('on',b.dataset.setsec===id));
+  $$('#setList [data-setsec]').forEach(b=>{const on=b.dataset.setsec===id;b.classList.toggle('on',on);
+    if(on)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
   $$('#setMain .setpanel').forEach(p=>p.classList.toggle('on',p.dataset.sec===id));
-  const crumb=$('#setCrumb');if(crumb)crumb.textContent=SETSEC(id).title;
-  if(scroll)$('#setMain').scrollIntoView({block:'start',behavior:'smooth'});
+  $('#setCrumb').textContent=SETSEC(id).title;
+  const note=SET_NOTE[id]||('set-'+id),info=$('#setInfo');
+  info.dataset.note=note;info.hidden=!NOTES[note];
 }
-function openSettingsSection(id){go('settings');showSetSection(id,true)}
+/* A move between the list and a section, or between two sections, is a
+   fade-through: what is on screen leaves by itself, and only then does
+   the next page rise in. A second tap mid-move takes over the first. */
+function setShown(){
+  if(!setPhone())return $('#setMain .setpanel.on');
+  return document.body.classList.contains('setdetail')?$('#setMain'):$('#sxList');
+}
+function setMove(change){
+  const tok=++SET_FX,out=setShown();
+  const arrive=()=>{
+    /* a page hidden mid-rise never reports animationend, so clear both */
+    $$('#v-settings .sx-leave,#v-settings .sx-arrive').forEach(x=>x.classList.remove('sx-leave','sx-arrive'));
+    change();
+    const inn=setShown();if(!inn)return;
+    inn.classList.remove('sx-arrive');void inn.offsetWidth;inn.classList.add('sx-arrive');
+    inn.addEventListener('animationend',()=>inn.classList.remove('sx-arrive'),{once:true});
+  };
+  if(!out||VIEW!=='settings'){arrive();return}
+  out.classList.add('sx-leave');
+  setTimeout(()=>{if(tok===SET_FX)arrive()},90);
+}
+function openSetDetail(id){
+  const phone=setPhone(),inDetail=document.body.classList.contains('setdetail');
+  if(!phone&&id===SET_SEC&&$('#setMain .setpanel.on'))return;
+  setMove(()=>{
+    if(phone&&!inDetail){SET_LISTY=window.scrollY;document.body.classList.add('setdetail')}
+    showSetSection(id);
+    window.scrollTo(0,0);
+  });
+}
+function closeSetDetail(){
+  setMove(()=>{document.body.classList.remove('setdetail');window.scrollTo(0,SET_LISTY)});
+}
+function openSettingsSection(id){go('settings');showSetSection(id);document.body.classList.add('setdetail')}
 window.openSettingsSection=openSettingsSection;
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-setsec]');if(!b)return;
   e.preventDefault();
-  if(b.closest('#setNav'))showSetSection(b.dataset.setsec);
+  if(VIEW==='settings')openSetDetail(b.dataset.setsec);
   else openSettingsSection(b.dataset.setsec);
 });
+$('#setBack').onclick=closeSetDetail;
+/* a date row is the whole row: wherever it is tapped, the picker opens */
+document.addEventListener('click',e=>{
+  const d=e.target.closest&&e.target.closest('.sx-date input[type=date]');
+  if(d&&d.showPicker)try{d.showPicker()}catch(err){}
+});
 function renderSettings(){
-  renderSetNav();
   /* preference panels are rebuilt from the spec every time this screen opens,
      so they always show what is actually stored */
   SETTINGS_SPEC.filter(s=>!s.static).forEach(sec=>{
     const panel=$('#setMain .setpanel[data-sec="'+sec.id+'"]');if(!panel)return;
-    panel.innerHTML='<h3 class="sec">'+esc(sec.title)+'</h3>'+
-      (sec.blurb?'<p class="blurb">'+esc(sec.blurb)+'</p>':'')+
-      setSheetHTML(sec)+
-      (sec.preview?SET_PREVIEW:'')+
-      '<div class="setfoot"><button class="btn ghost sm" data-setreset="'+sec.id+'">Reset this section</button>'+
-      (sec.session?'<span class="tiny muted">Also on the gear inside a session.</span>':'')+'</div>';
+    panel.innerHTML=(sec.preview?SET_PREVIEW:'')+setSheetHTML(sec)+
+      '<div class="sx-grp"><button class="sx-item" data-setreset="'+sec.id+'"><svg class="ic sx-ic"><use href="#i-history"/></svg>'+sxTx('Reset to defaults')+'</button></div>';
     bindSettings(panel);
     panel.querySelector('[data-setreset]').onclick=()=>{resetSection(sec.id);renderSettings();showSetSection(sec.id)};
+    NOTES['set-'+sec.id]=[sec.title,setNoteHTML(sec)];
   });
   showSetSection(SET_SEC);
   const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
@@ -10395,14 +10600,17 @@ function renderSettings(){
   const dp=DB.questions.filter(q=>q.dupCandidate).length;
   const rp=DB.questions.filter(q=>(q.seenCount||0)>1).length;
   const vf=DB.questions.filter(q=>q.verified).length;
-  $('#classInfo').innerHTML=`Taxonomy v${DB.taxVersion||1} · ${SYSTEMS.length} systems · ${SUBJECTS.length} subjects · ${ARCHETYPES.length} question types<br>
-    <b>${un}</b> unclassified · <b>${lk}</b> locked by hand · <b>${vf}</b> verified by you · <b>${rp}</b> seen more than once · <b>${dp}</b> flagged as possible duplicates`;
+  $('#classInfo').innerHTML=sxStat('Taxonomy v'+(DB.taxVersion||1),undefined,
+      SYSTEMS.length+' systems · '+SUBJECTS.length+' subjects · '+ARCHETYPES.length+' question types')+
+    sxStat('Unclassified',un)+sxStat('Locked by hand',lk)+sxStat('Verified by you',vf)+
+    sxStat('Seen more than once',rp)+sxStat('Possible duplicates',dp);
   const modes={indexeddb:'IndexedDB (best — large banks and images are fine)',localstorage:'localStorage (works, but roughly 5 MB total)',memory:'Memory only — this browser is blocking storage, so nothing survives a refresh. Export a backup.'};
   const fmtName={v3:'sharded store (v3)',locked:'old format — upgrade pending',fresh:'nothing in the repository yet',legacy:'old format',unknown:'checking…'};
   const mode=(window.V3&&V3.mode)?V3.mode():'legacy';
-  $('#storeInfo').innerHTML=`Saving to: <b>${esc(modes[STORE_MODE])}</b>${IDB.v2?' · photos kept as files, not inside the questions':''}<br>`
-    +`Repository format: <b>${esc(fmtName[mode]||mode)}</b><br>`
-    +`${DB.questions.length} questions · ${allAttempts().length} answers · ${DB.sessions.length} sessions${DB.updatedAt?' · last saved '+new Date(DB.updatedAt).toLocaleString():''}`;
+  $('#storeInfo').innerHTML=sxStat('Saving to',undefined,esc(modes[STORE_MODE])+(IDB.v2?' · photos kept as files, not inside the questions':''))+
+    sxStat('Repository format',undefined,esc(fmtName[mode]||mode))+
+    sxStat('On this device',undefined,`${DB.questions.length} questions · ${allAttempts().length} answers · ${DB.sessions.length} sessions`)+
+    (DB.updatedAt?sxStat('Last saved',undefined,esc(new Date(DB.updatedAt).toLocaleString())):'');
   try{TOOLS.bind();TOOLS.renderMedia()}catch(e){}
   renderStudyData();
   if(window.SYNC)window.SYNC.render();
@@ -10454,65 +10662,62 @@ function renderStudyData(){
   const exDays=Object.keys(r.days).filter(k=>r.days[k].s);
   const exSess=Object.keys(r.sessions).filter(k=>r.sessions[k].s);
   const rec=DB.recovery;
-  host.innerHTML=`<div class="statgrid" style="margin-bottom:14px">${[
-      ['Counted',live],['Recorded',raw],['Days excluded',exDays.length],['Sessions excluded',exSess.length]
-    ].map(([k,v])=>`<div class="stat"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join('')}</div>
-    <div class="card">
-      <p class="tiny muted" style="margin:0 0 12px;line-height:1.7">${
-        raw===live?'Every answer on this device is being counted.'
-        :`<b>${raw-live}</b> answer${raw-live===1?' is':'s are'} on the device but out of the statistics. ${raw-live} of ${raw} — the questions behind them are back in the unused pool and off the review schedule.`}</p>
-      <div class="row">
-        <button class="btn" id="sdBackup">Download a backup</button>
-        ${(exDays.length||exSess.length||r.before.v)?'<button class="btn ghost" id="sdClearRules">Count everything again</button>':''}
-        ${rec?`<button class="btn ghost" id="sdUndo">Undo: ${esc(rec.label)} (${rec.n})</button>`:''}
+  const pct=raw?Math.round(live/raw*100):100;
+  host.innerHTML=`<div class="sx-grp">
+      <div class="sx-item sx-col">
+        <div class="sx-row"><span class="sx-t">Counted</span><span class="sx-val">${live} of ${raw}</span></div>
+        <div class="sx-prog" aria-hidden="true"><i style="width:${pct}%"></i>${pct<100?'<b></b>':''}</div>
+        <span class="sx-s">${raw===live?'Every answer on this device is being counted.'
+          :`<b>${raw-live}</b> answer${raw-live===1?' is':'s are'} out of the statistics — the questions behind them are back in the unused pool and off the review schedule.`}</span>
       </div>
-      ${rec?`<p class="tiny muted" style="margin:12px 0 0">Deleted ${new Date(rec.ts).toLocaleString()}. Kept until the next deletion replaces it.</p>`:''}
+      ${sxStat('Days excluded',exDays.length)}${sxStat('Sessions excluded',exSess.length)}
+    </div>
+    <div class="sx-grp">
+      <button class="sx-item" id="sdBackup"><svg class="ic sx-ic"><use href="#i-import"/></svg>${sxTx('Download a backup')}</button>
+      ${(exDays.length||exSess.length||r.before.v)?`<button class="sx-item" id="sdClearRules"><svg class="ic sx-ic"><use href="#i-check"/></svg>${sxTx('Count everything again')}</button>`:''}
+      ${rec?`<button class="sx-item" id="sdUndo"><svg class="ic sx-ic"><use href="#i-history"/></svg>${sxTx('Undo: '+esc(rec.label)+' ('+rec.n+')','Deleted '+esc(new Date(rec.ts).toLocaleString())+' · kept until the next deletion replaces it')}</button>`:''}
     </div>`;
 
   /* the cut-off — one control that usually settles the whole problem */
   const cut=r.before.v?new Date(r.before.v):null;
-  $('#sdBefore').innerHTML=`<div class="setrow">
-      <div class="lb">Ignore anything earlier<small>${cut?'Answers before '+cut.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})+' are not counted.':'Set this to the day real revision began.'}</small></div>
-      <div class="ctl"><input type="date" id="sdBeforeInput" value="${cut?dayKey(cut):''}">
-        ${cut?'<button class="btn ghost sm" id="sdBeforeClr">Clear</button>':''}</div>
+  $('#sdBefore').innerHTML=`<div class="sx-item sx-date">
+      ${sxTx('Ignore anything earlier',cut?'Answers before '+esc(cut.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}))+' are not counted':'Not set')}
+      <input type="date" id="sdBeforeInput" value="${cut?dayKey(cut):''}" aria-label="Ignore anything earlier">
+      ${cut?'<button class="sx-icb" id="sdBeforeClr" aria-label="Clear the cut-off"><svg class="ic"><use href="#i-close"/></svg></button>':''}
     </div>
-    ${cut?`<div class="setrow"><div class="lb">Delete what is before it<small>${esc(sdCount({before:r.before.v}))} would be removed for good</small></div>
-      <div class="ctl"><button class="btn danger sm" id="sdBeforeDel">Delete permanently</button></div></div>`:''}`;
+    ${cut?`<button class="sx-item sx-err" id="sdBeforeDel"><svg class="ic sx-ic"><use href="#i-trash"/></svg>${sxTx('Delete what is before it',esc(sdCount({before:r.before.v}))+' would be removed for good')}</button>`:''}`;
 
   /* day ledger */
   const days=dayLedger(), goal=DB.settings.goal||0;
-  $('#sdDays').innerHTML=days.length?`<div class="setsheet">${days.slice(0,120).map(d=>{
+  $('#sdDays').innerHTML=days.length?`<div class="sx-grp">${days.slice(0,120).map(d=>{
       const off=drDay(d.k)||(r.before.v&&d.ts<r.before.v);
       const hard=r.before.v&&d.ts<r.before.v;
       const acc=d.n?Math.round(d.c/d.n*100):0;
       const dt=new Date(d.k+'T00:00:00');
-      return `<div class="setrow">
-        <div class="lb">${dt.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
-          ${off?`<span class="chip amber" style="margin-left:8px">${hard?'Before the cut-off':'Excluded'}</span>`:''}
-          <small>${d.n} answered · ${acc}% · ${fmtDur(d.ms)} · ${Object.keys(d.sess).length} session${Object.keys(d.sess).length===1?'':'s'}${goal&&d.n>=goal?' · goal met':''}</small></div>
-        <div class="ctl">
-          <button class="btn ghost sm" data-sdday="${d.k}"${hard?' disabled':''}>${drDay(d.k)?'Count it':'Exclude'}</button>
-          <button class="tool" data-sddel="${d.k}" title="Delete this day permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
-        </div></div>`}).join('')}</div>
-      ${days.length>120?`<p class="tiny muted" style="margin:12px 0 0">Showing the 120 most recent of ${days.length} days.</p>`:''}`
-    :'<div class="empty"><h4>No answers yet</h4><p class="tiny">Every day you study will be listed here.</p></div>';
+      return `<div class="sx-item">
+        ${sxTx(esc(dt.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'}))+
+          (off?`<span class="sx-tag">${hard?'Before the cut-off':'Excluded'}</span>`:''),
+          `${d.n} answered · ${acc}% · ${fmtDur(d.ms)} · ${Object.keys(d.sess).length} session${Object.keys(d.sess).length===1?'':'s'}${goal&&d.n>=goal?' · goal met':''}`)}
+        <button class="sx-btn tonal sm" data-sdday="${d.k}"${hard?' disabled':''}>${drDay(d.k)?'Count it':'Exclude'}</button>
+        <button class="sx-icb" data-sddel="${d.k}" aria-label="Delete this day permanently" title="Delete this day permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
+        </div>`}).join('')}</div>
+      ${days.length>120?`<p class="sx-foot">Showing the 120 most recent of ${days.length} days.</p>`:''}`
+    :`<div class="sx-grp">${sxStat('No answers yet',undefined,'Every day you study will be listed here.')}</div>`;
 
   /* session ledger */
   const ss=(DB.sessions||[]).slice().sort((a,b)=>(b.ts||0)-(a.ts||0));
-  $('#sdSess').innerHTML=ss.length?`<div class="setsheet">${ss.slice(0,120).map(x=>{
+  $('#sdSess').innerHTML=ss.length?`<div class="sx-grp">${ss.slice(0,120).map(x=>{
       const n=(x.order||[]).length, sc=sessScore(x);
       const off=drSess(x.id)||drDay(dayKey(x.ts||0))||(r.before.v&&(x.ts||0)<r.before.v);
       const soft=!drSess(x.id)&&off;
-      return `<div class="setrow">
-        <div class="lb">${esc(x.config&&x.config.label||'Session')}
-          ${off?`<span class="chip amber" style="margin-left:8px">${soft?'Excluded by day':'Excluded'}</span>`:''}
-          <small>${new Date(x.ts).toLocaleString()} · ${n} question${n===1?'':'s'} · ${sc.p}% · ${fmtDur(x.elapsed||0)} · ${esc(SESS_LABEL[sessState(x)]||'')}</small></div>
-        <div class="ctl">
-          <button class="btn ghost sm" data-sdsess="${x.id}">${drSess(x.id)?'Count it':'Exclude'}</button>
-          <button class="tool" data-sdsdel="${x.id}" title="Delete this session permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
-        </div></div>`}).join('')}</div>
-      ${ss.length>120?`<p class="tiny muted" style="margin:12px 0 0">Showing the 120 most recent of ${ss.length} sessions.</p>`:''}`
-    :'<div class="empty"><h4>No sessions yet</h4><p class="tiny">Build one from the bank and it will be listed here.</p></div>';
+      return `<div class="sx-item">
+        ${sxTx(esc(x.config&&x.config.label||'Session')+(off?`<span class="sx-tag">${soft?'Excluded by day':'Excluded'}</span>`:''),
+          `${new Date(x.ts).toLocaleString()} · ${n} question${n===1?'':'s'} · ${sc.p}% · ${fmtDur(x.elapsed||0)} · ${esc(SESS_LABEL[sessState(x)]||'')}`)}
+        <button class="sx-btn tonal sm" data-sdsess="${x.id}">${drSess(x.id)?'Count it':'Exclude'}</button>
+        <button class="sx-icb" data-sdsdel="${x.id}" aria-label="Delete this session permanently" title="Delete this session permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
+        </div>`}).join('')}</div>
+      ${ss.length>120?`<p class="sx-foot">Showing the 120 most recent of ${ss.length} sessions.</p>`:''}`
+    :`<div class="sx-grp">${sxStat('No sessions yet',undefined,'Build one from the bank and it will be listed here.')}</div>`;
 }
 /* one confirmation for every permanent removal, and it always counts first */
 function sdConfirm(title,sel,label){
@@ -10539,11 +10744,13 @@ document.addEventListener('click',e=>{
   const sd=e.target.closest('[data-sdsdel]');
   if(sd){const ses=sessFind(sd.dataset.sdsdel);
     sdConfirm('Delete this session?',{sessions:[sd.dataset.sdsdel]},(ses&&ses.config&&ses.config.label)||'Session');return}
-  if(e.target.id==='sdBackup'){download(`nidus-backup-${stamp()}.json`,JSON.stringify(DB));toast('Backup downloaded.');return}
-  if(e.target.id==='sdClearRules'){const r=DR();r.days={};r.sessions={};drBefore(0);applyDataRules(true);renderStudyData();toast('Everything counts again.');return}
-  if(e.target.id==='sdUndo'){const n=restoreRecovery();renderSettings();showSetSection('studydata');toast(`${n} answer${n===1?'':'s'} restored.`);return}
-  if(e.target.id==='sdBeforeClr'){drBefore(0);applyDataRules(true);renderStudyData();toast('Cut-off cleared.');return}
-  if(e.target.id==='sdBeforeDel'){sdConfirm('Delete everything before the cut-off?',{before:DR().before.v},'Everything before the cut-off');return}
+  /* the rows hold an icon and text, so the press lands on a child */
+  const tid=((e.target.closest&&e.target.closest('[id]'))||{}).id;
+  if(tid==='sdBackup'){download(`nidus-backup-${stamp()}.json`,JSON.stringify(DB));toast('Backup downloaded.');return}
+  if(tid==='sdClearRules'){const r=DR();r.days={};r.sessions={};drBefore(0);applyDataRules(true);renderStudyData();toast('Everything counts again.');return}
+  if(tid==='sdUndo'){const n=restoreRecovery();renderSettings();showSetSection('studydata');toast(`${n} answer${n===1?'':'s'} restored.`);return}
+  if(tid==='sdBeforeClr'){drBefore(0);applyDataRules(true);renderStudyData();toast('Cut-off cleared.');return}
+  if(tid==='sdBeforeDel'){sdConfirm('Delete everything before the cut-off?',{before:DR().before.v},'Everything before the cut-off');return}
 });
 document.addEventListener('change',e=>{
   if(e.target.id==='sdBeforeInput'){
@@ -13724,8 +13931,10 @@ const SYNCUI=(function(){
   window.addEventListener('online',()=>update(SYNC.status()));
   window.addEventListener('offline',()=>update(SYNC.status()));
 
-  /* the legend in Settings draws the indicator standing still */
+  /* the legend in the sync note draws the indicator standing still */
   document.querySelectorAll('[data-ld]').forEach(x=>{x.outerHTML=ldHtml(true)});
+  /* the same key is drawn in the sync note, which is only a string until opened */
+  NOTES.sync[1]=NOTES.sync[1].replace('<span class="sync-ld still" data-ld></span>',ldHtml(true));
 
   return {update:update,details:details,expand:expand};
 })();
@@ -14152,7 +14361,7 @@ const TOOLS=(function(){
       ' — '+mb(u.bytes)+' of '+mb(cap)+'.'+
       (pend.length?'<br><b>'+pend.length+'</b> file'+(pend.length===1?'':'s')+' still to upload. They cannot be dropped until they are safely in the repository.':'<br>Everything here is also in the repository.');
     const sl=document.getElementById('mediaCap'),tx=document.getElementById('mediaCapTxt');
-    if(sl){sl.value=Math.round(cap/1048576);}
+    if(sl){sl.value=Math.round(cap/1048576);sl.style.setProperty('--m3-val',((sl.value-sl.min)/(sl.max-sl.min)*100).toFixed(2)+'%');}
     if(tx)tx.textContent=mb(cap);
   }
 
@@ -15177,15 +15386,14 @@ const BRAND=(function(){
         become tabs inside the destination each belongs to
      2. the top app bar overflow menu, which absorbs the old
         More sheet whole
-     3. Settings rebuilt as an Android 16 list -> detail, grouped
-        by what a setting is about, every row carrying its own
-        current value, and the whole thing searchable
+     3. The settings list, grouped by what a setting is about,
+        every row carrying its own current value, and searchable
+        (the screen around it is renderSettings, since v6.12)
    ============================================================ */
 (function () {
   'use strict';
 
   function el(id) { return document.getElementById(id); }
-  function $1(sel, root) { return (root || document).querySelector(sel); }
   function $a(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   function esc2(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -15514,60 +15722,30 @@ const BRAND=(function(){
         return hay.toLowerCase().indexOf(filter) >= 0;
       });
       if (!ids.length) return;
-      html += '<div class="setgrp">' + esc2(g[0]) + '</div>';
-      ids.forEach(function (id, i) {
-        var cls = 'setitem' + (ids.length === 1 ? ' onlyin' : (i === ids.length - 1 ? ' lastin' : ''));
+      html += '<h4 class="sx-sub">' + esc2(g[0]) + '</h4><div class="sx-grp">';
+      ids.forEach(function (id) {
         var v = '';
         try { v = SUMMARY[id] ? SUMMARY[id]() : ''; } catch (e) { v = ''; }
-        html += '<button class="' + cls + '" data-setsec="' + id + '">' +
-                '<span class="lead"><svg class="ic"><use href="#' + secIcon(id) + '"/></svg></span>' +
-                '<span class="txt"><span class="t">' + esc2(secTitle(id)) + '</span>' +
-                (v ? '<span class="v">' + esc2(v) + '</span>' : '') + '</span>' +
-                '<svg class="ic chev"><use href="#i-chev"/></svg>' +
+        var on = (typeof SET_SEC !== 'undefined' && SET_SEC === id);
+        html += '<button class="sx-item sx-nav' + (on ? ' on' : '') + '" data-setsec="' + id + '"' + (on ? ' aria-current="true"' : '') + '>' +
+                '<span class="sx-lead"><svg class="ic"><use href="#' + secIcon(id) + '"/></svg></span>' +
+                '<span class="sx-tx"><span class="sx-t">' + esc2(secTitle(id)) + '</span>' +
+                (v ? '<span class="sx-s">' + esc2(v) + '</span>' : '') + '</span>' +
                 '</button>';
       });
+      html += '</div>';
     });
-    if (!html) html = '<p class="sethint">Nothing here matches that. Try a word like <b>font</b>, <b>goal</b>, <b>backup</b> or <b>colour</b>.</p>';
+    if (!html) html = '<p class="sx-empty">Nothing here matches that. Try a word like <b>font</b>, <b>goal</b>, <b>backup</b> or <b>colour</b>.</p>';
     host.innerHTML = html;
   }
 
-  /* build the list, the search field and the back button into the screen */
-  function installSettingsShell() {
-    var view = el('v-settings'), wrap = $1('.setwrap', view);
-    if (!view || !wrap || el('setList')) return;
-
-    var head = document.createElement('div');
-    head.innerHTML =
-      '<div class="setsearch"><svg class="ic"><use href="#i-search"/></svg>' +
-      '<input type="search" id="setSearch" placeholder="Search settings" autocomplete="off" ' +
-      'aria-label="Search settings"></div>' +
-      '<div class="setlist" id="setList"></div>';
-    wrap.parentNode.insertBefore(head, wrap);
-
-    var back = document.createElement('button');
-    back.className = 'setback';
-    back.id = 'setBack';
-    back.innerHTML = '<svg class="ic"><use href="#i-back"/></svg>All settings';
-    var main = el('setMain');
-    main.parentNode.insertBefore(back, main);
-
-    el('setSearch').addEventListener('input', function () {
-      document.body.classList.remove('setdetail');
-      renderSetList(this.value);
-    });
-    back.addEventListener('click', function () {
-      document.body.classList.remove('setdetail');
-      var c = el('setCrumb'); if (c) c.textContent = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+  /* the search field filters the list as you type */
+  function bindSettingsSearch() {
+    var q = el('setSearch');
+    if (!q || q.dataset.bound) return;
+    q.dataset.bound = '1';
+    q.addEventListener('input', function () { renderSetList(this.value); });
   }
-
-  /* on a phone, picking a row is a navigation into a detail page */
-  document.addEventListener('click', function (e) {
-    var b = e.target.closest && e.target.closest('#setList [data-setsec]');
-    if (!b) return;
-    document.body.classList.add('setdetail');
-  });
 
   /* ==========================================================
      WIRING
@@ -15593,14 +15771,13 @@ const BRAND=(function(){
       });
     } catch (e) {}
 
-    installSettingsShell();
+    bindSettingsSearch();
 
     /* keep the list, the tab counts and the overflow honest after any render */
     if (typeof window.renderSettings === 'function') {
       var _rs = window.renderSettings;
       window.renderSettings = function () {
         _rs.apply(this, arguments);
-        installSettingsShell();
         var q = el('setSearch');
         renderSetList(q ? q.value : '');
       };
@@ -15609,20 +15786,12 @@ const BRAND=(function(){
       var _rh = window.renderHistory;
       window.renderHistory = function () { _rh.apply(this, arguments); paintSessCnt(); };
     }
-    /* a deep link into one section should land on that section's page */
-    if (typeof window.openSettingsSection === 'function') {
-      var _os = window.openSettingsSection;
-      window.openSettingsSection = function (id) {
-        _os.apply(this, arguments);
-        document.body.classList.add('setdetail');
-      };
-    }
     /* any preference change can change what the list says */
     if (typeof window.applySettings === 'function') {
       var _as = window.applySettings;
       window.applySettings = function () {
         _as.apply(this, arguments);
-        if (el('setList') && !document.body.classList.contains('setdetail')) {
+        if (el('setList')) {
           var q = el('setSearch');
           renderSetList(q ? q.value : '');
         }
