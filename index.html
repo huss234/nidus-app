@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.12 -->
+<!-- Nidus — Personal Qbank · v6.13 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -1864,6 +1864,7 @@ h3.sec > .ib{vertical-align:-3px}
 .spark .ar{fill:var(--md-primary-container);opacity:.55}
 .spark .gr{stroke:var(--md-outline-variant);stroke-width:1;stroke-dasharray:3 4}
 .spark .pt{fill:var(--md-primary)}
+.spark .ln.dash{stroke:var(--md-outline);stroke-dasharray:6 5}
 
 /* ============================================================
    PROGRESS — adherence, calendar, rhythm
@@ -3990,6 +3991,12 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
           <div class="tiny muted" id="accNote" style="margin-top:6px"></div>
         </div>
 
+        <h3 class="sec">Time per question<button class="ib" data-note="timing" aria-label="What each time measures"><svg class="ic"><use href="#i-info"/></svg></button></h3>
+        <div class="card">
+          <svg class="spark" id="timeChart" viewBox="0 0 600 130" preserveAspectRatio="none"></svg>
+          <div class="tiny muted" id="timeNote" style="margin-top:6px"></div>
+        </div>
+
         <h3 class="sec">Where the marks are<button class="ib" data-note="leverage" aria-label="How this list is ordered"><svg class="ic"><use href="#i-info"/></svg></button></h3>
         <div class="card"><div class="bars" id="statLev"></div><p class="tiny muted" id="statLevNote" style="margin:14px 0 0;line-height:1.7"></p></div>
 
@@ -4064,7 +4071,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <div class="card"><div class="bars" id="statConf"></div></div>
         <h3 class="sec">Why I missed them</h3>
         <div class="card"><div class="bars" id="statMiss"></div></div>
-        <h3 class="sec">Timing</h3>
+        <h3 class="sec">Timing<button class="ib" data-note="timing" aria-label="What each time measures"><svg class="ic"><use href="#i-info"/></svg></button></h3>
         <div class="card"><div class="bars" id="statTime"></div></div>
       </div><!-- /pane mastery -->
 
@@ -4241,7 +4248,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.12</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.13</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4251,7 +4258,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.12 · sharded store</span>
+        <span class="chip" id="verChip">v6.13 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4411,7 +4418,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
-<script type="text/plain" id="defaultPrompt">
+<script type="text/x-prompt" id="defaultPrompt">
 NIDUS INGEST PROTOCOL — "ARCHIVIST" v2.6
 
 Turns any exam material into the JSON question bank this app imports.
@@ -5154,7 +5161,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.12';
+const APP_VERSION='6.13';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5645,7 +5652,7 @@ function dayLedger(){
   const m={};
   DB.questions.forEach(q=>((DB.stats[q.id]||{}).attempts||[]).forEach(a=>{
     const k=dayKey(a.ts),d=m[k]||(m[k]={k,ts:a.ts,n:0,c:0,ms:0,sess:{}});
-    d.n++;if(a.correct)d.c++;d.ms+=a.timeMs||0;if(a.ts<d.ts)d.ts=a.ts;if(a.sess)d.sess[a.sess]=1;
+    d.n++;if(a.correct)d.c++;d.ms+=studyOf(a);if(a.ts<d.ts)d.ts=a.ts;if(a.sess)d.sess[a.sess]=1;
   }));
   return Object.keys(m).sort().reverse().map(k=>m[k]);
 }
@@ -5760,6 +5767,12 @@ const NOTES={
   coverage:['Reading this chart',
     `<p class="tiny">How much of each Step 1 system you have actually attempted, as a share of what the bank holds for it.</p>
      <p class="tiny" style="margin-top:12px">A thin bar is a blind spot in the bank, not in you — it means questions are missing or unseen, so treat it as an import job rather than a study one.</p>`],
+
+  timing:['Four clocks',
+    `<p class="tiny"><b>Answer time</b> runs from the moment a question appears until you commit to an answer: Submit in tutor mode, your last change of choice in exam mode. A skipped question has none.</p>
+     <p class="tiny" style="margin-top:12px"><b>Review time</b> is what you spend on the question after answering it, reading the explanation or coming back to it.</p>
+     <p class="tiny" style="margin-top:12px"><b>Question time</b> is all of it: answer time plus review time, every visit counted.</p>
+     <p class="tiny" style="margin-top:12px"><b>Session time</b> is the whole session on the clock, which is every question time in it added up. None of these is capped.</p>`],
 
   calib:['Reading this chart',
     `<p class="tiny">Your answers split by the confidence you gave them, so you can see whether you know that you know.</p>
@@ -7383,7 +7396,7 @@ function paceWindow(A,days,back){
   list.forEach(a=>d[dayKey(a.ts)]=1);
   return {n:list.length,c,acc:list.length?c/list.length*100:null,
           days:Object.keys(d).length,per:list.length/days,
-          ms:list.reduce((x,a)=>x+(a.timeMs||0),0)};
+          ms:list.reduce((x,a)=>x+studyOf(a),0)};
 }
 /* first sighting only — the closest thing the bank has to an exam score,
    because on exam day every question is a first sighting */
@@ -7746,7 +7759,7 @@ function startSession(label){
   list.forEach(q=>{
     let ch=q.choices.map(c=>c.label);
     if(shuffle)ch.sort(()=>Math.random()-.5);
-    s.items[q.id]={chosen:null,struck:[],correct:null,timeMs:0,conf:null,miss:null,order:ch,submitted:false};
+    s.items[q.id]={chosen:null,struck:[],correct:null,timeMs:0,ansMs:null,conf:null,miss:null,order:ch,submitted:false};
   });
   DB.sessions.push(s);save();openSession(s);
 }
@@ -7852,7 +7865,7 @@ function finishSession(s){
     if(!it.submitted){
       const c=q.choices.find(x=>x.label===it.chosen);
       it.correct=!!(c&&c.isCorrect);it.submitted=true;
-      ST(id).attempts.push({ts:Date.now(),chosen:it.chosen,correct:it.correct,timeMs:it.timeMs,conf:it.conf,sess:s.id,miss:null});
+      ST(id).attempts.push({ts:Date.now(),chosen:it.chosen,correct:it.correct,timeMs:it.ansMs!=null?it.ansMs:it.timeMs,studyMs:it.timeMs,conf:it.conf,sess:s.id,miss:null});
       srsUpdate(id,it.correct);
     }
   });
@@ -7895,7 +7908,20 @@ function curId(){return S.order[cur]}
 function curQ(){return Q_BY_ID[curId()]}
 function curIt(){return S.items[curId()]}
 function stopTick(){clearInterval(tickT);tickT=null;flushTime()}
-function flushTime(){if(!S||qEnter===0)return;if(S.review){qEnter=0;return}const it=curIt();if(it)it.timeMs+=Date.now()-qEnter;S.elapsed=(S.elapsed||0)+(Date.now()-qEnter);qEnter=0;sessBeat(S)}
+/* v6.13 — FOUR CLOCKS, one source each
+     Answer time    question shown → answer committed (Submit in tutor; the
+                    last change of choice in exam)       item.ansMs → attempt.timeMs
+     Question time  every second the question is on screen, explanation and
+                    return visits included               item.timeMs → attempt.studyMs
+     Review time    question time − answer time; derived, never stored
+     Session time   the whole session on the clock       session.elapsed
+   Session time is the sum of its question times, and nothing is capped.
+   In tutor mode the attempt is written at Submit while the clock runs on
+   through the explanation, so its question time keeps following the item. */
+function flushTime(){if(!S||qEnter===0)return;if(S.review){qEnter=0;return}const it=curIt(),d=Date.now()-qEnter;if(it){it.timeMs+=d;if(it.submitted)attTime(curId(),it)}S.elapsed=(S.elapsed||0)+d;qEnter=0;sessBeat(S)}
+function attTime(id,it){const a=(ST(id).attempts||[]).filter(x=>x.sess===S.id).pop();if(a&&(a.studyMs||0)<it.timeMs)a.studyMs=it.timeMs}
+/* the moment a choice is made: in exam mode the last one standing is the answer */
+function markAns(it){if(!S||S.review||!it)return;it.ansMs=(it.timeMs||0)+(qEnter?Date.now()-qEnter:0)}
 function startTick(){
   clearInterval(tickT);qEnter=Date.now();
   const it0=curIt();
@@ -7909,7 +7935,7 @@ function startTick(){
   const paint=()=>{
     const el=$('#pTimer');
     if(secs){el.textContent=fmtT(remain);el.classList.toggle('warn',remain<=15)}
-    else{el.textContent=fmtT((Date.now()-qEnter)/1000);el.classList.remove('warn')}
+    else{el.textContent=fmtT((((it0&&it0.timeMs)||0)+Date.now()-qEnter)/1000);el.classList.remove('warn')}
   };paint();
   /* already out of time on arrival: tutor reveals the answer now. Exam only
      holds at 0:00 — moving on by itself would throw you off a question you
@@ -8039,7 +8065,7 @@ $('#pChoices').addEventListener('click',e=>{
     if(it.chosen===l&&i<0)it.chosen=null;renderChoices();save();return}
   const row=e.target.closest('.ch');if(!row)return;
   if(S.config.mode==='tutor'&&it.submitted)return;
-  it.chosen=row.dataset.lab;
+  if(it.chosen!==row.dataset.lab){it.chosen=row.dataset.lab;markAns(it)}
   const k=it.struck.indexOf(it.chosen);if(k>=0)it.struck.splice(k,1);
   renderChoices();
   const answered=S.order.filter(id=>S.items[id].chosen).length;
@@ -8056,11 +8082,11 @@ function submitAnswer(auto){
   const q=curQ(),it=curIt();
   if(it.submitted)return;
   if(!it.chosen&&!auto)return toast('Pick an answer first — or cross out what you can and commit to a guess.');
-  flushTime();
+  flushTime();it.ansMs=it.timeMs;
   const c=q.choices.find(x=>x.label===it.chosen);
   it.correct=!!(c&&c.isCorrect);it.submitted=true;
   const s=ST(q.id);
-  s.attempts.push({ts:Date.now(),chosen:it.chosen,correct:it.correct,timeMs:it.timeMs,conf:it.conf,sess:S.id,miss:null});
+  s.attempts.push({ts:Date.now(),chosen:it.chosen,correct:it.correct,timeMs:it.ansMs,studyMs:it.timeMs,conf:it.conf,sess:S.id,miss:null});
   srsUpdate(q.id,it.correct);
   save();renderQ();
   if(it.correct&&DB.settings.autoNext&&cur<S.order.length-1)setTimeout(()=>next(),700);
@@ -8150,7 +8176,8 @@ function renderExpl(){
      history summary beside it is filtered, because that one is a statistic. */
   const raw=s.attempts||[],mine=raw[raw.length-1];
   const att=attOf(q.id);
-  const avg=att.length>1?att.reduce((a,b)=>a+(b.timeMs||0),0)/att.length:null;
+  const atts=att.filter(a=>ansOf(a)!=null);
+  const avg=atts.length>1?atts.reduce((a,b)=>a+ansOf(b),0)/atts.length:null;
   const prev=att.length>1?`${att.filter(a=>a.correct).length}/${att.length} correct across ${att.length} attempts`:'first attempt';
   const order=(it.order&&it.order.length)?it.order:q.choices.map(c=>c.label);
   const disp=l=>{const i=order.indexOf(String(l).trim());return i>=0?(LETTERS[i]||l):l};
@@ -8159,7 +8186,7 @@ function renderExpl(){
 
   let h=`<div class="expl">
     <div class="verdict ${it.correct?'ok':'no'}">${it.correct?'✓ Correct':'✕ Incorrect'} — the answer is ${esc(keyTxt)}
-      <span class="meta">${fmtT(it.timeMs/1000)}${avg?' · avg '+fmtT(avg/1000):''} · ${prev}</span></div>`;
+      <span class="meta">answer time ${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}${avg?' · your avg '+fmtT(avg/1000):''} · ${prev}</span></div>`;
 
   /* things that need to be seen without being opened first */
   let top='';
@@ -8227,7 +8254,9 @@ $('#pSubmit').onclick=()=>submitAnswer(false);
 $('#pEnd').onclick=()=>endSession();
 $('#pQuit').onclick=()=>{
   if(S&&S.review){exitPlayer();return}
-  flushTime();save();
+  /* flushed so the dialog's choices start from saved time, and re-armed so
+     dismissing the dialog does not stop the clock */
+  flushTime();qEnter=Date.now();save();
   modal('Leave this session?','<p class="tiny muted">Pause keeps your place and stops the clock — the session stays on Home and you can resume it on any device. Finish grades it now and closes it for good.</p>',
     '<button class="btn" data-close id="suspendBtn">Pause</button><button class="btn pri" id="finishNow">Finish and grade</button>');
   $('#suspendBtn').onclick=()=>{closeModal();pauseSession(S);exitPlayer()};
@@ -8354,7 +8383,8 @@ function qToMarkdown(q,it,o){
     const att=st.attempts||[],mine=att[att.length-1];
     if((it.struck||[]).length)push('- Crossed out: '+it.struck.map(l=>disp(l)).join(', '));
     if(it.conf)push('- Confidence: '+it.conf);
-    if(it.timeMs)push('- Time on this attempt: '+fmtT(it.timeMs/1000));
+    if(it.chosen&&(it.ansMs!=null||it.timeMs))push('- Answer time: '+fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000));
+    if(it.timeMs)push('- Question time: '+fmtT(it.timeMs/1000));
     if(att.length>1)push('- History: '+att.filter(a=>a.correct).length+'/'+att.length+' correct across '+att.length+' attempts');
     else if(att.length===1)push('- History: first attempt');
     if(st.flag)push('- Flagged for review');
@@ -8937,7 +8967,7 @@ document.addEventListener('keydown',e=>{
   if(tag==='textarea'||tag==='input')return;
   const it=curIt(),q=curQ();
   if(/^[1-9]$/.test(e.key)){const i=parseInt(e.key,10)-1;const lab=(it.order||[])[i];
-    if(lab&&!(S.config.mode==='tutor'&&it.submitted)){it.chosen=lab;renderChoices();save()}return}
+    if(lab&&!(S.config.mode==='tutor'&&it.submitted)){if(it.chosen!==lab){it.chosen=lab;markAns(it)}renderChoices();save()}return}
   const k=e.key.toLowerCase();
   if(e.key==='Enter'){e.preventDefault();
     if(S.config.mode==='tutor'&&!it.submitted)submitAnswer(false);
@@ -8987,7 +9017,7 @@ function rptRetry(s,ids,label,pool){
   const ns={id:uid(),ts:Date.now(),status:'live',heart:Date.now(),idx:0,elapsed:0,
     config:{mode:'tutor',secs:s.config.secs,conf:s.config.conf,label:label+(s.config.label||''),pool:pool},
     order:ids.slice(),items:{}};
-  ids.forEach(id=>{ns.items[id]={chosen:null,struck:[],correct:null,timeMs:0,conf:null,miss:null,order:(Q_BY_ID[id].choices||[]).map(c=>c.label).sort(()=>Math.random()-.5),submitted:false}});
+  ids.forEach(id=>{ns.items[id]={chosen:null,struck:[],correct:null,timeMs:0,ansMs:null,conf:null,miss:null,order:(Q_BY_ID[id].choices||[]).map(c=>c.label).sort(()=>Math.random()-.5),submitted:false}});
   DB.sessions.push(ns);save();$('#resultsPanel').classList.remove('on');openSession(ns);
 }
 function showResults(s){
@@ -9001,6 +9031,10 @@ function showResults(s){
   const p=n?Math.round(c/n*100):0;
   const secs=s.config.secs||0;
   const tOf=id=>(IT(id).timeMs||0)/1000;
+  /* answer time: the item's own since 6.13, the attempt's before it */
+  const aOf=id=>{const it=IT(id);if(!it.chosen)return null;if(it.ansMs!=null)return it.ansMs/1000;
+    const m=mineOf(id);return m?(m.timeMs||0)/1000:tOf(id)};
+  const tChip=id=>{const a=aOf(id);return `<span class="chip mono" title="Answer time · question time">${a!=null?fmtT(a)+' answer · ':''}${fmtT(tOf(id))} total</span>`};
   const flagged=id=>!!(DB.stats[id]||{}).flag;
   const numOf=id=>ids.indexOf(id)+1;
 
@@ -9027,6 +9061,7 @@ function showResults(s){
 
   /* ---- 1 · how did it go ---- */
   const times=ids.map(tOf),sum=times.reduce((a,b)=>a+b,0),avg=sum/n;
+  const ansT=ids.map(aOf).filter(x=>x!=null),avgA=ansT.length?ansT.reduce((a,b)=>a+b,0)/ansT.length:null;
   let slow=0;times.forEach((t,i)=>{if(t>times[slow])slow=i});
   const over=secs?times.filter(t=>t>secs).length:0;
   const maxT=Math.max(...times,secs,1);
@@ -9043,9 +9078,10 @@ function showResults(s){
       <div class="rtop">
         <div><div class="num">${p}<small>%</small></div><div class="rsay">${say.join(' ')}</div></div>
         <div class="rfacts">
-          <div><b>${fmtT(avg)}</b><span>Per question</span></div>
+          <div><b>${avgA==null?'—':fmtT(avgA)}</b><span>Avg answer time</span></div>
+          <div><b>${fmtT(avg)}</b><span>Avg question time</span></div>
           <div><b>${fmtT(times[slow])}</b><span>Slowest · Q${slow+1}</span></div>
-          <div><b>${fmtLong(sum).replace(/^0m /,'')}</b><span>On questions</span></div>
+          <div><b>${fmtLong(Math.max(sum,(s.elapsed||0)/1000)).replace(/^0m /,'')}</b><span>Session time</span></div>
           ${secs?`<div><b>${over}</b><span>Over the ${fmtT(secs)} limit</span></div>`:''}
         </div>
       </div>
@@ -9081,7 +9117,7 @@ function showResults(s){
     if(!keys.length)keys=String(q.correctAnswer||(q.correctAnswers||[]).join(',')).split(/\s*,\s*/).filter(Boolean);
     const chips=[
       `<span class="chip">${esc(q.system||'—')}</span>`,
-      `<span class="chip mono">${fmtT(tOf(id))}</span>`,
+      tChip(id),
       sure?'<span class="chip rose">Was sure</span>':(it.conf?`<span class="chip">${esc(it.conf==='guess'?'Guessed':it.conf==='unsure'?'Unsure':it.conf)}</span>`:''),
       hist[id]==='again'?'<span class="chip amber">Missed before too</span>':hist[id]==='slipped'?'<span class="chip amber">Right last time</span>':'',
       flagged(id)?'<span class="chip amber">Flagged</span>':'',
@@ -9156,7 +9192,7 @@ function showResults(s){
     const q=Q_BY_ID[id],it=IT(id);if(!q)return '';const st=stOf(id);
     return `<div class="qrow" role="button" tabindex="0" data-rq="${id}" data-sid="${s.id}" data-rst="${st}"${flagged(id)?' data-rfl="1"':''} style="cursor:pointer">
       <div><div class="stem">${i+1}. ${esc(rptClean(q.stem,180))}</div>
-      <div class="meta"><span class="chip">${esc(q.system||'')}</span><span class="chip mono">${fmtT(tOf(id))}</span>
+      <div class="meta"><span class="chip">${esc(q.system||'')}</span>${tChip(id)}
       ${it.conf?`<span class="chip ${it.conf==='sure'&&st!=='ok'?'rose':''}">${esc(it.conf)}</span>`:''}
       ${flagged(id)?'<span class="chip amber">Flagged</span>':''}</div></div>
       <span class="rmark ${st}" aria-label="${lab[st]}">${mark[st]}</span></div>`}).join('');
@@ -9850,9 +9886,25 @@ function rangeDays(){return RANGE==='all'?null:parseInt(RANGE,10)}
 function rangeFrom(){const n=rangeDays();return n?addDays(sod(Date.now()),-(n-1)).getTime():0}
 function inRange(a){return a.ts>=rangeFrom()}
 function byDay(list){const m={};list.forEach(a=>{const k=dayKey(a.ts);const d=m[k]||(m[k]={n:0,c:0,ms:0,sess:{}});
-  d.n++;if(a.correct)d.c++;d.ms+=a.timeMs||0;if(a.sess)d.sess[a.sess]=1});return m}
-function sumOf(list){const o={n:list.length,c:0,ms:0};list.forEach(a=>{if(a.correct)o.c++;o.ms+=a.timeMs||0});
+  d.n++;if(a.correct)d.c++;d.ms+=studyOf(a);if(a.sess)d.sess[a.sess]=1});return m}
+/* v6.13 — every statistic reads time through these three, never timeMs
+   directly. An attempt's timeMs is its answer time (null when nothing was
+   chosen); studyMs is its question time. Attempts older than 6.13 have no
+   studyMs until timeBackfill finds their session, and fall back to timeMs. */
+function ansOf(a){return a.chosen==null?null:(a.timeMs||0)}
+function studyOf(a){return a.studyMs!=null?a.studyMs:(a.timeMs||0)}
+function revOf(a){const x=ansOf(a);return x==null?null:Math.max(0,studyOf(a)-x)}
+function sumOf(list){const o={n:list.length,c:0,ms:0,ans:0,an:0,rev:0};list.forEach(a=>{if(a.correct)o.c++;o.ms+=studyOf(a);
+    const x=ansOf(a);if(x!=null){o.ans+=x;o.an++;o.rev+=revOf(a)}});
   o.acc=o.n?o.c/o.n*100:null;o.days=Object.keys(byDay(list)).length;return o}
+/* the session items have always held the full question time, so attempts
+   written before 6.13 get it back from there. Only rows that have never had
+   a question time are touched; running it twice changes nothing. */
+function timeBackfill(){let n=0;
+  (DB.sessions||[]).forEach(x=>{if(!x||!x.items||x.review)return;
+    Object.keys(x.items).forEach(id=>{const it=x.items[id];if(!it||!it.timeMs)return;
+      ((DB.stats[id]||{}).attempts||[]).forEach(a=>{if(a.sess===x.id&&a.studyMs===undefined){a.studyMs=Math.max(it.timeMs,a.timeMs||0);n++}})})});
+  return n}
 function between(list,a,b){return list.filter(x=>x.ts>=a&&x.ts<b)}
 function unitize(v){if(typeof v!=='string'||v.indexOf('<')>=0)return v;
   return v.replace(/(\d)(%|h|m|s|d)(?=\s|$)/g,'$1<small>$2</small>')}
@@ -9896,7 +9948,8 @@ function bucketSeries(list){
         lab:s.toLocaleDateString(undefined,{month:'short'}),full:s.toLocaleDateString(undefined,{month:'long',year:'numeric'}),n:0,c:0,ms:0})}
   }
   list.forEach(a=>{for(let i=0;i<out.length;i++){const b=out[i];
-    if(a.ts>=b.start&&a.ts<b.end){b.n++;if(a.correct)b.c++;b.ms+=a.timeMs||0;break}}});
+    if(a.ts>=b.start&&a.ts<b.end){b.n++;if(a.correct)b.c++;b.ms+=studyOf(a);
+      const x=ansOf(a);if(x!=null){b.ans=(b.ans||0)+x;b.an=(b.an||0)+1}break}}});
   return {mode,out};
 }
 /* stacked volume columns — correct at the base, missed on top */
@@ -9913,6 +9966,7 @@ function hgram(el,cols){
       <div class="l">${lab}</div></div>`}).join('');
 }
 function renderStats(){
+  if(timeBackfill())save();           // sessions a sync just brought in
   SA=allAttempts();SMAP=byDay(SA);
   const t=totals(), from=rangeFrom();
   const A=SA.filter(inRange);                       // everything below is range-scoped
@@ -9921,7 +9975,7 @@ function renderStats(){
   const firstTs=SA.length?SA[0].ts:Date.now();
   const spanStart=Math.max(from,sod(firstTs).getTime());
   const spanDays=SA.length?Math.max(1,Math.round((sod(Date.now())-spanStart)/DAYMS)+1):0;
-  const avgT=A.length?A.reduce((x,a)=>x+(a.timeMs||0),0)/A.length/1000:0;
+  const avgT=A.length?s.ms/A.length/1000:0, avgA=s.an?s.ans/s.an/1000:null;
   const done=sessCounted().filter(x=>x.status==='done');
   const doneR=done.filter(x=>x.ts>=from);
   $$('#rangeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.range===RANGE));
@@ -9945,7 +9999,7 @@ function renderStats(){
       (s.acc!=null&&ps.acc!=null)?delta(Math.round(s.acc),Math.round(ps.acc),'pt'):''),
     tile(fpW.p==null?'—':Math.round(fpW.p)+'<small>%</small>','First-pass',fpW.n?fpW.n+' first sightings':''),
     tile(fmtDur(s.ms),'Time studied',s.days?fmtDur(s.ms/Math.max(s.days,1))+' an active day':''),
-    tile(fmtT(avgT),'Avg / question','across this window'),
+    tile(avgA==null?'—':fmtT(avgA),'Avg answer time','question time '+fmtT(avgT)),
     tile(s.days+'<small>/ '+spanDays+'</small>','Days active',
       spanDays?Math.round(s.days/Math.max(spanDays,1)*100)+'% of the window':''),
     tile(streak()+'<small>d</small>','Streak','best '+longestStreak()+'d'),
@@ -9987,7 +10041,7 @@ function renderStats(){
   renderAdherence(A,map,spanDays);
   renderCalendar();
   renderForecast();
-  renderVolume(A);
+  renderVolume(A);renderTimeTrend(A);
   renderCompare();
   renderPeriodBars();
   renderRhythm(A);
@@ -10022,12 +10076,27 @@ function renderStats(){
     return barRow(lab,mm[k]/tot*100,mm[k]+' misses','var(--amber)')}).join('')
     :'<span class="tiny muted">Tag your misses in tutor mode or in a session report and the pattern shows up here.</span>';
   // timing
-  const cT=A.filter(a=>a.correct),wT=A.filter(a=>!a.correct);
-  const mean=x=>x.length?x.reduce((s,a)=>s+(a.timeMs||0),0)/x.length/1000:0;
-  const mx=Math.max(mean(cT),mean(wT),1);
+  /* v6.13 — the four clocks, each under its own name (the (i) defines them) */
+  const tA=A.filter(a=>ansOf(a)!=null),cT=tA.filter(a=>a.correct),wT=tA.filter(a=>!a.correct),oT=A.filter(a=>ansOf(a)==null);
+  const mean=(x,f)=>x.length?x.reduce((s,a)=>s+f(a),0)/x.length/1000:0;
+  const tm=sumOf(A),skipMs=Math.max(0,tm.ms-tm.ans-tm.rev);
+  const head=t=>`<p class="eyebrow" style="margin:6px 0 -2px">${t} <span class="rule"></span></p>`;
+  const avgs=[['Answer time',mean(tA,ansOf),'var(--md-primary)'],['Review time',mean(tA,revOf),'var(--amber)'],['Question time',mean(A,studyOf),'var(--md-outline)']];
+  const mxA=Math.max(...avgs.map(r=>r[1]),1);
+  const split=(f,list3)=>{const v=list3.map(r=>[r[0],r[1].length?mean(r[1],f):null,r[2]]).filter(r=>r[1]!=null);
+    const m=Math.max(...v.map(r=>r[1]),1);return v.map(r=>barRow(r[0],r[1]/m*100,fmtT(r[1]),r[2])).join('')};
   $('#statTime').innerHTML=A.length?[
-    barRow('When correct',mean(cT)/mx*100,fmtT(mean(cT)),'var(--jade)'),
-    barRow('When incorrect',mean(wT)/mx*100,fmtT(mean(wT)),'var(--rose)')
+    head('Where the time went'),
+    barRow('Answer time',tm.ms?tm.ans/tm.ms*100:0,fmtDur(tm.ans),'var(--md-primary)'),
+    barRow('Review time',tm.ms?tm.rev/tm.ms*100:0,fmtDur(tm.rev),'var(--amber)'),
+    skipMs?barRow('Skipped',skipMs/tm.ms*100,fmtDur(skipMs),'var(--md-outline)'):'',
+    barRow('Question time',100,fmtDur(tm.ms),'var(--md-outline)'),
+    head('Average per question'),
+    avgs.map(r=>barRow(r[0],r[1]/mxA*100,fmtT(r[1]),r[2])).join(''),
+    head('Answer time · correct vs incorrect'),
+    tA.length?split(ansOf,[['When correct',cT,'var(--jade)'],['When incorrect',wT,'var(--rose)']]):'<span class="tiny muted">Nothing answered in this window.</span>',
+    head('Question time · correct vs incorrect'),
+    split(studyOf,[['When correct',cT,'var(--jade)'],['When incorrect',wT,'var(--rose)'],['When skipped',oT,'var(--md-outline)']])
   ].join(''):'<span class="tiny muted">No timing data yet.</span>';
 }
 
@@ -10042,6 +10111,10 @@ function renderSessStats(from){
   if(!all.length){el.innerHTML='<div class="card"><span class="tiny muted">No sessions yet. Build one from the bank and it will be measured here.</span></div>';return}
   const ms=fin.reduce((a,s)=>a+(s.elapsed||0),0);
   const qs=fin.reduce((a,s)=>a+s.order.length,0);
+  /* answer time per session item: the item's own since 6.13, the attempt's before */
+  const ansL=[];fin.forEach(s=>s.order.forEach(id=>{const it=s.items[id];if(!it||!it.chosen)return;
+    if(it.ansMs!=null)return ansL.push(it.ansMs);
+    const a=((DB.stats[id]||{}).attempts||[]).filter(x=>x.sess===s.id).pop();ansL.push(a?(a.timeMs||0):(it.timeMs||0))}));
   const cor=fin.reduce((a,s)=>a+sessScore(s).c,0);
   const omit=fin.reduce((a,s)=>a+s.order.filter(id=>!s.items[id].chosen).length,0);
   const accs=fin.map(s=>sessScore(s).p);
@@ -10051,9 +10124,11 @@ function renderSessStats(from){
   const tiles=[
     ['Finished',fin.length],
     ['Still open',open.length],
+    ['Session time',fin.length?fmtDur(ms):'—'],
     ['Avg length',fin.length?fmtDur(ms/fin.length):'—'],
     ['Avg set size',fin.length?Math.round(qs/fin.length):'—'],
-    ['Avg / question',qs?fmtT(ms/qs/1000):'—'],
+    ['Avg question time',qs?fmtT(ms/qs/1000):'—'],
+    ['Avg answer time',ansL.length?fmtT(ansL.reduce((a,b)=>a+b,0)/ansL.length/1000):'—'],
     ['Session accuracy',qs?Math.round(cor/qs*100)+'%':'—'],
     ['Left omitted',qs?Math.round(omit/qs*100)+'%':'—'],
     ['Completion rate',finRate+'%']
@@ -10084,7 +10159,7 @@ function renderAdherence(A,map,spanDays){
   const met=goal?Object.keys(map).filter(k=>map[k].n>=goal).length:0;
   const adh=spanDays?Math.round((goal?met:act)/spanDays*100):0;
   const best=Object.keys(map).reduce((m,k)=>Math.max(m,map[k].n),0);
-  const ms=A.reduce((x,a)=>x+(a.timeMs||0),0);
+  const ms=A.reduce((x,a)=>x+studyOf(a),0);
   $('#adhStats').innerHTML=[
     ['Current streak',streak()+'d'],
     ['Longest streak',longestStreak()+'d'],
@@ -10161,8 +10236,8 @@ function renderCalDay(){
       <button class="btn ghost sm" id="calClear" style="margin-left:auto">Close</button>
     </div>
     ${o.n?`<div class="statgrid">
-      ${[['Answered',o.n],['Accuracy',Math.round(o.acc)+'%'],['Time',fmtDur(o.ms)],
-         ['Avg / question',fmtT(o.ms/o.n/1000)],['Sessions',sess.length],['Worked',win]]
+      ${[['Answered',o.n],['Accuracy',Math.round(o.acc)+'%'],['Question time',fmtDur(o.ms)],['Answer time',fmtDur(o.ans)],
+         ['Avg question time',fmtT(o.ms/o.n/1000)],['Avg answer time',o.an?fmtT(o.ans/o.an/1000):'—'],['Sessions',sess.length],['Worked',win]]
         .map(([k,v])=>`<div class="stat"><div class="v" style="${String(v).length>6?'font-size:19px':''}">${v}</div><div class="k">${k}</div></div>`).join('')}
     </div>
     <hr class="sep">
@@ -10215,6 +10290,20 @@ function renderVolume(A){
   const dir=lastV-firstV;
   $('#accNote').textContent=`Accuracy per ${per} · lines at 50% and 75%. Latest ${Math.round(lastV)}%, ${Math.abs(dir)<2?'flat across the window':(dir>0?'up':'down')+' '+Math.abs(Math.round(dir))+' points since the start of it'}.`;
 }
+/* v6.13 — average answer time (solid) and question time (dashed) per bucket */
+function renderTimeTrend(A){
+  const bs=bucketSeries(A), out=bs.out, per=bs.mode, svg=$('#timeChart');
+  const qa=out.map((b,i)=>[b.an?b.ans/b.an/1000:null,i]).filter(p=>p[0]!=null);
+  const qt=out.map((b,i)=>[b.n?b.ms/b.n/1000:null,i]).filter(p=>p[0]!=null);
+  if(qt.length<2){svg.innerHTML='';$('#timeNote').textContent=`Two active ${per}s and the time lines appear.`;return}
+  const W=600,H=130,pd=8,top=Math.max(...qt.map(p=>p[0]),...qa.map(p=>p[0]),1)*1.1;
+  const x=i=>pd+(out.length<2?0:i*(W-2*pd)/(out.length-1)), y=v=>H-pd-(v/top)*(H-2*pd);
+  const line=(pts,cls)=>`<polyline class="ln${cls}" points="${pts.map(p=>`${x(p[1])},${y(p[0])}`).join(' ')}"/>`;
+  svg.innerHTML=`<line class="gr" x1="0" y1="${y(top/2)}" x2="${W}" y2="${y(top/2)}"/>`+line(qt,' dash')+
+    (qa.length>1?line(qa,'')+qa.map(p=>`<circle class="pt" cx="${x(p[1])}" cy="${y(p[0])}" r="2.5"/>`).join(''):'');
+  const la=qa.length?qa[qa.length-1][0]:null, lt=qt[qt.length-1][0];
+  $('#timeNote').textContent=`Per ${per}, averaged per question. Solid: answer time. Dashed: question time. Dotted line at ${fmtT(top/2)}. Latest ${per}: ${la==null?'no answers':'answer '+fmtT(la)}, question ${fmtT(lt)}.`;
+}
 
 /* ---------- like-for-like period comparison ---------- */
 function cmpCard(title,note,now,prev){
@@ -10223,6 +10312,7 @@ function cmpCard(title,note,now,prev){
     ['Questions',a.n,delta(a.n,b.n)],
     ['Accuracy',a.acc==null?'—':Math.round(a.acc)+'%',(a.acc!=null&&b.acc!=null)?delta(Math.round(a.acc),Math.round(b.acc),'pt'):''],
     ['Time studied',fmtDur(a.ms),delta(Math.round(a.ms/60000),Math.round(b.ms/60000),'m')],
+    ['Avg answer time',a.an?fmtT(a.ans/a.an/1000):'—',(a.an&&b.an)?delta(Math.round(a.ans/a.an/1000),Math.round(b.ans/b.an/1000),'s').replace(/delta (up|down)/,'delta'):''],  // faster is not better or worse by itself, so no colour
     ['Active days',a.days,delta(a.days,b.days)],
     ['Avg / active day',a.days?Math.round(a.n/a.days):0,delta(a.days?Math.round(a.n/a.days):0,b.days?Math.round(b.n/b.days):0)]
   ];
@@ -10983,7 +11073,7 @@ function compQuestion(i){
     const bits=[
       (it.struck||[]).length?'crossed out '+it.struck.map(disp).join(', '):'',
       it.conf?it.conf:'',
-      it.timeMs?fmtT(it.timeMs/1000):'',
+      it.timeMs?(it.chosen&&it.ansMs!=null?'answer '+fmtT(it.ansMs/1000)+' · ':'')+'question '+fmtT(it.timeMs/1000):'',
       catt.length>1?catt.filter(a=>a.correct).length+'/'+catt.length+' correct across '+catt.length+' attempts':'first attempt',
       (clast&&clast.miss)?((MISS.find(x=>x[0]===clast.miss)||[])[1]||''):''
     ].filter(Boolean).join(' · ');
@@ -11043,7 +11133,7 @@ function compQuestion(i){
      it; if it has not, there is nothing to carry and nothing is invented. */
   const cbase=Object.assign({},DB.settings.copyOpts||{},{order:ord});
   const cIt={order:ord,chosen:it.chosen||null,struck:it.struck||[],conf:it.conf||null,
-             timeMs:it.timeMs||0,correct:!!it.correct,submitted:!!it.submitted};
+             timeMs:it.timeMs||0,ansMs:it.ansMs!=null?it.ansMs:null,correct:!!it.correct,submitted:!!it.submitted};
   $('#compCopy').onclick=()=>copy(
     qToMarkdown(q,cIt,Object.assign({},cbase,{scope:'full'})),
     it.submitted?'Copied with the answer given over there and every explanation.'
@@ -11871,8 +11961,10 @@ const SYNC=(function(){
   function mergeStat(b,m,t){
     b=b||{};
     const s={};
-    s.attempts=uniq([].concat(m.attempts||[],t.attempts||[]),
-      a=>a.ts+'|'+(a.sess||'')+'|'+(a.chosen===null||a.chosen===undefined?'-':a.chosen))
+    const uk=a=>a.ts+'|'+(a.sess||'')+'|'+(a.chosen===null||a.chosen===undefined?'-':a.chosen);
+    const tm={};[].concat(m.attempts||[],t.attempts||[]).forEach(a=>{if(a.studyMs!=null)tm[uk(a)]=Math.max(tm[uk(a)]||0,a.studyMs)});
+    s.attempts=uniq([].concat(m.attempts||[],t.attempts||[]),uk)
+      .map(a=>tm[uk(a)]!=null&&(a.studyMs==null||tm[uk(a)]>a.studyMs)?Object.assign({},a,{studyMs:tm[uk(a)]}):a)
       .sort((x,y)=>(x.ts||0)-(y.ts||0));
     s.note=mNote(b.note,m.note,t.note);
     s.flag=!!m3(!!b.flag,!!m.flag,!!t.flag);
@@ -12587,7 +12679,7 @@ const V3=(function(){
     const by=monthRows();
     Object.keys(by).forEach(m=>{
       const rows=by[m];
-      files[P.log(m)]={kind:'log',month:m,fp:'l'+rows.length+':'+h32(rows.map(a=>attRowKey(a)).join(';')),rows:rows};
+      files[P.log(m)]={kind:'log',month:m,fp:'l'+rows.length+':'+h32(rows.map(a=>attRowKey(a)+'='+(a.timeMs||0)+'/'+(a.studyMs==null?'':a.studyMs)).join(';')),rows:rows};
     });
     (DB.sessions||[]).forEach(s=>{
       if(!s||!s.id)return;
@@ -12754,11 +12846,15 @@ const V3=(function(){
       const s=ST(qid);
       const mineM=(s.attempts||[]).filter(a=>monthKey(a.ts)===m);
       const other=(s.attempts||[]).filter(a=>monthKey(a.ts)!==m);
-      const union=M().uniq([].concat(mineM,byQ[qid].map(a=>{const c=Object.assign({},a);delete c.qid;return c})),
-        a=>a.ts+'|'+(a.sess||'')+'|'+(a.chosen===null||a.chosen===undefined?'-':a.chosen))
+      const uk=a=>a.ts+'|'+(a.sess||'')+'|'+(a.chosen===null||a.chosen===undefined?'-':a.chosen);
+      const union=M().uniq([].concat(mineM,byQ[qid].map(a=>{const c=Object.assign({},a);delete c.qid;return c})),uk)
         .filter(a=>!M().purgedAtt(pg,a))
         .sort((x,y)=>(x.ts||0)-(y.ts||0));
       if(union.length!==mineM.length){touched=true}
+      /* v6.13 — a tutor attempt's question time grows after it is first
+         written, so the same answer can arrive with a longer one: it wins */
+      const tm={};byQ[qid].forEach(a=>{if(a.studyMs!=null)tm[uk(a)]=Math.max(tm[uk(a)]||0,a.studyMs)});
+      union.forEach(a=>{const t=tm[uk(a)];if(t!=null&&(a.studyMs==null||t>a.studyMs)){a.studyMs=t;touched=true}});
       s.attempts=other.concat(union).sort((x,y)=>(x.ts||0)-(y.ts||0));
     });
     return touched;
@@ -14485,6 +14581,7 @@ const BRAND=(function(){
   /* the media engine binds any <img data-media> that appears anywhere, so no
      rendering call site has to know that photos are blobs now */
   MEDIA.watch();
+  if(timeBackfill())save();
   SYNC.boot();
   /* which storage format this repository is on decides what a sync means, so
      it is settled before the first one runs */
@@ -14495,6 +14592,12 @@ const BRAND=(function(){
   window.addEventListener('beforeunload',e=>{
     if(S&&$('#player').classList.contains('on')){flushTime();doSave()}
   });
+  /* v6.13 — a phone kills a backgrounded app without beforeunload, and the
+     time on the open question went with it. It is written down whenever the
+     app leaves the screen; the clock itself keeps running as before. */
+  const keepTime=()=>{if(!S||S.review||!qEnter||!$('#player').classList.contains('on'))return;flushTime();qEnter=Date.now();doSave()};
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')keepTime()});
+  window.addEventListener('pagehide',keepTime);
 })();
 </script>
 
