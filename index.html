@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.14 -->
+<!-- Nidus — Personal Qbank · v6.15 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2559,22 +2559,6 @@ body.scrolled .phead{background:var(--md-surface-container)}
   color:var(--md-on-surface-variant);opacity:.7;white-space:nowrap;
 }
 
-/* ---------- bottom app bar ---------- */
-.actionbar{
-  position:fixed;bottom:0;left:0;right:0;z-index:40;
-  background:var(--md-surface-container);border:none;
-  padding:16px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;
-  padding-bottom:calc(16px + env(safe-area-inset-bottom));
-}
-.actionbar #pNext,.actionbar #pEnd{
-  height:56px;padding:0 24px;border-radius:var(--m3-corner-l);
-  background:var(--md-primary-container);color:var(--md-on-primary-container);
-  font-size:16px;font-weight:600;box-shadow:var(--m3-elev-1);
-}
-.actionbar #pNext:active,.actionbar #pEnd:active{border-radius:var(--m3-corner-s)}
-.actionbar #pSubmit{height:56px;padding:0 26px;border-radius:var(--m3-corner-l);font-size:16px}
-.actionbar #pSubmit:active{border-radius:var(--m3-corner-s)}
-#pProgress{font-size:14px;color:var(--md-on-surface-variant);white-space:nowrap}
 
 /* ---------- explanation ---------- */
 .expl{
@@ -3140,14 +3124,6 @@ body.hasmig{padding-bottom:64px}
 /* ============================================================
    MOTION POLISH
    ============================================================ */
-#pChoices.anim .ch{animation:m3Rise var(--m3-spatial) var(--m3-ease-emphasized-decel) backwards}
-#pChoices.anim .ch:nth-child(1){animation-delay:.02s}
-#pChoices.anim .ch:nth-child(2){animation-delay:.05s}
-#pChoices.anim .ch:nth-child(3){animation-delay:.08s}
-#pChoices.anim .ch:nth-child(4){animation-delay:.11s}
-#pChoices.anim .ch:nth-child(5){animation-delay:.14s}
-#pChoices.anim .ch:nth-child(6){animation-delay:.17s}
-#pChoices.anim .ch:nth-child(n+7){animation-delay:.2s}
 .ch.sel .k,.ch.correct .k,.ch.wrong .k{animation:m3Key var(--m3-spatial) var(--m3-spring-expressive)}
 .expl{animation:m3Rise var(--m3-dur-medium2) var(--m3-ease-emphasized-decel)}
 .verdict{animation:m3Pop var(--m3-spatial) var(--m3-spring-expressive) 40ms backwards}
@@ -3205,7 +3181,6 @@ body.hasmig{padding-bottom:64px}
   .ptop{padding:0 4px;gap:4px}
   .ptop .qn{font-size:18px}
   .ptop .timer{font-size:13px;padding:0 10px;height:32px;min-width:60px;margin:0 0 0 8px}
-  #pMode{display:none}
   .navstrip{padding:4px 12px 10px}
   .navstrip button{width:42px;height:42px;font-size:14px}
   .ch{padding:14px 14px 14px 17px}
@@ -3218,10 +3193,6 @@ body.hasmig{padding-bottom:64px}
   .esec > .ec{padding:0 20px 20px}
   .echoice .ebody{margin-left:0}
   .expl .efoot{padding:14px 16px}
-  .actionbar{padding:12px 14px;padding-bottom:calc(12px + env(safe-area-inset-bottom));gap:8px}
-  .actionbar #pNext,.actionbar #pEnd,.actionbar #pSubmit{height:52px;padding:0 20px;font-size:15px}
-  .actionbar #pPrev{padding:0 14px}
-  #pProgress{display:none}
 
   /* dialogs become bottom sheets, as they do on Android */
   .mask{padding:0;align-items:flex-end}
@@ -3698,6 +3669,397 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .rngbar .seg button{flex:0 0 auto;white-space:nowrap}
 }
 
+
+/* ============================================================
+   STUDY SESSION — Material 3 Expressive (6.15)
+   ------------------------------------------------------------
+   The session screen, drawn from scratch. One reading column,
+   a bar that carries the session (close, where you are, the
+   clock, the two tools you reach for mid-question) and a
+   floating action pill at the foot that always holds the one
+   next step. Answers are big tonal cards whose key morphs shape
+   when chosen; the reveal paints the verdict onto the cards
+   themselves and the teaching arrives below in the order the
+   new item format writes it: pivot, chain, takeaway. Older items
+   keep their objective / things-to-remember sections.
+   Every colour, curve and corner comes from the tokens above.
+   ============================================================ */
+.sp{--sp-gut:24px;--sp-r:var(--m3-corner-xl);background:var(--md-surface)}
+.sp .sp-body{padding:8px var(--sp-gut) 140px;max-width:var(--pmax);margin:0 auto;width:100%;animation:none}
+.player.sp.on .sp-body{animation:none}
+
+/* ---------- the bar ---------- */
+.sp-bar{
+  position:sticky;top:0;z-index:31;background:var(--md-surface);
+  padding-top:env(safe-area-inset-top);
+  transition:background-color var(--m3-dur-medium2) var(--m3-ease-standard),box-shadow var(--m3-dur-medium2) var(--m3-ease-standard);
+}
+.sp-bar.scrolled{background:var(--md-surface-container)}
+.sp-top{display:flex;align-items:center;gap:4px;height:64px;padding:0 8px;max-width:calc(var(--pmax) + 32px);margin:0 auto}
+.sp-top .tools{margin-left:auto;display:flex;align-items:center}
+.sp-count{
+  display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 10px 0 14px;margin-left:2px;
+  border:none;background:transparent;color:var(--md-on-surface);border-radius:var(--m3-corner-full);
+  font:inherit;cursor:pointer;min-width:0;
+  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),border-radius var(--m3-shape-out) var(--m3-shape-ease),transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sp-count:hover{background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
+.sp-count:active{transform:scale(.96);border-radius:var(--m3-corner-m);transition-duration:var(--m3-shape-in)}
+.sp-count .qn{font-size:20px;line-height:28px;font-weight:600;letter-spacing:0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sp-mode{
+  font-size:12px;line-height:16px;font-weight:600;letter-spacing:.5px;
+  padding:4px 10px;border-radius:var(--m3-corner-full);
+  background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);
+}
+.sp-mode.exam{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.sp-cv{width:20px;height:20px;color:var(--md-on-surface-variant);transition:transform var(--m3-spatial) var(--m3-spring-expressive)}
+.sp-count[aria-expanded="true"] .sp-cv{transform:rotate(180deg)}
+.sp-timer{
+  font-family:var(--m3-mono);font-size:14px;letter-spacing:0;font-variant-numeric:tabular-nums;
+  height:32px;padding:0 12px;display:inline-flex;align-items:center;margin-left:4px;
+  border-radius:var(--m3-corner-full);background:var(--md-surface-container-high);color:var(--md-on-surface-variant);
+  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard);
+}
+.sp-timer.warn{background:var(--md-error-container);color:var(--md-on-error-container);animation:spPulse 1s var(--m3-ease-standard) infinite}
+@keyframes spPulse{50%{transform:scale(1.06)}}
+.sp-top .tool.sp-flag.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.sp-top .tool.sp-flag.on .ic{animation:spWiggle var(--m3-spatial-slow) var(--m3-spring-expressive)}
+@keyframes spWiggle{0%{transform:rotate(0) scale(.7)}40%{transform:rotate(-14deg) scale(1.15)}100%{transform:none}}
+
+/* progress track: one segment per question while they fit, a single bar after */
+.sp-track{display:flex;gap:3px;height:4px;padding:0 16px 8px;max-width:calc(var(--pmax) + 32px);margin:0 auto;box-sizing:content-box}
+.sp-track i{
+  flex:1;border-radius:var(--m3-corner-full);background:var(--md-surface-container-highest);
+  transition:background-color var(--m3-dur-medium2) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sp-track i.ans{background:var(--md-primary)}
+.sp-track i.c{background:var(--md-success)}
+.sp-track i.w{background:var(--md-error)}
+.sp-track i.cur{transform:scaleY(2);background:var(--md-on-surface)}
+.sp-track i.cur.ans{background:var(--md-primary)}
+.sp-track .sp-run{position:relative;flex:1;border-radius:var(--m3-corner-full);background:var(--md-surface-container-highest);overflow:hidden}
+.sp-track .sp-run b{position:absolute;inset:0;transform-origin:left center;background:var(--md-primary);border-radius:inherit;
+  transition:transform var(--m3-spatial-slow) var(--m3-ease-emphasized)}
+
+/* navigator: drops out of the bar as a card of every question */
+.sp-nav{
+  position:absolute;left:12px;right:12px;top:calc(100% - 4px);max-width:calc(var(--pmax) + 8px);margin:0 auto;
+  background:var(--md-surface-container-high);border-radius:var(--m3-corner-xl);box-shadow:var(--m3-elev-3);
+  visibility:hidden;opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top center;
+  clip-path:inset(0 0 100% 0 round var(--m3-corner-xl));
+  transition:clip-path var(--m3-dur-short2) var(--m3-ease-emphasized-accel),opacity var(--m3-dur-short2) var(--m3-ease-emphasized-accel),
+             transform var(--m3-dur-short2) var(--m3-ease-emphasized-accel),visibility 0s linear var(--m3-dur-short2);
+}
+.sp-nav.on{
+  visibility:visible;opacity:1;transform:none;clip-path:inset(0 0 0 0 round var(--m3-corner-xl));
+  transition:clip-path var(--m3-spatial-slow) var(--m3-ease-emphasized-decel),opacity var(--m3-dur-short2) var(--m3-ease-standard),
+             transform var(--m3-spatial-slow) var(--m3-spring-expressive),visibility 0s;
+}
+.sp-navin{padding:16px;max-height:min(60vh,420px);overflow:auto;overscroll-behavior:contain}
+.sp-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 2px 14px;font-size:12px;line-height:16px;letter-spacing:.4px;color:var(--md-on-surface-variant)}
+.sp-legend span{display:inline-flex;align-items:center;gap:6px}
+.sp-legend i{width:10px;height:10px;border-radius:50%;background:var(--md-secondary-container)}
+.sp-legend .lg-c{background:var(--md-success)}.sp-legend .lg-w{background:var(--md-error)}.sp-legend .lg-f{background:var(--md-warning)}
+.sp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:8px}
+.sp-grid button{
+  position:relative;height:48px;border:none;border-radius:var(--m3-corner-l);
+  background:var(--md-surface-container-lowest);color:var(--md-on-surface);
+  font:600 15px/1 var(--m3-font);font-variant-numeric:tabular-nums;cursor:pointer;
+  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),background-color var(--m3-dur-medium) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sp-nav.on .sp-grid button{animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(min(var(--i),24) * 12ms)}
+.sp-grid button:active{transform:scale(.92);border-radius:var(--m3-corner-s);transition-duration:var(--m3-shape-in)}
+.sp-grid button.ans{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.sp-grid button.c{background:var(--md-success-container);color:var(--md-on-success-container)}
+.sp-grid button.w{background:var(--md-error-container);color:var(--md-on-error-container)}
+.sp-grid button.cur{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-full)}
+.sp-grid button.flag::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--md-warning)}
+
+/* ---------- the question ---------- */
+.sp-page{outline:none}
+.sp-page.in-r{animation:spFromR var(--m3-spatial-slow) var(--m3-ease-emphasized-decel)}
+.sp-page.in-l{animation:spFromL var(--m3-spatial-slow) var(--m3-ease-emphasized-decel)}
+.sp-page.in{animation:spIn var(--m3-dur-medium2) var(--m3-ease-emphasized-decel)}
+@keyframes spFromR{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes spFromL{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+@keyframes spIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.sp-meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+.sp-meta:empty{display:none}
+.sp-meta .chip{animation:spIn var(--m3-dur-medium) var(--m3-ease-emphasized-decel) backwards}
+.sp .sp-stem{margin-top:12px;max-width:var(--measure)}
+.sp-ask{margin-top:24px;max-width:var(--measure)}
+.sp .sp-lead{
+  margin:0;padding:18px 20px 18px 22px;border-radius:var(--sp-r);
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  font-weight:600;letter-spacing:.1px;max-width:none;position:relative;
+}
+.sp .sp-lead:empty{display:none}
+
+/* ---------- answer cards ---------- */
+.sp-opts{margin-top:20px;display:flex;flex-direction:column;gap:8px;max-width:var(--measure)}
+.sp-opt{
+  position:relative;display:grid;grid-template-columns:40px 1fr auto;align-items:start;column-gap:14px;
+  padding:12px 8px 12px 12px;min-height:64px;box-sizing:border-box;cursor:pointer;
+  border-radius:var(--m3-corner-l);background:var(--md-surface-container);color:var(--md-on-surface);
+  -webkit-tap-highlight-color:transparent;outline:none;overflow:hidden;isolation:isolate;
+  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),
+             background-color var(--m3-dur-medium2) var(--m3-ease-standard),
+             color var(--m3-dur-medium2) var(--m3-ease-standard),
+             transform var(--m3-spatial) var(--m3-spring-expressive),
+             opacity var(--m3-dur-medium2) var(--m3-ease-standard);
+}
+.sp-opt::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;pointer-events:none;
+  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard)}
+@media (hover:hover){.sp-opt:hover::after{opacity:var(--m3-state-hover)}}
+.sp-opt:focus-visible{box-shadow:0 0 0 3px var(--md-primary)}
+.sp-opt:active{transform:scale(.985);border-radius:var(--m3-corner-m);transition-duration:var(--m3-shape-in)}
+.sp-opts.anim .sp-opt{animation:spIn var(--m3-spatial-slow) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 40ms + 60ms)}
+.sp-k{
+  position:relative;width:40px;height:40px;display:grid;place-items:center;
+  border-radius:50%;background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+  font:600 15px/1 var(--m3-font);
+  transition:border-radius var(--m3-spatial-slow) var(--m3-spring-expressive),background-color var(--m3-dur-medium2) var(--m3-ease-standard),
+             color var(--m3-dur-medium2) var(--m3-ease-standard),transform var(--m3-spatial-slow) var(--m3-spring-expressive);
+}
+.sp-k > *{grid-area:1/1}
+.sp-k .ic{width:22px;height:22px;opacity:0;transform:scale(.4) rotate(-45deg);
+  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial-slow) var(--m3-spring-expressive)}
+.sp-kl{transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-ease-emphasized)}
+.sp-t{
+  align-self:center;padding:8px 0;font-family:var(--qfam);font-size:var(--qfont);line-height:calc(var(--qlh) - .2);letter-spacing:.15px;
+  overflow-wrap:anywhere;transition:opacity var(--m3-dur-medium) var(--m3-ease-standard)
+}
+.sp-t b,.sp-t strong{font-weight:780;letter-spacing:.4px}
+.sp-t em{font-style:italic;font-weight:500}
+.sp-t code{font-family:var(--m3-mono);font-size:.88em;background:color-mix(in oklab,currentColor 10%,transparent);border-radius:var(--m3-corner-xs);padding:1px 5px}
+.sp-t .sp-tline{text-decoration:line-through transparent;text-decoration-thickness:2px;transition:text-decoration-color var(--m3-dur-medium) var(--m3-ease-standard)}
+.sp-x{
+  width:40px;height:40px;margin-top:0;border:none;border-radius:50%;background:transparent;color:var(--md-on-surface-variant);
+  display:grid;place-items:center;cursor:pointer;opacity:.6;
+  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),background-color var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive);
+}
+.sp-x .ic{width:20px;height:20px}
+.sp-x:hover{opacity:1;background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
+.sp-x:active{transform:scale(.85)}
+/* chosen: the card turns tonal and the key morphs from a circle into a soft square */
+.sp-opt.sel{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--sp-r)}
+.sp-opt.sel .sp-k{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-m);transform:rotate(-8deg)}
+.sp-opt.sel .sp-kl{transform:rotate(8deg)}
+.sp-opt.sel .sp-x{color:inherit}
+/* crossed out */
+.sp-opt.struck{background:var(--md-surface-container-low)}
+.sp-opt.struck .sp-t{opacity:.42}
+.sp-opt.struck .sp-tline{text-decoration-color:currentColor}
+.sp-opt.struck .sp-k{background:transparent;box-shadow:inset 0 0 0 1.5px var(--md-outline-variant);opacity:.6}
+.sp-opt.struck .sp-x{opacity:1;color:var(--md-primary)}
+/* revealed */
+.sp-opts.done .sp-opt{cursor:default}
+.sp-opts.done .sp-opt:active{transform:none;border-radius:var(--m3-corner-l)}
+.sp-opts.done .sp-opt.dim{background:var(--md-surface-container-low)}
+.sp-opts.done .sp-opt.dim .sp-t{opacity:.72}
+.sp-opt.ok{background:var(--md-success-container);color:var(--md-on-success-container);border-radius:var(--sp-r)}
+.sp-opt.no{background:var(--md-error-container);color:var(--md-on-error-container);border-radius:var(--sp-r)}
+.sp-opt.ok .sp-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--m3-corner-m)}
+.sp-opt.no .sp-k{background:var(--md-error);color:var(--md-on-error);border-radius:var(--m3-corner-m)}
+.sp-opt.ok .sp-k .ic,.sp-opt.no .sp-k .ic{opacity:1;transform:none}
+.sp-opt.ok .sp-kl,.sp-opt.no .sp-kl{opacity:0;transform:scale(.4)}
+.sp-opts.reveal .sp-opt.ok{animation:spPop var(--m3-spatial-slow) var(--m3-spring-expressive)}
+.sp-opts.reveal .sp-opt.no{animation:spShake 420ms var(--m3-ease-emphasized)}
+@keyframes spPop{0%{transform:scale(.97)}60%{transform:scale(1.015)}100%{transform:none}}
+@keyframes spShake{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+.sp-tag{
+  display:inline-flex;align-items:center;gap:4px;margin-left:8px;vertical-align:2px;
+  font:600 11px/16px var(--m3-font);letter-spacing:.5px;padding:2px 8px;border-radius:var(--m3-corner-full);
+  background:color-mix(in oklab,currentColor 14%,transparent);white-space:nowrap
+}
+.sp-pct{grid-column:2/4;font:500 12px/16px var(--m3-font);letter-spacing:.4px;opacity:.75;margin:-2px 0 4px}
+/* the reasoning under each option */
+.sp-why{grid-column:1/4;margin:8px 4px 4px;padding-top:12px;border-top:1px solid color-mix(in oklab,currentColor 16%,transparent);
+  font-family:var(--qfam);font-size:var(--efont);line-height:var(--qlh);display:grid;gap:8px}
+.sp-opts.reveal .sp-why{animation:spIn var(--m3-spatial-slow) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 50ms + 180ms)}
+.sp-why p{margin:0}
+.sp-why .ebody{color:inherit;max-width:none}
+.sp-wr{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.sp-wl{
+  font:700 11px/16px var(--m3-font);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;
+  padding:2px 8px;border-radius:var(--m3-corner-full);
+  background:color-mix(in oklab,currentColor 12%,transparent);
+}
+.sp-wr.rin .sp-wl{background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)}
+.sp-jump{
+  grid-column:1/4;justify-self:start;margin:6px 0 2px 54px;border:none;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 14px;border-radius:var(--m3-corner-full);
+  background:color-mix(in oklab,currentColor 12%,transparent);color:inherit;font:600 13px/1 var(--m3-font);letter-spacing:.1px;
+  transition:transform var(--m3-spatial) var(--m3-spring-expressive),border-radius var(--m3-shape-out) var(--m3-shape-ease)
+}
+.sp-jump .ic{width:18px;height:18px;transform:rotate(90deg)}
+.sp-jump:active{transform:scale(.94);border-radius:var(--m3-corner-s)}
+
+/* ---------- confidence: a connected button group ---------- */
+.sp-conf{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-top:20px;max-width:var(--measure)}
+.sp-conf-l{font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.sp-cbg{display:flex;gap:2px}
+.sp-cbg button{
+  height:40px;padding:0 16px;border:none;cursor:pointer;font:500 14px/1 var(--m3-font);letter-spacing:.1px;
+  background:var(--md-surface-container-high);color:var(--md-on-surface);border-radius:var(--m3-corner-s);
+  transition:border-radius var(--m3-spatial) var(--m3-spring-expressive),background-color var(--m3-dur-medium) var(--m3-ease-standard),
+             color var(--m3-dur-medium) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive)
+}
+.sp-cbg button:first-child{border-radius:var(--m3-corner-full) var(--m3-corner-s) var(--m3-corner-s) var(--m3-corner-full)}
+.sp-cbg button:last-child{border-radius:var(--m3-corner-s) var(--m3-corner-full) var(--m3-corner-full) var(--m3-corner-s)}
+.sp-cbg button.on{background:var(--md-tertiary);color:var(--md-on-tertiary);border-radius:var(--m3-corner-full)}
+.sp-cbg button:active{transform:scale(.94)}
+
+/* ---------- the floating action pill ---------- */
+.sp-dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;pointer-events:none;
+  padding:0 16px calc(16px + env(safe-area-inset-bottom));
+  background:linear-gradient(to top,var(--md-surface) 40%,color-mix(in oklab,var(--md-surface) 0%,transparent));
+}
+.sp-fab-bar{
+  pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:calc(var(--measure) + 24px);margin:0 auto;
+  padding:8px;border-radius:var(--m3-corner-full);background:var(--md-surface-container-high);box-shadow:var(--m3-elev-3);
+  animation:spDock var(--m3-spatial-slow) var(--m3-spring-expressive) 120ms backwards
+}
+@keyframes spDock{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.sp-ib{
+  width:48px;height:48px;flex:0 0 48px;border:none;border-radius:50%;cursor:pointer;display:grid;place-items:center;
+  background:var(--md-surface-container-highest);color:var(--md-on-surface);
+  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),transform var(--m3-spatial) var(--m3-spring-expressive),opacity var(--m3-dur-medium) var(--m3-ease-standard)
+}
+.sp-ib:active{transform:scale(.9);border-radius:var(--m3-corner-m);transition-duration:var(--m3-shape-in)}
+.sp-ib:disabled{opacity:.38;cursor:default;transform:none}
+.sp-prog{flex:1;min-width:0;text-align:center;font:500 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.sp-go{
+  height:56px;padding:0 24px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;
+  border-radius:var(--m3-corner-l);background:var(--md-primary);color:var(--md-on-primary);
+  font:600 16px/1 var(--m3-font);letter-spacing:.1px;
+  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),transform var(--m3-spatial) var(--m3-spring-expressive),
+             background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard);
+  animation:spGo var(--m3-spatial) var(--m3-spring-expressive)
+}
+.sp-go .ic{width:22px;height:22px}
+.sp-go:active{transform:scale(.94);border-radius:var(--m3-corner-s);transition-duration:var(--m3-shape-in)}
+.sp-go.mini{padding:0 16px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:14px}
+.sp-go.mini span{display:none}
+#pEnd.sp-go.mini span{display:inline}
+.sp-go.sp-submit{background:var(--md-surface-container-highest);color:var(--md-on-surface-variant)}
+.sp-go.sp-submit.ready{background:var(--md-tertiary);color:var(--md-on-tertiary);border-radius:var(--m3-corner-full)}
+@keyframes spGo{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+
+/* ---------- the reveal ---------- */
+.sp-expl{margin-top:28px;display:flex;flex-direction:column;gap:12px;max-width:var(--measure)}
+.sp-expl > *{animation:spIn var(--m3-spatial-slow) var(--m3-ease-emphasized-decel) backwards}
+.sp-expl > :nth-child(1){animation-delay:.05s}.sp-expl > :nth-child(2){animation-delay:.11s}.sp-expl > :nth-child(3){animation-delay:.17s}
+.sp-expl > :nth-child(4){animation-delay:.23s}.sp-expl > :nth-child(5){animation-delay:.29s}.sp-expl > :nth-child(n+6){animation-delay:.35s}
+.sp-verdict{
+  display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;
+  padding:20px;border-radius:var(--m3-corner-xl);
+}
+.sp-verdict.ok{background:var(--md-success-container);color:var(--md-on-success-container)}
+.sp-verdict.no{background:var(--md-error-container);color:var(--md-on-error-container)}
+.sp-vshape{
+  grid-row:span 2;width:56px;height:56px;display:grid;place-items:center;
+  border-radius:var(--m3-corner-l);transform:rotate(12deg);
+  animation:spBloom var(--m3-dur-xlong) var(--m3-spring-expressive) .1s backwards
+}
+.sp-verdict.ok .sp-vshape{background:var(--md-success);color:var(--md-on-success);border-radius:42% 58% 46% 54% / 55% 45% 55% 45%}
+.sp-verdict.no .sp-vshape{background:var(--md-error);color:var(--md-on-error)}
+.sp-vshape .ic{width:28px;height:28px;transform:rotate(-12deg)}
+@keyframes spBloom{from{transform:rotate(-80deg) scale(.3);border-radius:50%}to{transform:rotate(12deg) scale(1)}}
+.sp-vt{font-size:24px;line-height:32px;font-weight:600;letter-spacing:0}
+.sp-vs{font-size:14px;line-height:20px;letter-spacing:.25px;opacity:.9}
+.sp-vs b{font-weight:700}
+.sp-vmeta{grid-column:1/3;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.sp-vmeta span{font:500 12px/16px var(--m3-font);letter-spacing:.3px;padding:6px 10px;border-radius:var(--m3-corner-full);background:color-mix(in oklab,currentColor 11%,transparent)}
+.sp-vmeta b{font-family:var(--m3-mono);font-weight:600}
+.sp-card{border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);padding:20px}
+.sp-eyebrow{font:600 12px/16px var(--m3-font);letter-spacing:.8px;text-transform:uppercase;color:var(--md-primary);margin:0 0 12px}
+.sp-chips{display:flex;flex-wrap:wrap;gap:8px}
+.sp-chip{
+  height:36px;padding:0 14px;border:1px solid var(--md-outline-variant);border-radius:var(--m3-corner-s);cursor:pointer;
+  background:transparent;color:var(--md-on-surface-variant);font:500 14px/1 var(--m3-font);letter-spacing:.1px;
+  display:inline-flex;align-items:center;gap:8px;
+  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard),
+             border-color var(--m3-dur-medium) var(--m3-ease-standard),border-radius var(--m3-spatial) var(--m3-spring-expressive),transform var(--m3-spatial) var(--m3-spring-expressive)
+}
+.sp-chip .ic{width:18px;height:18px}
+.sp-chips .sp-chip .ic{width:0;margin-right:-8px;opacity:0;transform:scale(.4);
+  transition:width var(--m3-spatial) var(--m3-spring-expressive),margin var(--m3-spatial) var(--m3-spring-expressive),opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive)}
+.sp-chips .sp-chip.on .ic{width:18px;margin-right:0;opacity:1;transform:none}
+.sp-chip:active{transform:scale(.95)}
+.sp-chip.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent;border-radius:var(--m3-corner-full)}
+.sp-warn{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.sp-warn .sp-eyebrow{color:inherit}
+.sp-warn p{margin:0 0 6px;font-size:14px;line-height:20px}
+/* new-format teaching: pivot, chain, takeaway */
+.sp-pivot{font-size:calc(var(--efont) + 1px);color:var(--md-on-surface)}
+.sp-pivot + .sp-logic{margin-top:16px}
+.sp-logic > * + *{margin-top:14px}
+.sp-chain{list-style:none;margin:0;padding:4px 0 0;position:relative}
+.sp-chain li{
+  position:relative;padding:0 0 12px 30px;font-family:var(--qfam);font-size:var(--efont);line-height:1.5;color:var(--md-on-surface);
+  animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 70ms + 250ms)
+}
+.sp-chain li:last-child{padding-bottom:0}
+.sp-chain li::before{content:"";position:absolute;left:5px;top:.42em;width:10px;height:10px;border-radius:50%;
+  background:var(--md-surface-container-low);box-shadow:inset 0 0 0 2px var(--md-primary)}
+.sp-chain li::after{content:"";position:absolute;left:9px;top:calc(.42em + 14px);bottom:2px;width:2px;border-radius:2px;
+  background:color-mix(in oklab,var(--md-primary) 35%,transparent)}
+.sp-chain li:last-child::after{display:none}
+.sp-chain li.key{font-weight:600}
+.sp-chain li.key::before{background:var(--md-primary);box-shadow:0 0 0 4px color-mix(in oklab,var(--md-primary) 22%,transparent)}
+.sp-chain li b,.sp-chain li strong{font-weight:780;color:var(--md-primary)}
+.sp-rule{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:20px;
+  border-radius:var(--m3-corner-xl);background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)
+}
+.sp-rule .sp-eyebrow{color:inherit;opacity:.85;margin-bottom:6px}
+.sp-rule p{margin:0;font-family:var(--qfam);font-size:calc(var(--efont) + 1px);line-height:1.5;font-weight:600;letter-spacing:.1px}
+.sp-ruleic{width:40px;height:40px;display:grid;place-items:center;background:var(--md-tertiary);color:var(--md-on-tertiary);
+  border-radius:var(--m3-corner-m);transform:rotate(45deg)}
+.sp-ruleic svg{width:20px;height:20px;transform:rotate(-45deg)}
+/* older items: sections become cards */
+.sp-expl .esec{border:none;border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);overflow:hidden}
+.sp-expl .esec > .eh{min-height:56px;padding:0 20px;font-weight:600}
+.sp-expl .esec > .ec{padding:0 20px 20px}
+.sp-expl .esec.key > .eh{color:var(--md-primary)}
+.sp-expl .echoice .ebody{margin-left:40px}
+/* actions */
+.sp-acts{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
+.sp-acts .sp-chip{height:40px;border-radius:var(--m3-corner-m)}
+.sp-acts .sp-chip:active{border-radius:var(--m3-corner-s)}
+.sp-acts .sp-chip.pri{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
+/* my note */
+.sp-note{margin-top:24px;padding:16px;border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);max-width:var(--measure);
+  animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel)}
+.sp-note-l{display:flex;align-items:center;gap:8px;font:600 12px/16px var(--m3-font);letter-spacing:.8px;text-transform:uppercase;color:var(--md-primary);margin:0 4px 10px}
+.sp-note-l .ic{width:18px;height:18px}
+.sp-note .notepad{min-height:120px;border-radius:var(--m3-corner-l);background:var(--md-surface-container-lowest)}
+
+/* focus mode hides the session furniture */
+/* ripple hosts */
+.sp-go,.sp-ib,.sp-count,.sp-cbg button,.sp-chip,.sp-grid button,.sp-jump{position:relative;overflow:hidden;isolation:isolate}
+.player.sp.zen .sp-track,.player.sp.zen #pMetaRow{display:none}
+
+@media (max-width:400px){.sp-mode{display:none}}
+@media (max-width:520px){
+  .sp{--sp-gut:16px}
+  .sp-top{padding:0 4px;gap:0}
+  .sp-count{padding:0 6px 0 10px;gap:8px}
+  .sp-count .qn{font-size:18px}
+  .sp-timer{padding:0 10px;font-size:13px}
+  .sp-opt{column-gap:12px;padding:10px 6px 10px 10px}
+  .sp-go{padding:0 20px}
+  .sp-verdict{padding:18px}
+  .sp-card,.sp-rule{padding:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button{animation-name:m3Fade}
+  .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape{animation:none}
+  .sp-opt.sel .sp-k{transform:none}.sp-opt.sel .sp-kl{transform:none}
+}
 </style>
 </head>
 <body>
@@ -4249,7 +4611,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.14</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.15</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4259,7 +4621,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.14 · sharded store</span>
+        <span class="chip" id="verChip">v6.15 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4291,62 +4653,74 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 </div>
 
 <!-- ============ PLAYER ============ -->
-<div class="player" id="player">
-  <div class="phead">
-  <div class="ptop">
-    <button class="tool" id="pQuit" title="Leave this session"><svg class="ic"><use href="#i-back"/></svg></button>
-    <div class="pmeta">
-      <span class="qn" id="pCounter">Q 1 / 20</span>
-      <span class="chip acc" id="pMode">Tutor</span>
-    </div>
-    <span class="timer" id="pTimer">00:00</span>
-    <div class="tools">
-      <button class="tool" id="pRefr" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)"><svg class="ic"><use href="#i-cloud"/></svg></button>
-      <button class="tool hl" id="pHl" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg></button>
-      <button class="tool" id="pNote" title="Notes (N)"><svg class="ic"><use href="#i-note"/></svg></button>
-      <div class="tmwrap">
-        <button class="tool" id="pMore" title="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
-        <div class="tmpop" id="pMorePop" role="menu" aria-labelledby="pMore">
-          <div class="setgrp">This question</div>
-          <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span><span class="kbd">G</span></button>
-          <button class="tool" id="pCopy" role="menuitem" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy everything</span><span class="kbd">Y</span></button>
-          <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span><span class="kbd">⇧Y</span></button>
-          <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag this question</span><span class="kbd">F</span></button>
-          <div class="setgrp">Reference</div>
-          <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span><span class="kbd">L</span></button>
-          <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span><span class="kbd">C</span></button>
-          <div class="setgrp">Display</div>
-          <button class="tool" id="pFull" role="menuitem" title="Focus mode / fullscreen (Shift+F)"><svg class="ic" id="pFullIc"><use href="#i-expand"/></svg><span class="tml" id="pFullLbl">Focus mode</span><span class="kbd">⇧F</span></button>
-          <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span><span class="kbd">,</span></button>
+<div class="player sp" id="player">
+  <header class="sp-bar">
+    <div class="sp-top">
+      <button class="tool" id="pQuit" title="Leave this session" aria-label="Leave this session"><svg class="ic"><use href="#i-close"/></svg></button>
+      <button class="sp-count" id="pNavBtn" aria-expanded="false" aria-controls="pNav" title="All questions in this session">
+        <span class="qn" id="pCounter">1 / 20</span>
+        <span class="sp-mode" id="pMode">Tutor</span>
+        <svg class="ic sp-cv"><use href="#i-chev"/></svg>
+      </button>
+      <span class="sp-timer" id="pTimer">00:00</span>
+      <div class="tools">
+        <button class="tool sp-flag" id="pFlag" title="Flag this question for review (F)" aria-label="Flag"><svg class="ic"><use href="#i-flag"/></svg></button>
+        <button class="tool hl" id="pHl" title="Highlighter (H)" aria-label="Highlighter"><svg class="ic"><use href="#i-highlight"/></svg></button>
+        <div class="tmwrap">
+          <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
+          <div class="tmpop" id="pMorePop" role="menu" aria-labelledby="pMore">
+            <div class="setgrp">This question</div>
+            <button class="tool" id="pNote" role="menuitem" title="My note on this question (N)"><svg class="ic"><use href="#i-note"/></svg><span class="tml">My note</span><span class="kbd">N</span></button>
+            <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span><span class="kbd">G</span></button>
+            <button class="tool" id="pCopy" role="menuitem" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy everything</span><span class="kbd">Y</span></button>
+            <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span><span class="kbd">⇧Y</span></button>
+            <button class="tool" id="pRefr" role="menuitem" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)"><svg class="ic"><use href="#i-cloud"/></svg><span class="tml">Refresh from cloud</span><span class="kbd">R</span></button>
+            <div class="setgrp">Reference</div>
+            <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span><span class="kbd">L</span></button>
+            <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span><span class="kbd">C</span></button>
+            <div class="setgrp">Display</div>
+            <button class="tool" id="pFull" role="menuitem" title="Focus mode / fullscreen (Shift+F)"><svg class="ic" id="pFullIc"><use href="#i-expand"/></svg><span class="tml" id="pFullLbl">Focus mode</span><span class="kbd">⇧F</span></button>
+            <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span><span class="kbd">,</span></button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="navstrip" id="pStrip"></div>
-  </div>
-  <div class="pbody">
-    <div id="pMetaRow" class="row" style="margin-bottom:14px"></div>
-    <div class="qtext" id="pStem"></div>
-    <div id="pImages"></div>
-    <div class="leadin" id="pLead"></div>
-    <div class="choices" id="pChoices"></div>
-    <div id="pExpl"></div>
-    <div id="pNotesWrap" style="display:none;margin-top:24px">
-      <p class="eyebrow">My note</p>
-      <textarea class="notepad" id="pNoteBox" placeholder="What tripped you up? Write it in your own words — you'll see this every time the question comes back."></textarea>
+    <div class="sp-track" id="pTrack" aria-hidden="true"></div>
+    <div class="sp-nav" id="pNav" role="region" aria-label="Questions in this session">
+      <div class="sp-navin">
+        <div class="sp-legend"><span><i class="lg-a"></i>Answered</span><span><i class="lg-c"></i>Correct</span><span><i class="lg-w"></i>Incorrect</span><span><i class="lg-f"></i>Flagged</span></div>
+        <div class="sp-grid" id="pStrip"></div>
+      </div>
     </div>
-    <div id="pLinks"></div>
-  </div>
-  <div class="actionbar">
-    <button class="btn ghost" id="pPrev"><svg class="ic"><use href="#i-prev"/></svg>Prev</button>
-    <div class="conf" id="pConf" style="display:none">
-      <button data-c="sure">Sure</button><button data-c="unsure">Unsure</button><button data-c="guess">Guess</button>
+  </header>
+  <div class="pbody sp-body">
+    <div class="sp-page" id="pPage">
+      <div id="pMetaRow" class="sp-meta"></div>
+      <div class="qtext sp-stem" id="pStem"></div>
+      <div id="pImages"></div>
+      <div class="sp-ask"><div class="leadin sp-lead" id="pLead"></div></div>
+      <div class="sp-opts" id="pChoices" role="radiogroup" aria-label="Answer options"></div>
+      <div class="sp-conf" id="pConf" style="display:none">
+        <span class="sp-conf-l">How sure are you?</span>
+        <div class="sp-cbg" role="group" aria-label="Confidence">
+          <button data-c="sure">Sure</button><button data-c="unsure">Unsure</button><button data-c="guess">Guess</button>
+        </div>
+      </div>
+      <div id="pExpl"></div>
+      <div class="sp-note" id="pNotesWrap" style="display:none">
+        <label class="sp-note-l" for="pNoteBox"><svg class="ic"><use href="#i-note"/></svg>My note</label>
+        <textarea class="notepad" id="pNoteBox" placeholder="What tripped you up? Write it in your own words — you'll see it every time this question comes back."></textarea>
+      </div>
+      <div id="pLinks"></div>
     </div>
-    <div style="margin-left:auto;display:flex;gap:10px;align-items:center">
-      <span class="tiny muted" id="pProgress"></span>
-      <button class="btn" id="pSubmit">Submit</button>
-      <button class="btn pri" id="pNext">Next<svg class="ic"><use href="#i-next"/></svg></button>
-      <button class="btn pri" id="pEnd" style="display:none">End session</button>
+  </div>
+  <div class="sp-dock">
+    <div class="sp-fab-bar">
+      <button class="sp-ib" id="pPrev" title="Previous question (←)" aria-label="Previous question"><svg class="ic"><use href="#i-prev"/></svg></button>
+      <span class="sp-prog" id="pProgress"></span>
+      <button class="sp-go sp-submit" id="pSubmit"><svg class="ic"><use href="#i-check"/></svg><span>Submit</span></button>
+      <button class="sp-go" id="pNext"><span>Next</span><svg class="ic"><use href="#i-next"/></svg></button>
+      <button class="sp-go" id="pEnd" style="display:none"><span>End session</span></button>
     </div>
   </div>
 </div>
@@ -5058,7 +5432,9 @@ If the bank runs to more than a handful of items, or if the user asks for a file
     /* .galtile .gph, not .galtile: the photo box is the part that already
        clips and is positioned, so the ripple lands inside the picture */
     '.galtile .gph,.galsec .galh,' +
-    '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button';
+    '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button,' +
+    /* the study session (6.15) */
+    '.sp-opt,.sp-go,.sp-ib,.sp-count,.sp-cbg button,.sp-chip,.sp-grid button,.sp-jump';
   var TAP_DELAY = 70, SLOP = 10, MIN_HOLD = 220, MAX_PER_HOST = 3;
   var pending = null, live = {};
 
@@ -5192,7 +5568,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.14';
+const APP_VERSION='6.15';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7934,7 +8310,7 @@ function openSession(s){
   renderQ();
 }
 function exitPlayer(){
-  stopTick();$('#player').classList.remove('on');$('#shell').style.display='';$('#tabbar').style.display='';
+  stopTick();setNav(false);LASTQ=null;$('#player').classList.remove('on');$('#shell').style.display='';$('#tabbar').style.display='';
   S=null;go(VIEW);
 }
 function curId(){return S.order[cur]}
@@ -8013,20 +8389,66 @@ function renderMeta(){
   const toggle=auto?'':`<button class="chip mtag" data-metatoggle title="${open?'Hide the tags again':'Show this question\'s tags — they can point at the answer'}"><svg class="ic"><use href="#i-more"/></svg>${open?'hide':'tags'}</button>`;
   row.innerHTML=open?tags+warn+toggle:toggle+warn;
 }
-function renderQ(){
-  const q=curQ(),it=curIt();if(!q){toast('That question is missing from the bank.');return}
-  S.idx=cur;
-  $('#pCounter').textContent=`Q ${cur+1} / ${S.order.length}`;
-  // strip
+/* 6.15 — the session screen is drawn by the functions below. The ids the rest
+   of the app reaches for (#pStem, #pChoices, #pExpl, #pStrip, the tools) are
+   the same; what they look like and how they move is new. */
+let NAVDIR=0,LASTQ=null,CH_KEY='';
+/* the current item format: one explanation (pivot → chain → takeaway) and a
+   Wrong / Right in line per distractor. Items imported from schema 2 say so;
+   older items are recognised by the objective and lists they carry. */
+function isNewFmt(q){
+  if(!q)return false;
+  if(q.schema>=2)return true;
+  if(q.schema===1)return false;
+  return !q.educationalObjective&&!(q.thingsToRemember||[]).length&&!(q.choices||[]).some(c=>c.isCorrect&&c.explanation);
+}
+function renderTrack(){
+  const n=S.order.length,el=$('#pTrack');if(!el)return;
+  const tutor=S.config.mode==='tutor';
+  if(n>48){
+    const a=S.order.filter(id=>S.items[id].chosen).length;
+    el.innerHTML=`<span class="sp-run"><b style="transform:scaleX(${n?a/n:0})"></b></span>`;return;
+  }
+  const html=S.order.map((id,i)=>{const x=S.items[id];
+    let c=i===cur?'cur':'';
+    if(tutor&&x.submitted)c+=x.correct?' c':' w';else if(x.chosen)c+=' ans';
+    return `<i class="${c}"></i>`}).join('');
+  el.innerHTML=html;
+}
+function renderNav(){
   $('#pStrip').innerHTML=S.order.map((id,i)=>{
     const x=S.items[id],st=ST(id);
     let cls=i===cur?'cur':'';
     if(S.config.mode==='tutor'&&x.submitted)cls+=' '+(x.correct?'c':'w');
     else if(x.chosen)cls+=' ans';
     if(st.flag)cls+=' flag';
-    return `<button class="${cls}" data-i="${i}">${i+1}</button>`}).join('');
-  const cb=$('#pStrip button.cur');if(cb)cb.scrollIntoView({block:'nearest',inline:'center',behavior:Motion.reduced?'auto':'smooth'});
-  // meta
+    return `<button class="${cls}" data-i="${i}" style="--i:${i}" aria-label="Question ${i+1}">${i+1}</button>`}).join('');
+}
+function navOpen(){return $('#pNav').classList.contains('on')}
+function setNav(open){
+  $('#pNav').classList.toggle('on',open);
+  $('#pNavBtn').setAttribute('aria-expanded',open?'true':'false');
+  if(open){const b=$('#pStrip button.cur');if(b)b.scrollIntoView({block:'nearest'})}
+}
+$('#pNavBtn').onclick=e=>{e.stopPropagation();setNav(!navOpen())};
+document.addEventListener('click',e=>{if(navOpen()&&!e.target.closest('#pNav')&&!e.target.closest('#pNavBtn'))setNav(false)});
+/* the bar picks up a tone once the page scrolls under it, as an M3 top app bar does */
+window.addEventListener('scroll',()=>{const b=$('#player .sp-bar');if(b&&$('#player').classList.contains('on'))b.classList.toggle('scrolled',window.scrollY>4)},{passive:true});
+function paintGo(){
+  const it=curIt();if(!it)return;
+  $('#pSubmit').classList.toggle('ready',!!it.chosen);
+  const answered=S.order.filter(id=>S.items[id].chosen).length;
+  $('#pProgress').textContent=`${answered} of ${S.order.length} answered`;
+}
+function renderQ(){
+  const q=curQ(),it=curIt();if(!q){toast('That question is missing from the bank.');return}
+  S.idx=cur;
+  const moved=LASTQ!==q.id;LASTQ=q.id;
+  $('#pCounter').textContent=`${cur+1} / ${S.order.length}`;
+  const tutor=S.config.mode==='tutor';
+  $('#pMode').textContent=S.review?'Review':tutor?'Tutor':'Exam';
+  $('#pMode').classList.toggle('exam',!tutor&&!S.review);
+  renderTrack();renderNav();
   const st=ST(q.id);
   metaPeek=false;
   renderMeta();
@@ -8035,78 +8457,116 @@ function renderQ(){
   $('#pStem').innerHTML=hlRender(qFmt(q.stem),st.hlStem);
   $('#pLead').innerHTML=hlRender(esc(q.leadIn||''),st.hlLead);
   $('#pImages').innerHTML=figStemHTML(q.id);
-  /* block 16 — the attachments close the item. The panel is the last thing in
-     the body, below the note, so nothing lands between the stem and the
-     lead-in and nothing between the lead-in and the options. */
+  /* block 16 — the attachments close the item, below the note */
   $('#pLinks').innerHTML=linksHTML(q);
   figSyncTool(q);
-  renderChoices(true);
-  // notes
+  renderChoices(moved);
   $('#pNoteBox').value=st.note||'';
-  // confidence
+  if(moved){$('#pNotesWrap').style.display='none';$('#pNote').classList.remove('on')}
   const showConf=S.config.conf&&!it.submitted;
-  $('#pConf').style.display=showConf?'inline-flex':'none';
+  $('#pConf').style.display=showConf?'flex':'none';
   $$('#pConf button').forEach(b=>b.classList.toggle('on',it.conf===b.dataset.c));
-  // buttons
-  const tutor=S.config.mode==='tutor';
   $('#pSubmit').style.display=(tutor&&!it.submitted)?'inline-flex':'none';
+  /* before an answer is in, Submit leads and Next shrinks to a skip button beside it */
+  const pending=tutor&&!it.submitted;
   $('#pNext').style.display=cur<S.order.length-1?'inline-flex':'none';
-  $('#pEnd').style.display=(cur===S.order.length-1||!tutor)?'inline-flex':'none';
-  $('#pEnd').textContent=S.review?'Close review':'End session';
+  $('#pNext').classList.toggle('mini',pending);
+  $('#pEnd').style.display=cur===S.order.length-1?'inline-flex':'none';
+  $('#pEnd').classList.toggle('mini',pending);
+  $('#pEnd').textContent=S.review?'Close review':'Finish';
   $('#pPrev').disabled=cur===0;
-  const answered=S.order.filter(id=>S.items[id].chosen).length;
-  $('#pProgress').textContent=`${answered}/${S.order.length} answered`;
-  // explanation
+  paintGo();
   if(tutor&&it.submitted)renderExpl();else $('#pExpl').innerHTML='';
+  if(moved){
+    window.scrollTo(0,0);
+    const pg=$('#pPage');pg.classList.remove('in-r','in-l','in');void pg.offsetWidth;
+    pg.classList.add(NAVDIR>0?'in-r':NAVDIR<0?'in-l':'in');
+  }
+  NAVDIR=0;
   applySettings();
   startTick();
+}
+/* "Wrong: … Right in: …" — the new format's distractor line, split into its two halves */
+function whyHTML(c){
+  const t=String(c.explanation||'').trim();if(!t)return '';
+  const m=/^\**\s*Wrong\s*:?\s*\**\s*([\s\S]*?)\s*(?:\**\s*Right in\s*:?\s*\**\s*([\s\S]*))?$/i.exec(t);
+  if(m&&m[1]!=null&&/^\**\s*Wrong/i.test(t)){
+    return `<div class="sp-wr"><span class="sp-wl">Not here</span><span>${aFmt(m[1])}</span></div>`+
+      (m[2]?`<div class="sp-wr rin"><span class="sp-wl">Right in</span><span>${aFmt(m[2])}</span></div>`:'');
+  }
+  return `<div class="ebody">${mdFmt(t)}</div>`;
 }
 function renderChoices(anim){
   const q=curQ(),it=curIt(),tutor=S.config.mode==='tutor',done=tutor&&it.submitted;
   const order=it.order&&it.order.length?it.order:q.choices.map(c=>c.label);
-  $('#pChoices').innerHTML=order.map((lab,i)=>{
+  const inline=(DB.settings.explLayout||'inline')==='inline';
+  const box=$('#pChoices');
+  const key=q.id+'|'+(done?1:0)+'|'+inline+'|'+order.join('');
+  /* same question, same state: change only what changed, so a pick or a
+     cross-out animates on the card instead of the list being redrawn */
+  if(!anim&&key===CH_KEY&&box.children.length){
+    box.querySelectorAll('.sp-opt').forEach(el=>{const l=el.dataset.lab;
+      el.classList.toggle('sel',it.chosen===l);el.classList.toggle('struck',it.struck.includes(l));
+      el.setAttribute('aria-checked',it.chosen===l?'true':'false')});
+    return;
+  }
+  const revealing=done&&box.dataset.q===q.id&&box.dataset.done==='0';
+  CH_KEY=key;box.dataset.q=q.id;box.dataset.done=done?'1':'0';
+  const nf=isNewFmt(q);
+  box.innerHTML=order.map((lab,i)=>{
     const c=q.choices.find(x=>x.label===lab);if(!c)return '';
-    let cls='ch';
+    let cls='sp-opt';
     if(it.struck.includes(lab))cls+=' struck';
-    if(it.chosen===lab)cls+=' sel';
-    if(done){if(c.isCorrect)cls='ch correct';else if(it.chosen===lab)cls='ch wrong';}
-    const hist=personalPick(q.id,lab);
-    const inline=(DB.settings.explLayout||'inline')==='inline';
+    if(!done&&it.chosen===lab)cls+=' sel';
+    if(done)cls+=c.isCorrect?' ok':(it.chosen===lab?' no':' dim');
+    const hist=done?personalPick(q.id,lab):'';
     let tag='';
-    if(done){
-      if(c.isCorrect)tag=`<span class="tag">correct${it.chosen===lab?' · your answer':''}</span>`;
-      else if(it.chosen===lab)tag='<span class="tag">your answer</span>';
+    if(done&&it.chosen===lab)tag=`<span class="sp-tag">your answer</span>`;
+    let why='';
+    if(done&&inline){
+      if(c.explanation)why=`<div class="sp-why">${whyHTML(c)}</div>`;
+      else if(c.isCorrect&&nf&&q.explanation)why=`<button class="sp-jump" data-jump><svg class="ic"><use href="#i-next"/></svg>Why it's right</button>`;
     }
-    return `<div class="${cls}" data-lab="${lab}">
-      <span class="k">${LETTERS[i]}</span>
-      <span class="t">${aFmt(c.text)}${tag}</span>
-      ${!done?`<button class="x" data-strike="${lab}" title="Cross out"><svg class="ic"><use href="#i-close"/></svg></button>`:''}
-      ${done&&inline&&c.explanation?`<span class="why">${mdFmt(c.explanation)}</span>`:''}
-      ${done&&hist?`<span class="pct">${hist}</span>`:''}
+    return `<div class="${cls}" data-lab="${lab}" role="radio" aria-checked="${!done&&it.chosen===lab}" tabindex="${done?-1:0}" style="--i:${i}">
+      <span class="sp-k"><span class="sp-kl">${LETTERS[i]}</span><svg class="ic"><use href="#i-${c.isCorrect?'check':'close'}"/></svg></span>
+      <span class="sp-t"><span class="sp-tline">${aFmt(c.text)}</span>${tag}</span>
+      ${!done?`<button class="sp-x" data-strike="${lab}" title="Cross out" aria-label="Cross out ${LETTERS[i]}"><svg class="ic"><use href="#i-close"/></svg></button>`:'<span></span>'}
+      ${hist?`<span class="sp-pct">${hist}</span>`:''}${why}
     </div>`}).join('');
-  $('#pChoices').classList.toggle('anim',!!anim);
+  box.classList.toggle('done',done);
+  box.classList.remove('anim','reveal');void box.offsetWidth;
+  if(anim)box.classList.add('anim');
+  if(revealing)box.classList.add('reveal');
 }
 function personalPick(qid,lab){
   const a=attOf(qid);if(a.length<2)return '';
   const n=a.filter(x=>x.chosen===lab).length;return n?Math.round(n/a.length*100)+'% of your tries':'';
 }
+function pickChoice(lab){
+  const it=curIt();if(!it||!lab)return;
+  if(S.config.mode==='tutor'&&it.submitted)return;
+  if(it.chosen!==lab){it.chosen=lab;markAns(it)}
+  const k=it.struck.indexOf(lab);if(k>=0)it.struck.splice(k,1);
+  renderChoices();renderTrack();renderNav();paintGo();save();
+}
 $('#pChoices').addEventListener('click',e=>{
-  const sx=e.target.closest('[data-strike]');
   const it=curIt();if(!it)return;
+  if(e.target.closest('[data-jump]')){const x=$('#pExpl .sp-teach')||$('#pExpl');if(x)x.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'start'});return}
+  const sx=e.target.closest('[data-strike]');
   if(sx){e.stopPropagation();const l=sx.dataset.strike;
     const i=it.struck.indexOf(l);i>=0?it.struck.splice(i,1):it.struck.push(l);
-    if(it.chosen===l&&i<0)it.chosen=null;renderChoices();save();return}
-  const row=e.target.closest('.ch');if(!row)return;
-  if(S.config.mode==='tutor'&&it.submitted)return;
-  if(it.chosen!==row.dataset.lab){it.chosen=row.dataset.lab;markAns(it)}
-  const k=it.struck.indexOf(it.chosen);if(k>=0)it.struck.splice(k,1);
-  renderChoices();
-  const answered=S.order.filter(id=>S.items[id].chosen).length;
-  $('#pProgress').textContent=`${answered}/${S.order.length} answered`;
-  paintStrip();save();
+    if(it.chosen===l&&i<0)it.chosen=null;renderChoices();renderTrack();renderNav();paintGo();save();return}
+  const row=e.target.closest('.sp-opt');if(!row)return;
+  pickChoice(row.dataset.lab);
 });
-function paintStrip(){const b=$(`#pStrip button[data-i="${cur}"]`);if(b&&curIt().chosen&&!curIt().submitted)b.classList.add('ans')}
-$('#pStrip').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(!b)return;flushTime();cur=parseInt(b.dataset.i,10);renderQ()});
+$('#pChoices').addEventListener('keydown',e=>{
+  const row=e.target.closest('.sp-opt');if(!row||(e.key!==' '&&e.key!=='Enter'))return;
+  if(e.key===' '){e.preventDefault();e.stopPropagation();pickChoice(row.dataset.lab)}
+});
+function paintStrip(){renderTrack();renderNav()}
+$('#pStrip').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(!b)return;
+  const i=parseInt(b.dataset.i,10);setNav(false);if(i===cur)return;
+  flushTime();NAVDIR=i>cur?1:-1;cur=i;renderQ()});
 $('#pMetaRow').addEventListener('click',e=>{if(!e.target.closest('[data-metatoggle]'))return;metaPeek=!metaPeek;renderMeta()});
 $('#pConf').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const it=curIt();it.conf=it.conf===b.dataset.c?null:b.dataset.c;
   $$('#pConf button').forEach(x=>x.classList.toggle('on',x.dataset.c===it.conf));save()});
@@ -8202,6 +8662,35 @@ function esec(key,label,note,inner,cls){
     <button class="eh"><svg class="ic cv"><use href="#i-chev"/></svg>${esc(label)}${note?`<span class="n">${esc(note)}</span>`:''}</button>
     <div class="ec">${inner}</div></div>`;
 }
+/* The new format's explanation, read by position: the first prose block is the
+   pivot, a closing line that is bold and nothing else is the takeaway, and
+   every block between is the logic — where a block is an arrow chain it is
+   drawn as a chain of steps, the bolded step marked as the one that answers. */
+function nfTeach(md){
+  const blocks=String(md||'').replace(/\r\n?/g,'\n').trim().split(/\n{2,}/).filter(b=>b.trim());
+  let rule='';
+  const last=blocks.length?blocks[blocks.length-1].trim():'';
+  if(blocks.length>1&&/^\*\*[^*\n][^\n]*\*\*$/.test(last)&&last.slice(2,-2).indexOf('**')<0){rule=last.slice(2,-2);blocks.pop()}
+  let pivot='';
+  if(blocks.length&&!/^\s*([*\-•+]|\d+[.)]|\||→)/.test(blocks[0])&&blocks[0].indexOf('→')<0){pivot=blocks.shift()}
+  const chainOf=b=>{
+    if(/^\s*\|/m.test(b)||/^\s*([*\-•+]|\d+[.)])\s/m.test(b))return null;
+    const lines=b.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(!lines.some(l=>l.indexOf('→')>=0))return null;
+    const steps=lines.join(' ').split(/\s*→\s*/).map(x=>x.trim()).filter(Boolean);
+    return steps.length>=2?steps:null;
+  };
+  const logic=blocks.map(b=>{
+    const st=chainOf(b);
+    if(!st)return `<div class="ebody">${mdFmt(b)}</div>`;
+    return `<ol class="sp-chain">${st.map((x,i)=>`<li class="${/\*\*/.test(x)?'key':''}" style="--i:${i}">${mdInline(x)}</li>`).join('')}</ol>`;
+  }).join('');
+  let h=`<div class="sp-card sp-teach"><div class="sp-eyebrow">Explanation</div>`+
+    (pivot?`<div class="ebody sp-pivot">${mdFmt(pivot)}</div>`:'')+
+    (logic?`<div class="sp-logic">${logic}</div>`:'')+`</div>`;
+  if(rule)h+=`<div class="sp-rule"><span class="sp-ruleic"><svg class="ic"><use href="#i-check"/></svg></span><div><div class="sp-eyebrow">Takeaway</div><p>${mdInline(rule)}</p></div></div>`;
+  return h;
+}
 function renderExpl(){
   const q=curQ(),it=curIt(),s=ST(q.id);
   /* `mine` is the answer just given and is written back to (the miss tag), so
@@ -8211,62 +8700,63 @@ function renderExpl(){
   const att=attOf(q.id);
   const atts=att.filter(a=>ansOf(a)!=null);
   const avg=atts.length>1?atts.reduce((a,b)=>a+ansOf(b),0)/atts.length:null;
-  const prev=att.length>1?`${att.filter(a=>a.correct).length}/${att.length} correct across ${att.length} attempts`:'first attempt';
+  const prev=att.length>1?`${att.filter(a=>a.correct).length}/${att.length} right so far`:'first attempt';
   const order=(it.order&&it.order.length)?it.order:q.choices.map(c=>c.label);
   const disp=l=>{const i=order.indexOf(String(l).trim());return i>=0?(LETTERS[i]||l):l};
-  const key=(q.correctAnswer||(q.correctAnswers||[]).join(', '))||'';
-  const keyTxt=key?String(key).split(/\s*,\s*/).map(k=>disp(k)).join(', '):'—';
+  const keys=String((q.correctAnswer||(q.correctAnswers||[]).join(', '))||'').split(/\s*,\s*/).filter(Boolean);
+  const keyTxt=keys.length?keys.map(k=>disp(k)).join(', '):'—';
+  const keyText=keys.length===1?((q.choices.find(c=>c.label===keys[0])||{}).text||''):'';
+  const nf=isNewFmt(q);
 
-  let h=`<div class="expl">
-    <div class="verdict ${it.correct?'ok':'no'}">${it.correct?'✓ Correct':'✕ Incorrect'} — the answer is ${esc(keyTxt)}
-      <span class="meta">answer time ${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}${avg?' · your avg '+fmtT(avg/1000):''} · ${prev}</span></div>`;
-
-  /* things that need to be seen without being opened first */
-  let top='';
-  if(!it.correct){
-    top+=`<h4>Why did you miss it?</h4><div class="missrow" style="margin-bottom:14px">${MISS.map(([k,l])=>`<button class="pill${mine&&mine.miss===k?' on':''}" data-miss="${k}">${l}</button>`).join('')}</div>`;
+  let h=`<section class="sp-expl ${nf?'nf':'of'}">
+    <div class="sp-verdict ${it.correct?'ok':'no'}">
+      <span class="sp-vshape"><svg class="ic"><use href="#i-${it.correct?'check':'close'}"/></svg></span>
+      <div class="sp-vt">${it.correct?'Correct':it.chosen?'Not this time':'Not answered'}</div>
+      <div class="sp-vs">The answer is <b>${esc(keyTxt)}</b>${keyText?' — '+aFmt(keyText):''}</div>
+      <div class="sp-vmeta"><span><b>${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}</b> answer time</span>${avg?`<span>your average <b>${fmtT(avg/1000)}</b></span>`:''}<span>${prev}</span></div>
+    </div>`;
+  if(!it.correct&&mine){
+    h+=`<div class="sp-card"><div class="sp-eyebrow">What went wrong?</div><div class="sp-chips">${MISS.map(([k,l])=>`<button class="sp-chip${mine.miss===k?' on':''}" data-miss="${k}"><svg class="ic"><use href="#i-check"/></svg>${l}</button>`).join('')}</div></div>`;
   }
   if(q.keyConflict||q.needsReview){
-    top+=`<div class="ttr" style="border-color:var(--rose);background:var(--rose-soft);margin:0 0 14px"><h4 style="color:var(--rose)">Disputed item</h4>
-      ${q.paperAnswer?`<div class="tiny">Your paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</div>`:''}
-      ${q.conflictNote?`<div class="tiny" style="margin-top:6px">${aFmt(q.conflictNote)}</div>`:''}
-      <div class="tiny muted" style="margin-top:6px">Decide this one yourself, then edit the question if the key is wrong.</div></div>`;
+    h+=`<div class="sp-card sp-warn"><div class="sp-eyebrow">Disputed item</div>
+      ${q.paperAnswer?`<p>Your paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</p>`:''}
+      ${q.conflictNote?`<p>${aFmt(q.conflictNote)}</p>`:''}
+      <p style="opacity:.8">Decide this one yourself, then edit the question if the key is wrong.</p></div>`;
   }
-  if(top)h+=`<div class="epad">${top}</div>`;
-
   /* grouped layout gathers every choice's reasoning here instead of under the options */
   if((DB.settings.explLayout||'inline')==='grouped'){
     const rows=order.map((lab,i)=>{const c=q.choices.find(x=>x.label===lab);return (c&&c.explanation)?{i,lab,c}:null}).filter(Boolean);
     if(rows.length)h+=esec('choices','Choice by choice',rows.length+' options',
       rows.map(r=>`<div class="echoice ${r.c.isCorrect?'c':(it.chosen===r.lab?'w':'')}">
         <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${aFmt(r.c.text)}</span>
-        <div class="ebody">${mdFmt(r.c.explanation)}</div></div>`).join(''));
+        <div class="ebody">${nf?whyHTML(r.c):mdFmt(r.c.explanation)}</div></div>`).join(''));
   }
   /* figures that belong to the teaching rather than the question sit at the head of it */
   const efigs=figsIn(q,'expl');
   if(efigs.length)h+=esec('figs',efigs.length>1?'Figures':'Figure',
     efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{}));
-  if(q.explanation)h+=esec('expl','Explanation','',`<div class="ebody">${mdFmt(q.explanation)}</div>`,'key');
-  if(q.educationalObjective)h+=esec('obj','Educational objective','',`<div class="ecall"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
-  if(q.thingsToRemember&&q.thingsToRemember.length)
-    h+=esec('ttr','Things to remember',q.thingsToRemember.length+' points',
-      `<div class="ttr" style="margin:0"><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`);
-  /* margin: the citations close the authored item, then my own note — blocks
-     14 and 15 of the spine, in that order */
-  if(q.references&&q.references.length)
-    h+=esec('refs','References',q.references.length+'',`<div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`);
-  if(s.note)h+=esec('note','My own note','',`<div class="ebody">${mdFmt(s.note)}</div>`);
+  if(nf){if(q.explanation)h+=nfTeach(q.explanation)}
+  else{
+    if(q.explanation)h+=esec('expl','Explanation','',`<div class="ebody">${mdFmt(q.explanation)}</div>`,'key');
+    if(q.educationalObjective)h+=esec('obj','Educational objective','',`<div class="ecall"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
+    if(q.thingsToRemember&&q.thingsToRemember.length)
+      h+=esec('ttr','Things to remember',q.thingsToRemember.length+' points',
+        `<div class="ttr" style="margin:0"><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`);
+    if(q.references&&q.references.length)
+      h+=esec('refs','References',q.references.length+'',`<div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`);
+  }
+  if(s.note)h+=`<div class="sp-card"><div class="sp-eyebrow">My note</div><div class="ebody">${mdFmt(s.note)}</div></div>`;
   /* the referenced files are block 16 and are drawn by #pLinks below this
      panel, at the foot of the body, so they are not repeated inside it */
-
-  h+=`<div class="efoot">
-      <button class="btn sm" id="explCopy"><svg class="ic"><use href="#i-copy"/></svg>Copy everything</button>
-      <button class="btn ghost sm" id="explCopyAsk"><svg class="ic"><use href="#i-copy"/></svg>Question only</button>
-      <button class="btn ghost sm" data-editq="${q.id}">Edit this question</button>
-      <button class="btn ghost sm" id="explNote">${s.note?'Edit my note':'Add a note'}</button>
-      <button class="btn ghost sm figadd" data-figadd="expl" data-figq="${q.id}"><svg class="ic"><use href="#i-imageadd"/></svg>Add a figure</button>
-      <button class="btn ghost sm" id="explSet" style="margin-left:auto"><svg class="ic"><use href="#i-tune"/></svg>Reading</button>
-    </div></div>`;
+  h+=`<div class="sp-acts">
+      <button class="sp-chip pri" id="explCopy"><svg class="ic"><use href="#i-copy"/></svg>Copy everything</button>
+      <button class="sp-chip" id="explCopyAsk"><svg class="ic"><use href="#i-copy"/></svg>Question only</button>
+      <button class="sp-chip" id="explNote"><svg class="ic"><use href="#i-note"/></svg>${s.note?'Edit my note':'Add a note'}</button>
+      <button class="sp-chip" data-editq="${q.id}"><svg class="ic"><use href="#i-text"/></svg>Edit</button>
+      <button class="sp-chip figadd" data-figadd="expl" data-figq="${q.id}"><svg class="ic"><use href="#i-imageadd"/></svg>Add a figure</button>
+      <button class="sp-chip" id="explSet"><svg class="ic"><use href="#i-tune"/></svg>Reading</button>
+    </div></section>`;
 
   $('#pExpl').innerHTML=h;
   $('#pExpl').querySelectorAll('[data-miss]').forEach(b=>b.onclick=()=>{
@@ -8280,8 +8770,8 @@ function renderExpl(){
   const ea=$('#explCopyAsk');if(ea)ea.onclick=()=>copyCurrentQ('ask');
   const es=$('#explSet');if(es)es.onclick=openSessionSettings;
 }
-function next(){if(cur<S.order.length-1){flushTime();cur++;renderQ()}}
-function prev(){if(cur>0){flushTime();cur--;renderQ()}}
+function next(){if(cur<S.order.length-1){flushTime();NAVDIR=1;cur++;renderQ()}}
+function prev(){if(cur>0){flushTime();NAVDIR=-1;cur--;renderQ()}}
 $('#pNext').onclick=next;$('#pPrev').onclick=prev;
 $('#pSubmit').onclick=()=>submitAnswer(false);
 $('#pEnd').onclick=()=>endSession();
@@ -8301,7 +8791,7 @@ function endSession(){
   exitPlayer();showResults(done);
 }
 /* toolbar */
-$('#pFlag').onclick=()=>{const s=ST(curId());s.flag=!s.flag;$('#pFlag').classList.toggle('on',s.flag);renderQ();save()};
+$('#pFlag').onclick=()=>{const s=ST(curId());s.flag=!s.flag;$('#pFlag').classList.toggle('on',s.flag);renderNav();paintTools();save();toast(s.flag?'Flagged for review.':'Flag removed.')};
 $('#pHl').onclick=()=>{hlMode=!hlMode;$('#pHl').classList.toggle('on',hlMode);toast(hlMode?'Highlighter on — select text. Tap a highlight to remove it.':'Highlighter off.')};
 $('#pNote').onclick=()=>toggleNotes();
 $('#pFig').onclick=()=>{const q=curQ();if(q)openFigManager(q.id)};
@@ -8495,7 +8985,7 @@ function repaintCurrentQ(){
   $('#pLead').innerHTML=hlRender(esc(q.leadIn||''),st.hlLead);
   $('#pImages').innerHTML=figStemHTML(q.id);
   figSyncTool(q);
-  renderChoices(false);
+  CH_KEY='';renderChoices(false);
   $('#pLinks').innerHTML=linksHTML(q);
   if(S.config.mode==='tutor'&&it.submitted)renderExpl();
   applySettings();
@@ -8566,7 +9056,7 @@ function paintFull(){
 }
 $('#pFull').onclick=()=>{
   if(!FS_OK){const p=$('#player');p.classList.toggle('zen');paintFull();
-    toast(p.classList.contains('zen')?'Focus mode on — question navigator hidden.':'Focus mode off.');return}
+    toast(p.classList.contains('zen')?'Focus mode on — progress track and tags hidden.':'Focus mode off.');return}
   if(fsOn()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}
   else{const el=document.documentElement;(el.requestFullscreen||el.webkitRequestFullscreen).call(el).catch(()=>{
     $('#player').classList.add('zen');paintFull();toast('This browser blocked fullscreen — using focus mode instead.')})}
@@ -9000,7 +9490,7 @@ document.addEventListener('keydown',e=>{
   if(tag==='textarea'||tag==='input')return;
   const it=curIt(),q=curQ();
   if(/^[1-9]$/.test(e.key)){const i=parseInt(e.key,10)-1;const lab=(it.order||[])[i];
-    if(lab&&!(S.config.mode==='tutor'&&it.submitted)){if(it.chosen!==lab){it.chosen=lab;markAns(it)}renderChoices();save()}return}
+    if(lab)pickChoice(lab);return}
   const k=e.key.toLowerCase();
   if(e.key==='Enter'){e.preventDefault();
     if(S.config.mode==='tutor'&&!it.submitted)submitAnswer(false);
@@ -9016,7 +9506,7 @@ document.addEventListener('keydown',e=>{
   if(k==='y'){e.preventDefault();e.shiftKey?$('#pCopyAsk').click():$('#pCopy').click()}
   if(k==='r'){e.preventDefault();$('#pRefr').click()}
   if(e.key===','){e.preventDefault();$('#pSet').click()}
-  if(e.key==='Escape'){if(toolsOpen()){closeTools();return}$('#pQuit').click()}
+  if(e.key==='Escape'){if(navOpen()){setNav(false);return}if(toolsOpen()){closeTools();return}$('#pQuit').click()}
 });
 
 /* ============================================================
