@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.17 -->
+<!-- Nidus — Personal Qbank · v6.18 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3820,15 +3820,24 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-opts.anim .sp-opt{animation:spIn var(--m3-spatial-slow) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 40ms + 60ms)}
 .sp-k{
   position:relative;width:40px;height:40px;display:grid;place-items:center;
-  border-radius:50%;background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
-  font:600 15px/1 var(--m3-font);
-  transition:border-radius var(--m3-spatial-slow) var(--m3-spring-expressive),background-color var(--m3-dur-medium2) var(--m3-ease-standard),
-             color var(--m3-dur-medium2) var(--m3-ease-standard),transform var(--m3-spatial-slow) var(--m3-spring-expressive);
+  color:var(--md-on-surface-variant);font:600 15px/1 var(--m3-font);
+  transition:color var(--m3-dur-medium2) var(--m3-ease-standard);
 }
-.sp-k > *{grid-area:1/1}
+.sp-k > *{grid-area:1/1;position:relative}
+/* The key is drawn, not rounded: a polar shape from the M3 Expressive set
+   (circle, 8-lobe cookie, 12-ray sun, 4-leaf clover) whose points are
+   written once by SP_SH so every shape has the same path commands and
+   morphs point for point. Every lobe peaks on the circle's own radius, so a
+   shape never grows past the footprint it started in — it turns inside it.
+   Where the browser cannot animate `d` the shape simply changes. */
+.sp-ks{width:100%;height:100%;overflow:visible;
+  transition:rotate var(--m3-spatial-slow) var(--m3-spring-expressive),scale var(--m3-spatial) var(--m3-spring-expressive)}
+.sp-ks path{d:var(--sp-sh-o);fill:var(--md-surface-container-highest);stroke:transparent;stroke-width:1.5;
+  transition:d var(--m3-spatial-slow) var(--m3-spring-spatial),fill var(--m3-dur-medium2) var(--m3-ease-standard),stroke var(--m3-dur-medium2) var(--m3-ease-standard)}
+.sp-opt:active .sp-ks{scale:.86;transition-duration:var(--m3-spatial-slow),var(--m3-shape-in)}
 .sp-k .ic{width:22px;height:22px;opacity:0;transform:scale(.4) rotate(-45deg);
   transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial-slow) var(--m3-spring-expressive)}
-.sp-kl{transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-ease-emphasized)}
+.sp-kl{transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),transform var(--m3-spatial-slow) var(--m3-spring-expressive)}
 .sp-t{
   align-self:center;padding:8px 0;font-family:var(--qfam);font-size:var(--qfont);line-height:calc(var(--qlh) - .2);letter-spacing:.15px;
   overflow-wrap:anywhere;transition:opacity var(--m3-dur-medium) var(--m3-ease-standard)
@@ -3845,16 +3854,23 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-x .ic{width:20px;height:20px}
 .sp-x:hover{opacity:1;background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
 .sp-x:active{transform:scale(.85)}
-/* chosen: the card turns tonal and the key morphs from a circle into a soft square,
-   upright and concentric with the card's corner */
-.sp-opt.sel{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--sp-ro)}
-.sp-opt.sel .sp-k{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-m)}
+/* chosen: the card turns tonal and rounds out; the key blooms from a circle
+   into a cookie and turns one lobe on a spring, and the letter pops with it */
+.sp-opt.sel{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--sp-ro);
+  box-shadow:inset 0 0 0 2px color-mix(in oklab,var(--md-primary) 45%,transparent)}
+.sp-opt.sel .sp-k{color:var(--md-on-primary)}
+.sp-opt.sel .sp-ks{rotate:45deg}
+.sp-opt.sel .sp-ks path{d:var(--sp-sh-sel);fill:var(--md-primary)}
+.sp-opt.sel .sp-kl{animation:spKPop var(--m3-spatial-slow) var(--m3-spring-expressive)}
+@keyframes spKPop{0%{transform:scale(.6)}100%{transform:none}}
+.sp-opt.sel:focus-visible{box-shadow:0 0 0 3px var(--md-primary)}
 .sp-opt.sel .sp-x{color:inherit}
 /* crossed out */
 .sp-opt.struck{background:var(--md-surface-container-low)}
 .sp-opt.struck .sp-t{opacity:.42}
 .sp-opt.struck .sp-tline{text-decoration-color:currentColor}
-.sp-opt.struck .sp-k{background:transparent;box-shadow:inset 0 0 0 1.5px var(--md-outline-variant);opacity:.6}
+.sp-opt.struck .sp-k{opacity:.6}
+.sp-opt.struck .sp-ks path{fill:transparent;stroke:var(--md-outline-variant)}
 .sp-opt.struck .sp-x{opacity:1;color:var(--md-primary)}
 /* revealed */
 .sp-opts.done .sp-opt{cursor:default}
@@ -3864,8 +3880,19 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-opts.done .sp-opt.dim .sp-t{opacity:.72}
 .sp-opt.ok{background:var(--md-success-container);color:var(--md-on-success-container);border-radius:var(--sp-ro)}
 .sp-opt.no{background:var(--md-error-container);color:var(--md-on-error-container);border-radius:var(--sp-ro)}
-.sp-opt.ok .sp-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--m3-corner-m)}
-.sp-opt.no .sp-k{background:var(--md-error);color:var(--md-on-error);border-radius:var(--m3-corner-m)}
+.sp-opt.ok .sp-k{color:var(--md-on-success)}
+.sp-opt.no .sp-k{color:var(--md-on-error)}
+.sp-opt.ok .sp-ks{rotate:30deg}
+.sp-opt.no .sp-ks{rotate:45deg}
+.sp-opt.ok .sp-ks path{d:var(--sp-sh-ok);fill:var(--md-success)}
+.sp-opt.no .sp-ks path{d:var(--sp-sh-no);fill:var(--md-error)}
+.sp-opts.reveal .sp-opt.ok .sp-ks,.sp-opts.reveal .sp-opt.no .sp-ks{animation:spKTurn var(--m3-dur-xlong) var(--m3-spring-expressive) .12s backwards}
+.sp-opts.reveal .sp-opt.ok .sp-ks path{animation:spKOk var(--m3-spatial-slow) var(--m3-spring-spatial) .12s backwards}
+.sp-opts.reveal .sp-opt.no .sp-ks path{animation:spKNo var(--m3-spatial-slow) var(--m3-spring-spatial) .12s backwards}
+.sp-opts.reveal .sp-opt.ok .sp-k .ic,.sp-opts.reveal .sp-opt.no .sp-k .ic{animation:spKPop var(--m3-spatial-slow) var(--m3-spring-expressive) .22s backwards}
+@keyframes spKTurn{from{rotate:-60deg;scale:.7}}
+@keyframes spKOk{from{d:var(--sp-sh-o)}}
+@keyframes spKNo{from{d:var(--sp-sh-o)}}
 .sp-opt.ok .sp-k .ic,.sp-opt.no .sp-k .ic{opacity:1;transform:none}
 .sp-opt.ok .sp-kl,.sp-opt.no .sp-kl{opacity:0;transform:scale(.4)}
 .sp-opts.reveal .sp-opt.ok{animation:spPop var(--m3-spatial-slow) var(--m3-spring-expressive)}
@@ -3900,20 +3927,50 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-jump .ic{width:18px;height:18px;transform:rotate(90deg)}
 .sp-jump:active{transform:scale(.94);border-radius:var(--m3-corner-s)}
 
-/* ---------- confidence: a connected button group ---------- */
-.sp-conf{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;margin-top:20px;max-width:var(--measure)}
+/* ---------- confidence: one track, one indicator that travels ----------
+   Three equal segments on a pill track. The choice is a pill of its own
+   that slides between them on a spring, stretching as it goes and taking
+   each level's colour on the way; it grows in where there was none and
+   shrinks away when the choice is taken back. Only transform, opacity and
+   colour move. */
+.sp-conf{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;margin-top:20px;max-width:var(--measure)}
 .sp-conf-l{font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;color:var(--md-on-surface-variant)}
-.sp-cbg{display:flex;gap:2px}
-.sp-cbg button{
-  height:40px;padding:0 16px;border:none;cursor:pointer;font:500 14px/1 var(--m3-font);letter-spacing:.1px;
-  background:var(--md-surface-container-high);color:var(--md-on-surface);border-radius:var(--m3-corner-s);
-  transition:border-radius var(--m3-spatial) var(--m3-spring-expressive),background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard),transform var(--m3-spatial) var(--m3-spring-expressive)
+.sp-cbg{
+  --ci:0;position:relative;flex:1 1 280px;max-width:420px;display:grid;grid-template-columns:repeat(3,1fr);
+  height:48px;padding:4px;box-sizing:border-box;border-radius:var(--m3-corner-full);background:var(--md-surface-container-high);
 }
-.sp-cbg button:first-child{border-radius:var(--m3-corner-full) var(--m3-corner-s) var(--m3-corner-s) var(--m3-corner-full)}
-.sp-cbg button:last-child{border-radius:var(--m3-corner-s) var(--m3-corner-full) var(--m3-corner-full) var(--m3-corner-s)}
-.sp-cbg button.on{background:var(--md-tertiary);color:var(--md-on-tertiary);border-radius:var(--m3-corner-full)}
-.sp-cbg button:active{transform:scale(.94)}
+.sp-cthumb{
+  position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 3);border-radius:var(--m3-corner-full);
+  background:var(--md-primary);opacity:0;scale:.4;translate:calc(var(--ci) * 100%) 0;pointer-events:none;
+  transition:translate var(--m3-spatial-slow) var(--m3-spring-spatial),scale var(--m3-spatial) var(--m3-ease-emphasized-accel),
+             opacity var(--m3-dur-short2) var(--m3-ease-standard),background-color var(--m3-dur-medium2) var(--m3-ease-standard);
+}
+/* the slide stays inside the track (the low-overshoot spring); the stretch and the grow-in carry the bounce */
+.sp-cbg.has .sp-cthumb{opacity:1;scale:1;transition-timing-function:var(--m3-spring-spatial),var(--m3-spring-expressive),var(--m3-ease-standard),var(--m3-ease-standard)}
+.sp-cbg.jump .sp-cthumb{transition:none}
+.sp-cbg.mv .sp-cthumb{animation:spCStretch var(--m3-spatial-slow) var(--m3-ease-emphasized)}
+@keyframes spCStretch{35%{scale:1.14 .86}}
+.sp-cbg:has(button.on:active) .sp-cthumb{scale:.92;transition-duration:var(--m3-spatial-slow),var(--m3-shape-in)}
+.sp-cbg[data-on="unsure"] .sp-cthumb{background:var(--md-tertiary)}
+.sp-cbg[data-on="guess"] .sp-cthumb{background:var(--md-secondary)}
+.sp-cbg button{
+  position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;
+  height:100%;padding:0 10px;border:none;background:transparent;cursor:pointer;border-radius:var(--m3-corner-full);
+  font:500 14px/1 var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);-webkit-tap-highlight-color:transparent;
+  transition:color var(--m3-dur-medium2) var(--m3-ease-standard)
+}
+.sp-cbg button::after{content:"";position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;z-index:-1;
+  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard)}
+@media (hover:hover){.sp-cbg button:not(.on):hover::after{opacity:var(--m3-state-hover)}}
+.sp-cbg button:focus-visible{outline:2px solid var(--md-primary);outline-offset:2px}
+.sp-cbg button > *{transition:scale var(--m3-spatial) var(--m3-spring-expressive)}
+.sp-cbg button:active > *{scale:.9;transition-duration:var(--m3-shape-in)}
+.sp-cbg button .ic{width:18px;height:18px}
+.sp-cbg button.on{color:var(--md-on-primary)}
+.sp-cbg[data-on="unsure"] button.on{color:var(--md-on-tertiary)}
+.sp-cbg[data-on="guess"] button.on{color:var(--md-on-secondary)}
+.sp-cbg button.on .ic{animation:spCIc var(--m3-spatial-slow) var(--m3-spring-expressive)}
+@keyframes spCIc{from{transform:scale(.3) rotate(-40deg)}}
 
 /* ---------- the floating action pill ---------- */
 .sp-dock{
@@ -4088,7 +4145,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-x{width:44px;height:44px}
   .sp-jump{margin-left:60px}
   .sp-conf-l{font-size:15px}
-  .sp-cbg button{height:48px;padding:0 22px;font-size:15px}
+  .sp-cbg{height:56px;max-width:480px}
+  .sp-cbg button{font-size:15px}
   .sp-grid{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
   .sp-grid button{height:56px;font-size:16px}
   .sp-acts .sp-chip{height:44px}
@@ -4112,6 +4170,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 @media (prefers-reduced-motion:reduce){
   .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button{animation-name:m3Fade}
   .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape{animation:none}
+  .sp-ks,.sp-cthumb,.sp-opts.reveal .sp-ks,.sp-opts.reveal .sp-ks path,.sp-cbg.mv .sp-cthumb,.sp-opt.sel .sp-kl,.sp-cbg button.on .ic{animation:none;transition-property:opacity,fill,background-color,color}
 }
 </style>
 </head>
@@ -4157,6 +4216,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-swap" viewBox="0 0 24 24"><path d="M3.8 8.4h13.4"/><path d="m13.9 5.1 3.3 3.3-3.3 3.3"/><path d="M20.2 15.6H6.8"/><path d="m10.1 12.3-3.3 3.3 3.3 3.3"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.5h14.8"/><path d="M9.4 6.5V4.8a1.5 1.5 0 0 1 1.5-1.5h2.2a1.5 1.5 0 0 1 1.5 1.5v1.7"/><path d="m6.4 6.5.9 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.9-12"/><path d="M10.4 10.4v6M13.6 10.4v6"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.6 12.6 4.7 4.7L19.4 7.1"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M9.7 9.6a2.4 2.4 0 0 1 4.7.6c0 1.6-2.4 2-2.4 3.5"/><circle cx="12" cy="16.6" r="1.05" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-dice" viewBox="0 0 24 24"><rect x="4.4" y="4.4" width="15.2" height="15.2" rx="3.6"/><circle cx="8.9" cy="8.9" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.1" cy="15.1" r="1.2" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></symbol>
 <symbol id="i-tg" viewBox="0 0 24 24"><path d="M21.3 4.3 2.9 11.2a.6.6 0 0 0 .05 1.14l4.55 1.4 1.75 5.35a.6.6 0 0 0 1.02.22l2.5-2.6 4.6 3.38a.6.6 0 0 0 .94-.35l3.05-14.7a.6.6 0 0 0-.9-.64z"/><path d="m7.5 13.74 10.6-6.6-7.55 7.5-.3 4.1"/></symbol>
 <symbol id="i-link" viewBox="0 0 24 24"><path d="M9.6 12h4.8"/><path d="M10.7 7.6H7.5a4.4 4.4 0 0 0 0 8.8h3.2"/><path d="M13.3 7.6h3.2a4.4 4.4 0 0 1 0 8.8h-3.2"/></symbol>
@@ -4664,7 +4725,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.17</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.18</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4674,7 +4735,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.17 · sharded store</span>
+        <span class="chip" id="verChip">v6.18 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4759,7 +4820,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="sp-conf" id="pConf" style="display:none">
         <span class="sp-conf-l">How sure are you?</span>
         <div class="sp-cbg" role="group" aria-label="Confidence">
-          <button data-c="sure">Sure</button><button data-c="unsure">Unsure</button><button data-c="guess">Guess</button>
+          <span class="sp-cthumb" aria-hidden="true"></span>
+          <button data-c="sure" aria-pressed="false"><svg class="ic"><use href="#i-check"/></svg><span>Sure</span></button><button data-c="unsure" aria-pressed="false"><svg class="ic"><use href="#i-help"/></svg><span>Unsure</span></button><button data-c="guess" aria-pressed="false"><svg class="ic"><use href="#i-dice"/></svg><span>Guess</span></button>
         </div>
       </div>
       <div id="pExpl"></div>
@@ -5625,7 +5687,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.17';
+const APP_VERSION='6.18';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8450,6 +8512,15 @@ function renderMeta(){
    of the app reaches for (#pStem, #pChoices, #pExpl, #pStrip, the tools) are
    the same; what they look like and how they move is new. */
 let NAVDIR=0,LASTQ=null,CH_KEY='';
+/* the answer key's shapes: r(θ) = R(1 + a·cos kθ), scaled so every lobe
+   peaks on the 20-unit circle. Same 96 points each, so `d` interpolates. */
+const SP_SH=(()=>{
+  const shape=(k,a)=>{const R=20/(1+a);let d='';for(let j=0;j<96;j++){const t=j/96*2*Math.PI-Math.PI/2,r=R*(1+a*Math.cos(k*(t+Math.PI/2)));
+    d+=(j?'L':'M')+(r*Math.cos(t)).toFixed(2)+' '+(r*Math.sin(t)).toFixed(2)}return d+'Z'};
+  const o={o:shape(8,0),sel:shape(8,.085),ok:shape(12,.05),no:shape(4,.13)};
+  const R=document.documentElement.style;for(const k in o)R.setProperty('--sp-sh-'+k,`path("${o[k]}")`);
+  return o;
+})();
 /* the current item format: one explanation (pivot → chain → takeaway) and a
    Wrong / Right in line per distractor. Items imported from schema 2 say so;
    older items are recognised by the objective and lists they carry. */
@@ -8522,7 +8593,7 @@ function renderQ(){
   if(moved){$('#pNotesWrap').style.display='none';$('#pNote').classList.remove('on')}
   const showConf=S.config.conf&&!it.submitted;
   $('#pConf').style.display=showConf?'flex':'none';
-  $$('#pConf button').forEach(b=>b.classList.toggle('on',it.conf===b.dataset.c));
+  paintConf(true);
   $('#pSubmit').style.display=(tutor&&!it.submitted)?'inline-flex':'none';
   /* before an answer is in, Submit leads and Next shrinks to a skip button beside it */
   const pending=tutor&&!it.submitted;
@@ -8585,7 +8656,7 @@ function renderChoices(anim){
       else if(c.isCorrect&&nf&&q.explanation)why=`<button class="sp-jump" data-jump><svg class="ic"><use href="#i-next"/></svg>Why it's right</button>`;
     }
     return `<div class="${cls}" data-lab="${lab}" role="radio" aria-checked="${!done&&it.chosen===lab}" tabindex="${done?-1:0}" style="--i:${i}">
-      <span class="sp-k"><span class="sp-kl">${LETTERS[i]}</span><svg class="ic"><use href="#i-${c.isCorrect?'check':'close'}"/></svg></span>
+      <span class="sp-k"><svg class="sp-ks" viewBox="-20 -20 40 40" aria-hidden="true"><path d="${SP_SH.o}"/></svg><span class="sp-kl">${LETTERS[i]}</span><svg class="ic"><use href="#i-${c.isCorrect?'check':'close'}"/></svg></span>
       <span class="sp-t"><span class="sp-tline">${aFmt(c.text)}</span>${tag}</span>
       ${!done?`<button class="sp-x" data-strike="${lab}" title="Cross out" aria-label="Cross out ${LETTERS[i]}"><svg class="ic"><use href="#i-close"/></svg></button>`:'<span></span>'}
       ${hist?`<span class="sp-pct">${hist}</span>`:''}${why}
@@ -8626,7 +8697,21 @@ $('#pStrip').addEventListener('click',e=>{const b=e.target.closest('[data-i]');i
   flushTime();NAVDIR=i>cur?1:-1;cur=i;renderQ()});
 $('#pMetaRow').addEventListener('click',e=>{if(!e.target.closest('[data-metatoggle]'))return;metaPeek=!metaPeek;renderMeta()});
 $('#pConf').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const it=curIt();it.conf=it.conf===b.dataset.c?null:b.dataset.c;
-  $$('#pConf button').forEach(x=>x.classList.toggle('on',x.dataset.c===it.conf));save()});
+  paintConf(false);save()});
+/* the indicator moves only between two choices; arriving from none it grows
+   where it lands, and a new question places it without a journey */
+function paintConf(instant){
+  const g=$('#pConf .sp-cbg'),it=curIt(),c=it&&it.conf,i=['sure','unsure','guess'].indexOf(c);
+  $$('#pConf button').forEach(b=>{const on=b.dataset.c===c;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on?'true':'false')});
+  const had=g.classList.contains('has'),was=g.style.getPropertyValue('--ci');
+  if(i>=0){
+    g.dataset.on=c;
+    if(!had||instant){g.classList.add('jump');g.style.setProperty('--ci',i);void g.offsetWidth;g.classList.remove('jump')}
+    else if(was!==String(i)){g.style.setProperty('--ci',i);g.classList.remove('mv');void g.offsetWidth;g.classList.add('mv')}
+  }
+  if(instant&&i<0){g.classList.add('jump');g.classList.remove('has');void g.offsetWidth;g.classList.remove('jump')}
+  else g.classList.toggle('has',i>=0);
+}
 
 function submitAnswer(auto){
   const q=curQ(),it=curIt();
