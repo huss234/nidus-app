@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.16 -->
+<!-- Nidus — Personal Qbank · v6.17 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3685,6 +3685,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    Every colour, curve and corner comes from the tokens above.
    ============================================================ */
 .sp{--sp-gut:24px;--sp-r:var(--m3-corner-xl);--sp-barh:76px;background:var(--md-surface);
+  /* a chosen card is the key's corner plus the inset around it, so the two curves share a centre */
+  --sp-oin:12px;--sp-ro:calc(var(--m3-corner-m) + var(--sp-oin));
   /* the reading sizes from Settings, times a step that only tablets take */
   --sp-z:1;--qfont:calc(var(--qbase,17px) * var(--sp-z));--efont:calc(var(--ebase,15.5px) * var(--sp-z))}
 .sp .sp-body{padding:8px var(--sp-gut) 140px;max-width:var(--pmax);margin:0 auto;width:100%;animation:none}
@@ -3801,7 +3803,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-opts{margin-top:20px;display:flex;flex-direction:column;gap:8px;max-width:var(--measure)}
 .sp-opt{
   position:relative;display:grid;grid-template-columns:40px 1fr auto;align-items:start;column-gap:14px;
-  padding:12px 8px 12px 12px;min-height:64px;box-sizing:border-box;cursor:pointer;
+  padding:var(--sp-oin) 8px var(--sp-oin) var(--sp-oin);min-height:64px;box-sizing:border-box;cursor:pointer;
   border-radius:var(--m3-corner-l);background:var(--md-surface-container);color:var(--md-on-surface);
   -webkit-tap-highlight-color:transparent;outline:none;overflow:hidden;isolation:isolate;
   transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),
@@ -3843,10 +3845,10 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-x .ic{width:20px;height:20px}
 .sp-x:hover{opacity:1;background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
 .sp-x:active{transform:scale(.85)}
-/* chosen: the card turns tonal and the key morphs from a circle into a soft square */
-.sp-opt.sel{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--sp-r)}
-.sp-opt.sel .sp-k{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-m);transform:rotate(-8deg)}
-.sp-opt.sel .sp-kl{transform:rotate(8deg)}
+/* chosen: the card turns tonal and the key morphs from a circle into a soft square,
+   upright and concentric with the card's corner */
+.sp-opt.sel{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--sp-ro)}
+.sp-opt.sel .sp-k{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-m)}
 .sp-opt.sel .sp-x{color:inherit}
 /* crossed out */
 .sp-opt.struck{background:var(--md-surface-container-low)}
@@ -3857,10 +3859,11 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 /* revealed */
 .sp-opts.done .sp-opt{cursor:default}
 .sp-opts.done .sp-opt:active{transform:none;border-radius:var(--m3-corner-l)}
+.sp-opts.done .sp-opt.ok:active,.sp-opts.done .sp-opt.no:active{border-radius:var(--sp-ro)}
 .sp-opts.done .sp-opt.dim{background:var(--md-surface-container-low)}
 .sp-opts.done .sp-opt.dim .sp-t{opacity:.72}
-.sp-opt.ok{background:var(--md-success-container);color:var(--md-on-success-container);border-radius:var(--sp-r)}
-.sp-opt.no{background:var(--md-error-container);color:var(--md-on-error-container);border-radius:var(--sp-r)}
+.sp-opt.ok{background:var(--md-success-container);color:var(--md-on-success-container);border-radius:var(--sp-ro)}
+.sp-opt.no{background:var(--md-error-container);color:var(--md-on-error-container);border-radius:var(--sp-ro)}
 .sp-opt.ok .sp-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--m3-corner-m)}
 .sp-opt.no .sp-k{background:var(--md-error);color:var(--md-on-error);border-radius:var(--m3-corner-m)}
 .sp-opt.ok .sp-k .ic,.sp-opt.no .sp-k .ic{opacity:1;transform:none}
@@ -3929,20 +3932,22 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   background:var(--md-surface-container-highest);color:var(--md-on-surface);
   transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),transform var(--m3-spatial) var(--m3-spring-expressive),opacity var(--m3-dur-medium) var(--m3-ease-standard)
 }
+/* the pill is 72 tall with an 8 inset: a 48 circle sits on its end's centre only 12 in from the edge */
+.sp-fab-bar > .sp-ib:first-child{margin-left:4px}
 .sp-ib:active{transform:scale(.9);border-radius:var(--m3-corner-m);transition-duration:var(--m3-shape-in)}
 .sp-ib:disabled{opacity:.38;cursor:default;transform:none}
 .sp-prog{flex:1;min-width:0;text-align:center;font:500 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .sp-go{
   height:56px;padding:0 24px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;
-  border-radius:var(--m3-corner-l);background:var(--md-primary);color:var(--md-on-primary);
+  border-radius:var(--m3-corner-full);background:var(--md-primary);color:var(--md-on-primary);
   font:600 16px/1 var(--m3-font);letter-spacing:.1px;
   transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),transform var(--m3-spatial) var(--m3-spring-expressive),
              background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard);
   animation:spGo var(--m3-spatial) var(--m3-spring-expressive)
 }
 .sp-go .ic{width:22px;height:22px}
-.sp-go:active{transform:scale(.94);border-radius:var(--m3-corner-s);transition-duration:var(--m3-shape-in)}
+.sp-go:active{transform:scale(.94);border-radius:var(--m3-corner-l);transition-duration:var(--m3-shape-in)}
 .sp-go.mini{padding:0 16px;background:var(--md-secondary-container);color:var(--md-on-secondary-container);font-size:14px}
 .sp-go.mini span{display:none}
 #pEnd.sp-go.mini span{display:inline}
@@ -3963,13 +3968,13 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-verdict.no{background:var(--md-error-container);color:var(--md-on-error-container)}
 .sp-vshape{
   grid-row:span 2;width:56px;height:56px;display:grid;place-items:center;
-  border-radius:var(--m3-corner-l);transform:rotate(12deg);
+  border-radius:var(--m3-corner-l);
   animation:spBloom var(--m3-dur-xlong) var(--m3-spring-expressive) .1s backwards
 }
 .sp-verdict.ok .sp-vshape{background:var(--md-success);color:var(--md-on-success);border-radius:42% 58% 46% 54% / 55% 45% 55% 45%}
 .sp-verdict.no .sp-vshape{background:var(--md-error);color:var(--md-on-error)}
-.sp-vshape .ic{width:28px;height:28px;transform:rotate(-12deg)}
-@keyframes spBloom{from{transform:rotate(-80deg) scale(.3);border-radius:50%}to{transform:rotate(12deg) scale(1)}}
+.sp-vshape .ic{width:28px;height:28px}
+@keyframes spBloom{from{transform:rotate(-80deg) scale(.3);border-radius:50%}to{transform:none}}
 .sp-vt{font-size:24px;line-height:32px;font-weight:600;letter-spacing:0}
 .sp-vs{font-size:14px;line-height:20px;letter-spacing:.25px;opacity:.9}
 .sp-vs b{font-weight:700}
@@ -4020,12 +4025,14 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-rule .sp-eyebrow{color:inherit;opacity:.85;margin-bottom:6px}
 .sp-rule p{margin:0;font-family:var(--qfam);font-size:calc(var(--efont) + 1px);line-height:1.5;font-weight:600;letter-spacing:.1px}
 .sp-ruleic{width:40px;height:40px;display:grid;place-items:center;background:var(--md-tertiary);color:var(--md-on-tertiary);
-  border-radius:var(--m3-corner-m);transform:rotate(45deg)}
-.sp-ruleic svg{width:20px;height:20px;transform:rotate(-45deg)}
+  border-radius:var(--m3-corner-m)}
+.sp-ruleic svg{width:20px;height:20px}
 /* older items: sections become cards */
 .sp-expl .esec{border:none;border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);overflow:hidden}
 .sp-expl .esec > .eh{min-height:56px;padding:0 20px;font-weight:600}
 .sp-expl .esec > .ec{padding:0 20px 20px}
+.sp-expl .esec.shut > .ec{padding-bottom:0}
+.sp-expl .esec > .eh:not(:has(.n)) .cv{margin-left:auto}
 .sp-expl .esec.key > .eh{color:var(--md-primary)}
 .sp-expl .echoice .ebody{margin-left:40px}
 /* actions */
@@ -4047,12 +4054,12 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 
 @media (max-width:400px){.sp-mode{display:none}}
 @media (max-width:520px){
-  .sp{--sp-gut:16px}
+  .sp{--sp-gut:16px;--sp-oin:10px}
   .sp-top{padding:0 4px;gap:0}
   .sp-count{padding:0 6px 0 10px;gap:8px}
   .sp-count .qn{font-size:18px}
   .sp-timer{padding:0 10px;font-size:13px}
-  .sp-opt{column-gap:12px;padding:10px 6px 10px 10px}
+  .sp-opt{column-gap:12px;padding-right:6px}
   .sp-go{padding:0 20px}
   .sp-verdict{padding:18px}
   .sp-card,.sp-rule{padding:18px}
@@ -4072,11 +4079,11 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-fab-bar{max-width:calc(min(100vw,var(--pmax)) - 2 * var(--sp-gut) + 16px)}
 }
 @media (min-width:600px) and (pointer:coarse){
-  .sp{--sp-z:1.1;--sp-barh:84px}
+  .sp{--sp-z:1.1;--sp-barh:84px;--sp-oin:14px}
   .sp-top{height:72px}
   .sp-count .qn{font-size:22px}
   .sp-opts{gap:10px}
-  .sp-opt{grid-template-columns:44px 1fr auto;column-gap:16px;min-height:72px;padding:14px 10px 14px 14px}
+  .sp-opt{grid-template-columns:44px 1fr auto;column-gap:16px;min-height:72px;padding-right:10px}
   .sp-k{width:44px;height:44px;font-size:16px}
   .sp-x{width:44px;height:44px}
   .sp-jump{margin-left:60px}
@@ -4105,7 +4112,6 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 @media (prefers-reduced-motion:reduce){
   .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button{animation-name:m3Fade}
   .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape{animation:none}
-  .sp-opt.sel .sp-k{transform:none}.sp-opt.sel .sp-kl{transform:none}
 }
 </style>
 </head>
@@ -4658,7 +4664,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.16</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.17</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4668,7 +4674,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.16 · sharded store</span>
+        <span class="chip" id="verChip">v6.17 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5619,7 +5625,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.16';
+const APP_VERSION='6.17';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
