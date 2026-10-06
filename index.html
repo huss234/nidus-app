@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.15 -->
+<!-- Nidus — Personal Qbank · v6.16 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3684,7 +3684,9 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    keep their objective / things-to-remember sections.
    Every colour, curve and corner comes from the tokens above.
    ============================================================ */
-.sp{--sp-gut:24px;--sp-r:var(--m3-corner-xl);background:var(--md-surface)}
+.sp{--sp-gut:24px;--sp-r:var(--m3-corner-xl);--sp-barh:76px;background:var(--md-surface);
+  /* the reading sizes from Settings, times a step that only tablets take */
+  --sp-z:1;--qfont:calc(var(--qbase,17px) * var(--sp-z));--efont:calc(var(--ebase,15.5px) * var(--sp-z))}
 .sp .sp-body{padding:8px var(--sp-gut) 140px;max-width:var(--pmax);margin:0 auto;width:100%;animation:none}
 .player.sp.on .sp-body{animation:none}
 
@@ -4054,6 +4056,51 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-go{padding:0 20px}
   .sp-verdict{padding:18px}
   .sp-card,.sp-rule{padding:18px}
+}
+
+/* ---------- tablets and wide screens (6.16) ----------
+   Past phone width the column fills the width the session allows instead
+   of hugging the left edge, and the action pill spans the same column.
+   A 10-inch tablet draws a CSS pixel at about the size a phone does but is
+   held further away, so on a touch screen the type and the targets grow a
+   step. In landscape the question and the answers sit side by side: the
+   stem stays in view on the left while the options, the verdict and the
+   teaching run down the right, with the pill beneath them. */
+@media (min-width:600px){
+  .sp{--sp-gut:32px}
+  .sp .sp-stem,.sp-ask,.sp-opts,.sp-conf,.sp-expl,.sp-note{max-width:none}
+  .sp-fab-bar{max-width:calc(min(100vw,var(--pmax)) - 2 * var(--sp-gut) + 16px)}
+}
+@media (min-width:600px) and (pointer:coarse){
+  .sp{--sp-z:1.1;--sp-barh:84px}
+  .sp-top{height:72px}
+  .sp-count .qn{font-size:22px}
+  .sp-opts{gap:10px}
+  .sp-opt{grid-template-columns:44px 1fr auto;column-gap:16px;min-height:72px;padding:14px 10px 14px 14px}
+  .sp-k{width:44px;height:44px;font-size:16px}
+  .sp-x{width:44px;height:44px}
+  .sp-jump{margin-left:60px}
+  .sp-conf-l{font-size:15px}
+  .sp-cbg button{height:48px;padding:0 22px;font-size:15px}
+  .sp-grid{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
+  .sp-grid button{height:56px;font-size:16px}
+  .sp-acts .sp-chip{height:44px}
+}
+@media (min-width:1000px) and (orientation:landscape){
+  .sp{--sp-wide:calc(var(--pmax) * 1.45);--sp-split:40px}
+  .sp .sp-body{max-width:var(--sp-wide)}
+  .sp-top,.sp-track{max-width:calc(var(--sp-wide) + 32px)}
+  .sp-nav{max-width:calc(var(--sp-wide) + 8px)}
+  .sp-page{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--sp-split);align-items:start}
+  .sp-q{
+    position:sticky;top:calc(var(--sp-barh) + env(safe-area-inset-top) + 8px);
+    max-height:calc(100dvh - var(--sp-barh) - env(safe-area-inset-top) - 24px);
+    overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;
+    margin-right:-12px;padding:0 12px 16px 0;
+  }
+  .sp-a > .sp-opts{margin-top:8px}
+  .sp-dock{left:50%;padding-left:calc(var(--sp-split) / 2);padding-right:calc((100% - min(100%,var(--sp-wide))) / 2 + var(--sp-gut))}
+  .sp-fab-bar{max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
   .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button{animation-name:m3Fade}
@@ -4611,7 +4658,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.15</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.16</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4621,7 +4668,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.15 · sharded store</span>
+        <span class="chip" id="verChip">v6.16 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4695,10 +4742,13 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   </header>
   <div class="pbody sp-body">
     <div class="sp-page" id="pPage">
+      <div class="sp-q" id="pQPane">
       <div id="pMetaRow" class="sp-meta"></div>
       <div class="qtext sp-stem" id="pStem"></div>
       <div id="pImages"></div>
       <div class="sp-ask"><div class="leadin sp-lead" id="pLead"></div></div>
+      </div>
+      <div class="sp-a">
       <div class="sp-opts" id="pChoices" role="radiogroup" aria-label="Answer options"></div>
       <div class="sp-conf" id="pConf" style="display:none">
         <span class="sp-conf-l">How sure are you?</span>
@@ -4712,6 +4762,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <textarea class="notepad" id="pNoteBox" placeholder="What tripped you up? Write it in your own words — you'll see it every time this question comes back."></textarea>
       </div>
       <div id="pLinks"></div>
+      </div>
     </div>
   </div>
   <div class="sp-dock">
@@ -5568,7 +5619,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.15';
+const APP_VERSION='6.16';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8478,7 +8529,7 @@ function renderQ(){
   paintGo();
   if(tutor&&it.submitted)renderExpl();else $('#pExpl').innerHTML='';
   if(moved){
-    window.scrollTo(0,0);
+    window.scrollTo(0,0);$('#pQPane').scrollTop=0;
     const pg=$('#pPage');pg.classList.remove('in-r','in-l','in');void pg.offsetWidth;
     pg.classList.add(NAVDIR>0?'in-r':NAVDIR<0?'in-l':'in');
   }
@@ -11277,6 +11328,7 @@ function applySettings(){
   s.copyOpts=Object.assign({meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true},s.copyOpts||{});
   R.setProperty('--qfont',(s.font||17)+'px');
   R.setProperty('--efont',(s.efont||15.5)+'px');
+  R.setProperty('--qbase',(s.font||17)+'px');R.setProperty('--ebase',(s.efont||15.5)+'px');
   R.setProperty('--qlh',String(s.lh||1.72));
   const w=WIDTHS[s.width]||WIDTHS.comfortable;
   R.setProperty('--pmax',w[0]);R.setProperty('--measure',w[1]);
