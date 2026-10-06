@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.13 -->
+<!-- Nidus — Personal Qbank · v6.14 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4124,6 +4124,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <button class="btn" id="exportAll">Export full backup</button>
         <button class="btn ghost" id="exportLight">Full backup, without photos</button>
         <button class="btn" id="exportQs">Export questions only</button>
+        <button class="btn" id="exportRerun">Export for re-run</button>
         <button class="btn" id="exportMissed">Export missed as study sheet</button>
         <button class="btn" id="restoreBtn">Restore from backup</button>
         <input type="file" id="restoreInput" accept=".json" hidden>
@@ -4248,7 +4249,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.13</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.14</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4258,7 +4259,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.13 · sharded store</span>
+        <span class="chip" id="verChip">v6.14 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4419,13 +4420,13 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v2.6
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v2.8
 
 Turns any exam material into the JSON question bank this app imports.
 
 0 · ROLE
 
-You are an exam archivist and item editor. You transcribe questions exactly, resolve the correct answer with evidence, and explain every option well enough that the item teaches on its own. Accuracy beats speed and beats volume. You never invent a question, an option, a source, a figure finding or a reference that is not in the material.
+You are an exam archivist and item editor. You transcribe questions exactly, resolve the correct answer with evidence, and explain the item briefly and directly — enough that it teaches on its own, nothing that makes the reader wade. Accuracy beats speed and beats volume. You never invent a question, an option, a source, a figure finding or a reference that is not in the material.
 
 1 · WHAT YOU MAY BE GIVEN — route on what you actually see
 
@@ -4438,7 +4439,7 @@ You are an exam archivist and item editor. You transcribe questions exactly, res
 Handling:
   A / B — read every page, including boxes, tables, footnotes and figure captions. Ignore page furniture: headers, footers, page numbers, watermarks, line numbers. Look hard at every picture, whether or not you can carry it across: section 9 turns what you see into the caption the reader gets.
   C — an item ends where the next question number or the next fresh vignette begins. A blank line alone does not end an item.
-  D — the discussion is evidence, not decoration. It usually carries the key, the per-option reasoning, the educational objective and the references. Section 5 and the worked mapping below tell you how to lift them.
+  D — the discussion is evidence, not decoration. It usually carries the key and the per-option reasoning, often wrapped in more text than the reader needs. Section 5 tells you how to lift the key; section 6 tells you how to distill the reasoning.
   E — do not manufacture questions. Return a valid object with an empty questions array and say why in meta.notes.
 
 Mixed material is normal. Process all of it in one pass, in the order it appears.
@@ -4458,8 +4459,8 @@ An item emitted without a key is an item the user loses. If you are unsure, stil
   Pass 1 — Segment. Cut the material into items and keep the paper's own numbering for source.number. If several questions share one stem, repeat that stem in full in each item — the app stores one stem per item.
   Pass 2 — Transcribe. Stem, lead-in and every option, verbatim, in printed order (section 4).
   Pass 3 — Resolve the key and commit to a letter (section 5).
-  Pass 4 — Explain the correct option and every distractor (section 6).
-  Pass 5 — Shape the answer side into markdown (section 6A): the tree for the teaching fields, inline marks for the one-line ones. Content is already fixed by Pass 4; this pass moves nothing but line breaks and emphasis.
+  Pass 4 — Write the distractor lines and the explanation (section 6).
+  Pass 5 — Shape the answer side into markdown (section 6A). Content is already fixed by Pass 4; this pass moves nothing but line breaks and emphasis.
   Pass 6 — Classify and attribute (sections 7 and 8).
   Pass 7 — Validate and repair against the final gate, fix what fails, then emit.
 
@@ -4477,7 +4478,7 @@ If part of an item is genuinely unreadable, transcribe what is legible, mark the
 
 Plain text vs markdown — the split runs between the two halves of an item, not down a list of field names. An MCQ is a question side and an answer side, and only one of them is being read blind:
   • The question side — stem and leadIn — is plain text. No markdown, no HTML, no LaTeX. This is what the reader meets before knowing anything, and a mark placed on it is an editorial hand on the question itself: bold one phrase in a vignette and you have told the reader which phrase decides the item. Marking up a transcribed stem is a transcription failure. The single exception is a printed table inside a stem, which is transcribed under section 4A.
-  • The answer side — choices[].text, choices[].explanation, explanation, educationalObjective, thingsToRemember, conflictNote and references — is rendered as markdown by the app and is shaped under section 6A. The long teaching fields take the full tree; the short ones, drawn on one line inside a card, take inline marks alone. Emphasis is never licence to reword: an option's text is still verbatim, and a mark goes around the printed words without changing one of them.
+  • The answer side — choices[].text, choices[].explanation, explanation and conflictNote — is rendered as markdown by the app and is shaped under section 6A. explanation takes block structure; the one-line fields take inline marks alone. Emphasis is never licence to reword: an option's text is still verbatim, and a mark goes around the printed words without changing one of them.
   • Machine fields — imageDescription, caption, alt, topic, tags, source.*, and every enum — are plain text. The app reads these, not the candidate.
 
 Use \n for a line break. Keep printed symbols as they are (µ, °, ₂, →).
@@ -4486,19 +4487,22 @@ Use \n for a line break. Keep printed symbols as they are (µ, °, ₂, →).
 
 A table is data. Flattened into a sentence it stops being answerable, so the app draws a real table wherever one appears and you transcribe it as a GitHub-style pipe table, in place:
 
+```
 | Study | Patient | Reference |
 | --- | --- | --- |
 | Sodium | 128 mEq/L | 136–145 mEq/L |
 | Potassium | 5.9 mEq/L | 3.5–5.0 mEq/L |
+```
 
   • Where it sits: exactly where the paper printed it — after the sentence that introduces it, before the sentence that follows — with one blank line above it and one below. A panel printed after the vignette ends the stem; a table printed mid-vignette stays mid-vignette. Never move a table to the end for tidiness.
-  • Which fields: stem, explanation and choices[].explanation, and nowhere else. A table needs a block of its own, and leadIn, choices[].text, conflictNote and references are each drawn on one line inside a card — they may carry the inline marks of section 6A, but never a table, a heading or a list. imageDescription and every machine field stay single-line plain text. If the paper printed a table inside one option, transcribe that option's printed wording as text and leave the table out of it.
-  • Shape: a header row, then a dash rule (| --- | --- |), then one row per printed row. Every row carries the same number of cells as the header. A cell the paper left blank is left blank — never filled with a dash, an em dash or a guess.
-  • Contents are verbatim: numbers, units, reference ranges and symbols exactly as printed. Inside a stem a cell is plain text; inside an explanation a cell may carry inline **bold** on the entity that decides the item, and nothing else.
-  • A literal pipe inside a cell is escaped \|.
-  • Alignment colons (| ---: | :---: |) are optional. Use them only to reproduce a column the paper printed right-aligned or centred.
+  • Which fields: stem and explanation, and nowhere else. A table needs a block of its own, and leadIn, choices[].text, choices[].explanation and conflictNote are each drawn on one line inside a card. A table the source printed inside its discussion of one option moves, whole, into explanation. The one-line fields may carry the inline marks of section 6A, but never a table, a heading or a list. imageDescription and every machine field stay single-line plain text. If the paper printed a table inside one option, transcribe that option's printed wording as text and leave the table out of it.
+  • Shape: a header row, then a dash rule (`| --- | --- |`), then one row per printed row. Every row carries the same number of cells as the header. A cell the paper left blank is left blank — never filled with a dash, an em dash or a guess.
+  • Contents are verbatim: numbers, units, reference ranges and symbols exactly as printed. Inside a stem a cell is plain text; inside an explanation a cell may carry inline `**bold**` on the entity that decides the item, and nothing else.
+  • Complete, always. A table the source printed — in the stem or in its discussion — is carried over whole: every row, every column, even rows that reach beyond this item. Tables are the part of a discussion that is already compact, so the brevity rules of section 6 never trim, merge or rebuild one.
+  • A literal pipe inside a cell is escaped `\|`.
+  • Alignment colons (`| ---: | :---: |`) are optional. Use them only to reproduce a column the paper printed right-aligned or centred.
   • A table printed as a picture is still a table. If you can read it reliably, transcribe it as a pipe table and it needs no figure slot at all. If you cannot read it reliably, it is a figure: section 9.
-  • Never invent one. Lab values printed as a running sentence stay a sentence. A column of name-and-value pairs is a two-column table. A graph, a tracing, a pedigree or an image whose point is its appearance is never converted into a table.
+  • Never invent one. Lab values printed as a running sentence stay a sentence. A column of name-and-value pairs is a two-column table. A graph, a tracing, a pedigree or an image whose point is its appearance is never converted into a table. The one table you may build yourself is a small comparison grid inside explanation, under section 6A.
 
 5 · ANSWER RESOLUTION — take the highest rung that applies
 
@@ -4518,87 +4522,101 @@ Negative lead-ins (EXCEPT, NOT, LEAST likely): the answer is the odd one out. Ke
 
 Select-all items: type "multi", correctAnswers ["A","D"], correctAnswer null.
 
-6 · EXPLANATION LAYER — the app scores an item's confidence on this
+6 · EXPLANATION LAYER — short, direct, and complete on what the item tests
 
-explanation (for the correct answer): open with the finding in the stem that decides it, give the mechanism linking that finding to the answer, then the discriminator that kills the runner-up. Teach the chain, never just name the label. Length depends on explanationSource:
-  • explanationSource "model" — no source discussion exists, you are reasoning from scratch: two to six sentences, roughly 60–160 words.
-  • explanationSource "paper" or "mixed" — a source discussion exists: the 60–160 word target does not apply and is never a ceiling. Reproduce every finding, mechanism and discriminator the source gave, even past 160 words or six sentences. Cutting an idea to fit a length target is a transcription failure, not a tightening.
+The reader works through about fifty items a day. Source discussions often run to a lecture per item: the vignette retold, the mechanism walked through twice, a summary of the summary. Every line of the answer side should move the reader toward what this item tests; a line that retells what they just read, or teaches a tangent the item never asks about, costs time and buries the point. Brevity never costs clarity, though: write full, plain sentences rather than cryptic shorthand, and keep medical terminology exactly as precise as the source used it.
 
-choices[].explanation — one per option, no exceptions:
-  • wrong option: what that option actually is, and what would have to appear in the stem for it to be right. Anchor it to a real entity, e.g. "that pattern is hypersensitivity myocarditis, which needs a recently started drug and perivascular eosinophils". When the source's own discussion of this option runs longer than one line, keep all of it.
-  • correct option: the line that makes it correct — one line when you are writing it yourself; the source's full discussion of the correct choice, in full, when one exists.
-  • Banned: "This is incorrect", "Not the best answer", "See explanation above", or a restatement of the option text. An explanation shorter than about fifteen characters counts as missing.
+**choices[].explanation**
 
-educationalObjective: one transferable sentence that makes sense without the question.
+  • Correct option: null. The explanation field teaches it; a second copy on the option card is the same idea read twice.
+  • Wrong option: one sentence in two parts — why it is wrong in this item, then when it would be right:
+      `Wrong: blood counts are normal and B12 does not cause high-output failure. Right in: macrocytic anemia with neuropathy.`
+      `Wrong: a sudden pressure load gives the RV no time to hypertrophy. Right in: chronic pulmonary hypertension.`
+    The "wrong" half names the stem clue or the fact that rules the option out here, not a general description of the option. The "right in" half names the real, testable setting where this option is the answer, because exams reuse distractors as keys elsewhere.
+  • Write "Right in" only when a genuine scenario exists. Some options are impossible combinations (a fall in cardiac output with lower afterload and unchanged preload). For those, say why the combination cannot happen and stop. Never invent a scenario to fill the slot; a made-up "right in" teaches something false.
+  • When the source discusses an option at length, distill it to those two halves. Drop the mini-lecture on the distractor's own disease. Keep a trap the source flags when it is what makes the distractor tempting — "B6 can cause neuropathy, but not high-output failure" is the reason the option is there.
+  • Banned: a bare verdict ("This is incorrect", "Not the best answer"), "See explanation above", or a restatement of the option text.
 
-thingsToRemember: one to three short strings — the facts worth memorising.
+**explanation** — three roles, in order, shaped to what this item tests
 
-If the source already explains: keep everything it said, in full — every idea, finding and reasoning step, with nothing cut for length. You may rewrite genuinely convoluted or unclear sentences into straightforward, direct wording and add mechanism; medical terminology stays exactly as precise as the source used it, since this is medicine, not literature. That rewriting must never remove, compress or summarize away content — if a rewrite would risk dropping an idea, keep the original wording instead. explanationSource is "paper" if the reasoning is the source's, "model" if you wrote it, "mixed" if both.
+Step 1 items do not all hinge on a diagnosis. Some turn on a normal physiological state, a mechanism, an enzyme, a drug action or a calculation. So the explanation is not a fixed template with fixed labels; it fills three roles and lets the item decide what goes in each:
 
-Once the content of a field is settled here, section 6A decides its shape. The two never trade against each other: 6A may not delete what 6 required.
+  1. The pivot — one or two sentences of prose: what the item turns on, with the deciding clues that lead there. "Sudden dyspnea and near-syncope, with hypotension, distended neck veins, clear lungs and hypoxemia with respiratory alkalosis, is **massive pulmonary embolism**." "Trace dependent edema with normal blood pressure and no proteinuria at 30 weeks is **normal pregnancy**; the item tests the hemodynamics behind it." Never retell the vignette sentence by sentence.
+  2. The logic — the reasoning from the pivot to the answer. Use arrow chains (`clot → ↑ pulmonary vascular resistance → sudden ↑ RV pressure → **RV dilates**`) wherever the steps are causal, and short bullets where the reasoning branches (nerves → dry beriberi; heart → wet beriberi). Bold the step that produces the answer. A closely linked high-yield fact the source states and the item sits next to (a shock profile, a timing note) may follow as one short line.
+  3. The rule — one bolded sentence on its own line, last: the transferable takeaway. "**Acute pressure overload dilates the ventricle; chronic pressure overload thickens it.**"
 
-6A · ANSWER SHAPE — tiered markdown across the answer side
+  The roles show by position; never print "Pivot:", "Logic:" or "Rule:" as labels.
 
-A wall of prose is hard to revise from. The app renders every answer-side field as markdown, so give the long ones a tree instead of a block: the reader should be able to find the mechanism, the timeline and the discriminator without reading the whole paragraph twice. The short ones get the same inline vocabulary and nothing more.
+  Tables: every table the source printed in its discussion goes into explanation whole, where it sits in the reasoning (section 4A). You may also build a small comparison table when a real grid separates the answer from the distractors (section 6A).
 
-This is a formatting pass, not an editing pass. You are moving line breaks and adding emphasis. You may split an existing sentence at its natural seam and promote a clause to its own line; you may not delete an idea, merge two findings into one, reword to fit a shorter line, or add a fact to fill an empty branch. **If a rearrangement would cost content, leave the paragraph as a paragraph.** Wording is decided in section 6 and is not reopened here.
+**What to keep from a source discussion, and what to drop**
 
-**The tree — three levels, and never a fourth scheme**
+  • Keep: everything that bears on why this answer is right and why these distractors are wrong, every printed table in full, and any trap the source points out.
+  • Drop: the retold vignette, background on why a physiology exists ("these changes benefit the fetus"), tangents this item and its options never test (infantile beriberi in an adult wet-beriberi item), and the source's closing summaries — educational objective, take-home lists, key-point boxes. The rule line replaces them; their content, where it matters, already lives in the logic.
+  • Rewrite long, convoluted source sentences into short, direct ones. Never alter a fact, a number or a term while doing it.
+  • No word count. Length follows the item: a simple item comes out short, a complex one takes more lines only where its logic needs them. The shape above is the limit.
 
-  1. Top level — a **bold line** standing alone as the heading of a block: `**Mechanism**`, `**Why the runner-up fails**`, `**Timeline**`, `**Key findings**`. Nothing else on that line. Never label these A., B., C. — those letters belong to the options and would read as an answer key.
-  2. Second level — adaptive, by item count under that heading:
-       • three or more items → a numbered list: `1. `, `2. `, `3. `
-       • two or fewer items → `* ` bullets. Numbering two things is clutter.
-  3. Third level and deeper → `* ` only, indented four more spaces at each level. Depth is carried by indentation alone. Never 1.1, never a., never i.
+explanationSource is "paper" if the reasoning is the source's, "model" if you wrote it, "mixed" if both. A model-written explanation takes exactly the same shape.
 
-  The structure is strictly `**Heading**` → `1.` → `*` → `*`, or `**Heading**` → `*` → `*` → `*`, chosen by the adaptive rule above.
+Once the content of a field is settled here, section 6A decides its shape. 6A may not delete what 6 kept.
+
+6A · ANSWER SHAPE — markdown across the answer side
+
+The app renders every answer-side field as markdown. Shape exists so the reader's eye lands on the pivot, the chain and the rule without reading anything twice.
+
+This is a formatting pass, not an editing pass. You are moving line breaks and adding emphasis. You may split a sentence at its natural seam; you may not delete an idea, merge two findings into one, or add a fact to fill an empty space. Wording is decided in section 6 and is not reopened here.
+
+**Blocks in explanation**
+
+  • The pivot is a prose paragraph, first, unbulleted.
+  • An arrow chain stands on its own line. A long chain may break across consecutive lines, each line starting with `→ `.
+  • Branching reasoning uses `* ` bullets, one line each. Use `1. ` numbers only for a real sequence of three or more steps that cannot be written as one chain. Third level and deeper → `* ` only, indented four more spaces per level. Never 1.1, never a., never i.
+  • A `**bold line**` standing alone as a heading is allowed only where a block genuinely needs naming — usually above a table. Most explanations need none. Never label a heading A., B., C. — those letters belong to the options and would read as an answer key.
+  • The rule is the last block: one bolded sentence, alone.
 
 **Emphasis**
 
-  • `**bold**` for the entity that decides the item — the diagnosis, drug, organism, enzyme, or the finding the stem turns on. One or two per block. If half a line is bold, none of it reads as bold.
-  • `*italic*` for the short field label that opens a leaf line: `*Mechanism*: …`, `*Dose*: …`, `*Discriminator*: …`, `*Result*: …`.
-  • Never bold a whole sentence, and never use emphasis on a clinical number to make it look important — the number is already the point.
+  • `**bold**` for the entity that decides the item — the diagnosis, drug, organism, enzyme, or the chain step that produces the answer. One or two per block, plus the rule line. If half a line is bold, none of it reads as bold.
+  • `*italic*` sparingly, for a short label that genuinely clarifies a leaf line. Do not open every line with one; labels on every step are what made the old explanations slow.
+  • Never use emphasis on a clinical number to make it look important — the number is already the point.
 
-**Where structure begins and where it stops**
+**One-line fields**
 
-  • The first line of `explanation` is always prose: one or two unbulleted sentences naming the finding in the stem that decides the item. The tree starts after that.
-  • A field carrying a single idea stays a paragraph. The tree is for content that genuinely has parts; applied to one idea it is decoration, and decoration is not the goal.
-  • `choices[].explanation` is prose by default — a one- or two-sentence distractor line takes at most inline `**bold**` on the entity it names. Give it a tree only when the source's discussion of that option really runs to several parts.
-  • `educationalObjective` is one sentence and stays one plain sentence; inline `**bold**` on the rule's own subject is the most it takes.
-  • `thingsToRemember` entries are short strings; inline `**bold**` only, no bullets inside them — the app already renders them as a list.
+  • `choices[].explanation` is one sentence on one line: inline `**bold**` on the entity it names at most. No tree, no table.
   • `choices[].text` is verbatim first and formatted second. It is drawn on one line inside the option card, so it takes `**bold**`, `*italic*` and `` `code` `` and nothing else — no heading, no bullet, no table, and not one word added, dropped or reordered. Reach for a mark only where an option is genuinely hard to read flat: a long chemical or drug name, a dose or unit that must not be misread, a two-part option whose halves need separating. Most options need nothing, and nothing is the right answer for most of them.
   • Emphasis inside an option must never single one out. Bold the deciding term in the correct option and leave the distractors bare and you have printed the key on the question screen — the options are read before any explanation is. Either every option is treated the same way for the same reason, or none of them is. When the reason applies to only one option, drop it and leave them all plain.
-  • `conflictNote` and each `references` entry are one-line answer-side fields on the same terms: inline marks only, same three, same limits. `**bold**` suits the disputed letter or a source's own verdict; a citation keeps its printed punctuation, and formatting never stands in for a word the source did not print.
-  • Comparisons live inside `explanation` as sibling bullets under a bold heading, one line each: `* **Acute**: weeks, dense mononuclear infiltrate.`
+  • `conflictNote` is a one-line answer-side field on the same terms: inline marks only, same three, same limits. `**bold**` suits the disputed letter or a source's own verdict.
 
 **Mechanics**
 
-  • `\n` between lines within a block, `\n\n` between blocks — a blank line before every bold heading and after every list.
+  • `\n` between lines within a block, `\n\n` between blocks — a blank line before every heading, after every list, and around every table and the rule line.
   • Exactly four spaces per indent level. One space after a bullet marker or a number.
-  • Allowed marks and nothing else: `**bold**`, `*italic*`, `` `code` `` for a short literal that must survive exactly as printed, `*` bullets, `1.` numbers, `\n`, and a pipe table under section 4A. The one-line answer fields take the first three and stop there. No `#` headings, no HTML, no LaTeX, no code fences, no `>` quotes, no `---` rules, no links.
+  • Allowed marks and nothing else: `**bold**`, `*italic*`, `` `code` `` for a short literal that must survive exactly as printed, `*` bullets, `1.` numbers, `→` arrows, `\n`, and a pipe table under section 4A. The one-line answer fields take the first three and stop there. No `#` headings, no HTML, no LaTeX, no code fences, no `>` quotes, no `---` rules, no links.
   • A literal asterisk that is not a marker is escaped `\*`. Printed symbols (µ, °, ₂, →) stay as printed.
-  • A table inside a teaching field is a block like any other: a blank line above it and below it, never nested inside a list item. Reach for one only where a real grid is being compared — two drugs across four properties, three organisms across their stains. Two facts side by side are still sibling bullets, not a table.
+  • A table inside explanation is a block like any other: a blank line above it and below it, never nested inside a list item. A table you build yourself is for a real grid being compared — the vitamins that cause neuropathy against their distinguishing feature. Two facts side by side are a bullet pair, not a table.
 
-**Worked shape — one explanation field**
+**Worked shape — one item's answer side**
+
+Options (correct one carries `"explanation": null`):
 
 ```
-Tearing interscapular pain with a 24 mm Hg systolic difference between the arms is **aortic dissection** until proven otherwise.
+A. Right ventricular wall thickening — Wrong: a sudden pressure load gives the RV no time to hypertrophy. Right in: chronic pulmonary hypertension.
+B. Enlarged left ventricular cavity — Wrong: in PE the LV receives less blood, so it is normal or small. Right in: chronic volume overload (dilated cardiomyopathy, aortic or mitral regurgitation).
+C. Enlarged right ventricular cavity — null
+D. Left ventricular wall thickening — Wrong: nothing here puts a chronic load on the LV. Right in: long-standing systemic hypertension or aortic stenosis.
+E. Left atrial enlargement — Wrong: there is no diastolic rumble and the lungs are clear. Right in: mitral stenosis.
+```
 
-**Mechanism**
+explanation:
 
-1. An intimal tear admits blood into the media
-    * *Propagation*: the false lumen strips the media longitudinally
-    * *Consequence*: branch vessel ostia are sheared or compressed
-2. Left subclavian involvement
-    * *Result*: unequal arm pressures — the finding in the stem
-3. Proximal extension
-    * *Tamponade*: rupture into the pericardial sac
-    * *Aortic regurgitation*: annular dilation, early diastolic murmur
+```
+Sudden dyspnea and near-syncope, with hypotension, distended neck veins, clear lungs and hypoxemia with respiratory alkalosis, is **massive pulmonary embolism** causing obstructive shock.
 
-**Why the runner-up fails**
+Clot → ↑ pulmonary vascular resistance → sudden ↑ RV pressure → **RV stretches and dilates** → RV ischemia (↑ O₂ demand, ↓ coronary perfusion) → RV failure → ↓ LV preload → ↓ cardiac output → hypotension
 
-* **Myocardial infarction** gives pressure rather than tearing pain, and never a pressure difference between the arms.
-* *Discriminator*: ischaemic ECG change comes first in infarction; here the ECG is unremarkable.
+Obstructive shock profile: ↑ CVP, ↓ PCWP, ↓ CO, ↑ SVR.
+
+**Acute pressure overload dilates the ventricle; chronic pressure overload thickens it.**
 ```
 
 **Worked shape — one set of options**
@@ -4625,6 +4643,7 @@ Copy enum values character for character from the lists below. An unrecognised v
   topic — free text, as specific as the item: "Acute cardiac transplant rejection", never "Heart".
   difficulty — lowercase easy | medium | hard, judged as an exam item, not as trivia. Anything else is forced to medium.
   tags — two to six lowercase keywords someone would actually search: findings, drugs, organisms, syndromes.
+  File tag — when the material arrives as a file, every item from that file also carries the file's name as one extra tag, so the user can filter a whole file's questions in the app. Build it from the file name alone: drop the extension, turn underscores and hyphens into spaces, collapse repeated spaces, and lowercase it — `cardiovascular_system_v8.txt` → `cardiovascular system v8`. Keep version markers and numbers exactly as they appear in the name. It goes first in tags and does not count toward the two to six keywords. With several files, each item takes its own file's tag. Pasted text with no file takes no file tag; never invent one.
   depth is recomputed by the app from the item itself; send it or omit it, it will be overwritten.
 
 8 · PROVENANCE — record what you know and nothing more
@@ -4632,8 +4651,6 @@ Copy enum values character for character from the lists below. An unrecognised v
 source: { "exam": the paper or set, "year": number or null, "course": null unless stated, "block": null unless stated, "number": the paper's own question number, "channel": the site, group or channel it was posted in, "collection": the batch name, "url": link if you have one }
 
 Never invent a source, a year or a citation. Unknown means null — not a guess, not an empty string.
-
-references: plain strings, only citations that actually appear in the source. Copy the title line; never fabricate journals, authors or DOIs.
 
 verified: always false. Only the person studying marks an item verified.
 
@@ -4672,21 +4689,33 @@ Never truncate JSON to fit a reply. If the material is larger than one response,
 
 Output the JSON alone: no preamble, no commentary, no code fences, no trailing notes, nothing before the first { or after the last }.
 
+11 · RE-RUNS — an item that already carries an id
+
+A file exported from the app for re-running ("kind": "rerun" in its meta) holds questions the app already has, in an older format. Every item in it carries an "id". That id is how the app finds the question it already holds and updates it in place, keeping its history, instead of adding a second copy.
+
+  • Copy each item's id, unchanged, into the same item of your output, as its first field. An item that loses its id can still be matched by its wording, but the id is the sure way.
+  • Treat each item as route D material. stem, leadIn and every option's text are already transcribed: carry them over word for word, in the same order. Keep the key. Rebuild the answer side — option lines and explanation — to this protocol, using the old explanation, objective and option notes as your evidence.
+  • Keep the item's classification, tags, source and images unless one is plainly wrong.
+  • Material without ids takes no id field. Never invent one.
+
 SCHEMA
 
 Top level, exactly:
-{ "schemaVersion": 1, "meta": { … }, "questions": [ { … }, … ] }
+{ "schemaVersion": 2, "meta": { … }, "questions": [ { … }, … ] }
+
+Schema 2 differs from schema 1 in three ways: the correct option's explanation is null, and the fields educationalObjective, thingsToRemember and references are gone.
 
 meta:
 { "source": "Pathology Final 2024", "year": 2024, "course": null, "channel": null, "collection": null, "batch": "1 of 1", "notes": null }
 
-Question object — every field:
+Question object — every field (on a re-run, section 11, each object also carries "id" first, copied unchanged):
 {
   "stem": "The full vignette or question body, verbatim, without the asked sentence.",
   "leadIn": "The asked sentence, verbatim, e.g. Which of the following findings is most consistent with acute graft rejection?",
   "type": "single",
   "choices": [
-    { "label": "A", "text": "option text, verbatim — inline marks only, applied to every option or to none", "isCorrect": false, "explanation": "what this option actually is and what would have to be present for it to be right" }
+    { "label": "A", "text": "option text, verbatim — inline marks only, applied to every option or to none", "isCorrect": false, "explanation": "Wrong: why it fails in this item. Right in: the real setting where it is the answer." },
+    { "label": "B", "text": "option text, verbatim", "isCorrect": true, "explanation": null }
   ],
   "correctAnswer": "B",
   "correctAnswers": null,
@@ -4696,9 +4725,7 @@ Question object — every field:
   "needsReview": false,
   "answerSource": "paper",
   "explanationSource": "paper",
-  "explanation": "Deciding finding in prose, then \n\n**Mechanism**\n\n1. first step\n    * *Detail*: …\n2. second step",
-  "educationalObjective": "One transferable sentence.",
-  "thingsToRemember": ["short fact", "short fact"],
+  "explanation": "Pivot in prose: what the item turns on.\n\nstep → step → **step that gives the answer**\n\n**One-sentence rule.**",
   "system": "Cardiovascular System",
   "subject": "Pathology",
   "archetype": "Most likely finding",
@@ -4710,11 +4737,10 @@ Question object — every field:
   "hasImage": false,
   "imageDescription": null,
   "images": [],
-  "source": { "exam": "Pathology Final", "year": 2024, "course": null, "block": null, "number": 1, "channel": null, "collection": null, "url": null },
-  "references": []
+  "source": { "exam": "Pathology Final", "year": 2024, "course": null, "block": null, "number": 1, "channel": null, "collection": null, "url": null }
 }
 
-Required and never empty: stem, choices (two or more, each with text), correctAnswer (or correctAnswers for multi), explanation, and every choices[].explanation. Any unknown value is null — never "" and never "N/A".
+Required and never empty: stem, choices (two or more, each with text), correctAnswer (or correctAnswers for multi), explanation, and the explanation of every wrong option. A correct option's explanation is always null; for a multi item that means every option listed in correctAnswers. Any unknown value is null — never "" and never "N/A".
 
 ENUMS — copy exactly, never invent a value
 
@@ -4740,37 +4766,42 @@ WORKED MAPPING — a source that already contains its own discussion
   Vignette up to but excluding the asked sentence      → stem
   "Which of the following findings is most consistent…" → leadIn, verbatim
   "A. Concentric coronary atherosclerosis"             → choices[0] { label "A", text "Concentric coronary atherosclerosis" }
-  First paragraph of the discussion                    → explanation; it also names the key → correctAnswer, answerSource "paper"
-  The rest of that discussion                          → the tiered blocks under it (section 6A); every idea survives, only the line breaks are yours
-  "(Choice A) …" / "(Choice C) …" paragraphs           → that letter's choices[].explanation
-  The letter absent from the (Choice …) paragraphs     → the correct option; confirm against the first paragraph
-  "Educational Objective: …"                           → educationalObjective, trimmed to one rule
-  Bulleted citations under "References"                → references ["…", "…"]
+  First paragraph of the discussion                    → the pivot of explanation, cut to what the item turns on; it also names the key → correctAnswer, answerSource "paper"
+  The rest of that discussion                          → the logic of explanation (section 6): what bears on this answer and these distractors, as chains and short bullets
+  A table inside the discussion                        → explanation, whole and verbatim, where it sits in the reasoning (section 4A)
+  "(Choice A) …" / "(Choice C) …" paragraphs           → that letter's choices[].explanation, distilled to one Wrong / Right in sentence
+  The letter absent from the (Choice …) paragraphs     → the correct option, explanation null; confirm against the first paragraph
+  "Educational Objective: …"                           → raw material for the rule line; not a field of its own
+  Bulleted citations under "References"                → dropped
   A lab panel printed as a grid under the vignette      → a pipe table at the end of the stem, in place (section 4A)
   "Figure 1" referenced but not reproducible           → hasImage true, imageDescription, and images [{ "slot":"stem","src":null, … }] with a caption that says what to look for in it
   Nothing stated about origin                          → every source field null; meta.source from the file name
 
-SHAPE EXAMPLE — abbreviated; real items carry full explanations
+SHAPE EXAMPLE — abbreviated; a real item keeps every distractor line and any printed table
 
-{"schemaVersion":1,"meta":{"source":"Physiology set 3","year":null,"course":null,"channel":null,"collection":null,"batch":"1 of 1","notes":null},"questions":[{"stem":"A 48-year-old man undergoes exercise treadmill testing. Heart rate rises from 70/min at rest to 132/min at peak and mean blood pressure from 95 mm Hg to 112 mm Hg.","leadIn":"Which of the following parameters was most likely decreased during peak stress compared with the resting state?","type":"single","choices":[{"label":"A","text":"Cardiac output","isCorrect":false,"explanation":"Cardiac output rises during exercise; at high workloads the rise in heart rate supplies most of the increase."},{"label":"B","text":"Total systemic vascular resistance","isCorrect":true,"explanation":"Metabolite-driven arteriolar dilation in working muscle dominates the sympathetic vasoconstriction elsewhere, so **total peripheral resistance falls**."},{"label":"C","text":"Left ventricular end-diastolic pressure","isCorrect":false,"explanation":"Venous return climbs with the muscle pump and peripheral venoconstriction, so end-diastolic volume and pressure both rise."}],"correctAnswer":"B","correctAnswers":null,"paperAnswer":null,"keyConflict":false,"conflictNote":null,"needsReview":false,"answerSource":"paper","explanationSource":"paper","explanation":"Mean arterial pressure rose only 17 mm Hg while heart rate nearly doubled, so cardiac output climbed far more than pressure did. Since MAP equals cardiac output times total peripheral resistance, **total systemic vascular resistance must have fallen**.\n\n**Mechanism**\n\n* *Local metabolites*: adenosine, potassium, ATP, CO2 and lactate dilate arterioles in the contracting muscle.\n* *Net effect*: that dilation outweighs splanchnic and cutaneous vasoconstriction, so the whole-body resistance drops.\n\n**Why the other parameters rise**\n\n1. Cardiac output — driven up mostly by heart rate at high workloads\n2. Venous return — muscle pump plus venoconstriction\n    * *Consequence*: end-diastolic volume and pressure both climb","educationalObjective":"During dynamic exercise, vasodilation in active muscle lowers total systemic vascular resistance, so mean arterial pressure rises only modestly despite a large rise in cardiac output.","thingsToRemember":["Exercising muscle can take up to 85% of cardiac output.","Systolic pressure rises, diastolic stays flat, MAP rises little."],"system":"Cardiovascular System","subject":"Physiology","archetype":"Most likely finding","task":"Foundational Concepts","topic":"Hemodynamics of dynamic exercise","difficulty":"medium","tags":["exercise","vascular resistance","cardiac output"],"verified":false,"hasImage":false,"imageDescription":null,"images":[],"source":{"exam":"Physiology set 3","year":null,"course":null,"block":null,"number":2,"channel":null,"collection":null,"url":null},"references":[]}]}
+{"schemaVersion":2,"meta":{"source":"Physiology set 3","year":null,"course":null,"channel":null,"collection":null,"batch":"1 of 1","notes":null},"questions":[{"stem":"A 48-year-old man undergoes exercise treadmill testing. Heart rate rises from 70/min at rest to 132/min at peak and mean blood pressure from 95 mm Hg to 112 mm Hg.","leadIn":"Which of the following parameters was most likely decreased during peak stress compared with the resting state?","type":"single","choices":[{"label":"A","text":"Cardiac output","isCorrect":false,"explanation":"Wrong: cardiac output rises during exercise, supplied mostly by heart rate at high workloads. Right in: a fall in pump function or venous return, such as heart failure or hemorrhage."},{"label":"B","text":"Total systemic vascular resistance","isCorrect":true,"explanation":null},{"label":"C","text":"Left ventricular end-diastolic pressure","isCorrect":false,"explanation":"Wrong: the muscle pump and venoconstriction raise venous return, so end-diastolic pressure climbs. Right in: reduced venous return, such as hemorrhage or upright tilt."}],"correctAnswer":"B","correctAnswers":null,"paperAnswer":null,"keyConflict":false,"conflictNote":null,"needsReview":false,"answerSource":"paper","explanationSource":"paper","explanation":"Heart rate nearly doubled while mean arterial pressure rose only 17 mm Hg, so the item turns on **MAP = cardiac output × total peripheral resistance**: output climbed far more than pressure, so resistance must have fallen.\n\nWorking muscle releases adenosine, K⁺, CO2 and lactate → arterioles in muscle dilate → this outweighs splanchnic and skin vasoconstriction → **total peripheral resistance falls**\n\nSystolic pressure rises, diastolic stays flat, and MAP rises little.\n\n**A large rise in cardiac output with a small rise in MAP means systemic vascular resistance fell.**","system":"Cardiovascular System","subject":"Physiology","archetype":"Most likely finding","task":"Foundational Concepts","topic":"Hemodynamics of dynamic exercise","difficulty":"medium","tags":["exercise","vascular resistance","cardiac output"],"verified":false,"hasImage":false,"imageDescription":null,"images":[],"source":{"exam":"Physiology set 3","year":null,"course":null,"block":null,"number":2,"channel":null,"collection":null,"url":null}}]}
 
 FINAL GATE — run this against your draft before sending
 
   1. Valid JSON: every brace and bracket closed, every string quoted, no trailing comma, no code fence, nothing outside the outermost braces.
   2. Every item has a stem, two or more options with text, and exactly one isCorrect true — or type "multi" with correctAnswers.
   3. correctAnswer matches a label that exists in that item's choices.
-  4. Every option carries a specific explanation. No verdicts, no "This is incorrect", no restated option text.
-  5. explanation is at least two sentences and opens from a finding in the stem, in prose, before any heading.
+  4. Every wrong option carries one sentence: why it fails in this item, then "Right in:" the real setting where it is the answer — or, when no such setting exists, why the combination cannot happen, with no invented scenario. No bare verdicts, no restated option text, no lecture on the distractor's own disease. Every correct option's explanation is null.
+  5. explanation opens with the pivot in prose — what the item turns on, not a retelling of the vignette — then the logic as arrow chains or short bullets, and ends with one bolded rule sentence on its own line. No "Pivot:", "Logic:" or "Rule:" labels are printed.
   6. system, subject, archetype and task are copied character for character from the enums; difficulty is lowercase.
   7. Nothing invented — no source, year, citation, figure finding or option absent from the material.
   8. The number of objects emitted equals the number of items you counted in Pass 0, in the same order, each with its own source.number.
   9. keyConflict, needsReview and paperAnswer appear only where they are genuinely true; they lower the item's confidence badge, so they are not decoration.
   10. Every images entry has a slot of "stem" or "explanation" and a src of null unless you were handed a real link, and every one of them carries a caption written from this question — what the picture is, and the feature the item turns on inside it. A bare label like "ECG" or "CT scan" fails this line. Any item with hasImage true carries at least one stem slot. No required figure is marked optional. imageDescription is null on every item whose hasImage is false, and nowhere does it — or the stem, lead-in or an option — carry a remark about whether a figure was needed or where one will appear.
   11. The question side is clean: stem and leadIn carry no bold, italic, code, bullet or heading — the one exception being a pipe table inside a stem, transcribed under section 4A. imageDescription and every machine field are plain too. All markdown in the item is on the answer side.
-  12. On the answer side, the tree appears only in explanation and choices[].explanation; choices[].text, conflictNote, educationalObjective, thingsToRemember and references carry inline marks alone. No option's text gained, lost or reordered a word to accommodate a mark, and no option is emphasised in a way the others are not — emphasis that falls only on the key is the key, given away.
-  13. Every heading is a bold line alone; second-level lists use numbers at three or more items and `*` at two or fewer; nothing deeper than the second level uses anything but `*`; indents are four spaces; no `#`, HTML or code fence anywhere.
-  14. Every printed table survived as a table. Each one has a header row, a dash rule, equal cell counts on every row, verbatim contents, and sits where the paper printed it — and no table was invented from prose that was never tabular.
-  15. The shaping pass cost nothing: every idea required by section 6 is still present after section 6A.
+  12. On the answer side, block structure appears only in explanation; choices[].text, choices[].explanation and conflictNote carry inline marks alone. No option's text gained, lost or reordered a word to accommodate a mark, and no option is emphasised in a way the others are not — emphasis that falls only on the key is the key, given away.
+  13. Any heading is a bold line alone and earns its place; lists use `*`, with `1.` only for a real sequence of three or more steps; nothing deeper than the second level uses anything but `*`; indents are four spaces; no `#`, HTML or code fence anywhere.
+  14. Every printed table survived as a table, complete — every row and column the source printed, none trimmed for brevity. Each one has a header row, a dash rule, equal cell counts on every row, verbatim contents, and sits where the source printed it — and no table was invented from prose that was never tabular, except a small comparison grid built under section 6A.
+  15. The shaping pass cost nothing: everything section 6 kept is still present after section 6A.
+  16. No item carries educationalObjective, thingsToRemember or references, and schemaVersion is 2.
+  17. Every item that came from a file carries that file's tag first in tags, built from the file name under section 7; items from pasted text carry none.
+
+  18. On a re-run, every item carries its id, unchanged, and its stem, lead-in and option text are word for word what the file held.
 
 Return the JSON now.
 
@@ -5161,7 +5192,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.13';
+const APP_VERSION='6.14';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -5793,10 +5824,11 @@ const NOTES={
      <p class="tiny" style="margin-top:12px">1 — Open <b>Extractor prompt</b> and copy it. Split the PDF into batches of about 25 questions first if it is long; models get sloppy past that.</p>
      <p class="tiny" style="margin-top:12px">2 — Paste the prompt into any capable model, attach the PDF, and ask for JSON only.</p>
      <p class="tiny" style="margin-top:12px">3 — Save the reply as <span class="mono">batch-name.json</span>, or paste it straight into the box on this tab.</p>
-     <p class="tiny" style="margin-top:12px">4 — Afterwards, check the <span class="chip amber">key conflict</span> filter in the bank. Those are the questions where the model disagreed with your paper's answer key, and they are yours to settle.</p>`],
+     <p class="tiny" style="margin-top:12px">4 — Afterwards, check the <span class="chip amber">key conflict</span> filter in the bank. Those are the questions where the model disagreed with your paper's answer key, and they are yours to settle.</p>
+     <p class="tiny" style="margin-top:12px">To bring older questions up to the current format, tap <b>Export for re-run</b>, send that file through the prompt, and import the reply with <b>Update questions that already exist</b> on. Each question keeps its id, so it is updated in place with its attempts and notes, not added again.</p>`],
 
   prompt:['About this prompt',
-    `<p class="tiny">This is the instruction sheet a model needs to turn a paper into JSON this app can read directly. It asks for verbatim transcription, an evidenced answer key, an explanation for every option, and empty figure slots where pictures belong.</p>
+    `<p class="tiny">This is the instruction sheet a model needs to turn a paper into JSON this app can read directly. It asks for verbatim transcription, an evidenced answer key, a one-line note on every wrong option, and empty figure slots where pictures belong.</p>
      <p class="tiny" style="margin-top:12px">Edit it if your papers have quirks — a house numbering style, a second language, an answer key printed at the back. Your version is saved on this device and used from then on; <b>Restore default</b> brings back the shipped one.</p>
      <p class="tiny" style="margin-top:12px">When the app ships a better prompt than the copy you saved, a note appears above telling you exactly which section is missing.</p>`],
 
@@ -7149,8 +7181,9 @@ function trustOf(q){
   if(q.verified)return 3;
   let t=0;
   if((q.explanation||'').length>60)t++;
-  const withWhy=(q.choices||[]).filter(c=>(c.explanation||'').length>15).length;
-  if(withWhy>=Math.ceil((q.choices||[]).length*0.6))t++;
+  const wrong=(q.choices||[]).filter(c=>!c.isCorrect);
+  const withWhy=wrong.filter(c=>(c.explanation||'').length>15).length;
+  if(withWhy>=Math.ceil(wrong.length*0.6))t++;
   if(q.answerSource==='paper')t++;
   if(q.keyConflict||q.needsReview)t=Math.min(t,1);
   return clamp(t,0,2);
@@ -10466,15 +10499,35 @@ function parseBatch(text){
   const meta=data.meta||{};
   const arr=Array.isArray(data)?data:(data.questions||data.items||data.data||[]);
   if(!Array.isArray(arr))throw new Error('No "questions" array found in the JSON.');
-  return{meta,arr};
+  return{meta,arr,sv:Number(data.schemaVersion)||1};
 }
+/* Which question in the bank an incoming item is. An item carrying the id the
+   app gave it (a re-run export sent back through the prompt) is that question,
+   even if its wording moved. Otherwise the wording decides: the fingerprint the
+   item would get now, the fingerprint an earlier update left on a question whose
+   id is older, and last the near-key, used only when exactly one question has it. */
+function findExisting(raw,q,byFp,byNk){
+  const rid=raw&&raw.id!=null?String(raw.id).trim():'';
+  if(rid&&Q_BY_ID[rid])return Q_BY_ID[rid];
+  const pid=raw&&(raw.pubId||(/^NID-/i.test(rid)?rid:''));
+  if(pid){const m=DB.questions.find(x=>(x.pubId||pubIdOf(x.id))===String(pid).toUpperCase());if(m)return m}
+  if(Q_BY_ID[q.id])return Q_BY_ID[q.id];
+  if(byFp[q.fp])return byFp[q.fp];
+  const nk=q.nkey&&byNk[q.nkey];
+  return (nk&&nk.length===1)?nk[0]:null;
+}
+/* schema 2 is the current prompt's format; anything older is waiting for a re-run */
+const isOldFormat=q=>(q.schema||1)<2;
 function doImport(text,update){
-  const{meta,arr}=parseBatch(text);
+  const{meta,arr,sv}=parseBatch(text);
   let added=0,updated=0,skipped=0,bad=0,repeats=0;const badList=[];
+  const byFp={},byNk={};
+  DB.questions.forEach(x=>{if(x.fp)byFp[x.fp]=x;if(x.nkey)(byNk[x.nkey]=byNk[x.nkey]||[]).push(x)});
   arr.forEach((raw,i)=>{
     const q=normalizeQ(raw,meta);
     if(!q){bad++;badList.push(i+1);return}
-    const ex=Q_BY_ID[q.id];
+    q.schema=sv>=2?2:1;
+    const ex=findExisting(raw,q,byFp,byNk);
     if(ex){
       /* the same item arriving again is a fact worth keeping, not a no-op */
       noteOccurrence(ex,meta);repeats++;
@@ -10487,10 +10540,10 @@ function doImport(text,update){
         ex.trust=trustOf(ex);updated++;
       }else skipped++;
     }
-    else{noteOccurrence(q,meta);DB.questions.push(q);added++}
+    else{noteOccurrence(q,meta);DB.questions.push(q);added++;byFp[q.fp]=q}
   });
   reindex();save();
-  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta};
+  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta,old:DB.questions.filter(isOldFormat).length};
 }
 $('#importBtn').onclick=()=>{
   let r;
@@ -10500,6 +10553,7 @@ $('#importBtn').onclick=()=>{
   $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)">
     <b style="color:var(--jade)">Imported ${r.added} new question${r.added===1?'':'s'}</b>
     <div class="tiny muted" style="margin-top:8px">${r.updated} updated · ${r.repeats} already known (logged as a repeat sighting) · ${r.skipped} left untouched · ${r.bad} unreadable${r.bad?' (item '+r.badList.slice(0,10).join(', ')+')':''} · ${r.total} seen</div>
+    ${r.old?`<div class="tiny" style="margin-top:8px">${r.old} question${r.old===1?' is':'s are'} still in the old format. <b>Export for re-run</b> below gives you the file to send back through the prompt.</div>`:''}
     ${un?`<div class="tiny" style="margin-top:8px">${un} question${un===1?' in the bank still needs':'s in the bank still need'} a system or subject. Build a session from the <b>Needs classifying</b> pool to fix them, or run <b>Reclassify the bank</b> in Settings.</div>`:'<div class="tiny muted" style="margin-top:8px">Every question in the bank now carries a system, a subject and a question type.</div>'}
     ${r.bad?'<div class="tiny" style="margin-top:8px">Unreadable items are usually missing a correct answer or have fewer than two options. Fix them in the JSON and import again — duplicates will not double up.</div>':''}</div>`;
   $('#importBox').value='';renderDash();toast(`${r.added} added, ${r.updated} updated.`);
@@ -10512,7 +10566,8 @@ $('#fileInput').onchange=e=>{
   files.forEach(f=>{const rd=new FileReader();
     rd.onload=()=>{try{const r=doImport(rd.result,$('#impUpdate').checked);tot.added+=r.added;tot.updated+=r.updated;tot.bad+=r.bad}
       catch(err){toast(f.name+': '+err.message)}
-      if(++done===files.length){$('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable</div></div>`;renderDash()}};
+      if(++done===files.length){const old=DB.questions.filter(isOldFormat).length;
+        $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash()}};
     rd.readAsText(f)});
   e.target.value='';
 };
@@ -10536,6 +10591,24 @@ if($('#exportLight'))$('#exportLight').onclick=async()=>{
   download(`nidus-backup-light-${stamp()}.json`,await MIG.lightExport());
   toast('Light backup downloaded — photos are referenced, not included.');
 };
+/* The questions still in the old format, cut down to what the prompt reads and
+   each carrying its id, so the reply can be imported over the top of them. */
+$('#exportRerun').onclick=()=>{
+  const old=DB.questions.filter(isOldFormat);
+  if(!old.length)return toast('Every question is already in the new format.');
+  const pick=q=>({id:q.id,stem:q.stem,leadIn:q.leadIn,type:q.type,
+    choices:q.choices.map(c=>({label:c.label,text:c.text,isCorrect:!!c.isCorrect,explanation:c.explanation||null})),
+    correctAnswer:q.correctAnswer,correctAnswers:q.correctAnswers,paperAnswer:q.paperAnswer,keyConflict:!!q.keyConflict,
+    conflictNote:q.conflictNote||null,needsReview:!!q.needsReview,answerSource:q.answerSource,explanationSource:q.explanationSource,
+    explanation:q.explanation||null,educationalObjective:q.educationalObjective||null,thingsToRemember:q.thingsToRemember||[],
+    system:q.system,subject:q.subject,archetype:q.archetype,task:q.task,topic:q.topic,difficulty:q.difficulty,tags:q.tags||[],
+    hasImage:!!q.hasImage,imageDescription:q.imageDescription||null,
+    images:(q.images||[]).map(f=>({slot:f.slot,src:null,caption:f.caption||null,alt:f.alt||null})),source:q.source||null});
+  download(`nidus-rerun-${stamp()}.json`,JSON.stringify({schemaVersion:1,meta:{kind:'rerun',source:'Nidus re-run',count:old.length,
+    notes:'These questions are already in the app. Rebuild each one in the current format (schemaVersion 2) and copy its "id" unchanged into the same item of the output, as its first field: the app uses it to update the question in place instead of adding a copy. Keep stem, leadIn and option text word for word.'},
+    questions:old.map(pick)},null,1));
+  toast(old.length+' question'+(old.length===1?'':'s')+' exported for re-run.');
+};
 $('#exportQs').onclick=()=>{download(`nidus-questions-${stamp()}.json`,JSON.stringify({schemaVersion:1,meta:{source:'Nidus export'},questions:DB.questions},null,1));toast('Questions exported.')};
 $('#exportMissed').onclick=()=>{
   const missed=DB.questions.filter(q=>statusOf(q.id)==='incorrect');
@@ -10543,7 +10616,7 @@ $('#exportMissed').onclick=()=>{
   const md=missed.map(q=>{const s=DB.stats[q.id]||{};
     return `## ${q.topic||q.system}\n\n${q.stem}\n\n**${q.leadIn||''}**\n\n`+
       q.choices.map(c=>`- ${c.label===q.correctAnswer?'**':''}${c.label}. ${c.text}${c.label===q.correctAnswer?'** ✓':''}${c.explanation?`\n    - ${c.explanation}`:''}`).join('\n')+
-      `\n\n**Explanation.** ${q.explanation||'—'}\n\n**Objective.** ${q.educationalObjective||'—'}\n`+
+      `\n\n**Explanation.** ${q.explanation||'—'}\n${q.educationalObjective?`\n**Objective.** ${q.educationalObjective}\n`:''}`+
       (s.note?`\n**My note.** ${s.note}\n`:'')+`\n---\n`}).join('\n');
   download(`nidus-missed-${stamp()}.md`,`# Missed questions — ${new Date().toLocaleDateString()}\n\n${missed.length} questions\n\n${md}`,'text/markdown');
   toast('Study sheet downloaded.');
@@ -10578,6 +10651,10 @@ function renderPrompt(){
     gaps.push('It never asks for figure slots \u2014 an empty slot in the JSON is drawn here as a one-tap upload panel sitting exactly where the picture belongs.');
   if(p&&p.indexOf('ANSWER SHAPE')<0)
     gaps.push('It never asks for a shaped answer side \u2014 explanations come back as one flat paragraph instead of the headings, numbered steps and nested bullets this screen now renders, and options, conflict notes and citations come back unmarked, though every one of them is drawn here as markdown.');
+  if(p&&p.indexOf('"schemaVersion": 2')<0)
+    gaps.push('It still asks for the old format \u2014 an objective and a things-to-remember list on every item and a note on the correct option, where the current format puts all of that into one short explanation and a Wrong / Right in line per distractor.');
+  if(p&&p.indexOf('RE-RUNS')<0)
+    gaps.push('It never asks a re-run to keep each question\'s id \u2014 without it, an updated question is matched by its wording alone.');
   if(p&&p.indexOf('TABLES')<0)
     gaps.push('It never asks for tables or reading captions \u2014 a printed lab panel comes back flattened into a sentence instead of the table this screen now draws, and a figure arrives with a bare label instead of a line telling you what to look for in it.');
   n.style.display=gaps.length?'block':'none';
@@ -11908,7 +11985,7 @@ const SYNC=(function(){
     q.links=uniq([].concat(linksOf(w),linksOf(l)),x=>String(x.url)).slice(0,20);
     q.verified=!!(w.verified||l.verified);
     if(!q.explanation&&l.explanation)q.explanation=l.explanation;
-    if(!q.educationalObjective&&l.educationalObjective)q.educationalObjective=l.educationalObjective;
+    if(!q.educationalObjective&&l.educationalObjective&&isOldFormat(q))q.educationalObjective=l.educationalObjective;
     return q;
   }
   function mergeBank(b,mine,theirs){
