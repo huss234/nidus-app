@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.35 -->
+<!-- Nidus — Personal Qbank · v6.36 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4259,6 +4259,456 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape,.sp-rulesh,.sp-ruleic .ic{animation:none}
   .sp-ks,.sp-cthumb,.sp-opts.reveal .sp-ks,.sp-opts.reveal .sp-ks path,.sp-cbg.mv .sp-cthumb,.sp-opt.sel .sp-kl,.sp-cbg button.on .ic{animation:none;transition-property:opacity,fill,background-color,color}
 }
+
+/* ============================================================
+   Plume 1.0 · tokens
+   ------------------------------------------------------------
+   The Plume design language (DESIGN.md). Colour comes from the
+   --md-* roles above, which the colour engine rewrites live.
+   Springs are generated from stiffness / damping ratio (mass 1)
+   and sampled into linear(); each has its settling time as -d.
+   Spatial springs move things and may overshoot a little;
+   effects springs change colour, opacity and corners and never do.
+   ============================================================ */
+:root{
+  --p-r-xs:4px;--p-r-s:8px;--p-r-m:12px;--p-r-l:16px;
+  --p-r-lx:20px;--p-r-xl:28px;--p-r-xxl:48px;--p-r-full:999px;
+  /* spatial 800/0.6 · 380/0.8 · 200/0.8 — effects 3800/1 · 1600/1 · 800/1 */
+  --p-spatial-fast:linear(0,0.0247 2.5%,0.0895 5%,0.1816 7.5%,0.2898 10%,0.4052 12.5%,0.5205 15%,0.6303 17.5%,0.7308 20%,0.8195 22.5%,0.895 25%,0.9571 27.5%,1.006 30%,1.0427 32.5%,1.0684 35%,1.0846 37.5%,1.0929 40%,1.0947 42.5%,1.0916 45%,1.085 47.5%,1.0759 50%,1.0655 52.5%,1.0545 55%,1.0436 57.5%,1.0333 60%,1.024 62.5%,1.0158 65%,1.0089 67.5%,1.0032 70%,0.9988 72.5%,0.9955 75%,0.9932 77.5%,0.9918 80%,0.9911 82.5%,0.991 85%,0.9914 87.5%,0.9921 90%,0.993 92.5%,0.994 95%,0.995 97.5%,1);
+  --p-spatial-fast-d:330ms; /* overshoot 9.5% */
+  --p-spatial:linear(0,0.0155 2.5%,0.0562 5%,0.1144 7.5%,0.1839 10%,0.2597 12.5%,0.338 15%,0.4158 17.5%,0.4909 20%,0.5618 22.5%,0.6276 25%,0.6874 27.5%,0.7412 30%,0.7889 32.5%,0.8306 35%,0.8666 37.5%,0.8973 40%,0.9232 42.5%,0.9447 45%,0.9623 47.5%,0.9766 50%,0.9878 52.5%,0.9966 55%,1.0032 57.5%,1.008 60%,1.0113 62.5%,1.0135 65%,1.0147 67.5%,1.0151 70%,1.015 72.5%,1.0145 75%,1.0137 77.5%,1.0127 80%,1.0115 82.5%,1.0104 85%,1.0092 87.5%,1.008 90%,1.0069 92.5%,1.0059 95%,1.005 97.5%,1);
+  --p-spatial-d:380ms; /* overshoot 1.5% */
+  --p-spatial-slow:linear(0,0.0148 2.5%,0.0536 5%,0.1093 7.5%,0.1762 10%,0.2495 12.5%,0.3256 15%,0.4016 17.5%,0.4754 20%,0.5455 22.5%,0.6108 25%,0.6707 27.5%,0.7249 30%,0.7732 32.5%,0.8159 35%,0.853 37.5%,0.8849 40%,0.9121 42.5%,0.935 45%,0.9539 47.5%,0.9695 50%,0.9819 52.5%,0.9918 55%,0.9994 57.5%,1.0051 60%,1.0093 62.5%,1.0121 65%,1.0139 67.5%,1.0149 70%,1.0152 72.5%,1.015 75%,1.0144 77.5%,1.0135 80%,1.0125 82.5%,1.0114 85%,1.0103 87.5%,1.0091 90%,1.008 92.5%,1.0069 95%,1.0059 97.5%,1);
+  --p-spatial-slow-d:510ms; /* overshoot 1.5% */
+  --p-effect-fast:linear(0,0.0448 4.2%,0.1447 8.3%,0.2649 12.5%,0.3857 16.7%,0.4972 20.8%,0.5949 25%,0.6777 29.2%,0.7461 33.3%,0.8016 37.5%,0.8461 41.7%,0.8813 45.8%,0.9089 50%,0.9304 54.2%,0.9471 58.3%,0.9599 62.5%,0.9697 66.7%,0.9771 70.8%,0.9828 75%,0.9871 79.2%,0.9903 83.3%,0.9928 87.5%,0.9946 91.7%,0.996 95.8%,1);
+  --p-effect-fast-d:130ms; /* overshoot -0.3% */
+  --p-effect:linear(0,0.0407 4.2%,0.133 8.3%,0.2459 12.5%,0.3613 16.7%,0.4697 20.8%,0.5663 25%,0.6495 29.2%,0.7195 33.3%,0.7773 37.5%,0.8244 41.7%,0.8623 45.8%,0.8926 50%,0.9166 54.2%,0.9355 58.3%,0.9503 62.5%,0.9618 66.7%,0.9707 70.8%,0.9776 75%,0.9829 79.2%,0.987 83.3%,0.9901 87.5%,0.9925 91.7%,0.9943 95.8%,1);
+  --p-effect-d:190ms; /* overshoot -0.4% */
+  --p-effect-slow:linear(0,0.0411 4.2%,0.134 8.3%,0.2475 12.5%,0.3635 16.7%,0.4722 20.8%,0.5689 25%,0.6521 29.2%,0.7219 33.3%,0.7796 37.5%,0.8264 41.7%,0.8641 45.8%,0.8942 50%,0.9179 54.2%,0.9366 58.3%,0.9512 62.5%,0.9625 66.7%,0.9713 70.8%,0.9781 75%,0.9833 79.2%,0.9873 83.3%,0.9904 87.5%,0.9927 91.7%,0.9945 95.8%,1);
+  --p-effect-slow-d:270ms; /* overshoot -0.4% */
+  --p-press:.96;--p-press-sm:.92;--p-press-card:.98;
+  --p-stagger:30ms;
+  --p-exit:cubic-bezier(.3,0,.8,.15);
+  --p-shadow:0 1px 2px color-mix(in oklab,var(--md-shadow) 22%,transparent),
+             0 6px 20px -4px color-mix(in oklab,var(--md-primary) 16%,color-mix(in oklab,var(--md-shadow) 26%,transparent));
+}
+[data-theme="dark"]{
+  --p-shadow:0 1px 2px color-mix(in oklab,var(--md-shadow) 40%,transparent),
+             0 8px 22px -6px color-mix(in oklab,var(--md-shadow) 55%,transparent);
+}
+
+/* ============================================================
+   Plume 1.0 · primitives
+   Icon button, button, chip, floating toolbar, split button,
+   menu, filled field. Every one follows the touch contract:
+   .is-down (set on pointerdown by plumePress) squeezes it and
+   squares its corners; letting go springs it back.
+   ============================================================ */
+.pl-press{-webkit-user-select:none;user-select:none;touch-action:manipulation}
+
+.pl-ib{
+  position:relative;flex:none;width:48px;height:48px;display:grid;place-items:center;
+  border-radius:var(--p-r-full);color:var(--md-on-surface-variant);isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),color var(--p-effect-d) var(--p-effect),opacity var(--p-effect-d) var(--p-effect);
+}
+.pl-ib::before{
+  content:"";position:absolute;inset:4px;z-index:-1;border-radius:20px;background:currentColor;opacity:0;
+  transition:opacity var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect);
+}
+.pl-ib .ic{width:24px;height:24px}
+@media (hover:hover){.pl-ib:hover::before{opacity:var(--m3-state-hover)}}
+.pl-ib:focus-visible{outline:none}
+.pl-ib:focus-visible::before{opacity:var(--m3-state-focus);outline:3px solid var(--md-primary);outline-offset:2px}
+.pl-ib.is-down{transform:scale(var(--p-press-sm));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.pl-ib.is-down::before{opacity:var(--m3-state-press);border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.pl-ib:disabled{opacity:.38;pointer-events:none}
+
+.pl-btn{
+  --h:40px;position:relative;isolation:isolate;overflow:hidden;
+  height:var(--h);padding:0 24px;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:calc(var(--h) / 2);font:500 14px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+.pl-btn::before{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.pl-btn .ic{width:20px;height:20px;margin-left:-8px}
+.pl-btn--m{--h:56px;padding:0 28px;font-size:16px;line-height:24px;letter-spacing:.15px}
+.pl-btn--m .ic{width:24px;height:24px}
+.pl-btn--filled{background:var(--md-primary);color:var(--md-on-primary)}
+.pl-btn--tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.pl-btn--text{color:var(--md-primary);padding:0 16px}
+@media (hover:hover){.pl-btn:hover::before{opacity:var(--m3-state-hover)}}
+.pl-btn:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.pl-btn.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.pl-btn.is-down::before{opacity:var(--m3-state-press)}
+
+.pl-chip{
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;
+  border-radius:var(--p-r-s);border:1px solid var(--md-outline-variant);
+  font:500 13px/18px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);white-space:nowrap;
+}
+.pl-chip .ic{width:16px;height:16px;margin-left:-2px}
+.pl-chip i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.pl-chip.is-easy i{background:var(--md-success)}
+.pl-chip.is-medium i{background:var(--md-warning)}
+.pl-chip.is-hard i{background:var(--md-error)}
+
+/* floating toolbar */
+.pl-tb{
+  display:flex;align-items:center;gap:2px;padding:8px;height:64px;
+  border-radius:var(--p-r-full);background:var(--md-surface-container-high);color:var(--md-on-surface);
+  box-shadow:var(--p-shadow);
+}
+.pl-tb__sep{width:1px;height:24px;margin:0 6px;background:var(--md-outline-variant)}
+
+/* split button: two halves of one pill; the trailing half turns round while its menu is open */
+.pl-split{display:flex;gap:2px;height:48px}
+.pl-split > button{
+  position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:var(--md-primary);color:var(--md-on-primary);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.pl-split > button::before{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pl-split > button:hover::before{opacity:var(--m3-state-hover)}}
+.pl-split > button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.pl-split__main{gap:8px;padding:0 14px 0 16px;border-radius:24px var(--p-r-xs) var(--p-r-xs) 24px;font:500 14px/20px var(--m3-font);letter-spacing:.1px}
+.pl-split__main .ic{width:20px;height:20px}
+.pl-split__more{width:44px;border-radius:var(--p-r-xs) 24px 24px var(--p-r-xs)}
+.pl-split__more .ic{width:22px;height:22px;transition:transform var(--p-spatial-d) var(--p-spatial)}
+.pl-split > button.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.pl-split__main.is-down{border-radius:var(--p-r-m) var(--p-r-xs) var(--p-r-xs) var(--p-r-m)}
+.pl-split > button.is-down::before{opacity:var(--m3-state-press)}
+.pl-split__more[aria-expanded="true"]{border-radius:24px}
+.pl-split__more[aria-expanded="true"] .ic{transform:rotate(180deg)}
+
+/* menu: grows from its anchor; rows are rounded inside a rounded sheet */
+.pl-menu{
+  position:fixed;z-index:95;min-width:244px;max-width:calc(100vw - 32px);padding:4px;
+  border-radius:var(--p-r-l);background:var(--md-surface-container);color:var(--md-on-surface);
+  box-shadow:var(--p-shadow);display:flex;flex-direction:column;gap:2px;
+}
+.pl-menu[hidden]{display:none}
+.pl-menu__item{
+  position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;gap:14px;
+  min-height:56px;padding:8px 16px 8px 14px;border-radius:var(--p-r-m);text-align:left;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast);
+}
+.pl-menu__item::before{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pl-menu__item:hover::before{opacity:var(--m3-state-hover)}}
+.pl-menu__item:focus-visible{outline:none}
+.pl-menu__item:focus-visible::before{opacity:var(--m3-state-focus)}
+.pl-menu__item.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d)}
+.pl-menu__item.is-down::before{opacity:var(--m3-state-press)}
+.pl-menu__item .ic{width:22px;height:22px;color:var(--md-on-surface-variant)}
+.pl-menu__item b{display:block;font:500 15px/20px var(--m3-font);letter-spacing:.1px}
+.pl-menu__item small{display:block;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);letter-spacing:.2px}
+
+/* filled text field: the label floats, the indicator grows from the centre */
+.pl-field{position:relative;border-radius:var(--p-r-s) var(--p-r-s) 0 0;background:var(--md-surface-container-highest);transition:background-color var(--p-effect-d) var(--p-effect)}
+.pl-field textarea{
+  display:block;width:100%;min-height:112px;resize:vertical;border:0;outline:0;background:transparent;
+  padding:28px 16px 12px;font:400 16px/24px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface);
+}
+.pl-field label{
+  position:absolute;left:16px;top:16px;pointer-events:none;transform-origin:left top;
+  font:400 16px/24px var(--m3-font);color:var(--md-on-surface-variant);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),color var(--p-effect-d) var(--p-effect);
+}
+.pl-field textarea:focus + label,.pl-field textarea:not(:placeholder-shown) + label{transform:translateY(-9px) scale(.75)}
+.pl-field textarea::placeholder{color:transparent;transition:color var(--p-effect-d) var(--p-effect)}
+.pl-field textarea:focus::placeholder{color:var(--md-on-surface-variant)}
+.pl-field::before,.pl-field::after{content:"";position:absolute;left:0;right:0;bottom:0;pointer-events:none}
+.pl-field::before{height:1px;background:var(--md-on-surface-variant)}
+.pl-field::after{height:2px;background:var(--md-primary);transform:scaleX(0);transition:transform var(--p-spatial-d) var(--p-spatial)}
+.pl-field:focus-within::after{transform:none}
+.pl-field:focus-within label{color:var(--md-primary)}
+@media (hover:hover){.pl-field:hover{background:color-mix(in oklab,var(--md-on-surface) 6%,var(--md-surface-container-highest))}}
+.pl-help{display:flex;justify-content:space-between;gap:12px;padding:4px 16px 0;font:400 12px/16px var(--m3-font);letter-spacing:.4px;color:var(--md-on-surface-variant)}
+
+/* ============================================================
+   Plume 1.0 · companion
+   The running session seen from a second device. A hero card
+   for the session, the question index under it, and a reader
+   that grows out of the tile it was opened from.
+   ============================================================ */
+.cp{display:none;min-height:100vh;min-height:100dvh;background:var(--md-surface);color:var(--md-on-surface)}
+.cp.on{display:block}
+
+.cp-bar{
+  position:sticky;top:0;z-index:31;display:flex;align-items:center;gap:4px;
+  height:calc(64px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 4px 0;
+  background:var(--md-surface);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+}
+.cp-bar.is-scrolled{background:var(--md-surface-container)}
+.cp-bar__t{position:relative;flex:1;min-width:0;height:28px;margin-left:4px;overflow:hidden}
+.cp-bar__a,.cp-bar__b{
+  position:absolute;inset:0;font:400 22px/28px var(--m3-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-d) var(--p-spatial);
+}
+.cp-bar__b{opacity:0;transform:translateY(12px);font-weight:500}
+.cp-bar.is-named .cp-bar__a{opacity:0;transform:translateY(-12px)}
+.cp-bar.is-named .cp-bar__b{opacity:1;transform:none}
+#compPull .ic{transform-origin:50% 50%}
+#compPull.is-busy .ic{animation:cpSpin .8s linear infinite}
+@keyframes cpSpin{to{transform:rotate(360deg)}}
+
+.cp-body{max-width:760px;margin:0 auto;padding:4px 16px calc(40px + env(safe-area-inset-bottom))}
+
+/* entrance: blocks rise in turn on the first draw of each visit */
+.cp-body.is-enter .cp-in{animation:cpIn var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * 70ms)}
+.cp-body.is-enter .cp-q{animation:cpTile var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(140ms + var(--d,0) * var(--p-stagger))}
+@keyframes cpIn{from{opacity:0;transform:translate3d(0,16px,0)}}
+@keyframes cpTile{from{opacity:0;transform:scale(.6)}}
+
+/* ---- the session card ---- */
+.cp-hero{
+  padding:20px 20px 20px;border-radius:var(--p-r-xl);
+  background:var(--md-surface-container);
+}
+.cp-hero__top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:32px}
+.cp-state{
+  display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px 0 12px;border-radius:16px;
+  font:500 13px/18px var(--m3-font);letter-spacing:.2px;
+  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+}
+.cp-state i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.cp-state.st-live{background:var(--md-success-container);color:var(--md-on-success-container)}
+.cp-state.st-live i{background:var(--md-success)}
+.cp-state.st-idle,.cp-state.st-paused{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.cp-state.st-idle i,.cp-state.st-paused i{background:var(--md-warning)}
+.cp-seen{font:400 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);text-align:right}
+.cp-hero__name{margin:14px 0 0;font:500 28px/36px var(--m3-font);letter-spacing:-.2px;overflow-wrap:anywhere}
+.cp-count{display:flex;align-items:baseline;gap:8px;margin-top:18px}
+.cp-count b{font:500 57px/60px var(--m3-font);letter-spacing:-1.2px;font-variant-numeric:tabular-nums;color:var(--md-primary)}
+.cp-count span{font:400 16px/24px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface-variant)}
+
+/* wavy progress: the part done ripples, the rest is a flat track, a stop dot closes it */
+.cp-wave{display:block;width:100%;height:16px;margin-top:12px;overflow:visible}
+.cp-wave__w{fill:none;stroke:var(--md-primary);stroke-width:4;stroke-linecap:round;stroke-dasharray:1000 1000;
+  transition:stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow),opacity var(--p-effect-d) var(--p-effect)}
+.cp-wave__t{fill:var(--md-secondary-container);transition:x var(--p-spatial-slow-d) var(--p-spatial-slow),width var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.cp-wave__dot{fill:var(--md-primary);transition:opacity var(--p-effect-d) var(--p-effect)}
+.cp-wave.is-snap *{transition:none!important}
+
+.cp-facts{display:flex;flex-wrap:wrap;gap:12px 28px;margin:18px 0 0;padding:0}
+.cp-facts div{min-width:0}
+.cp-facts dt{font:500 12px/16px var(--m3-font);letter-spacing:.5px;color:var(--md-on-surface-variant)}
+.cp-facts dd{margin:2px 0 0;font:500 18px/24px var(--m3-font);font-variant-numeric:tabular-nums}
+
+/* the other device, as its beacon last reported it */
+.cp-live:empty{display:none}
+.cp-dev{
+  display:flex;align-items:center;gap:14px;margin-top:18px;padding:12px 16px 12px 12px;
+  border-radius:var(--p-r-l);background:var(--md-surface-container-high);
+}
+.cp-dev__ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:var(--p-r-m);background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.cp-dev__ic .ic{width:22px;height:22px}
+.cp-dev__t{flex:1;min-width:0}
+.cp-dev__t b{display:block;font:500 15px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-dev__t small{display:block;font:400 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.cp-dev__dot{width:10px;height:10px;flex:none;border-radius:50%;background:var(--md-success)}
+.cp-dev.is-beat .cp-dev__dot{animation:cpBeat var(--p-spatial-slow-d) var(--p-spatial-fast)}
+@keyframes cpBeat{30%{transform:scale(1.7);opacity:.55}}
+
+.cp-follow{width:100%;margin-top:20px}
+.cp-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.cp-note{margin:14px 0 0;font:400 14px/20px var(--m3-font);letter-spacing:.25px;color:var(--md-on-surface-variant)}
+
+/* ---- the index ---- */
+.cp-sec{margin-top:32px}
+.cp-sec__head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:0 4px}
+.cp-sec__head h2{margin:0;font:400 22px/28px var(--m3-font)}
+.cp-sec__head span{font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.cp-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;padding:0 4px;font:500 12px/16px var(--m3-font);letter-spacing:.4px;color:var(--md-on-surface-variant)}
+.cp-legend span{display:inline-flex;align-items:center;gap:6px}
+.cp-legend i{width:10px;height:10px;border-radius:3px;background:var(--md-surface-container-highest)}
+.cp-legend .lg-c{background:var(--md-success-container);box-shadow:inset 0 0 0 1.5px var(--md-success)}
+.cp-legend .lg-w{background:var(--md-error-container);box-shadow:inset 0 0 0 1.5px var(--md-error)}
+.cp-legend .lg-a{background:var(--md-secondary-container);box-shadow:inset 0 0 0 1.5px var(--md-secondary)}
+.cp-legend .lg-n{background:var(--md-primary);border-radius:50%}
+.cp-legend .lg-f{width:8px;height:8px;border-radius:50%;background:var(--md-tertiary)}
+
+.cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px;margin-top:16px}
+.cp-q{
+  position:relative;isolation:isolate;aspect-ratio:1;min-height:48px;display:grid;place-items:center;
+  border-radius:var(--p-r-l);background:var(--md-surface-container-high);color:var(--md-on-surface);
+  font:500 16px/1 var(--m3-font);font-variant-numeric:tabular-nums;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-spatial-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+.cp-q::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.cp-q:hover::before{opacity:var(--m3-state-hover)}}
+.cp-q:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.cp-q.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-s);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.cp-q.is-down::before{opacity:var(--m3-state-press)}
+.cp-q.is-a{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.cp-q.is-c{background:var(--md-success-container);color:var(--md-on-success-container)}
+.cp-q.is-w{background:var(--md-error-container);color:var(--md-on-error-container)}
+.cp-q.is-x{color:var(--md-outline)}
+/* the question open on the other device: the one round, filled tile */
+.cp-q.is-now{background:var(--md-primary);color:var(--md-on-primary);border-radius:50%;font-weight:700}
+.cp-q.is-now.is-down{border-radius:var(--p-r-l)}
+.cp-q.is-f::after{
+  content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;
+  background:var(--md-tertiary);box-shadow:0 0 0 2px var(--md-surface-container-high);
+}
+.cp-q.is-c.is-f::after{box-shadow:0 0 0 2px var(--md-success-container)}
+.cp-q.is-w.is-f::after{box-shadow:0 0 0 2px var(--md-error-container)}
+.cp-q.is-a.is-f::after{box-shadow:0 0 0 2px var(--md-secondary-container)}
+.cp-q.is-now.is-f::after{box-shadow:0 0 0 2px var(--md-primary)}
+
+.cp-miss{
+  display:flex;align-items:center;gap:12px;margin-top:20px;padding:12px 8px 12px 16px;border-radius:var(--p-r-l);
+  background:var(--md-warning-container);color:var(--md-on-warning-container);font:400 14px/20px var(--m3-font);letter-spacing:.25px;
+}
+.cp-miss span{flex:1}
+.cp-miss .pl-btn--text{color:inherit}
+
+/* ============================================================
+   Plume 1.0 · companion reader
+   ============================================================ */
+.cpq{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;background:var(--md-surface);color:var(--md-on-surface)}
+.cpq[hidden]{display:none}
+/* the colour of the tile it grew from, fading out as it opens */
+.cpq-tint{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0}
+.cpq-bar{
+  position:relative;z-index:2;flex:none;display:flex;align-items:center;gap:4px;
+  height:calc(64px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 4px 0;
+  background:var(--md-surface);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+}
+.cpq-bar.is-scrolled{background:var(--md-surface-container)}
+.cpq-bar__t{flex:1;min-width:0;margin:0 0 0 4px;font:400 22px/28px var(--m3-font);font-variant-numeric:tabular-nums}
+.cpq-bar__t b{font-weight:600}
+.cpq-bar__t span{color:var(--md-on-surface-variant)}
+.cpq-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.cpq-page{max-width:var(--pmax);margin:0 auto;padding:8px 16px calc(120px + env(safe-area-inset-bottom))}
+.cpq-page > *{max-width:var(--measure)}
+
+.cpq-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.cpq-stem{font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh)}
+.cpq-lead{margin-top:20px;font-family:var(--qfam);font-size:var(--qfont);line-height:1.5;font-weight:600}
+
+/* options: one stacked group, read-only, so nothing here looks pressable */
+.cpq-opts{display:flex;flex-direction:column;gap:2px;margin-top:20px}
+.cpq-opt{
+  display:flex;align-items:flex-start;gap:14px;padding:14px 16px 14px 14px;border-radius:var(--p-r-xs);
+  background:var(--md-surface-container-low);
+}
+.cpq-opt:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.cpq-opt:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.cpq-k{
+  flex:none;min-width:32px;height:32px;padding:0 4px;display:grid;place-items:center;border-radius:16px;
+  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);font:500 14px/1 var(--m3-font);
+}
+.cpq-opt__t{flex:1;min-width:0;padding-top:4px;font-family:var(--qfam);font-size:calc(var(--qfont) - 1px);line-height:1.5}
+.cpq-opt.is-mine{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.cpq-opt.is-mine .cpq-k{background:var(--md-secondary);color:var(--md-on-secondary);border-radius:var(--p-r-m)}
+.cpq-tag{
+  display:inline-flex;align-items:center;height:24px;margin-left:8px;padding:0 10px;border-radius:12px;vertical-align:2px;
+  background:color-mix(in oklab,var(--md-on-secondary-container) 12%,transparent);font:500 12px/16px var(--m3-font);letter-spacing:.4px;font-family:var(--m3-font);
+}
+
+/* the spoiler: shut on every question, opened on purpose */
+.cpq-rv{margin-top:28px;border-radius:var(--p-r-xl);background:var(--md-surface-container);overflow:clip}
+.cpq-rv__h{
+  position:relative;isolation:isolate;width:100%;min-height:76px;display:flex;align-items:center;gap:16px;
+  padding:16px 20px 16px 16px;text-align:left;border-radius:var(--p-r-xl);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.cpq-rv__h::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.cpq-rv__h:hover::before{opacity:var(--m3-state-hover)}}
+.cpq-rv__h:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.cpq-rv__h.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.cpq-rv__h.is-down::before{opacity:var(--m3-state-press)}
+.cpq-rv__ic{
+  width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:22px;
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  transition:border-radius var(--p-spatial-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+.cpq-rv__ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cpq-rv__ic .slash{stroke-dasharray:1 2;stroke-dashoffset:0;transition:stroke-dashoffset var(--p-spatial-d) var(--p-effect)}
+.cpq-rv__t{flex:1;min-width:0}
+.cpq-rv__t b{display:block;font:500 16px/24px var(--m3-font);letter-spacing:.15px}
+.cpq-rv__t small{display:block;font:400 13px/18px var(--m3-font);letter-spacing:.25px;color:var(--md-on-surface-variant)}
+.cpq-rv__cv{width:24px;height:24px;color:var(--md-on-surface-variant);transition:transform var(--p-spatial-d) var(--p-spatial)}
+.cpq-rv__b{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.cpq-rv__in{min-height:0;overflow:hidden}
+.cpq-rv__pad{padding:4px 16px 20px}
+.cpq-rv__pad > *{opacity:0;transform:translate3d(0,10px,0);transition:opacity var(--p-effect-fast-d) var(--p-effect-fast),transform var(--p-effect-fast-d) var(--p-effect-fast)}
+.cpq-rv.is-open .cpq-rv__b{grid-template-rows:1fr}
+.cpq-rv.is-open .cpq-rv__h{border-radius:var(--p-r-xl) var(--p-r-xl) var(--p-r-s) var(--p-r-s)}
+.cpq-rv.is-open .cpq-rv__ic{border-radius:var(--p-r-m);background:var(--md-primary);color:var(--md-on-primary)}
+.cpq-rv.is-open .cpq-rv__ic .slash{stroke-dashoffset:1}
+.cpq-rv.is-open .cpq-rv__cv{transform:rotate(180deg)}
+.cpq-rv.is-open .cpq-rv__pad > *{
+  opacity:1;transform:none;
+  transition:opacity var(--p-effect-slow-d) var(--p-effect-slow),transform var(--p-spatial-d) var(--p-spatial);
+  transition-delay:calc(60ms + var(--i,0) * var(--p-stagger));
+}
+
+.cpq-key,.cpq-mine{display:flex;align-items:flex-start;gap:14px;padding:14px 16px 14px 14px;border-radius:var(--p-r-l)}
+.cpq-key{background:var(--md-success-container);color:var(--md-on-success-container)}
+.cpq-key .cpq-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--p-r-m)}
+.cpq-mine{margin-top:8px;background:var(--md-surface-container-high)}
+.cpq-mine.is-c .cpq-k{background:var(--md-success);color:var(--md-on-success)}
+.cpq-mine.is-w .cpq-k{background:var(--md-error);color:var(--md-on-error)}
+.cpq-kt{flex:1;min-width:0;padding-top:1px}
+.cpq-kt small{display:block;font:500 12px/16px var(--m3-font);letter-spacing:.5px;opacity:.85}
+.cpq-kt span{display:block;margin-top:2px;font:400 15px/22px var(--m3-font)}
+.cpq-kt em{display:block;margin-top:4px;font:400 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.cpq-lab{margin:24px 4px 10px;font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.cpq-disp{margin-top:12px;padding:14px 16px;border-radius:var(--p-r-l);background:var(--md-error-container);color:var(--md-on-error-container);font:400 14px/20px var(--m3-font)}
+.cpq-disp__h{display:block;margin-bottom:4px;font-weight:500}
+.cpq-ch{display:flex;flex-direction:column;gap:2px}
+.cpq-ch > div{padding:14px 16px 14px 14px;border-radius:var(--p-r-xs);background:var(--md-surface-container-high)}
+.cpq-ch > div:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.cpq-ch > div:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.cpq-ch__h{display:flex;align-items:flex-start;gap:12px}
+.cpq-ch__h .cpq-k{min-width:28px;height:28px;font-size:13px}
+.cpq-ch__h > span:not(.cpq-k){flex:1;min-width:0;padding-top:3px;font:500 15px/22px var(--m3-font)}
+.cpq-ch .is-c .cpq-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--p-r-s)}
+.cpq-ch .ebody{margin:8px 0 0 40px;font-size:var(--efont)}
+.cpq-card{margin-top:12px;padding:14px 16px;border-radius:var(--p-r-l)}
+.cpq-card > small{display:block;margin-bottom:6px;font:500 12px/16px var(--m3-font);letter-spacing:.5px}
+.cpq-card.is-obj{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.cpq-card.is-rem{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.cpq-card .ebody,.cpq-card .ebody b,.cpq-card .ebody strong{color:inherit}
+.cpq-expl{margin-top:12px;font-size:var(--efont)}
+.cpq-refs{margin:0;padding-left:20px;font:400 13px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+
+.cpq-note{margin-top:28px}
+.cpq-saved{display:inline-flex;align-items:center;gap:4px;color:var(--md-primary);opacity:0;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow)}
+.cpq-saved .ic{width:14px;height:14px;stroke-width:2.4}
+.cpq-saved.on{opacity:1}
+.cpq-links{display:flex;flex-wrap:wrap;gap:8px}
+.cpq-hint{margin:24px 4px 0;font:400 13px/18px var(--m3-font);letter-spacing:.25px;color:var(--md-on-surface-variant)}
+
+/* the floating toolbar: tucks away while reading down, returns on the way up */
+.cpq-dock{
+  position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;justify-content:center;pointer-events:none;
+  padding:0 16px calc(16px + env(safe-area-inset-bottom));
+  transition:transform var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect);
+}
+.cpq-dock > *{pointer-events:auto}
+.cpq-dock.is-hid{transform:translate3d(0,calc(100% + 8px),0);opacity:0;transition-duration:var(--p-effect-slow-d);transition-timing-function:var(--p-exit)}
+
+@media (min-width:600px){
+  .cp-body{padding-left:24px;padding-right:24px}
+  .cp-hero{padding:28px}
+  .cp-grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:10px}
+  .cpq-page{padding-left:24px;padding-right:24px}
+}
+
+/* reduced motion: fades and colour stay, travel and squeeze go */
+@media (prefers-reduced-motion:reduce){
+  :root{--p-press:1;--p-press-sm:1;--p-press-card:1}
+  .cp .cp-bar__a,.cp .cp-bar__b,.cp-bar,.cpq-bar,.cp-q,.cpq-saved,.cpq-dock,.cpq-rv__ic,.pl-field::after{transition-duration:var(--p-effect-d)!important}
+  .cp-body.is-enter .cp-in,.cp-body.is-enter .cp-q{animation:none}
+  .cpq-rv__b{transition:none!important}
+  .cpq-rv__pad > *,.cpq-rv.is-open .cpq-rv__pad > *{transform:none!important;transition:opacity var(--p-effect-d) var(--p-effect)!important}
+  .cp-bar__b,.cp-bar.is-named .cp-bar__a,.cpq-dock.is-hid{transform:none}
+  #compPull.is-busy .ic{animation:none}
+}
 </style>
 </head>
 <body>
@@ -4312,6 +4762,10 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3.3a8.7 8.7 0 0 0 0 17.4c1.35 0 1.9-.9 1.9-1.75 0-.9-.75-1.35-.75-2.35a1.8 1.8 0 0 1 1.8-1.8h1.8a4.05 4.05 0 0 0 4-4c0-4.1-3.9-7.5-8.75-7.5z"/><circle cx="7.6" cy="11.4" r="1.15" fill="currentColor" stroke="none"/><circle cx="10.2" cy="7.2" r="1.15" fill="currentColor" stroke="none"/><circle cx="15.3" cy="7.7" r="1.15" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11.1v5.2"/><circle cx="12" cy="7.9" r="1.05" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-gallery" viewBox="0 0 24 24"><rect x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><circle cx="7.1" cy="6.9" r="1.35"/><path d="m2.8 14.1 4.2-3.7 2.5 2.3 3.2-3.1 4.7 4.5"/><path d="M17.4 6.6h.8a3.2 3.2 0 0 1 3.2 3.2v8.4a3.2 3.2 0 0 1-3.2 3.2H9.8a3.2 3.2 0 0 1-3.2-3.2v-.8"/></symbol>
+<!-- Plume 1.0 · companion icons -->
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19.7 12.2a7.7 7.7 0 1 1-2.25-5.65"/><path d="M19.9 4.3v4.4h-4.4"/></symbol>
+<symbol id="i-device" viewBox="0 0 24 24"><rect x="5.2" y="2.8" width="13.6" height="18.4" rx="2.6"/><path d="M10.4 17.6h3.2"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8.2 5.6v12.8a.9.9 0 0 0 1.37.77l10.1-6.4a.9.9 0 0 0 0-1.54L9.57 4.83A.9.9 0 0 0 8.2 5.6z"/></symbol>
 </defs></svg>
 <div class="app" id="shell">
 
@@ -4813,7 +5267,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.35</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.36</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4823,7 +5277,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.35 · sharded store</span>
+        <span class="chip" id="verChip">v6.36 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4985,17 +5439,40 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 </div>
 
 <!-- ============ COMPANION — the running session, read-only, on a second device ============ -->
-<div class="player" id="companion">
-  <div class="phead">
-  <div class="ptop">
-    <button class="tool" id="compClose" title="Close"><svg class="ic"><use href="#i-back"/></svg></button>
-    <span class="qn">Companion</span>
-    <div class="tools">
-      <button class="btn sm" id="compPull"><svg class="ic"><use href="#i-cloud"/></svg>Refresh</button>
+<!-- Plume 1.0 · companion -->
+<div class="cp" id="companion">
+  <header class="cp-bar">
+    <button class="pl-ib pl-press" id="compClose" type="button" aria-label="Back to Home"><svg class="ic"><use href="#i-back"/></svg></button>
+    <div class="cp-bar__t"><span class="cp-bar__a">Companion</span><span class="cp-bar__b" id="cpBarName" aria-hidden="true"></span></div>
+    <button class="pl-ib pl-press" type="button" data-note="companion" aria-label="What this screen is"><svg class="ic"><use href="#i-info"/></svg></button>
+    <button class="pl-ib pl-press" id="compPull" type="button" aria-label="Refresh"><svg class="ic"><use href="#i-refresh"/></svg></button>
+  </header>
+  <main class="cp-body" id="compBody"></main>
+</div>
+<!-- the question reader: one question as the other device shows it, grown out of its tile -->
+<div class="cpq" id="cpq" role="dialog" aria-modal="true" aria-labelledby="cpqTitle" hidden>
+  <div class="cpq-tint" aria-hidden="true"></div>
+  <header class="cpq-bar">
+    <button class="pl-ib pl-press" id="cpqClose" type="button" aria-label="Back to the questions"><svg class="ic"><use href="#i-back"/></svg></button>
+    <h2 class="cpq-bar__t" id="cpqTitle"></h2>
+    <button class="pl-ib pl-press" id="cpqEdit" type="button" aria-label="Edit everything" title="Edit everything"><svg class="ic"><use href="#i-note"/></svg></button>
+  </header>
+  <div class="cpq-scroll" id="cpqScroll"><article class="cpq-page" id="cpqPage"></article></div>
+  <div class="cpq-dock" id="cpqDock">
+    <div class="pl-tb" role="toolbar" aria-label="Question tools">
+      <button class="pl-ib pl-press" id="compPrev" type="button" aria-label="Previous question"><svg class="ic"><use href="#i-prev"/></svg></button>
+      <button class="pl-ib pl-press" id="compNext" type="button" aria-label="Next question"><svg class="ic"><use href="#i-next"/></svg></button>
+      <span class="pl-tb__sep" aria-hidden="true"></span>
+      <div class="pl-split" id="cpqSplit">
+        <button class="pl-split__main pl-press" id="compCopy" type="button"><svg class="ic"><use href="#i-copy"/></svg>Copy</button>
+        <button class="pl-split__more pl-press" id="cpqMore" type="button" aria-label="More ways to copy" aria-haspopup="menu" aria-expanded="false" aria-controls="cpqMenu"><svg class="ic"><use href="#i-chev"/></svg></button>
+      </div>
     </div>
   </div>
+  <div class="pl-menu" id="cpqMenu" role="menu" aria-label="Copy" hidden>
+    <button class="pl-menu__item pl-press" role="menuitem" type="button" id="compCopyAll"><svg class="ic"><use href="#i-copy"/></svg><span><b>Copy everything</b><small>With the answer and every explanation</small></span></button>
+    <button class="pl-menu__item pl-press" role="menuitem" type="button" id="compCopyAsk"><svg class="ic"><use href="#i-text"/></svg><span><b>Question only</b><small>Stem and options, in this session’s order</small></span></button>
   </div>
-  <div class="pbody" id="compBody"></div>
 </div>
 
 
@@ -5782,7 +6259,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.35';
+const APP_VERSION='6.36';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -6468,7 +6945,7 @@ const NOTES={
 
   companion:['What this panel is',
     `<p class="tiny">A read-along copy of a session that is running on another device. The numbers above are that session's own, and each question keeps the option order it was shuffled into, so the letters match the other screen.</p>
-     <p class="tiny" style="margin-top:12px">Nothing here is recorded as an answer, and the clock keeps running over there. The outlined number is the question open on that device.</p>
+     <p class="tiny" style="margin-top:12px">Nothing here is recorded as an answer, and the clock keeps running over there. The round, filled number is the question open on that device.</p>
      <p class="tiny" style="margin-top:12px">A photo, a note or an edit made here is stored on the question itself and pushed on the next sync. So is a photo removed or a placeholder deleted, on either device — once gone, it stays gone everywhere. On the device you are studying on, press <b>Refresh</b> in the top bar to pull it into the open question without ending the session.</p>
      <p class="tiny" style="margin-top:12px">Press <b>Refresh</b> here to fetch what that device has done since.</p>`]
 };
@@ -11889,7 +12366,7 @@ function migrateTaxonomy(){
    same GitHub sync the two devices already share, and which the
    other device picks up with Refresh this question (R).
    ============================================================ */
-const COMP={sid:null,i:0};
+const COMP={sid:null,i:0,live:null,ans:null,frac:null,enter:false,swap:0,copy:null,lastY:0,opening:0};
 let compNoteT;
 
 function activeSession(){
@@ -11932,106 +12409,261 @@ function renderCompCard(){
     }).join('')}`;
 }
 
+/* ---------- Plume 1.0 · shared motion helpers ---------- */
+/* the springs, read from the same tokens the stylesheet uses */
+const PL=(()=>{const c={};return n=>c[n]||(c[n]=(()=>{const cs=getComputedStyle(document.documentElement);
+  return {e:cs.getPropertyValue('--p-'+n).trim()||'ease-out',d:parseFloat(cs.getPropertyValue('--p-'+n+'-d'))||250}})())})();
+const PL_EXIT='cubic-bezier(.3,0,.8,.15)';
+/* The touch contract: the squeeze starts on pointerdown, holds while the
+   finger does, and is let go no sooner than 90 ms after it began, so a quick
+   tap still reads as a press. Letting go hands it to the element's own
+   release spring in CSS. A finger that slides off cancels it. */
+(function(){
+  let el=null,t0=0;
+  const up=()=>{if(!el)return;const e=el;el=null;
+    e.__pd=setTimeout(()=>e.classList.remove('is-down'),Math.max(0,90-(performance.now()-t0)))};
+  document.addEventListener('pointerdown',e=>{
+    if(e.button>0)return;
+    const t=e.target.closest&&e.target.closest('.pl-press');
+    if(!t||t.disabled)return;
+    if(el&&el!==t)el.classList.remove('is-down');
+    clearTimeout(t.__pd);el=t;t0=performance.now();t.classList.add('is-down');
+  },{passive:true});
+  ['pointerup','pointercancel','dragstart'].forEach(k=>document.addEventListener(k,up,{passive:true}));
+  document.addEventListener('pointerout',e=>{if(el&&e.target===el&&!el.contains(e.relatedTarget))up()},{passive:true});
+  document.addEventListener('keydown',e=>{
+    const t=e.target;if(e.repeat||(e.key!==' '&&e.key!=='Enter')||!t.classList||!t.classList.contains('pl-press'))return;
+    clearTimeout(t.__pd);t.classList.add('is-down');t.__pd=setTimeout(()=>t.classList.remove('is-down'),110);
+  });
+})();
+
 /* ---------- the index ---------- */
+function compClock(ms){const s=Math.max(0,Math.round((ms||0)/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);
+  return h?h+':'+pad(m)+':'+pad(s%60):m+':'+pad(s%60)}
+/* the question open on the other device: its beacon when that is the fresher word */
+function compNowIdx(s){const L=COMP.live;
+  return (L&&L.id===s.id&&L.ts>=(s.heart||0))?(L.idx||0):(s.idx||0)}
+function compLiveHTML(s){
+  const L=COMP.live;if(!L||L.id!==s.id)return '';
+  return `<div class="cp-dev"><span class="cp-dev__ic"><svg class="ic"><use href="#i-device"/></svg></span>
+    <span class="cp-dev__t"><b>${esc(L.label)}</b><small>On question ${(L.idx||0)+1} · ${L.answered|0} answered · ${compClock(L.elapsed)}</small></span>
+    <span class="cp-dev__dot" aria-hidden="true"></span></div>`;
+}
+function compWaveHTML(label,now,max){
+  return `<svg class="cp-wave" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${now}">
+    <rect class="cp-wave__t" y="6" height="4" rx="2"/><circle class="cp-wave__dot" cy="8" r="2"/>
+    <path class="cp-wave__w" pathLength="1000"/></svg>`;
+}
+/* the wave is drawn to the card's real width, so its wavelength never stretches */
+function compWave(p,from){
+  const svg=$('#compBody .cp-wave');if(!svg)return;
+  const W=svg.getBoundingClientRect().width;if(!W)return;
+  const path=svg.querySelector('.cp-wave__w'),tr=svg.querySelector('.cp-wave__t'),dot=svg.querySelector('.cp-wave__dot');
+  let d='M2 8';for(let x=4;x<=W-2;x+=2)d+='L'+x+' '+(8+3*Math.sin((x-2)/26*2*Math.PI)).toFixed(2);
+  path.setAttribute('d',d);dot.setAttribute('cx',W-2);
+  const put=q=>{const tx=q>0?Math.min(W,2+q*(W-4)+8):0;
+    path.style.strokeDashoffset=String(1000-q*1000);path.style.opacity=q>0?'1':'0';
+    tr.style.x=tx+'px';tr.style.width=Math.max(0,W-tx)+'px';dot.style.opacity=q<1?'1':'0'};
+  if(from==null||from===p){svg.classList.add('is-snap');put(p);void svg.getBoundingClientRect();svg.classList.remove('is-snap');return}
+  svg.classList.add('is-snap');put(from);void svg.getBoundingClientRect();svg.classList.remove('is-snap');
+  requestAnimationFrame(()=>put(p));
+}
+function compCount(el,from,to){
+  if(!el)return;
+  if(from==null||from===to||Motion.reduced){el.textContent=to;return}
+  const t0=performance.now(),D=PL('spatial-slow').d+250;
+  el.textContent=from;
+  const step=t=>{const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);
+    el.textContent=Math.round(from+(to-from)*e);if(k<1&&el.isConnected)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
 function compDrawIndex(){
   const s=compSession();
-  if(!s)return compClose();
-  /* the run can be finished on the other device while this panel is open —
+  if(!s)return compClose(true);
+  const body=$('#compBody'),enter=COMP.enter;COMP.enter=false;
+  body.classList.toggle('is-enter',enter);
+  const label=s.config.label||'Session',n=s.order.length,sc=sessScore(s),st=sessState(s);
+  const tutor=s.config.mode!=='test';
+  $('#cpBarName').textContent=label;
+  /* the run can be finished on the other device while this screen is open —
      say so plainly instead of going on announcing a session in progress */
-  if(sessState(s)==='done'){
-    const sc=sessScore(s);
-    $('#compBody').innerHTML=`
-      <h2 class="vt" style="margin:0 0 6px">${esc(s.config.label||'Session')}</h2>
-      <div class="row" style="margin-bottom:16px">${sessChip(s)}
-        <span class="chip">${sc.c}/${sc.n} correct</span>
-        <span class="chip">${fmtLong((s.elapsed||0)/1000)}</span>
-        <span class="chip">finished ${esc(sessAgo(s.finishedAt||s.heart||s.ts))}</span></div>
-      <div class="empty"><h4>This session is finished</h4>
-        <p class="tiny">It was graded and closed on the other device, so there is nothing live to follow here. Its questions are in the bank and its report is in Past sessions.</p>
-        <div class="row" style="justify-content:center;margin-top:16px">
-          <button class="btn pri" id="compReport">Open the report</button>
-          <button class="btn ghost" id="compBack">Back to Home</button></div></div>`;
-    $('#compReport').onclick=()=>{const f=s;compClose();showResults(f)};
-    $('#compBack').onclick=compClose;
+  if(st==='done'){
+    body.innerHTML=`
+      <section class="cp-hero cp-in" style="--i:0">
+        <div class="cp-hero__top"><span class="cp-state st-done"><i></i>Finished</span><span class="cp-seen">${esc(sessAgo(s.finishedAt||s.heart||s.ts))}</span></div>
+        <h1 class="cp-hero__name" id="cpName">${esc(label)}</h1>
+        <div class="cp-count"><b>${sc.c}</b><span>of ${n} correct</span></div>
+        ${compWaveHTML('Questions correct',sc.c,n)}
+        <dl class="cp-facts"><div><dt>Score</dt><dd>${sc.p}%</dd></div><div><dt>Clock</dt><dd>${compClock(s.elapsed)}</dd></div><div><dt>Mode</dt><dd>${tutor?'Tutor':'Exam'}</dd></div></dl>
+        <p class="cp-note">It was graded and closed on the other device. Its questions are in the bank and its report is in Past sessions.</p>
+        <div class="cp-acts">
+          <button class="pl-btn pl-btn--filled pl-press" id="compReport" type="button">Open the report</button>
+          <button class="pl-btn pl-btn--text pl-press" id="compBack" type="button">Back to Home</button></div>
+      </section>`;
+    $('#compReport').onclick=()=>{const f=s;compClose(true);showResults(f)};
+    $('#compBack').onclick=()=>compClose();
+    compMeters(n?sc.c/n:0,sc.c,enter);
+    compScrolled();
     return;
   }
-  const n=s.order.length;
-  const answered=s.order.filter(id=>s.items[id]&&s.items[id].chosen).length;
+  const ans=sessAnswered(s),now=compNowIdx(s);
   const missing=s.order.filter(id=>!Q_BY_ID[id]).length;
-  $('#compBody').innerHTML=`
-    <h2 class="vt" style="margin:0 0 6px">${esc(s.config.label||'Session')}<button class="ib" data-note="companion" aria-label="What this panel is"><svg class="ic"><use href="#i-info"/></svg></button></h2>
-    <div class="row" style="margin:0 0 22px">
-      ${sessChip(s)}
-      <span class="chip">${n} question${n===1?'':'s'}</span>
-      <span class="chip ${s.config.mode==='test'?'acc':''}">${s.config.mode==='test'?'Exam':'Tutor'}</span>
-      <span class="chip">${answered} answered</span>
-      <span class="chip">${fmtLong((s.elapsed||0)/1000)} on the clock</span>
-      <span class="chip">last seen ${esc(sessAgo(s.heart||s.ts))}</span>
-    </div>
-    <div class="row" id="compLive" style="margin:-12px 0 20px"></div>
-    <div class="navstrip wrapped" id="compIndex">${s.order.map((id,i)=>{
-      const it=s.items[id]||{},st=DB.stats[id]||{};
-      let cls=[];
-      if(s.config.mode==='tutor'&&it.submitted)cls.push(it.correct?'c':'w');
-      else if(it.chosen)cls.push('ans');
-      if(i===(s.idx||0))cls.push('cur');
-      if(st.flag)cls.push('flag');
-      return `<button class="${cls.join(' ')}" data-compq="${i}">${i+1}</button>`;
-    }).join('')}</div>
-    ${missing?`<p class="tiny muted" style="margin-top:20px;line-height:1.7"><b>${missing}</b> of these questions have not reached this device yet — press Refresh.</p>`:''}`;
+  const tiles=s.order.map((id,i)=>{
+    const it=s.items[id]||{},sst=DB.stats[id]||{},c=['cp-q','pl-press'];let say='';
+    if(tutor&&it.submitted){c.push(it.correct?'is-c':'is-w');say=it.correct?', correct':', wrong'}
+    else if(it.chosen){c.push('is-a');say=', answered'}
+    if(!Q_BY_ID[id]){c.push('is-x');say+=', not on this device yet'}
+    if(i===now)c.push('is-now');
+    if(sst.flag){c.push('is-f');say+=', flagged'}
+    /* tiles arrive on a diagonal, a beat apart, the first rows leading */
+    return `<button class="${c.join(' ')}" type="button" data-compq="${i}" style="--d:${Math.min(i%6+Math.floor(i/6),10)}"${i===now?' aria-current="true"':''} aria-label="Question ${i+1}${say}">${i+1}</button>`;
+  }).join('');
+  body.innerHTML=`
+    <section class="cp-hero cp-in" style="--i:0">
+      <div class="cp-hero__top"><span class="cp-state st-${st}"><i></i>${esc(SESS_LABEL[st])}</span><span class="cp-seen">Seen ${esc(sessAgo(s.heart||s.ts))}</span></div>
+      <h1 class="cp-hero__name" id="cpName">${esc(label)}</h1>
+      <div class="cp-count"><b>${ans}</b><span>of ${n} answered</span></div>
+      ${compWaveHTML('Questions answered',ans,n)}
+      <dl class="cp-facts"><div><dt>Clock</dt><dd>${compClock(s.elapsed)}</dd></div><div><dt>Mode</dt><dd>${tutor?'Tutor':'Exam'}</dd></div>${tutor?`<div><dt>Correct</dt><dd>${sc.c}</dd></div>`:''}</dl>
+      <div class="cp-live" id="compLive">${compLiveHTML(s)}</div>
+      <button class="pl-btn pl-btn--m pl-btn--filled pl-press cp-follow" id="compFollow" type="button" data-compq="${now}"><svg class="ic"><use href="#i-play"/></svg>Open question ${now+1}</button>
+    </section>
+    <section class="cp-sec cp-in" style="--i:1" aria-labelledby="cpIdxH">
+      <div class="cp-sec__head"><h2 id="cpIdxH">Questions</h2><span>${n}</span></div>
+      <div class="cp-legend">${tutor?'<span><i class="lg-c"></i>Correct</span><span><i class="lg-w"></i>Wrong</span>':'<span><i class="lg-a"></i>Answered</span>'}<span><i class="lg-n"></i>Open there</span><span><i class="lg-f"></i>Flagged</span></div>
+      <div class="cp-grid" id="compIndex">${tiles}</div>
+      ${missing?`<div class="cp-miss"><span><b>${missing}</b> of these have not reached this device yet.</span><button class="pl-btn pl-btn--text pl-press" type="button" data-comppull>Refresh</button></div>`:''}
+    </section>`;
+  compMeters(n?ans/n:0,ans,enter);
+  compScrolled();
 }
+/* the big figure counts and the wave runs — from zero on arrival, and
+   afterwards only by the difference a sync brought */
+function compMeters(f,val,enter){
+  compWave(f,enter?0:COMP.frac);
+  compCount($('#compBody .cp-count b'),enter?0:COMP.ans,val);
+  COMP.frac=f;COMP.ans=val;
+}
+/* a beacon moved: repaint the device row, the button and the round tile only */
+function compPaintLive(){
+  const s=compSession(),el=$('#compLive');if(!s||!el)return;
+  const had=!!el.firstElementChild;
+  el.innerHTML=compLiveHTML(s);
+  const dev=el.firstElementChild;if(dev&&had)dev.classList.add('is-beat');
+  const now=compNowIdx(s);
+  $$('#compIndex .cp-q.is-now').forEach(b=>{if(+b.dataset.compq!==now){b.classList.remove('is-now');b.removeAttribute('aria-current')}});
+  const t=$(`#compIndex [data-compq="${now}"]`);if(t){t.classList.add('is-now');t.setAttribute('aria-current','true')}
+  const f=$('#compFollow');if(f){f.dataset.compq=now;f.lastChild.textContent='Open question '+(now+1)}
+}
+function compScrolled(){
+  const cp=$('#companion');if(!cp.classList.contains('on'))return;
+  const bar=cp.querySelector('.cp-bar'),nm=$('#cpName');
+  bar.classList.toggle('is-scrolled',window.scrollY>4);
+  bar.classList.toggle('is-named',!!nm&&nm.getBoundingClientRect().bottom<bar.getBoundingClientRect().bottom);
+}
+window.addEventListener('scroll',compScrolled,{passive:true});
+window.addEventListener('resize',()=>{if(COMP.sid&&COMP.frac!=null)compWave(COMP.frac)});
+
 function compOpen(id){
-  COMP.sid=id;COMP.i=0;
-  $('#shell').style.display='none';$('#tabbar').style.display='none';
-  $('#companion').classList.add('on');
-  compDrawIndex();
-  if(window.SYNC&&SYNC.connected&&SYNC.connected()){
-    compPull(true);
-    /* while this panel is open the other devices' beacons are polled every
-       three seconds. Nearly every one of those answers 304 and costs nothing,
-       which is the whole reason it can be three seconds. */
-    try{V3.beaconStart();V3.beaconPoll()}catch(e){}
-  }
-  else toast('Cloud sync is off — this is the copy stored on this device.');
+  COMP.sid=id;COMP.i=0;COMP.enter=true;COMP.ans=null;COMP.frac=null;
+  const tok=++COMP.opening;
+  const arrive=()=>{
+    if(tok!==COMP.opening)return;
+    $('#shell').style.display='none';$('#tabbar').style.display='none';
+    const cp=$('#companion');cp.getAnimations().forEach(a=>a.cancel());cp.__leaving=0;
+    cp.classList.add('on');window.scrollTo(0,0);
+    compDrawIndex();
+    if(window.SYNC&&SYNC.connected&&SYNC.connected()){
+      compPull(true);
+      /* while this screen is open the other devices' beacons are polled every
+         three seconds. Nearly every one of those answers 304 and costs nothing,
+         which is the whole reason it can be three seconds. */
+      try{V3.beaconStart();V3.beaconPoll()}catch(e){}
+    }
+    else toast('Cloud sync is off — this is the copy stored on this device.');
+  };
+  /* a fade-through: Home leaves first, then the companion rises in */
+  const out=[$('#shell'),$('#tabbar')].filter(el=>el&&el.animate&&el.style.display!=='none');
+  if(Motion.reduced||!out.length)return arrive();
+  const as=out.map(el=>el.animate([{opacity:1},{opacity:0}],{duration:90,easing:PL_EXIT,fill:'forwards'}));
+  as[0].finished.then(()=>{arrive();as.forEach(a=>a.cancel())},()=>{});
 }
-function compClose(){
-  $('#companion').classList.remove('on');
-  $('#shell').style.display='';$('#tabbar').style.display='';
-  COMP.sid=null;go('dash');
+function compClose(now){
+  const cp=$('#companion');
+  cpqHide(true);
+  const done=()=>{cp.classList.remove('on');cp.getAnimations().forEach(a=>a.cancel());cp.__leaving=0;
+    $('#shell').style.display='';$('#tabbar').style.display='';
+    COMP.sid=null;go('dash')};
+  if(now===true||Motion.reduced||!cp.classList.contains('on')||!cp.animate)return done();
+  if(cp.__leaving)return;cp.__leaving=1;
+  cp.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translate3d(0,8px,0)'}],
+    {duration:110,easing:PL_EXIT,fill:'forwards'}).finished.then(done,()=>{});
 }
 async function compPull(quiet){
   if(!(window.SYNC&&SYNC.connected&&SYNC.connected()))
     return toast('Cloud sync is off — connect this device to the same repository first.');
-  const b=$('#compPull');if(b)b.disabled=true;
+  const b=$('#compPull');
+  if(b.classList.contains('is-busy'))return;
+  b.classList.add('is-busy');b.setAttribute('aria-busy','true');
   try{await SYNC.now()}catch(e){}
-  if(b)b.disabled=false;
+  /* the arrow finishes the turn it is on rather than stopping mid-spin */
+  const stop=()=>{b.classList.remove('is-busy');b.removeAttribute('aria-busy')};
+  const ic=b.querySelector('.ic');
+  if(ic&&ic.getAnimations().length){ic.addEventListener('animationiteration',stop,{once:true});setTimeout(stop,900)}else stop();
   if(!$('#companion').classList.contains('on'))return;
   compDrawIndex();
   if(!quiet)toast('Session refreshed.');
 }
 
 /* ---------- one question, as the other device is showing it ---------- */
-function compQuestion(i){
+function cpqIsOpen(){const L=$('#cpq');return !L.hidden&&!L.__closing}
+function compQuestion(i,from){
   const s=compSession();if(!s)return;
-  COMP.i=clamp(i,0,s.order.length-1);
-  const id=s.order[COMP.i],q=Q_BY_ID[id],it=s.items[id]||{};
+  i=clamp(i,0,s.order.length-1);
+  const id=s.order[i],q=Q_BY_ID[id];
   if(!q)return toast('That question has not reached this device yet — press Refresh.');
+  const open=cpqIsOpen(),dir=open?Math.sign(i-COMP.i):0;
+  COMP.i=i;
+  const paint=()=>cpqPaint(s,id,q);
+  if(!open){paint();cpqShow(from);return}
+  /* the same question again (an edit handed back): repaint where it stands */
+  if(!dir){const sc=$('#cpqScroll'),y=sc.scrollTop;paint();sc.scrollTop=y;return}
+  cpqSwap(dir,paint);
+}
+function compStep(d){
+  const s=compSession();if(!s)return;
+  const j=COMP.i+d;if(j<0||j>=s.order.length)return;
+  compQuestion(j);
+}
+function cpqPaint(s,id,q){
+  const it=s.items[id]||{},n=s.order.length;
   const ord=(it.order&&it.order.length)?it.order:(q.choices||[]).map(c=>c.label);
   const disp=l=>{const k=ord.indexOf(String(l).trim());return k>=0?(LETTERS[k]||l):l};
+  const optText=l=>{const c=(q.choices||[]).find(x=>x.label===String(l).trim());return c?aFmt(c.text):''};
   const key=(q.correctAnswer||(q.correctAnswers||[]).join(', '))||'';
-  const keyTxt=key?String(key).split(/\s*,\s*/).map(disp).join(', '):'—';
+  const keys=key?String(key).split(/\s*,\s*/):[];
+  const keyTxt=keys.length?keys.map(disp).join(', '):'—';
+  $('#cpqTitle').innerHTML=`Question <b>${COMP.i+1}</b> <span>of ${n}</span>`;
+  $('#cpqEdit').dataset.editq=id;
+  $('#compPrev').disabled=COMP.i===0;
+  $('#compNext').disabled=COMP.i===n-1;
+  const diff=String(q.difficulty||'').toLowerCase();
+  /* "answered there" stays neutral: a green or red chip would give the result
+     away on a screen whose whole point is not to */
   const chips=[
-    q.system?`<span class="chip">${esc(q.system)}</span>`:'',
-    q.subject?`<span class="chip">${esc(q.subject)}</span>`:'',
-    q.difficulty?`<span class="chip ${q.difficulty==='hard'?'rose':q.difficulty==='easy'?'jade':''}">${esc(q.difficulty)}</span>`:'',
-    (q.source&&q.source.exam)?`<span class="chip">${esc(q.source.exam)}${q.source.number?' · #'+q.source.number:''}</span>`:'',
-    it.submitted?`<span class="chip ${it.correct?'jade':'rose'}">already answered over there</span>`:''
+    q.system?`<span class="pl-chip">${esc(q.system)}</span>`:'',
+    q.subject?`<span class="pl-chip">${esc(q.subject)}</span>`:'',
+    q.difficulty?`<span class="pl-chip is-${esc(diff)}"><i></i>${esc(q.difficulty)}</span>`:'',
+    (q.source&&q.source.exam)?`<span class="pl-chip">${esc(q.source.exam)}${q.source.number?' · #'+q.source.number:''}</span>`:'',
+    it.submitted?`<span class="pl-chip"><svg class="ic"><use href="#i-check"/></svg>Answered there</span>`:''
   ].join('');
   /* blocks 6 and 7, built only when the other device has actually submitted.
      Both live inside the spoiler with the teaching, because opening it is a
      deliberate act on a read-along screen. */
   const cst=ST(id),catt=cst.attempts||[],clast=catt[catt.length-1];
-  let mineHTML='';
+  let k=0;const I=()=>` style="--i:${Math.min(k++,8)}"`;
+  const parts=[];
+  parts.push(`<div class="cpq-key"${I()}><span class="cpq-k">${esc(keyTxt)}</span><div class="cpq-kt"><small>Correct answer</small>${keys.length===1?`<span>${optText(keys[0])}</span>`:''}</div></div>`);
   if(it.submitted){
     const bits=[
       (it.struck||[]).length?'crossed out '+it.struck.map(disp).join(', '):'',
@@ -12040,56 +12672,60 @@ function compQuestion(i){
       catt.length>1?catt.filter(a=>a.correct).length+'/'+catt.length+' correct across '+catt.length+' attempts':'first attempt',
       (clast&&clast.miss)?((MISS.find(x=>x[0]===clast.miss)||[])[1]||''):''
     ].filter(Boolean).join(' · ');
-    mineHTML=`<p class="figsub" style="margin-top:18px">My answer</p>
-      <div class="ebody"><p><b>${it.chosen?esc(disp(it.chosen)):'Omitted'}</b> — ${it.correct?'correct':'incorrect'}</p></div>
-      ${bits?`<div class="tiny muted" style="margin-top:4px">${esc(bits)}</div>`:''}`;
+    parts.push(`<div class="cpq-mine ${it.correct?'is-c':'is-w'}"${I()}><span class="cpq-k">${it.chosen?esc(disp(it.chosen)):'–'}</span>
+      <div class="cpq-kt"><small>Answered there · ${it.chosen?(it.correct?'correct':'incorrect'):'omitted'}</small>${it.chosen?`<span>${optText(it.chosen)}</span>`:''}${bits?`<em>${esc(bits)}</em>`:''}</div></div>`);
   }
-  const cRows=ord.map((lab,j)=>{
-    const c=(q.choices||[]).find(x=>x.label===lab);
-    return (c&&c.explanation)?{j,lab,c}:null}).filter(Boolean);
-  const body=`
-    <div class="row" style="margin-bottom:14px">${chips}</div>
-    <div class="qtext">${qFmt(q.stem)}</div>
+  if(q.keyConflict||q.needsReview)
+    parts.push(`<div class="cpq-disp"${I()}><b class="cpq-disp__h">Disputed item</b>${q.paperAnswer?`<div>The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</div>`:''}${q.conflictNote?`<div style="margin-top:6px">${aFmt(q.conflictNote)}</div>`:''}</div>`);
+  const cRows=ord.map((lab,j)=>{const c=(q.choices||[]).find(x=>x.label===lab);return (c&&c.explanation)?{j,lab,c}:null}).filter(Boolean);
+  if(cRows.length)
+    parts.push(`<p class="cpq-lab"${I()}>Choice by choice</p><div class="cpq-ch"${I()}>${cRows.map(r=>`<div class="${r.c.isCorrect?'is-c':''}"><div class="cpq-ch__h"><span class="cpq-k">${LETTERS[r.j]||esc(r.lab)}</span><span>${aFmt(r.c.text)}</span></div><div class="ebody">${mdFmt(r.c.explanation)}</div></div>`).join('')}</div>`);
+  parts.push(`<p class="cpq-lab"${I()}>Figures with the explanation</p><div${I()}>${figHTML(id,'expl',{add:true})}</div>`);
+  if(q.explanation)parts.push(`<div class="ebody cpq-expl"${I()}>${mdFmt(q.explanation)}</div>`);
+  if(q.educationalObjective)parts.push(`<div class="cpq-card is-obj"${I()}><small>Educational objective</small><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
+  if(q.thingsToRemember&&q.thingsToRemember.length)
+    parts.push(`<div class="cpq-card is-rem"${I()}><small>Things to remember</small><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`);
+  if(q.references&&q.references.length)
+    parts.push(`<p class="cpq-lab"${I()}>References</p><ul class="cpq-refs"${I()}>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul>`);
+  const opts=ord.map((lab,j)=>{
+    const c=(q.choices||[]).find(x=>x.label===lab);if(!c)return '';
+    /* the chosen option is marked but never graded out here */
+    const mine=it.submitted&&it.chosen===lab;
+    return `<div class="cpq-opt${mine?' is-mine':''}"><span class="cpq-k">${LETTERS[j]||esc(lab)}</span><span class="cpq-opt__t">${aFmt(c.text)}${mine?'<span class="cpq-tag">Answered there</span>':''}</span></div>`;
+  }).join('');
+  $('#cpqPage').innerHTML=`
+    ${chips?`<div class="cpq-meta">${chips}</div>`:''}
+    <div class="qtext cpq-stem">${qFmt(q.stem)}</div>
     ${figHTML(id,'stem',{add:true,desc:true})}
-    ${q.leadIn?`<div class="leadin">${esc(q.leadIn)}</div>`:''}
-    <div class="choices" style="margin-top:16px">${ord.map((lab,j)=>{
-      const c=(q.choices||[]).find(x=>x.label===lab);if(!c)return '';
-      /* the chosen option is marked but never graded out here — grading it would
-         give the key away on a screen whose whole point is not to */
-      const mine=it.submitted&&it.chosen===lab;
-      return `<div class="ch${mine?' sel':''}"><span class="k">${LETTERS[j]||esc(lab)}</span><span class="t">${aFmt(c.text)}${mine?'<span class="tag">my answer</span>':''}</span></div>`;
-    }).join('')}</div>
-    <div class="expl" style="margin-top:24px">
-      <div class="esec key shut" data-sec="compkey">
-        <button class="eh"><svg class="ic cv"><use href="#i-chev"/></svg>Answer, result and the full explanation<span class="n">shut, so it cannot spoil the run</span></button>
-        <div class="ec">
-          <div class="ebody"><p><b>Correct: ${esc(keyTxt)}</b></p></div>
-          ${mineHTML}
-          ${(q.keyConflict||q.needsReview)?`<div class="ttr" style="border-color:var(--rose);background:var(--rose-soft);margin-top:16px"><p class="figsub" style="color:var(--rose);margin:0 0 6px">Disputed item</p>${q.paperAnswer?`<div class="tiny">The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</div>`:''}${q.conflictNote?`<div class="tiny" style="margin-top:6px">${aFmt(q.conflictNote)}</div>`:''}</div>`:''}
-          ${cRows.length?`<p class="figsub" style="margin-top:20px">Choice by choice</p>${cRows.map(r=>`<div class="echoice ${r.c.isCorrect?'c':''}"><span class="lb">${LETTERS[r.j]||esc(r.lab)}</span><span class="ct">${aFmt(r.c.text)}</span><div class="ebody">${mdFmt(r.c.explanation)}</div></div>`).join('')}`:''}
-          <p class="figsub" style="margin-top:20px">Figures shown with the explanation</p>
-          ${figHTML(id,'expl',{add:true})}
-          ${q.explanation?`<div class="ebody" style="margin-top:12px">${mdFmt(q.explanation)}</div>`:''}
-          ${q.educationalObjective?`<div class="ttr"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`:''}
-          ${(q.thingsToRemember&&q.thingsToRemember.length)?`<div class="ttr" style="margin-top:14px"><p class="figsub" style="color:inherit;margin:0 0 6px">Things to remember</p><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`:''}
-          ${(q.references&&q.references.length)?`<p class="figsub" style="margin-top:16px">References</p><div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`:''}
-        </div>
-      </div>
+    ${q.leadIn?`<div class="cpq-lead">${esc(q.leadIn)}</div>`:''}
+    <div class="cpq-opts">${opts}</div>
+    <section class="cpq-rv" id="cpqRv">
+      <button class="cpq-rv__h pl-press" type="button" aria-expanded="false" aria-controls="cpqRvB">
+        <span class="cpq-rv__ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.8 12c2.2-4.1 5.4-6.2 9.2-6.2s7 2.1 9.2 6.2c-2.2 4.1-5.4 6.2-9.2 6.2S5 16.1 2.8 12z"/><circle cx="12" cy="12" r="2.9"/><path class="slash" pathLength="1" d="M4.4 4.4 19.6 19.6"/></svg></span>
+        <span class="cpq-rv__t"><b>Answer and explanation</b><small>Hidden so it can’t spoil the run</small></span>
+        <svg class="ic cpq-rv__cv"><use href="#i-chev"/></svg>
+      </button>
+      <div class="cpq-rv__b" id="cpqRvB"><div class="cpq-rv__in" inert><div class="cpq-rv__pad">${parts.join('')}</div></div></div>
+    </section>
+    <div class="cpq-note">
+      <div class="pl-field"><textarea id="compNote" rows="3" placeholder="Anything you want beside this question later">${esc(cst.note||'')}</textarea><label for="compNote">My note</label></div>
+      <div class="pl-help"><span>Saved as you type, and carried to the other device</span><span class="cpq-saved" id="cpqSaved"><svg class="ic"><use href="#i-check"/></svg>Saved</span></div>
     </div>
-    <label class="fld" style="margin-top:18px"><span>My note — saved as you type and carried to the other device</span><textarea id="compNote" rows="4" placeholder="Anything you want beside this question later.">${esc(cst.note||'')}</textarea></label>
-    ${linksHTML(q)}
-    <p class="tiny muted" style="margin-top:18px;line-height:1.7">Photos, notes and edits are saved onto the question and pushed on the next sync. Press <b>Refresh</b> on the studying device to pull them into the open question.</p>`;
-  modal(`Q ${COMP.i+1} of ${s.order.length}`,body,
-    `<button class="btn ghost sm" id="compPrev"><svg class="ic"><use href="#i-prev"/></svg>Prev</button>
-     <button class="btn ghost sm" id="compNext">Next<svg class="ic"><use href="#i-next"/></svg></button>
-     <button class="btn ghost sm" data-editq="${esc(id)}"><svg class="ic"><use href="#i-note"/></svg>Edit everything</button>
-     <button class="btn ghost sm" id="compCopyAsk"><svg class="ic"><use href="#i-copy"/></svg>Question only</button>
-     <button class="btn pri" id="compCopy"><svg class="ic"><use href="#i-copy"/></svg>Copy everything</button>`);
+    ${linksOf(q).length?`<p class="cpq-lab">Referenced files</p><div class="cpq-links">${linkBtns(q)}</div>`:''}
+    <p class="cpq-hint">Photos, notes and edits are saved onto the question and pushed on the next sync. Press Refresh on the studying device to pull them into the open question.</p>`;
+  const rv=$('#cpqRv'),rh=rv.querySelector('.cpq-rv__h'),rin=rv.querySelector('.cpq-rv__in');
+  rh.onclick=()=>{
+    const on=!rv.classList.contains('is-open');
+    rv.classList.toggle('is-open',on);rh.setAttribute('aria-expanded',String(on));rin.inert=!on;
+    /* opened low on the screen, the answer is brought up to meet the reader */
+    if(on)setTimeout(()=>{const sc=$('#cpqScroll'),r=rh.getBoundingClientRect(),sr=sc.getBoundingClientRect();
+      if(r.top>sr.top+sr.height*.45)sc.scrollTo({top:sc.scrollTop+r.top-sr.top-72,behavior:Motion.reduced?'auto':'smooth'})},40);
+  };
   const cn=$('#compNote');
-  if(cn)cn.addEventListener('input',()=>{const st=ST(id);st.note=cn.value;
-    clearTimeout(compNoteT);compNoteT=setTimeout(save,500)});
-  /* a local toggle: the player keeps its own memory of which sections are shut */
-  $$('#mBody .esec > .eh').forEach(b=>b.onclick=()=>b.parentElement.classList.toggle('shut'));
+  cn.addEventListener('input',()=>{const st=ST(id);st.note=cn.value;
+    const sv=$('#cpqSaved');if(sv)sv.classList.remove('on');
+    clearTimeout(compNoteT);compNoteT=setTimeout(()=>{save();
+      const sv=$('#cpqSaved');if(sv){sv.classList.add('on');clearTimeout(sv.__t);sv.__t=setTimeout(()=>sv.classList.remove('on'),1600)}},500)});
   /* The session's own option order goes in, so the letters match the other
      screen. What is copied is this instance of the question: if the other
      device has already answered, that answer and its metadata are carried with
@@ -12097,24 +12733,160 @@ function compQuestion(i){
   const cbase=Object.assign({},DB.settings.copyOpts||{},{order:ord});
   const cIt={order:ord,chosen:it.chosen||null,struck:it.struck||[],conf:it.conf||null,
              timeMs:it.timeMs||0,ansMs:it.ansMs!=null?it.ansMs:null,correct:!!it.correct,submitted:!!it.submitted};
-  $('#compCopy').onclick=()=>copy(
-    qToMarkdown(q,cIt,Object.assign({},cbase,{scope:'full'})),
-    it.submitted?'Copied with the answer given over there and every explanation.'
-                :'Copied with the key and explanations — that question has not been answered yet.');
-  $('#compCopyAsk').onclick=()=>copy(
-    qToMarkdown(q,cIt,Object.assign({},cbase,{scope:'ask'})),
-    'Question and options copied — options in this session\u2019s order.');
-  $('#compPrev').onclick=()=>compQuestion(COMP.i-1);
-  $('#compNext').onclick=()=>compQuestion(COMP.i+1);
-  $('#compPrev').disabled=COMP.i===0;
-  $('#compNext').disabled=COMP.i===s.order.length-1;
+  COMP.copy={
+    all:()=>copy(qToMarkdown(q,cIt,Object.assign({},cbase,{scope:'full'})),
+      it.submitted?'Copied with the answer given over there and every explanation.'
+                  :'Copied with the key and explanations — that question has not been answered yet.'),
+    ask:()=>copy(qToMarkdown(q,cIt,Object.assign({},cbase,{scope:'ask'})),
+      'Question and options copied — options in this session’s order.')
+  };
 }
 
-$('#compClose').onclick=compClose;
+/* ---------- the reader's motion ---------- */
+function cpqParts(){const L=$('#cpq');return [L.querySelector('.cpq-bar'),$('#cpqScroll'),$('#cpqDock')]}
+function cpqReset(){
+  const sc=$('#cpqScroll');sc.scrollTop=0;COMP.lastY=0;
+  $('#cpqDock').classList.remove('is-hid');$('#cpq .cpq-bar').classList.remove('is-scrolled');
+}
+function cpqInset(r,rad){
+  return `inset(${r.top}px ${Math.max(0,innerWidth-r.right)}px ${Math.max(0,innerHeight-r.bottom)}px ${r.left}px round ${rad}px)`;
+}
+/* a container transform: the reader opens out of the tile that was tapped,
+   carrying the tile's colour for its first few frames */
+function cpqShow(from){
+  const L=$('#cpq'),tint=L.querySelector('.cpq-tint');
+  L.getAnimations({subtree:true}).forEach(a=>a.cancel());
+  L.__closing=0;L.hidden=false;cpqReset();
+  const sp=PL('spatial');
+  const r=from&&from.isConnected&&from.getBoundingClientRect?from.getBoundingClientRect():null;
+  if(Motion.reduced||!L.animate){
+    if(L.animate)L.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e});
+  }else if(r&&r.width){
+    const cs=getComputedStyle(from);
+    L.animate([{clipPath:cpqInset(r,parseFloat(cs.borderTopLeftRadius)||16)},{clipPath:'inset(0px 0px 0px 0px round 0px)'}],{duration:sp.d,easing:sp.e});
+    tint.style.background=cs.backgroundColor;
+    tint.animate([{opacity:1},{opacity:0}],{duration:PL('effect-slow').d,easing:PL('effect-slow').e,delay:50,fill:'backwards'});
+    cpqParts().forEach((el,j)=>el.animate([{opacity:0,transform:'translate3d(0,20px,0)'},{opacity:1,transform:'none'}],
+      {duration:sp.d,easing:sp.e,delay:90+j*30,fill:'backwards'}));
+  }else{
+    L.animate([{opacity:0,transform:'scale(.94)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+  }
+  requestAnimationFrame(()=>$('#cpqClose').focus({preventScroll:true}));
+}
+/* and it goes back into the tile of the question it ends on */
+function cpqHide(now){
+  const L=$('#cpq');if(L.hidden)return;
+  cpqMenu(false,true);
+  const tile=$(`#compIndex [data-compq="${COMP.i}"]`);
+  const fin=()=>{L.hidden=true;L.__closing=0;L.getAnimations({subtree:true}).forEach(a=>a.cancel());
+    if(now!==true&&tile&&tile.isConnected)tile.focus({preventScroll:true})};
+  if(now===true)return fin();
+  if(L.__closing)return;L.__closing=1;
+  if(Motion.reduced||!L.animate){
+    if(!L.animate)return fin();
+    return L.animate([{opacity:1},{opacity:0}],{duration:PL('effect').d,easing:PL('effect').e,fill:'forwards'}).finished.then(fin,()=>{});
+  }
+  if(tile){
+    const r0=tile.getBoundingClientRect();
+    if(r0.top<90||r0.bottom>innerHeight-24)window.scrollTo(0,Math.max(0,window.scrollY+r0.top-innerHeight/2));
+  }
+  const r=tile&&tile.getBoundingClientRect(),ex=PL('effect-slow');
+  let a;
+  if(r&&r.width){
+    const cs=getComputedStyle(tile);
+    a=L.animate([{clipPath:'inset(0px 0px 0px 0px round 0px)'},{clipPath:cpqInset(r,parseFloat(cs.borderTopLeftRadius)||16)}],
+      {duration:ex.d+60,easing:ex.e,fill:'forwards'});
+    const tint=L.querySelector('.cpq-tint');tint.style.background=cs.backgroundColor;
+    tint.animate([{opacity:0},{opacity:1}],{duration:ex.d,easing:ex.e,delay:60,fill:'both'});
+    cpqParts().forEach(el=>el.animate([{opacity:1},{opacity:0}],{duration:110,easing:PL_EXIT,fill:'forwards'}));
+  }else{
+    a=L.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.96)'}],{duration:160,easing:PL_EXIT,fill:'forwards'});
+  }
+  a.finished.then(fin,()=>{});
+}
+/* next and previous: the page leaves the way you are going and the next one
+   comes in from the other side; the bars hold still */
+function cpqSwap(dir,paint){
+  const pg=$('#cpqPage'),tok=++COMP.swap;
+  pg.getAnimations().forEach(a=>a.cancel());
+  cpqMenu(false,true);
+  if(Motion.reduced||!pg.animate){
+    paint();cpqReset();
+    if(pg.animate)pg.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e});
+    return;
+  }
+  const out=pg.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translate3d(${-24*dir}px,0,0)`}],
+    {duration:90,easing:PL_EXIT,fill:'forwards'});
+  out.finished.then(()=>{
+    if(tok!==COMP.swap)return;
+    paint();cpqReset();out.cancel();
+    const sp=PL('spatial');
+    pg.animate([{opacity:0,transform:`translate3d(${32*dir}px,0,0)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+  },()=>{});
+}
+function cpqMenu(on,now){
+  const m=$('#cpqMenu'),b=$('#cpqMore');
+  if(on===undefined)on=m.hidden||!!m.__closing;
+  if(on){
+    m.getAnimations({subtree:true}).forEach(a=>a.cancel());
+    m.__closing=0;m.hidden=false;b.setAttribute('aria-expanded','true');
+    const r=b.getBoundingClientRect();
+    m.style.right=Math.max(16,innerWidth-r.right)+'px';m.style.bottom=(innerHeight-r.top+8)+'px';
+    m.style.transformOrigin=`calc(100% - ${r.width/2}px) 100%`;
+    if(!Motion.reduced){
+      const sp=PL('spatial');
+      m.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+      [...m.children].forEach((c,j)=>c.animate([{opacity:0,transform:'translate3d(0,8px,0)'},{opacity:1,transform:'none'}],
+        {duration:sp.d,easing:sp.e,delay:40+j*30,fill:'backwards'}));
+    }
+    requestAnimationFrame(()=>m.firstElementChild.focus({preventScroll:true}));
+    return;
+  }
+  b.setAttribute('aria-expanded','false');
+  if(m.hidden)return;
+  if(now||Motion.reduced||!m.animate){m.getAnimations({subtree:true}).forEach(a=>a.cancel());m.hidden=true;m.__closing=0;return}
+  if(m.__closing)return;m.__closing=1;
+  m.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.92)'}],{duration:130,easing:PL_EXIT,fill:'forwards'})
+    .finished.then(()=>{if(m.__closing){m.hidden=true;m.__closing=0;m.getAnimations().forEach(a=>a.cancel())}},()=>{});
+}
+
+$('#compClose').onclick=()=>compClose();
 $('#compPull').onclick=()=>compPull(false);
+$('#cpqClose').onclick=()=>cpqHide();
+$('#compPrev').onclick=()=>compStep(-1);
+$('#compNext').onclick=()=>compStep(1);
+$('#compCopy').onclick=()=>{if(COMP.copy)COMP.copy.all()};
+$('#cpqMore').onclick=()=>cpqMenu();
+$('#compCopyAll').onclick=()=>{cpqMenu(false);if(COMP.copy)COMP.copy.all()};
+$('#compCopyAsk').onclick=()=>{cpqMenu(false);if(COMP.copy)COMP.copy.ask()};
+$('#cpqScroll').addEventListener('scroll',()=>{
+  const sc=$('#cpqScroll'),y=sc.scrollTop,d=y-COMP.lastY;COMP.lastY=y;
+  $('#cpq .cpq-bar').classList.toggle('is-scrolled',y>4);
+  const dock=$('#cpqDock');
+  if(y<60||y+sc.clientHeight>=sc.scrollHeight-24)dock.classList.remove('is-hid');
+  else if(d>6&&$('#cpqMenu').hidden)dock.classList.add('is-hid');
+  else if(d<-6)dock.classList.remove('is-hid');
+},{passive:true});
+document.addEventListener('pointerdown',e=>{
+  const m=$('#cpqMenu');if(m.hidden||m.__closing)return;
+  if(!e.target.closest('#cpqMenu,#cpqMore'))cpqMenu(false);
+},{passive:true});
+/* capture phase: it must see a dialog or the figure viewer before their own
+   Escape closes them, or one key press would close two layers */
+document.addEventListener('keydown',e=>{
+  if(!cpqIsOpen()||$('#mask').classList.contains('on')||$('#lbx').classList.contains('on'))return;
+  if(e.key==='Escape'){e.preventDefault();
+    if(!$('#cpqMenu').hidden){cpqMenu(false);$('#cpqMore').focus();return}
+    cpqHide();return}
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='textarea'||tag==='input'||e.target.isContentEditable)return;
+  if(e.key==='ArrowRight'){e.preventDefault();compStep(1)}
+  else if(e.key==='ArrowLeft'){e.preventDefault();compStep(-1)}
+},true);
 document.addEventListener('click',e=>{
   const o=e.target.closest('[data-compopen]');if(o){compOpen(o.dataset.compopen);return}
-  const n=e.target.closest('[data-compq]');if(n)compQuestion(parseInt(n.dataset.compq,10));
+  if(e.target.closest('[data-comppull]')){compPull(false);return}
+  const n=e.target.closest('[data-compq]');if(n)compQuestion(parseInt(n.dataset.compq,10),n);
 });
 
 /* ============================================================
@@ -14447,13 +15219,12 @@ const V3=(function(){
     }catch(e){}
     toast('A photo arrived from another device.');
   }
+  /* Plume 1.0 — the beacon is kept, and the companion repaints only what it moved */
   function liveSession(j){
-    const el=document.getElementById('compLive');
-    if(!el||!j.session)return;
-    el.innerHTML='<span class="chip acc">'+esc(j.label||'other device')+'</span>'+
-      '<span class="chip">'+j.session.answered+' answered</span>'+
-      '<span class="chip">'+fmtLong((j.session.elapsed||0)/1000)+'</span>'+
-      '<span class="chip">on question '+((j.session.idx||0)+1)+'</span>';
+    if(!j.session||typeof COMP==='undefined')return;
+    COMP.live={id:j.session.id,label:j.label||'Other device',idx:j.session.idx||0,
+      answered:j.session.answered|0,elapsed:j.session.elapsed||0,ts:j.ts||Date.now()};
+    if(COMP.sid&&document.getElementById('companion').classList.contains('on'))compPaintLive();
   }
   /* v5.8 — the poll used to run only while the player or the companion was on
      screen, so a device sitting on Home learned that a session had started on
