@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.40 -->
+<!-- Nidus — Personal Qbank · v6.41 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2345,8 +2345,8 @@ body.scrolled .phead{background:var(--md-surface-container)}
 .tmpop .tool.on .ic{color:var(--md-warning)}
 /* a switch that is on fills its row: flag in the warning tone, the others tonal */
 .tmpop #pFlag.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
-.tmpop #pHl.on,.tmpop #pFull.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-.tmpop #pFlag.on .ic,.tmpop #pHl.on .ic,.tmpop #pFull.on .ic{color:inherit}
+.tmpop #pHl.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.tmpop #pFlag.on .ic,.tmpop #pHl.on .ic{color:inherit}
 .tmpop .tml{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* a row that carries its own switch: the switch shows the state, so the row
    stays unfilled, and tapping it leaves the menu open to watch the thumb move */
@@ -3717,6 +3717,16 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 }
 .sp-timer.warn{background:var(--md-error-container);color:var(--md-on-error-container);animation:spPulse 1s var(--m3-ease-standard) infinite}
 @keyframes spPulse{50%{transform:scale(1.06)}}
+/* Plume 1.4 · focus mode button. One click away in the bar. Its icon is
+   never swapped: the expand and shrink glyphs are the same four corner
+   brackets, each turned 180° about its own centre, so the corners rotate
+   inward on a spatial spring and back out. On, the button turns tonal and
+   squares its corners (shape carries state). */
+.sp-top #pFull.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-radius:var(--p-r-m)}
+.sp-fsic path{transform-box:fill-box;transform-origin:center;transition:transform var(--p-spatial-d) var(--p-spatial)}
+.sp-fsic path:nth-child(2){transition-delay:15ms}.sp-fsic path:nth-child(3){transition-delay:30ms}.sp-fsic path:nth-child(4){transition-delay:45ms}
+#pFull.on .sp-fsic path{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.sp-fsic path{transition:none}}
 /* Plume 1.3 · session clock switch. Hiding only takes the clock off the
    screen: it keeps its place in the bar (no layout jump) and keeps ticking
    underneath. It fades and shrinks out, then turns invisible once the fade
@@ -4213,7 +4223,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-go,.sp-ib,.sp-count,.sp-cbg button,.sp-chip,.sp-grid button,.sp-jump{position:relative;overflow:hidden;isolation:isolate}
 .player.sp.zen .sp-track,.player.sp.zen #pMetaRow{display:none}
 
-@media (max-width:400px){.sp-mode{display:none}}
+@media (max-width:520px){.sp-mode{display:none}}
 @media (max-width:520px){
   .sp{--sp-gut:16px;--sp-oin:14px}
   .sp-top{padding:0 4px;gap:0}
@@ -4222,6 +4232,31 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-timer{padding:0 10px;font-size:13px}
   .sp-opt{column-gap:12px}
   .sp-go{padding:0 20px}
+}
+/* Plume 1.4 · compact session bar. Four tools, the close button, the
+   counter and the clock have to share a phone's width without touching.
+   On phones the Tutor/Exam chip is hidden (it already was below 400px).
+   The icon buttons give up 4px of width each (their
+   48px height stays),
+   the clock drops its pill padding, and from 420px down the counter's
+   chevron goes (the counter itself still opens the question grid). Checked
+   with the widest counter, "100 / 120", from 320 to 430px. */
+@media (max-width:520px){
+  .sp-top > .tool,.sp-top .tools > .tool,.sp-top .tmwrap > .tool{width:44px}
+}
+@media (max-width:420px){
+  .sp-cv{display:none}
+  .sp-count{padding:0 6px 0 8px;margin-left:0}
+  .sp-timer{padding:0 8px;margin-left:0;font-size:12.5px}
+}
+@media (max-width:379px){
+  .sp-top > .tool,.sp-top .tools > .tool,.sp-top .tmwrap > .tool{width:40px}
+  .sp-count .qn{font-size:17px}
+}
+@media (max-width:340px){
+  .sp-count{padding:0 2px 0 4px}
+  .sp-count .qn{font-size:15px}
+  .sp-timer{padding:0 6px;font-size:12px}
 }
 @media (max-width:359px){
   #pNext span{display:none}
@@ -5293,7 +5328,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.40</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.41</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5303,7 +5338,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.40 · sharded store</span>
+        <span class="chip" id="verChip">v6.41 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5346,6 +5381,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       </button>
       <span class="sp-timer" id="pTimer">00:00</span>
       <div class="tools">
+        <button class="tool sp-fs" id="pFull" title="Focus mode / fullscreen (Shift+F)" aria-label="Focus mode" aria-pressed="false"><svg class="ic sp-fsic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></svg></button>
         <button class="tool" id="pRefr" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)" aria-label="Refresh from cloud"><svg class="ic"><use href="#i-cloud"/></svg></button>
         <button class="tool" id="pCopy" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)" aria-label="Copy everything"><svg class="ic"><use href="#i-copy"/></svg></button>
         <div class="tmwrap">
@@ -5364,7 +5400,6 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
             <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span></button>
             <div class="tmdiv" role="separator"></div>
             <label class="tool tmsw" id="pClock" title="Show or hide the clock. It keeps running either way"><svg class="ic"><use href="#i-clock"/></svg><span class="tml">Show clock</span><input type="checkbox" id="pClockSw" role="switch" aria-label="Show clock" checked></label>
-            <button class="tool" id="pFull" role="menuitem" title="Focus mode / fullscreen (Shift+F)"><svg class="ic" id="pFullIc"><use href="#i-expand"/></svg><span class="tml" id="pFullLbl">Focus mode</span></button>
             <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span></button>
           </div>
         </div>
@@ -6286,7 +6321,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.40';
+const APP_VERSION='6.41';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9901,8 +9936,8 @@ $('#pRefr').onclick=refreshCurrentQ;
 $('#pEdit').onclick=()=>{const id=S&&curId();if(id)editQuestion(id)};
 
 /* ---------- the tool menu ----------
-   Every session tool lives behind one button except Refresh and Copy
-   everything, which sit beside it in the bar. They keep their original ids
+   Every session tool lives behind one button except Focus mode, Refresh
+   and Copy everything, which sit beside it in the bar. They keep their original ids
    and handlers; only where they sit on screen has changed, so the keyboard
    shortcuts still reach them while the popover is closed. */
 let toolsT=null,toolsSettleT=null;
@@ -9942,9 +9977,9 @@ const FS_OK=!!(document.documentElement.requestFullscreen||document.documentElem
 function fsOn(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
 function paintFull(){
   const on=FS_OK?fsOn():$('#player').classList.contains('zen');
-  $('#pFull').classList.toggle('on',on);
-  $('#pFullIc').innerHTML='<use href="#i-'+(on?'shrink':'expand')+'"/>';
-  $('#pFullLbl').textContent=on?'Leave focus mode':'Focus mode';
+  /* the icon is not swapped: its four corners turn on the spring (CSS) */
+  const b=$('#pFull');b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));
+  b.setAttribute('aria-label',on?'Leave focus mode':'Focus mode');
 }
 $('#pFull').onclick=()=>{
   if(!FS_OK){const p=$('#player');p.classList.toggle('zen');paintFull();

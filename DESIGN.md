@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.3** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.4** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -487,6 +487,16 @@ Errors say what happened and what is safe ("Nothing was lost").
   the row is not filled, and tapping it keeps the menu open so the thumb
   can be seen moving. It writes a `SETTINGS_SPEC` key, so Settings and the
   in-session sheet show the same switch.
+- **Icon morph by turning its parts** (focus mode, `#pFull`): when two
+  glyphs are the same strokes in different places (expand ↔ shrink are the
+  same four corners, each turned 180° about its own centre), draw the icon
+  inline and rotate each path (`transform-box: fill-box`) on `--p-spatial`,
+  staggered 15ms. Never swap the `<use>`: that cuts.
+- **The compact session bar** (`Plume 1.4 · compact session bar`): from
+  520px down the bar's icon buttons are 44px wide (40px below 380px), the
+  height stays 48px; the Tutor/Exam chip hides; from 420px the counter's
+  chevron hides. Anything added to the bar is measured at 320–430px with
+  the widest counter ("100 / 120") before it ships.
 - **Hiding something without changing the layout** (the session clock,
   `.player.clock-off`): fade and shrink it out on the exit curve, then flip
   `visibility` to hidden after the fade (a delayed `visibility` transition).
@@ -504,6 +514,7 @@ A surface that is not listed here is legacy.
 | Companion (session screen + question reader) | 1.0 | 6.36 | First Plume surface. Tokens and primitives added. Inside the reader, the figure blocks (`figHTML`) and the referenced-file buttons (`linkBtns`) are still legacy components |
 | Opening the player and the companion from Home's session card (Resume, Companion) | 1.0 | 6.38 | The transition only. The player itself is still legacy |
 | Player: "Show clock" switch in the ⋮ menu, and the clock's hide/show | 1.3 | 6.40 | The menu around it is still legacy |
+| Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. The other bar buttons keep their legacy press style |
 
 ## 15. Language changelog
 
@@ -525,6 +536,8 @@ A surface that is not listed here is legacy.
 - **Plume 1.3** (2026-10-07): a switch inside a menu (row is a label,
   the menu stays open), and hiding an element in place without a layout
   jump (fade out, then `visibility`).
+- **Plume 1.4** (2026-10-07): icons that morph by rotating their own
+  strokes; the compact session bar, measured with the widest counter.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

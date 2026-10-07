@@ -111,5 +111,13 @@ does) and work in the scratchpad:
   store is IndexedDB; the `localStorage.nidus_db` seed can win again on
   reload and make a working setting look lost. Load the page empty, set
   the value, `await doSave()`, reload, then read `DB.settings`.
+- **Measure the session bar, don't eyeball it.** For anything added to
+  `.sp-top`, set the session to 120 questions at index 0 and 99 and, at
+  320 / 360 / 375 / 390 / 412 / 430px, read `scrollWidth - clientWidth`
+  of `.sp-top` and `.sp-count` (both must be 0) and the gaps between the
+  counter, clock and tools.
+- **Narrow-width rules go after the `max-width:520px` player block.** It
+  comes late in the file and silently overrides an earlier, narrower media
+  query with the same specificity.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
