@@ -442,6 +442,12 @@ Errors say what happened and what is safe ("Nothing was lost").
   the direction-aware page swap (`cpqSwap`); the menu that grows from its
   anchor (`cpqMenu`); the wavy progress drawn to real width (`compWave`);
   count-up figures (`compCount`); the toolbar that tucks away on scroll.
+- **Opening a whole screen from a card:** `plumeOpen(dest, card, build,
+  after, settle)` pins the screen over Home, grows it out of the card
+  (clip-path + the card's colour fading out), brings its content in as one
+  piece, and only then hides Home and scrolls to the top. `settle` finishes
+  a legacy screen's own CSS entrances so they don't trickle in underneath.
+  Anything that closes the screen calls `plumeAbort(dest)` first.
 
 ---
 
@@ -452,6 +458,7 @@ A surface that is not listed here is legacy.
 | Surface | Plume version | App version | Notes |
 |---|---|---|---|
 | Companion (session screen + question reader) | 1.0 | 6.36 | First Plume surface. Tokens and primitives added. Inside the reader, the figure blocks (`figHTML`) and the referenced-file buttons (`linkBtns`) are still legacy components |
+| Opening the player and the companion from Home's session card (Resume, Companion) | 1.0 | 6.38 | The transition only. The player itself is still legacy |
 
 ## 15. Language changelog
 

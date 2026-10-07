@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.37 -->
+<!-- Nidus — Personal Qbank · v6.38 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4456,7 +4456,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 
 /* entrance: blocks rise in turn on the first draw of each visit */
 .cp-body.is-enter .cp-in{animation:cpIn var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * 70ms)}
-.cp-body.is-enter .cp-q{animation:cpTile var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(140ms + var(--d,0) * var(--p-stagger))}
+.cp-body.is-enter .cp-q,.cp-body.is-grow .cp-q{animation:cpTile var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(140ms + var(--d,0) * var(--p-stagger))}
 @keyframes cpIn{from{opacity:0;transform:translate3d(0,16px,0)}}
 @keyframes cpTile{from{opacity:0;transform:scale(.6)}}
 
@@ -4698,6 +4698,11 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .cp-grid{grid-template-columns:repeat(auto-fill,minmax(60px,1fr));gap:10px}
   .cpq-page{padding-left:24px;padding-right:24px}
 }
+
+/* Plume 1.0 · open from a card — a whole screen grows out of the card that
+   opened it while Home stays put underneath, then settles into the page */
+.pl-morph{position:fixed!important;inset:0;z-index:85;overflow:hidden}
+.pl-morph-tint{position:absolute;inset:0;z-index:999;pointer-events:none}
 
 /* reduced motion: fades and colour stay, travel and squeeze go */
 @media (prefers-reduced-motion:reduce){
@@ -5267,7 +5272,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.37</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.38</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5277,7 +5282,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.37 · sharded store</span>
+        <span class="chip" id="verChip">v6.38 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6259,7 +6264,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.37';
+const APP_VERSION='6.38';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9036,13 +9041,13 @@ function pauseSession(s,quiet){
   s.status='paused';s.pausedAt=Date.now();s.heart=Date.now();save();
   if(!quiet)toast('Paused. Its place and its clock are kept — resume it from Home.');
 }
-function resumeSession(s){
+function resumeSession(s,from){
   if(!s)return;
   sessNorm(s);
   if(s.status==='done')return toast('That session is finished. Open its report to review or retry it.');
   if(S&&S.id===s.id&&$('#player').classList.contains('on'))return;
   s.status='live';s.resumedAt=Date.now();sessBeat(s);save();
-  openSession(s);
+  openSession(s,from);
 }
 /* grading is a function of the session, not of the player, so a set can be
    finished from a list without having to be opened first */
@@ -9071,12 +9076,12 @@ function confirmFinish(id){
   $('#sessFinishGo').onclick=()=>{closeModal();const d=finishSession(s);toast('Session finished.');showResults(d)};
 }
 document.addEventListener('click',e=>{
-  const r=e.target.closest('[data-sessresume]');if(r){resumeSession(sessFind(r.dataset.sessresume));return}
+  const r=e.target.closest('[data-sessresume]');if(r){resumeSession(sessFind(r.dataset.sessresume),r);return}
   const p=e.target.closest('[data-sesspause]');if(p){pauseSession(sessFind(p.dataset.sesspause));renderDash();if(VIEW==='history')renderHistory();return}
   const f=e.target.closest('[data-sessfinish]');if(f){confirmFinish(f.dataset.sessfinish);return}
 });
 
-function openSession(s){
+function openSession(s,from){
   if(!s)return;
   /* the one door into the player, so the terminal state is enforced in one place */
   if(!s.review){
@@ -9085,11 +9090,16 @@ function openSession(s){
     s.status='live';sessBeat(s);
   }
   S=s;cur=clamp(s.idx||0,0,s.order.length-1);
-  $('#shell').style.display='none';$('#player').classList.add('on');$('#tabbar').style.display='none';
-  $('#pMode').textContent=s.config.mode==='test'?'Exam':'Tutor';
-  renderQ();
+  const show=()=>{$('#player').classList.add('on');
+    $('#pMode').textContent=s.config.mode==='test'?'Exam':'Tutor';
+    renderQ()};
+  /* Plume 1.0 — opened from a card (Resume on Home), the player grows out of it */
+  if(from){plumeOpen($('#player'),from.closest('.oss')||from,show,null,true);return}
+  $('#shell').style.display='none';$('#tabbar').style.display='none';
+  show();
 }
 function exitPlayer(){
+  plumeAbort($('#player'));
   stopTick();setNav(false);LASTQ=null;$('#player').classList.remove('on');$('#shell').style.display='';$('#tabbar').style.display='';
   S=null;go(VIEW);
 }
@@ -12370,7 +12380,7 @@ function migrateTaxonomy(){
    same GitHub sync the two devices already share, and which the
    other device picks up with Refresh this question (R).
    ============================================================ */
-const COMP={sid:null,i:0,live:null,ans:null,frac:null,enter:false,swap:0,copy:null,lastY:0,opening:0};
+const COMP={sid:null,i:0,live:null,ans:null,frac:null,enter:false,swap:0,copy:null,lastY:0};
 let compNoteT;
 
 function activeSession(){
@@ -12418,6 +12428,55 @@ function renderCompCard(){
 const PL=(()=>{const c={};return n=>c[n]||(c[n]=(()=>{const cs=getComputedStyle(document.documentElement);
   return {e:cs.getPropertyValue('--p-'+n).trim()||'ease-out',d:parseFloat(cs.getPropertyValue('--p-'+n+'-d'))||250}})())})();
 const PL_EXIT='cubic-bezier(.3,0,.8,.15)';
+/* Plume 1.0 · open from a card. The destination is built at once, pinned over
+   Home, and grows out of the card's own shape and colour; its content arrives
+   with it as one piece. Only when it has landed is Home put away and the page
+   scrolled to the top, which the pinned screen already shows, so nothing moves.
+   settle: finish the screen's own CSS entrances first, so they do not arrive
+   in pieces under the transform. */
+function plumeOpen(dest,from,build,after,settle){
+  const tok=dest.__po=(dest.__po||0)+1;
+  const r=from&&from.isConnected?from.getBoundingClientRect():null;
+  const cs=r?getComputedStyle(from):null;
+  dest.getAnimations().forEach(a=>a.cancel());
+  dest.querySelectorAll(':scope > .pl-morph-tint').forEach(t=>t.remove());
+  build();
+  const land=()=>{
+    if(dest.__po!==tok)return;
+    dest.classList.remove('pl-morph');
+    dest.querySelectorAll(':scope > .pl-morph-tint').forEach(t=>t.remove());
+    $('#shell').style.display='none';$('#tabbar').style.display='none';
+    window.scrollTo(0,0);
+    if(after)after();
+  };
+  if(settle)dest.getAnimations({subtree:true}).forEach(a=>{
+    try{if(typeof CSSAnimation!=='undefined'&&a instanceof CSSAnimation&&a.effect.getComputedTiming().iterations!==Infinity)a.finish()}catch(e){}});
+  if(!dest.animate){land();return}
+  dest.classList.add('pl-morph');
+  if(Motion.reduced){
+    dest.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e}).finished.then(land,()=>{});
+    return;
+  }
+  const sp=PL('spatial');let a;
+  const kids=[...dest.children].filter(k=>k.nodeType===1);
+  if(r&&r.width){
+    a=dest.animate([{clipPath:cpqInset(r,parseFloat(cs.borderTopLeftRadius)||16)},{clipPath:'inset(0px 0px 0px 0px round 0px)'}],{duration:sp.d,easing:sp.e});
+    const tint=document.createElement('div');tint.className='pl-morph-tint';tint.style.background=cs.backgroundColor;
+    dest.appendChild(tint);
+    tint.animate([{opacity:1},{opacity:0}],{duration:PL('effect').d,easing:PL('effect').e,fill:'both'});
+    kids.forEach(k=>k.animate([{opacity:0,transform:'translate3d(0,20px,0)'},{opacity:1,transform:'none'}],
+      {duration:sp.d,easing:sp.e,delay:30,fill:'backwards'}));
+  }else{
+    a=dest.animate([{opacity:0,transform:'scale(.96)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+  }
+  a.finished.then(land,()=>{});
+}
+/* a screen closed mid-open must not land afterwards */
+function plumeAbort(dest){
+  dest.__po=(dest.__po||0)+1;dest.classList.remove('pl-morph');
+  dest.getAnimations().forEach(a=>a.cancel());
+  dest.querySelectorAll(':scope > .pl-morph-tint').forEach(t=>t.remove());
+}
 /* The touch contract: the squeeze starts on pointerdown, holds while the
    finger does, and is let go no sooner than 90 ms after it began, so a quick
    tap still reads as a press. Letting go hands it to the element's own
@@ -12485,7 +12544,7 @@ function compDrawIndex(){
   const s=compSession();
   if(!s)return compClose(true);
   const body=$('#compBody'),enter=COMP.enter;COMP.enter=false;
-  body.classList.toggle('is-enter',enter);
+  body.classList.toggle('is-enter',enter===true);body.classList.toggle('is-grow',enter==='grow');
   const label=s.config.label||'Session',n=s.order.length,sc=sessScore(s),st=sessState(s);
   const tutor=s.config.mode!=='test';
   $('#cpBarName').textContent=label;
@@ -12506,7 +12565,7 @@ function compDrawIndex(){
       </section>`;
     $('#compReport').onclick=()=>{const f=s;compClose(true);showResults(f)};
     $('#compBack').onclick=()=>compClose();
-    compMeters(n?sc.c/n:0,sc.c,enter);
+    compMeters(n?sc.c/n:0,sc.c,!!enter);
     compScrolled();
     return;
   }
@@ -12538,7 +12597,7 @@ function compDrawIndex(){
       <div class="cp-grid" id="compIndex">${tiles}</div>
       ${missing?`<div class="cp-miss"><span><b>${missing}</b> of these have not reached this device yet.</span><button class="pl-btn pl-btn--text pl-press" type="button" data-comppull>Refresh</button></div>`:''}
     </section>`;
-  compMeters(n?ans/n:0,ans,enter);
+  compMeters(n?ans/n:0,ans,!!enter);
   compScrolled();
 }
 /* the big figure counts and the wave runs — from zero on arrival, and
@@ -12568,34 +12627,29 @@ function compScrolled(){
 window.addEventListener('scroll',compScrolled,{passive:true});
 window.addEventListener('resize',()=>{if(COMP.sid&&COMP.frac!=null)compWave(COMP.frac)});
 
-function compOpen(id){
-  COMP.sid=id;COMP.i=0;COMP.enter=true;COMP.ans=null;COMP.frac=null;
-  const tok=++COMP.opening;
-  const arrive=()=>{
-    if(tok!==COMP.opening)return;
-    $('#shell').style.display='none';$('#tabbar').style.display='none';
-    const cp=$('#companion');cp.getAnimations().forEach(a=>a.cancel());cp.__leaving=0;
-    cp.classList.add('on');window.scrollTo(0,0);
-    compDrawIndex();
-    if(window.SYNC&&SYNC.connected&&SYNC.connected()){
-      compPull(true);
-      /* while this screen is open the other devices' beacons are polled every
-         three seconds. Nearly every one of those answers 304 and costs nothing,
-         which is the whole reason it can be three seconds. */
-      try{V3.beaconStart();V3.beaconPoll()}catch(e){}
-    }
-    else toast('Cloud sync is off — this is the copy stored on this device.');
-  };
-  /* a fade-through: Home leaves first, then the companion rises in */
-  const out=[$('#shell'),$('#tabbar')].filter(el=>el&&el.animate&&el.style.display!=='none');
-  if(Motion.reduced||!out.length)return arrive();
-  const as=out.map(el=>el.animate([{opacity:1},{opacity:0}],{duration:90,easing:PL_EXIT,fill:'forwards'}));
-  as[0].finished.then(()=>{arrive();as.forEach(a=>a.cancel())},()=>{});
+function compOpen(id,from){
+  COMP.sid=id;COMP.i=0;COMP.ans=null;COMP.frac=null;
+  const cp=$('#companion');cp.__leaving=0;
+  /* grown out of its card, the screen is the motion: blocks no longer rise in
+     on their own, only the tiles ripple and the figures run */
+  const card=from&&(from.closest('.oss')||from);
+  COMP.enter=card?'grow':true;
+  const synced=!!(window.SYNC&&SYNC.connected&&SYNC.connected());
+  /* the snackbar waits until the screen has landed */
+  plumeOpen(cp,card,()=>{cp.classList.add('on');compDrawIndex()},()=>{compScrolled();
+    if(!synced)toast('Cloud sync is off — this is the copy stored on this device.')});
+  if(synced){
+    compPull(true);
+    /* while this screen is open the other devices' beacons are polled every
+       three seconds. Nearly every one of those answers 304 and costs nothing,
+       which is the whole reason it can be three seconds. */
+    try{V3.beaconStart();V3.beaconPoll()}catch(e){}
+  }
 }
 function compClose(now){
   const cp=$('#companion');
   cpqHide(true);
-  const done=()=>{cp.classList.remove('on');cp.getAnimations().forEach(a=>a.cancel());cp.__leaving=0;
+  const done=()=>{plumeAbort(cp);cp.classList.remove('on');cp.getAnimations().forEach(a=>a.cancel());cp.__leaving=0;
     $('#shell').style.display='';$('#tabbar').style.display='';
     COMP.sid=null;go('dash')};
   if(now===true||Motion.reduced||!cp.classList.contains('on')||!cp.animate)return done();
@@ -12888,7 +12942,7 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowLeft'){e.preventDefault();compStep(-1)}
 },true);
 document.addEventListener('click',e=>{
-  const o=e.target.closest('[data-compopen]');if(o){compOpen(o.dataset.compopen);return}
+  const o=e.target.closest('[data-compopen]');if(o){compOpen(o.dataset.compopen,o);return}
   if(e.target.closest('[data-comppull]')){compPull(false);return}
   const n=e.target.closest('[data-compq]');if(n)compQuestion(parseInt(n.dataset.compq,10),n);
 });
