@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.6** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.7** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -341,6 +341,12 @@ data such as IDs, timers and counts. Use tabular figures
   expanded.
 - Always check **390px** (phone) and a desktop width. No horizontal scroll,
   ever. Respect `env(safe-area-inset-*)`.
+- **A highlight keeps the column.** A tinted tile, chip or box inside a
+  list or stepper starts on the same left edge as the text around it, and
+  its padding goes inward. Never pull it out with a negative margin to
+  keep its text aligned: the box edge is what the eye reads, and one that
+  juts toward the markers breaks the column. (The chain's answering step,
+  v6.48, after the user found it misaligned.)
 
 ---
 
@@ -578,6 +584,8 @@ A surface that is not listed here is legacy.
 - **Plume 1.6** (2026-10-07): a sheet that stacks over a dialog (its
   layer, its keys, drag to dismiss), filter chips with a drawn check, and
   the copyable ID chip.
+- **Plume 1.7** (2026-10-07): a highlight keeps the column; a tinted tile
+  in a list never juts out toward the markers.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
