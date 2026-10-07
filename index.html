@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.44 -->
+<!-- Nidus — Personal Qbank · v6.45 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3041,10 +3041,9 @@ body.hasmig{padding-bottom:64px}
 .lbx .lbh .tiny{color:color-mix(in oklab,var(--lb-on) 72%,transparent)}
 .lbx .lbh .tool{color:var(--lb-on)}
 .lbx .lbh .tool.arm{background:var(--md-error);color:var(--md-on-error)}
-.lbstage{flex:1;min-height:0;overflow:auto;display:flex;align-items:center;justify-content:center;padding:0 16px}
+.lbstage{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0 16px}
 .lbstage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--m3-corner-l);cursor:zoom-in}
-.lbx.zoom .lbstage{align-items:flex-start;justify-content:flex-start}
-.lbx.zoom .lbstage img{max-width:none;max-height:none;width:auto;height:auto;cursor:zoom-out}
+.lbx.zoom .lbstage img{cursor:zoom-out}
 .lbf{
   flex:0 0 auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom));
   color:color-mix(in oklab,var(--lb-on) 78%,transparent);
@@ -3072,10 +3071,12 @@ body.hasmig{padding-bottom:64px}
 .lbq button .ic{width:18px;height:18px;flex:0 0 18px}
 .lbq button .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lbq button .mono{font-family:var(--m3-mono);opacity:.8;flex:0 0 auto}
-/* a picture answers a swipe on a touch screen; the stage keeps its own
-   vertical scroll for the zoomed state, so only the horizontal axis is taken */
-.lbstage{touch-action:pan-y pinch-zoom}
-.lbx.zoom .lbstage{touch-action:auto}
+/* Plume 1.5 · figure viewer zoom. The stage takes every touch, because
+   the picture zooms and pans by transform alone (FZ, in script): left to
+   the browser, two fingers zoomed the whole page instead. Nothing here
+   transitions; the springs run per frame so a new touch can catch them. */
+.lbstage{touch-action:none;overscroll-behavior:contain}
+.lbstage img{transform-origin:50% 50%;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
 
 /* ============================================================
    STATE LAYERS
@@ -5343,7 +5344,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.44</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.45</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5353,7 +5354,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.44 · sharded store</span>
+        <span class="chip" id="verChip">v6.45 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6336,7 +6337,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.44';
+const APP_VERSION='6.45';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8077,7 +8078,7 @@ function figDrawViewer(){
   const vp=figCapPair(f);
   $('#lbxCap').innerHTML=vp.cap?esc(vp.cap)+(vp.note?`<span class="fignote">${esc(vp.note)}</span>`:''):'';
   $('#lbxPrev').style.display=$('#lbxNext').style.display=list.length>1?'inline-flex':'none';
-  $('#lbx').classList.remove('zoom');
+  FZ.reset();
   $('#lbxDel').classList.remove('arm');
   figDrawViewerQ();
 }
@@ -8121,6 +8122,7 @@ function figOpenViewer(qid,fid){
 function figCloseViewer(){
   const b=$('#lbx');
   b.classList.remove('on','zoom');b.setAttribute('aria-hidden','true');
+  FZ.reset();
   $('#lbxStage').innerHTML='';
   const rail=$('#lbxQ');if(rail){rail.classList.remove('on');rail.innerHTML=''}
   document.body.style.overflow='';
@@ -8135,10 +8137,11 @@ function figStep(d){
 $('#lbxClose').onclick=figCloseViewer;
 $('#lbxPrev').onclick=()=>figStep(-1);
 $('#lbxNext').onclick=()=>figStep(1);
-$('#lbxZoom').onclick=()=>$('#lbx').classList.toggle('zoom');
-$('#lbxStage').addEventListener('click',e=>{
-  if(e.target.tagName==='IMG')$('#lbx').classList.toggle('zoom');
-  else figCloseViewer();
+$('#lbxZoom').onclick=()=>FZ.toggle(null,null,'actual');
+/* a tap on the dark around the picture closes; a tap on the picture, or
+   the end of any drag or pinch, belongs to the zoom (FZ decides which) */
+$('#lbxStage').addEventListener('click',()=>{
+  if(!FZ.swallow())figCloseViewer();
 });
 $('#lbxSwap').onclick=()=>{
   const list=figViewList();if(!list.length)return;
@@ -8176,6 +8179,187 @@ $('#lbxDel').onclick=()=>{
     if(Math.abs(dx)<48||Math.abs(dx)<Math.abs(dy)*1.6)return;
     figStep(dx<0?1:-1);
   },{passive:true});
+})();
+/* ---------- zoom: pinch, pan, double tap (v6.45 · Plume 1.5) ----------
+   The viewer used to offer only an "actual size" switch that relaid the
+   picture out in a scrolling box, and the stage handed two fingers to the
+   browser, which zoomed the whole page. Now the stage takes every touch and
+   the picture moves by transform alone:
+   - two fingers zoom about their midpoint and pan in the same motion,
+     exactly under the fingers;
+   - one finger pans once it is zoomed, and the release keeps its speed;
+   - past an edge, under fit or over the ceiling it gives at 0.55× (the
+     Plume rubber band) and springs back on release;
+   - a double tap zooms into the tapped point and back out; a mouse click
+     and the Actual size button zoom to the picture's real size;
+   - the wheel zooms about the pointer (a trackpad pinch is ctrl + wheel).
+   Every settle is a spring integrated per frame (the --p-spatial values,
+   380 / 0.8; 3800 / 1 under reduced motion), not a CSS transition, so a
+   finger that lands mid-flight catches the picture where it is.
+   #lbx.zoom means "bigger than fit": the swipe and the cursor read it. */
+const FZ=(()=>{
+  const st=$('#lbxStage'),box=$('#lbx'),RB=.55;
+  let s=1,x=0,y=0,vs=0,vx=0,vy=0;   /* shown transform, and its velocity */
+  let goal=null,raf=0,last=0,wt=0;
+  const pts=new Map();               /* pointers down on the stage */
+  let g=null,trail=[],press=null,lastTap=null;
+  const img=()=>st.querySelector('img');
+  const now=()=>performance.now();
+  const cl=(v,a,b)=>v<a?a:v>b?b:v;
+  const rub=(v,a,b)=>v<a?a-(a-v)*RB:v>b?b+(v-b)*RB:v;
+  const unrub=(v,a,b)=>v<a?a-(a-v)/RB:v>b?b+(v-b)/RB:v;
+  function paint(){
+    const im=img();
+    if(im){
+      im.style.transform=(Math.abs(s-1)<1e-4&&Math.abs(x)<.05&&Math.abs(y)<.05)?'':`translate(${x}px,${y}px) scale(${s})`;
+      /* a layer only while moving: once still, the browser redraws the
+         picture sharp at its new size */
+      im.style.willChange=(g||raf||wt)?'transform':'';
+    }
+    box.classList.toggle('zoom',s>1.01);
+  }
+  /* the picture's fitted box (its centre without the transform), the stage,
+     and the ceiling: four times fit, or 1.5× its real size if that is more */
+  function geo(){
+    const im=img();if(!im||!im.offsetWidth)return null;
+    const r=im.getBoundingClientRect(),sr=st.getBoundingClientRect();
+    const w=im.offsetWidth,h=im.offsetHeight,real=(im.naturalWidth||w)/w;
+    return {cx:r.left+r.width/2-x,cy:r.top+r.height/2-y,w,h,sr,real,max:cl(real*1.5,4,10)};
+  }
+  /* how far it may travel at scale S: centred while it fits, edge to edge
+     once it is bigger than the stage */
+  function lim(G,S){
+    const ox=G.sr.left+G.sr.width/2-G.cx,oy=G.sr.top+G.sr.height/2-G.cy;
+    const ax=Math.max(0,(S*G.w-G.sr.width)/2),ay=Math.max(0,(S*G.h-G.sr.height)/2);
+    return {x0:ox-ax,x1:ox+ax,y0:oy-ay,y1:oy+ay};
+  }
+  /* scale S, keeping the point under (fx,fy) where it is */
+  function about(G,fx,fy,S,from){
+    const k=S/from.s;
+    return {s:S,x:fx-G.cx-(fx-G.cx-from.x)*k,y:fy-G.cy-(fy-G.cy-from.y)*k};
+  }
+  function inside(G,t){
+    if(t.s<=1.0001)return {s:1,x:0,y:0};
+    const L=lim(G,t.s);
+    return {s:t.s,x:cl(t.x,L.x0,L.x1),y:cl(t.y,L.y0,L.y1)};
+  }
+  function spring(to){
+    goal=to;
+    if(!raf){last=now();raf=requestAnimationFrame(step)}
+    paint();
+  }
+  function step(t){
+    const red=!!(window.Motion&&Motion.reduced),k=red?3800:380,c=2*(red?1:.8)*Math.sqrt(k);
+    const dt=Math.min(.05,Math.max(0,(t-last)/1000));last=t;
+    for(let n=Math.max(1,Math.ceil(dt/.004)),h=dt/n;n--;){
+      vs+=(-k*(s-goal.s)-c*vs)*h;s+=vs*h;
+      vx+=(-k*(x-goal.x)-c*vx)*h;x+=vx*h;
+      vy+=(-k*(y-goal.y)-c*vy)*h;y+=vy*h;
+    }
+    if(Math.abs(s-goal.s)<5e-4&&Math.abs(vs)<.01&&Math.abs(x-goal.x)<.3&&Math.abs(vx)<8&&Math.abs(y-goal.y)<.3&&Math.abs(vy)<8){
+      s=goal.s;x=goal.x;y=goal.y;vs=vx=vy=0;goal=null;raf=0;paint();return;
+    }
+    paint();raf=requestAnimationFrame(step);
+  }
+  function halt(){if(raf)cancelAnimationFrame(raf);raf=0;goal=null;vs=vx=vy=0}
+  function centroid(){let a=0,b=0;pts.forEach(p=>{a+=p.x;b+=p.y});return {x:a/pts.size,y:b/pts.size}}
+  function spread(){if(pts.size<2)return 0;const [p,q]=[...pts.values()];return Math.hypot(p.x-q.x,p.y-q.y)}
+  /* (re)start from what is on screen, so a finger added or lifted mid-gesture
+     never makes the picture jump. r* are the values before the rubber band. */
+  function begin(){
+    const G=geo();if(!G){g=null;return}
+    const L=lim(G,s),m=centroid();
+    g={G,m,lm:m,d:spread(),ds:s,dx:x,dy:y,rs:unrub(s,1,G.max),rx:unrub(x,L.x0,L.x1),ry:unrub(y,L.y0,L.y1)};
+    trail=[];
+  }
+  function track(){
+    if(!g)return;
+    const G=g.G,m=centroid();
+    let S=g.ds;
+    if(pts.size>=2&&g.d>0)S=rub(g.rs*spread()/g.d,1,G.max);
+    else if(g.ds<=1.01)return;   /* one finger at fit: that is a swipe */
+    const k=S/g.ds,L=lim(G,S);
+    const ix=m.x-G.cx-(g.m.x-G.cx-g.dx)*k,iy=m.y-G.cy-(g.m.y-G.cy-g.dy)*k;
+    s=S;x=rub(g.rx+ix-g.dx,L.x0,L.x1);y=rub(g.ry+iy-g.dy,L.y0,L.y1);
+    g.lm=m;
+    trail.push({t:now(),x,y});if(trail.length>8)trail.shift();
+    paint();
+  }
+  /* the last finger is up: settle inside the bounds, carrying the throw */
+  function release(){
+    const G=g&&g.G,lm=g&&g.lm;g=null;
+    if(!G){paint();return}
+    let ux=0,uy=0;
+    const t=now(),old=trail.find(p=>t-p.t<100),end=trail[trail.length-1];
+    if(old&&end&&end.t>old.t&&t-end.t<50){
+      const dt=(end.t-old.t)/1000;
+      ux=cl((end.x-old.x)/dt,-4000,4000);uy=cl((end.y-old.y)/dt,-4000,4000);
+    }
+    let to={s:cl(s,1,G.max),x,y};
+    if(to.s!==s)to=about(G,lm.x,lm.y,to.s,{s,x,y});
+    to.x+=ux*.25;to.y+=uy*.25;
+    vx=ux;vy=uy;vs=0;
+    spring(inside(G,to));
+  }
+  function toggle(fx,fy,mode){
+    const G=geo();if(!G)return;
+    if((goal||{s}).s>1.01)return spring({s:1,x:0,y:0});
+    const S=cl(mode==='actual'&&G.real>=1.5?G.real:2.5,1,G.max);
+    if(fx==null){fx=G.sr.left+G.sr.width/2;fy=G.sr.top+G.sr.height/2}
+    spring(inside(G,about(G,fx,fy,S,{s,x,y})));
+  }
+  st.addEventListener('pointerdown',e=>{
+    const im=img();if(!im)return;
+    if(e.pointerType==='mouse'){if(e.button!==0)return;e.preventDefault()}
+    pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===1)press={x:e.clientX,y:e.clientY,onImg:e.target===im,moved:false,type:e.pointerType};
+    else if(press)press.moved=true;   /* two fingers are never a tap */
+    halt();begin();paint();
+  });
+  addEventListener('pointermove',e=>{
+    const p=pts.get(e.pointerId);if(!p)return;
+    p.x=e.clientX;p.y=e.clientY;
+    if(press&&!press.moved&&Math.hypot(p.x-press.x,p.y-press.y)>8)press.moved=true;
+    track();
+  });
+  function up(e){
+    if(!pts.delete(e.pointerId))return;
+    if(pts.size){begin();return}
+    const pr=press;
+    if(pr&&!pr.moved&&pr.onImg&&e.type==='pointerup'){
+      if(pr.type==='mouse'){g=null;return toggle(e.clientX,e.clientY,'actual')}
+      const t=now();
+      if(lastTap&&t-lastTap.t<320&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<32){
+        lastTap=null;g=null;return toggle(e.clientX,e.clientY);
+      }
+      lastTap={t,x:e.clientX,y:e.clientY};
+    }
+    release();
+  }
+  addEventListener('pointerup',up);
+  addEventListener('pointercancel',up);
+  st.addEventListener('wheel',e=>{
+    const G=geo();if(!G)return;
+    e.preventDefault();
+    const from=goal||{s,x,y};
+    const dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?400:1);
+    const to=inside(G,about(G,e.clientX,e.clientY,cl(from.s*Math.exp(-dy*(e.ctrlKey?.01:.0015)),1,G.max),from));
+    /* a trackpad streams small steps: follow them 1:1. A mouse wheel clicks
+       in big ones: spring to each, retargeting as the next click lands */
+    clearTimeout(wt);wt=setTimeout(()=>{wt=0;paint()},160);
+    if(e.ctrlKey||Math.abs(dy)<40){halt();s=to.s;x=to.x;y=to.y;paint()}
+    else spring(to);
+  },{passive:false});
+  addEventListener('resize',()=>{
+    if(!box.classList.contains('on')||(s===1&&!x&&!y))return;
+    const G=geo();if(G)spring(inside(G,goal||{s,x,y}));
+  });
+  return {
+    reset(){halt();pts.clear();g=null;press=null;lastTap=null;s=1;x=y=0;paint()},
+    toggle,
+    /* whether the click that follows belonged to the zoom, not the scrim */
+    swallow(){return !!press&&(press.onImg||press.moved)}
+  };
 })();
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-galopen]');if(!b)return;

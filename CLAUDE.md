@@ -144,5 +144,12 @@ does) and work in the scratchpad:
   slow it down and tap twice (pending), and fake `visibilityState` hidden →
   visible (another tab). After every tap, fullscreen, `.zen` and the icon
   must agree.
+- **Test touch gestures with real touch points.** Playwright's `tap` sends
+  one finger only. For pinch, pan and double tap, open a CDP session and
+  send `Input.dispatchTouchEvent` (`touchStart` with two points, a series
+  of `touchMove`, then `touchEnd` with none), with `hasTouch` and
+  `isMobile` on the context. Read the picture's `style.transform` and
+  `visualViewport.scale` (it must stay 1: the page itself never zooms).
+  To check a spring, log the transform on every animation frame.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

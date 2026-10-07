@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.4** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.5** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -239,6 +239,14 @@ padding or size.
   counts), and the motion continues with that velocity on `--p-spatial`.
 - Past a threshold: resistance (rubber band, 0.55× movement), then a light
   haptic tick where supported.
+- **Pinch to zoom a picture** (the figure viewer): the stage takes every
+  touch (`touch-action:none`) and the picture moves by `transform` alone.
+  Two fingers scale about their midpoint and pan at once, exactly under
+  the fingers; one finger pans only once zoomed (at fit it is the swipe to
+  the next picture). Past an edge, under fit or over the ceiling it gives
+  at 0.55×. Every settle is a spring stepped per frame with the
+  `--p-spatial` values, never a CSS transition, so a finger can catch it
+  mid-flight. Double tap zooms into the tapped point and back.
 - Haptics are optional and subtle: `navigator.vibrate(6–10)` on a commit
   (toggle on, gesture past its threshold, answer locked). Behind a setting,
   and a silent no-op where unsupported.
@@ -499,6 +507,15 @@ Errors say what happened and what is safe ("Nothing was lost").
   height stays 48px; the Tutor/Exam chip hides; from 420px the counter's
   chevron hides. Anything added to the bar is measured at 320–430px with
   the widest counter ("100 / 120") before it ships.
+- **Pinch, pan and double-tap zoom** (`Plume 1.5 · figure viewer zoom`,
+  `FZ` in script): a per-frame spring (stiffness 380, damping 0.8, the
+  `--p-spatial` source values; 3800 / 1 under reduced motion) that keeps
+  its velocity, so gestures retarget without a jump. Each gesture restarts
+  from what is on screen whenever a finger is added or lifted, un-doing
+  the rubber band first. `will-change` is on only while moving, so the
+  picture redraws sharp once still. A click after a drag or a tap on the
+  picture is swallowed (`FZ.swallow()`); only a tap on the scrim closes.
+  Reuse it for any other zoomable picture.
 - **Hiding something without changing the layout** (the session clock,
   `.player.clock-off`): fade and shrink it out on the exit curve, then flip
   `visibility` to hidden after the fade (a delayed `visibility` transition).
@@ -517,6 +534,7 @@ A surface that is not listed here is legacy.
 | Opening the player and the companion from Home's session card (Resume, Companion) | 1.0 | 6.38 | The transition only. The player itself is still legacy |
 | Player: "Show clock" switch in the ⋮ menu, and the clock's hide/show | 1.3 | 6.40 | The menu around it is still legacy |
 | Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
+| Figure viewer: pinch, pan, double-tap and wheel zoom | 1.5 | 6.45 | The gesture and its springs only. The viewer's bar and buttons are still legacy |
 
 ## 15. Language changelog
 
@@ -540,6 +558,8 @@ A surface that is not listed here is legacy.
   jump (fade out, then `visibility`).
 - **Plume 1.4** (2026-10-07): icons that morph by rotating their own
   strokes; the compact session bar, measured with the widest counter.
+- **Plume 1.5** (2026-10-07): pinch-to-zoom for pictures, driven by a
+  per-frame spring that a finger can catch mid-flight.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
