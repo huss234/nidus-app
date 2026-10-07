@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.19 -->
+<!-- Nidus — Personal Qbank · v6.20 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3727,8 +3727,6 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 }
 .sp-timer.warn{background:var(--md-error-container);color:var(--md-on-error-container);animation:spPulse 1s var(--m3-ease-standard) infinite}
 @keyframes spPulse{50%{transform:scale(1.06)}}
-.sp-top .tool.sp-flag.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
-.sp-top .tool.sp-flag.on .ic{animation:spWiggle var(--m3-spatial-slow) var(--m3-spring-expressive)}
 @keyframes spWiggle{0%{transform:rotate(0) scale(.7)}40%{transform:rotate(-14deg) scale(1.15)}100%{transform:none}}
 
 /* progress track: one segment per question while they fit, a single bar after */
@@ -4116,11 +4114,6 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-expl .esec > .eh:not(:has(.n)) .cv{margin-left:auto}
 .sp-expl .esec.key > .eh{color:var(--md-primary)}
 .sp-expl .echoice .ebody{margin-left:40px}
-/* actions */
-.sp-acts{display:flex;flex-wrap:wrap;gap:8px;padding-top:4px}
-.sp-acts .sp-chip{height:40px;border-radius:var(--m3-corner-m)}
-.sp-acts .sp-chip:active{border-radius:var(--m3-corner-s)}
-.sp-acts .sp-chip.pri{background:var(--md-secondary-container);color:var(--md-on-secondary-container);border-color:transparent}
 /* my note */
 .sp-note{margin-top:24px;padding:16px;border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);max-width:var(--measure);
   animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel)}
@@ -4173,7 +4166,6 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-cbg button{font-size:15px}
   .sp-grid{grid-template-columns:repeat(auto-fill,minmax(56px,1fr))}
   .sp-grid button{height:56px;font-size:16px}
-  .sp-acts .sp-chip{height:44px}
 }
 @media (min-width:1000px) and (orientation:landscape){
   .sp{--sp-wide:calc(var(--pmax) * 1.45);--sp-split:40px}
@@ -4749,7 +4741,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.19</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.20</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4759,7 +4751,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.19 · sharded store</span>
+        <span class="chip" id="verChip">v6.20 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4802,17 +4794,18 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       </button>
       <span class="sp-timer" id="pTimer">00:00</span>
       <div class="tools">
-        <button class="tool sp-flag" id="pFlag" title="Flag this question for review (F)" aria-label="Flag"><svg class="ic"><use href="#i-flag"/></svg></button>
-        <button class="tool hl" id="pHl" title="Highlighter (H)" aria-label="Highlighter"><svg class="ic"><use href="#i-highlight"/></svg></button>
+        <button class="tool" id="pRefr" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)" aria-label="Refresh from cloud"><svg class="ic"><use href="#i-cloud"/></svg></button>
+        <button class="tool" id="pCopy" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)" aria-label="Copy everything"><svg class="ic"><use href="#i-copy"/></svg></button>
         <div class="tmwrap">
           <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
           <div class="tmpop" id="pMorePop" role="menu" aria-labelledby="pMore">
             <div class="setgrp">This question</div>
+            <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag for review</span><span class="kbd">F</span></button>
+            <button class="tool" id="pHl" role="menuitem" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg><span class="tml">Highlighter</span><span class="kbd">H</span></button>
             <button class="tool" id="pNote" role="menuitem" title="My note on this question (N)"><svg class="ic"><use href="#i-note"/></svg><span class="tml">My note</span><span class="kbd">N</span></button>
             <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span><span class="kbd">G</span></button>
-            <button class="tool" id="pCopy" role="menuitem" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy everything</span><span class="kbd">Y</span></button>
             <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span><span class="kbd">⇧Y</span></button>
-            <button class="tool" id="pRefr" role="menuitem" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)"><svg class="ic"><use href="#i-cloud"/></svg><span class="tml">Refresh from cloud</span><span class="kbd">R</span></button>
+            <button class="tool" id="pEdit" role="menuitem" title="Edit this question"><svg class="ic"><use href="#i-text"/></svg><span class="tml">Edit question</span></button>
             <div class="setgrp">Reference</div>
             <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span><span class="kbd">L</span></button>
             <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span><span class="kbd">C</span></button>
@@ -5711,7 +5704,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.19';
+const APP_VERSION='6.20';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8899,10 +8892,6 @@ function renderExpl(){
         <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${aFmt(r.c.text)}</span>
         <div class="ebody">${nf?whyHTML(r.c):mdFmt(r.c.explanation)}</div></div>`).join(''));
   }
-  /* figures that belong to the teaching rather than the question sit at the head of it */
-  const efigs=figsIn(q,'expl');
-  if(efigs.length)h+=esec('figs',efigs.length>1?'Figures':'Figure',
-    efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{}));
   if(nf){if(q.explanation)h+=nfTeach(q.explanation)}
   else{
     if(q.explanation)h+=esec('expl','Explanation','',`<div class="ebody">${mdFmt(q.explanation)}</div>`,'key');
@@ -8916,14 +8905,13 @@ function renderExpl(){
   if(s.note)h+=`<div class="sp-card"><div class="sp-eyebrow">My note</div><div class="ebody">${mdFmt(s.note)}</div></div>`;
   /* the referenced files are block 16 and are drawn by #pLinks below this
      panel, at the foot of the body, so they are not repeated inside it */
-  h+=`<div class="sp-acts">
-      <button class="sp-chip pri" id="explCopy"><svg class="ic"><use href="#i-copy"/></svg>Copy everything</button>
-      <button class="sp-chip" id="explCopyAsk"><svg class="ic"><use href="#i-copy"/></svg>Question only</button>
-      <button class="sp-chip" id="explNote"><svg class="ic"><use href="#i-note"/></svg>${s.note?'Edit my note':'Add a note'}</button>
-      <button class="sp-chip" data-editq="${q.id}"><svg class="ic"><use href="#i-text"/></svg>Edit</button>
-      <button class="sp-chip figadd" data-figadd="expl" data-figq="${q.id}"><svg class="ic"><use href="#i-imageadd"/></svg>Add a figure</button>
-      <button class="sp-chip" id="explSet"><svg class="ic"><use href="#i-tune"/></svg>Reading</button>
-    </div></section>`;
+  /* figures that belong to the teaching close it, after everything written */
+  const efigs=figsIn(q,'expl');
+  if(efigs.length)h+=esec('figs',efigs.length>1?'Figures':'Figure',
+    efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{}));
+  /* the session's actions (copy, note, edit, figures, reading) live in the bar
+     and its ⋮ menu, so the panel ends with the teaching */
+  h+=`</section>`;
 
   $('#pExpl').innerHTML=h;
   $('#pExpl').querySelectorAll('[data-miss]').forEach(b=>b.onclick=()=>{
@@ -8932,10 +8920,6 @@ function renderExpl(){
   $('#pExpl').querySelectorAll('.esec > .eh').forEach(b=>b.onclick=()=>{
     const sec=b.parentElement;sec.classList.toggle('shut');
     EXPLSHUT[sec.dataset.sec]=sec.classList.contains('shut')});
-  const en=$('#explNote');if(en)en.onclick=()=>toggleNotes(true);
-  const ec=$('#explCopy');if(ec)ec.onclick=()=>copyCurrentQ('full');
-  const ea=$('#explCopyAsk');if(ea)ea.onclick=()=>copyCurrentQ('ask');
-  const es=$('#explSet');if(es)es.onclick=openSessionSettings;
 }
 function next(){if(cur<S.order.length-1){flushTime();NAVDIR=1;cur++;renderQ()}}
 function prev(){if(cur>0){flushTime();NAVDIR=-1;cur--;renderQ()}}
@@ -9171,16 +9155,18 @@ async function refreshCurrentQ(){
   toast(linked?'This question is up to date.':'Redrawn from this device — cloud sync is off, so nothing was fetched.');
 }
 $('#pRefr').onclick=refreshCurrentQ;
+$('#pEdit').onclick=()=>{const id=S&&curId();if(id)editQuestion(id)};
 
 /* ---------- the tool menu ----------
-   Six of the nine session tools live behind one button now. They keep their
-   original ids and handlers; only where they sit on screen has changed, so the
-   keyboard shortcuts still reach them while the popover is closed. */
+   Every session tool lives behind one button except Refresh and Copy
+   everything, which sit beside it in the bar. They keep their original ids
+   and handlers; only where they sit on screen has changed, so the keyboard
+   shortcuts still reach them while the popover is closed. */
 let toolsT=null,toolsSettleT=null;
 function toolsOpen(){const p=$('#pMorePop');return p.classList.contains('on')&&!p.classList.contains('out')}
 function paintTools(){
   /* a tool can be lit while it is out of sight — mirror that on the button */
-  const lit=['#pFig','#pFull','#pFlag'].some(s=>{const b=$(s);return b&&b.classList.contains('on')});
+  const lit=['#pFig','#pFull','#pFlag','#pHl'].some(s=>{const b=$(s);return b&&b.classList.contains('on')});
   $('#pMore').classList.toggle('flagged',lit);
 }
 function closeTools(){
