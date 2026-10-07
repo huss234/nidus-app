@@ -82,6 +82,13 @@ exactly**, without waiting to be asked.
   Paste bubble, Chrome asks once); if that is blocked it opens a paste box
   (`figPastePad`) in the figure block. Every figure block drawn by
   `figHTML` (companion, bank preview, editor, figure manager) gets both.
+- **Focus mode has two forms**: real fullscreen and the in-page fallback
+  (`.zen`, used when the browser refuses fullscreen). Its state is
+  `focusOn()` (either one), and a tap always flips that. Never decide from
+  the fullscreen flag alone: that left the fallback stuck on with the icon
+  saying off (v6.43 and earlier). Every fullscreen call is awaited and
+  caught, a tap during a pending request is ignored (`fsBusy`), and hiding
+  the tab exits fullscreen while coming back repaints the button.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -132,5 +139,10 @@ does) and work in the scratchpad:
   `navigator.clipboard.write`, then tap Paste. For the fallback, make
   `navigator.clipboard.read` reject and dispatch a `ClipboardEvent('paste')`
   carrying a `DataTransfer` file on `.figpad`.
+- **Test focus mode by stubbing the browser**, since headless Chromium
+  keeps fullscreen across tabs: make `requestFullscreen` reject (refused),
+  slow it down and tap twice (pending), and fake `visibilityState` hidden →
+  visible (another tab). After every tap, fullscreen, `.zen` and the icon
+  must agree.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
