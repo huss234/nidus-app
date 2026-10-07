@@ -75,6 +75,13 @@ exactly**, without waiting to be asked.
   figures last). Any other surface that copies a question from a session
   (the companion does) calls the same function, so the copies stay
   identical. Change copy behaviour there, never per surface.
+- **Confidence travels with the answer.** The "How sure are you?" control
+  hides once the answer is submitted, so every place that reports an
+  answer (block 7) also reports its confidence (`it.conf`): the verdict's
+  meta row (a pill with the control's own icon, worded by `CONF_IC` /
+  `CONF_SAY`), the Markdown copy ("Confidence before answering: …") and
+  the companion's "Answered there" line. A new surface that shows an
+  answer shows its confidence too.
 - **Adding a picture** always offers three ways in: choose a file
   (`figPick`), **Paste** (`figPaste`) and **From gallery** (`fpkOpen`,
   which reuses a picture already in the bank). A phone has no Ctrl+V and no
