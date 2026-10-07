@@ -5,6 +5,22 @@ progress), built as a single-file app: everything lives in `index.html`,
 served by GitHub Pages from `main`. Its data syncs to the private repos
 `nidus-data` / `nidus-media`. Never edit those repos.
 
+## Keep these files current, unprompted
+
+Updating `CLAUDE.md` and `DESIGN.md` is part of every change, in the same
+commit, without the user asking. Before shipping, check what the work
+taught and write it down:
+
+- a new or changed Plume pattern, helper, component or token → `DESIGN.md`
+  §13 (where it lives) and the §14 ledger, with a Plume version bump if it
+  adds a rule;
+- a bug found and its cause, or a correction from the user → the rule that
+  prevents it (`DESIGN.md` for design and motion, this file for workflow
+  and code conventions);
+- a new house convention, shared function or testing technique → this file.
+
+If nothing was learned, nothing changes; say so in the report.
+
 ## Design: Plume
 
 Nidus is being redesigned in **Plume**, its own design language built on
