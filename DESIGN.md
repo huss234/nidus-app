@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.0** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.1** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -205,6 +205,13 @@ padding or size.
   has actually finished (measured, never a guessed timer).
 - **Peer screens:** fade-through. The old screen fades out (≈90ms), then the
   new one fades in with a 12px rise on `--p-spatial`. They never overlap.
+- **A screen opened from a card** (Resume, Companion on Home) grows out of
+  that card (`plumeOpen`). The old screen stays visible underneath until the
+  new one has landed. **Never a blank frame**, and the new screen arrives
+  as one piece: its own entrance animations must not trickle in parts
+  (bar first, then content, then a bottom bar) under the transform.
+- **Messages wait for motion.** A snackbar triggered by opening a screen
+  appears after the screen has landed, never mid-transition.
 - **Hierarchy (list → detail):** a container transform. The tapped card
   becomes the detail surface (View Transitions API with
   `view-transition-name`, or a FLIP fallback).
@@ -247,6 +254,16 @@ padding or size.
 - `will-change` only while something is animating, removed afterwards.
 - 60fps on a mid-range Android phone is the bar. Large blurs and box-shadow
   animations are suspects. Animate the opacity of a shadow layer instead.
+
+### Layers and keys
+
+- Escape closes **only the top layer**: menu, then dialog or figure viewer,
+  then the reader, then nothing. One key press never closes two layers.
+- A Plume layer's key handler runs in the **capture phase** and returns
+  early while a dialog (`#mask.on`) or the figure viewer (`#lbx.on`) is
+  open. In bubble phase it runs after the dialog has already closed itself,
+  and closes the layer underneath too.
+- Arrow keys move between items only when focus is not in a text field.
 
 ### Reduced motion
 
@@ -375,6 +392,10 @@ can shine.
   runs to its value. If the result earns it, a `tertiary` celebration:
   an expressive shape blooms behind the number, once, never on loop.
 - **Streaks and milestones:** the only place `tertiary` is used as a fill.
+- **Spoilers stay sealed.** When an answer is hidden (the companion's
+  read-along), nothing outside the spoiler may hint at it. No green or red
+  chip, badge or tint says whether it was right. "Answered there" is
+  neutral, and the chosen option is marked but never graded outside it.
 
 ---
 
@@ -398,6 +419,9 @@ Errors say what happened and what is safe ("Nothing was lost").
 - Idle or looping decoration.
 - Feedback that waits for `click` while the finger is already down.
 - A redesign of a surface the user did not ask for.
+- A blank frame, or parts arriving at different times, between two screens.
+- One key press closing two layers.
+- A colour that gives away a hidden answer.
 
 ---
 
@@ -411,10 +435,13 @@ Errors say what happened and what is safe ("Nothing was lost").
 - [ ] No layout jump during or after any animation, and none on first paint.
 - [ ] Reduced motion: still alive in feel, no travel.
 - [ ] Checked in light and dark, at 390px and desktop (`htmlcheck --shot`).
+- [ ] Every new or changed transition **filmed frame by frame** on its real
+      trigger (see `CLAUDE.md`, Testing): no blank frame, no part snapping
+      in on its own, and it lands where it should.
 - [ ] Keyboard: Tab order, `:focus-visible`, Escape closes, Enter/Space
       activates. ARIA roles and states are correct.
 - [ ] `htmlcheck` passes with no console errors.
-- [ ] The CSS block is marked `/* Plume 1.0 · <surface> */` and the ledger
+- [ ] The CSS block is marked `/* Plume <ver> · <surface> */` and the ledger
       below is updated.
 
 ---
@@ -467,6 +494,12 @@ A surface that is not listed here is legacy.
   indicators, gesture physics and the Nidus moments. Amended the same day
   with the first surface (Companion): spring durations replaced by the
   generated settling times, and §13 now maps where Plume lives in the code.
+
+- **Plume 1.1** (2026-10-07): rules learned from the first fixes. A screen
+  opened from a card never shows a blank frame and arrives as one piece.
+  Snackbars wait for motion. Escape closes only the top layer (capture-phase
+  key handlers). Spoilers stay sealed: no colour hints at a hidden answer.
+  Transitions are filmed frame by frame before they ship.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

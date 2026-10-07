@@ -31,6 +31,13 @@ exactly**, without waiting to be asked.
 - If a change needs a pattern Plume doesn't cover yet, design it within the
   principles, then add it to `DESIGN.md` in the same commit and bump the
   Plume minor version.
+- The **frontend-design** plugin is installed. Use it for aesthetic
+  direction on visual work, but `DESIGN.md` wins whenever they disagree.
+- **Motion complaints:** when the user says a motion looks wrong or buggy,
+  film it frame by frame on the real trigger first, name exactly what
+  happens ("Home vanishes in one frame, then a blank screen, then the
+  options appear one by one"), and fix that motion only. Don't add visual
+  elements nobody asked for.
 
 ## Versions and commits
 
@@ -38,7 +45,8 @@ exactly**, without waiting to be asked.
   the comment on line 2, `APP_VERSION`, `#buildChip`, and `#verChip`
   (`vX.YY · sharded store`).
 - Commit message format: `<Area>: <what changed> (v6.36)`. For Plume work,
-  add the language version: `<Area>: <what changed> (v6.36 · Plume 1.0)`.
+  add the language version: `<Area>: <what changed> (v6.36 · Plume 1.1)`,
+  using the version in the header of `DESIGN.md`.
 
 ## House rules
 
@@ -46,6 +54,11 @@ exactly**, without waiting to be asked.
   order for every surface that draws a question (player, bank preview,
   companion, Markdown copy via `qToMarkdown()`). A surface may omit a
   block but never reorder one.
+- **Copying a question:** the study session defines what Copy writes and in
+  what order, through `sessCopyOpts(scope)` (no tags line, explanation
+  figures last). Any other surface that copies a question from a session
+  (the companion does) calls the same function, so the copies stay
+  identical. Change copy behaviour there, never per surface.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -55,3 +68,28 @@ exactly**, without waiting to be asked.
   and import/export working.
 - Ship with `ship ~/projects/nidus-app "<message>"` (from the global
   instructions). Never push code that fails `htmlcheck`.
+
+## Testing locally
+
+`htmlcheck` only loads the page empty. To see real screens, drive the app
+with playwright-core (Chromium at `~/.cache/ms-playwright`, as `htmlcheck`
+does) and work in the scratchpad:
+
+- **Seed data:** in `addInitScript`, write a JSON database to
+  `localStorage.nidus_db`, guarded by a `sessionStorage` flag so a reload
+  doesn't overwrite it. It needs `questions` (id, stem, leadIn, choices
+  with label / text / isCorrect / explanation, correctAnswer, explanation…),
+  `stats`, `sessions` and `settings` (`{theme:'light'}` gives the light
+  theme; setting `data-theme` by hand is overwritten by the app).
+- **Session items must be complete:** `{order, chosen, struck:[], conf,
+  timeMs, ansMs, submitted, correct}`. A missing `struck` makes the player
+  throw, which looks like an app bug but isn't.
+- **Open screens:** `compOpen(id)`, `compQuestion(i, tileEl)`,
+  `resumeSession(sessFind(id), buttonEl)`, or tap the real buttons
+  (`[data-compopen]`, `[data-sessresume]`) with `hasTouch:true`.
+- **Film a transition:** `Page.startScreencast` over CDP while tapping the
+  real trigger, save the frames with their times, and make a contact sheet
+  with ImageMagick (`montage -label '%t' … -tile 8x3`). Read the sheet
+  before and after the fix.
+- **Check copies:** replace `window.copy` with a function that records the
+  text, then click the copy buttons and compare the strings.
