@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.46 -->
+<!-- Nidus — Personal Qbank · v6.47 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -25,7 +25,7 @@
        4             lead-in
        5             options
        6  VERDICT    the correct answer
-       7             my answer, result, time, attempt history, miss
+       7             my answer, result, confidence, time, attempt history, miss
        8  TEACHING   disputed item
        9             choice by choice
       10             explanation figures
@@ -4209,6 +4209,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-vmeta{grid-column:1/3;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .sp-vmeta span{font:500 12px/16px var(--m3-font);letter-spacing:.3px;padding:6px 10px;border-radius:var(--m3-corner-full);background:color-mix(in oklab,currentColor 11%,transparent)}
 .sp-vmeta b{font-family:var(--m3-mono);font-weight:600}
+.sp-vmeta .sp-vconf{display:inline-flex;align-items:center;gap:6px}
+.sp-vmeta .sp-vconf .ic{width:16px;height:16px}
 .sp-card{border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);padding:20px}
 .sp-eyebrow{font:600 12px/16px var(--m3-font);letter-spacing:.8px;text-transform:uppercase;color:var(--md-primary);margin:0 0 12px}
 .sp-chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -5477,7 +5479,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.46</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.47</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5487,7 +5489,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.46 · sharded store</span>
+        <span class="chip" id="verChip">v6.47 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6490,7 +6492,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.46';
+const APP_VERSION='6.47';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10230,6 +10232,10 @@ function nfTeach(md){
   if(rule)h+=`<div class="sp-rule"><span class="sp-ruleic"><svg class="sp-rulesh" viewBox="-20 -20 40 40" aria-hidden="true"><path d="${SP_SH.ok}"/></svg><svg class="ic"><use href="#i-bulb"/></svg></span><div><div class="sp-eyebrow">Takeaway</div><p>${mdInline(rule)}</p></div></div>`;
   return h+`</div>`;
 }
+/* the confidence given before answering, as the verdict and the companion say it;
+   the icons are the ones on the "How sure are you?" control */
+const CONF_IC={sure:'check',unsure:'help',guess:'dice'};
+const CONF_SAY={sure:'You were sure',unsure:'You were unsure',guess:'You guessed'};
 function renderExpl(){
   const q=curQ(),it=curIt(),s=ST(q.id);
   /* `mine` is the answer just given and is written back to (the miss tag), so
@@ -10252,7 +10258,7 @@ function renderExpl(){
       <span class="sp-vshape"><svg class="ic"><use href="#i-${it.correct?'check':'close'}"/></svg></span>
       <div class="sp-vt">${it.correct?'Correct':it.chosen?'Not this time':'Not answered'}</div>
       <div class="sp-vs">The answer is <b>${esc(keyTxt)}</b>${keyText?' — '+aFmt(keyText):''}</div>
-      <div class="sp-vmeta"><span><b>${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}</b> answer time</span>${avg?`<span>your average <b>${fmtT(avg/1000)}</b></span>`:''}<span>${prev}</span></div>
+      <div class="sp-vmeta"><span><b>${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}</b> answer time</span>${avg?`<span>your average <b>${fmtT(avg/1000)}</b></span>`:''}<span>${prev}</span>${it.conf&&CONF_SAY[it.conf]?`<span class="sp-vconf"><svg class="ic"><use href="#i-${CONF_IC[it.conf]}"/></svg>${CONF_SAY[it.conf]}</span>`:''}</div>
     </div>`;
   if(!it.correct&&mine){
     h+=`<div class="sp-card"><div class="sp-eyebrow">What went wrong?</div><div class="sp-chips">${MISS.map(([k,l])=>`<button class="sp-chip${mine.miss===k?' on':''}" data-miss="${k}"><svg class="ic"><use href="#i-check"/></svg>${l}</button>`).join('')}</div></div>`;
@@ -10435,7 +10441,7 @@ function qToMarkdown(q,it,o){
     push('- Chose: '+(it.chosen?'**'+disp(it.chosen)+'**':'_omitted_')+' — '+(it.correct?'correct':'incorrect'));
     const att=st.attempts||[],mine=att[att.length-1];
     if((it.struck||[]).length)push('- Crossed out: '+it.struck.map(l=>disp(l)).join(', '));
-    if(it.conf)push('- Confidence: '+it.conf);
+    if(it.conf)push('- Confidence before answering: '+it.conf);
     if(it.chosen&&(it.ansMs!=null||it.timeMs))push('- Answer time: '+fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000));
     if(it.timeMs)push('- Question time: '+fmtT(it.timeMs/1000));
     if(att.length>1)push('- History: '+att.filter(a=>a.correct).length+'/'+att.length+' correct across '+att.length+' attempts');
@@ -13427,7 +13433,7 @@ function cpqPaint(s,id,q){
   if(it.submitted){
     const bits=[
       (it.struck||[]).length?'crossed out '+it.struck.map(disp).join(', '):'',
-      it.conf?it.conf:'',
+      it.conf?'confidence: '+it.conf:'',
       it.timeMs?(it.chosen&&it.ansMs!=null?'answer '+fmtT(it.ansMs/1000)+' · ':'')+'question '+fmtT(it.timeMs/1000):'',
       catt.length>1?catt.filter(a=>a.correct).length+'/'+catt.length+' correct across '+catt.length+' attempts':'first attempt',
       (clast&&clast.miss)?((MISS.find(x=>x[0]===clast.miss)||[])[1]||''):''
