@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.26 -->
+<!-- Nidus — Personal Qbank · v6.27 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -1082,7 +1082,7 @@ a.btn.tg{background:var(--md-primary-container);color:var(--md-on-primary-contai
 .tool:active{border-radius:var(--m3-corner-m);transform:scale(.9);transition-duration:var(--m3-shape-in)}
 .tool.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
 .tool.on.hl{background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)}
-/* 6.26 — copied: the button itself stays as it is; the copy glyph shrinks
+/* 6.26 — copied (Copy everything, and the menu's button for Copy question only): the button itself stays as it is; the copy glyph shrinks
    and turns away and a check draws itself in its place, then the glyph
    springs home */
 .cpi{display:grid;place-items:center;width:24px;height:24px;flex:0 0 24px}
@@ -4746,7 +4746,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.26</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.27</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4756,7 +4756,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.26 · sharded store</span>
+        <span class="chip" id="verChip">v6.27 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4802,7 +4802,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <button class="tool" id="pRefr" title="Refresh this question — fetch the newest copy, including a photo attached on another device (R)" aria-label="Refresh from cloud"><svg class="ic"><use href="#i-cloud"/></svg></button>
         <button class="tool" id="pCopy" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)" aria-label="Copy everything"><span class="cpi"><svg class="ic"><use href="#i-copy"/></svg><svg class="ic cpk" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="m4.6 12.6 4.7 4.7L19.4 7.1"/></svg></span></button>
         <div class="tmwrap">
-          <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
+          <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><span class="cpi"><svg class="ic"><use href="#i-morev"/></svg><svg class="ic cpk" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="m4.6 12.6 4.7 4.7L19.4 7.1"/></svg></span></button>
           <div class="tmpop" id="pMorePop" role="menu" aria-labelledby="pMore">
             <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag for review</span></button>
             <button class="tool" id="pHl" role="menuitem" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg><span class="tml">Highlighter</span></button>
@@ -4810,7 +4810,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
             <div class="tmdiv" role="separator"></div>
             <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span></button>
             <button class="tool" id="pEdit" role="menuitem" title="Edit this question"><svg class="ic"><use href="#i-text"/></svg><span class="tml">Edit question</span></button>
-            <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><span class="cpi"><svg class="ic"><use href="#i-copy"/></svg><svg class="ic cpk" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="m4.6 12.6 4.7 4.7L19.4 7.1"/></svg></span><span class="tml">Copy question only</span></button>
+            <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span></button>
             <div class="tmdiv" role="separator"></div>
             <button class="tool" id="pTags" role="menuitem" title="Tags on this question — system, subject, topic, difficulty, source"><svg class="ic"><use href="#i-info"/></svg><span class="tml">Tags</span></button>
             <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span></button>
@@ -5709,7 +5709,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.26';
+const APP_VERSION='6.27';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9119,7 +9119,12 @@ function copyCurrentQ(scope){
     ask?'Question and options copied — nothing that answers it.'
        :((it&&it.submitted)?'Copied with your answer, the explanations and everything attached.'
                            :'Copied with the key and explanations — you have not answered it yet, so no answer of yours is included.'));
-  const b=$(ask?'#pCopyAsk':'#pCopy');if(b){clearTimeout(b._ok);b.classList.remove('ok');void b.offsetWidth;b.classList.add('ok');b._ok=setTimeout(()=>b.classList.remove('ok'),1200)}
+  /* 6.27 — the menu closes the moment its row is tapped, so the row has no time
+     to confirm anything: the check plays on the button the menu folds back
+     into, once the fold has landed */
+  const b=$(ask?'#pMore':'#pCopy'),wait=ask&&toolsOpen()?140:0;
+  if(b){clearTimeout(b._ok);b.classList.remove('ok');
+    b._ok=setTimeout(()=>{b.classList.add('ok');b._ok=setTimeout(()=>b.classList.remove('ok'),1200)},wait)}
 }
 $('#pCopy').onclick=()=>copyCurrentQ('full');
 $('#pCopyAsk').onclick=()=>copyCurrentQ('ask');
