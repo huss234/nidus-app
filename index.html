@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.34 -->
+<!-- Nidus — Personal Qbank · v6.35 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4813,7 +4813,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.34</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.35</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4823,7 +4823,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.34 · sharded store</span>
+        <span class="chip" id="verChip">v6.35 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5782,7 +5782,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.34';
+const APP_VERSION='6.35';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -6469,7 +6469,7 @@ const NOTES={
   companion:['What this panel is',
     `<p class="tiny">A read-along copy of a session that is running on another device. The numbers above are that session's own, and each question keeps the option order it was shuffled into, so the letters match the other screen.</p>
      <p class="tiny" style="margin-top:12px">Nothing here is recorded as an answer, and the clock keeps running over there. The outlined number is the question open on that device.</p>
-     <p class="tiny" style="margin-top:12px">A photo, a note or an edit made here is stored on the question itself and pushed on the next sync. On the device you are studying on, press <b>Refresh</b> in the top bar to pull it into the open question without ending the session.</p>
+     <p class="tiny" style="margin-top:12px">A photo, a note or an edit made here is stored on the question itself and pushed on the next sync. So is a photo removed or a placeholder deleted, on either device — once gone, it stays gone everywhere. On the device you are studying on, press <b>Refresh</b> in the top bar to pull it into the open question without ending the session.</p>
      <p class="tiny" style="margin-top:12px">Press <b>Refresh</b> here to fetch what that device has done since.</p>`]
 };
 document.addEventListener('click',e=>{
@@ -6949,13 +6949,18 @@ function figSlotOf(s){
 /* one predicate for "this slot has a picture in it", so the legacy field and
    the content id can never disagree about what counts as filled */
 function figFilled(f){return !!(f&&(f.media||f.src))}
-function figNorm(im,i){
+/* v6.35 — an entry that arrives without an fid, read inside a known question,
+   gets an fid computed from what it is rather than a random one. Two devices
+   normalising the same legacy question used to mint two different ids for the
+   one placeholder, sync kept both, and the placeholder doubled. */
+function figNorm(im,i,qid){
   if(typeof im==='string')im={src:im};
   im=im||{};
   const src=String(im.src==null?(im.url||im.data||im.dataUri||'') : im.src).trim();
   const media=String(im.media==null?'':im.media).trim().toLowerCase();
   return{
-    fid:String(im.fid||('f'+Date.now().toString(36)+i+Math.random().toString(36).slice(2,6))),
+    fid:String(im.fid||(qid?'f'+hash(qid+'|'+i+'|'+figSlotOf(im.slot)+'|'+(im.caption||im.title||'')+'|'+(im.alt||im.description||'')+'|'+media+'|'+src.slice(0,96))
+      :('f'+Date.now().toString(36)+i+Math.random().toString(36).slice(2,6)))),
     slot:figSlotOf(im.slot),
     media:/^[0-9a-f]{12,64}$/.test(media)?media:'',
     mime:String(im.mime||'').trim(),
@@ -6965,8 +6970,61 @@ function figNorm(im,i){
     caption:String(im.caption||im.title||'').trim(),
     alt:String(im.alt||im.description||'').trim(),
     optional:!!im.optional,
-    dismissed:!!im.dismissed
+    dismissed:!!im.dismissed,
+    at:Number(im.at)||0,
+    was:String(im.was||'')
   };
+}
+/* ============================================================
+   HOW A FIGURE BEHAVES ACROSS DEVICES (v6.35)
+   ------------------------------------------------------------
+   Before this build the merge was a plain union in which a filled
+   slot always beat an empty one. So nothing a device REMOVED could
+   ever win: a photo taken off on the tablet came back from the
+   phone's copy, a deleted placeholder came back from the other
+   side's list, and a live-photo hint replayed from the other
+   device's beacon could refill a slot long after it was emptied.
+   The contract now, and every path below keeps to it:
+
+     1. A figure is identified by its fid, and an fid is the same on
+        every device — minted once when a photo or slot is made, or
+        computed from the entry itself when an old one has none.
+     2. Every change to a figure's picture — attach, replace, remove,
+        "Not needed" — stamps f.at. Between two copies of one fid the
+        higher stamp wins, removals included. A stamp is never lower
+        than the one it replaces, so an action always beats the state
+        it was taken on, whatever the two clocks say.
+     3. Deleting an entry leaves q.figGone[fid] = {ts, slot}. Nothing
+        with that fid comes back unless it was changed after the
+        delete. Tombstones merge by union, newest time.
+     4. Two devices filling one slot without having seen each other's
+        photo keep both — the second becomes its own figure. A
+        replace that saw the old photo (f.was) is a replace.
+     5. Copies that are plainly the same placeholder, or the same
+        photo twice in one slot, collapse to one, chosen the same way
+        on every device.
+     6. A live-photo hint only fills the exact fid it names, and only
+        if nothing newer has happened to that fid here.
+   ============================================================ */
+function figStamp(f){f.at=Math.max(Date.now(),(f.at||0)+1)}
+function figBury(q,f){
+  if(!q.figGone)q.figGone={};
+  q.figGone[f.fid]={ts:Math.max(Date.now(),(f.at||0)+1),slot:f.slot};
+}
+function figGoneTs(g){return typeof g==='number'?g:((g&&g.ts)||0)}
+function figDedupe(list){
+  const key=f=>figFilled(f)?(f.media?f.slot+'|m|'+f.media:''):((f.caption||f.alt)?f.slot+'|e|'+f.caption+'|'+f.alt:'');
+  const pick=(a,b)=>((a.at||0)!==(b.at||0))?((a.at||0)>(b.at||0)?a:b):(a.fid<=b.fid?a:b);
+  const best={},covered={};
+  list.forEach(f=>{
+    const k=key(f);if(k)best[k]=best[k]?pick(best[k],f):f;
+    if(figFilled(f)&&(f.caption||f.alt))covered[f.slot+'|e|'+f.caption+'|'+f.alt]=1;
+  });
+  return list.filter(f=>{
+    const k=key(f);if(!k)return true;
+    if(!figFilled(f)&&covered[k])return false;
+    return best[k]===f;
+  });
 }
 /* every read normalises in place, so old banks and new imports look the same
    to the UI. The shape test asks for media as well as src, so an entry written
@@ -6974,10 +7032,14 @@ function figNorm(im,i){
 function figList(q){
   if(!q)return[];
   if(!Array.isArray(q.images))q.images=[];
-  q.images=q.images.map((im,i)=>(im&&im.fid&&im.slot&&typeof im.src==='string'&&typeof im.media==='string')?im:figNorm(im,i));
-  /* an item the extractor flagged as figure-dependent gets a slot to fill */
-  if(q.hasImage&&!q.images.some(f=>f.slot==='stem'))
-    q.images.push(figNorm({slot:'stem',alt:q.imageDescription||''},q.images.length));
+  q.images=q.images.map((im,i)=>(im&&im.fid&&im.slot&&typeof im.src==='string'&&typeof im.media==='string')?im:figNorm(im,i,q.id));
+  /* an item the extractor flagged as figure-dependent gets a slot to fill —
+     always under the same fid, so a slot deleted here is not re-made */
+  if(q.hasImage&&!q.images.some(f=>f.slot==='stem')){
+    const afid='fs'+hash(String(q.id||''));
+    if(!(q.figGone&&q.figGone[afid]))q.images.push(figNorm({fid:afid,slot:'stem',alt:q.imageDescription||''},q.images.length));
+  }
+  if(q.images.length>1){const d=figDedupe(q.images);if(d.length!==q.images.length)q.images=d}
   return q.images;
 }
 function figsIn(q,slot){return figList(q).filter(f=>f.slot===slot&&!f.dismissed)}
@@ -7090,6 +7152,23 @@ function figRefresh(qid){
      has to be reflected there too — otherwise it goes on showing a snapshot */
   if(qid!=='@edit'&&VIEW==='gallery'&&typeof renderGallery==='function')renderGallery(false);
 }
+/* a sync that merged anything in redraws the figure blocks already on screen,
+   so a photo removed or a placeholder deleted on the other device disappears
+   here too instead of lingering until the next navigation. A block holding
+   the caret (a caption being typed) is left alone. */
+function figRedrawVisible(){
+  $$('.figs').forEach(el=>{
+    const qid=el.dataset.figq;
+    if(!qid||qid==='@edit'||!figQ(qid)||el.contains(document.activeElement))return;
+    const tmp=document.createElement('div');
+    tmp.innerHTML=figHTML(qid,el.dataset.figslot,figOptObj(el.dataset.figopt));
+    const nu=tmp.firstElementChild;
+    if(nu)el.replaceWith(nu);
+  });
+  try{MEDIA.scan()}catch(e){}
+  const cq=(typeof S!=='undefined'&&S&&$('#player').classList.contains('on'))?curQ():null;
+  if(cq)figSyncTool(cq);
+}
 function figSyncTool(q){
   const b=$('#pFig');if(!b)return;
   /* 6.25 — the row stays plain; only its tooltip says what the question holds */
@@ -7155,21 +7234,22 @@ async function figTake(qid,fid,slot,files){
       if(IDB.v2){
         const m=await MEDIA.ingest(files[i]);
         if(target){
+          target.was=target.media||'';
           target.media=m.hash;target.mime=m.mime;target.w=m.w;target.h=m.h;
-          target.src='';target.dismissed=false;
-          filled.push({fid:target.fid,media:m.hash});
+          target.src='';target.dismissed=false;figStamp(target);
+          filled.push({fid:target.fid,media:m.hash,at:target.at,was:target.was});
         }else{
           const nu=figNorm({slot:slot||'stem',media:m.hash,mime:m.mime,w:m.w,h:m.h},q.images.length);
-          figList(q).push(nu);
-          filled.push({fid:nu.fid,media:m.hash});
+          figStamp(nu);figList(q).push(nu);
+          filled.push({fid:nu.fid,media:m.hash,at:nu.at,was:''});
         }
         /* the bytes are queued in the lane the user's own hands earned:
            immediate, unpaced, and ahead of any bulk backlog */
         await MEDIA.enqueue(m.hash,'foreground');
       }else{
         const src=await figRead(files[i]);
-        if(target){target.src=src;target.media='';target.dismissed=false;filled.push({fid:target.fid,media:''})}
-        else{const nu=figNorm({slot:slot||'stem',src:src},q.images.length);figList(q).push(nu);filled.push({fid:nu.fid,media:''})}
+        if(target){target.was=target.media||'';target.src=src;target.media='';target.dismissed=false;figStamp(target);filled.push({fid:target.fid,media:''})}
+        else{const nu=figNorm({slot:slot||'stem',src:src},q.images.length);figStamp(nu);figList(q).push(nu);filled.push({fid:nu.fid,media:''})}
       }
       first=false;n++;
     }catch(err){toast((err&&err.message)||'That file could not be read.')}
@@ -7211,8 +7291,8 @@ function figRemove(qid,fid){
   /* a slot the extractor described is worth keeping empty — the description is the instruction */
   /* the media file itself is never deleted — a removed reference is cheap to
      undo, a lost clinical figure is not recoverable. See Clean unused media. */
-  if(f.alt||f.caption){f.src='';f.media='';f.mime='';f.w=0;f.h=0}
-  else q.images=figList(q).filter(x=>x.fid!==fid);
+  if(f.alt||f.caption){f.was=f.media||'';f.src='';f.media='';f.mime='';f.w=0;f.h=0;figStamp(f)}
+  else{figBury(q,f);q.images=figList(q).filter(x=>x.fid!==fid)}
   figTouch(q);figRefresh(qid);toast('Photo removed.');
 }
 /* Removing a photo leaves the described slot standing, because the description
@@ -7230,6 +7310,7 @@ function figDropSlot(qid,fid){
   const q=figQ(qid);if(!q)return;
   const f=figFind(q,fid);if(!f)return;
   const wasStem=f.slot==='stem';
+  figBury(q,f);
   q.images=figList(q).filter(x=>x.fid!==fid);
   if(wasStem&&!q.images.some(x=>x.slot==='stem'&&!x.dismissed))q.hasImage=false;
   figTouch(q);figRefresh(qid);toast('Placeholder deleted.');
@@ -7268,7 +7349,7 @@ document.addEventListener('click',e=>{
     else if(act.dataset.figact==='drop')figArm(act,()=>figDropSlot(qid,fid),'Delete this placeholder');
     else if(act.dataset.figact==='dismiss'){
       const q=figQ(qid),f=q&&figFind(q,fid);
-      if(f){f.dismissed=true;figTouch(q);figRefresh(qid);toast('Slot cleared.')}
+      if(f){f.dismissed=true;figStamp(f);figTouch(q);figRefresh(qid);toast('Slot cleared.')}
     }
     return;
   }
@@ -7500,14 +7581,24 @@ document.addEventListener('keydown',e=>{
 },true);
 
 /* ---------- re-imports must never overwrite a photo I attached by hand ---------- */
+/* v6.35 — the existing entries keep their fids. Swapping an empty slot for the
+   incoming copy's freshly minted one meant the other device still held the
+   old fid, and sync brought both back: a re-import doubled the placeholder.
+   Slots deleted here count as taken, so a re-import does not re-add them. */
 function figMerge(ex,inc){
-  const mine=figList(ex).filter(f=>figFilled(f)||f.dismissed);
-  const out=mine.slice();
+  const out=figList(ex).map(f=>Object.assign({},f));
+  const gone=ex.figGone||{};
   ['stem','expl'].forEach(slot=>{
-    const have=out.filter(f=>f.slot===slot).length;
-    figList(inc).filter(f=>f.slot===slot).slice(have).forEach(f=>out.push(f));
+    const have=out.filter(f=>f.slot===slot),theirs=figList(inc).filter(f=>f.slot===slot);
+    have.forEach((f,i)=>{
+      const t=theirs[i];if(!t||figFilled(f))return;
+      if(t.caption)f.caption=t.caption;if(t.alt)f.alt=t.alt;
+      if(figFilled(t)){f.media=t.media||'';f.src=t.src||'';f.mime=t.mime||'';f.w=t.w||0;f.h=t.h||0;f.dismissed=false;f.at=Math.max(f.at||0,t.at||0)}
+    });
+    const taken=have.length+Object.keys(gone).filter(k=>gone[k]&&gone[k].slot===slot).length;
+    theirs.slice(taken).forEach(f=>out.push(f));
   });
-  return out;
+  return figDedupe(out);
 }
 
 /* ---------- router ---------- */
@@ -7953,7 +8044,7 @@ function normalizeQ(raw,meta){
     task:raw.task||null,archetype:raw.archetype||null,depth:raw.depth||null,resources:[],
     difficulty:String(raw.difficulty||'medium').toLowerCase(),
     tags:Array.isArray(raw.tags)?raw.tags.map(t=>String(t).toLowerCase()):[],
-    images:(Array.isArray(raw.images)?raw.images:[]).map((im,i)=>figNorm(im,i)),
+    images:(Array.isArray(raw.images)?raw.images:[]).map((im,i)=>figNorm(im,i,'q'+fp)),   /* same paper, same fids, on every device */
     imageDescription:raw.imageDescription||null,hasImage:!!raw.hasImage,
     source:Object.assign({exam:(meta&&meta.source)||null,year:(meta&&meta.year)||null,course:null,block:null,number:null,channel:(meta&&meta.channel)||null,collection:(meta&&meta.collection)||null,url:null},raw.source||{}),
     references:raw.references||[],
@@ -10239,6 +10330,12 @@ function drawEditor(){
     o.hasImage=figsIn(o,'stem').length>0;
     o.resources=detectResources(o,classifyText(o));o.trust=trustOf(o);
     if(EDIT_ID&&Q_BY_ID[EDIT_ID]){
+      /* the editor holds a copy taken when it opened; a photo removed or a
+         placeholder deleted on another device since then must not be undone
+         by saving it, so the figures go through the same merge as a sync */
+      try{const live=Q_BY_ID[EDIT_ID],gone=SYNC.M.figGoneOf(o,live);
+        o.images=SYNC.M.mergeImages(o,live);if(Object.keys(gone).length)o.figGone=gone;
+        o.hasImage=figsIn(o,'stem').length>0}catch(e){}
       /* the ID is permanent: attempts, schedule and notes are keyed to it */
       Object.assign(Q_BY_ID[EDIT_ID],o,{id:EDIT_ID,pubId:Q_BY_ID[EDIT_ID].pubId||pubIdOf(EDIT_ID)});
       Q_BY_ID[EDIT_ID].nkey=nearKeyOf(Q_BY_ID[EDIT_ID]);
@@ -12723,45 +12820,69 @@ const SYNC=(function(){
   }
 
   /* ---------- bank merge ---------- */
-  /* Photos are merged slot by slot. The old code did Object.assign({},winner)
+  /* Photos are merged figure by figure. The old code did Object.assign({},winner)
      and the loser's images[] went in the bin without a word. In this user's
      actual workflow that is not a corner case: the tablet attaches a photo to
      the explanation slot while the phone attaches one to the stem slot of the
-     same question, both sync, and one photo disappears silently. The rules:
+     same question, both sync, and one photo disappears silently.
+     v6.35 — the rule that replaced it, "a filled slot always beats an empty
+     one", had the opposite flaw: no removal could ever win, so a photo taken
+     off on one device came straight back from the other, and a deleted
+     placeholder came back from the other side's list. The rules now (see the
+     contract above figList):
 
-       · union every fid on either side
-       · a FILLED slot always beats an empty one, whichever copy is newer
-       · both filled with different pictures -> KEEP BOTH. Content addressing
-         makes that safe; neither file can corrupt the other, and a figure
-         the user went and photographed is never the thing to discard.
-       · caption, alt and optional follow the newer copy
-       · dismissed only survives if both sides agree it was dismissed */
+       · union every fid on either side, minus the ones in figGone whose
+         delete is at least as new as the newest change to that fid
+       · between two copies of one fid, the higher f.at wins — so a removal,
+         a replace and a "Not needed" travel exactly like an attach
+       · both filled with different pictures, and the newer one never saw
+         the older (f.was) -> KEEP BOTH. Content addressing makes that safe.
+       · copies with no stamp at all (written before v6.35) keep the old
+         rules: filled beats empty, dismissed only if both agree
+       · caption, alt and optional follow the newer copy of the question
+       · the same placeholder or the same photo twice collapses to one */
+  function figGoneOf(w,l){
+    const g={};
+    [l.figGone||{},w.figGone||{}].forEach(m=>{for(const k in m){
+      if(!g[k]||figGoneTs(m[k])>figGoneTs(g[k]))g[k]=m[k]}});
+    return g;
+  }
   function mergeImages(w,l){
     const W=figList(w)||[],L=figList(l)||[];
+    const gone=figGoneOf(w,l);
     const Wm={},Lm={};
     W.forEach(f=>{if(f&&f.fid)Wm[f.fid]=f});
     L.forEach(f=>{if(f&&f.fid)Lm[f.fid]=f});
     const ids=[],seen={};
     W.concat(L).forEach(f=>{if(f&&f.fid&&!seen[f.fid]){seen[f.fid]=1;ids.push(f.fid)}});
     const out=[];
+    const keep=f=>{if(!(gone[f.fid]&&figGoneTs(gone[f.fid])>=(f.at||0)))out.push(f)};
+    /* a fork already carried by either side is that side's copy, merged on its own turn */
+    const fork=(f,ffid)=>{if(!Wm[ffid]&&!Lm[ffid])keep(Object.assign({},f,{fid:ffid,dismissed:false}))};
+    const picOf=p=>({media:p.media||'',src:p.src||'',mime:p.mime||'',w:p.w||0,h:p.h||0,at:p.at||0,was:p.was||''});
     ids.forEach(fid=>{
       const a=Wm[fid],b=Lm[fid];
-      if(!a||!b){out.push(Object.assign({},a||b));return}
-      const af=figFilled(a),bf=figFilled(b);
-      const pic=(af&&!bf)?a:((bf&&!af)?b:a);
-      out.push(Object.assign({},a,{
-        media:pic.media||'',src:pic.src||'',mime:pic.mime||'',
-        w:pic.w||0,h:pic.h||0,
-        dismissed:!!(a.dismissed&&b.dismissed)
-      }));
-      if(af&&bf&&a.media&&b.media&&a.media!==b.media)
-        out.push(Object.assign({},b,{fid:b.fid+'~'+String(b.media).slice(0,8),dismissed:false}));
+      if(!a||!b){keep(Object.assign({},a||b));return}
+      const af=figFilled(a),bf=figFilled(b),at=a.at||0,bt=b.at||0;
+      if(!at&&!bt){
+        const pic=(af&&!bf)?a:((bf&&!af)?b:a);
+        keep(Object.assign({},a,picOf(pic),{dismissed:!!(a.dismissed&&b.dismissed)}));
+        if(af&&bf&&a.media&&b.media&&a.media!==b.media)
+          fork(b,b.fid+'~'+String(b.media).slice(0,8));
+        return;
+      }
+      const nw=at!==bt?(at>bt?a:b):(String(a.media||a.src)>=String(b.media||b.src)?a:b),od=nw===a?b:a;
+      keep(Object.assign({},a,picOf(nw),{dismissed:!!nw.dismissed}));
+      if(figFilled(nw)&&figFilled(od)&&nw.media&&od.media&&nw.media!==od.media&&nw.was!==od.media)
+        fork(od,od.fid+'~'+String(od.media).slice(0,8));
     });
-    return out;
+    return figDedupe(out);
   }
   function pickQ(a,b){
     const w=((a.updatedAt||a.addedAt||0)>=(b.updatedAt||b.addedAt||0))?a:b, l=(w===a?b:a);
     const q=Object.assign({},w);
+    const gone=figGoneOf(w,l);
+    if(Object.keys(gone).length)q.figGone=gone;
     q.images=mergeImages(w,l);
     /* the flag follows the slots, or a rescued stem figure would not be drawn */
     q.hasImage=q.images.some(f=>f.slot==='stem'&&!f.dismissed);
@@ -13006,6 +13127,7 @@ const SYNC=(function(){
             'Up to date — last sync '+new Date().toLocaleString());
         }
         if(changed&&!playing()){reindex();go(VIEW)}
+        if(changed)try{figRedrawVisible()}catch(e){}
         if(changed&&reason!=='boot')toast('Changes from another device merged in.');
         busy=false;renderSync();
         if(pending){const r=pending;pending=null;setTimeout(()=>run(r),250)}
@@ -13026,6 +13148,7 @@ const SYNC=(function(){
       setState('ok','Synced '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
         'Up to date — last sync '+new Date().toLocaleString());
       if(changed&&!playing()){reindex();go(VIEW)}
+      if(changed)try{figRedrawVisible()}catch(e){}
       if(changed&&reason!=='boot')toast('Changes from another device merged in.');
     }catch(e){
       applying=false;
@@ -13322,7 +13445,7 @@ const SYNC=(function(){
     kick:r=>run(r||'beacon'),
     cfg:()=>cfg,saveCfg:saveCfg,branch:branch,dir:()=>((cfg&&cfg.dir)||'nidus').replace(/^\/+|\/+$/g,''),
     state:setState,paint:paint,clearBase:clearBase,readLegacy:readFile,snap:snap,apply:apply,fp:fp,
-    M:{m3:m3,mNote:mNote,mSet:mSet,uniq:uniq,replaySrs:replaySrs,pickQ:pickQ,mergeImages:mergeImages,
+    M:{m3:m3,mNote:mNote,mSet:mSet,uniq:uniq,replaySrs:replaySrs,pickQ:pickQ,mergeImages:mergeImages,figGoneOf:figGoneOf,
        mergeBank:mergeBank,mergeStat:mergeStat,mergeRules:mergeRules,mergeProgress:mergeProgress,
        richer:richer,purgedAtt:purgedAtt,reduceBase:reduceBase,hlCopy:hlCopy,playing:playing}};
 })();
@@ -13417,9 +13540,10 @@ const V3=(function(){
      fingerprint differs. */
   function h32(s){let h=5381;s=String(s);for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return h}
   function fpQ(q){
-    const im=(q.images||[]).map(f=>(f.fid||'')+':'+(f.media||(f.src?'src':''))+':'+(f.dismissed?1:0)+':'+(f.caption||'')).join(',');
+    const im=(q.images||[]).map(f=>(f.fid||'')+':'+(f.media||(f.src?'src':''))+':'+(f.dismissed?1:0)+':'+(f.caption||'')+(f.at?':'+f.at:'')).join(',');
     return q.id+'|'+(q.updatedAt||0)+'|'+(q.addedAt||0)+'|'+(q.verified?1:0)+'|'+(q.system||'')+'|'+(q.subject||'')
-      +'|'+(q.topic||'')+'|'+h32(q.stem||'')+'|'+h32(q.explanation||'')+'|'+im+'|'+((q.occurrences||[]).length);
+      +'|'+(q.topic||'')+'|'+h32(q.stem||'')+'|'+h32(q.explanation||'')+'|'+im+'|'+((q.occurrences||[]).length)
+      +(q.figGone?'|g'+Object.keys(q.figGone).length:'');
   }
   function fpStat(x){
     x=x||{};
@@ -14207,7 +14331,8 @@ const V3=(function(){
         try{SYNC.log('Uploaded a photo for a question')}catch(e){}
       }
       /* now, and only now, the reference and the announcement */
-      beaconEvents.push({t:'photo',qid:q.id,fid:filled[0]&&filled[0].fid,media:filled[0]&&filled[0].media,ts:Date.now()});
+      beaconEvents.push({t:'photo',qid:q.id,fid:filled[0]&&filled[0].fid,media:filled[0]&&filled[0].media,
+        at:filled[0]&&filled[0].at,was:filled[0]&&filled[0].was,ts:Date.now()});
       while(beaconEvents.length>20)beaconEvents.shift();
       await run('photo');
     }catch(e){}
@@ -14296,13 +14421,23 @@ const V3=(function(){
     if(news)setTimeout(()=>{try{SYNC.kick('beacon')}catch(e){}},0);
     }finally{beaconBusy=false}
   }
+  /* v6.35 — the hint used to fill "the first empty slot" when its own fid was
+     missing, and it ran again for every event still listed in the other
+     device's beacon each time this one reloaded. A photo removed here, or a
+     placeholder deleted, was refilled from an event minutes old, and figTouch
+     then made that stale copy the newest. Now a hint fills only the fid it
+     names, only if nothing newer happened to it here, and it carries its own
+     stamp rather than minting a new one. A hint from an older build carries
+     no stamp and is left to the sync it already kicked. */
   async function applyLivePhoto(ev){
     const q=Q_BY_ID[ev.qid];
-    if(!q)return;
-    const f=ev.fid?figFind(q,ev.fid):null;
-    const slot=f||figList(q).find(x=>!figFilled(x)&&!x.dismissed);
-    if(slot&&!slot.media){slot.media=ev.media;slot.src='';slot.dismissed=false;figTouch(q)}
-    else if(!slot)return;
+    if(!q||!ev.fid||!ev.at)return;
+    const g=q.figGone&&q.figGone[ev.fid];
+    if(g&&figGoneTs(g)>=ev.at)return;
+    const slot=figFind(q,ev.fid);
+    if(!slot||(slot.at||0)>=ev.at)return;
+    slot.media=ev.media;slot.src='';slot.dismissed=false;slot.at=ev.at;slot.was=ev.was||'';
+    q.hasImage=figsIn(q,'stem').length>0;
     try{await MEDIA.url(ev.media,'full')}catch(e){}
     /* fill the slot where it stands rather than redrawing the session */
     try{
