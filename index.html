@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.32 -->
+<!-- Nidus — Personal Qbank · v6.33 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4050,33 +4050,109 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-warn{background:var(--md-warning-container);color:var(--md-on-warning-container)}
 .sp-warn .sp-eyebrow{color:inherit}
 .sp-warn p{margin:0 0 6px;font-size:14px;line-height:20px}
-/* new-format teaching: pivot, chain, takeaway */
-.sp-pivot{font-size:calc(var(--efont) + 1px);color:var(--md-on-surface)}
-.sp-pivot + .sp-logic{margin-top:16px}
-.sp-logic > * + *{margin-top:14px}
-.sp-chain{list-style:none;margin:0;padding:4px 0 0;position:relative}
+/* ---------- new-format teaching: pivot, reasoning, takeaway ----------
+   The three roles ARCHIVIST writes are one connected group: three panes 3px
+   apart, the group's outer corners at 28 and its inner corners at 4, so it
+   reads as one explanation in three parts. Each pane has its own tone — the
+   pivot the strongest neutral, the reasoning the quiet one, the takeaway the
+   tertiary accent — so the eye finds the part it wants without reading. */
+.sp-expl > .sp-teach{animation:none}
+.sp-teach{display:flex;flex-direction:column;gap:3px}
+.sp-teach > *{border-radius:var(--m3-corner-xs);padding:20px;
+  animation:spIn var(--m3-spatial-slow) var(--m3-ease-emphasized-decel) backwards;animation-delay:.14s}
+.sp-teach > :nth-child(2){animation-delay:.22s}
+.sp-teach > :nth-child(3){animation-delay:.3s}
+.sp-teach > :first-child{border-top-left-radius:var(--m3-corner-xl);border-top-right-radius:var(--m3-corner-xl)}
+.sp-teach > :last-child{border-bottom-left-radius:var(--m3-corner-xl);border-bottom-right-radius:var(--m3-corner-xl)}
+.sp-tp{background:var(--md-surface-container)}
+.sp-tl{background:var(--md-surface-container-low)}
+/* the pivot: every bold is a deciding clue or the answer, so each one is set
+   as a tonal highlight the eye can pick out of the sentence on its own */
+.sp-pivot{font-size:calc(var(--efont) + 1.5px);line-height:1.72;color:var(--md-on-surface)}
+.sp-pivot b,.sp-pivot strong{
+  font-weight:700;letter-spacing:.2px;padding:.06em .3em;border-radius:6px;
+  background:color-mix(in oklab,var(--md-primary) 24%,transparent);color:var(--md-on-surface);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone
+}
+/* the reasoning: chains, groups, lists, tables and fact tiles in the order written */
+.sp-logic > * + *{margin-top:20px}
+.sp-arr{color:var(--md-primary);font-weight:700}
+.sp-dir{color:var(--md-primary);font-weight:800}
+.sp-chainw{position:relative}
+/* a chain that opens with → carries on from the block above, so a dashed lead-in joins them */
+.sp-chainw.cont::before{content:"";position:absolute;left:9px;top:-18px;height:calc(.43em * 1.2 + 18px);width:2px;
+  background:repeating-linear-gradient(to bottom,color-mix(in oklab,var(--md-primary) 45%,transparent) 0 3px,transparent 3px 6px)}
+.sp-clab{
+  display:inline-flex;align-items:center;min-height:24px;padding:2px 10px;margin:0 0 10px;box-sizing:border-box;
+  border-radius:var(--m3-corner-s);background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  font:600 12px/16px var(--m3-font);letter-spacing:.4px
+}
+.sp-chain{list-style:none;margin:0;padding:0;position:relative}
 .sp-chain li{
-  position:relative;padding:0 0 12px 30px;font-family:var(--qfam);font-size:var(--efont);line-height:1.5;color:var(--md-on-surface);
-  animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 70ms + 250ms)
+  position:relative;padding:0 0 14px 32px;font-family:var(--qfam);font-size:var(--efont);line-height:1.5;color:var(--md-on-surface);
+  animation:spIn var(--m3-spatial) var(--m3-ease-emphasized-decel) backwards;animation-delay:calc(var(--i) * 70ms + 300ms)
 }
 .sp-chain li:last-child{padding-bottom:0}
-.sp-chain li::before{content:"";position:absolute;left:5px;top:.42em;width:10px;height:10px;border-radius:50%;
-  background:var(--md-surface-container-low);box-shadow:inset 0 0 0 2px var(--md-primary)}
-.sp-chain li::after{content:"";position:absolute;left:9px;top:calc(.42em + 14px);bottom:2px;width:2px;border-radius:2px;
+.sp-chain li::before{content:"";position:absolute;left:5px;top:.43em;width:10px;height:10px;border-radius:50%;box-sizing:border-box;
+  background:var(--md-surface-container-low);border:2px solid var(--md-primary)}
+.sp-chain li::after{content:"";position:absolute;left:9px;top:calc(.43em + 14px);bottom:2px;width:2px;border-radius:2px;
   background:color-mix(in oklab,var(--md-primary) 35%,transparent)}
 .sp-chain li:last-child::after{display:none}
-.sp-chain li.key{font-weight:600}
-.sp-chain li.key::before{background:var(--md-primary);box-shadow:0 0 0 4px color-mix(in oklab,var(--md-primary) 22%,transparent)}
+.sp-st{display:block}
+/* a step's qualifier sits under it, quieter, so the chain itself reads at a glance */
+.sp-sd{display:block;margin-top:2px;font-size:calc(var(--efont) - 1.5px);line-height:1.45;color:var(--md-on-surface-variant);letter-spacing:.2px}
 .sp-chain li b,.sp-chain li strong{font-weight:780;color:var(--md-primary)}
+/* the step that produces the answer is a tonal tile with a filled node */
+.sp-chain li.tile .sp-st{
+  width:fit-content;max-width:100%;box-sizing:border-box;margin-left:-10px;padding:6px 10px;
+  border-radius:var(--m3-corner-m);background:var(--md-primary-container);color:var(--md-on-primary-container);font-weight:600;
+  animation:spKeyPop var(--m3-spatial-slow) var(--m3-spring-expressive) backwards;animation-delay:calc(var(--i) * 70ms + 380ms)
+}
+.sp-chain li.tile .sp-st b,.sp-chain li.tile .sp-st strong,.sp-chain li.tile .sp-st .sp-arr,.sp-chain li.tile .sp-st .sp-dir{color:inherit}
+.sp-chain li.tile .sp-sd{margin-top:6px}
+.sp-chain li.key::before{background:var(--md-primary);border-color:var(--md-primary);
+  box-shadow:0 0 0 4px color-mix(in oklab,var(--md-primary) 22%,transparent)}
+.sp-chain li.tile::before{top:calc(.43em + 6px)}
+.sp-chain li.tile::after{top:calc(.43em + 20px)}
+.sp-chain li:has(+ li.tile)::after{bottom:-4px}
+@keyframes spKeyPop{from{opacity:0;transform:scale(.9)}}
+/* a group heading over the list or table it names */
+.sp-gh{display:flex;align-items:center;gap:10px;margin:0 0 10px;font:600 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+.sp-gh::before{content:"";flex:0 0 4px;align-self:stretch;min-height:16px;border-radius:2px;background:var(--md-tertiary)}
+.sp-gh b,.sp-gh strong{font-weight:inherit;letter-spacing:inherit;color:inherit}
+.sp-blk .ebody{max-width:none}
+.sp-blk.list .ebody > ul,.sp-blk.list .ebody > ol{margin-bottom:0}
+.sp-blk.list .ebody li{margin-bottom:.6em}
+.sp-blk.list .ebody li:last-child{margin-bottom:0}
+/* a leading "Term:" becomes the line's label */
+.sp-term{
+  display:inline-block;margin-right:4px;padding:0 8px;border-radius:6px;vertical-align:1px;
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  font:600 calc(var(--efont) - 2.5px)/1.65 var(--m3-font);letter-spacing:.3px
+}
+/* numbered steps carry their number in a round badge */
+.sp-logic .ebody ol{list-style:none;padding-left:34px}
+.sp-logic .ebody ol > li{position:relative}
+.sp-logic .ebody > ol{counter-reset:spn}
+.sp-logic .ebody > ol > li{counter-increment:spn}
+.sp-logic .ebody > ol > li::before{
+  content:counter(spn);position:absolute;left:-34px;top:calc((1em * var(--qlh) - 22px) / 2);width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;background:var(--md-primary-container);color:var(--md-on-primary-container);font:700 12px/1 var(--m3-font)
+}
+/* a linked fact the reasoning sets beside the chain */
+.sp-blk.fact > .ebody{padding:12px 16px;border-radius:var(--m3-corner-l);background:var(--md-surface-container)}
 .sp-rule{
-  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:20px;
-  border-radius:var(--m3-corner-xl);background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)
+  display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;
+  background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)
 }
 .sp-rule .sp-eyebrow{color:inherit;opacity:.85;margin-bottom:6px}
-.sp-rule p{margin:0;font-family:var(--qfam);font-size:calc(var(--efont) + 1px);line-height:1.5;font-weight:600;letter-spacing:.1px}
-.sp-ruleic{width:40px;height:40px;display:grid;place-items:center;background:var(--md-tertiary);color:var(--md-on-tertiary);
-  border-radius:var(--m3-corner-m)}
-.sp-ruleic svg{width:20px;height:20px}
+.sp-rule p{margin:0;font-family:var(--qfam);font-size:calc(var(--efont) + 2px);line-height:1.5;font-weight:600;letter-spacing:.1px}
+.sp-rule p b,.sp-rule p strong{font-weight:800}
+/* the takeaway's mark is an M3 Expressive cookie shape that turns into place */
+.sp-ruleic{position:relative;width:48px;height:48px;display:grid;place-items:center;color:var(--md-on-tertiary)}
+.sp-rulesh{position:absolute;inset:0;width:100%;height:100%;fill:var(--md-tertiary);
+  animation:spKTurn var(--m3-dur-xlong) var(--m3-spring-expressive) .4s backwards}
+.sp-ruleic .ic{position:relative;width:22px;height:22px;animation:spKPop var(--m3-spatial-slow) var(--m3-spring-expressive) .5s backwards}
 /* older items: sections become cards. Closed, each is a 64dp row led by a round
    icon 12 in from the edge, so the icon and the card's 28 corner share a centre
    and the label sits clear of the curve instead of pressed against it. */
@@ -4131,7 +4207,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   #pNext span{display:none}
   #pNext.sp-go{padding:0 16px}
   .sp-verdict{padding:18px}
-  .sp-card,.sp-rule{padding:18px}
+  .sp-card,.sp-teach > *{padding:18px}
 }
 
 /* ---------- tablets and wide screens (6.16) ----------
@@ -4179,8 +4255,8 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   .sp-fab-bar{max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
-  .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button{animation-name:m3Fade}
-  .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape{animation:none}
+  .sp-page.in-r,.sp-page.in-l,.sp-page.in,.sp-opts.anim .sp-opt,.sp-expl > *,.sp-chain li,.sp-opts.reveal .sp-why,.sp-nav.on .sp-grid button,.sp-teach > *,.sp-chain li.tile .sp-st{animation-name:m3Fade}
+  .sp-opts.reveal .sp-opt.ok,.sp-opts.reveal .sp-opt.no,.sp-timer.warn,.sp-vshape,.sp-rulesh,.sp-ruleic .ic{animation:none}
   .sp-ks,.sp-cthumb,.sp-opts.reveal .sp-ks,.sp-opts.reveal .sp-ks path,.sp-cbg.mv .sp-cthumb,.sp-opt.sel .sp-kl,.sp-cbg button.on .ic{animation:none;transition-property:opacity,fill,background-color,color}
 }
 </style>
@@ -4217,6 +4293,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-cloudup" viewBox="0 0 24 24"><path d="M6.85 18.2a4.5 4.5 0 0 1-.95-8.9 6.5 6.5 0 0 1 12.4 1.75 3.6 3.6 0 0 1 .35 7.15z"/><path d="M12.25 15.4V10"/><path d="m9.95 12.3 2.3-2.3 2.3 2.3"/></symbol>
 <symbol id="i-cloudoff" viewBox="0 0 24 24"><path d="M15.87 18.2L6.65 18.2L6.25 18.16L5.47 17.99L4.91 17.77L4.39 17.47L3.76 16.98L3.35 16.54L3.01 16.05L2.81 15.7L2.52 14.96L2.39 14.37L2.34 13.78L2.37 13.18L2.48 12.59L2.67 12.02L2.93 11.48L3.38 10.82L3.65 10.53L4.1 10.13L4.78 9.7L5.33 9.46L5.9 9.3L6.17 8.76"/><path d="M9.58 5.81L10.34 5.58L11.33 5.42L12.33 5.42L12.73 5.46L13.32 5.57L13.89 5.73L14.82 6.11L15.34 6.41L15.67 6.64L16.43 7.28L16.84 7.72L17.2 8.2L17.52 8.71L17.7 9.06L17.87 9.43L18.07 9.99L18.18 10.38L18.29 10.97L18.42 11.06L19.01 11.16L19.39 11.29L19.75 11.45L20.1 11.65L20.56 12.03L20.84 12.32L21.19 12.81L21.37 13.16L21.52 13.53L21.65 14.12L21.69 14.72L21.63 15.31L21.47 15.89L21.31 16.26L21 16.77L20.74 17.08"/><path d="M4.05 3.4 20.45 19.8"/></symbol>
 <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.7v5.2"/><circle cx="12" cy="16.1" r="1.05" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-bulb" viewBox="0 0 24 24"><path d="M12 3.4a6.1 6.1 0 0 0-3.7 10.95c.55.42.85 1.02.85 1.68v.97h5.7v-.97c0-.66.3-1.26.85-1.68A6.1 6.1 0 0 0 12 3.4z"/><path d="M9.6 20.6h4.8"/></symbol>
 <symbol id="i-priority" viewBox="0 0 24 24"><path d="M12 5.4v8.6"/><circle cx="12" cy="18.4" r="1.3" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.2" y="3" width="11" height="14" rx="2"/><path d="M4.4 7.4v11.4a2.2 2.2 0 0 0 2.2 2.2h8.8"/></symbol>
 <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></symbol>
@@ -4736,7 +4813,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.32</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.33</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4746,7 +4823,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.32 · sharded store</span>
+        <span class="chip" id="verChip">v6.33 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4925,7 +5002,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v2.8
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.0
 
 Turns any exam material into the JSON question bank this app imports.
 
@@ -5046,8 +5123,8 @@ The reader works through about fifty items a day. Source discussions often run t
 
 Step 1 items do not all hinge on a diagnosis. Some turn on a normal physiological state, a mechanism, an enzyme, a drug action or a calculation. So the explanation is not a fixed template with fixed labels; it fills three roles and lets the item decide what goes in each:
 
-  1. The pivot — one or two sentences of prose: what the item turns on, with the deciding clues that lead there. "Sudden dyspnea and near-syncope, with hypotension, distended neck veins, clear lungs and hypoxemia with respiratory alkalosis, is **massive pulmonary embolism**." "Trace dependent edema with normal blood pressure and no proteinuria at 30 weeks is **normal pregnancy**; the item tests the hemodynamics behind it." Never retell the vignette sentence by sentence.
-  2. The logic — the reasoning from the pivot to the answer. Use arrow chains (`clot → ↑ pulmonary vascular resistance → sudden ↑ RV pressure → **RV dilates**`) wherever the steps are causal, and short bullets where the reasoning branches (nerves → dry beriberi; heart → wet beriberi). Bold the step that produces the answer. A closely linked high-yield fact the source states and the item sits next to (a shock profile, a timing note) may follow as one short line.
+  1. The pivot — one or two sentences of prose: what the item turns on, with the deciding clues that lead there. "Sudden dyspnea and near-syncope, with hypotension, distended neck veins, clear lungs and hypoxemia with respiratory alkalosis, is **massive pulmonary embolism**." "Trace dependent edema with normal blood pressure and no proteinuria at 30 weeks is **normal pregnancy**; the item tests the hemodynamics behind it." Never retell the vignette sentence by sentence. Bold the answer and the one or two clues that decide it, each a short phrase of two to five words: the app draws every bold in the pivot as a highlight, so three short highlights read at a glance and a bolded half-sentence reads as nothing.
+  2. The logic — the reasoning from the pivot to the answer. Use arrow chains (`clot → ↑ pulmonary vascular resistance → sudden ↑ RV pressure → **RV dilates**`) wherever the steps are causal, and short bullets where the reasoning branches (nerves → dry beriberi; heart → wet beriberi). Bold the step that produces the answer. A closely linked high-yield fact the source states and the item sits next to (a shock profile, a timing note) may follow as one short line. The app draws a chain as a vertical stepper, one step per row, so each step is a short phrase — the event, not a sentence about it.
   3. The rule — one bolded sentence on its own line, last: the transferable takeaway. "**Acute pressure overload dilates the ventricle; chronic pressure overload thickens it.**"
 
   The roles show by position; never print "Pivot:", "Logic:" or "Rule:" as labels.
@@ -5074,10 +5151,16 @@ This is a formatting pass, not an editing pass. You are moving line breaks and a
 **Blocks in explanation**
 
   • The pivot is a prose paragraph, first, unbulleted.
-  • An arrow chain stands on its own line. A long chain may break across consecutive lines, each line starting with `→ `.
+  • An arrow chain is one block. A long chain breaks across consecutive lines inside that block, each new line starting with `→ ` — never a blank line inside a chain.
+  • A step is a short phrase. A qualifier that belongs to one step — an example list, a percentage, a brief mechanism — goes in parentheses at the end of that step: `Sarcomere mutation (beta-myosin heavy chain or myosin-binding protein C; autosomal dominant) → myocyte disarray`. The app sets it on a quieter line under the step, so the chain still reads at a glance. Never put an arrow inside the parentheses.
+  • Bold exactly one step per chain: the step that produces the answer. The app draws it as a highlighted tile; a chain with no bold step carries no answer, and a chain with three has no point.
+  • When the logic has two or more chains, or a chain belongs to a distinct phase or setting, open each with a two-to-four-word label and a colon: `Before birth: unventilated lungs → …`, `Contraction: L-type Ca²⁺ influx → …`. The app draws the label as a tag above its chain.
+  • A block that opens with `→ ` continues from the block above it. Use it only to resume a chain after a short list that branches from it, when the list's items all feed the step that follows; the app joins the two with a dashed lead-in.
   • Branching reasoning uses `* ` bullets, one line each. Use `1. ` numbers only for a real sequence of three or more steps that cannot be written as one chain. Third level and deeper → `* ` only, indented four more spaces per level. Never 1.1, never a., never i.
-  • A `**bold line**` standing alone as a heading is allowed only where a block genuinely needs naming — usually above a table. Most explanations need none. Never label a heading A., B., C. — those letters belong to the options and would read as an answer key.
-  • The rule is the last block: one bolded sentence, alone.
+  • When bullets or numbered steps set things side by side — the paths a branch can take, the members of a family, the phases of a process — open each with its subject and a colon (`* Exudate: …`, `* Transudate: …`, `1. Phase 0: …`). The subject is one to four words; the app sets it as the line's label.
+  • A linked fact that is neither a chain nor a list is one short prose line, a block of its own; the app sets it in a tile. Open it with its subject and a colon when it has one: `Obstructive shock profile: ↑ CVP, ↓ PCWP, ↓ CO, ↑ SVR.`
+  • A `**bold line**` standing alone as a heading is allowed only where a block genuinely needs naming — above a table, or above a list that gathers several items under one name (`**At birth**`). It is a block of its own, directly above the list or table it names, never above a chain or prose; the app draws it as that group's title. Most explanations need none. Never label a heading A., B., C. — those letters belong to the options and would read as an answer key.
+  • The rule is the last block: one bolded sentence, alone, short enough to say in one breath — about twenty words at most. The app sets it large in its own Takeaway panel.
 
 **Emphasis**
 
@@ -5292,7 +5375,7 @@ FINAL GATE — run this against your draft before sending
   2. Every item has a stem, two or more options with text, and exactly one isCorrect true — or type "multi" with correctAnswers.
   3. correctAnswer matches a label that exists in that item's choices.
   4. Every wrong option carries one sentence: why it fails in this item, then "Right in:" the real setting where it is the answer — or, when no such setting exists, why the combination cannot happen, with no invented scenario. No bare verdicts, no restated option text, no lecture on the distractor's own disease. Every correct option's explanation is null.
-  5. explanation opens with the pivot in prose — what the item turns on, not a retelling of the vignette — then the logic as arrow chains or short bullets, and ends with one bolded rule sentence on its own line. No "Pivot:", "Logic:" or "Rule:" labels are printed.
+  5. explanation opens with the pivot in prose — what the item turns on, not a retelling of the vignette — then the logic as arrow chains or short bullets, and ends with one bolded rule sentence on its own line. The pivot bolds the answer and at most two short deciding clues. Each chain is one block with exactly one bolded step; its steps are short phrases with any qualifier in trailing parentheses; two or more chains each open with a short label and a colon; side-by-side bullets open with their subject and a colon. No "Pivot:", "Logic:" or "Rule:" labels are printed.
   6. system, subject, archetype and task are copied character for character from the enums; difficulty is lowercase.
   7. Nothing invented — no source, year, citation, figure finding or option absent from the material.
   8. The number of objects emitted equals the number of items you counted in Pass 0, in the same order, each with its own source.number.
@@ -5699,7 +5782,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.32';
+const APP_VERSION='6.33';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8816,10 +8899,20 @@ function esec(key,label,note,inner,cls){
     <button class="eh"><span class="lic"><svg class="ic"><use href="#i-${ESEC_IC[key]||'info'}"/></svg></span><svg class="ic cv"><use href="#i-chev"/></svg>${esc(label)}${note?`<span class="n">${esc(note)}</span>`:''}</button>
     <div class="ec">${inner}</div></div>`;
 }
-/* The new format's explanation, read by position: the first prose block is the
-   pivot, a closing line that is bold and nothing else is the takeaway, and
-   every block between is the logic — where a block is an arrow chain it is
-   drawn as a chain of steps, the bolded step marked as the one that answers. */
+/* The new format's explanation, read by position into the three roles the
+   extractor writes (ARCHIVIST §6–6A): the first prose block is the pivot, a
+   closing line that is bold and nothing else is the takeaway, and every block
+   between is the reasoning. Each reasoning block is read by its shape:
+     an arrow chain     a stepper; the bolded step is the one that answers, a
+                        trailing "(…)" on a step drops to a quieter line under
+                        it, "Label: a → b" puts a tag above it, and a block that
+                        opens with "→" carries on from the block above it
+     a short title line a group heading over the list or table that follows
+     a list             bullets, with a leading "Term:" set as the bullet's label
+     a table            the shared table
+     anything else      a fact tile
+   The three roles are drawn as one connected group, so they read as one
+   explanation in three parts rather than three unrelated cards. */
 function nfTeach(md){
   const blocks=String(md||'').replace(/\r\n?/g,'\n').trim().split(/\n{2,}/).filter(b=>b.trim());
   let rule='';
@@ -8827,23 +8920,70 @@ function nfTeach(md){
   if(blocks.length>1&&/^\*\*[^*\n][^\n]*\*\*$/.test(last)&&last.slice(2,-2).indexOf('**')<0){rule=last.slice(2,-2);blocks.pop()}
   let pivot='';
   if(blocks.length&&!/^\s*([*\-•+]|\d+[.)]|\||→)/.test(blocks[0])&&blocks[0].indexOf('→')<0){pivot=blocks.shift()}
+  const LIST=/^\s*([*\-•+]|\d+[.)])\s/,TBL=/^\s*\|/;
   const chainOf=b=>{
     if(/^\s*\|/m.test(b)||/^\s*([*\-•+]|\d+[.)])\s/m.test(b))return null;
     const lines=b.split('\n').map(l=>l.trim()).filter(Boolean);
     if(!lines.some(l=>l.indexOf('→')>=0))return null;
-    const steps=lines.join(' ').split(/\s*→\s*/).map(x=>x.trim()).filter(Boolean);
-    return steps.length>=2?steps:null;
+    const txt=lines.join(' '),cont=/^→/.test(txt);
+    /* an arrow inside **bold** belongs to the bolded step, so the split skips it */
+    const steps=[];let cur='',bold=false;
+    for(let i=0;i<txt.length;i++){
+      if(txt[i]==='*'&&txt[i+1]==='*'){bold=!bold;cur+='**';i++;continue}
+      if(txt[i]==='→'&&!bold){steps.push(cur);cur='';continue}
+      cur+=txt[i];
+    }
+    steps.push(cur);
+    for(let i=steps.length-1;i>=0;i--){steps[i]=steps[i].trim();if(!steps[i])steps.splice(i,1)}
+    if(steps.length<(cont?1:2))return null;
+    let label='';
+    const m=cont?null:/^([A-Za-z][^:→()*|`\n]{0,39}):\s+(\S[\s\S]*)$/.exec(steps[0]);
+    if(m){label=m[1].trim();steps[0]=m[2]}
+    return{label,cont,steps};
   };
-  const logic=blocks.map(b=>{
-    const st=chainOf(b);
-    if(!st)return `<div class="ebody">${mdFmt(b)}</div>`;
-    return `<ol class="sp-chain">${st.map((x,i)=>`<li class="${/\*\*/.test(x)?'key':''}" style="--i:${i}">${mdInline(x)}</li>`).join('')}</ol>`;
-  }).join('');
-  let h=`<div class="sp-card sp-teach"><div class="sp-eyebrow">Explanation</div>`+
-    (pivot?`<div class="ebody sp-pivot">${mdFmt(pivot)}</div>`:'')+
-    (logic?`<div class="sp-logic">${logic}</div>`:'')+`</div>`;
-  if(rule)h+=`<div class="sp-rule"><span class="sp-ruleic"><svg class="ic"><use href="#i-check"/></svg></span><div><div class="sp-eyebrow">Takeaway</div><p>${mdInline(rule)}</p></div></div>`;
-  return h;
+  /* "step (qualifier)" -> the step and its qualifier, when the qualifier is long
+     enough to slow the chain down; bold may not straddle the cut */
+  const splitStep=x=>{
+    if(!/\)$/.test(x))return [x,''];
+    let d=0,k=-1;
+    for(let i=x.length-1;i>=0;i--){if(x[i]===')')d++;else if(x[i]==='('){d--;if(!d){k=i;break}}}
+    if(k<1)return [x,''];
+    const head=x.slice(0,k).trim(),det=x.slice(k+1,-1).trim();
+    if(det.length<12||!head||(head.split('**').length-1)%2||(det.split('**').length-1)%2)return [x,''];
+    return [head,det];
+  };
+  /* arrows and direction marks are the grammar of the reasoning, so they take the accent */
+  const dec=h=>h.replace(/→/g,'<span class="sp-arr">→</span>').replace(/[↑↓]+/g,'<span class="sp-dir">$&</span>');
+  /* "Term: …" at the head of a bullet or a fact becomes that line's label */
+  const terms=h=>h.replace(/<(li|p)>(?:<b>([^<]{1,40})<\/b>:|([^<:.;]{1,40}):)\s/g,(m0,t,a,b)=>`<${t}><span class="sp-term">${a||b}</span> `);
+  const isTitle=b=>b.indexOf('\n')<0&&b.length<=90&&b.indexOf('→')<0&&!LIST.test(b)&&!TBL.test(b)&&!/[.!?:;]\**$/.test(b.trim());
+  const chainHTML=c=>`<div class="sp-chainw${c.cont?' cont':''}">${c.label?`<span class="sp-clab">${mdInline(c.label)}</span>`:''}`+
+    `<ol class="sp-chain">${c.steps.map((x,i)=>{const[hd,dt]=splitStep(x);
+      /* the answering step is a tile when it is a step; a long descriptive one keeps the filled node and its bold but not the tile */
+      const key=/\*\*/.test(x),tile=key&&hd.replace(/\*\*|`/g,'').length<=80;
+      return `<li class="${key?'key':''}${tile?' tile':''}" style="--i:${i}"><span class="sp-st">${dec(mdInline(hd))}</span>${dt?`<span class="sp-sd">${dec(mdInline(dt))}</span>`:''}</li>`}).join('')}</ol></div>`;
+  const out=[];
+  for(let i=0;i<blocks.length;i++){
+    let b=blocks[i].replace(/^\n+|\n+$/g,'');
+    const c=chainOf(b);
+    if(c){out.push(chainHTML(c));continue}
+    /* a title line, standing alone above a list or a table or leading one inside its block */
+    let title='';
+    const nl=b.indexOf('\n'),first=nl<0?b:b.slice(0,nl),rest=nl<0?'':b.slice(nl+1);
+    if(isTitle(first.trim())&&(rest?(LIST.test(rest)||TBL.test(rest)):(i+1<blocks.length&&(LIST.test(blocks[i+1])||TBL.test(blocks[i+1]))))){
+      title=first.trim();
+      if(!rest){i++;b=blocks[i]}else b=rest;
+    }
+    const kind=LIST.test(b)?'list':TBL.test(b)?'tbl':'fact';
+    const t=title.replace(/^\*\*(?=\S)([^*\n]*?\S)\*\*:?$/,'$1');
+    out.push(`<div class="sp-blk ${kind}">${title?`<div class="sp-gh"><span>${mdInline(t)}</span></div>`:''}<div class="ebody">${dec(terms(mdFmt(b)))}</div></div>`);
+  }
+  const logic=out.join('');
+  let h=`<div class="sp-teach">`;
+  if(pivot)h+=`<div class="sp-tp"><div class="sp-eyebrow">The pivot</div><div class="ebody sp-pivot">${mdFmt(pivot)}</div></div>`;
+  if(logic)h+=`<div class="sp-tl"><div class="sp-eyebrow">Reasoning</div><div class="sp-logic">${logic}</div></div>`;
+  if(rule)h+=`<div class="sp-rule"><span class="sp-ruleic"><svg class="sp-rulesh" viewBox="-20 -20 40 40" aria-hidden="true"><path d="${SP_SH.ok}"/></svg><svg class="ic"><use href="#i-bulb"/></svg></span><div><div class="sp-eyebrow">Takeaway</div><p>${mdInline(rule)}</p></div></div>`;
+  return h+`</div>`;
 }
 function renderExpl(){
   const q=curQ(),it=curIt(),s=ST(q.id);
@@ -11290,6 +11430,8 @@ function renderPrompt(){
     gaps.push('It still asks for the old format \u2014 an objective and a things-to-remember list on every item and a note on the correct option, where the current format puts all of that into one short explanation and a Wrong / Right in line per distractor.');
   if(p&&p.indexOf('RE-RUNS')<0)
     gaps.push('It never asks a re-run to keep each question\'s id \u2014 without it, an updated question is matched by its wording alone.');
+  if(p&&p.indexOf('quieter line')<0)
+    gaps.push('It never asks for the explanation shape the study screen now draws \u2014 short chain steps with their qualifier in parentheses, one bolded step per chain, labelled chains and labelled bullets \u2014 so explanations arrive as long run-on chains instead of the stepper, tiles and labels the explanation panel lays out.');
   if(p&&p.indexOf('TABLES')<0)
     gaps.push('It never asks for tables or reading captions \u2014 a printed lab panel comes back flattened into a sentence instead of the table this screen now draws, and a figure arrives with a bare label instead of a line telling you what to look for in it.');
   n.style.display=gaps.length?'block':'none';
