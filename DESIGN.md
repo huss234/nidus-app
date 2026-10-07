@@ -1,0 +1,459 @@
+# Plume — the Nidus design language
+
+**Version: Plume 1.0** · Base: Material 3 Expressive (2025 release and later)
+
+This file defines how Nidus should look, move and feel. It is the target, not
+a description of the app as it is today. Most of the current UI was built
+before Plume existed and is **legacy**: it does not set any standard, and
+nothing in it is a model to copy. Each surface moves to Plume when it is
+rebuilt. The ledger at the end lists the surfaces already done.
+
+> A nidus is a nest. A plume is the feather it is built from: light,
+> exact, and alive to the smallest touch of air.
+
+---
+
+## 0. What Plume is
+
+Plume starts from Material 3 Expressive: dynamic colour, the shape library,
+spring physics, emphasized type, and the new components (button groups,
+split buttons, FAB menus, floating toolbars, loading indicators, wavy
+progress). It keeps M3E's grammar and goes further in three ways:
+
+1. **Every touch answers.** M3E gives you state layers and a few springs.
+   In Plume, every interactive element responds physically in the same
+   frame the finger lands, and settles with a spring when it is released.
+   Nothing feels dead.
+2. **Continuity over cuts.** Nothing appears from nowhere or vanishes. Every
+   surface grows out of the thing that summoned it and goes back into it.
+   Every motion can be interrupted and picks up from where it is.
+3. **Restraint as craft.** Expressive does not mean loud. Plume is calm
+   while you are not touching it and comes alive when you do. Colour,
+   shape and motion are each spent where they mean something, so that the
+   moments that matter (a correct answer, a finished block, a streak) can
+   be truly expressive.
+
+"Perfect" in Plume means perfect execution: no jank, no flicker, no layout
+jump, no stuck hover, no orphaned element, no animation that fights another
+one, in light and dark, at 390px and on desktop.
+
+---
+
+## 1. Principles
+
+1. **Quiet at rest, alive in touch.** Nothing idles: no ambient loops and no
+   decorative motion, except the loading indicator while something really
+   is loading. Motion only answers the user or reports a real change.
+2. **The finger is the clock.** Feedback starts on `pointerdown`, not on
+   `click`. A drag follows the finger 1:1. A release carries the finger's
+   velocity into the spring.
+3. **Shape carries state.** Selection, focus and pressing change *form*
+   (corners, size), not only colour. A selected thing looks different even
+   in greyscale.
+4. **One hero per screen.** Each screen has one primary action and one
+   focal element. It gets the strongest colour, the largest shape and the
+   richest motion. Everything else steps back into tonal surfaces.
+5. **Origin and destination.** Things open from the place they were opened
+   from and close back into it: menus from their anchor, sheets from their
+   edge, detail views from the card that was tapped.
+6. **Interruptible always.** Tapping again mid-animation retargets from the
+   current position. Never queue animations, never snap to the end, never
+   restart from zero.
+7. **Content first.** This is a study tool. Reading comfort (measure,
+   leading, contrast) beats decoration everywhere. Motion never moves text
+   while it is being read.
+8. **Dark and light are equals.** Both are designed, not inverted. Check
+   both every time.
+
+---
+
+## 2. Colour
+
+**Dynamic colour is the base.** The app already generates M3 colour roles
+(`--md-primary`, `--md-surface-container-high`, …) live from one seed hue.
+Plume uses those roles and nothing else. A raw hex, rgb or oklch value in a
+Plume component is a bug. Use a role, or `color-mix()` of roles.
+
+| Role | Job in Plume |
+|---|---|
+| `primary` / `on-primary` | The single hero action on a screen, the active indicator, progress |
+| `primary-container` | The selected state of a navigation or toggle item, a highlighted card |
+| `secondary-container` | Selected chips, segmented selections, the tonal button |
+| `tertiary` / `tertiary-container` | Celebration and moments of delight: streaks, milestones, a perfect block. Rare on purpose |
+| `success` / `error` / `warning` (+ containers) | Verdicts and status only. Never decoration |
+| `surface-container-lowest` … `highest` | Depth. Surfaces are separated by tone, not by lines or shadows |
+| `outline-variant` | Hairline dividers, only where tone cannot separate |
+| `inverse-surface` | Snackbars, tooltips |
+
+Rules:
+
+- **Tonal elevation first.** A raised surface is one container step higher.
+  Shadows are reserved for things that truly float above the page (FAB,
+  menus, dragged items, floating toolbars), and Plume shadows are soft and
+  tinted (§5).
+- **State layers** are the "on" colour of the element at fixed opacity:
+  hover 8%, focus 10%, press 10%, drag 16%. Never invent a hover colour.
+- **Verdict colour is spent narrowly.** A right or wrong answer shows in its
+  badge and a thin edge, with an 8–12% wash at most. It never floods the
+  screen.
+- **Contrast:** body text at least 4.5:1, large text and icons at least 3:1,
+  in both themes and every seed hue.
+
+---
+
+## 3. Shape
+
+Shape is the most expressive tool Plume has. Corners are tokens, and they
+move.
+
+### Scale
+
+| Token | Value | Use |
+|---|---|---|
+| `--p-r-xs` | 4px | Tags, small badges, inner segments |
+| `--p-r-s` | 8px | Chips, small inputs, tooltips |
+| `--p-r-m` | 12px | Cards inside cards, menu items, fields |
+| `--p-r-l` | 16px | Cards, list groups |
+| `--p-r-lx` | 20px | Large cards, floating toolbars |
+| `--p-r-xl` | 28px | Sheets, dialogs, hero cards |
+| `--p-r-xxl` | 48px | Display surfaces, hero imagery |
+| `--p-r-full` | 999px | Buttons at rest, FABs, pills, indicators |
+
+### Shape in motion
+
+- **Press squares the corners.** A pill button on `pointerdown` morphs its
+  radius toward `--p-r-m` (fast effects spring), and springs back on
+  release. Small icon buttons go from round to `--p-r-m`. Never to 0.
+- **Selected changes form.** A toggle or icon button that turns on goes
+  from round to squircle (or the reverse, consistently across the app). A
+  selected segment in a button group widens and its inner corners round
+  off.
+- **Connected groups.** In a button group, the outer corners are full and
+  the inner corners are `--p-r-xs`. The pressed or selected member takes
+  full corners all round and pushes its neighbours by a few pixels
+  (`transform` only).
+- **Lists as stacked cards.** A grouped list is cards with `--p-r-l` at the
+  ends and `--p-r-xs` between them, separated by 2px gaps of surface, not by
+  divider lines. While a row is pressed, its corners round up.
+- **Expressive shapes** (the M3E library: cookie, sunny, clover, gem,
+  pill, soft burst, …) are reserved for meaning: avatars, the active
+  indicator in a celebration, the loading indicator, a correct-answer badge.
+  Draw them as SVG paths with matching command counts so they can morph,
+  or as `clip-path: path()`.
+- Where it is supported, `corner-shape: squircle` may refine large cards
+  and sheets (`@supports`), with the plain radius as fallback.
+- **Radius never takes a spring that overshoots.** An overshooting radius
+  can dip below its target. Animate corners on an effects spring (§4).
+
+---
+
+## 4. Motion: the Plume physics
+
+Motion is the soul of Plume. It is all **spring physics**, written in CSS
+as `linear()` easings generated from stiffness and damping (mass 1), with
+the duration set to the spring's settling time.
+
+### Two kinds of spring
+
+- **Spatial springs** move things: position, scale, size, rotation. They
+  may overshoot a little, which is what makes things feel physical.
+- **Effects springs** change appearance: opacity, colour, corner radius,
+  blur, shadow. They never overshoot.
+
+### The six springs (M3E expressive scheme)
+
+| Token | Stiffness / damping ratio | Settles in | Overshoot | Use |
+|---|---|---|---|---|
+| `--p-spatial-fast` | 800 / 0.6 | ≈ 250ms | ≈ 9% | Small things: switch thumbs, checkmarks, press release, chips, badges |
+| `--p-spatial` | 380 / 0.8 | ≈ 300ms | ≈ 1.5% | Medium things: menus, cards, FAB menu, indicators that travel |
+| `--p-spatial-slow` | 200 / 0.8 | ≈ 400ms | ≈ 1.5% | Large things: sheets, dialogs, full-screen transitions |
+| `--p-effect-fast` | 3800 / 1.0 | ≈ 100ms | 0 | Press state, state layers, radius under the finger |
+| `--p-effect` | 1600 / 1.0 | ≈ 150ms | 0 | Colour and opacity changes on selection |
+| `--p-effect-slow` | 800 / 1.0 | ≈ 200ms | 0 | Fades of large surfaces, scrims |
+
+Each token is a pair: `--p-spatial` (the `linear()` curve) and
+`--p-spatial-d` (its duration). Generate them once with a small spring
+sampler and put them on `:root`. The script reads the same tokens, so CSS
+and JS can never drift apart. Use the **standard scheme** (stiffness 1400 /
+700 / 300 at damping 0.9) for utility motion that should not draw the eye,
+like a scroll-linked header or a reflowing list.
+
+### The touch contract (every interactive element)
+
+| Moment | Response |
+|---|---|
+| `pointerdown` | Within one frame: scale to **0.96** (0.92 for small icon buttons), corners square toward `--p-r-m`, press state layer at 10%. `--p-effect-fast` |
+| Hold | Stays compressed. No timers |
+| Release / click | Springs back to 1 on `--p-spatial-fast` (the small overshoot *is* the feel), then the action plays |
+| Hover (`@media (hover:hover)` only) | 8% state layer and, on cards, 1 tonal step up. `--p-effect` |
+| Focus-visible | 3px `primary` ring offset 2px, following the element's current shape |
+| Cancelled press (finger slides off) | Springs back with no action |
+| Disabled | 38% content opacity, no response, no cursor change |
+
+Pressing must never shift layout: use `transform` only, never margin,
+padding or size.
+
+### Choreography
+
+- **Arrival:** surfaces grow from their origin with `transform-origin` set
+  to the anchor: scale 0.85→1 plus fade on `--p-spatial`. Their contents
+  follow 30–40ms later, staggered by 25–35ms per item, six steps at most,
+  in reading order.
+- **Departure:** about 30% faster than arrival, with no stagger, shrinking
+  back toward the origin. Remove the element only after the exit animation
+  has actually finished (measured, never a guessed timer).
+- **Peer screens:** fade-through. The old screen fades out (≈90ms), then the
+  new one fades in with a 12px rise on `--p-spatial`. They never overlap.
+- **Hierarchy (list → detail):** a container transform. The tapped card
+  becomes the detail surface (View Transitions API with
+  `view-transition-name`, or a FLIP fallback).
+- **Shared indicators travel.** One active pill in a nav bar, tabs or
+  segmented control slides and stretches to the new item
+  (`translateX` + `scaleX` on `--p-spatial`). Never crossfade two
+  indicators.
+- **Layout changes glide.** When an item is added, removed or reordered, the
+  rest move to their new places with FLIP (WAAPI, `--p-spatial`). Nothing
+  jumps.
+- **Data draws itself.** Numbers count up (tabular figures), rings run,
+  bars grow from their base. On a re-render, only the difference animates.
+
+### Gestures
+
+- Sheets, the drawer and swipe-able rows follow the finger 1:1. Turn off
+  transitions while dragging.
+- On release, the target is chosen by position *and* velocity (a flick
+  counts), and the motion continues with that velocity on `--p-spatial`.
+- Past a threshold: resistance (rubber band, 0.55× movement), then a light
+  haptic tick where supported.
+- Haptics are optional and subtle: `navigator.vibrate(6–10)` on a commit
+  (toggle on, gesture past its threshold, answer locked). Behind a setting,
+  and a silent no-op where unsupported.
+
+### Mechanics (non-negotiable)
+
+- Animate only `transform`, `opacity`, `filter`, `clip-path`, and colours.
+  Never `width`, `height`, `top`, `left`, `margin` or `padding`. Height
+  reveals use `grid-template-rows: 0fr → 1fr` with a content fade.
+- Name properties in `transition`. Never `transition: all`.
+- State that can flip back and forth uses **transitions** (they retarget).
+  Keyframes are only for one-shot arrivals and exits.
+- Never hide with `display:none` directly. Animate out, then hide. Use
+  `inert` on whatever is closed or leaving.
+- No `setTimeout` guessing animation lengths. Use `animationend` /
+  `transitionend` or `Animation.finished`.
+- No linear easing on movement (only on spinners and progress).
+- Hover effects live in `@media (hover:hover)` so they don't stick on touch.
+- `will-change` only while something is animating, removed afterwards.
+- 60fps on a mid-range Android phone is the bar. Large blurs and box-shadow
+  animations are suspects. Animate the opacity of a shadow layer instead.
+
+### Reduced motion
+
+With `prefers-reduced-motion: reduce`: keep fades, colour changes and the
+press state layer. Replace movement, scale and overshoot with a short
+crossfade (≈150ms). The app stays fully alive in feel. It just stops
+travelling. Never set all durations to 0: that removes the feedback too.
+
+---
+
+## 5. Depth and light
+
+- Surfaces separate by **tone** (container levels).
+- A floating element (FAB, menu, floating toolbar, dragged card, snackbar)
+  gets a **Plume shadow**: two soft layers, tinted with the primary hue
+  instead of pure black:
+  `0 1px 2px color-mix(in oklab, var(--md-shadow) 20%, transparent),
+   0 6px 20px -4px color-mix(in oklab, var(--md-primary) 18%, var(--md-shadow) 22%)`.
+  Dark theme: lower the tint and rely more on tone.
+- A lifted or dragged item rises one level: shadow grows (fade between two
+  pre-drawn shadow layers), scale 1.02.
+- Scrims: `--md-scrim` at 32%, fading on `--p-effect-slow`. A backdrop
+  blur of 2–6px is allowed behind sheets and dialogs if it stays smooth.
+
+---
+
+## 6. Type
+
+Typeface: **Roboto Flex** (variable), with `--m3-mono` (Roboto Mono) for
+data such as IDs, timers and counts. Use tabular figures
+(`font-variant-numeric: tabular-nums`) everywhere numbers change.
+
+| Role | Size / line | Weight | Use |
+|---|---|---|---|
+| Display | 45 / 52 | 400 (emphasized 600) | One hero number per screen (score, streak) |
+| Headline L / M / S | 32/40 · 28/36 · 24/32 | 400 (emph. 500–600) | Screen titles, sheet titles |
+| Title L / M / S | 22/28 · 16/24 · 14/20 | 500 | Card and section titles |
+| Body L / M / S | 16/24 · 14/20 · 12/16 | 400 | Reading text and UI text |
+| Label L / M / S | 14/20 · 12/16 · 11/16 | 500 | Buttons, chips, tabs, labels |
+
+- **Emphasized type** (M3E) is weight and optical size, not more size. A
+  screen title is one notch heavier and slightly tighter (−0.01 to −0.02em).
+- **Living type:** a selected nav item's label animates weight 500→700 via
+  `font-variation-settings` (`--p-effect`). Hero numbers count up.
+- Question stems and explanations follow the reader's own settings
+  (`--qfont`, `--qlh`, `--qfam`, `--measure`). Plume never overrides them.
+  Reading measure stays within 60–75ch.
+- Sentence case everywhere. No ALL-CAPS labels except tiny overlines, and
+  then only with +0.08em tracking.
+
+---
+
+## 7. Layout and spacing
+
+- **4px grid.** Spacing steps: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64.
+- Screen side margins: 16px compact, 24px medium, 24–32px expanded.
+- Inside cards: 16px (compact) to 20–24px (large). Nothing touches an edge.
+- Touch targets are at least 48×48px, even when the visual is smaller.
+- Window classes (M3): compact < 600px, medium 600–839px, expanded 840px+.
+  Navigation: bottom nav bar on compact, rail on medium, rail or drawer on
+  expanded.
+- Always check **390px** (phone) and a desktop width. No horizontal scroll,
+  ever. Respect `env(safe-area-inset-*)`.
+
+---
+
+## 8. Components: the Plume standard
+
+When a component is built or rebuilt, it meets this anatomy. All of them
+follow the touch contract in §4.
+
+| Component | Plume anatomy |
+|---|---|
+| **Buttons** | Sizes XS 32 / S 40 / M 56 / L 96 / XL 136px high. Pill at rest, squares on press. Variants: filled (hero only), tonal, outlined, text, elevated. Leading icon 20px with 8px gap. A loading button morphs its label into the loading indicator without changing width |
+| **Icon buttons** | Round 40px visual in a 48px target. Toggle variants change shape and fill when selected. The icon may animate its fill axis (outline → filled) |
+| **Button group** | Connected: one container, inner corners `--p-r-xs`, 2px gaps. Pressing one member widens it and narrows its neighbours (spring). Replaces old-style segmented controls |
+| **Split button** | Leading action plus trailing chevron. The chevron half turns into a circle and its icon rotates 180° while its menu is open |
+| **FAB / FAB menu** | Only for the screen's hero action. FAB menu: the FAB morphs into a close button (rotate and shape morph) while items unfold upward with a stagger, each a `primary-container` pill |
+| **Navigation bar** | Short (64px) bar. The active item has a pill indicator that slides between items and stretches mid-travel. Label weight animates. Icons switch outline → filled |
+| **Navigation rail / drawer** | Same travelling indicator. The rail can expand into a drawer with a container transform |
+| **Top app bar** | Flat at rest. On scroll it shifts to `surface-container` with an effects-spring colour transition. No shadow |
+| **Floating toolbar** | `surface-container-high`, `--p-r-full` or `--p-r-lx`, Plume shadow. Hides on scroll down and returns on scroll up (`--p-spatial`, translate only) |
+| **Cards** | Filled (`surface-container-*`), outlined, or elevated. Press compresses the card to 0.98, not 0.96. A card that opens something uses the container transform |
+| **Lists** | Stacked-card groups (§3), 56–72px rows, leading icon in a 40px tonal shape, trailing meta in label style |
+| **Menus** | M3E vertical menu: `surface-container`, `--p-r-l`, 4px inner padding, rows `--p-r-m` with 48px height, grouped sections with 2px gaps instead of dividers. Grows from its anchor (scale 0.85 + fade, `transform-origin` at the anchor) on `--p-spatial`. Selected row: `secondary-container` with a check |
+| **Bottom sheet** | `--p-r-xl` top corners, a 32×4px drag handle, draggable with velocity and snap points, scrim fade. Rises on `--p-spatial-slow`. Closes on scrim tap, Escape, back gesture, or flick down |
+| **Dialog** | `surface-container-high`, `--p-r-xl`, 24px padding, actions bottom-right as text or tonal buttons. Arrives with scale 0.9 + fade from the centre (or from its trigger). On compact screens prefer a bottom sheet |
+| **Snackbar** | `inverse-surface`, `--p-r-s`, slides up 16px + fade, one optional action, auto-dismiss 4–6s, swipe to dismiss. Only one at a time. A new one replaces the old with a quick crossfade |
+| **Chips** | 32px, `--p-r-s`. Selected: `secondary-container`, a leading check that draws itself (stroke-dashoffset), and the chip widens smoothly to fit it |
+| **Switch** | 52×32 track. The thumb grows from 16 to 24px when on (28px while pressed), slides on `--p-spatial-fast`, and shows a check icon when on |
+| **Checkbox / radio** | Check strokes draw in. The radio dot scales in with a spring. 48px target |
+| **Slider** | M3E slider: a tall track with a gap around the handle. The handle is a vertical bar that narrows while dragged. A value label pops above it while dragging |
+| **Text field** | Filled or outlined. The label floats on `--p-spatial-fast`. The focus indicator grows from the centre outward |
+| **Progress** | Wavy (M3E) for determinate progress worth celebrating (session progress). Flat for utility. Indeterminate: the M3E loading indicator, a shape that morphs through the expressive shapes inside a soft container |
+| **Tabs** | Indicator travels (§4). Content uses a fade-through, or swipes horizontally with the finger on touch |
+| **Tooltip** | `inverse-surface`, `--p-r-xs`, appears after 500ms hover or a long press, scale 0.9 + fade |
+| **Empty states** | One expressive shape as illustration (in `primary-container` / `tertiary-container`), one short line, one action |
+
+**Icons:** Material Symbols Rounded geometry on a 24px grid, outline at
+rest and filled when selected or active, with the switch animated. Stroke
+icons are drawn as inline SVG with consistent weight. No emoji as icons.
+Icon morphs (copy → check, play → pause) use paths with matching commands,
+or a rotate + scale crossfade.
+
+---
+
+## 9. Nidus moments (where Plume is most expressive)
+
+These carry the app's character. Every other surface stays calm so these
+can shine.
+
+- **Choosing an answer:** the option card compresses, and the letter badge
+  morphs circle → squircle and fills with `primary` (`--p-spatial-fast`).
+  Changing the choice moves the selection to the new card (one indicator
+  that travels where the layout allows).
+- **The verdict:** correct: the key badge morphs into the expressive
+  "soft burst" shape in `success`, with a single small scale pulse
+  (1 → 1.08 → 1). Wrong: the chosen card gives one damped horizontal
+  nudge (≈6px, two cycles, `--p-spatial-fast`), its badge turns `error`,
+  and the correct option lights up 80ms later. The explanation then rises
+  in as a stagger of its sections.
+- **Next question:** the content moves out and in as a shared horizontal
+  motion following the direction of travel (≈24px + fade). The chrome
+  (bars, timer) never moves.
+- **Finishing a block:** the score counts up on a Display number. A ring
+  runs to its value. If the result earns it, a `tertiary` celebration:
+  an expressive shape blooms behind the number, once, never on loop.
+- **Streaks and milestones:** the only place `tertiary` is used as a fill.
+
+---
+
+## 10. Copy and tone
+
+Plain, calm, second person. Short labels that explain themselves. No
+exclamation marks. A helper line only when a control can't explain itself.
+Errors say what happened and what is safe ("Nothing was lost").
+
+---
+
+## 11. Anti-patterns (never)
+
+- Copying a legacy component's styling as a "reference" for a Plume surface.
+- Raw colour values, new fonts, or one-off radii outside the scales.
+- `transition: all`, animating layout properties, timers instead of events.
+- Two indicators crossfading where one should travel.
+- Things popping in or out without an origin.
+- Shadows used to separate ordinary cards.
+- Bounces on colour, opacity or radius (effects never overshoot).
+- Idle or looping decoration.
+- Feedback that waits for `click` while the finger is already down.
+- A redesign of a surface the user did not ask for.
+
+---
+
+## 12. Definition of done (every Plume change)
+
+- [ ] Uses only `--md-*` roles and `--p-*` tokens. No raw values.
+- [ ] Every interactive element follows the touch contract (press,
+      release spring, hover, focus, cancel, disabled).
+- [ ] Arrivals have an origin. Exits finish before removal. Mid-animation
+      taps retarget smoothly.
+- [ ] No layout jump during or after any animation, and none on first paint.
+- [ ] Reduced motion: still alive in feel, no travel.
+- [ ] Checked in light and dark, at 390px and desktop (`htmlcheck --shot`).
+- [ ] Keyboard: Tab order, `:focus-visible`, Escape closes, Enter/Space
+      activates. ARIA roles and states are correct.
+- [ ] `htmlcheck` passes with no console errors.
+- [ ] The CSS block is marked `/* Plume 1.0 · <surface> */` and the ledger
+      below is updated.
+
+---
+
+## 13. Token block (add to `:root` with the first Plume surface)
+
+Generate the spring `linear()` curves from the table in §4 (sample the
+damped-spring step response at ~40 points). Until the generator exists, do
+not hand-type approximate curves.
+
+```css
+/* Plume 1.0 · tokens */
+:root{
+  --p-r-xs:4px; --p-r-s:8px; --p-r-m:12px; --p-r-l:16px;
+  --p-r-lx:20px; --p-r-xl:28px; --p-r-xxl:48px; --p-r-full:999px;
+  /* --p-spatial-fast / -d, --p-spatial / -d, --p-spatial-slow / -d,
+     --p-effect-fast / -d, --p-effect / -d, --p-effect-slow / -d
+     → generated linear() + settling duration */
+  --p-press:.96; --p-press-sm:.92; --p-press-card:.98;
+  --p-stagger:30ms;
+}
+```
+
+---
+
+## 14. Ledger: surfaces rebuilt under Plume
+
+A surface that is not listed here is legacy.
+
+| Surface | Plume version | App version | Notes |
+|---|---|---|---|
+| *(none yet)* | | | |
+
+## 15. Language changelog
+
+- **Plume 1.0** (2026-10-07): first definition. Based on M3 Expressive,
+  extended with the touch contract, continuity rules, travelling
+  indicators, gesture physics and the Nidus moments.
+
+Version rules: a clarification or a new component spec bumps the minor
+version (1.0 → 1.1). A change of direction (palette philosophy, motion
+system) bumps the major version, and the ledger records which surfaces
+were built under which version.
