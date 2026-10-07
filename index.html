@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.39 -->
+<!-- Nidus — Personal Qbank · v6.40 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2348,6 +2348,10 @@ body.scrolled .phead{background:var(--md-surface-container)}
 .tmpop #pHl.on,.tmpop #pFull.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
 .tmpop #pFlag.on .ic,.tmpop #pHl.on .ic,.tmpop #pFull.on .ic{color:inherit}
 .tmpop .tml{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* a row that carries its own switch: the switch shows the state, so the row
+   stays unfilled, and tapping it leaves the menu open to watch the thumb move */
+.tmpop .tmsw{cursor:pointer;-webkit-user-select:none;user-select:none;padding-right:12px}
+.tmpop .tmsw input{position:relative;z-index:1}
 /* 6.24 — the question's tags live behind the menu, in a sheet of labelled groups */
 .tgset{display:grid;gap:8px}
 .tgset + .tgset{margin-top:20px}
@@ -3713,6 +3717,17 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 }
 .sp-timer.warn{background:var(--md-error-container);color:var(--md-on-error-container);animation:spPulse 1s var(--m3-ease-standard) infinite}
 @keyframes spPulse{50%{transform:scale(1.06)}}
+/* Plume 1.3 · session clock switch. Hiding only takes the clock off the
+   screen: it keeps its place in the bar (no layout jump) and keeps ticking
+   underneath. It fades and shrinks out, then turns invisible once the fade
+   has finished, so it can't be read or tapped while hidden. */
+.sp-timer{transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard),
+  opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),visibility 0s linear 0s}
+.player.clock-off .sp-timer{opacity:0;transform:scale(.85);visibility:hidden;
+  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard),
+  opacity var(--p-effect-d) var(--p-exit),transform var(--p-effect-d) var(--p-exit),visibility 0s linear var(--p-effect-d)}
+.player.clock-off .sp-timer.warn{animation:none}
+@media (prefers-reduced-motion:reduce){.player.clock-off .sp-timer{transform:none}}
 @keyframes spWiggle{0%{transform:rotate(0) scale(.7)}40%{transform:rotate(-14deg) scale(1.15)}100%{transform:none}}
 
 /* progress track: one segment per question while they fit, a single bar after */
@@ -4729,6 +4744,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-review" viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45"/><path d="M20.6 3.9v4.3h-4.3"/><path d="M12 7.7V12l3.3 1.95"/></symbol>
 <symbol id="i-bank" viewBox="0 0 24 24"><rect x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/><path d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M10.2 12.1h3.6"/></symbol>
 <symbol id="i-stats" viewBox="0 0 24 24"><rect x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/><rect x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/><rect x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.6V12l2.9 1.8"/></symbol>
 <symbol id="i-history" viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.95-6.45"/><path d="M3.4 3.9v4.3h4.3"/><path d="M12 7.7V12l3.3 1.95"/></symbol>
 <symbol id="i-import" viewBox="0 0 24 24"><path d="M12 3.5v11.2"/><path d="m7.6 10.4 4.4 4.4 4.4-4.4"/><path d="M4.3 16.5v2.3a1.8 1.8 0 0 0 1.8 1.8h11.8a1.8 1.8 0 0 0 1.8-1.8v-2.3"/></symbol>
 <symbol id="i-prompt" viewBox="0 0 24 24"><path d="m8.6 8.4-3.9 3.6 3.9 3.6"/><path d="m15.4 8.4 3.9 3.6-3.9 3.6"/><path d="M13.1 5.8 10.9 18.2"/></symbol>
@@ -5277,7 +5293,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.39</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.40</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5287,7 +5303,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.39 · sharded store</span>
+        <span class="chip" id="verChip">v6.40 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5347,6 +5363,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
             <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span></button>
             <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span></button>
             <div class="tmdiv" role="separator"></div>
+            <label class="tool tmsw" id="pClock" title="Show or hide the clock. It keeps running either way"><svg class="ic"><use href="#i-clock"/></svg><span class="tml">Show clock</span><input type="checkbox" id="pClockSw" role="switch" aria-label="Show clock" checked></label>
             <button class="tool" id="pFull" role="menuitem" title="Focus mode / fullscreen (Shift+F)"><svg class="ic" id="pFullIc"><use href="#i-expand"/></svg><span class="tml" id="pFullLbl">Focus mode</span></button>
             <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span></button>
           </div>
@@ -6269,7 +6286,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.39';
+const APP_VERSION='6.40';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -6606,7 +6623,7 @@ const DEFAULTS={
      instead of on whichever device synced last. */
   dataRules:{v:1,days:{},sessions:{},before:{v:0,ts:0},purged:{days:{},sessions:{},before:0}},
   recovery:null,
-  settings:{name:'',brand:'Personal Qbank',goal:40,examDate:'',font:17,autoNext:false,theme:'dark',lastFilters:null,
+  settings:{name:'',brand:'Personal Qbank',goal:40,examDate:'',font:17,autoNext:false,showClock:true,theme:'dark',lastFilters:null,
     efont:15.5,lh:1.72,width:'comfortable',family:'sans',explLayout:'inline',explOpen:true,
     copyOpts:{meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true}}
 };
@@ -9915,7 +9932,9 @@ function openTools(){
   toolsSettleT=setTimeout(()=>p.classList.add('settled'),300);
 }
 $('#pMore').onclick=e=>{e.stopPropagation();toolsOpen()?closeTools():openTools()};
-$('#pMorePop').addEventListener('click',()=>{setTimeout(closeTools,0)});
+$('#pMorePop').addEventListener('click',e=>{if(e.target.closest('.tmsw'))return;setTimeout(closeTools,0)});
+/* the clock switch writes the same preference as Settings → Session */
+$('#pClockSw').addEventListener('change',e=>{DB.settings.showClock=e.target.checked;applySettings();save()});
 document.addEventListener('click',e=>{if(!e.target.closest('.tmwrap'))closeTools()});
 
 /* ---------- focus mode ---------- */
@@ -9984,6 +10003,7 @@ const SETTINGS_SPEC=[
    blurb:'How a run of questions behaves and what counts as a full day of work.',
    rows:[
      {k:'autoNext',kind:'toggle',label:'Auto-advance',hint:'Move on by itself after a correct answer in tutor mode',on:'On'},
+     {k:'showClock',kind:'toggle',label:'Show clock',hint:'Hiding it only takes it off the screen; the session is still timed. Also a switch in the ⋮ menu inside a session',on:'On'},
      {k:'goal',kind:'number',label:'Daily goal',hint:'Questions per day — drives the ring and the streak on the dashboard',min:0,step:5},
      {k:'examDate',kind:'date',label:'Exam date',hint:'Turns Home into a countdown and works out the pace the rest of the bank needs'}
    ]},
@@ -12174,6 +12194,9 @@ function applySettings(){
   R.setProperty('--pmax',w[0]);R.setProperty('--measure',w[1]);
   R.setProperty('--qfam',FAMS[s.family]||FAMS.sans);
   document.documentElement.dataset.theme=s.theme||'dark';
+  const clock=setVal('showClock')!==false;
+  $('#player').classList.toggle('clock-off',!clock);$('#pTimer').setAttribute('aria-hidden',String(!clock));
+  $('#pClockSw').checked=clock;
   $('#brandTag').textContent=s.brand||'Personal Qbank';
   document.title='Nidus — '+(s.brand||'Personal Qbank');
   try{if($('#player').classList.contains('on'))renderMeta()}catch(e){}

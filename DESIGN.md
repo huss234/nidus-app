@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.2** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.3** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -481,6 +481,17 @@ Errors say what happened and what is safe ("Nothing was lost").
   piece, and only then hides Home and scrolls to the top. `settle` finishes
   a legacy screen's own CSS entrances so they don't trickle in underneath.
   Anything that closes the screen calls `plumeAbort(dest)` first.
+- **A switch inside a menu** (the player's ⋮ menu, "Show clock"): the row
+  is a `<label class="tool tmsw">` holding the app's own switch
+  (`<input type="checkbox" role="switch">`). The switch shows the state, so
+  the row is not filled, and tapping it keeps the menu open so the thumb
+  can be seen moving. It writes a `SETTINGS_SPEC` key, so Settings and the
+  in-session sheet show the same switch.
+- **Hiding something without changing the layout** (the session clock,
+  `.player.clock-off`): fade and shrink it out on the exit curve, then flip
+  `visibility` to hidden after the fade (a delayed `visibility` transition).
+  It keeps its space, so nothing beside it jumps, and it can't be tapped or
+  read by a screen reader (`aria-hidden`) while hidden.
 
 ---
 
@@ -492,6 +503,7 @@ A surface that is not listed here is legacy.
 |---|---|---|---|
 | Companion (session screen + question reader) | 1.0 | 6.36 | First Plume surface. Tokens and primitives added. Inside the reader, the figure blocks (`figHTML`) and the referenced-file buttons (`linkBtns`) are still legacy components |
 | Opening the player and the companion from Home's session card (Resume, Companion) | 1.0 | 6.38 | The transition only. The player itself is still legacy |
+| Player: "Show clock" switch in the ⋮ menu, and the clock's hide/show | 1.3 | 6.40 | The menu around it is still legacy |
 
 ## 15. Language changelog
 
@@ -510,6 +522,9 @@ A surface that is not listed here is legacy.
 - **Plume 1.2** (2026-10-07): verdict containers never fill a card that
   holds reading text; the wrong option in the player became a faint veil
   with a thin red edge.
+- **Plume 1.3** (2026-10-07): a switch inside a menu (row is a label,
+  the menu stays open), and hiding an element in place without a layout
+  jump (fade out, then `visibility`).
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

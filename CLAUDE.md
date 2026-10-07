@@ -107,5 +107,9 @@ does) and work in the scratchpad:
   real trigger, save the frames with their times, and make a contact sheet
   with ImageMagick (`montage -label '%t' … -tile 8x3`). Read the sheet
   before and after the fix.
+- **Test that a setting survives a reload without the seed.** The real
+  store is IndexedDB; the `localStorage.nidus_db` seed can win again on
+  reload and make a working setting look lost. Load the page empty, set
+  the value, `await doSave()`, reload, then read `DB.settings`.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
