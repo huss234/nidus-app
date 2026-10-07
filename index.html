@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.25 -->
+<!-- Nidus — Personal Qbank · v6.26 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -1082,18 +1082,16 @@ a.btn.tg{background:var(--md-primary-container);color:var(--md-on-primary-contai
 .tool:active{border-radius:var(--m3-corner-m);transform:scale(.9);transition-duration:var(--m3-shape-in)}
 .tool.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
 .tool.on.hl{background:var(--md-tertiary-container);color:var(--md-on-tertiary-container)}
-.tool.ok{background:var(--md-success-container);color:var(--md-on-success-container)}
-/* 6.25 — copied: the button squares its corners in the success tone while the
-   copy glyph shrinks and turns away and a check draws itself in its place;
-   on the way back the check fades and the glyph springs home */
-.tool.ok{border-radius:var(--m3-corner-m)}
+/* 6.26 — copied: the button itself stays as it is; the copy glyph shrinks
+   and turns away and a check draws itself in its place, then the glyph
+   springs home */
 .cpi{display:grid;place-items:center;width:24px;height:24px;flex:0 0 24px}
 .tool .cpi > .ic{grid-area:1/1;
   transition:transform var(--m3-spatial) var(--m3-spring-expressive),opacity var(--m3-dur-short2) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard)}
 .tool .cpi > .cpk{opacity:0;transform:scale(.6)}
 .cpk path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--m3-dur-short2) var(--m3-ease-emphasized-accel)}
 .tool.ok .cpi > .ic:first-child{opacity:0;transform:scale(.5) rotate(-25deg)}
-.tool.ok .cpi > .cpk{opacity:1;transform:none;color:inherit}
+.tool.ok .cpi > .cpk{opacity:1;transform:none}
 .tool.ok .cpk path{stroke-dashoffset:0;transition:stroke-dashoffset var(--m3-spatial) var(--m3-ease-emphasized-decel) 70ms}
 @media (prefers-reduced-motion:reduce){.tool .cpi > .ic{transform:none!important}}
 
@@ -4748,7 +4746,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.25</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.26</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4758,7 +4756,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.25 · sharded store</span>
+        <span class="chip" id="verChip">v6.26 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5711,7 +5709,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.25';
+const APP_VERSION='6.26';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
