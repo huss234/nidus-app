@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.1** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.2** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -96,6 +96,12 @@ Rules:
 - **Verdict colour is spent narrowly.** A right or wrong answer shows in its
   badge and a thin edge, with an 8–12% wash at most. It never floods the
   screen.
+- **Never fill a card that holds reading text with a verdict container.**
+  `error-container` (deep red in dark, loud salmon in light) is painful to
+  read through. A graded option stays a reading surface in `on-surface`
+  text: `color-mix(in oklab, var(--md-error) 9%, var(--md-surface-container))`
+  plus a 1.5px inset edge of `error` at about 42%. The badge keeps the full
+  colour. (Player wrong option, v6.39, after the user found it painful.)
 - **Contrast:** body text at least 4.5:1, large text and icons at least 3:1,
   in both themes and every seed hue.
 
@@ -500,6 +506,10 @@ A surface that is not listed here is legacy.
   Snackbars wait for motion. Escape closes only the top layer (capture-phase
   key handlers). Spoilers stay sealed: no colour hints at a hidden answer.
   Transitions are filmed frame by frame before they ship.
+
+- **Plume 1.2** (2026-10-07): verdict containers never fill a card that
+  holds reading text; the wrong option in the player became a faint veil
+  with a thin red edge.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
