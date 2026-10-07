@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.23 -->
+<!-- Nidus — Personal Qbank · v6.24 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -1102,14 +1102,6 @@ a.btn.tg{background:var(--md-primary-container);color:var(--md-on-primary-contai
 .chip.mono{font-family:var(--m3-mono);letter-spacing:0}
 /* a chip that is also a button: the question's tags sit behind one of these */
 button.chip{border:0;font:inherit;font-size:12px;line-height:16px;font-weight:500;letter-spacing:.4px;cursor:pointer}
-.chip.mtag{
-  background:transparent;border:1px dashed var(--md-outline);
-  color:var(--md-on-surface-variant);
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             border-color var(--m3-dur-medium) var(--m3-ease-standard);
-}
-.chip.mtag:hover{background:var(--md-surface-container-highest);border-color:var(--md-on-surface-variant)}
-.chip.mtag .ic{width:16px;height:16px;stroke-width:2.2}
 
 /* ---------- filter chips ----------
    A button.pill is a Material filter chip: outlined when off, tonal when
@@ -2300,9 +2292,10 @@ body.scrolled .phead{background:var(--md-surface-container)}
    badges (the shortcuts still work and still show in each row's tooltip),
    and four short groups split by hairlines instead of headings — mark the
    question, work on it, look something up, change the view. A tool that is
-   switched on fills its row, so its state reads without a legend. It opens
-   on a calm decelerate rather than a spring: a tall menu that overshoots
-   wobbles, and the rows only fade, so nothing slides under the finger. */
+   switched on fills its row, so its state reads without a legend.
+   6.24 — it opens exactly as the home overflow does: the container springs
+   up from the button's corner (ovOpen) and the rows drop in on a 25ms beat
+   (ovItem). */
 .tmpop{
   display:none;position:absolute;top:calc(100% + 6px);right:4px;z-index:40;
   min-width:252px;max-width:min(320px,calc(100vw - 24px));
@@ -2315,19 +2308,14 @@ body.scrolled .phead{background:var(--md-surface-container)}
   scrollbar-width:none;
 }
 .tmpop::-webkit-scrollbar{display:none}
-.tmpop.on{display:block;animation:tmOpen var(--m3-dur-medium) var(--m3-ease-emphasized-decel)}
-@keyframes tmOpen{
-  from{opacity:0;transform:translateY(-4px) scale(.96);clip-path:inset(0 0 35% 0 round var(--m3-corner-l))}
-  to{opacity:1;transform:none;clip-path:inset(0 0 0 0 round var(--m3-corner-l))}
-}
-@keyframes tmRow{from{opacity:0}to{opacity:1}}
+.tmpop.on{display:block;animation:ovOpen var(--m3-spatial-fast) var(--m3-spring-expressive)}
 .tmpop.out{
   display:block;pointer-events:none;
   animation:ovClose var(--m3-dur-short2) var(--m3-ease-emphasized-accel) both;
 }
-.tmpop.on:not(.settled):not(.out) > *{animation:tmRow var(--m3-dur-short2) var(--m3-ease-standard) both;animation-delay:calc(var(--r,0) * 12ms + 30ms)}
+.tmpop.on:not(.settled):not(.out) > *{animation:ovItem var(--m3-dur-short2) var(--m3-ease-emphasized-decel) both;animation-delay:calc(var(--r,0) * 25ms + 20ms)}
 .tmpop > :nth-child(2){--r:1}.tmpop > :nth-child(3){--r:2}.tmpop > :nth-child(4){--r:3}.tmpop > :nth-child(5){--r:4}
-.tmpop > :nth-child(6){--r:5}.tmpop > :nth-child(7){--r:6}.tmpop > :nth-child(8){--r:7}.tmpop > :nth-child(n+9){--r:8}
+.tmpop > :nth-child(n+6){--r:5}
 .tmpop .tmdiv{height:1px;margin:6px 12px;background:var(--md-outline-variant)}
 .tmpop .tool{
   position:relative;width:100%;height:48px;flex:0 0 auto;
@@ -2363,6 +2351,11 @@ body.scrolled .phead{background:var(--md-surface-container)}
 .tmpop #pHl.on,.tmpop #pFull.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
 .tmpop #pFlag.on .ic,.tmpop #pHl.on .ic,.tmpop #pFull.on .ic{color:inherit}
 .tmpop .tml{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 6.24 — the question's tags live behind the menu, in a sheet of labelled groups */
+.tgset{display:grid;gap:8px}
+.tgset + .tgset{margin-top:20px}
+.tgl{font:500 12px/16px var(--m3-font);letter-spacing:.5px;color:var(--md-on-surface-variant)}
+.tgc{display:flex;flex-wrap:wrap;gap:6px}
 
 /* the question navigator */
 .navstrip{
@@ -3784,6 +3777,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 @keyframes spIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .sp-meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
 .sp-meta:empty{display:none}
+.sp-meta:empty{display:none}
 .sp-meta .chip{animation:spIn var(--m3-dur-medium) var(--m3-ease-emphasized-decel) backwards}
 .sp .sp-stem{margin-top:12px;max-width:var(--measure)}
 .sp-ask{margin-top:24px;max-width:var(--measure)}
@@ -4743,7 +4737,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.23</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.24</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -4753,7 +4747,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.23 · sharded store</span>
+        <span class="chip" id="verChip">v6.24 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -4809,6 +4803,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
             <button class="tool" id="pEdit" role="menuitem" title="Edit this question"><svg class="ic"><use href="#i-text"/></svg><span class="tml">Edit question</span></button>
             <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span></button>
             <div class="tmdiv" role="separator"></div>
+            <button class="tool" id="pTags" role="menuitem" title="Tags on this question — system, subject, topic, difficulty, source"><svg class="ic"><use href="#i-info"/></svg><span class="tml">Tags</span></button>
             <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span></button>
             <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span></button>
             <div class="tmdiv" role="separator"></div>
@@ -5705,7 +5700,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.23';
+const APP_VERSION='6.24';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -6043,7 +6038,7 @@ const DEFAULTS={
   dataRules:{v:1,days:{},sessions:{},before:{v:0,ts:0},purged:{days:{},sessions:{},before:0}},
   recovery:null,
   settings:{name:'',brand:'Personal Qbank',goal:40,examDate:'',font:17,autoNext:false,theme:'dark',lastFilters:null,
-    efont:15.5,lh:1.72,width:'comfortable',family:'sans',explLayout:'inline',explOpen:true,qtags:'hidden',
+    efont:15.5,lh:1.72,width:'comfortable',family:'sans',explLayout:'inline',explOpen:true,
     copyOpts:{meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true}}
 };
 let DB=JSON.parse(JSON.stringify(DEFAULTS));
@@ -8497,33 +8492,31 @@ function timeUp(){
   else if(cur<S.order.length-1){next()}
   else{toast('Time is up on the last question.')}
 }
-/* The classification chips name the system, the subject and the difficulty, so
-   read before answering they can hand the question away. They stay shut, and
-   open only when you ask for them or when the setting says otherwise. The two
-   integrity chips are not classification and are never hidden. */
-let metaPeek=false;
-function metaTagsHTML(q){
-  return [
-    q.system?`<span class="chip">${esc(q.system)}</span>`:'',
-    q.subject?`<span class="chip">${esc(q.subject)}</span>`:'',
-    q.difficulty?`<span class="chip ${q.difficulty==='hard'?'rose':q.difficulty==='easy'?'jade':''}">${esc(q.difficulty)}</span>`:'',
-    q.source&&q.source.exam?`<span class="chip">${esc(q.source.exam)}${q.source.number?' · #'+q.source.number:''}</span>`:''
-  ].join('');
-}
+/* 6.24 — the classification chips moved off the stem into the Tags sheet in
+   the session menu: read before answering they can hand the question away, and
+   the row of them crowded the top of every item. The two integrity chips are
+   not classification and still sit above the stem. */
 function renderMeta(){
   const row=$('#pMetaRow');if(!row||typeof S==='undefined'||!S)return;
-  const q=curQ(),it=curIt();if(!q)return;
+  const q=curQ();if(!q)return;
   const warn=[
     q.keyConflict?`<span class="chip amber">key conflict</span>`:'',
     q.needsReview?`<span class="chip rose">flagged by extractor</span>`:''
   ].join('');
-  const tags=metaTagsHTML(q);
-  if(!tags){row.innerHTML=warn;return}
-  const mode=setVal('qtags')||'hidden';
-  const auto=mode==='always'||(mode==='answered'&&it&&it.submitted);
-  const open=auto||metaPeek;
-  const toggle=auto?'':`<button class="chip mtag" data-metatoggle title="${open?'Hide the tags again':'Show this question\'s tags — they can point at the answer'}"><svg class="ic"><use href="#i-more"/></svg>${open?'hide':'tags'}</button>`;
-  row.innerHTML=open?tags+warn+toggle:toggle+warn;
+  row.innerHTML=warn;
+}
+function showTags(){
+  const q=curQ();if(!q)return;
+  const set=(l,h)=>h?`<div class="tgset"><div class="tgl">${l}</div><div class="tgc">${h}</div></div>`:'';
+  const ch=(v,c)=>v?`<span class="chip${c?' '+c:''}">${esc(v)}</span>`:'';
+  const body=[
+    set('Classification',ch(q.system)+ch(q.subject)+ch(q.difficulty,q.difficulty==='hard'?'rose':q.difficulty==='easy'?'jade':'')),
+    set('Topic',ch(q.topic)+ch(q.archetype,'acc')+ch(q.task)),
+    set('Tags',(q.tags||[]).map(t=>ch(t)).join('')),
+    set('Source',q.source&&q.source.exam?ch(q.source.exam+(q.source.number?' · #'+q.source.number:'')):''),
+    set('Needs a look',ch(q.keyConflict&&'key conflict','amber')+ch(q.needsReview&&'flagged by extractor','rose'))
+  ].join('');
+  modal('Tags',body||'<p class="tiny muted">This question has no tags.</p>');
 }
 /* 6.15 — the session screen is drawn by the functions below. The ids the rest
    of the app reaches for (#pStem, #pChoices, #pExpl, #pStrip, the tools) are
@@ -8593,7 +8586,6 @@ function renderQ(){
   $('#pMode').classList.toggle('exam',!tutor&&!S.review);
   renderTrack();renderNav();
   const st=ST(q.id);
-  metaPeek=false;
   renderMeta();
   $('#pFlag').classList.toggle('on',!!st.flag);
   $('#pHl').classList.toggle('on',hlMode);
@@ -8716,7 +8708,7 @@ function paintStrip(){renderTrack();renderNav()}
 $('#pStrip').addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(!b)return;
   const i=parseInt(b.dataset.i,10);setNav(false);if(i===cur)return;
   flushTime();NAVDIR=i>cur?1:-1;cur=i;renderQ()});
-$('#pMetaRow').addEventListener('click',e=>{if(!e.target.closest('[data-metatoggle]'))return;metaPeek=!metaPeek;renderMeta()});
+$('#pTags').onclick=showTags;
 $('#pConf').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const it=curIt();it.conf=it.conf===b.dataset.c?null:b.dataset.c;
   paintConf(false);save()});
 /* the indicator moves only between two choices; arriving from none it grows
@@ -9261,7 +9253,6 @@ const SETTINGS_SPEC=[
   {id:'session',icon:'i-new',title:'Session',group:'Study',session:true,
    blurb:'How a run of questions behaves and what counts as a full day of work.',
    rows:[
-     {k:'qtags',kind:'seg',label:'Question tags',hint:'System, subject and difficulty above the stem — read early they can point at the answer',opts:[['hidden','Hidden'],['answered','After answering'],['always','Always']],rerender:true},
      {k:'autoNext',kind:'toggle',label:'Auto-advance',hint:'Move on by itself after a correct answer in tutor mode',on:'On'},
      {k:'goal',kind:'number',label:'Daily goal',hint:'Questions per day — drives the ring and the streak on the dashboard',min:0,step:5},
      {k:'examDate',kind:'date',label:'Exam date',hint:'Turns Home into a countdown and works out the pace the rest of the bank needs'}
@@ -16463,9 +16454,8 @@ const BRAND=(function(){
     },
     session: function () {
       var g = sv('goal') || 0;
-      var t = { hidden: 'tags hidden', answered: 'tags after answering', always: 'tags always shown' }[sv('qtags')] || 'tags hidden';
       return (sv('autoNext') ? 'Auto-advance on' : 'Auto-advance off') +
-             ' · ' + (g ? g + ' a day' : 'no daily goal') + ' · ' + t;
+             ' · ' + (g ? g + ' a day' : 'no daily goal');
     },
     copying: function () {
       var d = db(), o = (d && d.settings && d.settings.copyOpts) || {};
