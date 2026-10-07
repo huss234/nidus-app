@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.41 -->
+<!-- Nidus — Personal Qbank · v6.42 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2882,6 +2882,19 @@ body.hasmig{padding-bottom:64px}
 .figplate .fpa .btn .ic{width:18px;height:18px}
 .figplate .fpa .btn.arm{background:var(--md-error);color:var(--md-on-error);border-color:transparent}
 .figadd .ic{width:18px;height:18px}
+.figadds{display:flex;flex-wrap:wrap;gap:8px}
+/* the paste box: a dashed drop-style target that only accepts a paste */
+.figpad{
+  margin-top:8px;min-height:72px;padding:12px 16px;box-sizing:border-box;
+  display:flex;align-items:center;justify-content:center;gap:10px;text-align:center;
+  border:1.5px dashed var(--md-outline);border-radius:var(--m3-corner-m);
+  color:var(--md-on-surface-variant);font-size:14px;line-height:20px;
+  caret-color:transparent;outline:none;-webkit-user-select:text;user-select:text;
+  animation:m3Fade var(--m3-dur-medium) var(--m3-ease-standard);
+  transition:border-color var(--m3-dur-short2) var(--m3-ease-standard),background-color var(--m3-dur-short2) var(--m3-ease-standard);
+}
+.figpad:focus{border-color:var(--md-primary);background:color-mix(in oklab,var(--md-primary) 6%,transparent)}
+.figpad .ic{width:20px;height:20px;flex:0 0 auto}
 .figsub{
   font-size:14px;line-height:20px;font-weight:600;letter-spacing:.1px;
   color:var(--md-primary);margin:0 0 10px;text-transform:none;
@@ -4811,6 +4824,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-shrink" viewBox="0 0 24 24"><path d="M3.4 9.2h5.8V3.4"/><path d="M20.6 9.2h-5.8V3.4"/><path d="M14.8 20.6v-5.8h5.8"/><path d="M9.2 20.6v-5.8H3.4"/></symbol>
 <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
 <symbol id="i-image" viewBox="0 0 24 24"><rect x="3.3" y="4.6" width="17.4" height="14.8" rx="2.4"/><circle cx="8.6" cy="9.6" r="1.5"/><path d="m3.5 16.9 4.9-4.3 3 2.7 3.8-3.6 5.5 5.2"/></symbol>
+<symbol id="i-paste" viewBox="0 0 24 24"><path d="M15.6 4.6h1.6a2.2 2.2 0 0 1 2.2 2.2v12.4a2.2 2.2 0 0 1-2.2 2.2H6.8a2.2 2.2 0 0 1-2.2-2.2V6.8a2.2 2.2 0 0 1 2.2-2.2h1.6"/><rect x="8.4" y="2.8" width="7.2" height="3.6" rx="1.2"/><path d="M8.6 11.4h6.8M8.6 15.4h4.4"/></symbol>
 <symbol id="i-imageadd" viewBox="0 0 24 24"><path d="M20.6 12.6V6.8a2.3 2.3 0 0 0-2.3-2.3H5.5A2.3 2.3 0 0 0 3.2 6.8v10.4a2.3 2.3 0 0 0 2.3 2.3h6.9"/><circle cx="8.7" cy="9.7" r="1.55"/><path d="m3.4 16.9 4.9-4.3 3.1 2.7 1.9-1.8"/><path d="M17.9 14.9v5.8M15 17.8h5.8"/></symbol>
 <symbol id="i-swap" viewBox="0 0 24 24"><path d="M3.8 8.4h13.4"/><path d="m13.9 5.1 3.3 3.3-3.3 3.3"/><path d="M20.2 15.6H6.8"/><path d="m10.1 12.3-3.3 3.3 3.3 3.3"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.5h14.8"/><path d="M9.4 6.5V4.8a1.5 1.5 0 0 1 1.5-1.5h2.2a1.5 1.5 0 0 1 1.5 1.5v1.7"/><path d="m6.4 6.5.9 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.9-12"/><path d="M10.4 10.4v6M13.6 10.4v6"/></symbol>
@@ -5328,7 +5342,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.41</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.42</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5338,7 +5352,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.41 · sharded store</span>
+        <span class="chip" id="verChip">v6.42 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6321,7 +6335,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.41';
+const APP_VERSION='6.42';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7645,6 +7659,7 @@ function figPlateHTML(f){
       <span class="fph">Tap to choose a file · or drop one here · or paste</span>
     </span>
     <span class="fpa">
+      <button class="btn ghost sm" data-figact="paste" data-fig="${esc(f.fid)}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button>
       ${f.optional?`<button class="btn ghost sm" data-figact="dismiss" data-fig="${esc(f.fid)}">Not needed</button>`:''}
       <button class="btn ghost sm" data-figact="drop" data-fig="${esc(f.fid)}" title="Delete this placeholder"><svg class="ic"><use href="#i-trash"/></svg>Delete</button>
     </span>
@@ -7659,8 +7674,10 @@ function figHTML(qid,slot,opt){
   /* the written description is its own card only on a figure-dependent item, and only when no slot is already carrying it */
   const desc=(opt.desc&&slot==='stem'&&q.hasImage&&q.imageDescription&&!list.length)
     ?`<div class="card tiny" style="margin:12px 0"><span class="chip">figure</span> ${esc(q.imageDescription)}</div>`:'';
+  /* Paste sits beside the picker: on a phone a copied image has no other way
+     in, since there is no Ctrl+V and no field to long-press */
   const add=opt.add
-    ?`<button class="btn ghost sm figadd" data-figadd="${slot}" style="margin-top:${list.length?'8px':'0'}"><svg class="ic"><use href="#i-imageadd"/></svg>${list.length?'Add another figure':'Add a figure'}</button>`
+    ?`<div class="figadds" style="margin-top:${list.length?'8px':'0'}"><button class="btn ghost sm figadd" data-figadd="${slot}"><svg class="ic"><use href="#i-imageadd"/></svg>${list.length?'Add another figure':'Add a figure'}</button><button class="btn ghost sm figadd" data-figpaste="${slot}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button></div>`
     :'';
   return `<div class="figs" ${attrs}>${list.map(f=>figFilled(f)?figCardHTML(f,opt.thumb?'thumb':'full'):figPlateHTML(f)).join('')}${desc}${add}</div>`;
 }
@@ -7883,6 +7900,7 @@ document.addEventListener('click',e=>{
     const w=act.closest('.figs');if(!w)return;
     const qid=w.dataset.figq,fid=act.dataset.fig;
     if(act.dataset.figact==='replace')figPick(qid,fid,w.dataset.figslot);
+    else if(act.dataset.figact==='paste')figPaste(qid,fid,w.dataset.figslot,w);
     else if(act.dataset.figact==='caption')figCaptionEdit(act);
     else if(act.dataset.figact==='remove')figArm(act,()=>figRemove(qid,fid));
     else if(act.dataset.figact==='drop')figArm(act,()=>figDropSlot(qid,fid),'Delete this placeholder');
@@ -7890,6 +7908,12 @@ document.addEventListener('click',e=>{
       const q=figQ(qid),f=q&&figFind(q,fid);
       if(f){f.dismissed=true;figStamp(f);figTouch(q);figRefresh(qid);toast('Slot cleared.')}
     }
+    return;
+  }
+  const pst=e.target.closest('[data-figpaste]');
+  if(pst){
+    const w=pst.closest('.figs');
+    if(w)figPaste(w.dataset.figq,null,pst.dataset.figpaste,w);
     return;
   }
   const add=e.target.closest('[data-figadd]');
@@ -7935,6 +7959,52 @@ document.addEventListener('drop',e=>{
   figTake(w.dataset.figq,z.dataset.figdrop||null,w.dataset.figslot,files);
 });
 
+/* ---------- the Paste button ----------
+   Reads the clipboard directly (async Clipboard API). It must start inside
+   the tap, before any other await: iOS then shows its own "Paste" bubble,
+   Chrome asks once for permission. Where that is blocked or missing, a paste
+   box opens in the figure block instead: long-press it, choose Paste, and
+   its paste event carries the image. */
+async function figPaste(qid,fid,slot,wrap){
+  if(navigator.clipboard&&navigator.clipboard.read){
+    try{
+      const items=await navigator.clipboard.read(),files=[];
+      for(const it of items){
+        const t=(it.types||[]).find(x=>/^image\//i.test(x));
+        if(t){const b=await it.getType(t);files.push(new File([b],'pasted.'+(t.split('/')[1]||'png'),{type:t}))}
+      }
+      if(files.length)return figTake(qid,fid,slot,files);
+      return toast('There is no image on the clipboard. Copy the picture first, then tap Paste.');
+    }catch(err){/* blocked or unsupported: the paste box below */}
+  }
+  figPastePad(qid,fid,slot,wrap);
+}
+function figPastePad(qid,fid,slot,wrap){
+  if(!wrap)return;
+  let pad=wrap.querySelector('.figpad');
+  if(!pad){
+    pad=document.createElement('div');
+    pad.className='figpad';pad.contentEditable='true';pad.setAttribute('inputmode','none');
+    pad.setAttribute('role','textbox');pad.setAttribute('aria-label','Paste an image here');
+    pad.innerHTML='<svg class="ic" aria-hidden="true"><use href="#i-paste"/></svg><span>Long-press here, then choose <b>Paste</b></span>';
+    wrap.appendChild(pad);
+    /* nothing may be typed or dropped into it; it only listens for a paste */
+    pad.addEventListener('beforeinput',ev=>{if(ev.inputType!=='insertFromPaste')ev.preventDefault()});
+    pad.addEventListener('paste',ev=>{
+      ev.preventDefault();ev.stopPropagation();
+      const files=Array.from((ev.clipboardData&&ev.clipboardData.items)||[])
+        .filter(i=>i.type&&i.type.indexOf('image/')===0).map(i=>i.getAsFile()).filter(Boolean);
+      if(!files.length){toast('That was not an image. Copy the picture itself, then paste it here.');return}
+      pad.remove();figTake(qid,fid,slot,files);
+    });
+    pad.addEventListener('blur',()=>{
+      const a=pad.animate([{opacity:1},{opacity:0}],{duration:PL('effect').d,easing:PL_EXIT});
+      a.finished.then(()=>pad.remove(),()=>pad.remove());
+    });
+  }
+  pad.focus();
+}
+
 /* ---------- paste a screenshot into whichever empty slot is on screen ---------- */
 function figPasteTarget(){
   const vis=el=>el.offsetParent!==null;
@@ -7964,7 +8034,7 @@ document.addEventListener('paste',e=>{
 function openFigManager(qid){
   const q=figQ(qid);if(!q)return;
   modal('Figures',
-    `<p class="tiny muted" style="margin:0 0 16px">Tap a slot to attach a photo, drop a file onto it, or paste one with Ctrl/⌘ + V. It is stored inside the question, so it travels with every session, backup and sync.</p>
+    `<p class="tiny muted" style="margin:0 0 16px">Tap a slot to attach a photo, drop a file onto it, or paste one you copied (the Paste button, or Ctrl/⌘ + V). It is stored inside the question, so it travels with every session, backup and sync.</p>
      <p class="figsub">With the question — seen before answering</p>
      ${figHTML(qid,'stem',{add:true,thumb:true})}
      <p class="figsub" style="margin-top:18px">With the explanation — seen after answering</p>

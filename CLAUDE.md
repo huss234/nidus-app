@@ -75,6 +75,13 @@ exactly**, without waiting to be asked.
   figures last). Any other surface that copies a question from a session
   (the companion does) calls the same function, so the copies stay
   identical. Change copy behaviour there, never per surface.
+- **Adding a picture** always offers both ways in: choose a file
+  (`figPick`) and **Paste** (`figPaste`). A phone has no Ctrl+V and no
+  field to long-press, so a copied image needs its own button. `figPaste`
+  calls `navigator.clipboard.read()` first thing in the tap (iOS shows its
+  Paste bubble, Chrome asks once); if that is blocked it opens a paste box
+  (`figPastePad`) in the figure block. Every figure block drawn by
+  `figHTML` (companion, bank preview, editor, figure manager) gets both.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -119,5 +126,11 @@ does) and work in the scratchpad:
 - **Narrow-width rules go after the `max-width:520px` player block.** It
   comes late in the file and silently overrides an earlier, narrower media
   query with the same specificity.
+- **Test the clipboard over http, not file://.** Serve the repo with
+  `python3 -m http.server`, `grantPermissions(['clipboard-read',
+  'clipboard-write'])` on the context, write a PNG with
+  `navigator.clipboard.write`, then tap Paste. For the fallback, make
+  `navigator.clipboard.read` reject and dispatch a `ClipboardEvent('paste')`
+  carrying a `DataTransfer` file on `.figpad`.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
