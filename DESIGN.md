@@ -491,7 +491,9 @@ Errors say what happened and what is safe ("Nothing was lost").
   glyphs are the same strokes in different places (expand ↔ shrink are the
   same four corners, each turned 180° about its own centre), draw the icon
   inline and rotate each path (`transform-box: fill-box`) on `--p-spatial`,
-  staggered 15ms. Never swap the `<use>`: that cuts.
+  staggered 15ms. Never swap the `<use>`: that cuts. When the icon itself
+  shows the state, the button stays unfilled in every state: the user did
+  not want the focus button highlighted while fullscreen is on.
 - **The compact session bar** (`Plume 1.4 · compact session bar`): from
   520px down the bar's icon buttons are 44px wide (40px below 380px), the
   height stays 48px; the Tutor/Exam chip hides; from 420px the counter's
@@ -514,7 +516,7 @@ A surface that is not listed here is legacy.
 | Companion (session screen + question reader) | 1.0 | 6.36 | First Plume surface. Tokens and primitives added. Inside the reader, the figure blocks (`figHTML`) and the referenced-file buttons (`linkBtns`) are still legacy components |
 | Opening the player and the companion from Home's session card (Resume, Companion) | 1.0 | 6.38 | The transition only. The player itself is still legacy |
 | Player: "Show clock" switch in the ⋮ menu, and the clock's hide/show | 1.3 | 6.40 | The menu around it is still legacy |
-| Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. The other bar buttons keep their legacy press style |
+| Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
 
 ## 15. Language changelog
 
