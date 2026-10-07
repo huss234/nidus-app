@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.45 -->
+<!-- Nidus — Personal Qbank · v6.46 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3078,6 +3078,139 @@ body.hasmig{padding-bottom:64px}
 .lbstage{touch-action:none;overscroll-behavior:contain}
 .lbstage img{transform-origin:50% 50%;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
 
+/* Plume 1.6 · image ID in the viewer. A chip under the caption; a tap
+   copies "img-xxxxxxxx" for From gallery on another question. */
+.lbidrow{display:block;margin-top:10px}
+.lbid{
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;
+  border-radius:var(--p-r-s);border:0;
+  background:color-mix(in oklab,var(--lb-on) 12%,transparent);color:var(--lb-on);
+  font:500 12px/16px var(--m3-mono);letter-spacing:.2px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect);
+}
+.lbid .ic{width:16px;height:16px}
+@media (hover:hover){.lbid:hover{background:color-mix(in oklab,var(--lb-on) 20%,transparent)}}
+.lbid:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.lbid.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);background:color-mix(in oklab,var(--lb-on) 22%,transparent);
+  transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+
+/* Plume 1.6 · gallery picker. A bottom sheet on phones (rises from the
+   edge on --p-spatial-slow, follows the finger down from its handle), a
+   dialog from 600px (scale .9 + fade on --p-spatial). It sits above the
+   dialog layer (#mask, 100) and below the viewer (120) and the snackbar.
+   Every state flips by transition, so a close mid-rise retargets. */
+.fpk{position:fixed;inset:0;z-index:110;display:flex;align-items:flex-end;justify-content:center}
+.fpk[hidden]{display:none}
+.fpk__scrim{
+  position:absolute;inset:0;background:color-mix(in oklab,var(--md-scrim) 32%,transparent);opacity:0;
+  transition:opacity calc(var(--p-effect-slow-d) * .7) var(--p-exit);
+}
+.fpk.is-open .fpk__scrim{opacity:1;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow)}
+.fpk__sheet{
+  position:relative;display:flex;flex-direction:column;width:100%;height:min(88dvh,860px);
+  background:var(--md-surface-container-low);color:var(--md-on-surface);
+  border-radius:var(--p-r-xl) var(--p-r-xl) 0 0;padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:var(--p-shadow);outline:none;
+  transform:translateY(100%);
+  transition:transform calc(var(--p-spatial-slow-d) * .7) var(--p-exit);
+}
+.fpk.is-open .fpk__sheet{transform:none;transition:transform var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.fpk__grab{flex:none;height:24px;display:grid;place-items:center;touch-action:none;cursor:grab}
+.fpk__grab::before{content:"";width:32px;height:4px;border-radius:var(--p-r-full);background:var(--md-outline)}
+.fpk__h{flex:none;display:flex;align-items:center;gap:8px;padding:0 8px 0 24px;touch-action:none}
+.fpk__h h3{flex:1;margin:0;font:400 24px/32px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+.fpk__sub{flex:none;margin:0 24px 16px;font:400 14px/20px var(--m3-font);letter-spacing:.25px;color:var(--md-on-surface-variant)}
+.fpk__find{
+  flex:none;margin:0 16px;display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;
+  border-radius:var(--p-r-full);background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+  outline:2px solid transparent;outline-offset:-2px;cursor:text;
+  transition:outline-color var(--p-effect-d) var(--p-effect);
+}
+.fpk__find:focus-within{outline-color:var(--md-primary)}
+.fpk__find .ic{width:24px;height:24px;flex:none}
+/* the global search-input look (its own pill, icon and focus ring) belongs
+   to the container here, so the field itself is reset, :focus included */
+.fpk__find input,.fpk__find input:focus{
+  flex:1;min-width:0;width:auto;height:100%;margin:0;padding:0;border:0;border-radius:0;outline:0;background:none;box-shadow:none;
+  font:400 16px/24px var(--m3-font);letter-spacing:.5px;color:var(--md-on-surface);
+}
+.fpk__find input::placeholder{color:var(--md-on-surface-variant)}
+.fpk__chips{flex:none;display:flex;gap:8px;overflow-x:auto;padding:12px 16px 0;scrollbar-width:none}
+.fpk__chips::-webkit-scrollbar{display:none}
+.fpk__chips + .fpk__chips{padding-top:8px}
+.fpk__chips[hidden]{display:none}
+.fpk__chip{
+  position:relative;isolation:isolate;overflow:hidden;flex:none;
+  display:inline-grid;grid-template-columns:0fr auto;align-items:center;
+  height:32px;padding:0 12px 0 8px;border-radius:var(--p-r-s);
+  border:1px solid var(--md-outline-variant);background:transparent;color:var(--md-on-surface-variant);
+  font:500 14px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),grid-template-columns var(--p-spatial-d) var(--p-spatial),
+             background-color var(--p-effect-d) var(--p-effect),border-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+.fpk__chip::before{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.fpk__chk{display:block;min-width:0;overflow:hidden}
+.fpk__chk svg{display:block;width:18px;height:18px;margin-right:6px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.fpk__chk path{stroke-dasharray:22;stroke-dashoffset:22;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+.fpk__chip.on{grid-template-columns:1fr auto;background:var(--md-secondary-container);border-color:transparent;color:var(--md-on-secondary-container)}
+.fpk__chip.on .fpk__chk path{stroke-dashoffset:0;transition-delay:60ms}
+@media (hover:hover){.fpk__chip:hover::before{opacity:var(--m3-state-hover)}}
+.fpk__chip:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.fpk__chip.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.fpk__chip.is-down::before{opacity:var(--m3-state-press)}
+.fpk__body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px 24px}
+.fpk__meta{margin:0 4px 8px;font:500 12px/16px var(--m3-font);letter-spacing:.5px;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.fpk__tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.fpk__tile{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;gap:6px;min-width:0;
+  padding:4px 4px 8px;border:0;border-radius:var(--p-r-l);background:transparent;color:var(--md-on-surface);text-align:left;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.fpk__tile::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:var(--md-on-surface);opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.fpk__tile:not(:disabled):hover::before{opacity:var(--m3-state-hover)}}
+.fpk__tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.fpk__tile.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.fpk__tile.is-down::before{opacity:var(--m3-state-press)}
+.fpk__tile:disabled{cursor:default}
+.fpk__ph{position:relative;display:block;aspect-ratio:1;border-radius:var(--p-r-m);overflow:hidden;background:var(--md-surface-container-highest)}
+.fpk__ph img{display:block;width:100%;height:100%;object-fit:cover}
+.fpk__tile:disabled .fpk__ph img{opacity:.38}
+.fpk__n,.fpk__here{
+  position:absolute;height:24px;display:inline-flex;align-items:center;padding:0 8px;border-radius:var(--p-r-xs);
+  background:var(--md-inverse-surface);color:var(--md-inverse-on-surface);font:500 11px/16px var(--m3-font);letter-spacing:.5px;
+}
+.fpk__n{top:6px;right:6px;font-family:var(--m3-mono)}
+.fpk__here{left:6px;right:6px;bottom:6px;justify-content:center}
+.fpk__cap{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;padding:0 4px;
+  font:400 12px/16px var(--m3-font);letter-spacing:.4px;color:var(--md-on-surface);
+}
+.fpk__id{padding:0 4px;font:500 11px/16px var(--m3-mono);letter-spacing:.2px;color:var(--md-on-surface-variant)}
+.fpk__empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px 24px;text-align:center;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.fpk__empty b{font:500 16px/24px var(--m3-font);color:var(--md-on-surface)}
+.fpk__emptyic{width:64px;height:64px;margin-bottom:8px;display:grid;place-items:center;border-radius:var(--p-r-xl);background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.fpk__emptyic .ic{width:28px;height:28px}
+.fpk__morerow{display:flex;justify-content:center;padding-top:16px}
+.fpk__morerow [hidden]{display:none}
+@media (min-width:600px){
+  .fpk{align-items:center;padding:24px}
+  .fpk__sheet{
+    width:min(760px,100%);height:min(80vh,760px);padding-bottom:0;
+    border-radius:var(--p-r-xl);background:var(--md-surface-container-high);
+    transform:scale(.9);opacity:0;
+    transition:transform calc(var(--p-spatial-d) * .7) var(--p-exit),opacity calc(var(--p-effect-d) * .7) var(--p-exit);
+  }
+  .fpk.is-open .fpk__sheet{transform:none;opacity:1;transition:transform var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect)}
+  .fpk__grab{display:none}
+  .fpk__h{padding-top:16px}
+  .fpk__find{background:var(--md-surface-container-highest)}
+}
+/* reduced motion: the sheet stays where it lands and only fades */
+.m-reduce .fpk__sheet,.m-reduce .fpk.is-open .fpk__sheet{transform:none}
+.m-reduce .fpk__sheet{opacity:0;transition:opacity 150ms var(--p-effect)}
+.m-reduce .fpk.is-open .fpk__sheet{opacity:1;transition:opacity 150ms var(--p-effect)}
+
 /* ============================================================
    STATE LAYERS
    ------------------------------------------------------------
@@ -5024,7 +5157,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <p class="eyebrow">Archive <span class="rule"></span> <span id="galEyebrow"></span></p>
       <h2 class="vt">Images</h2>
       <div class="row" style="margin-bottom:12px">
-        <input type="search" id="galSearch" placeholder="Search captions, topics, stems…" style="flex:1 1 220px;min-width:0">
+        <input type="search" id="galSearch" placeholder="Search captions, topics, stems, or an image ID…" style="flex:1 1 220px;min-width:0">
       </div>
       <div class="galchips" id="galChips"></div>
       <div class="galbar">
@@ -5344,7 +5477,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.45</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.46</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5354,7 +5487,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.45 · sharded store</span>
+        <span class="chip" id="verChip">v6.46 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5490,6 +5623,26 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
   <!-- only drawn when the viewer was opened from the gallery: finding the
        picture is half the errand, the item it teaches is the other half -->
   <div class="lbq" id="lbxQ"></div>
+</div>
+
+<!-- ============ GALLERY PICKER (Plume 1.6) ============ -->
+<div class="fpk" id="fpk" hidden inert>
+  <div class="fpk__scrim" data-fpkclose></div>
+  <section class="fpk__sheet" id="fpkSheet" role="dialog" aria-modal="true" aria-labelledby="fpkT" tabindex="-1">
+    <div class="fpk__grab" aria-hidden="true"></div>
+    <header class="fpk__h">
+      <h3 id="fpkT">Add from gallery</h3>
+      <button class="pl-ib pl-press" data-fpkclose aria-label="Close" title="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    </header>
+    <p class="fpk__sub" id="fpkSub"></p>
+    <label class="fpk__find"><svg class="ic" aria-hidden="true"><use href="#i-search"/></svg><input type="search" id="fpkQ" placeholder="Search, or paste an image ID" autocomplete="off" spellcheck="false" aria-label="Search pictures or paste an image ID"></label>
+    <div class="fpk__chips" id="fpkFmt" role="group" aria-label="Format"></div>
+    <div class="fpk__chips" id="fpkSys" role="group" aria-label="System"></div>
+    <div class="fpk__body" id="fpkBody">
+      <div id="fpkGrid"></div>
+      <div class="fpk__morerow"><button class="pl-btn pl-btn--tonal pl-press" id="fpkMore" hidden>Show more</button></div>
+    </div>
+  </section>
 </div>
 <input type="file" id="figInput" accept="image/*" multiple hidden>
 
@@ -6337,7 +6490,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.45';
+const APP_VERSION='6.46';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7658,10 +7811,11 @@ function figPlateHTML(f){
       <b>${f.optional?'A picture would help here':'This question has a figure — attach the photo'}</b>
       <span class="fpd">${esc(p.cap||where)}</span>
       ${p.note?`<span class="fpd fpn">${esc(p.note)}</span>`:''}
-      <span class="fph">Tap to choose a file · or drop one here · or paste</span>
+      <span class="fph">Tap to choose a file · or drop one here · or paste · or reuse one from the gallery</span>
     </span>
     <span class="fpa">
       <button class="btn ghost sm" data-figact="paste" data-fig="${esc(f.fid)}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button>
+      <button class="btn ghost sm" data-figact="gallery" data-fig="${esc(f.fid)}" title="Reuse a picture already in your gallery"><svg class="ic"><use href="#i-gallery"/></svg>Gallery</button>
       ${f.optional?`<button class="btn ghost sm" data-figact="dismiss" data-fig="${esc(f.fid)}">Not needed</button>`:''}
       <button class="btn ghost sm" data-figact="drop" data-fig="${esc(f.fid)}" title="Delete this placeholder"><svg class="ic"><use href="#i-trash"/></svg>Delete</button>
     </span>
@@ -7677,9 +7831,10 @@ function figHTML(qid,slot,opt){
   const desc=(opt.desc&&slot==='stem'&&q.hasImage&&q.imageDescription&&!list.length)
     ?`<div class="card tiny" style="margin:12px 0"><span class="chip">figure</span> ${esc(q.imageDescription)}</div>`:'';
   /* Paste sits beside the picker: on a phone a copied image has no other way
-     in, since there is no Ctrl+V and no field to long-press */
+     in, since there is no Ctrl+V and no field to long-press. From gallery
+     reuses a picture the bank already holds, by reference (figLink). */
   const add=opt.add
-    ?`<div class="figadds" style="margin-top:${list.length?'8px':'0'}"><button class="btn ghost sm figadd" data-figadd="${slot}"><svg class="ic"><use href="#i-imageadd"/></svg>${list.length?'Add another figure':'Add a figure'}</button><button class="btn ghost sm figadd" data-figpaste="${slot}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button></div>`
+    ?`<div class="figadds" style="margin-top:${list.length?'8px':'0'}"><button class="btn ghost sm figadd" data-figadd="${slot}"><svg class="ic"><use href="#i-imageadd"/></svg>${list.length?'Add another figure':'Add a figure'}</button><button class="btn ghost sm figadd" data-figpaste="${slot}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button><button class="btn ghost sm figadd" data-figgal="${slot}" title="Reuse a picture already in your gallery"><svg class="ic"><use href="#i-gallery"/></svg>From gallery</button></div>`
     :'';
   return `<div class="figs" ${attrs}>${list.map(f=>figFilled(f)?figCardHTML(f,opt.thumb?'thumb':'full'):figPlateHTML(f)).join('')}${desc}${add}</div>`;
 }
@@ -7903,6 +8058,7 @@ document.addEventListener('click',e=>{
     const qid=w.dataset.figq,fid=act.dataset.fig;
     if(act.dataset.figact==='replace')figPick(qid,fid,w.dataset.figslot);
     else if(act.dataset.figact==='paste')figPaste(qid,fid,w.dataset.figslot,w);
+    else if(act.dataset.figact==='gallery')fpkOpen(qid,fid,w.dataset.figslot,act);
     else if(act.dataset.figact==='caption')figCaptionEdit(act);
     else if(act.dataset.figact==='remove')figArm(act,()=>figRemove(qid,fid));
     else if(act.dataset.figact==='drop')figArm(act,()=>figDropSlot(qid,fid),'Delete this placeholder');
@@ -7916,6 +8072,12 @@ document.addEventListener('click',e=>{
   if(pst){
     const w=pst.closest('.figs');
     if(w)figPaste(w.dataset.figq,null,pst.dataset.figpaste,w);
+    return;
+  }
+  const gal=e.target.closest('[data-figgal]');
+  if(gal){
+    const w=gal.closest('.figs');
+    if(w)fpkOpen(w.dataset.figq,null,gal.dataset.figgal,gal);
     return;
   }
   const add=e.target.closest('[data-figadd]');
@@ -8036,13 +8198,201 @@ document.addEventListener('paste',e=>{
 function openFigManager(qid){
   const q=figQ(qid);if(!q)return;
   modal('Figures',
-    `<p class="tiny muted" style="margin:0 0 16px">Tap a slot to attach a photo, drop a file onto it, or paste one you copied (the Paste button, or Ctrl/⌘ + V). It is stored inside the question, so it travels with every session, backup and sync.</p>
+    `<p class="tiny muted" style="margin:0 0 16px">Tap a slot to attach a photo, drop a file onto it, paste one you copied (the Paste button, or Ctrl/⌘ + V), or reuse one already in your gallery (From gallery). It is stored inside the question, so it travels with every session, backup and sync. A reused picture is stored once and shared.</p>
      <p class="figsub">With the question — seen before answering</p>
      ${figHTML(qid,'stem',{add:true,thumb:true})}
      <p class="figsub" style="margin-top:18px">With the explanation — seen after answering</p>
      ${figHTML(qid,'expl',{add:true,thumb:true})}`,
     '<button class="btn" data-close>Done</button>');
 }
+
+/* ---------- one picture, many questions (v6.46) ----------
+   A picture's identity is the SHA-256 of its bytes (f.media). The media
+   repository keeps each one once, at media/xx/<hash>, however many
+   questions point at it. People see it as "img-" plus the first eight
+   characters: short enough to read and paste, the same on every device,
+   and matched as a prefix, so a longer piece of the hash finds it too.
+   Reusing a picture writes a reference into the slot, never new bytes.
+   A picture with no hash (the data-URI fallback on a browser without
+   IndexedDB) has no ID and can't be reused: copying it would store it twice. */
+function figImgId(media){return media?'img-'+String(media).slice(0,8):''}
+/* the hex an ID-shaped search term points at, or '' */
+function figIdTerm(s){
+  const m=String(s||'').trim().match(/^(?:img[-:\s]?)?([0-9a-f]{4,64})$/i);
+  return m?m[1].toLowerCase():'';
+}
+/* Put an existing picture (src, a figure from another question) into a
+   slot: the empty placeholder fid when one is given, else a new figure.
+   The placeholder keeps its own caption (it was written for this item);
+   a new figure starts from the source's, ready to be edited. The upload
+   path is the same as for a new photo: V3.photoAttached pushes any of the
+   picture's bytes this device has not uploaded yet before the reference
+   is announced, so a reference never lands ahead of its bytes. */
+function figLink(qid,fid,slot,src){
+  const q=figQ(qid);if(!q||!src||!src.media)return null;
+  const list=figList(q);
+  if(list.some(f=>f.media===src.media&&!f.dismissed)){toast('That picture is already on this question.');return null}
+  const target=fid?figFind(q,fid):null;
+  let f;
+  if(target&&!figFilled(target)){
+    f=target;f.was=f.media||'';
+    f.media=src.media;f.mime=src.mime||'';f.w=src.w||0;f.h=src.h||0;f.src='';f.dismissed=false;
+    if(!f.caption&&!f.alt){f.caption=src.caption||'';f.alt=src.alt||''}
+  }else{
+    f=figNorm({slot:slot||'stem',media:src.media,mime:src.mime,w:src.w,h:src.h,caption:src.caption,alt:src.alt},list.length);
+    list.push(f);
+  }
+  figStamp(f);
+  figTouch(q);figRefresh(qid);
+  if(window.V3&&V3.photoAttached)V3.photoAttached(q,[{fid:f.fid,media:f.media,at:f.at,was:f.was||''}]);
+  return f;
+}
+
+/* ---------- the gallery picker (Plume 1.6) ----------
+   "From gallery" on any figure block opens this sheet over whatever is on
+   screen (the editor dialog, the companion's reader, the figure manager).
+   It lists every picture in the bank that has an ID, newest first, and
+   narrows by search (words, or an image ID pasted from the viewer), by
+   format and by system. Picking one links it with figLink and the sheet
+   goes back down; the snackbar waits until it has. */
+const FPK={qid:null,fid:null,slot:'stem',shown:48,fmt:new Set(),sys:new Set(),list:[],from:null,typeT:0};
+function fpkIsOpen(){return $('#fpk').classList.contains('is-open')}
+function fpkEntries(){return galIndex().filter(e=>!e.need&&e.f.media)}
+function fpkChips(all){
+  const fmt=GAL_FORMATS.filter(k=>all.some(e=>e.qs.some(q=>(q.resources||[]).indexOf(k)>=0)));
+  const cnt=Object.create(null);
+  all.forEach(e=>{const k=e.q.system||UNCLASSIFIED;cnt[k]=(cnt[k]||0)+1});
+  const sys=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]||a.localeCompare(b));
+  const chip=(g,k)=>`<button class="fpk__chip pl-press" data-fpkchip="${g}|${esc(k)}" aria-pressed="false"><span class="fpk__chk" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></svg></span>${esc(k)}</button>`;
+  $('#fpkFmt').innerHTML=fmt.map(k=>chip('fmt',k)).join('');
+  $('#fpkSys').innerHTML=sys.length>1?sys.map(k=>chip('sys',k)).join(''):'';
+  $('#fpkFmt').hidden=!fmt.length;$('#fpkSys').hidden=sys.length<2;
+}
+function fpkDraw(reset){
+  if(reset)FPK.shown=48;
+  const raw=$('#fpkQ').value,id=figIdTerm(raw),term=norm(raw);
+  const own=new Set(figList(figQ(FPK.qid)).filter(f=>f.media&&!f.dismissed).map(f=>f.media));
+  const all=fpkEntries();
+  const hit=e=>!!id&&e.f.media.indexOf(id)===0;
+  const list=all.filter(e=>{
+    if(FPK.fmt.size&&!e.qs.some(q=>(q.resources||[]).some(r=>FPK.fmt.has(r))))return false;
+    if(FPK.sys.size&&!e.qs.some(q=>FPK.sys.has(q.system||UNCLASSIFIED)))return false;
+    if(!term)return true;
+    return hit(e)||e.qs.some(q=>galHay(q).includes(term));
+  });
+  /* an ID is an exact request: its picture leads, whatever else matched */
+  list.sort((a,b)=>(hit(b)-hit(a))||(b.at-a.at));
+  FPK.list=list;
+  const body=$('#fpkGrid'),slice=list.slice(0,FPK.shown);
+  if(!slice.length){
+    body.innerHTML=`<div class="fpk__empty"><span class="fpk__emptyic"><svg class="ic"><use href="#i-gallery"/></svg></span>
+      <b>${all.length?'Nothing matches':'No pictures to reuse yet'}</b>
+      <span>${all.length?(id?'No picture has that ID. Check it in the viewer, or search by words.':'Try another chip, or clear the search.')
+        :'Attach a photo to any question and it can be reused here.'}</span></div>`;
+  }else{
+    body.innerHTML=`<p class="fpk__meta">${list.length} ${list.length===1?'picture':'pictures'}</p><div class="fpk__tiles">${slice.map((e,i)=>{
+      const p=figCapPair(e.f),cap=p.cap||e.q.topic||e.q.system||'',here=own.has(e.f.media);
+      return `<button class="fpk__tile${here?'':' pl-press'}" data-fpk="${i}"${here?' disabled':''} title="${here?'Already on this question':'Add this picture'}">
+        <span class="fpk__ph"><img data-media="${esc(e.f.media)}" data-mkind="thumb" alt="">${e.qids.length>1?`<span class="fpk__n">×${e.qids.length}</span>`:''}${here?'<span class="fpk__here">On this question</span>':''}</span>
+        <span class="fpk__cap">${esc(cap)}</span>
+        <span class="fpk__id">${figImgId(e.f.media)}</span>
+      </button>`;
+    }).join('')}</div>`;
+  }
+  $('#fpkMore').hidden=list.length<=FPK.shown;
+}
+function fpkOpen(qid,fid,slot,from){
+  if(!figQ(qid))return;
+  FPK.qid=qid;FPK.fid=fid||null;FPK.slot=slot||'stem';FPK.from=from||null;
+  FPK.fmt.clear();FPK.sys.clear();
+  $('#fpkQ').value='';
+  $('#fpkSub').textContent=(fid?'Fills the empty slot. ':slot==='expl'?'Goes with the explanation. ':'Goes with the question. ')
+    +'The picture is shared, not copied.';
+  fpkChips(fpkEntries());fpkDraw(true);
+  $('#fpkBody').scrollTop=0;
+  const el=$('#fpk');
+  el.hidden=false;el.inert=false;
+  el.getBoundingClientRect();   /* commit the closed pose so the rise is a transition */
+  el.classList.add('is-open');
+  /* a phone keeps its keyboard down until the search is asked for: the
+     pictures are what the sheet is for */
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches)$('#fpkQ').focus({preventScroll:true});
+  else $('#fpkSheet').focus({preventScroll:true});
+}
+function fpkClose(after){
+  const el=$('#fpk');if(!fpkIsOpen())return;
+  const sh=$('#fpkSheet');
+  el.classList.remove('is-open');el.inert=true;
+  sh.style.transform='';sh.style.transition='';
+  el.getBoundingClientRect();   /* start the exit now, so it can be waited on */
+  Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{}))).then(()=>{
+    if(!fpkIsOpen())el.hidden=true;
+    if(after)after();
+  });
+  const f=FPK.from;FPK.from=null;
+  if(f&&f.isConnected)try{f.focus({preventScroll:true})}catch(e){}
+}
+$('#fpkQ').addEventListener('input',()=>{
+  clearTimeout(FPK.typeT);
+  FPK.typeT=setTimeout(()=>{fpkDraw(true);$('#fpkBody').scrollTop=0},120);
+});
+$('#fpkMore').onclick=()=>{FPK.shown+=48;fpkDraw(false)};
+document.addEventListener('click',e=>{
+  if(!e.target.closest||!e.target.closest('#fpk'))return;
+  if(e.target.closest('[data-fpkclose]')){fpkClose();return}
+  const c=e.target.closest('[data-fpkchip]');
+  if(c){
+    const i=c.dataset.fpkchip.indexOf('|'),g=c.dataset.fpkchip.slice(0,i),k=c.dataset.fpkchip.slice(i+1);
+    const s=FPK[g],on=!s.has(k);
+    if(on)s.add(k);else s.delete(k);
+    c.classList.toggle('on',on);c.setAttribute('aria-pressed',on?'true':'false');
+    requestAnimationFrame(()=>fpkDraw(true));
+    return;
+  }
+  const t=e.target.closest('[data-fpk]');
+  if(t&&!t.disabled){
+    const en=FPK.list[parseInt(t.dataset.fpk,10)];if(!en)return;
+    const f=figLink(FPK.qid,FPK.fid,FPK.slot,en.f);if(!f)return;
+    const n=en.qids.length+1;
+    fpkClose(()=>toast(`Picture added. It is now on ${n} questions and stored once.`));
+  }
+});
+/* capture phase, and first: while the sheet is up it is the top layer, so
+   no key may reach the dialog, the companion or the player underneath.
+   Escape closes the sheet and nothing else. */
+document.addEventListener('keydown',e=>{
+  if(!fpkIsOpen())return;
+  e.stopImmediatePropagation();
+  if(e.key==='Escape'){e.preventDefault();fpkClose()}
+},true);
+/* On a phone the sheet follows the finger down from its handle or title
+   and goes on down past a third of its height or on a flick; anything less
+   springs back. Upward it gives at 0.55×. */
+(function(){
+  const sh=$('#fpkSheet');
+  let live=false,id=null,y0=0,dy=0,trail=[];
+  sh.addEventListener('pointerdown',e=>{
+    if(!e.target.closest('.fpk__grab,.fpk__h')||e.target.closest('button'))return;
+    if(matchMedia('(min-width:600px)').matches||(window.Motion&&Motion.reduced))return;
+    live=true;id=e.pointerId;y0=e.clientY;dy=0;trail=[{t:performance.now(),y:0}];
+    try{sh.setPointerCapture(id)}catch(_){}
+    sh.style.transition='none';
+  });
+  sh.addEventListener('pointermove',e=>{
+    if(!live||e.pointerId!==id)return;
+    const d=e.clientY-y0;dy=d<0?d*.55:d;
+    sh.style.transform=`translateY(${dy}px)`;
+    trail.push({t:performance.now(),y:dy});if(trail.length>6)trail.shift();
+  });
+  const end=e=>{
+    if(!live||e.pointerId!==id)return;live=false;
+    const a=trail[0],b=trail[trail.length-1],v=b.t>a.t?(b.y-a.y)/(b.t-a.t)*1000:0;
+    if(dy>sh.offsetHeight/3||(v>700&&dy>12))fpkClose();
+    else{sh.style.transition='';sh.style.transform=''}
+  };
+  sh.addEventListener('pointerup',end);
+  sh.addEventListener('pointercancel',end);
+})();
 
 /* ---------- the viewer ----------
    The viewer has two callers with two different ideas of what "next" means.
@@ -8076,7 +8426,8 @@ function figDrawViewer(){
   $('#lbxSlot').textContent=f.slot==='expl'?'explanation figure':'question figure';
   $('#lbxCount').textContent=list.length>1?(FIG.view.i+1)+' of '+list.length:'';
   const vp=figCapPair(f);
-  $('#lbxCap').innerHTML=vp.cap?esc(vp.cap)+(vp.note?`<span class="fignote">${esc(vp.note)}</span>`:''):'';
+  $('#lbxCap').innerHTML=(vp.cap?esc(vp.cap)+(vp.note?`<span class="fignote">${esc(vp.note)}</span>`:''):'')
+    +(f.media?`<span class="lbidrow"><button class="lbid pl-press" data-copyimg="${esc(f.media)}" title="Copy this picture's ID, to reuse it in another question"><svg class="ic"><use href="#i-copy"/></svg>${figImgId(f.media)}</button></span>`:'');
   $('#lbxPrev').style.display=$('#lbxNext').style.display=list.length>1?'inline-flex':'none';
   FZ.reset();
   $('#lbxDel').classList.remove('arm');
@@ -8135,6 +8486,10 @@ function figStep(d){
   figDrawViewer();
 }
 $('#lbxClose').onclick=figCloseViewer;
+$('#lbxCap').addEventListener('click',e=>{
+  const b=e.target.closest('[data-copyimg]');if(!b)return;
+  copy(figImgId(b.dataset.copyimg),'Image ID copied. In another question, choose From gallery and paste it into the search.');
+});
 $('#lbxPrev').onclick=()=>figStep(-1);
 $('#lbxNext').onclick=()=>figStep(1);
 $('#lbxZoom').onclick=()=>FZ.toggle(null,null,'actual');
@@ -11419,7 +11774,7 @@ function galIndex(){
   return out;
 }
 function galFilter(all){
-  const term=norm(($('#galSearch')||{}).value||'');
+  const raw=($('#galSearch')||{}).value||'',term=norm(raw),id=figIdTerm(raw);
   const S=GAL.sets,wantNeed=S.need.size>0;
   return all.filter(e=>{
     if(!!e.need!==wantNeed)return false;
@@ -11432,7 +11787,8 @@ function galFilter(all){
       return false;
     }))return false;
     if(!term)return true;
-    return e.qs.some(q=>galHay(q).includes(term));
+    /* an image ID copied from the viewer finds its picture here too */
+    return (id&&e.f.media&&e.f.media.indexOf(id)===0)||e.qs.some(q=>galHay(q).includes(term));
   });
 }
 /* Which heading a tile files itself under. Format resolves to one bucket

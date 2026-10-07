@@ -75,13 +75,24 @@ exactly**, without waiting to be asked.
   figures last). Any other surface that copies a question from a session
   (the companion does) calls the same function, so the copies stay
   identical. Change copy behaviour there, never per surface.
-- **Adding a picture** always offers both ways in: choose a file
-  (`figPick`) and **Paste** (`figPaste`). A phone has no Ctrl+V and no
+- **Adding a picture** always offers three ways in: choose a file
+  (`figPick`), **Paste** (`figPaste`) and **From gallery** (`fpkOpen`,
+  which reuses a picture already in the bank). A phone has no Ctrl+V and no
   field to long-press, so a copied image needs its own button. `figPaste`
   calls `navigator.clipboard.read()` first thing in the tap (iOS shows its
   Paste bubble, Chrome asks once); if that is blocked it opens a paste box
   (`figPastePad`) in the figure block. Every figure block drawn by
-  `figHTML` (companion, bank preview, editor, figure manager) gets both.
+  `figHTML` (companion, bank preview, editor, figure manager) gets all
+  three, and an empty placeholder (`figPlateHTML`) gets Paste and Gallery.
+- **A picture is its hash.** `f.media` is the SHA-256 of the bytes and the
+  media repository stores each hash once, so two questions share a picture
+  by pointing at the same hash. Its ID for people is `figImgId(media)`
+  (`img-` plus the first 8 characters), read back with `figIdTerm()` as a
+  prefix. It is shown and copied in the figure viewer, and accepted by the
+  gallery search and the picker. Reuse always goes through `figLink`, which
+  writes a reference, never bytes, and calls `V3.photoAttached` like a new
+  photo so a reference never lands ahead of its bytes. Never add a second
+  ID field: the hash is already the same on every device.
 - **Focus mode has two forms**: real fullscreen and the in-page fallback
   (`.zen`, used when the browser refuses fullscreen). Its state is
   `focusOn()` (either one), and a tap always flips that. Never decide from
@@ -144,6 +155,11 @@ does) and work in the scratchpad:
   slow it down and tap twice (pending), and fake `visibilityState` hidden →
   visible (another tab). After every tap, fullscreen, `.zen` and the icon
   must agree.
+- **Test pictures with real bytes.** A seeded `media` hash has no bytes
+  behind it, so thumbnails stay blank. Draw images on a canvas in the page,
+  turn them into `File`s and call `figTake(qid, null, slot, [file])`: that
+  runs the real ingest and gives real hashes. Count `IDB.sAll('media')`
+  rows before and after a reuse to prove nothing was stored twice.
 - **Test touch gestures with real touch points.** Playwright's `tap` sends
   one finger only. For pinch, pan and double tap, open a CDP session and
   send `Input.dispatchTouchEvent` (`touchStart` with two points, a series

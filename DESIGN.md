@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.5** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.6** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -516,6 +516,20 @@ Errors say what happened and what is safe ("Nothing was lost").
   picture redraws sharp once still. A click after a drag or a tap on the
   picture is swallowed (`FZ.swallow()`); only a tap on the scrim closes.
   Reuse it for any other zoomable picture.
+- **A sheet over a dialog** (the gallery picker, `Plume 1.6 · gallery
+  picker`, `#fpk`): its own layer at z-index 110, above `#mask` (100) and
+  below the figure viewer (120) and the snackbar. Bottom sheet below
+  600px, dialog from 600px. Open and close flip one class, `is-open`, so
+  every motion is a transition that retargets; it is hidden only after
+  `getAnimations()` have finished. Its keydown handler runs in the capture
+  phase, registered before the companion's, and stops every key while it
+  is open, so Escape closes the sheet and nothing under it. The handle and
+  title drag it down 1:1 (0.55× upward); past a third of its height or on
+  a flick it closes, otherwise it springs back. Filter chips widen to show
+  a check that draws itself (`grid-template-columns: 0fr → 1fr`,
+  `stroke-dashoffset`).
+- **A copyable ID** (`.lbid` in the viewer): a mono chip with the copy
+  icon; the snackbar says what was copied and where to use it.
 - **Hiding something without changing the layout** (the session clock,
   `.player.clock-off`): fade and shrink it out on the exit curve, then flip
   `visibility` to hidden after the fade (a delayed `visibility` transition).
@@ -535,6 +549,7 @@ A surface that is not listed here is legacy.
 | Player: "Show clock" switch in the ⋮ menu, and the clock's hide/show | 1.3 | 6.40 | The menu around it is still legacy |
 | Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
 | Figure viewer: pinch, pan, double-tap and wheel zoom | 1.5 | 6.45 | The gesture and its springs only. The viewer's bar and buttons are still legacy |
+| Gallery picker ("From gallery" in every figure block) and the image ID chip in the viewer | 1.6 | 6.46 | The "From gallery" and "Gallery" buttons sit in legacy figure rows and match them; the sheet itself is Plume |
 
 ## 15. Language changelog
 
@@ -560,6 +575,9 @@ A surface that is not listed here is legacy.
   strokes; the compact session bar, measured with the widest counter.
 - **Plume 1.5** (2026-10-07): pinch-to-zoom for pictures, driven by a
   per-frame spring that a finger can catch mid-flight.
+- **Plume 1.6** (2026-10-07): a sheet that stacks over a dialog (its
+  layer, its keys, drag to dismiss), filter chips with a drawn check, and
+  the copyable ID chip.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
