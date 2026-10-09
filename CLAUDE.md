@@ -131,6 +131,12 @@ exactly**, without waiting to be asked.
 - **The file tag carries the question's number** (`cardiovascular system v5
   #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
   `fileTagBase()`, which drops the ` #N`; the question and search keep it.
+  A file the app exported (re-run, figures, backup) is never a source:
+  until ARCHIVIST 3.3 a re-run tagged every question with the re-run file's
+  name ("nidus rerun 2026 10 07") and the real file tag was lost.
+  `isExportTag()` drops such tags on every import, and a **tag fix** file
+  (`kind: "tags"`, items of `{id, tags}`) replaces only the tags of the
+  questions it names (`tagFixImport()`), for repairs in bulk.
 - **Adding a picture** always offers three ways in: choose a file
   (`figPick`), **Paste** (`figPaste`) and **From gallery** (`fpkOpen`,
   which reuses a picture already in the bank). A phone has no Ctrl+V and no

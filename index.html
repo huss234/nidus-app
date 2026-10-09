@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.54 -->
+<!-- Nidus — Personal Qbank · v6.55 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5518,7 +5518,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.54</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.55</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5528,7 +5528,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.54 · sharded store</span>
+        <span class="chip" id="verChip">v6.55 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5751,7 +5751,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.2
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.3
 
 Turns any exam material into the JSON question bank this app imports.
 
@@ -6003,7 +6003,7 @@ Copy enum values character for character from the lists below. An unrecognised v
   topic — free text, as specific as the item: "Acute cardiac transplant rejection", never "Heart".
   difficulty — lowercase easy | medium | hard, judged as an exam item, not as trivia. Anything else is forced to medium.
   tags — two to six lowercase keywords someone would actually search: findings, drugs, organisms, syndromes.
-  File tag — when the material arrives as a file, every item from that file also carries one extra tag: the file's name, a space, #, and the item's question number in that file, so the user can find any question back in its file and filter a whole file's questions in the app. Build the name from the file name alone: drop the extension, turn underscores and hyphens into spaces, collapse repeated spaces, and lowercase it. The number is the one the file prints for the item, when the file numbers its questions once from start to end; when it prints none, or its numbering restarts partway, it is the item's position in the file, counting from 1. Question 11 of `cardiovascular_system_v8.txt` → `cardiovascular system v8 #11`. Every item from a file carries its number, always, with no exception. Keep version markers and numbers in the name exactly as they appear. It goes first in tags and does not count toward the two to six keywords. With several files, each item takes its own file's name and its own number. Pasted text with no file takes no file tag; never invent one.
+  File tag — when the material arrives as a file, every item from that file also carries one extra tag: the file's name, a space, #, and the item's question number in that file, so the user can find any question back in its file and filter a whole file's questions in the app. Build the name from the file name alone: drop the extension, turn underscores and hyphens into spaces, collapse repeated spaces, and lowercase it. The number is the one the file prints for the item, when the file numbers its questions once from start to end; when it prints none, or its numbering restarts partway, it is the item's position in the file, counting from 1. Question 11 of `cardiovascular_system_v8.txt` → `cardiovascular system v8 #11`. Every item from a file carries its number, always, with no exception. Keep version markers and numbers in the name exactly as they appear. It goes first in tags and does not count toward the two to six keywords. With several files, each item takes its own file's name and its own number. Pasted text with no file takes no file tag; never invent one. The file tag names the paper the questions were printed in. A file exported from the NIDUS app — a re-run ("kind": "rerun"), a figure fill ("kind": "figures") or a backup, usually named nidus-rerun-…, nidus-figures-… or nidus-backup-… — is not a paper: it gives no file tag, and its items keep the tags they carry.
   depth is recomputed by the app from the item itself; send it or omit it, it will be overwritten.
 
 8 · PROVENANCE — record what you know and nothing more
@@ -6068,7 +6068,7 @@ A file exported from the app for re-running ("kind": "rerun" in its meta) holds 
 
   • Copy each item's id, unchanged, into the same item of your output, as its first field. An item that loses its id can still be matched by its wording, but the id is the sure way.
   • Treat each item as route D material. stem, leadIn and every option's text are already transcribed: carry them over word for word, in the same order. Keep the key. Rebuild the answer side — option lines and explanation — to this protocol, using the old explanation, objective and option notes as your evidence.
-  • Keep the item's classification, tags, source and images unless one is plainly wrong.
+  • Keep the item's classification, source and images unless one is plainly wrong, and its tags exactly as the file gives them: the re-run file is not the paper, so its name never becomes a tag (section 7).
   • Mark the lure under section 6B whether or not the file carries one. A lure the file already marks stays unless another option plainly pulls harder.
   • Material without ids takes no id field. Never invent one.
 
@@ -6185,7 +6185,7 @@ FINAL GATE — run this against your draft before sending
   14. Every printed table survived as a table, complete — every row and column the source printed, none trimmed for brevity. Each one has a header row, a dash rule, equal cell counts on every row, verbatim contents, and sits where the source printed it — and no table was invented from prose that was never tabular, except a small comparison grid built under section 6A.
   15. The shaping pass cost nothing: everything section 6 kept is still present after section 6A.
   16. No item carries educationalObjective, thingsToRemember or references, and schemaVersion is 2.
-  17. Every item that came from a file carries that file's tag first in tags, built under section 7 from the file name and the item's question number in that file ("cardiovascular system v8 #11"), the number never missing; items from pasted text carry none.
+  17. Every item that came from a file carries that file's tag first in tags, built under section 7 from the file name and the item's question number in that file ("cardiovascular system v8 #11"), the number never missing; items from pasted text carry none, and no tag is ever built from the name of a file the NIDUS app exported (a re-run, a figure fill, a backup).
 
   18. On a re-run, every item carries its id, unchanged, and its stem, lead-in and option text are word for word what the file held.
   19. Every item marks its lure with "lure": true: exactly one wrong option, or two when two pull with equal force, never the correct option, and no "lure" field on any other option. The lure is the option a well-prepared reader would choose, not the absurd one, and its Wrong half names that pull and the detail that defeats it, without the words lure, trap or tempting.
@@ -6583,7 +6583,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.54';
+const APP_VERSION='6.55';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9258,6 +9258,10 @@ const FACETS=[
    "cardiovascular system v5 #11"). The Tags filter groups by file, so the
    number is dropped there; the question itself and search keep it. */
 function fileTagBase(t){return String(t).replace(/\s+#\d+$/,'')}
+/* A tag built from the name of a file this app exported is not a source. Until
+   ARCHIVIST 3.3 a re-run tagged every question "nidus rerun 2026 10 07", the
+   name of the re-run file; no import keeps such a tag. */
+function isExportTag(t){return /^nidus[\s_-]+(rerun|re-run|figures|backup)\b/i.test(String(t).trim())}
 const FACET_BY={};FACETS.forEach(f=>FACET_BY[f.key]=f);
 function facetValues(f,q){const v=f.get(q);return Array.isArray(v)?(v.length?v:['—']):[v||'—']}
 
@@ -9307,7 +9311,7 @@ function normalizeQ(raw,meta){
     system:raw.system||null,subject:raw.subject||null,topic:raw.topic||'',
     task:raw.task||null,archetype:raw.archetype||null,depth:raw.depth||null,resources:[],
     difficulty:String(raw.difficulty||'medium').toLowerCase(),
-    tags:Array.isArray(raw.tags)?raw.tags.map(t=>String(t).toLowerCase()):[],
+    tags:Array.isArray(raw.tags)?raw.tags.map(t=>String(t).toLowerCase()).filter(t=>!isExportTag(t)):[],
     images:(Array.isArray(raw.images)?raw.images:[]).map((im,i)=>figNorm(im,i,'q'+fp)),   /* same paper, same fids, on every device */
     imageDescription:raw.imageDescription||null,hasImage:!!raw.hasImage,
     source:Object.assign({exam:(meta&&meta.source)||null,year:(meta&&meta.year)||null,course:null,block:null,number:null,channel:(meta&&meta.channel)||null,collection:(meta&&meta.collection)||null,url:null},raw.source||{}),
@@ -12735,6 +12739,7 @@ const isOldFormat=q=>(q.schema||1)<2;
 function doImport(text,update){
   const{meta,arr,sv}=parseBatch(text);
   if(String(meta.kind||'')==='figures')return figFillImport(arr,meta);
+  if(String(meta.kind||'')==='tags')return tagFixImport(arr,meta);
   const touched=[];
   let added=0,updated=0,skipped=0,bad=0,repeats=0;const badList=[];
   const byFp={},byNk={};
@@ -12840,6 +12845,25 @@ function figFillImport(arr,meta){
   reindex();save();
   return r;
 }
+/* A tag fix ("kind": "tags"): each item names a question by id and carries
+   its full new tag list. Only the tags change; nothing else in the question
+   moves. Used to repair tags in bulk, such as file tags lost to a re-run. */
+function tagFixImport(arr,meta){
+  const r={tagfix:true,fixed:0,same:0,lost:0,total:arr.length,meta};
+  arr.forEach(raw=>{
+    const rid=raw&&raw.id!=null?String(raw.id).trim():'';
+    const q=rid?(Q_BY_ID[rid]||DB.questions.find(x=>(x.pubId||pubIdOf(x.id))===rid.toUpperCase())):null;
+    if(!q||!Array.isArray(raw.tags)){r.lost++;return}
+    const tags=[...new Set(raw.tags.map(t=>String(t).trim().toLowerCase()).filter(t=>t&&!isExportTag(t)))];
+    if(JSON.stringify(tags)===JSON.stringify(q.tags||[])){r.same++;return}
+    q.tags=tags;q.updatedAt=Date.now();r.fixed++;
+  });
+  reindex();save();
+  return r;
+}
+function tagFixReport(r){
+  return `<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">Tags fixed on ${r.fixed} question${r.fixed===1?'':'s'}</b><div class="tiny muted" style="margin-top:8px">${r.same} already right · ${r.lost} not found · ${r.total} seen</div></div>`;
+}
 async function importText(text,update){
   const a=await figAbsorb(text);
   const r=doImport(a.text,update);
@@ -12861,6 +12885,7 @@ $('#importBtn').onclick=async()=>{
   try{r=await importText($('#importBox').value,$('#impUpdate').checked)}
   catch(err){btn.disabled=false;btn.textContent=was;$('#importReport').innerHTML=`<div class="card" style="border-color:var(--rose)"><b style="color:var(--rose)">Import failed</b><div class="tiny" style="margin-top:6px">${esc(err.message)}</div><div class="tiny muted" style="margin-top:8px">Common fix: the model wrapped the JSON in prose. Keep only the part from the first { to the last }.</div></div>`;return}
   btn.disabled=false;btn.textContent=was;
+  if(r.tagfix){$('#importReport').innerHTML=tagFixReport(r);$('#importBox').value='';renderDash();toast(`Tags fixed on ${r.fixed}.`);return}
   if(r.fill){$('#importReport').innerHTML=figFillReport(r);$('#importBox').value='';renderDash();toast(`${r.filled} picture${r.filled===1?'':'s'} filled.`);return}
   const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
   $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)">
@@ -12878,17 +12903,19 @@ $('#pickFile').onclick=()=>$('#fileInput').click();
 /* files are read one after another: each may carry pictures to store first */
 $('#fileInput').onchange=async e=>{
   const files=Array.from(e.target.files||[]);e.target.value='';if(!files.length)return;
-  const tot={added:0,updated:0,bad:0,figs:0,filled:0};let fill=null;
+  const tot={added:0,updated:0,bad:0,figs:0,filled:0};let fill=null,tagr=null;
   for(const f of files){
     try{
       const r=await importText(await f.text(),$('#impUpdate').checked);
-      if(r.fill){fill=r;tot.filled+=r.filled}
+      if(r.tagfix){tot.tagfix=(tot.tagfix||0)+r.fixed;tagr=r}
+      else if(r.fill){fill=r;tot.filled+=r.filled}
       else{tot.added+=r.added;tot.updated+=r.updated;tot.bad+=r.bad;tot.figs+=r.figs}
     }catch(err){toast(f.name+': '+err.message)}
   }
   if(files.length===1&&fill){$('#importReport').innerHTML=figFillReport(fill);renderDash();return}
+  if(files.length===1&&tagr){$('#importReport').innerHTML=tagFixReport(tagr);renderDash();return}
   const old=DB.questions.filter(isOldFormat).length;
-  $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable${tot.figs?' · '+tot.figs+' pictures attached':''}${tot.filled?' · '+tot.filled+' pictures filled':''}</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash();
+  $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable${tot.figs?' · '+tot.figs+' pictures attached':''}${tot.filled?' · '+tot.filled+' pictures filled':''}${tot.tagfix!=null?' · tags fixed on '+tot.tagfix:''}</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash();
 };
 function download(name,text,type){
   const b=new Blob([text],{type:type||'application/json'});const u=URL.createObjectURL(b);
@@ -13015,6 +13042,8 @@ function renderPrompt(){
     gaps.push('It never asks for the lure — the wrong option built to pull in someone who knows most of the topic — so no option gets the Lure tag once you have answered.');
   if(p&&p.indexOf('CARRYING FIGURES ACROSS')<0)
     gaps.push('It never carries pictures across: figures arrive as empty slots to fill by hand, instead of cropped from the PDF and attached on import. It also cannot read an Export missing figures file.');
+  if(p&&p.indexOf('is not a paper')<0)
+    gaps.push('It turns the name of a re-run file into a tag, so re-run questions lose their real file tag and all carry one like "nidus rerun 2026 10 07".');
   if(p&&p.indexOf('v8 #11')<0)
     gaps.push('It never numbers the file tag, so a question cannot be found back in its file by a tag such as "cardiovascular system v8 #11".');
   n.style.display=gaps.length?'block':'none';
