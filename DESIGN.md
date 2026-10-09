@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.8** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.9** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -341,6 +341,15 @@ data such as IDs, timers and counts. Use tabular figures
   expanded.
 - Always check **390px** (phone) and a desktop width. No horizontal scroll,
   ever. Respect `env(safe-area-inset-*)`.
+- **A pill beside text is centred on that text.** Its vertical centre sits
+  on the centre of the line it shares (the glyph box: ascent plus
+  descent), measured, never nudged with `vertical-align: 2px` or aligned
+  by baseline. A small label next to large text aligned by baseline sits
+  low, and an inline-flex pill whose first child is an icon rides high.
+  The text inside a pill is centred in it too. Two pills that label rows
+  of one list share one column, so their sentences start on the same
+  line. (The lure and "your answer" tags, the Not here / Right in labels
+  and the verdict's chips, v6.50, after the user found all of them off.)
 - **A highlight keeps the column.** A tinted tile, chip or box inside a
   list or stepper starts on the same left edge as the text around it, and
   its padding goes inward. Never pull it out with a negative margin to
@@ -545,6 +554,16 @@ Errors say what happened and what is safe ("Nothing was lost").
   matters keeps its mark at full strength and steps back its text only.
   Draw the same component on every surface that shows the key (player,
   grouped layout, bank preview, companion), never a per-surface copy.
+- **A pill on a line of text** (`Plume 1.9 · pill on a line of text`):
+  inside running text, wrap the pill in `.pl-inl`, a slot the height of
+  the text's own glyph box (`vertical-align: text-top`, `line-height:
+  normal`, `height: 1lh`) with the pill centred in it. Beside a sentence in
+  a grid, wrap the label in `.sp-wlc` (`height: 1lh` at the sentence's
+  line-height, label centred, rows `align-items: start`). Both follow any
+  reading font, size and line-height. A chip row with mixed fonts (mono
+  digits) sets `line-height: 1` on the mono part so it cannot make one chip
+  taller and push its text off centre. Check with Range rects (CLAUDE.md,
+  Testing): the offset must be 0.
 - **Dimming text inside a card:** step back its colour
   (`color-mix(in oklab, currentColor 72%, transparent)`), never `opacity`
   on an inline span. Opacity on an inline that wraps paints a faint
@@ -570,6 +589,7 @@ A surface that is not listed here is legacy.
 | Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
 | Figure viewer: pinch, pan, double-tap and wheel zoom | 1.5 | 6.45 | The gesture and its springs only. The viewer's bar and buttons are still legacy |
 | Gallery picker ("From gallery" in every figure block) and the image ID chip in the viewer | 1.6 | 6.46 | The "From gallery" and "Gallery" buttons sit in legacy figure rows and match them; the sheet itself is Plume |
+| Alignment of every pill beside text in the answer cards (lure, "your answer", Not here / Right in in both layouts) and the verdict's chips | 1.9 | 6.50 | Alignment only; those legacy components keep their look |
 | Lure tag on the answer cards (player, grouped "Choice by choice", bank preview, companion) and the dimmed lure card's edge | 1.8 | 6.49 | The tag only. The cards around it are still legacy; the editor's "This is the lure" switch and the report's "Took the lure" chip use the legacy controls beside them |
 
 ## 15. Language changelog
@@ -604,6 +624,8 @@ A surface that is not listed here is legacy.
 - **Plume 1.8** (2026-10-09): a mark that arrives with the verdict (the
   lure tag), in `warning` because it is a caution, not a verdict; dim text
   by colour, never by opacity on an inline.
+- **Plume 1.9** (2026-10-09): a pill beside text is centred on that text
+  (`.pl-inl`, `.sp-wlc`), never baseline-aligned or nudged by hand.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

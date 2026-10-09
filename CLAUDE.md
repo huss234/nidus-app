@@ -199,5 +199,14 @@ does) and work in the scratchpad:
   not as a tag). To test the import rules, call `doImport(json, true)`
   with a lure on the key and three on wrong options: the key loses it and
   only the first two stay.
+- **Measure alignment, don't eyeball it.** For a pill beside text, take
+  the pill's `getBoundingClientRect()` centre and the centre of the text
+  line it shares (`Range.selectNodeContents(textEl).getClientRects()`, the
+  rect whose centre is nearest the pill). The difference must be 0. Run it
+  at the default reading settings and at a large size, line-height 2 and
+  each family (`Object.assign(DB.settings,{font,efont,lh,family});
+  applySettings()`; setting the CSS variables by hand is overwritten). A
+  pill that wrapped onto a line of its own has no text to align with, so
+  skip it. Then look at a 4× clip (`deviceScaleFactor: 4`).
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

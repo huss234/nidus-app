@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.49 -->
+<!-- Nidus — Personal Qbank · v6.50 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4066,7 +4066,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 @keyframes spPop{0%{transform:scale(.97)}60%{transform:scale(1.015)}100%{transform:none}}
 @keyframes spShake{0%,100%{transform:none}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
 .sp-tag{
-  display:inline-flex;align-items:center;gap:4px;margin-left:8px;vertical-align:2px;
+  display:inline-flex;align-items:center;gap:4px;margin-left:8px;
   font:600 11px/16px var(--m3-font);letter-spacing:.5px;padding:2px 8px;border-radius:var(--m3-corner-full);
   background:color-mix(in oklab,currentColor 14%,transparent);white-space:nowrap
 }
@@ -4081,8 +4081,14 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    longer one and both sentences start on the same line */
 .sp-why:has(> .sp-wr){grid-template-columns:auto 1fr;column-gap:10px}
 .sp-why > :not(.sp-wr){grid-column:1/-1}
-.sp-wr{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.sp-wr{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
 .sp-why > .sp-wr{grid-column:1/-1;grid-template-columns:subgrid}
+/* the grouped layout ("Choice by choice") draws the same two rows in an
+   .ebody, so it shares one label column the same way */
+.ebody:has(> .sp-wr){display:grid;grid-template-columns:auto 1fr;column-gap:10px;row-gap:8px}
+.ebody > .sp-wr{grid-column:1/-1;grid-template-columns:subgrid}
+.sp-wlc{display:flex;align-items:center;height:1lh}
+.sp-wlc > .sp-wl{flex:1}
 .sp-wl{
   font:700 11px/16px var(--m3-font);letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;text-align:center;
   padding:2px 8px;border-radius:var(--m3-corner-full);
@@ -4105,12 +4111,20 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    revealed card it grows in after the key has turned, and a dimmed lure keeps
    its tag and a faint edge at full strength while its text steps back. */
 .pl-lure{
-  display:inline-flex;align-items:center;gap:4px;margin-left:8px;vertical-align:2px;
+  display:inline-flex;align-items:center;gap:4px;margin-left:8px;
   padding:2px 8px 2px 6px;border-radius:var(--p-r-full);white-space:nowrap;
   font:600 11px/16px var(--m3-font);letter-spacing:.5px;
   background:var(--md-warning-container);color:var(--md-on-warning-container);transform-origin:0 50%
 }
 .pl-lure .ic{width:15px;height:15px;stroke-width:2.2}
+/* Plume 1.9 · pill on a line of text. A pill inside running text sits in a
+   slot (.pl-inl) exactly the height of that text's own glyph box: top on the
+   text's top (text-top), line-height normal so 1lh is the font's ascent plus
+   descent. The pill is centred in it, so its centre lands on the text's
+   centre in any font, size or line-height, with no hand-tuned offset.
+   The label column beside a sentence does the same with one line box
+   (.sp-wlc, height 1lh at the sentence's own line-height). */
+.pl-inl{display:inline-flex;align-items:center;vertical-align:text-top;height:1lh;line-height:normal;white-space:nowrap}
 .sp-opts.done .sp-opt.dim.lure{box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-warning) 38%,transparent)}
 .sp-opts.done .sp-opt.dim.lure .sp-t{opacity:1}
 .sp-opts.done .sp-opt.dim.lure .sp-tline{color:color-mix(in oklab,currentColor 72%,transparent)}
@@ -4230,7 +4244,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-vs b{font-weight:700}
 .sp-vmeta{grid-column:1/3;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .sp-vmeta span{font:500 12px/16px var(--m3-font);letter-spacing:.3px;padding:6px 10px;border-radius:var(--m3-corner-full);background:color-mix(in oklab,currentColor 11%,transparent)}
-.sp-vmeta b{font-family:var(--m3-mono);font-weight:600}
+.sp-vmeta b{font-family:var(--m3-mono);font-weight:600;line-height:1}
 .sp-vmeta .sp-vconf{display:inline-flex;align-items:center;gap:6px}
 .sp-vmeta .sp-vconf .ic{width:16px;height:16px}
 .sp-card{border-radius:var(--m3-corner-xl);background:var(--md-surface-container-low);padding:20px}
@@ -5503,7 +5517,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.49</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.50</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5513,7 +5527,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.49 · sharded store</span>
+        <span class="chip" id="verChip">v6.50 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6542,7 +6556,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.49';
+const APP_VERSION='6.50';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10012,8 +10026,8 @@ function whyHTML(c){
   const t=String(c.explanation||'').trim();if(!t)return '';
   const m=/^\**\s*Wrong\s*:?\s*\**\s*([\s\S]*?)\s*(?:\**\s*Right in\s*:?\s*\**\s*([\s\S]*))?$/i.exec(t);
   if(m&&m[1]!=null&&/^\**\s*Wrong/i.test(t)){
-    return `<div class="sp-wr"><span class="sp-wl">Not here</span><span>${aFmt(m[1])}</span></div>`+
-      (m[2]?`<div class="sp-wr rin"><span class="sp-wl">Right in</span><span>${aFmt(m[2])}</span></div>`:'');
+    return `<div class="sp-wr"><span class="sp-wlc"><span class="sp-wl">Not here</span></span><span>${aFmt(m[1])}</span></div>`+
+      (m[2]?`<div class="sp-wr rin"><span class="sp-wlc"><span class="sp-wl">Right in</span></span><span>${aFmt(m[2])}</span></div>`:'');
   }
   return `<div class="ebody">${mdFmt(t)}</div>`;
 }
@@ -10025,7 +10039,7 @@ function lureTidy(chs){let n=0;
 const isLure=c=>!!(c&&c.lure&&!c.isCorrect);
 const tookLure=(q,it)=>!!(it&&it.chosen&&!it.correct&&isLure((q.choices||[]).find(c=>c.label===it.chosen)));
 const LURE_SAY='The lure: the wrong option built to pull in someone who knows most of this';
-function lureTag(){return `<span class="pl-lure" title="${LURE_SAY}"><svg class="ic" aria-hidden="true"><use href="#i-lure"/></svg>Lure</span>`}
+function lureTag(){return `<span class="pl-inl"><span class="pl-lure" title="${LURE_SAY}"><svg class="ic" aria-hidden="true"><use href="#i-lure"/></svg>Lure</span></span>`}
 function renderChoices(anim){
   const q=curQ(),it=curIt(),tutor=S.config.mode==='tutor',done=tutor&&it.submitted;
   const order=it.order&&it.order.length?it.order:q.choices.map(c=>c.label);
@@ -10052,7 +10066,7 @@ function renderChoices(anim){
     if(done&&isLure(c))cls+=' lure';
     const hist=done?personalPick(q.id,lab):'';
     let tag='';
-    if(done&&it.chosen===lab)tag=`<span class="sp-tag">your answer</span>`;
+    if(done&&it.chosen===lab)tag=`<span class="pl-inl"><span class="sp-tag">your answer</span></span>`;
     if(done&&isLure(c))tag+=lureTag();
     let why='';
     if(done&&inline){
