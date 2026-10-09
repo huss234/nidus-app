@@ -122,6 +122,12 @@ exactly**, without waiting to be asked.
   then the first empty slot of the same kind, and fills **only empty
   slots**: a photo already attached is never replaced and nothing else in
   the question changes. It reports filled / already had / not found / gone.
+  When the reply puts the same picture in two empty slots of one question,
+  the second slot was a duplicate placeholder (two extractor runs each left
+  one, with slightly different captions, so `figDedupe` kept both): it is
+  deleted with `figBury`, like Delete placeholder, and reported as a removed
+  duplicate. Before v6.54 it stayed empty and counted as "already had a
+  photo", so it came back in every later export.
 - **The file tag carries the question's number** (`cardiovascular system v5
   #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
   `fileTagBase()`, which drops the ` #N`; the question and search keep it.
