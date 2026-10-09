@@ -146,6 +146,18 @@ exactly**, without waiting to be asked.
     pull is file order. Recent sessions sorts by `finishedAt`.
   The companion's "on question N" line clears when that device's beacon
   stops carrying a session (`COMP.live.dev`).
+- **The sync pointer is written last.** `c.sha` (localStorage, written at
+  once) promises "everything up to here is merged on this device". So the
+  merged data goes to disk (`doSave()`) before the pointer moves, in every
+  pass and in `fullResync`. Until v6.51 the database was written only after
+  the push, seconds later; a phone that went to the background (which
+  itself starts a pass) and was frozen or killed in that window kept the
+  pointer, lost the merge, and never fetched those files again: a session
+  finished on the tablet stayed "Live elsewhere" on the phone for good.
+  Bumping `REPAIR_STAMP` makes every device do one full re-read on its next
+  sync; v6.52 did that to recover what the old order lost. The manifest
+  pull reads at the branch tip, never at an older `d.head`, so a file is
+  never marked as delivered in a newer form than the one merged.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -241,6 +253,10 @@ does) and work in the scratchpad:
   branch, dir `nidus`, its own `deviceId`). `SYNC.now()` runs a pass; the
   other device also syncs by itself when it sees the beacon, so install any
   spies before the action that triggers it. Never point a test at the real
-  repositories.
+  repositories. To test a tab killed mid-sync, let the fake hang one
+  device's commit (`createCommitOnBranch` never answers for that device's
+  headline), close the page, and open a new page in the same context. To
+  test recovery of a device the old build broke, run the old file
+  (`git show HEAD:index.html`) first, then reopen with the new one.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
