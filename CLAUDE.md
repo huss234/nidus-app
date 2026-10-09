@@ -102,7 +102,12 @@ exactly**, without waiting to be asked.
   check for a saved copy that lacks it, keep the re-run export carrying
   the new field, and update the `nidus-archivist` skill to match (it is
   the same protocol, used outside the app). The skill also ships
-  `scripts/figures.py` (pages, find, crop, sheet, embed); a change to how
+  `scripts/figures.py` (overview, pages, find, crop, sheet, embed). It
+  must run offline: claude.ai's sandbox blocks pip, so it reads PDFs with
+  whatever is installed (PyMuPDF, then pypdfium2, then poppler's
+  `pdftoppm`), forced with `FIGURES_BACKEND=` for testing. Test a change on
+  all three (here: apt `python3-pymupdf`, `poppler-utils`, pip
+  `pypdfium2`) and compare the crops on one sheet. A change to how
   figures travel changes the script, the prompt text and `figAbsorb()`
   together.
 - **Pictures can arrive inside the JSON** (ARCHIVIST 3.2, section 9A): the
