@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.50 -->
+<!-- Nidus — Personal Qbank · v6.51 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5517,7 +5517,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.50</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.51</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5527,7 +5527,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.50 · sharded store</span>
+        <span class="chip" id="verChip">v6.51 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -6556,7 +6556,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.50';
+const APP_VERSION='6.51';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -6946,6 +6946,21 @@ function sessOK(s){
   return !drDay(dayKey(s.ts||0));
 }
 function sessCounted(){return (DB.sessions||[]).filter(sessOK)}
+/* A session deleted on any device stays deleted. Its file is never removed
+   from the store, so a pull that reads it again (a fresh device, a full
+   resync) used to add it straight back, and old deleted sessions crowded
+   Recent sessions. Every merge that can add a session asks this first, the
+   same stamped test the legacy merge applies. */
+function sessPurged(s){
+  if(!s)return false;
+  const pg=DR().purged,sp=pg.sessions[s.id];
+  return !!((sp&&(s.ts||0)<=sp)||(pg.before&&(s.ts||0)<pg.before));
+}
+function sessDropPurged(){
+  const n=(DB.sessions||[]).length;
+  DB.sessions=(DB.sessions||[]).filter(x=>!sessPurged(x)||(S&&S.id===x.id));
+  return n-DB.sessions.length;
+}
 /* the schedule is a pure function of the attempts that count, so excluding a
    day of testing has to walk the interval back to what studying alone earned.
    Same arithmetic as srsUpdate(), replayed rather than re-derived. */
@@ -9513,7 +9528,10 @@ function renderDash(){
   $('#bankCnt').textContent=t.total;$('#dueCnt').textContent=t.due;
   try{galPaintCount()}catch(e){}
   const dm=$('#dueCntM');dm.textContent=t.due>99?'99+':t.due;dm.style.display=t.due?'block':'none';
-  const rec=sessCounted().filter(s=>s.status==='done').slice(-5).reverse();
+  /* newest first by when each one ended: the array's order is whatever order
+     the sessions reached this device in, which after a pull is not time */
+  const rec=sessCounted().filter(s=>s.status==='done')
+    .sort((a,b)=>(b.finishedAt||b.heart||b.ts||0)-(a.finishedAt||a.heart||a.ts||0)).slice(0,5);
   $('#dashRecent').innerHTML=rec.length?rec.map(sessionRow).join(''):'<div class="empty"><h4>No sessions yet</h4><p class="tiny">Build one from the bank whenever you\'re ready.</p></div>';
   renderCompCard();
 }
@@ -10398,6 +10416,18 @@ $('#pQuit').onclick=()=>{
   $('#suspendBtn').onclick=()=>{closeModal();pauseSession(S);exitPlayer()};
   $('#finishNow').onclick=()=>{closeModal();endSession()};
 };
+/* The open session was finished on another device. The merge has already
+   made it done here; the player closes instead of running on a graded
+   session (it used to stay open with Submit live), and Home, which lists it
+   under Recent sessions, takes its place. No time is flushed into it: the
+   clock belongs to the device that finished it. */
+let ENDED_AT=0;   /* the sync's generic "merged in" note must not replace this one */
+function sessEndedElsewhere(){
+  if(!S||S.review||S.status!=='done'||!$('#player').classList.contains('on'))return;
+  qEnter=0;ENDED_AT=Date.now();
+  exitPlayer();
+  toast('This session was finished on another device. Its report is under Recent sessions.');
+}
 function endSession(){
   if(S&&S.review){exitPlayer();return}
   const done=finishSession(S);
@@ -14650,7 +14680,12 @@ const SYNC=(function(){
       /* this device's own settings stay; only the shared ones come in */
       DB.settings=Object.assign({},DEFAULTS.settings,m.settings,DEVSET.pick(DB.settings));
       /* keep the live session object identity so its writes still land */
-      if(S&&S.id){const i=DB.sessions.findIndex(x=>x.id===S.id);if(i>=0)DB.sessions[i]=S;else DB.sessions.push(S)}
+      if(S&&S.id){const i=DB.sessions.findIndex(x=>x.id===S.id);
+        if(i>=0){const mg=DB.sessions[i];
+          /* finished elsewhere: the live object takes the finished state, or the merge's verdict is lost */
+          if(mg!==S&&mg.status==='done'&&S.status!=='done'){Object.keys(mg).forEach(k=>{if(k!=='id')S[k]=mg[k]});setTimeout(sessEndedElsewhere,0)}
+          DB.sessions[i]=S}
+        else DB.sessions.push(S)}
       applySettings();
     }
     (DB.questions||[]).forEach(q=>{if(!DB.stats[q.id])DB.stats[q.id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]}});
@@ -14756,7 +14791,7 @@ const SYNC=(function(){
         }
         if(changed&&!playing()){reindex();go(VIEW)}
         if(changed)try{figRedrawVisible()}catch(e){}
-        if(changed&&reason!=='boot')toast('Changes from another device merged in.');
+        if(changed&&reason!=='boot'&&Date.now()-ENDED_AT>8000)toast('Changes from another device merged in.');
         busy=false;renderSync();
         if(pending){const r=pending;pending=null;setTimeout(()=>run(r),250)}
         return;
@@ -14777,7 +14812,7 @@ const SYNC=(function(){
         'Up to date — last sync '+new Date().toLocaleString());
       if(changed&&!playing()){reindex();go(VIEW)}
       if(changed)try{figRedrawVisible()}catch(e){}
-      if(changed&&reason!=='boot')toast('Changes from another device merged in.');
+      if(changed&&reason!=='boot'&&Date.now()-ENDED_AT>8000)toast('Changes from another device merged in.');
     }catch(e){
       applying=false;
       setState('err','Sync failed',(e&&e.message)||'Sync failed');
@@ -15479,13 +15514,15 @@ const V3=(function(){
   }
   async function mergeSessionFile(id,theirs){
     if(!theirs||!theirs.id)return false;
+    if(sessPurged(theirs))return false;
     const i=(DB.sessions||[]).findIndex(x=>x&&x.id===theirs.id);
     if(i<0){DB.sessions.push(theirs);return true}
     /* the live session object's identity is kept, or its own writes stop
        landing in the array the rest of the app reads */
     if(typeof S!=='undefined'&&S&&S.id===theirs.id){
-      const w=M().richer(S,theirs);
+      const w=M().richer(S,theirs),was=S.status;
       if(w!==S){Object.keys(theirs).forEach(k=>{if(k!=='id')S[k]=theirs[k]})}
+      if(was!=='done'&&S.status==='done')setTimeout(sessEndedElsewhere,0);
       DB.sessions[i]=S;
       return w!==S;
     }
@@ -15636,7 +15673,7 @@ const V3=(function(){
           const j=g.val;
           if(j===NET.UNCHANGED||j===null)continue;
           DB.dataRules=M().mergeRules(null,DB.dataRules,j);
-          DR();drSync();changed=true;
+          DR();drSync();sessDropPurged();changed=true;
         }else if(rel==='progress/settings.json'){
           const j=g.val;
           if(j===NET.UNCHANGED||j===null)continue;
@@ -16039,7 +16076,12 @@ const V3=(function(){
         photoHints[seenKey]=1;
         applyLivePhoto(ev);
       });
-      if(j.session)liveSession(j);
+      if(j.session)liveSession(j,dev);
+      else if(typeof COMP!=='undefined'&&COMP.live&&COMP.live.dev===dev){
+        /* that device's session ended; its last position is no longer live */
+        COMP.live=null;
+        if(COMP.sid&&document.getElementById('companion').classList.contains('on'))compPaintLive();
+      }
       /* Every push carries its author's beacon, so a beacon that has moved is
          proof that the data repository has moved with it. Pull now rather than
          waiting for this device's own timer: this is what turns the delay
@@ -16076,9 +16118,9 @@ const V3=(function(){
     toast('A photo arrived from another device.');
   }
   /* Plume 1.0 — the beacon is kept, and the companion repaints only what it moved */
-  function liveSession(j){
+  function liveSession(j,dev){
     if(!j.session||typeof COMP==='undefined')return;
-    COMP.live={id:j.session.id,label:j.label||'Other device',idx:j.session.idx||0,
+    COMP.live={dev:dev,id:j.session.id,label:j.label||'Other device',idx:j.session.idx||0,
       answered:j.session.answered|0,elapsed:j.session.elapsed||0,ts:j.ts||Date.now()};
     if(COMP.sid&&document.getElementById('companion').classList.contains('on'))compPaintLive();
   }
@@ -17204,6 +17246,8 @@ const BRAND=(function(){
   /* 'active' used to mean both running and suspended. Nothing was running when
      this build started, so every one of them is a suspended session. */
   (DB.sessions||[]).forEach(s=>{if(s&&s.status==='active'){s.status='paused';if(!s.heart)s.heart=s.ts||Date.now()}});
+  /* sessions an older build pulled back in after they were deleted (v6.50 and earlier) */
+  sessDropPurged();
   reindex();applySettings();renderPrompt();go('dash');
   requestAnimationFrame(()=>requestAnimationFrame(BRAND.play));
   /* the media engine binds any <img data-media> that appears anywhere, so no

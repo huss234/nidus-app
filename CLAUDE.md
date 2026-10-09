@@ -127,6 +127,25 @@ exactly**, without waiting to be asked.
   saying off (v6.43 and earlier). Every fullscreen call is awaited and
   caught, a tap during a pending request is ignored (`fsBusy`), and hiding
   the tab exits fullscreen while coming back repaints the button.
+- **Sessions across devices.** Finishing is terminal and wins every merge
+  (`richer()`), and three rules keep the screens honest about it:
+  - *Finished elsewhere closes the player.* A merge that turns the session
+    open in this device's player into `done` calls `sessEndedElsewhere()`:
+    the player closes without flushing time, Home shows it in Recent
+    sessions, and a toast says where it went (the sync's generic "merged
+    in" toast is held back for 8 s so it cannot replace it). Before v6.51
+    the phone kept the graded session open with Submit live.
+  - *Deleted stays deleted.* Deleting a session writes a stamped rule in
+    `purged.sessions` but leaves its file in the store, so every path that
+    adds a session checks `sessPurged()` first (`mergeSessionFile`, the
+    legacy `mergeProgress`), rules arriving from another device run
+    `sessDropPurged()`, and so does start-up. Before v6.51 a full pull
+    brought deleted sessions back.
+  - *Lists of sessions sort by time, never by array position.* The array
+    holds sessions in the order they reached this device, which after a
+    pull is file order. Recent sessions sorts by `finishedAt`.
+  The companion's "on question N" line clears when that device's beacon
+  stops carrying a session (`COMP.live.dev`).
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -208,5 +227,20 @@ does) and work in the scratchpad:
   applySettings()`; setting the CSS variables by hand is overwritten). A
   pill that wrapped onto a line of its own has no text to align with, so
   skip it. Then look at a 4× clip (`deviceScaleFactor: 4`).
+- **Test sync with two devices and a fake GitHub.** Sync bugs need two
+  devices, so drive two browser contexts (separate storage) against one
+  in-memory GitHub installed with `context.route('https://api.github.com/**')`.
+  It needs: `GET /repos/O/R/commits/main` (sha text, ETag, 304), `compare/A...B`
+  (files that differ), `contents/PATH` (raw file, JSON dir listing, ETags,
+  404), `POST /graphql` (the `readMany` `object(expression:"ref:path")`
+  query and `createCommitOnBranch` with `expectedHeadOid` → `STALE_DATA` on a
+  moved head), and the `git/blobs|trees|commits|refs` chain as fallback.
+  Seed it with a read-only copy of the real `nidus-data` tree
+  (`gh api …/git/trees/main?recursive=1`, then each file raw) and give each
+  context a `nidus_sync_cfg` in `localStorage` (token, owner, repo, mrepo,
+  branch, dir `nidus`, its own `deviceId`). `SYNC.now()` runs a pass; the
+  other device also syncs by itself when it sees the beacon, so install any
+  spies before the action that triggers it. Never point a test at the real
+  repositories.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
