@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.7** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.8** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -536,6 +536,20 @@ Errors say what happened and what is safe ("Nothing was lost").
   `stroke-dashoffset`).
 - **A copyable ID** (`.lbid` in the viewer): a mono chip with the copy
   icon; the snackbar says what was copied and where to use it.
+- **A mark that arrives with the verdict** (the lure tag, `Plume 1.8 ·
+  lure tag`, `.pl-lure` from `lureTag()`): a pill with the metrics of the
+  card's own "your answer" tag (11px/16px, 600, full radius) so the two sit
+  side by side, coloured by meaning, not by the card. It grows in on the
+  reveal (`--p-spatial-fast` scale 0.6 → 1, fade on `--p-effect`), one
+  stagger step after its card's key has turned. A dimmed card that still
+  matters keeps its mark at full strength and steps back its text only.
+  Draw the same component on every surface that shows the key (player,
+  grouped layout, bank preview, companion), never a per-surface copy.
+- **Dimming text inside a card:** step back its colour
+  (`color-mix(in oklab, currentColor 72%, transparent)`), never `opacity`
+  on an inline span. Opacity on an inline that wraps paints a faint
+  rectangle behind the first line (seen on the lure card, v6.49). Opacity
+  on a block is fine.
 - **Hiding something without changing the layout** (the session clock,
   `.player.clock-off`): fade and shrink it out on the exit curve, then flip
   `visibility` to hidden after the fade (a delayed `visibility` transition).
@@ -556,6 +570,7 @@ A surface that is not listed here is legacy.
 | Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
 | Figure viewer: pinch, pan, double-tap and wheel zoom | 1.5 | 6.45 | The gesture and its springs only. The viewer's bar and buttons are still legacy |
 | Gallery picker ("From gallery" in every figure block) and the image ID chip in the viewer | 1.6 | 6.46 | The "From gallery" and "Gallery" buttons sit in legacy figure rows and match them; the sheet itself is Plume |
+| Lure tag on the answer cards (player, grouped "Choice by choice", bank preview, companion) and the dimmed lure card's edge | 1.8 | 6.49 | The tag only. The cards around it are still legacy; the editor's "This is the lure" switch and the report's "Took the lure" chip use the legacy controls beside them |
 
 ## 15. Language changelog
 
@@ -586,6 +601,9 @@ A surface that is not listed here is legacy.
   the copyable ID chip.
 - **Plume 1.7** (2026-10-07): a highlight keeps the column; a tinted tile
   in a list never juts out toward the markers.
+- **Plume 1.8** (2026-10-09): a mark that arrives with the verdict (the
+  lure tag), in `warning` because it is a caution, not a verdict; dim text
+  by colour, never by opacity on an inline.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

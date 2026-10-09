@@ -82,6 +82,26 @@ exactly**, without waiting to be asked.
   `CONF_SAY`), the Markdown copy ("Confidence before answering: …") and
   the companion's "Answered there" line. A new surface that shows an
   answer shows its confidence too.
+- **The lure travels with the key.** ARCHIVIST §6B marks the wrong option
+  built to pull in a reader who knows most of the topic: `"lure": true` on
+  that choice, one per item, two at most, never the key (`lureTidy()`
+  enforces this on import and in the editor; a choice that is not a lure
+  has no `lure` field at all). It is answer-side, so it shows exactly where
+  the key shows and nowhere else: the player once submitted, the grouped
+  "Choice by choice", the bank preview, the companion's spoiler, the
+  Markdown copy (`[lure]` mark, "incorrect, took the lure") and the missed
+  sheet. Picking it says so (`tookLure()`): the verdict reads "Took the
+  lure", the report adds a "Took the lure" chip, and the companion's
+  "Answered there" line says it. Never on the companion's read-along
+  options or the question-only copy. A new surface that shows the key
+  shows the lure with `lureTag()`. Questions imported before ARCHIVIST v3.1
+  have no lure; Export for re-run offers just those, and the stale-prompt
+  note flags a saved prompt without section 6B.
+- **Changing the extractor prompt** (`#defaultPrompt`): bump its ARCHIVIST
+  version, add the new rule to the final gate, give `renderPrompt()` a gap
+  check for a saved copy that lacks it, keep the re-run export carrying
+  the new field, and update the `nidus-archivist` skill to match (it is
+  the same protocol, used outside the app).
 - **Adding a picture** always offers three ways in: choose a file
   (`figPick`), **Paste** (`figPaste`) and **From gallery** (`fpkOpen`,
   which reuses a picture already in the bank). A phone has no Ctrl+V and no
@@ -174,5 +194,10 @@ does) and work in the scratchpad:
   `isMobile` on the context. Read the picture's `style.transform` and
   `visualViewport.scale` (it must stay 1: the page itself never zooms).
   To check a spring, log the transform on every animation frame.
+- **Seed a lure** with `lure:true` on a wrong choice (seeded questions skip
+  `normalizeQ`, so a stray `lure:true` on the key is drawn as nothing,
+  not as a tag). To test the import rules, call `doImport(json, true)`
+  with a lure on the key and three on wrong options: the key loses it and
+  only the first two stay.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

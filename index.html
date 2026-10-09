@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.48 -->
+<!-- Nidus — Personal Qbank · v6.49 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4098,6 +4098,28 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .sp-jump .ic{width:18px;height:18px;transform:rotate(90deg)}
 .sp-jump:active{transform:scale(.94);border-radius:var(--m3-corner-s)}
 
+/* Plume 1.8 · lure tag — the wrong option built to pull in a reader who knows
+   most of the topic (ARCHIVIST §6B). Answer-side only, so it appears wherever
+   the key does and never before. It has the metrics of the "your answer" tag
+   so the two sit side by side, in warning (caution, not a verdict). On the
+   revealed card it grows in after the key has turned, and a dimmed lure keeps
+   its tag and a faint edge at full strength while its text steps back. */
+.pl-lure{
+  display:inline-flex;align-items:center;gap:4px;margin-left:8px;vertical-align:2px;
+  padding:2px 8px 2px 6px;border-radius:var(--p-r-full);white-space:nowrap;
+  font:600 11px/16px var(--m3-font);letter-spacing:.5px;
+  background:var(--md-warning-container);color:var(--md-on-warning-container);transform-origin:0 50%
+}
+.pl-lure .ic{width:15px;height:15px;stroke-width:2.2}
+.sp-opts.done .sp-opt.dim.lure{box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-warning) 38%,transparent)}
+.sp-opts.done .sp-opt.dim.lure .sp-t{opacity:1}
+.sp-opts.done .sp-opt.dim.lure .sp-tline{color:color-mix(in oklab,currentColor 72%,transparent)}
+.sp-opts.reveal .pl-lure{animation:plLureFade var(--p-effect-d) var(--p-effect) backwards,plLureGrow var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;
+  animation-delay:calc(var(--i) * 50ms + 200ms)}
+@keyframes plLureFade{from{opacity:0}}
+@keyframes plLureGrow{from{transform:scale(.6)}}
+@media (prefers-reduced-motion:reduce){.sp-opts.reveal .pl-lure{animation-name:plLureFade}}
+
 /* ---------- confidence: one track, one indicator that travels ----------
    Three equal segments on a pill track. The choice is a pill of its own
    that slides between them on a spring, stretching as it goes and taking
@@ -4967,6 +4989,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <symbol id="i-swap" viewBox="0 0 24 24"><path d="M3.8 8.4h13.4"/><path d="m13.9 5.1 3.3 3.3-3.3 3.3"/><path d="M20.2 15.6H6.8"/><path d="m10.1 12.3-3.3 3.3 3.3 3.3"/></symbol>
 <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.5h14.8"/><path d="M9.4 6.5V4.8a1.5 1.5 0 0 1 1.5-1.5h2.2a1.5 1.5 0 0 1 1.5 1.5v1.7"/><path d="m6.4 6.5.9 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9l.9-12"/><path d="M10.4 10.4v6M13.6 10.4v6"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.6 12.6 4.7 4.7L19.4 7.1"/></symbol>
+<symbol id="i-lure" viewBox="0 0 24 24"><circle cx="15" cy="4.3" r="2.1"/><path d="M15 6.4v8.1a5 5 0 0 1-10 0V9.6l3.4 3.1"/></symbol>
 <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M9.7 9.6a2.4 2.4 0 0 1 4.7.6c0 1.6-2.4 2-2.4 3.5"/><circle cx="12" cy="16.6" r="1.05" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-dice" viewBox="0 0 24 24"><rect x="4.4" y="4.4" width="15.2" height="15.2" rx="3.6"/><circle cx="8.9" cy="8.9" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="15.1" cy="15.1" r="1.2" fill="currentColor" stroke="none"/></symbol>
 <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></symbol>
@@ -5480,7 +5503,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.48</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.49</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5490,7 +5513,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.48 · sharded store</span>
+        <span class="chip" id="verChip">v6.49 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5713,7 +5736,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.0
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.1
 
 Turns any exam material into the JSON question bank this app imports.
 
@@ -5752,7 +5775,7 @@ An item emitted without a key is an item the user loses. If you are unsure, stil
   Pass 1 — Segment. Cut the material into items and keep the paper's own numbering for source.number. If several questions share one stem, repeat that stem in full in each item — the app stores one stem per item.
   Pass 2 — Transcribe. Stem, lead-in and every option, verbatim, in printed order (section 4).
   Pass 3 — Resolve the key and commit to a letter (section 5).
-  Pass 4 — Write the distractor lines and the explanation (section 6).
+  Pass 4 — Write the distractor lines and the explanation (section 6), and mark the lure (section 6B).
   Pass 5 — Shape the answer side into markdown (section 6A). Content is already fixed by Pass 4; this pass moves nothing but line breaks and emphasis.
   Pass 6 — Classify and attribute (sections 7 and 8).
   Pass 7 — Validate and repair against the final gate, fix what fails, then emit.
@@ -5896,10 +5919,10 @@ This is a formatting pass, not an editing pass. You are moving line breaks and a
 
 **Worked shape — one item's answer side**
 
-Options (correct one carries `"explanation": null`):
+Options (correct one carries `"explanation": null`; A, marked "lure" here, carries `"lure": true` — section 6B):
 
 ```
-A. Right ventricular wall thickening — Wrong: a sudden pressure load gives the RV no time to hypertrophy. Right in: chronic pulmonary hypertension.
+A. Right ventricular wall thickening — lure — Wrong: the RV is the chamber under strain, but a sudden pressure load gives it no time to hypertrophy. Right in: chronic pulmonary hypertension.
 B. Enlarged left ventricular cavity — Wrong: in PE the LV receives less blood, so it is normal or small. Right in: chronic volume overload (dilated cardiomyopathy, aortic or mitral regurgitation).
 C. Enlarged right ventricular cavity — null
 D. Left ventricular wall thickening — Wrong: nothing here puts a chronic load on the LV. Right in: long-standing systemic hypertension or aortic stenosis.
@@ -5930,6 +5953,29 @@ D. **Hydralazine** 10 mg IV every 4 hours
 ```
 
 The failing version of the same set bolds only B, because B is the answer. That is not formatting; it is the key, printed above the explanation that was supposed to reveal it.
+
+6B · THE LURE — the wrong option built to catch the student who almost knows
+
+Most wrong options are wrong in an ordinary way: a student who knows the topic passes them by. One is not. A student who knows nothing walks past it, but a student who knows the topic well, though not perfectly, is pulled straight to it. The item writer built it to separate those two students. That option is the lure. Mark it with "lure": true on its choice. The app shows the mark only after the reader has answered, so they learn to recognise the pull and, when they fell for it, see that it was the near miss of someone who knows most of the material.
+
+Finding it — ask which wrong option a well-prepared student is most likely to choose, and why. The lure usually:
+  • answers a neighbouring question: one step earlier or later in the chain, the acute phase instead of the chronic one, the classic presentation that the stem's twist rules out;
+  • is a true statement that does not answer this lead-in;
+  • fits the most striking clue in the stem and ignores the one detail that decides the item;
+  • is the textbook association for the topic, which this item was written to break.
+The absurd option is never the lure, and neither is the option only a student who knows nothing would pick. Knowledge leads to the lure, not ignorance.
+
+How many:
+  • Exactly one lure in every item. Commit to it even when the pull is modest: the strongest pull among the wrong options is the lure.
+  • A second lure only when two wrong options pull with genuinely equal force, for different reasons, so that choosing one over the other would be a coin toss. Never more than two.
+  • The correct option is never a lure. On a multi item the lure comes from the options outside correctAnswers.
+  • Every other option leaves the field out. Never write "lure": false.
+
+Its line: the lure's choices[].explanation keeps the Wrong / Right in shape of section 6, and its Wrong half does one more job. It names what makes the option tempting and the one detail in this item that defeats it:
+  `Wrong: the RV is the chamber under strain, but a sudden pressure load gives it no time to hypertrophy. Right in: chronic pulmonary hypertension.`
+Never write "lure", "trap" or "tempting" into the line. The app's mark already says it.
+
+The mark is answer-side information. It never shows in an option's text, and an option is never formatted differently because it is the lure: section 6A's rule that no option is singled out applies to the lure exactly as it does to the key.
 
 7 · CLASSIFICATION — this drives every filter and statistic in the app
 
@@ -5995,6 +6041,7 @@ A file exported from the app for re-running ("kind": "rerun" in its meta) holds 
   • Copy each item's id, unchanged, into the same item of your output, as its first field. An item that loses its id can still be matched by its wording, but the id is the sure way.
   • Treat each item as route D material. stem, leadIn and every option's text are already transcribed: carry them over word for word, in the same order. Keep the key. Rebuild the answer side — option lines and explanation — to this protocol, using the old explanation, objective and option notes as your evidence.
   • Keep the item's classification, tags, source and images unless one is plainly wrong.
+  • Mark the lure under section 6B whether or not the file carries one. A lure the file already marks stays unless another option plainly pulls harder.
   • Material without ids takes no id field. Never invent one.
 
 SCHEMA
@@ -6002,7 +6049,7 @@ SCHEMA
 Top level, exactly:
 { "schemaVersion": 2, "meta": { … }, "questions": [ { … }, … ] }
 
-Schema 2 differs from schema 1 in three ways: the correct option's explanation is null, and the fields educationalObjective, thingsToRemember and references are gone.
+Schema 2 differs from schema 1 in three ways: the correct option's explanation is null, and the fields educationalObjective, thingsToRemember and references are gone. Within schema 2, the lure's choice carries "lure": true (section 6B).
 
 meta:
 { "source": "Pathology Final 2024", "year": 2024, "course": null, "channel": null, "collection": null, "batch": "1 of 1", "notes": null }
@@ -6014,7 +6061,8 @@ Question object — every field (on a re-run, section 11, each object also carri
   "type": "single",
   "choices": [
     { "label": "A", "text": "option text, verbatim — inline marks only, applied to every option or to none", "isCorrect": false, "explanation": "Wrong: why it fails in this item. Right in: the real setting where it is the answer." },
-    { "label": "B", "text": "option text, verbatim", "isCorrect": true, "explanation": null }
+    { "label": "B", "text": "option text, verbatim", "isCorrect": true, "explanation": null },
+    { "label": "C", "text": "option text, verbatim", "isCorrect": false, "lure": true, "explanation": "Wrong: what pulls a well-prepared reader here, and the detail in this item that defeats it. Right in: the real setting where it is the answer." }
   ],
   "correctAnswer": "B",
   "correctAnswers": null,
@@ -6039,7 +6087,7 @@ Question object — every field (on a re-run, section 11, each object also carri
   "source": { "exam": "Pathology Final", "year": 2024, "course": null, "block": null, "number": 1, "channel": null, "collection": null, "url": null }
 }
 
-Required and never empty: stem, choices (two or more, each with text), correctAnswer (or correctAnswers for multi), explanation, and the explanation of every wrong option. A correct option's explanation is always null; for a multi item that means every option listed in correctAnswers. Any unknown value is null — never "" and never "N/A".
+Required and never empty: stem, choices (two or more, each with text), correctAnswer (or correctAnswers for multi), explanation, and the explanation of every wrong option. A correct option's explanation is always null; for a multi item that means every option listed in correctAnswers. "lure": true sits on exactly one wrong option, two at most, and nowhere else. Any unknown value is null — never "" and never "N/A".
 
 ENUMS — copy exactly, never invent a value
 
@@ -6078,7 +6126,7 @@ WORKED MAPPING — a source that already contains its own discussion
 
 SHAPE EXAMPLE — abbreviated; a real item keeps every distractor line and any printed table
 
-{"schemaVersion":2,"meta":{"source":"Physiology set 3","year":null,"course":null,"channel":null,"collection":null,"batch":"1 of 1","notes":null},"questions":[{"stem":"A 48-year-old man undergoes exercise treadmill testing. Heart rate rises from 70/min at rest to 132/min at peak and mean blood pressure from 95 mm Hg to 112 mm Hg.","leadIn":"Which of the following parameters was most likely decreased during peak stress compared with the resting state?","type":"single","choices":[{"label":"A","text":"Cardiac output","isCorrect":false,"explanation":"Wrong: cardiac output rises during exercise, supplied mostly by heart rate at high workloads. Right in: a fall in pump function or venous return, such as heart failure or hemorrhage."},{"label":"B","text":"Total systemic vascular resistance","isCorrect":true,"explanation":null},{"label":"C","text":"Left ventricular end-diastolic pressure","isCorrect":false,"explanation":"Wrong: the muscle pump and venoconstriction raise venous return, so end-diastolic pressure climbs. Right in: reduced venous return, such as hemorrhage or upright tilt."}],"correctAnswer":"B","correctAnswers":null,"paperAnswer":null,"keyConflict":false,"conflictNote":null,"needsReview":false,"answerSource":"paper","explanationSource":"paper","explanation":"Heart rate nearly doubled while mean arterial pressure rose only 17 mm Hg, so the item turns on **MAP = cardiac output × total peripheral resistance**: output climbed far more than pressure, so resistance must have fallen.\n\nWorking muscle releases adenosine, K⁺, CO2 and lactate → arterioles in muscle dilate → this outweighs splanchnic and skin vasoconstriction → **total peripheral resistance falls**\n\nSystolic pressure rises, diastolic stays flat, and MAP rises little.\n\n**A large rise in cardiac output with a small rise in MAP means systemic vascular resistance fell.**","system":"Cardiovascular System","subject":"Physiology","archetype":"Most likely finding","task":"Foundational Concepts","topic":"Hemodynamics of dynamic exercise","difficulty":"medium","tags":["exercise","vascular resistance","cardiac output"],"verified":false,"hasImage":false,"imageDescription":null,"images":[],"source":{"exam":"Physiology set 3","year":null,"course":null,"block":null,"number":2,"channel":null,"collection":null,"url":null}}]}
+{"schemaVersion":2,"meta":{"source":"Physiology set 3","year":null,"course":null,"channel":null,"collection":null,"batch":"1 of 1","notes":null},"questions":[{"stem":"A 48-year-old man undergoes exercise treadmill testing. Heart rate rises from 70/min at rest to 132/min at peak and mean blood pressure from 95 mm Hg to 112 mm Hg.","leadIn":"Which of the following parameters was most likely decreased during peak stress compared with the resting state?","type":"single","choices":[{"label":"A","text":"Cardiac output","isCorrect":false,"explanation":"Wrong: cardiac output rises during exercise, supplied mostly by heart rate at high workloads. Right in: a fall in pump function or venous return, such as heart failure or hemorrhage."},{"label":"B","text":"Total systemic vascular resistance","isCorrect":true,"explanation":null},{"label":"C","text":"Left ventricular end-diastolic pressure","isCorrect":false,"lure":true,"explanation":"Wrong: a fast heart rate does shorten filling time, but the muscle pump and venoconstriction raise venous return, so end-diastolic pressure climbs. Right in: reduced venous return, such as hemorrhage or upright tilt."}],"correctAnswer":"B","correctAnswers":null,"paperAnswer":null,"keyConflict":false,"conflictNote":null,"needsReview":false,"answerSource":"paper","explanationSource":"paper","explanation":"Heart rate nearly doubled while mean arterial pressure rose only 17 mm Hg, so the item turns on **MAP = cardiac output × total peripheral resistance**: output climbed far more than pressure, so resistance must have fallen.\n\nWorking muscle releases adenosine, K⁺, CO2 and lactate → arterioles in muscle dilate → this outweighs splanchnic and skin vasoconstriction → **total peripheral resistance falls**\n\nSystolic pressure rises, diastolic stays flat, and MAP rises little.\n\n**A large rise in cardiac output with a small rise in MAP means systemic vascular resistance fell.**","system":"Cardiovascular System","subject":"Physiology","archetype":"Most likely finding","task":"Foundational Concepts","topic":"Hemodynamics of dynamic exercise","difficulty":"medium","tags":["exercise","vascular resistance","cardiac output"],"verified":false,"hasImage":false,"imageDescription":null,"images":[],"source":{"exam":"Physiology set 3","year":null,"course":null,"block":null,"number":2,"channel":null,"collection":null,"url":null}}]}
 
 FINAL GATE — run this against your draft before sending
 
@@ -6101,6 +6149,7 @@ FINAL GATE — run this against your draft before sending
   17. Every item that came from a file carries that file's tag first in tags, built from the file name under section 7; items from pasted text carry none.
 
   18. On a re-run, every item carries its id, unchanged, and its stem, lead-in and option text are word for word what the file held.
+  19. Every item marks its lure with "lure": true: exactly one wrong option, or two when two pull with equal force, never the correct option, and no "lure" field on any other option. The lure is the option a well-prepared reader would choose, not the absurd one, and its Wrong half names that pull and the detail that defeats it, without the words lure, trap or tempting.
 
 Return the JSON now.
 
@@ -6493,7 +6542,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.48';
+const APP_VERSION='6.49';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7126,10 +7175,10 @@ const NOTES={
      <p class="tiny" style="margin-top:12px">2 — Paste the prompt into any capable model, attach the PDF, and ask for JSON only.</p>
      <p class="tiny" style="margin-top:12px">3 — Save the reply as <span class="mono">batch-name.json</span>, or paste it straight into the box on this tab.</p>
      <p class="tiny" style="margin-top:12px">4 — Afterwards, check the <span class="chip amber">key conflict</span> filter in the bank. Those are the questions where the model disagreed with your paper's answer key, and they are yours to settle.</p>
-     <p class="tiny" style="margin-top:12px">To bring older questions up to the current format, tap <b>Export for re-run</b>, send that file through the prompt, and import the reply with <b>Update questions that already exist</b> on. When every question is already current, the same button offers to export all of them, so a newer prompt can rewrite their explanations. Each question keeps its id, so it is updated in place with its attempts and notes, not added again.</p>`],
+     <p class="tiny" style="margin-top:12px">To bring older questions up to the current format, tap <b>Export for re-run</b>, send that file through the prompt, and import the reply with <b>Update questions that already exist</b> on. When every question is already current, the same button offers to export all of them, so a newer prompt can rewrite their explanations, or just the ones with no lure marked yet. Each question keeps its id, so it is updated in place with its attempts and notes, not added again.</p>`],
 
   prompt:['About this prompt',
-    `<p class="tiny">This is the instruction sheet a model needs to turn a paper into JSON this app can read directly. It asks for verbatim transcription, an evidenced answer key, a one-line note on every wrong option, and empty figure slots where pictures belong.</p>
+    `<p class="tiny">This is the instruction sheet a model needs to turn a paper into JSON this app can read directly. It asks for verbatim transcription, an evidenced answer key, a one-line note on every wrong option, the lure (the wrong option built to pull in someone who knows most of the topic, tagged once you answer), and empty figure slots where pictures belong.</p>
      <p class="tiny" style="margin-top:12px">Edit it if your papers have quirks — a house numbering style, a second language, an answer key printed at the back. Your version is saved on this device and used from then on; <b>Restore default</b> brings back the shipped one.</p>
      <p class="tiny" style="margin-top:12px">When the app ships a better prompt than the copy you saved, a note appears above telling you exactly which section is missing.</p>`],
 
@@ -9162,7 +9211,8 @@ function normalizeQ(raw,meta){
     return{label:String(c.label||c.key||LETTERS[i]).trim().toUpperCase().slice(0,2),
       text:String(c.text||c.value||c.option||c.content||''),
       isCorrect:!!(c.isCorrect||c.correct||c.is_correct),
-      explanation:String(c.explanation||c.rationale||c.why||'')};
+      explanation:String(c.explanation||c.rationale||c.why||''),
+      lure:c.lure===true};
   }).filter(c=>c.text);
   if(choices.length<2)return null;
   let key=raw.correctAnswer||raw.correct_answer||raw.answer||raw.correct||null;
@@ -9177,6 +9227,7 @@ function normalizeQ(raw,meta){
   }
   if(keys.length)choices.forEach(c=>c.isCorrect=keys.includes(c.label));
   if(!choices.some(c=>c.isCorrect))return null;
+  lureTidy(choices);
   const fp=fingerprint(stem,choices);
   const id='q'+fp;
   const q={
@@ -9966,6 +10017,15 @@ function whyHTML(c){
   }
   return `<div class="ebody">${mdFmt(t)}</div>`;
 }
+/* The lure (ARCHIVIST §6B): the wrong option built to pull in a reader who
+   knows most of the topic. One per item, two at most, never the key. It is
+   answer-side, so every surface shows it only where the key is shown. */
+function lureTidy(chs){let n=0;
+  (chs||[]).forEach(c=>{if(c.lure===true&&!c.isCorrect&&++n<=2)c.lure=true;else delete c.lure})}
+const isLure=c=>!!(c&&c.lure&&!c.isCorrect);
+const tookLure=(q,it)=>!!(it&&it.chosen&&!it.correct&&isLure((q.choices||[]).find(c=>c.label===it.chosen)));
+const LURE_SAY='The lure: the wrong option built to pull in someone who knows most of this';
+function lureTag(){return `<span class="pl-lure" title="${LURE_SAY}"><svg class="ic" aria-hidden="true"><use href="#i-lure"/></svg>Lure</span>`}
 function renderChoices(anim){
   const q=curQ(),it=curIt(),tutor=S.config.mode==='tutor',done=tutor&&it.submitted;
   const order=it.order&&it.order.length?it.order:q.choices.map(c=>c.label);
@@ -9989,9 +10049,11 @@ function renderChoices(anim){
     if(it.struck.includes(lab))cls+=' struck';
     if(!done&&it.chosen===lab)cls+=' sel';
     if(done)cls+=c.isCorrect?' ok':(it.chosen===lab?' no':' dim');
+    if(done&&isLure(c))cls+=' lure';
     const hist=done?personalPick(q.id,lab):'';
     let tag='';
     if(done&&it.chosen===lab)tag=`<span class="sp-tag">your answer</span>`;
+    if(done&&isLure(c))tag+=lureTag();
     let why='';
     if(done&&inline){
       if(c.explanation)why=`<div class="sp-why">${whyHTML(c)}</div>`;
@@ -10257,7 +10319,7 @@ function renderExpl(){
   let h=`<section class="sp-expl ${nf?'nf':'of'}">
     <div class="sp-verdict ${it.correct?'ok':'no'}">
       <span class="sp-vshape"><svg class="ic"><use href="#i-${it.correct?'check':'close'}"/></svg></span>
-      <div class="sp-vt">${it.correct?'Correct':it.chosen?'Not this time':'Not answered'}</div>
+      <div class="sp-vt">${it.correct?'Correct':it.chosen?(tookLure(q,it)?'Took the lure':'Not this time'):'Not answered'}</div>
       <div class="sp-vs">The answer is <b>${esc(keyTxt)}</b>${keyText?' — '+aFmt(keyText):''}</div>
       <div class="sp-vmeta"><span><b>${fmtT((it.ansMs!=null?it.ansMs:it.timeMs)/1000)}</b> answer time</span>${avg?`<span>your average <b>${fmtT(avg/1000)}</b></span>`:''}<span>${prev}</span>${it.conf&&CONF_SAY[it.conf]?`<span class="sp-vconf"><svg class="ic"><use href="#i-${CONF_IC[it.conf]}"/></svg>${CONF_SAY[it.conf]}</span>`:''}</div>
     </div>`;
@@ -10275,7 +10337,7 @@ function renderExpl(){
     const rows=order.map((lab,i)=>{const c=q.choices.find(x=>x.label===lab);return (c&&c.explanation)?{i,lab,c}:null}).filter(Boolean);
     if(rows.length)h+=esec('choices','Choice by choice',rows.length+' options',
       rows.map(r=>`<div class="echoice ${r.c.isCorrect?'c':(it.chosen===r.lab?'w':'')}">
-        <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${aFmt(r.c.text)}</span>
+        <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${aFmt(r.c.text)}${isLure(r.c)?lureTag():''}</span>
         <div class="ebody">${nf?whyHTML(r.c):mdFmt(r.c.explanation)}</div></div>`).join(''));
   }
   if(nf){if(q.explanation)h+=nfTeach(q.explanation)}
@@ -10407,6 +10469,7 @@ function qToMarkdown(q,it,o){
     const c=(q.choices||[]).find(x=>x.label===lab);if(!c)return;
     const marks=[];
     if(!ask&&reveal&&c.isCorrect)marks.push('correct');
+    if(!ask&&reveal&&isLure(c))marks.push('lure');
     if(!ask&&it&&it.chosen===lab)marks.push('my answer');
     if(!ask&&it&&(it.struck||[]).includes(lab))marks.push('crossed out');
     push('- **'+(LETTERS[i]||lab)+'.** '+T(c.text)+(marks.length?'  `['+marks.join(' · ')+']`':''));
@@ -10439,7 +10502,7 @@ function qToMarkdown(q,it,o){
      answered yet must not claim an answer you have not given. ---- */
   if(done&&o.mine){
     push('','### My answer','');
-    push('- Chose: '+(it.chosen?'**'+disp(it.chosen)+'**':'_omitted_')+' — '+(it.correct?'correct':'incorrect'));
+    push('- Chose: '+(it.chosen?'**'+disp(it.chosen)+'**':'_omitted_')+' — '+(it.correct?'correct':tookLure(q,it)?'incorrect, took the lure':'incorrect'));
     const att=st.attempts||[],mine=att[att.length-1];
     if((it.struck||[]).length)push('- Crossed out: '+it.struck.map(l=>disp(l)).join(', '));
     if(it.conf)push('- Confidence before answering: '+it.conf);
@@ -11213,6 +11276,7 @@ function showResults(s){
     const chips=[
       `<span class="chip">${esc(q.system||'—')}</span>`,
       tChip(id),
+      tookLure(q,it)?'<span class="chip amber">Took the lure</span>':'',
       sure?'<span class="chip rose">Was sure</span>':(it.conf?`<span class="chip">${esc(it.conf==='guess'?'Guessed':it.conf==='unsure'?'Unsure':it.conf)}</span>`:''),
       hist[id]==='again'?'<span class="chip amber">Missed before too</span>':hist[id]==='slipped'?'<span class="chip amber">Right last time</span>':'',
       flagged(id)?'<span class="chip amber">Flagged</span>':'',
@@ -11392,7 +11456,7 @@ function previewQuestion(id){
   <div style="white-space:pre-wrap;line-height:1.65">${qFmt(q.stem)}</div>
   ${figHTML(id,'stem',{add:true})}
   <div style="font-weight:600;margin-top:10px">${esc(q.leadIn||'')}</div>
-  <div class="choices" style="margin-top:14px">${q.choices.map(c=>`<div class="ch ${c.isCorrect?'correct':''}"><span class="k">${esc(c.label)}</span><span class="t">${aFmt(c.text)}${c.isCorrect?'<span class="tag">correct</span>':''}</span>${c.explanation?`<span class="why">${mdFmt(c.explanation)}</span>`:''}</div>`).join('')}</div>
+  <div class="choices" style="margin-top:14px">${q.choices.map(c=>`<div class="ch ${c.isCorrect?'correct':''}"><span class="k">${esc(c.label)}</span><span class="t">${aFmt(c.text)}${c.isCorrect?'<span class="tag">correct</span>':''}${isLure(c)?lureTag():''}</span>${c.explanation?`<span class="why">${mdFmt(c.explanation)}</span>`:''}</div>`).join('')}</div>
   <p class="figsub" style="margin-top:18px">Answer</p>
   <div class="ebody" style="font-size:14px"><p><b>${esc(keyB)}</b></p></div>
   <p class="figsub" style="margin-top:16px">My history</p>
@@ -11460,7 +11524,8 @@ function syncEditor(){
   if($('#eLinks'))EDIT.links=parseLinks($('#eLinks').value);
   EDIT.choices=$$('#eChoices [data-ch]').map((t,i)=>({label:LETTERS[i],text:t.value,
     isCorrect:!!($$('#eChoices input[name=corr]')[i]||{}).checked,
-    explanation:($('#eChoices [data-chx="'+i+'"]')||{value:''}).value}));
+    explanation:($('#eChoices [data-chx="'+i+'"]')||{value:''}).value,
+    lure:!!($('#eChoices [data-chl="'+i+'"]')||{}).checked}));
 }
 function drawEditor(){
   const w=EDIT;
@@ -11468,7 +11533,8 @@ function drawEditor(){
     <div class="row"><label class="pill"><input type="radio" name="corr" value="${i}" ${c.isCorrect?'checked':''} style="width:auto;margin-right:6px">Correct</label>
     <span class="chip">${LETTERS[i]}</span><button class="btn ghost sm" data-rmch="${i}" style="margin-left:auto">Remove</button></div>
     <textarea data-ch="${i}" rows="2" placeholder="Option text" style="margin-top:8px">${esc(c.text)}</textarea>
-    <textarea data-chx="${i}" rows="2" placeholder="Why this option is right / wrong">${esc(c.explanation)}</textarea></div>`).join('');
+    <textarea data-chx="${i}" rows="2" placeholder="Why this option is right / wrong">${esc(c.explanation)}</textarea>
+    <label class="pill" title="${LURE_SAY}" style="margin-top:8px"><input type="checkbox" data-chl="${i}" ${c.lure?'checked':''} style="width:auto;margin-right:6px">This is the lure</label></div>`).join('');
   modal(EDIT_ID?'Edit question':'New question',`
     <label class="fld"><span>Stem</span><textarea id="eStem" rows="5">${esc(w.stem)}</textarea></label>
     <label class="fld"><span>Lead-in</span><input type="text" id="eLead" value="${esc(w.leadIn)}"></label>
@@ -11521,6 +11587,9 @@ function drawEditor(){
     if(!o.stem.trim())return toast('The stem cannot be empty.');
     if(o.choices.some(c=>!c.text.trim()))return toast('Every option needs text.');
     if(!o.choices.some(c=>c.isCorrect))return toast('Mark which option is correct.');
+    if(o.choices.some(c=>c.lure&&c.isCorrect))return toast('The correct option cannot be the lure.');
+    if(o.choices.filter(c=>c.lure).length>2)return toast('Mark two lures at most.');
+    lureTidy(o.choices);
     o.correctAnswer=(o.choices.find(c=>c.isCorrect)||{}).label;o.type='single';
     o.classLocked=!!o.classLocked;o.updatedAt=Date.now();
     o.hasImage=figsIn(o,'stem').length>0;
@@ -12670,14 +12739,18 @@ $('#exportRerun').onclick=()=>{
   if(old.length)return rerunExport(old);
   const n=DB.questions.length;
   if(!n)return toast('There are no questions to re-run yet.');
+  /* the lure arrived with ARCHIVIST v3.1; a question with none was written before it */
+  const nolure=DB.questions.filter(q=>!(q.choices||[]).some(isLure));
   modal('Re-run every question?',`<p class="tiny">Every question is already in the current format. Re-running them anyway rebuilds each explanation and its option lines with the current prompt, so questions written by an older version of it get the shape the study screen now draws.</p>
-    <p class="tiny" style="margin-top:12px">The file holds all <b>${n}</b> question${n===1?'':'s'}. Send it through the prompt, then import the reply with <b>Update questions that already exist</b> on. Each question keeps its id, attempts and notes; stems, lead-ins and options are kept word for word.</p>`,
-    '<button class="btn ghost" data-close>Cancel</button><button class="btn pri" id="doRerunAll">Export all</button>');
+    ${nolure.length?`<p class="tiny" style="margin-top:12px"><b>${nolure.length}</b> question${nolure.length===1?' has':'s have'} no lure marked yet: the wrong option built to pull in someone who knows most of the topic. <b>Export without a lure</b> sends just ${nolure.length===1?'that one':'those'}, so a bank done in batches picks up where it stopped.</p>`:''}
+    <p class="tiny" style="margin-top:12px">Send the file through the prompt, then import the reply with <b>Update questions that already exist</b> on. Each question keeps its id, attempts and notes; stems, lead-ins and options are kept word for word.</p>`,
+    '<button class="btn ghost" data-close>Cancel</button>'+(nolure.length&&nolure.length<n?`<button class="btn" id="doRerunAll">Export all ${n}</button><button class="btn pri" id="doRerunLure">Export without a lure</button>`:`<button class="btn pri" id="doRerunAll">Export all ${n}</button>`));
   $('#doRerunAll').onclick=()=>{closeModal();rerunExport(DB.questions.slice())};
+  if($('#doRerunLure'))$('#doRerunLure').onclick=()=>{closeModal();rerunExport(nolure)};
 };
 function rerunExport(old){
   const pick=q=>({id:q.id,stem:q.stem,leadIn:q.leadIn,type:q.type,
-    choices:q.choices.map(c=>({label:c.label,text:c.text,isCorrect:!!c.isCorrect,explanation:c.explanation||null})),
+    choices:q.choices.map(c=>Object.assign({label:c.label,text:c.text,isCorrect:!!c.isCorrect},isLure(c)?{lure:true}:{},{explanation:c.explanation||null})),
     correctAnswer:q.correctAnswer,correctAnswers:q.correctAnswers,paperAnswer:q.paperAnswer,keyConflict:!!q.keyConflict,
     conflictNote:q.conflictNote||null,needsReview:!!q.needsReview,answerSource:q.answerSource,explanationSource:q.explanationSource,
     explanation:q.explanation||null,educationalObjective:q.educationalObjective||null,thingsToRemember:q.thingsToRemember||[],
@@ -12685,7 +12758,7 @@ function rerunExport(old){
     hasImage:!!q.hasImage,imageDescription:q.imageDescription||null,
     images:(q.images||[]).map(f=>({slot:f.slot,src:null,caption:f.caption||null,alt:f.alt||null})),source:q.source||null});
   download(`nidus-rerun-${stamp()}.json`,JSON.stringify({schemaVersion:1,meta:{kind:'rerun',source:'Nidus re-run',count:old.length,
-    notes:'These questions are already in the app. Rebuild each one in the current format (schemaVersion 2) and copy its "id" unchanged into the same item of the output, as its first field: the app uses it to update the question in place instead of adding a copy. Keep stem, leadIn and option text word for word.'},
+    notes:'These questions are already in the app. Rebuild each one in the current format (schemaVersion 2), mark its lure (section 6B), and copy its "id" unchanged into the same item of the output, as its first field: the app uses it to update the question in place instead of adding a copy. Keep stem, leadIn and option text word for word.'},
     questions:old.map(pick)},null,1));
   toast(old.length+' question'+(old.length===1?'':'s')+' exported for re-run.');
 }
@@ -12695,7 +12768,7 @@ $('#exportMissed').onclick=()=>{
   if(!missed.length)return toast('Nothing missed yet.');
   const md=missed.map(q=>{const s=DB.stats[q.id]||{};
     return `## ${q.topic||q.system}\n\n${q.stem}\n\n**${q.leadIn||''}**\n\n`+
-      q.choices.map(c=>`- ${c.label===q.correctAnswer?'**':''}${c.label}. ${c.text}${c.label===q.correctAnswer?'** ✓':''}${c.explanation?`\n    - ${c.explanation}`:''}`).join('\n')+
+      q.choices.map(c=>`- ${c.label===q.correctAnswer?'**':''}${c.label}. ${c.text}${c.label===q.correctAnswer?'** ✓':''}${isLure(c)?' _(lure)_':''}${c.explanation?`\n    - ${c.explanation}`:''}`).join('\n')+
       `\n\n**Explanation.** ${q.explanation||'—'}\n${q.educationalObjective?`\n**Objective.** ${q.educationalObjective}\n`:''}`+
       (s.note?`\n**My note.** ${s.note}\n`:'')+`\n---\n`}).join('\n');
   download(`nidus-missed-${stamp()}.md`,`# Missed questions — ${new Date().toLocaleDateString()}\n\n${missed.length} questions\n\n${md}`,'text/markdown');
@@ -12739,6 +12812,8 @@ function renderPrompt(){
     gaps.push('It never asks for the explanation shape the study screen now draws \u2014 short chain steps with their qualifier in parentheses, one bolded step per chain, labelled chains and labelled bullets \u2014 so explanations arrive as long run-on chains instead of the stepper, tiles and labels the explanation panel lays out.');
   if(p&&p.indexOf('TABLES')<0)
     gaps.push('It never asks for tables or reading captions \u2014 a printed lab panel comes back flattened into a sentence instead of the table this screen now draws, and a figure arrives with a bare label instead of a line telling you what to look for in it.');
+  if(p&&p.indexOf('THE LURE')<0)
+    gaps.push('It never asks for the lure — the wrong option built to pull in someone who knows most of the topic — so no option gets the Lure tag once you have answered.');
   n.style.display=gaps.length?'block':'none';
   const b=$('#promptStaleBody');
   if(b)b.innerHTML=gaps.map(g=>'<div style="margin-bottom:6px">'+g+'</div>').join('')
@@ -13440,13 +13515,13 @@ function cpqPaint(s,id,q){
       (clast&&clast.miss)?((MISS.find(x=>x[0]===clast.miss)||[])[1]||''):''
     ].filter(Boolean).join(' · ');
     parts.push(`<div class="cpq-mine ${it.correct?'is-c':'is-w'}"${I()}><span class="cpq-k">${it.chosen?esc(disp(it.chosen)):'–'}</span>
-      <div class="cpq-kt"><small>Answered there · ${it.chosen?(it.correct?'correct':'incorrect'):'omitted'}</small>${it.chosen?`<span>${optText(it.chosen)}</span>`:''}${bits?`<em>${esc(bits)}</em>`:''}</div></div>`);
+      <div class="cpq-kt"><small>Answered there · ${it.chosen?(it.correct?'correct':tookLure(q,it)?'incorrect, took the lure':'incorrect'):'omitted'}</small>${it.chosen?`<span>${optText(it.chosen)}</span>`:''}${bits?`<em>${esc(bits)}</em>`:''}</div></div>`);
   }
   if(q.keyConflict||q.needsReview)
     parts.push(`<div class="cpq-disp"${I()}><b class="cpq-disp__h">Disputed item</b>${q.paperAnswer?`<div>The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</div>`:''}${q.conflictNote?`<div style="margin-top:6px">${aFmt(q.conflictNote)}</div>`:''}</div>`);
   const cRows=ord.map((lab,j)=>{const c=(q.choices||[]).find(x=>x.label===lab);return (c&&c.explanation)?{j,lab,c}:null}).filter(Boolean);
   if(cRows.length)
-    parts.push(`<p class="cpq-lab"${I()}>Choice by choice</p><div class="cpq-ch"${I()}>${cRows.map(r=>`<div class="${r.c.isCorrect?'is-c':''}"><div class="cpq-ch__h"><span class="cpq-k">${LETTERS[r.j]||esc(r.lab)}</span><span>${aFmt(r.c.text)}</span></div><div class="ebody">${mdFmt(r.c.explanation)}</div></div>`).join('')}</div>`);
+    parts.push(`<p class="cpq-lab"${I()}>Choice by choice</p><div class="cpq-ch"${I()}>${cRows.map(r=>`<div class="${r.c.isCorrect?'is-c':''}"><div class="cpq-ch__h"><span class="cpq-k">${LETTERS[r.j]||esc(r.lab)}</span><span>${aFmt(r.c.text)}${isLure(r.c)?lureTag():''}</span></div><div class="ebody">${mdFmt(r.c.explanation)}</div></div>`).join('')}</div>`);
   parts.push(`<p class="cpq-lab"${I()}>Figures with the explanation</p><div${I()}>${figHTML(id,'expl',{add:true})}</div>`);
   if(q.explanation)parts.push(`<div class="ebody cpq-expl"${I()}>${mdFmt(q.explanation)}</div>`);
   if(q.educationalObjective)parts.push(`<div class="cpq-card is-obj"${I()}><small>Educational objective</small><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
