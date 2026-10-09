@@ -101,7 +101,30 @@ exactly**, without waiting to be asked.
   version, add the new rule to the final gate, give `renderPrompt()` a gap
   check for a saved copy that lacks it, keep the re-run export carrying
   the new field, and update the `nidus-archivist` skill to match (it is
-  the same protocol, used outside the app).
+  the same protocol, used outside the app). The skill also ships
+  `scripts/figures.py` (pages, find, crop, sheet, embed); a change to how
+  figures travel changes the script, the prompt text and `figAbsorb()`
+  together.
+- **Pictures can arrive inside the JSON** (ARCHIVIST 3.2, section 9A): the
+  extractor crops each figure from the source PDF with the skill's
+  `scripts/figures.py` and carries it in `src` as a JPEG data URI. Every
+  import goes through `importText()`, never `doImport()` alone:
+  `figAbsorb()` first sends each data URI through `MEDIA.ingest` (stored
+  once by hash, the same picture twice in a batch stored once, `src`
+  emptied), then `doImport()`, then `figAnnounce()` queues the bytes and
+  calls `V3.photoAttached` for each touched question, like a hand-picked
+  photo. A question must never keep megabytes of base64 in the data repo;
+  only a browser without IndexedDB keeps the data URI, as `figTake` does.
+- **Figure fill** (ARCHIVIST section 12): **Export missing figures** writes
+  `kind: "figures"` with each question's id, source, tags, wording and its
+  empty, non-optional slots (fid, slot, caption). The reply carries only id
+  and images (fid, slot, src). `figFillImport()` matches by id, then fid,
+  then the first empty slot of the same kind, and fills **only empty
+  slots**: a photo already attached is never replaced and nothing else in
+  the question changes. It reports filled / already had / not found / gone.
+- **The file tag carries the question's number** (`cardiovascular system v5
+  #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
+  `fileTagBase()`, which drops the ` #N`; the question and search keep it.
 - **Adding a picture** always offers three ways in: choose a file
   (`figPick`), **Paste** (`figPaste`) and **From gallery** (`fpkOpen`,
   which reuses a picture already in the bank). A phone has no Ctrl+V and no
@@ -225,6 +248,15 @@ does) and work in the scratchpad:
   `isMobile` on the context. Read the picture's `style.transform` and
   `visualViewport.scale` (it must stay 1: the page itself never zooms).
   To check a spring, log the transform on every animation frame.
+- **Test pictures that arrive in the JSON** with a real JPEG data URI (make
+  one with ImageMagick, `base64 -w0`), put the same one in two items, and
+  call `importText(json,true)`: both questions get one hash, `src` is empty,
+  `IDB.sAll('media')` grows by exactly 2 (full + thumb), and
+  `JSON.stringify(DB.questions)` holds no `data:image/`. For a fill, seed a
+  question with one filled and one empty slot plus an optional one, replace
+  `window.download` to catch the export, and import a reply that also
+  targets the filled slot, an unknown id and a null src: only the empty slot
+  fills. `setInputFiles('#fileInput', …)` drives the real file path.
 - **Seed a lure** with `lure:true` on a wrong choice (seeded questions skip
   `normalizeQ`, so a stray `lure:true` on the key is drawn as nothing,
   not as a tag). To test the import rules, call `doImport(json, true)`

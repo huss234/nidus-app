@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.52 -->
+<!-- Nidus — Personal Qbank · v6.53 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5393,6 +5393,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <button class="btn ghost" id="exportLight">Full backup, without photos</button>
         <button class="btn" id="exportQs">Export questions only</button>
         <button class="btn" id="exportRerun">Export for re-run</button>
+        <button class="btn" id="exportFigs">Export missing figures</button>
         <button class="btn" id="exportMissed">Export missed as study sheet</button>
         <button class="btn" id="restoreBtn">Restore from backup</button>
         <input type="file" id="restoreInput" accept=".json" hidden>
@@ -5517,7 +5518,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.52</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.53</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5527,7 +5528,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.52 · sharded store</span>
+        <span class="chip" id="verChip">v6.53 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5750,7 +5751,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.1
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.2
 
 Turns any exam material into the JSON question bank this app imports.
 
@@ -6002,7 +6003,7 @@ Copy enum values character for character from the lists below. An unrecognised v
   topic — free text, as specific as the item: "Acute cardiac transplant rejection", never "Heart".
   difficulty — lowercase easy | medium | hard, judged as an exam item, not as trivia. Anything else is forced to medium.
   tags — two to six lowercase keywords someone would actually search: findings, drugs, organisms, syndromes.
-  File tag — when the material arrives as a file, every item from that file also carries the file's name as one extra tag, so the user can filter a whole file's questions in the app. Build it from the file name alone: drop the extension, turn underscores and hyphens into spaces, collapse repeated spaces, and lowercase it — `cardiovascular_system_v8.txt` → `cardiovascular system v8`. Keep version markers and numbers exactly as they appear in the name. It goes first in tags and does not count toward the two to six keywords. With several files, each item takes its own file's tag. Pasted text with no file takes no file tag; never invent one.
+  File tag — when the material arrives as a file, every item from that file also carries one extra tag: the file's name, a space, #, and the item's question number in that file, so the user can find any question back in its file and filter a whole file's questions in the app. Build the name from the file name alone: drop the extension, turn underscores and hyphens into spaces, collapse repeated spaces, and lowercase it. The number is the one the file prints for the item, when the file numbers its questions once from start to end; when it prints none, or its numbering restarts partway, it is the item's position in the file, counting from 1. Question 11 of `cardiovascular_system_v8.txt` → `cardiovascular system v8 #11`. Every item from a file carries its number, always, with no exception. Keep version markers and numbers in the name exactly as they appear. It goes first in tags and does not count toward the two to six keywords. With several files, each item takes its own file's name and its own number. Pasted text with no file takes no file tag; never invent one.
   depth is recomputed by the app from the item itself; send it or omit it, it will be overwritten.
 
 8 · PROVENANCE — record what you know and nothing more
@@ -6015,12 +6016,12 @@ verified: always false. Only the person studying marks an item verified.
 
 9 · FIGURES — look hard at every picture, then say what the reader needs from it
 
-You cannot put a picture into JSON, so you do the next two things instead: you read it as carefully as you read the stem, and you leave an empty slot the app turns into an upload button. Not being able to carry the picture across is no reason to skim it — everything the reader will have is what you write about it.
+A picture can travel inside the JSON, written as text: a data URI (data:image/jpeg;base64,…), which the app turns back into the photo on import and stores like one the user attached by hand. So when you can run code and you hold the source file, you crop every figure out of it and carry it across under section 9A. When you cannot, you leave an empty slot the app turns into an upload button. Either way, read every picture as carefully as you read the stem — the caption is written from what you see, and on an empty slot it is all the reader has.
 
 If an item depends on a figure — ECG, radiograph, CT, ultrasound, slide, gross specimen, clinical photograph, graph, pedigree, tracing:
   hasImage: true
   imageDescription: precisely what is visible, in enough detail that the item stays answerable without the picture. Invent no finding the image does not show. If the source points at a figure you cannot see, say exactly that and set needsReview true.
-  images: one object per picture, with src null — a slot, not a link:
+  images: one object per picture. src is the picture itself when section 9A carried it across, and null otherwise — an empty slot:
     { "slot": "stem", "src": null, "caption": "ECG — read the rhythm strip: whether the rate is regular, and whether a P wave precedes each QRS, is what separates the answers here.", "alt": "Attach the 12-lead ECG printed with this question." }
 
 Every images entry whose src is null is read by the app as an empty slot and drawn as an outlined panel carrying your caption and alt text. One tap on that panel opens the file picker and the photo lands exactly where the slot sits — so put the slot where the picture belongs:
@@ -6040,7 +6041,20 @@ You may also propose a picture the source never had, when one would carry the po
 
 imageDescription belongs to a picture the question itself needs, and the app prints it inside the question, above the lead-in. So when hasImage is false, imageDescription is null — always, with no exception. Never write a remark there instead of a description: not "no figure is required to answer", not "the explanation carries an exhibit", not a note about what the original source printed or what the reader will find later. A picture that belongs only to the teaching is carried by an images entry with "slot": "explanation" and its own caption and alt; it needs nothing in imageDescription and nothing in the stem. Never mention a figure, an exhibit or an image inside stem, leadIn or any choices[].text unless the source itself printed those words there.
 
-Put a real value in src only if you were handed a real URL or data URI. Otherwise it is null. Never invent a link, never describe a figure the material does not contain, and never convert a figure you cannot see into a finding you assert.
+src holds only a picture you actually carried: a data URI built under section 9A from the source file itself, or a real URL or data URI you were handed. Otherwise it is null. An optional picture (one the source never printed) always has src null. Never invent a link, never put into src a picture from anywhere but the source, never describe a figure the material does not contain, and never convert a figure you cannot see into a finding you assert.
+
+9A · CARRYING FIGURES ACROSS — crop each one exactly
+
+Do this whenever you can run code and the material is a file: a PDF, or a photo or scan of a page. With pasted text, or no way to run code, skip it and leave the slots empty.
+
+  1. Find it. List the pictures on each page with their rectangles and look at the page preview with them outlined. Most papers place each figure as an image of its own, and the PDF records exactly where it sits. A scanned page is one image, so there you mark the figure's box yourself on the preview's grid.
+  2. Crop it exactly. Render just that rectangle at high resolution, so labels, arrows and letters drawn over the picture come with it, then trim the blank margin. The crop holds the figure and everything printed inside it — labels, scale bar, panel letters, the figure's own title — and nothing outside it: no question text, no option, no caption line or credit printed below it, no page number, no part of a neighbouring figure, no cut-off edge. Panels printed together as one figure are one picture; separate figures are separate images entries.
+  3. Look at every crop before you use it — all of them, side by side on one contact sheet. Redo any crop that cuts into the figure, carries a stray line of text, or is the wrong figure. A figure you cannot crop cleanly stays an empty slot with its caption and alt. A bad crop is worse than an empty slot; never ship one.
+  4. Embed it. Write each crop's file path into its images entry as "crop": "<path>", leave src null, then run the embed step: it writes each crop into src as a JPEG data URI, long side at most 1600 px, and removes "crop". Only code writes a data URI; never type, shorten or edit one by hand. Then check the file: every filled src starts with data:image/jpeg;base64, and no "crop" field is left.
+
+The picture printed with the question goes in a "stem" entry; a picture printed in the source's explanation or answer section goes in an "explanation" entry. Caption and alt are written as for any other entry, from what the crop shows.
+
+Tools: the nidus-archivist skill ships scripts/figures.py, which does all four steps (pages, crop, sheet, embed; run it with --help). Without it, do the same with PyMuPDF and Pillow. A bank carrying pictures is always written to a .json file, never pasted into the reply.
 
 10 · LENGTH AND BATCHING
 
@@ -6057,6 +6071,17 @@ A file exported from the app for re-running ("kind": "rerun" in its meta) holds 
   • Keep the item's classification, tags, source and images unless one is plainly wrong.
   • Mark the lure under section 6B whether or not the file carries one. A lure the file already marks stays unless another option plainly pulls harder.
   • Material without ids takes no id field. Never invent one.
+
+12 · FIGURE FILL — questions waiting for their pictures
+
+A file exported from the app with "kind": "figures" in its meta lists questions the app already holds whose pictures are still missing. It comes with the original source files. Each item carries its id, its source and tags, its stem, lead-in and options to find it by, and its empty images entries, each with a fid, slot, caption and alt.
+
+  • Find each item in the source files: by the file and number in its file tag ("cardiovascular system v5 #11") or its source.number, confirmed by the opening words of its stem in that file's text. A number alone is not a match when the stem disagrees; search the files for the stem instead.
+  • Carry each empty entry's picture across under section 9A: for a stem entry the picture printed with the question, for an explanation entry the one printed with its explanation. The caption says which picture is wanted.
+  • Reply with this shape and nothing else: { "schemaVersion": 2, "meta": { "kind": "figures", "source": "Nidus figures", "notes": … }, "questions": [ { "id": …, "images": [ { "fid": …, "slot": …, "src": … } ] } ] }. Every item of the file appears, in its order, with its id and every fid copied unchanged. src is the embedded picture, or null when you could not find or cleanly crop it. No stem, explanation, classification or caption: the app keeps the question exactly as it is. meta.notes names, in one line, each picture left null and why ("Q14: no figure printed in the PDF"), or is null.
+  • Never put a picture under an id or fid it does not belong to. A wrong picture is worse than an empty slot.
+
+The app fills only slots that are still empty; a photo already attached is never replaced.
 
 SCHEMA
 
@@ -6153,23 +6178,25 @@ FINAL GATE — run this against your draft before sending
   7. Nothing invented — no source, year, citation, figure finding or option absent from the material.
   8. The number of objects emitted equals the number of items you counted in Pass 0, in the same order, each with its own source.number.
   9. keyConflict, needsReview and paperAnswer appear only where they are genuinely true; they lower the item's confidence badge, so they are not decoration.
-  10. Every images entry has a slot of "stem" or "explanation" and a src of null unless you were handed a real link, and every one of them carries a caption written from this question — what the picture is, and the feature the item turns on inside it. A bare label like "ECG" or "CT scan" fails this line. Any item with hasImage true carries at least one stem slot. No required figure is marked optional. imageDescription is null on every item whose hasImage is false, and nowhere does it — or the stem, lead-in or an option — carry a remark about whether a figure was needed or where one will appear.
+  10. Every images entry has a slot of "stem" or "explanation" and a src of null unless it holds a picture carried under section 9A or a real link you were handed, and every one of them carries a caption written from this question — what the picture is, and the feature the item turns on inside it. A bare label like "ECG" or "CT scan" fails this line. Any item with hasImage true carries at least one stem slot. No required figure is marked optional. imageDescription is null on every item whose hasImage is false, and nowhere does it — or the stem, lead-in or an option — carry a remark about whether a figure was needed or where one will appear.
   11. The question side is clean: stem and leadIn carry no bold, italic, code, bullet or heading — the one exception being a pipe table inside a stem, transcribed under section 4A. imageDescription and every machine field are plain too. All markdown in the item is on the answer side.
   12. On the answer side, block structure appears only in explanation; choices[].text, choices[].explanation and conflictNote carry inline marks alone. No option's text gained, lost or reordered a word to accommodate a mark, and no option is emphasised in a way the others are not — emphasis that falls only on the key is the key, given away.
   13. Any heading is a bold line alone and earns its place; lists use `*`, with `1.` only for a real sequence of three or more steps; nothing deeper than the second level uses anything but `*`; indents are four spaces; no `#`, HTML or code fence anywhere.
   14. Every printed table survived as a table, complete — every row and column the source printed, none trimmed for brevity. Each one has a header row, a dash rule, equal cell counts on every row, verbatim contents, and sits where the source printed it — and no table was invented from prose that was never tabular, except a small comparison grid built under section 6A.
   15. The shaping pass cost nothing: everything section 6 kept is still present after section 6A.
   16. No item carries educationalObjective, thingsToRemember or references, and schemaVersion is 2.
-  17. Every item that came from a file carries that file's tag first in tags, built from the file name under section 7; items from pasted text carry none.
+  17. Every item that came from a file carries that file's tag first in tags, built under section 7 from the file name and the item's question number in that file ("cardiovascular system v8 #11"), the number never missing; items from pasted text carry none.
 
   18. On a re-run, every item carries its id, unchanged, and its stem, lead-in and option text are word for word what the file held.
   19. Every item marks its lure with "lure": true: exactly one wrong option, or two when two pull with equal force, never the correct option, and no "lure" field on any other option. The lure is the option a well-prepared reader would choose, not the absurd one, and its Wrong half names that pull and the detail that defeats it, without the words lure, trap or tempting.
+  20. Every filled src is a data:image/jpeg;base64 URI written by code from a crop you looked at, showing the whole figure and nothing outside it; no "crop" field is left; no optional entry carries a picture. When you could run code and held the source file, no figure the source printed was left as an empty slot without a reason.
+  21. A figure-fill reply (section 12) carries every item of the file in its order, each with only its id and images entries of fid, slot and src, every id and fid unchanged.
 
 Return the JSON now.
 
 DELIVERY NOTE
 
-If the bank runs to more than a handful of items, or if the user asks for a file, write the JSON to a `.json` file in the outputs directory and present it rather than pasting it into the reply — a long bank pasted inline is easy to truncate and awkward to import. The file's contents still obey the rule above: the JSON alone, nothing before the first `{` or after the last `}`.
+If the bank carries pictures, runs to more than a handful of items, or if the user asks for a file, write the JSON to a `.json` file in the outputs directory and present it rather than pasting it into the reply — a long bank pasted inline is easy to truncate and awkward to import. The file's contents still obey the rule above: the JSON alone, nothing before the first `{` or after the last `}`.
 </script>
 
 <script>
@@ -6556,7 +6583,7 @@ If the bank runs to more than a handful of items, or if the user asks for a file
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.52';
+const APP_VERSION='6.53';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7204,7 +7231,8 @@ const NOTES={
      <p class="tiny" style="margin-top:12px">2 — Paste the prompt into any capable model, attach the PDF, and ask for JSON only.</p>
      <p class="tiny" style="margin-top:12px">3 — Save the reply as <span class="mono">batch-name.json</span>, or paste it straight into the box on this tab.</p>
      <p class="tiny" style="margin-top:12px">4 — Afterwards, check the <span class="chip amber">key conflict</span> filter in the bank. Those are the questions where the model disagreed with your paper's answer key, and they are yours to settle.</p>
-     <p class="tiny" style="margin-top:12px">To bring older questions up to the current format, tap <b>Export for re-run</b>, send that file through the prompt, and import the reply with <b>Update questions that already exist</b> on. When every question is already current, the same button offers to export all of them, so a newer prompt can rewrite their explanations, or just the ones with no lure marked yet. Each question keeps its id, so it is updated in place with its attempts and notes, not added again.</p>`],
+     <p class="tiny" style="margin-top:12px">To bring older questions up to the current format, tap <b>Export for re-run</b>, send that file through the prompt, and import the reply with <b>Update questions that already exist</b> on. When every question is already current, the same button offers to export all of them, so a newer prompt can rewrite their explanations, or just the ones with no lure marked yet. Each question keeps its id, so it is updated in place with its attempts and notes, not added again.</p>
+     <p class="tiny" style="margin-top:12px">Questions with pictures still missing: tap <b>Export missing figures</b>, send that file through the prompt together with the original PDFs, and import the reply. Only empty picture slots are filled; a photo you attached yourself is never replaced, and nothing else in the question changes.</p>`],
 
   prompt:['About this prompt',
     `<p class="tiny">This is the instruction sheet a model needs to turn a paper into JSON this app can read directly. It asks for verbatim transcription, an evidenced answer key, a one-line note on every wrong option, the lure (the wrong option built to pull in someone who knows most of the topic, tagged once you answer), and empty figure slots where pictures belong.</p>
@@ -9223,9 +9251,13 @@ const FACETS=[
  {key:'trust',    label:'Answer confidence',adv:true, get:q=>TRUST_LABELS[q.trust||0]},
  {key:'source',   label:'Sources',          adv:true, get:q=>(q.source&&q.source.exam)||''},
  {key:'topic',    label:'Topics',           adv:true, get:q=>q.topic||''},
- {key:'tag',      label:'Tags',             adv:true, get:q=>q.tags||[]},
+ {key:'tag',      label:'Tags',             adv:true, get:q=>[...new Set((q.tags||[]).map(fileTagBase))]},
  {key:'utag',     label:'My labels',        adv:true, get:q=>((DB.stats[q.id]||{}).utags)||[]}
 ];
+/* A file tag carries the question's number in its file (ARCHIVIST 3.2:
+   "cardiovascular system v5 #11"). The Tags filter groups by file, so the
+   number is dropped there; the question itself and search keep it. */
+function fileTagBase(t){return String(t).replace(/\s+#\d+$/,'')}
 const FACET_BY={};FACETS.forEach(f=>FACET_BY[f.key]=f);
 function facetValues(f,q){const v=f.get(q);return Array.isArray(v)?(v.length?v:['—']):[v||'—']}
 
@@ -12702,6 +12734,8 @@ function findExisting(raw,q,byFp,byNk){
 const isOldFormat=q=>(q.schema||1)<2;
 function doImport(text,update){
   const{meta,arr,sv}=parseBatch(text);
+  if(String(meta.kind||'')==='figures')return figFillImport(arr,meta);
+  const touched=[];
   let added=0,updated=0,skipped=0,bad=0,repeats=0;const badList=[];
   const byFp={},byNk={};
   DB.questions.forEach(x=>{if(x.fp)byFp[x.fp]=x;if(x.nkey)(byNk[x.nkey]=byNk[x.nkey]||[]).push(x)});
@@ -12719,22 +12753,113 @@ function doImport(text,update){
           images:figMerge(ex,q)};
         if(ex.classLocked){keep.system=ex.system;keep.subject=ex.subject;keep.topic=ex.topic;keep.task=ex.task;keep.archetype=ex.archetype;keep.depth=ex.depth;keep.difficulty=ex.difficulty}
         Object.assign(ex,q,keep,{updatedAt:Date.now()});
-        ex.trust=trustOf(ex);updated++;
+        ex.trust=trustOf(ex);updated++;touched.push(ex);
       }else skipped++;
     }
-    else{noteOccurrence(q,meta);DB.questions.push(q);added++;byFp[q.fp]=q}
+    else{noteOccurrence(q,meta);DB.questions.push(q);added++;byFp[q.fp]=q;touched.push(q)}
   });
   reindex();save();
-  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta,old:DB.questions.filter(isOldFormat).length};
+  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta,touched,old:DB.questions.filter(isOldFormat).length};
 }
-$('#importBtn').onclick=()=>{
-  let r;
-  try{r=doImport($('#importBox').value,$('#impUpdate').checked)}
-  catch(err){$('#importReport').innerHTML=`<div class="card" style="border-color:var(--rose)"><b style="color:var(--rose)">Import failed</b><div class="tiny" style="margin-top:6px">${esc(err.message)}</div><div class="tiny muted" style="margin-top:8px">Common fix: the model wrapped the JSON in prose. Keep only the part from the first { to the last }.</div></div>`;return}
+/* ---------- pictures that arrive inside the JSON (v6.53) ----------
+   ARCHIVIST 3.2 crops each figure out of the source PDF and carries it in src
+   as a data URI. Before the batch is read, every such picture goes through
+   MEDIA.ingest like a photo picked by hand: stored once under its hash, src
+   emptied, so no question carries megabytes of text into the data repository.
+   The same picture twice in one batch is stored once. A browser without
+   IndexedDB keeps the data URI in the question, as figTake does there. */
+function figUriBlob(uri){
+  const i=uri.indexOf(','),mime=uri.slice(5,i).split(';')[0]||'image/jpeg';
+  const bin=atob(uri.slice(i+1)),b=new Uint8Array(bin.length);
+  for(let k=0;k<bin.length;k++)b[k]=bin.charCodeAt(k);
+  return new Blob([b],{type:mime});
+}
+async function figAbsorb(text){
+  text=String(text||'');
+  if(text.indexOf('data:image/')<0||!IDB.v2)return{text,hashes:[],failed:0};
+  const{meta,arr,sv}=parseBatch(text);
+  const seen=new Map(),hashes=[];let failed=0;
+  for(const raw of arr){
+    for(const im of (raw&&Array.isArray(raw.images))?raw.images:[]){
+      const src=(im&&typeof im==='object'&&typeof im.src==='string')?im.src.trim():'';
+      if(!/^data:image\//i.test(src))continue;
+      try{
+        let m=seen.get(src);
+        if(!m){const b=figUriBlob(src);m=await MEDIA.ingest(new File([b],'figure',{type:b.type}));seen.set(src,m);hashes.push(m.hash)}
+        Object.assign(im,{src:null,media:m.hash,mime:m.mime,w:m.w,h:m.h});
+      }catch(e){failed++;im.src=null}
+    }
+  }
+  return{text:JSON.stringify({schemaVersion:sv,meta,questions:arr}),hashes,failed};
+}
+/* the bytes go up the way a hand-picked photo's do: queued, then committed
+   with the question's reference by V3.photoAttached, never after it */
+async function figAnnounce(hashes,qs){
+  if(!hashes.length)return;
+  const set=new Set(hashes);
+  for(const h of hashes){try{await MEDIA.enqueue(h,'background')}catch(e){}}
+  for(const q of qs||[]){
+    const filled=figList(q).filter(f=>set.has(f.media)).map(f=>({fid:f.fid,media:f.media,at:f.at,was:f.was||''}));
+    if(filled.length&&window.V3&&V3.photoAttached){try{await V3.photoAttached(q,filled)}catch(e){}}
+  }
+}
+/* A figure fill (ARCHIVIST section 12): pictures for questions the bank
+   already holds, matched by id, then by fid, then by the first empty slot of
+   the same kind. Only an empty slot is filled: a photo already there is never
+   replaced, and nothing else in the question changes. */
+function figFillImport(arr,meta){
+  const r={fill:true,filled:0,had:0,none:0,lost:0,touched:[],total:arr.length,meta};
+  arr.forEach(raw=>{
+    const rid=raw&&raw.id!=null?String(raw.id).trim():'';
+    const q=rid?(Q_BY_ID[rid]||DB.questions.find(x=>(x.pubId||pubIdOf(x.id))===rid.toUpperCase())):null;
+    const ims=(raw&&Array.isArray(raw.images))?raw.images:[];
+    if(!q){r.lost++;return}
+    let n=0;
+    ims.forEach(im=>{
+      const media=/^[0-9a-f]{12,64}$/.test(String((im&&im.media)||''))?String(im.media):'';
+      const src=(!media&&im&&typeof im.src==='string'&&/^data:image\//i.test(im.src))?im.src:'';
+      if(!media&&!src){r.none++;return}
+      if(media&&figList(q).some(f=>f.media===media)){r.had++;return}
+      const slot=figSlotOf(im.slot);
+      let t=im.fid?figFind(q,String(im.fid)):null;
+      if(!t)t=figList(q).find(f=>f.slot===slot&&!figFilled(f)&&!f.dismissed&&!f.optional)||null;
+      if(!t||figFilled(t)){r.had++;return}
+      t.was=t.media||'';t.media=media;t.src=src;t.mime=media?(im.mime||''):'';t.w=media?(im.w||0):0;t.h=media?(im.h||0):0;
+      t.dismissed=false;figStamp(t);n++;r.filled++;
+    });
+    if(n){figTouch(q);r.touched.push(q)}
+  });
+  reindex();save();
+  return r;
+}
+async function importText(text,update){
+  const a=await figAbsorb(text);
+  const r=doImport(a.text,update);
+  r.figs=a.hashes.length;r.figFailed=a.failed;
+  figAnnounce(a.hashes,r.touched);
+  return r;
+}
+function figFillReport(r){
+  return `<div class="card" style="border-color:var(--jade)">
+    <b style="color:var(--jade)">Filled ${r.filled} picture${r.filled===1?'':'s'}</b>
+    <div class="tiny muted" style="margin-top:8px">${r.had} already had a photo · ${r.none} not found in the PDFs · ${r.lost} question${r.lost===1?'':'s'} no longer in the bank · ${r.total} seen</div>
+    ${r.meta&&r.meta.notes?`<div class="tiny" style="margin-top:8px">${esc(String(r.meta.notes))}</div>`:''}
+    ${r.figFailed?`<div class="tiny" style="margin-top:8px">${r.figFailed} picture${r.figFailed===1?'':'s'} could not be read and stayed empty.</div>`:''}</div>`;
+}
+$('#importBtn').onclick=async()=>{
+  let r;const btn=$('#importBtn'),was=btn.textContent;
+  if(btn.disabled)return;
+  btn.disabled=true;if($('#importBox').value.indexOf('data:image/')>=0)btn.textContent='Storing pictures…';
+  try{r=await importText($('#importBox').value,$('#impUpdate').checked)}
+  catch(err){btn.disabled=false;btn.textContent=was;$('#importReport').innerHTML=`<div class="card" style="border-color:var(--rose)"><b style="color:var(--rose)">Import failed</b><div class="tiny" style="margin-top:6px">${esc(err.message)}</div><div class="tiny muted" style="margin-top:8px">Common fix: the model wrapped the JSON in prose. Keep only the part from the first { to the last }.</div></div>`;return}
+  btn.disabled=false;btn.textContent=was;
+  if(r.fill){$('#importReport').innerHTML=figFillReport(r);$('#importBox').value='';renderDash();toast(`${r.filled} picture${r.filled===1?'':'s'} filled.`);return}
   const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
   $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)">
     <b style="color:var(--jade)">Imported ${r.added} new question${r.added===1?'':'s'}</b>
     <div class="tiny muted" style="margin-top:8px">${r.updated} updated · ${r.repeats} already known (logged as a repeat sighting) · ${r.skipped} left untouched · ${r.bad} unreadable${r.bad?' (item '+r.badList.slice(0,10).join(', ')+')':''} · ${r.total} seen</div>
+    ${r.figs?`<div class="tiny" style="margin-top:8px">${r.figs} picture${r.figs===1?'':'s'} came inside the file and ${r.figs===1?'is':'are'} attached.</div>`:''}
+    ${r.figFailed?`<div class="tiny" style="margin-top:8px">${r.figFailed} picture${r.figFailed===1?'':'s'} could not be read; ${r.figFailed===1?'its slot':'their slots'} stayed empty.</div>`:''}
     ${r.old?`<div class="tiny" style="margin-top:8px">${r.old} question${r.old===1?' is':'s are'} still in the old format. <b>Export for re-run</b> below gives you the file to send back through the prompt.</div>`:''}
     ${un?`<div class="tiny" style="margin-top:8px">${un} question${un===1?' in the bank still needs':'s in the bank still need'} a system or subject. Build a session from the <b>Needs classifying</b> pool to fix them, or run <b>Reclassify the bank</b> in Settings.</div>`:'<div class="tiny muted" style="margin-top:8px">Every question in the bank now carries a system, a subject and a question type.</div>'}
     ${r.bad?'<div class="tiny" style="margin-top:8px">Unreadable items are usually missing a correct answer or have fewer than two options. Fix them in the JSON and import again — duplicates will not double up.</div>':''}</div>`;
@@ -12742,16 +12867,20 @@ $('#importBtn').onclick=()=>{
 };
 $('#clearImport').onclick=()=>{$('#importBox').value='';$('#importReport').innerHTML=''};
 $('#pickFile').onclick=()=>$('#fileInput').click();
-$('#fileInput').onchange=e=>{
-  const files=Array.from(e.target.files||[]);if(!files.length)return;
-  let done=0,tot={added:0,updated:0,bad:0};
-  files.forEach(f=>{const rd=new FileReader();
-    rd.onload=()=>{try{const r=doImport(rd.result,$('#impUpdate').checked);tot.added+=r.added;tot.updated+=r.updated;tot.bad+=r.bad}
-      catch(err){toast(f.name+': '+err.message)}
-      if(++done===files.length){const old=DB.questions.filter(isOldFormat).length;
-        $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash()}};
-    rd.readAsText(f)});
-  e.target.value='';
+/* files are read one after another: each may carry pictures to store first */
+$('#fileInput').onchange=async e=>{
+  const files=Array.from(e.target.files||[]);e.target.value='';if(!files.length)return;
+  const tot={added:0,updated:0,bad:0,figs:0,filled:0};let fill=null;
+  for(const f of files){
+    try{
+      const r=await importText(await f.text(),$('#impUpdate').checked);
+      if(r.fill){fill=r;tot.filled+=r.filled}
+      else{tot.added+=r.added;tot.updated+=r.updated;tot.bad+=r.bad;tot.figs+=r.figs}
+    }catch(err){toast(f.name+': '+err.message)}
+  }
+  if(files.length===1&&fill){$('#importReport').innerHTML=figFillReport(fill);renderDash();return}
+  const old=DB.questions.filter(isOldFormat).length;
+  $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable${tot.figs?' · '+tot.figs+' pictures attached':''}${tot.filled?' · '+tot.filled+' pictures filled':''}</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash();
 };
 function download(name,text,type){
   const b=new Blob([text],{type:type||'application/json'});const u=URL.createObjectURL(b);
@@ -12791,6 +12920,24 @@ $('#exportRerun').onclick=()=>{
     '<button class="btn ghost" data-close>Cancel</button>'+(nolure.length&&nolure.length<n?`<button class="btn" id="doRerunAll">Export all ${n}</button><button class="btn pri" id="doRerunLure">Export without a lure</button>`:`<button class="btn pri" id="doRerunAll">Export all ${n}</button>`));
   $('#doRerunAll').onclick=()=>{closeModal();rerunExport(DB.questions.slice())};
   if($('#doRerunLure'))$('#doRerunLure').onclick=()=>{closeModal();rerunExport(nolure)};
+};
+/* The questions still waiting for a picture, cut down to what finding it in
+   the source PDF takes (ARCHIVIST section 12): the id, where the question came
+   from, its wording, and each empty slot with its fid and caption. Suggested
+   pictures the source never printed (optional) are not missing. */
+$('#exportFigs').onclick=()=>{
+  const out=[];
+  DB.questions.forEach(q=>{
+    const need=figList(q).filter(f=>!figFilled(f)&&!f.dismissed&&!f.optional);
+    if(!need.length)return;
+    out.push({id:q.id,source:q.source||null,tags:q.tags||[],stem:q.stem,leadIn:q.leadIn||'',
+      choices:(q.choices||[]).map(c=>c.label+'. '+c.text),
+      images:need.map(f=>({fid:f.fid,slot:f.slot==='expl'?'explanation':'stem',caption:f.caption||'',alt:f.alt||'',src:null}))});
+  });
+  if(!out.length)return toast('Every question already has its pictures.');
+  download(`nidus-figures-${stamp()}.json`,JSON.stringify({schemaVersion:2,meta:{kind:'figures',source:'Nidus figures',count:out.length,
+    notes:'Send this file with the original PDFs through the prompt (section 12), then import the reply.'},questions:out},null,1));
+  toast(`${out.length} question${out.length===1?'':'s'} waiting for a picture. File downloaded.`);
 };
 function rerunExport(old){
   const pick=q=>({id:q.id,stem:q.stem,leadIn:q.leadIn,type:q.type,
@@ -12858,6 +13005,10 @@ function renderPrompt(){
     gaps.push('It never asks for tables or reading captions \u2014 a printed lab panel comes back flattened into a sentence instead of the table this screen now draws, and a figure arrives with a bare label instead of a line telling you what to look for in it.');
   if(p&&p.indexOf('THE LURE')<0)
     gaps.push('It never asks for the lure — the wrong option built to pull in someone who knows most of the topic — so no option gets the Lure tag once you have answered.');
+  if(p&&p.indexOf('CARRYING FIGURES ACROSS')<0)
+    gaps.push('It never carries pictures across: figures arrive as empty slots to fill by hand, instead of cropped from the PDF and attached on import. It also cannot read an Export missing figures file.');
+  if(p&&p.indexOf('v8 #11')<0)
+    gaps.push('It never numbers the file tag, so a question cannot be found back in its file by a tag such as "cardiovascular system v8 #11".');
   n.style.display=gaps.length?'block':'none';
   const b=$('#promptStaleBody');
   if(b)b.innerHTML=gaps.map(g=>'<div style="margin-bottom:6px">'+g+'</div>').join('')
