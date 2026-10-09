@@ -5751,7 +5751,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <!-- The extractor prompt lives here as plain text so nothing needs escaping. -->
 <script type="text/x-prompt" id="defaultPrompt">
-NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.3
+NIDUS INGEST PROTOCOL — "ARCHIVIST" v3.4
 
 Turns any exam material into the JSON question bank this app imports.
 
@@ -6054,7 +6054,7 @@ Do this whenever you can run code and the material is a file: a PDF, or a photo 
 
 The picture printed with the question goes in a "stem" entry; a picture printed in the source's explanation or answer section goes in an "explanation" entry. Caption and alt are written as for any other entry, from what the crop shows.
 
-Tools: the nidus-archivist skill ships scripts/figures.py, which does all four steps (pages, crop, sheet, embed; run it with --help). Without it, do the same with PyMuPDF and Pillow. A bank carrying pictures is always written to a .json file, never pasted into the reply.
+Tools: the nidus-archivist skill ships scripts/figures.py, which does all four steps (overview, pages, crop, sheet, embed; run it with --help). It reads PDFs with whatever is already installed — PyMuPDF, pypdfium2 or poppler's pdftoppm — plus Pillow, so never spend time installing a package: where pip is blocked, the script still works. For a long PDF of screenshots, start with overview, which shows every page small and numbered, twelve to a sheet, so the pages that hold figures are found at a glance instead of page by page. Without the script, do the same with whichever of those tools is there. A bank carrying pictures is always written to a .json file, never pasted into the reply.
 
 10 · LENGTH AND BATCHING
 
