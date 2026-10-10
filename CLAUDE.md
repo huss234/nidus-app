@@ -153,10 +153,17 @@ a recipe.
   captions (and an empty slot's caption) until the explanation is on
   screen (tutor and submitted; never during an exam). Opened from a held
   block, the viewer shows only the stem pictures, with no caption and a
-  neutral alt. On reveal the caption unfolds in. In a session the alt
-  note ("Attach the ECG from question 7") is dropped from every plate; the
-  bank and the editor still show it. Any new surface that draws the stem
+  neutral alt. On reveal the caption unfolds in. Any new surface that draws the stem
   before the answer holds the caption the same way.
+- **No "attach" orders on figures.** The user asked for the alt note
+  ("Attach the 12-lead ECG printed with this question") to go everywhere
+  (v6.67, ARCHIVIST 3.5): the prompt no longer asks for `alt`, the
+  figure-fill and re-run exports no longer send it, and `figCapPair()`
+  never returns a note. Old banks still store `alt`; `figAltText()` lets
+  it stand in for a missing caption only when it is a description (the
+  auto slot holds `imageDescription` there), never an order to attach.
+  Captions and `imageDescription` are untouched. Never reintroduce a
+  reader-facing instruction to attach, add or find a picture.
 - **The file tag carries the question's number** (`cardiovascular system v5
   #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
   `fileTagBase()`, which drops the ` #N`; the question and search keep it.
