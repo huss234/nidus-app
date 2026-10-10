@@ -397,6 +397,13 @@ does) and work in the scratchpad:
   `touch-action: pan-y` too (Settings drag-back, v6.61). Check that a short
   drag springs home, a long one or a flick closes, a vertical swipe still
   scrolls, and a slider inside still drags.
+- **Film motion at the tablet's size with the CPU throttled.** Per-frame
+  `m41` logs at 800×1220 (dpr 1.5) under `Emulation.setCPUThrottlingRate`
+  4 show gaps of 33–67ms that the phone size never shows: the Settings
+  slide (a spring stepped per frame) looked perfect on the phone and
+  glitchy on the tablet (fixed in v6.66 by moving it to the compositor).
+  Once a motion runs on the compositor, the rAF log only shows main-thread
+  samples; judge it by whether the values follow the curve, not by gaps.
 - **Measure a corner morph, don't eyeball it.** Log the element's computed
   `borderTopLeftRadius` (and `scale`) on every animation frame through
   `pointerdown`, a hold and `pointerup`. Every frame should step; a value

@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.8** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.9** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -532,10 +532,19 @@ version of each):
   page comes in from the right edge as a whole page with its leading
   corners rounded while it travels and a soft shadow on its edge; the list
   underneath drifts left about a fifth of the width and dims under a scrim.
-  Back reverses it, a third quicker. One spring stepped per frame drives
-  every layer, so a tap, Back or a finger dragging the page to the right
-  (1:1, close past ~40% or on a flick, else spring home) takes it over
-  mid-flight. **Never a container transform or a grow-from-the-row reveal
+  Back reverses it, a third quicker. One spring drives every layer, so a
+  tap, Back or a finger dragging the page to the right (1:1, close past
+  ~40% or on a flick, else spring home) takes it over mid-flight.
+  **A page-sized move runs on the compositor (Rule, 2.9):** work the spring
+  out in advance into keyframes (one per 1/120 s, `easing:'linear'`) and
+  play them with WAAPI on `transform` and `opacity`, each property group in
+  its own animation (a corner radius in the same animation would pull the
+  slide back onto the main thread). To take it over, read the position and
+  velocity back from the samples at `currentTime`. A spring stepped per
+  frame in JavaScript waits on the main thread every frame: on the tablet
+  (800px wide, slower CPU, the new page painting as it moves) it dropped
+  frames all the way through while the phone looked perfect (Settings,
+  v6.61–6.65). A finger's own drag still writes the transform directly. **Never a container transform or a grow-from-the-row reveal
   for a page:** the user found it dated ("from 2017") and its return
   covered the row (Settings, v6.58–6.60). Existing grow-from-card openings
   (`plumeOpen` on Home) stay until the user asks about them.
@@ -1098,6 +1107,7 @@ A surface that is not listed here is legacy.
 | Figure captions (`figCardHTML`): the plate in the player, explanation, bank and editor, and the name / line in the viewer | 2.6 | 6.62 | The figure blocks' edit buttons, empty-slot plates and "Add a figure" row are still legacy |
 | Figure viewer, around the picture: top bar, position pill, filmstrip, info card (kind, size, title, caption), Copy image ID, Save, the gallery's "Used in" list | 2.7 | 6.63 | Rebuilt from scratch on the user's request. The stage, the open/close morph, swipe and zoom (1.5, 1.10) are kept; the dots were replaced by the filmstrip and the ID chip by the Copy button |
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
+| Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 
 ## 16. Language changelog
 
@@ -1193,6 +1203,11 @@ A surface that is not listed here is legacy.
   Chrome over a picture has no fill; details live in a sheet that rests as
   one row and lifts; zooming clears every piece of chrome but the bar. From
   the user: the 2.7 card took the bottom third, so zooming had no room.
+
+- **Plume 2.9** (2026-10-10): a page-sized move plays on the compositor as
+  precomputed spring keyframes, never a spring stepped per frame. From the
+  user: the Settings slide was glitchy on the tablet in portrait and fine
+  on the phone.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
