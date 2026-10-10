@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.64 -->
+<!-- Nidus — Personal Qbank · v6.65 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3269,7 +3269,7 @@ body.hasmig{padding-bottom:64px}
   display:none;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
   margin:16px -20px 0;padding:4px 20px;overscroll-behavior-x:contain;
 }
-.lbx.is-many .lbx__strip{display:flex;justify-content:safe center}
+.lbx.is-many .lbx__strip{display:flex}
 .lbx__strip::-webkit-scrollbar{display:none}
 .lbx__th{
   flex:0 0 44px;width:44px;height:44px;margin:4px 0;padding:0;border:0;overflow:hidden;
@@ -5924,7 +5924,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.64</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.65</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5980,7 +5980,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.64 · sharded store</span>
+        <span class="chip" id="verChip">v6.65 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7059,7 +7059,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.64';
+const APP_VERSION='6.65';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9128,6 +9128,9 @@ function lbxSheet(open,now){
   if(now){sh.getBoundingClientRect();sh.classList.remove('is-hold')}
   const g=$('#lbxGrab');g.setAttribute('aria-expanded',open?'true':'false');g.setAttribute('aria-label',open?'Hide details':'Show details');
   body.inert=!open;
+  /* the strip has no width until the viewer is on screen, so it is centred
+     again whenever the sheet is laid out */
+  lbxStripCentre(false);
 }
 /* how much of the screen's height the chrome keeps at rest: the larger of
    the bar and the sheet's head, kept on both sides so the picture stays
@@ -9150,10 +9153,19 @@ function lbxStrip(list,i){
   const cur=st.children[i];
   [...st.children].forEach((b,k)=>b.setAttribute('aria-current',k===i?'true':'false'));
   if(cur){
-    /* keep the lit one centred, measured from where it will be once it has grown */
-    const left=cur.offsetLeft+26-st.clientWidth/2;
-    st.scrollTo({left,behavior:(Motion.reduced||$('#lbx').hidden)?'auto':'smooth'});
+    /* Keep the lit one centred. The strip is padded by half its width at both
+       ends, so the first and the last can reach the middle too (they could
+       not: the row ran out before they got there). The target is where the
+       thumbnail will be once the sizes have settled, not where it is mid
+       transition: every thumbnail is 44px with 6px gaps and the lit one 52,
+       so the lit one's centre sits exactly i × 50px from the first one's. */
+    lbxStripCentre(!Motion.reduced&&!$('#lbx').hidden);
   }
+}
+function lbxStripCentre(smooth){
+  const st=$('#lbxStrip');if(!st||!FIG.view||!st.clientWidth)return;
+  st.style.paddingInline=Math.max(0,st.clientWidth/2-26)+'px';
+  st.scrollTo({left:FIG.view.i*50,behavior:smooth?'smooth':'auto'});
 }
 /* The rail is only for the gallery: inside a question you are already
    standing in the item, so a button offering to take you there is noise. */

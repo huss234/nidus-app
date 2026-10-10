@@ -1067,6 +1067,14 @@ The quality bar. A surface is done when it *feels* like §2, and:
   The sheet is solid (`--lb-card`, `on` mixed into the scrim) and spans
   the width up to 640px, on the bottom edge on every screen: a gap under
   it let the body peek out at rest.
+- **Rule: a strip that keeps its current item centred can centre every
+  item.** Pad both ends by half the strip's width (`lbxStripCentre()`), so
+  the first and last items can reach the middle, and scroll to where the
+  item will be once sizes settle (computed from the fixed sizes, here
+  i × 50px), never to where it is mid-transition. Measure the result: the
+  item's centre minus the strip's centre is 0 for every tap and swipe.
+  (The viewer's filmstrip left end items up to 274px off centre and mid
+  items 8–24px off; the user found it useless. Fixed in v6.65.)
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
