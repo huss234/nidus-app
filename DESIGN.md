@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.0** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.1** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -325,6 +325,28 @@ All motion is **spring physics**, written in CSS as `linear()` easings
 generated from stiffness and damping (mass 1), with the duration set to
 the spring's settling time.
 
+### Butter: nothing changes plainly (Rule)
+
+The whole app should feel like butter. **No visible change happens in a
+single frame.** Anything that appears, leaves, moves, resizes, changes
+colour, changes value or swaps its content reaches its new state through a
+transition that shows where it came from and where it went: a number
+rolls or counts to its new value, a label crossfades, a list makes room
+before an item lands, a panel opens out of its trigger, a removed item
+collapses its gap, a badge grows in, a disabled button eases into
+being enabled. If you can see the before and the after, there is motion
+between them.
+
+- This includes the small things that are easiest to forget: a counter's
+  text, a toggled icon, a chip's checked state, an error line appearing
+  under a field, a button's label changing, a re-sorted list.
+- Being smooth never means being slow. Small changes settle in 130–330ms;
+  the user should never wait for an animation to finish before acting
+  (every motion retargets mid-flight).
+- The only things that don't move: text while it is being read (motion
+  never shifts a paragraph under the eye) and anything under reduced
+  motion beyond a short crossfade (which is still a transition).
+
 ### Two kinds of spring
 
 - **Spatial springs** move things: position, scale, size, rotation. They
@@ -404,6 +426,70 @@ touch triggers may wait for rendering, data or layout.
 
 Pressing never shifts layout: `transform` only, never margin, padding or
 size.
+
+### Icons move by their own logic (Rule)
+
+**Every icon has a logic you can read from its shape, and its motion acts
+that logic out.** An icon is a picture of a thing; when its action
+happens, the thing does what it would really do. A bounce, a squash, a
+stretch, a wobble or a spin of the whole glyph is not icon motion: it is
+the same gesture stuck on every icon, it reads as childish and it says
+nothing. (That is what the flashcard app does today: one table hands out
+a whole-glyph tilt, scale or nudge by icon category, so a bin, a pin and
+a flag all just lean. Don't repeat it.)
+
+How to design one:
+
+1. **Read the glyph.** What object is it? What are its parts (a lid and a
+   body, two sheets, an arrow and a tray, a knob on a track, a hand on a
+   dial)? Which part is fixed and which moves, and around what pivot?
+2. **Say the motion in one sentence, as what the object does.** "The lid
+   lifts on its hinge and drops shut." "The front sheet slides off the
+   one behind." If the only sentence you can write is "it bounces", it
+   fails.
+3. **Move the parts, not the picture.** Draw the icon as inline SVG with
+   each moving part its own path or group, `transform-box: fill-box`, and
+   `transform-origin` at the real pivot (the hinge, the axle, the centre
+   of the arc). Strokes that appear draw along their own direction
+   (`stroke-dashoffset`); shapes that change form morph between paths
+   with matching commands.
+4. **Tie it to the meaning.** It plays when its action happens or its
+   state changes (tap, start, finish, on/off), never idly. A state icon
+   moves to its new state and stays there; an action icon plays its
+   action and comes to rest.
+5. **Keep it adult.** Small amplitude, physical springs (spatial for
+   parts that travel, effects for strokes and fills), overshoot only
+   where the real object would have it (a lid settling, a needle). Most
+   icon motions finish within 250–450ms.
+
+Examples from Nidus's own icons (directions, not specs; find the best
+version of each):
+
+| Icon | Its logic, acted out |
+|---|---|
+| Sync (arrows on a circle) | While syncing, the arrows travel along their own arc, which is what they depict; on finishing they glide to rest at their drawn position. Sync off: the slash draws across the cloud along its length, and draws back off when sync returns |
+| Import / download (arrow into a tray) | The arrow drops into the tray, the tray dips slightly under it and recovers, and a fresh arrow slides in from above |
+| Copy (two sheets) | The front sheet slides off the back one along their offset, then the pair becomes a check that draws itself |
+| Delete (bin) | The lid lifts on its hinge, tilts open, and closes with a small settle |
+| Review (clock with an arrow running back) | The arrow sweeps backwards around the dial and the hands turn back with it |
+| Bank (archive box) | The lid lifts off the box and settles back |
+| Images (frame with mountains and a sun) | The sun rises a little behind the mountains |
+| Progress (bars) | The bars grow from their baseline one after another, to their own heights |
+| Settings / tune (knobs on tracks) | Each knob slides along its own track to a new position, in opposite directions |
+| Search (magnifier) | The lens sweeps a short arc, as if scanning, pivoting at the handle's end |
+| Theme (moon ↔ sun) | The moon's shadow slides off to reveal the sun's disc and the rays extend outward one by one; the reverse eclipses it |
+| Expand / collapse (chevron) | It turns 180° about its centre, in step with the panel it opens |
+| Show / hide (eye) | The lid closes over the eye and the slash draws in |
+| Play ↔ pause | The two bars morph into the triangle and back (matched paths) |
+| Check | The stroke draws in its writing direction, short leg first |
+| Focus mode (four corners) | Each corner turns 180° about its own centre (the pattern already built for `#pFull`, §14) |
+
+- **A noun with no action** (a static label icon) does not invent motion;
+  its motion is its state change: outline → filled on selection.
+- **One icon, one motion, everywhere.** Each designed icon motion is
+  recorded in §14 and reused; the same icon never moves two ways.
+- Interruptible like everything else. Under reduced motion, an icon keeps
+  its fill and stroke changes and drops the travel.
 
 ### Choreography
 
@@ -580,7 +666,9 @@ goals and rules above win). All follow the touch contract (§6).
 
 **Icons:** Material Symbols Rounded geometry on a 24px grid, outline at
 rest and filled when selected or active, with the change animated (the
-font's `FILL` axis, or matching SVG paths). Stroke icons drawn as inline
+font's `FILL` axis, or matching SVG paths). An icon that moves is drawn as
+inline SVG with its moving parts separate, and moves by its own logic
+(§6). Stroke icons drawn as inline
 SVG keep one consistent weight. No emoji as icons. Icon morphs (copy →
 check, play → pause) use paths with matching commands, or a rotate + scale
 crossfade.
@@ -668,6 +756,11 @@ Errors say what happened and what is safe ("Nothing was lost").
 - Shadows used to separate ordinary cards.
 - Bounces on colour, opacity or radius (effects never overshoot).
 - Idle or looping decoration.
+- Any visible change in a single frame: a value, label, icon, colour or
+  item that just swaps.
+- An icon that bounces, squashes, stretches, wobbles or spins as a whole
+  instead of moving its parts by their logic; one generic motion shared
+  by many icons.
 - Feedback that waits for `click` while the finger is already down.
 - A floating button covering content at rest.
 - A redesign of a surface the user did not ask for.
@@ -693,6 +786,10 @@ The quality bar. A surface is done when it *feels* like §2, and:
       raw values.
 - [ ] Every interactive element follows the touch contract (press, release
       spring, hover, focus, cancel, disabled).
+- [ ] **Butter:** nothing on the surface changes in a single frame
+      (filmed); every value, label, icon and item transitions.
+- [ ] **Icons:** every icon that moves passes the one-sentence test (§6)
+      and moves its parts, not the whole glyph.
 - [ ] **Ensemble:** each meaningful touch is answered by its layers together,
       in one direction.
 - [ ] **First frame:** on a bank of ≥ 2,000 questions, the indicator or
@@ -911,6 +1008,12 @@ A surface that is not listed here is legacy.
   inventive implementation measured against a quality bar. The reference
   moment (§2) records what made the user's favourite control fluid, and
   its lag.
+
+- **Plume 2.1** (2026-10-10): the user's two clarifications. Butter:
+  no visible change happens in a single frame; everything that changes
+  transitions. Icons move by their own logic: read the object the glyph
+  depicts and move its parts as that object would, never a generic bounce,
+  stretch or spin of the whole glyph; examples for Nidus's icons.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
