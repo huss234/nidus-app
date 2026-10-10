@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.6** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.7** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -921,7 +921,7 @@ The quality bar. A surface is done when it *feels* like §2, and:
   a check that draws itself (`grid-template-columns: 0fr → 1fr`,
   `stroke-dashoffset`).
 - **A full-screen picture viewer** (`Plume 1.10 · figure viewer`, `#lbx`):
-  bar with Close, title (slot and "2 of 5"), zoom and ⋮ (Replace, Remove;
+  bar with Close, the position pill (2.7), zoom and ⋮ (Replace, Remove;
   Remove asks twice through `figArm`, the row turning `error`, and the menu
   stays open between taps). The picture opens out of the thumbnail tapped
   (`lbxSource()` finds it, `lbxAt()` gives the transform plus a
@@ -939,9 +939,8 @@ The quality bar. A surface is done when it *feels* like §2, and:
   down to close with the scrim and chrome thinning as it goes; a third of
   the way (a fifth, down) or a flick commits. A step's new picture slides
   in only once it has loaded (its animation waits paused), and the
-  neighbours' full pictures are fetched ahead. Several pictures show as
-  dots with one travelling pill (12 at most), and, for a mouse, arrows
-  beside the picture. Focus goes to the dialog itself on open (focusing
+  neighbours' full pictures are fetched ahead. Several pictures show as a
+  filmstrip (2.7, below), and, for a mouse, arrows beside the picture. Focus goes to the dialog itself on open (focusing
   Close showed its focus layer at rest) and back to where it was on close.
 - **Settings** (`Plume 2.2 · settings`, rebuilt from scratch): a hero
   whose focal element is a live **specimen** (`sxSpecHTML`, a question drawn
@@ -1045,6 +1044,24 @@ The quality bar. A surface is done when it *feels* like §2, and:
   `--p-spatial`, padding on an inner `.figcap__pad` so nothing jumps) with
   its text fading in after (`.cap-in`).
 
+- **Figure viewer, info card** (`Plume 2.7 · figure viewer, the info
+  card`, v6.63): under the stage, a filmstrip (`lbxStrip`, every picture in
+  the set; the one on the stage grows to 52px with `--p-r-l` corners and a
+  ring, and is kept centred; a tap jumps there through `figStep(0, i)`)
+  and one solid card (`--lb-card`, `on` mixed into the scrim, never
+  translucent: the page showed through). The card holds the kind of figure
+  and its size, the caption's name as the title (`figCapSplit`), the
+  reading line, and the actions. **The viewer's hero is Copy image ID**: a
+  full-width 56px filled button on the fixed primary roles
+  (`--md-primary-fixed`, the same tone in both themes, since the viewer is
+  one dark room in both), ID in mono under the label, copy icon turning
+  into a check that draws in. Save sits beside it (the arrow drops into the
+  tray). The position pill sits in the middle of the top bar. In the
+  gallery, "Used in" lists the questions as a grouped list. `lbxInfo()`
+  draws it all.
+- **A held caption says so in the viewer** ("The caption shows once you
+  answer"), rather than leaving a blank card.
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1063,6 +1080,7 @@ A surface that is not listed here is legacy.
 | **Foundation: lighting roles, Google Sans Flex, card and hero radii (§9)** | 2.0 | 6.58 | Landed with Settings. Engine writes the lighting roles and retunes the M3 surface ladder (legacy screens follow the lighting model without being rebuilt); Plume 1.x surfaces re-pointed to the roles; the `.card` and logo light-theme swaps removed. Measured ΔL card − page: 0.038 light, 0.065 dark. Legacy screens keep their own layout and colour fills (Home's hero is still a container fill) |
 | Settings, whole screen (list, hero, every section, search, phone layer, desktop list-detail) and the controls in the in-session settings sheet | 2.2 | 6.58 | Rebuilt from scratch. The in-session sheet's dialog around the rows is still legacy |
 | Figure captions (`figCardHTML`): the plate in the player, explanation, bank and editor, and the name / line in the viewer | 2.6 | 6.62 | The figure blocks' edit buttons, empty-slot plates and "Add a figure" row are still legacy |
+| Figure viewer, around the picture: top bar, position pill, filmstrip, info card (kind, size, title, caption), Copy image ID, Save, the gallery's "Used in" list | 2.7 | 6.63 | Rebuilt from scratch on the user's request. The stage, the open/close morph, swipe and zoom (1.5, 1.10) are kept; the dots were replaced by the filmstrip and the ID chip by the Copy button |
 
 ## 16. Language changelog
 
@@ -1149,6 +1167,10 @@ A surface that is not listed here is legacy.
   photo's frame on a tinted strip, name first, reading line after, and a
   caption that arrives late unfolds from the photo's edge. From the user
   finding the bare grey caption line badly designed.
+
+- **Plume 2.7** (2026-10-10): the figure viewer's info card. A viewer's
+  most used action is its one full-width filled button, at the bottom in
+  thumb reach; a card over a scrim is solid, never translucent.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

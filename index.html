@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.62 -->
+<!-- Nidus — Personal Qbank · v6.63 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3089,7 +3089,10 @@ body.hasmig{padding-bottom:64px}
    neutral palette in both themes (--lb-on, from a role token, never #fff). */
 .lbx{
   --lb-on:var(--md-on-surface);
-  --lb-tone:color-mix(in oklab,var(--lb-on) 14%,transparent);
+  --lb-tone:color-mix(in oklab,var(--lb-on) 12%,transparent);
+  /* solid, so nothing of the page behind the scrim shows through the card */
+  --lb-card:color-mix(in oklab,var(--lb-on) 9%,var(--md-scrim));
+  --lb-acc-text:var(--md-primary-fixed);
   position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;
   color:var(--lb-on);
 }
@@ -3100,7 +3103,7 @@ body.hasmig{padding-bottom:64px}
   position:absolute;inset:0;z-index:-1;background:var(--md-scrim);opacity:0;
   transition:opacity var(--p-effect-slow-d) var(--p-effect-slow);
 }
-.lbx.is-open .lbx__scrim{opacity:.96}
+.lbx.is-open .lbx__scrim{opacity:.97}
 .lbx.is-drag .lbx__scrim{transition:none}
 /* the chrome fades in one beat after the picture starts to grow, and leaves
    at once (exit curve) when it goes back */
@@ -3113,13 +3116,23 @@ body.hasmig{padding-bottom:64px}
 .lbx.is-drag .lbx__top,.lbx.is-drag .lbx__foot,.lbx.is-drag .lbx__side{opacity:var(--lb-fade,1);transition:none}
 .lbx__top{
   flex:0 0 auto;display:flex;align-items:center;gap:4px;
-  padding:calc(4px + env(safe-area-inset-top)) 4px 4px;min-height:56px;
+  padding:calc(8px + env(safe-area-inset-top)) 8px 4px;min-height:60px;
 }
+/* the bar's buttons sit on a tone of their own, so they read over any
+   picture, dark or light, without a gradient behind them */
 .lbx .pl-ib{color:var(--lb-on)}
-.lbx__ttl{flex:1;min-width:0;padding:0 8px;display:flex;flex-direction:column}
-.lbx__ttl b{font:500 16px/24px var(--m3-font);letter-spacing:.15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lbx__ttl span{font:500 12px/16px var(--m3-font);letter-spacing:.4px;font-variant-numeric:tabular-nums;color:color-mix(in oklab,var(--lb-on) 70%,transparent)}
-.lbx__ttl span:empty{display:none}
+.lbx__btn::before{inset:4px;border-radius:var(--p-r-full);background:var(--lb-on);opacity:.1}
+@media (hover:hover){.lbx__btn:hover::before{opacity:.18}}
+/* where you are, as one pill in the middle of the bar */
+.lbx__pos{
+  flex:1;display:flex;justify-content:center;min-width:0;
+  font:550 14px/20px var(--m3-font);letter-spacing:.1px;font-variant-numeric:tabular-nums;
+}
+.lbx__pos b{
+  padding:6px 14px;border-radius:var(--p-r-full);background:var(--lb-tone);
+  font-weight:600;
+}
+.lbx__pos b i{font-style:normal;color:color-mix(in oklab,var(--lb-on) 62%,transparent);font-weight:450}
 /* the zoom icon is the focus-mode glyph: four corners that turn inward when
    zoomed and back out at fit (Plume 1.4 icon morph) */
 .lbx__zic path{transform-box:fill-box;transform-origin:center;transition:transform var(--p-spatial-d) var(--p-spatial)}
@@ -3145,46 +3158,146 @@ body.hasmig{padding-bottom:64px}
 }
 .lbx.zoom .lbx__side{opacity:0;pointer-events:none}
 
-.lbx__foot{flex:0 0 auto;padding:12px 20px calc(16px + env(safe-area-inset-bottom));text-align:center}
-/* where you are among several pictures: one pill that travels between dots */
-.lbx__dots{position:relative;display:none;width:max-content;gap:8px;height:8px;margin:0 auto 12px}
-.lbx.is-many .lbx__dots{display:flex}
-.lbx__dots i{width:6px;height:6px;margin:1px;border-radius:var(--p-r-full);background:color-mix(in oklab,var(--lb-on) 34%,transparent)}
-.lbx__dots b{
-  position:absolute;left:0;top:0;width:16px;height:8px;border-radius:var(--p-r-full);background:var(--lb-on);
-  transition:transform var(--p-spatial-d) var(--p-spatial);
+/* Plume 2.7 · figure viewer, the info card. Everything about the picture
+   on the stage sits in one card under it: what kind of figure, its size,
+   its name as the title, the caption's reading line, and the actions, with
+   Copy image ID as the one big button at the bottom, under the thumb. The
+   card is a tone of the viewer's light (--lb-on), so it reads as part of
+   the same dark room in both themes. */
+.lbx__foot{
+  flex:0 0 auto;width:100%;max-width:680px;margin:0 auto;box-sizing:border-box;
+  padding:8px 12px calc(12px + env(safe-area-inset-bottom));
 }
-.lbf{
-  color:color-mix(in oklab,var(--lb-on) 86%,transparent);
-  font:400 14px/20px var(--m3-font);letter-spacing:.25px;
-  max-width:60ch;margin:0 auto;max-height:28vh;overflow:auto;overscroll-behavior:contain;
+/* the filmstrip: every picture in the set; the one on the stage is larger,
+   squarer and fully lit, and the strip keeps it centred */
+.lbx__strip{
+  display:none;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+  padding:6px 4px 12px;margin:0 -12px;padding-inline:16px;
+  scroll-padding-inline:50%;overscroll-behavior-x:contain;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);
 }
-.lbf:empty{display:none}
-.lbf .figcap__name{display:block;font-weight:600;color:var(--lb-on);margin-bottom:2px}
-.lbf .figcap__line{display:block}
-.lbf .fignote{
-  display:block;margin-top:4px;font-size:13px;line-height:18px;
-  color:color-mix(in oklab,var(--lb-on) 62%,transparent);
+.lbx.is-many .lbx__strip{display:flex;justify-content:safe center}
+.lbx__strip::-webkit-scrollbar{display:none}
+.lbx__th{
+  flex:0 0 44px;width:44px;height:44px;margin:4px 0;padding:0;border:0;overflow:hidden;
+  border-radius:var(--p-r-m);background:var(--lb-tone);opacity:.5;position:relative;
+  transition:flex-basis var(--p-spatial-d) var(--p-spatial),width var(--p-spatial-d) var(--p-spatial),
+             height var(--p-spatial-d) var(--p-spatial),margin var(--p-spatial-d) var(--p-spatial),
+             border-radius var(--p-effect-d) var(--p-effect),opacity var(--p-effect-d) var(--p-effect),
+             transform var(--p-spatial-fast-d) var(--p-spatial-fast);
 }
+.lbx__th img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.lbx__th[aria-current="true"]{
+  flex-basis:52px;width:52px;height:52px;margin:0;opacity:1;border-radius:var(--p-r-l);
+  box-shadow:0 0 0 2px var(--lb-on);
+}
+@media (hover:hover){.lbx__th:hover{opacity:.82}}
+.lbx__th.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+.lbx__th:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+
+.lbx__card{
+  border-radius:var(--p-r-xl);background:var(--lb-card);
+  padding:16px 16px 12px;color:var(--lb-on);
+}
+.lbx__kick{display:flex;align-items:center;gap:8px;min-height:24px;margin:0 4px}
+.lbx__slot{
+  display:inline-flex;align-items:center;gap:6px;
+  font:600 12px/16px var(--m3-font);letter-spacing:.5px;
+  color:var(--lb-acc-text);
+}
+.lbx__slot .ic{width:16px;height:16px}
+.lbx__dim{
+  margin-left:auto;font:500 12px/16px var(--m3-font);letter-spacing:.3px;font-variant-numeric:tabular-nums;
+  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
+}
+.lbx__dim:empty{display:none}
+.lbx__title{
+  margin:6px 4px 0;font:500 22px/28px var(--m3-font);letter-spacing:-.005em;
+  font-variation-settings:"wdth" 104;color:var(--lb-on);text-wrap:balance;
+}
+.lbx__title:empty{display:none}
+.lbx__cap{
+  margin:6px 4px 0;max-height:22vh;overflow:auto;overscroll-behavior:contain;
+  font:400 15px/22px var(--m3-font);letter-spacing:.15px;text-wrap:pretty;
+  color:color-mix(in oklab,var(--lb-on) 80%,transparent);
+}
+.lbx__cap:empty{display:none}
+.lbx__cap .figcap__line{display:block}
+.lbx__cap .fignote{
+  display:flex;gap:6px;margin-top:10px;font-size:13px;line-height:18px;
+  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
+}
+/* a caption held back until the answer says so, quietly, in its place */
+.lbx__held{display:flex;align-items:center;gap:8px;color:color-mix(in oklab,var(--lb-on) 62%,transparent)}
+.lbx__held .ic{width:18px;height:18px;flex:0 0 18px}
+
+.lbx__acts{display:flex;gap:8px;align-items:center;margin-top:16px}
+.lbx__acts:empty,.lbx__acts.is-none{display:none}
+/* the image ID is what this screen is used for most, so it is the one
+   filled button: full width, 56px, at the bottom edge where the thumb is.
+   It uses the fixed primary roles, which keep one tone in both themes, as
+   this card sits in the same dark room in both. */
+.lbx__copy{
+  flex:1;min-width:0;height:56px;padding:0 20px 0 16px;border:0;
+  display:flex;align-items:center;gap:12px;text-align:left;
+  border-radius:28px;background:var(--md-primary-fixed);color:var(--md-on-primary-fixed);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect);
+}
+.lbx__copy[hidden]{display:none}
+.lbx__copy.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-l);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.lbx__copy:focus-visible{outline:3px solid var(--lb-on);outline-offset:2px}
+@media (hover:hover){.lbx__copy:hover{background:color-mix(in oklab,var(--md-on-primary-fixed) 8%,var(--md-primary-fixed))}}
+.lbx__cic{position:relative;width:24px;height:24px;flex:0 0 24px}
+.lbx__cic .ic{position:absolute;inset:0;width:24px;height:24px;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__c1{opacity:0;transform:scale(.4) rotate(-45deg)}
+.lbx__copy.is-done .lbx__c0{opacity:0;transform:scale(.4) rotate(45deg)}
+.lbx__copy.is-done .lbx__c1{opacity:1;transform:none}
+/* the check draws itself */
+.lbx__c1{stroke-dasharray:24;stroke-dashoffset:24}
+.lbx__copy.is-done .lbx__c1{stroke-dashoffset:0;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),stroke-dashoffset 260ms var(--p-effect) 60ms}
+.lbx__cl{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.lbx__ct{position:relative;font:600 15px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap}
+.lbx__ct .t1{position:absolute;left:0;top:0;opacity:0;transform:translateY(6px)}
+.lbx__ct span{display:inline-block;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__copy.is-done .t0{opacity:0;transform:translateY(-6px)}
+.lbx__copy.is-done .t1{opacity:1;transform:none}
+.lbx__cl code{
+  font:500 12px/16px var(--m3-mono);letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  color:color-mix(in oklab,var(--md-on-primary-fixed) 72%,transparent);
+}
+/* Save: a tonal round button beside it, 56px to share the row's height;
+   on a tap the arrow drops into the tray */
+.lbx__save{width:56px;height:56px;flex:0 0 56px;color:var(--lb-on)}
+.lbx__save::before{inset:0;border-radius:var(--p-r-full);background:var(--lb-on);opacity:.12}
+@media (hover:hover){.lbx__save:hover::before{opacity:.2}}
+.lbx__sic .ar{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__save.is-go .lbx__sic .ar{transform:translateY(3px);transition-duration:120ms}
+
 /* the rail out of the viewer and back into the bank — one row per question
    that carries this picture, because a deduplicated figure can serve several */
-.lbq{display:none;padding-top:12px}
-.lbq.on{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.lbq{display:none;margin-top:12px}
+.lbq.on{display:flex;flex-direction:column;gap:2px}
+.lbq__h{margin:0 4px 6px;font:600 12px/16px var(--m3-font);letter-spacing:.5px;color:color-mix(in oklab,var(--lb-on) 62%,transparent)}
 .lbq button{
-  display:inline-flex;align-items:center;gap:8px;max-width:100%;
-  height:40px;padding:0 16px;border:none;
-  border-radius:var(--p-r-full);background:var(--lb-tone);color:var(--lb-on);
-  font:500 14px/20px var(--m3-font);letter-spacing:.1px;
+  display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 14px;border:none;text-align:left;
+  border-radius:var(--p-r-xs);background:var(--lb-tone);color:var(--lb-on);
+  font:400 14px/20px var(--m3-font);letter-spacing:.1px;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
+.lbq button:first-of-type{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.lbq button:last-of-type{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
 .lbq button.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
 .lbq button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
-.lbq button .ic{width:18px;height:18px;flex:0 0 18px}
-.lbq button .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.lbq button .mono{font-family:var(--m3-mono);opacity:.8;flex:0 0 auto}
+.lbq button .ic{width:20px;height:20px;flex:0 0 20px;opacity:.8}
+.lbq button .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbq button .mono{font:500 12px/16px var(--m3-mono);opacity:.75;flex:0 0 auto}
+.lbq button .go{width:18px;height:18px;flex:0 0 18px;opacity:.6}
 
 /* the ⋮ menu: a Plume menu on the viewer's own layer, grown from its button */
-.lbx__menu{position:absolute;z-index:2;top:calc(56px + env(safe-area-inset-top));right:8px;transform-origin:calc(100% - 24px) 0}
+.lbx__menu{position:absolute;z-index:2;top:calc(60px + env(safe-area-inset-top));right:8px;transform-origin:calc(100% - 24px) 0}
 .lbx__menu .arm{color:var(--md-error)}
 .lbx__menu .arm .ic{color:var(--md-error)}
 .lbx__menu .t1,.lbx__menu .arm .t0{display:none}
@@ -3197,23 +3310,9 @@ body.hasmig{padding-bottom:64px}
 .lbstage{touch-action:none;overscroll-behavior:contain}
 .lbstage img{transform-origin:50% 50%;-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
 
-/* Plume 1.6 · image ID in the viewer. A chip under the caption; a tap
-   copies "img-xxxxxxxx" for From gallery on another question. */
-.lbidrow{display:block;margin-top:10px}
-.lbid{
-  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;
-  border-radius:var(--p-r-s);border:0;
-  background:color-mix(in oklab,var(--lb-on) 12%,transparent);color:var(--lb-on);
-  font:500 12px/16px var(--m3-mono);letter-spacing:.2px;
-  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
-             background-color var(--p-effect-d) var(--p-effect);
-}
-.lbid .ic{width:16px;height:16px}
-@media (hover:hover){.lbid:hover{background:color-mix(in oklab,var(--lb-on) 20%,transparent)}}
-.lbid:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
-.lbid.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);background:color-mix(in oklab,var(--lb-on) 22%,transparent);
-  transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
-@media (prefers-reduced-motion:reduce){.lbx__zic path,.lbx__dots b{transition:none}}
+/* Plume 1.6's image ID chip under the caption became the Copy image ID
+   button of the info card (Plume 2.7). */
+@media (prefers-reduced-motion:reduce){.lbx__zic path,.lbx__th,.lbx__sic .ar{transition:none}.lbx__cic .ic,.lbx__ct span{transform:none!important}}
 
 /* Plume 1.6 · gallery picker. A bottom sheet on phones (rises from the
    edge on --p-spatial-slow, follows the finger down from its handle), a
@@ -5816,7 +5915,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.62</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.63</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5872,7 +5971,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.62 · sharded store</span>
+        <span class="chip" id="verChip">v6.63 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -5994,20 +6093,32 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 <div class="lbx" id="lbx" role="dialog" aria-modal="true" aria-labelledby="lbxSlot" tabindex="-1" hidden inert>
   <div class="lbx__scrim"></div>
   <div class="lbx__top">
-    <button class="pl-ib pl-press" id="lbxClose" title="Close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
-    <div class="lbx__ttl"><b id="lbxSlot">Question figure</b><span id="lbxCount"></span></div>
-    <button class="pl-ib pl-press" id="lbxZoom" title="Zoom in" aria-label="Zoom in"><svg class="ic lbx__zic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></svg></button>
-    <button class="pl-ib pl-press lbx__ib" id="lbxMore" title="More" aria-label="More" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
+    <button class="pl-ib pl-press lbx__btn" id="lbxClose" title="Close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    <span class="lbx__pos" id="lbxCount" aria-live="polite"></span>
+    <button class="pl-ib pl-press lbx__btn" id="lbxZoom" title="Zoom in" aria-label="Zoom in"><svg class="ic lbx__zic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></svg></button>
+    <button class="pl-ib pl-press lbx__btn lbx__ib" id="lbxMore" title="More" aria-label="More" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
   </div>
   <div class="lbstage" id="lbxStage"></div>
   <div class="lbx__side lbx__side--l"><button class="pl-ib pl-press" id="lbxPrev" title="Previous picture" aria-label="Previous picture"><svg class="ic"><use href="#i-prev"/></svg></button></div>
   <div class="lbx__side lbx__side--r"><button class="pl-ib pl-press" id="lbxNext" title="Next picture" aria-label="Next picture"><svg class="ic"><use href="#i-next"/></svg></button></div>
   <div class="lbx__foot">
-    <div class="lbx__dots" id="lbxDots" aria-hidden="true"></div>
-    <div class="lbf" id="lbxCap"></div>
-    <!-- only drawn when the viewer was opened from the gallery: finding the
-         picture is half the errand, the item it teaches is the other half -->
-    <div class="lbq" id="lbxQ"></div>
+    <!-- every picture in this set, as a row of thumbnails; a tap goes there -->
+    <div class="lbx__strip" id="lbxStrip" role="group" aria-label="Pictures"></div>
+    <section class="lbx__card">
+      <div class="lbx__kick"><span class="lbx__slot" id="lbxSlot">Question figure</span><span class="lbx__dim" id="lbxDim"></span></div>
+      <h2 class="lbx__title" id="lbxTitle"></h2>
+      <div class="lbx__cap" id="lbxCap"></div>
+      <div class="lbx__acts" id="lbxActs">
+        <button class="lbx__copy pl-press" id="lbxCopy" title="Copy this picture's ID, to reuse it in another question">
+          <span class="lbx__cic" aria-hidden="true"><svg class="ic lbx__c0"><use href="#i-copy"/></svg><svg class="ic lbx__c1"><use href="#i-check"/></svg></span>
+          <span class="lbx__cl"><span class="lbx__ct"><span class="t0">Copy image ID</span><span class="t1">Copied</span></span><code id="lbxId"></code></span>
+        </button>
+        <button class="pl-ib pl-press lbx__save" id="lbxSave" title="Save this picture" aria-label="Save this picture"><svg class="ic lbx__sic" viewBox="0 0 24 24" aria-hidden="true"><path class="ar" d="M12 4.2v10.6M7.6 10.6l4.4 4.4 4.4-4.4"/><path d="M4.6 15.6v2.2a2 2 0 0 0 2 2h10.8a2 2 0 0 0 2-2v-2.2"/></svg></button>
+      </div>
+      <!-- only drawn when the viewer was opened from the gallery: finding the
+           picture is half the errand, the item it teaches is the other half -->
+      <div class="lbq" id="lbxQ"></div>
+    </section>
   </div>
   <div class="pl-menu lbx__menu" id="lbxMenu" role="menu" hidden>
     <button class="pl-menu__item pl-press" role="menuitem" id="lbxSwap"><svg class="ic"><use href="#i-swap"/></svg><span><b>Replace photo</b><small>Choose another file for this slot</small></span></button>
@@ -6930,7 +7041,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.62';
+const APP_VERSION='6.63';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8953,19 +9064,7 @@ function figDrawViewer(){
   const im=$('#lbxStage img');
   if(f.media&&th&&th.currentSrc)im.src=th.currentSrc;
   im.addEventListener('load',()=>{if(!im.dataset.ar)lbxFit()});
-  $('#lbxSlot').textContent=f.slot==='expl'?'Explanation figure':'Question figure';
-  $('#lbxCount').textContent=list.length>1?(FIG.view.i+1)+' of '+list.length:'';
-  const box=$('#lbx'),many=list.length>1;
-  box.classList.toggle('is-many',many);
-  const dots=$('#lbxDots');
-  if(many&&list.length<=12){
-    if(dots.childElementCount!==list.length+1)dots.innerHTML='<i></i>'.repeat(list.length)+'<b></b>';
-    dots.lastElementChild.style.transform=`translateX(${FIG.view.i*16-4}px)`;
-    dots.style.visibility='';
-  }else{dots.innerHTML='';dots.style.visibility='hidden'}
-  const vp=FIG.view.held?{cap:'',note:''}:figCapPair(f);
-  $('#lbxCap').innerHTML=(vp.cap?figCapBody(vp,false):'')
-    +(f.media?`<span class="lbidrow"><button class="lbid pl-press" data-copyimg="${esc(f.media)}" title="Copy this picture's ID, to reuse it in another question"><svg class="ic"><use href="#i-copy"/></svg>${figImgId(f.media)}</button></span>`:'');
+  lbxInfo(f,list);
   /* Replace and Remove act on a question; a picture with no owner has neither */
   const qid=figViewQid();
   $('#lbxMore').style.visibility=qid?'':'hidden';
@@ -8977,6 +9076,43 @@ function figDrawViewer(){
   if(list.length>1)[1,-1].forEach(k=>{const n=list[(FIG.view.i+k+list.length)%list.length];
     if(n&&n.media)try{MEDIA.url(n.media,'full').catch(()=>{})}catch(e){}});
 }
+/* Plume 2.7 · the info card and the filmstrip. The title is the caption's
+   name ("12-lead ECG"); a caption without one is all reading line under the
+   kind of figure. A caption held until the answer says so in its place. */
+function lbxInfo(f,list){
+  const n=list.length,i=FIG.view.i,held=!!FIG.view.held;
+  $('#lbxCount').innerHTML=n>1?`<b>${i+1}<i> / ${n}</i></b>`:'';
+  $('#lbxSlot').innerHTML=`<svg class="ic"><use href="#i-${f.slot==='expl'?'bulb':'image'}"/></svg>${f.slot==='expl'?'Explanation figure':'Question figure'}`;
+  $('#lbxDim').textContent=(f.w&&f.h)?f.w+' \u00d7 '+f.h:'';
+  const p=held?{cap:'',note:''}:figCapPair(f),c=figCapSplit(p.cap);
+  $('#lbxTitle').textContent=c.name;
+  $('#lbxCap').innerHTML=held
+    ?`<span class="lbx__held"><svg class="ic"><use href="#i-info"/></svg>The caption shows once you answer.</span>`
+    :(c.line?`<span class="figcap__line">${esc(c.line)}</span>`:'')+(p.note?`<span class="fignote">${esc(p.note)}</span>`:'');
+  const cp=$('#lbxCopy');
+  cp.hidden=!f.media;cp.dataset.copyimg=f.media||'';
+  clearTimeout(cp._t);cp.classList.remove('is-done');
+  $('#lbxId').textContent=figImgId(f.media);
+  $('#lbx').classList.toggle('is-many',n>1);
+  lbxStrip(list,i);
+}
+function lbxStrip(list,i){
+  const st=$('#lbxStrip');
+  const key=list.map(f=>f.fid+':'+(f.media||'')).join(',');
+  if(st.dataset.k!==key){
+    st.dataset.k=key;
+    st.innerHTML=list.length>1?list.map((f,k)=>`<button class="lbx__th pl-press" data-lbxto="${k}" aria-label="Picture ${k+1} of ${list.length}">${f.media
+      ?`<img data-media="${esc(f.media)}" data-mkind="thumb" loading="lazy" alt="" draggable="false">`
+      :`<img src="${esc(f.src)}" loading="lazy" alt="" draggable="false">`}</button>`).join(''):'';
+  }
+  const cur=st.children[i];
+  [...st.children].forEach((b,k)=>b.setAttribute('aria-current',k===i?'true':'false'));
+  if(cur){
+    /* keep the lit one centred, measured from where it will be once it has grown */
+    const left=cur.offsetLeft+26-st.clientWidth/2;
+    st.scrollTo({left,behavior:(Motion.reduced||$('#lbx').hidden)?'auto':'smooth'});
+  }
+}
 /* The rail is only for the gallery: inside a question you are already
    standing in the item, so a button offering to take you there is noise. */
 function figDrawViewerQ(){
@@ -8984,14 +9120,16 @@ function figDrawViewerQ(){
   if(!FIG.view||!FIG.view.gal){rail.classList.remove('on');rail.innerHTML='';return}
   const e=FIG.view.gal[FIG.view.i];
   const ids=(e&&e.qids&&e.qids.length)?e.qids:(e?[e.qid]:[]);
-  rail.innerHTML=ids.map(id=>{
+  const rows=ids.map(id=>{
     const q=Q_BY_ID[id];if(!q)return '';
     return `<button class="pl-press" data-galopen="${esc(id)}">
       <svg class="ic"><use href="#i-bank"/></svg>
       <span class="mono">${esc(q.pubId||pubIdOf(q.id))}</span>
-      <span class="t">${esc((q.stem||q.leadIn||'Open the question').slice(0,60))}</span>
+      <span class="t">${esc((q.stem||q.leadIn||'Open the question').slice(0,80))}</span>
+      <svg class="ic go"><use href="#i-next"/></svg>
     </button>`;
   }).join('');
+  rail.innerHTML=rows?`<p class="lbq__h">${ids.length>1?'Used in '+ids.length+' questions':'Used in'}</p>`+rows:'';
   rail.classList.toggle('on',!!rail.innerHTML);
 }
 /* the morph between the thumbnail and the stage: the frame is moved and
@@ -9113,12 +9251,13 @@ function lbxDone(){
 }
 /* next and previous: the old picture leaves the way it was going (from
    wherever the finger left it), the new one comes in from the other side */
-function figStep(d){
+function figStep(d,to){
   const list=figViewList();if(list.length<2||$('#lbx').__closing)return;
+  if(to!=null){if(to===FIG.view.i)return;d=to>FIG.view.i?1:-1}
   const old=$('#lbxStage .lbx__frame'),tok=++LBX.step;
   const go=()=>{
     if(tok!==LBX.step||!FIG.view)return;
-    FIG.view.i=(FIG.view.i+d+list.length)%list.length;
+    FIG.view.i=to!=null?to:(FIG.view.i+d+list.length)%list.length;
     figDrawViewer();
     const fr=$('#lbxStage .lbx__frame');if(!fr||!fr.animate)return;
     const sp=PL('spatial');
@@ -9171,9 +9310,36 @@ document.addEventListener('pointerdown',e=>{
 },{passive:true});
 $('#lbxClose').onclick=()=>figCloseViewer();
 $('#lbxMore').onclick=()=>lbxMenu();
-$('#lbxCap').addEventListener('click',e=>{
-  const b=e.target.closest('[data-copyimg]');if(!b)return;
-  copy(figImgId(b.dataset.copyimg),'Image ID copied. In another question, choose From gallery and paste it into the search.');
+/* the button answers the tap itself (copy turns into a check that draws
+   in, "Copied" rises into the label) and the snackbar says where it goes */
+$('#lbxCopy').onclick=()=>{
+  const b=$('#lbxCopy');if(!b.dataset.copyimg)return;
+  /* the hint is said once a visit; after that the check is the answer, and
+     the snackbar stays off the card */
+  const id=figImgId(b.dataset.copyimg);
+  if(LBX.hinted)navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(id).catch(()=>copy(id,'Image ID copied.')):copy(id,'Image ID copied.');
+  else{LBX.hinted=1;copy(id,'Image ID copied. In another question, choose From gallery and paste it into the search.')}
+  b.classList.add('is-done');clearTimeout(b._t);
+  b._t=setTimeout(()=>b.classList.remove('is-done'),1800);
+};
+/* Save hands the picture to the browser as a file, named after its title
+   when it has one, else after its image ID */
+$('#lbxSave').onclick=async()=>{
+  const b=$('#lbxSave'),list=figViewList(),f=FIG.view&&list[FIG.view.i];if(!f)return;
+  b.classList.add('is-go');setTimeout(()=>b.classList.remove('is-go'),160);
+  let url=null;
+  try{url=f.media?await MEDIA.url(f.media,'full'):f.src}catch(e){}
+  if(!url)return toast('That picture is not on this device yet.');
+  const nm=figCapSplit(figCapPair(f).cap).name;
+  const base=(!FIG.view.held&&nm?nm.replace(/[^\w\- ]+/g,'').trim().replace(/\s+/g,'-'):'')||figImgId(f.media)||'figure';
+  const ext=/png/.test(f.mime||'')?'png':/webp/.test(f.mime||'')?'webp':'jpg';
+  const a=document.createElement('a');a.href=url;a.download=base+'.'+ext;
+  document.body.appendChild(a);a.click();a.remove();
+  toast('Picture saved to your downloads.');
+};
+$('#lbxStrip').addEventListener('click',e=>{
+  const t=e.target.closest('[data-lbxto]');if(!t)return;
+  figStep(0,parseInt(t.dataset.lbxto,10)||0);
 });
 $('#lbxPrev').onclick=()=>figStep(-1);
 $('#lbxNext').onclick=()=>figStep(1);
