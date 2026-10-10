@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.5** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.6** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1033,6 +1033,18 @@ The quality bar. A surface is done when it *feels* like §2, and:
 
 ---
 
+- **Figure plate** (`Plume 2.6 · figure plate`, v6.62): a captioned
+  picture is one object. `figCardHTML` gives `.figfig.has-cap` a
+  `--p-r-l` frame that clips the photo, with the caption on a strip tinted
+  `on-surface` 5% (the same plate on the page and in a card, both themes).
+  The plate's width is the photo's (`width:fit-content`, and
+  `contain:inline-size` on the caption so text never widens it).
+  `figCapSplit()` splits an ARCHIVIST caption at its first " — ": the name
+  leads in Title S, the reading line follows in Body M. A caption that
+  arrives late unfolds from zero height (`grid-template-rows` 0fr → 1fr on
+  `--p-spatial`, padding on an inner `.figcap__pad` so nothing jumps) with
+  its text fading in after (`.cap-in`).
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1050,6 +1062,7 @@ A surface that is not listed here is legacy.
 | Lure tag on the answer cards (player, grouped "Choice by choice", bank preview, companion) and the dimmed lure card's edge | 1.8 | 6.49 | The tag only. The cards around it are still legacy; the editor's "This is the lure" switch and the report's "Took the lure" chip use the legacy controls beside them |
 | **Foundation: lighting roles, Google Sans Flex, card and hero radii (§9)** | 2.0 | 6.58 | Landed with Settings. Engine writes the lighting roles and retunes the M3 surface ladder (legacy screens follow the lighting model without being rebuilt); Plume 1.x surfaces re-pointed to the roles; the `.card` and logo light-theme swaps removed. Measured ΔL card − page: 0.038 light, 0.065 dark. Legacy screens keep their own layout and colour fills (Home's hero is still a container fill) |
 | Settings, whole screen (list, hero, every section, search, phone layer, desktop list-detail) and the controls in the in-session settings sheet | 2.2 | 6.58 | Rebuilt from scratch. The in-session sheet's dialog around the rows is still legacy |
+| Figure captions (`figCardHTML`): the plate in the player, explanation, bank and editor, and the name / line in the viewer | 2.6 | 6.62 | The figure blocks' edit buttons, empty-slot plates and "Add a figure" row are still legacy |
 
 ## 16. Language changelog
 
@@ -1131,6 +1144,11 @@ A surface that is not listed here is legacy.
   (rounded leading edge, list drifting and dimming, drag back with the
   finger) on one per-frame spring; no container transform or grow-from-row
   reveal for a page. From the user's correction on Settings.
+
+- **Plume 2.6** (2026-10-10): the figure plate. A caption shares the
+  photo's frame on a tinted strip, name first, reading line after, and a
+  caption that arrives late unfolds from the photo's edge. From the user
+  finding the bare grey caption line badly designed.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

@@ -147,6 +147,16 @@ a recipe.
   deleted with `figBury`, like Delete placeholder, and reported as a removed
   duplicate. Before v6.54 it stayed empty and counted as "already had a
   photo", so it came back in every later export.
+- **A question's own figure keeps its caption until the answer.** The
+  caption names what the picture shows, so it can give the key away. In a
+  session, `figStemHTML` passes `play`, and `figHeld(qid)` holds the stem
+  captions (and an empty slot's caption) until the explanation is on
+  screen (tutor and submitted; never during an exam). Opened from a held
+  block, the viewer shows only the stem pictures, with no caption and a
+  neutral alt. On reveal the caption unfolds in. In a session the alt
+  note ("Attach the ECG from question 7") is dropped from every plate; the
+  bank and the editor still show it. Any new surface that draws the stem
+  before the answer holds the caption the same way.
 - **The file tag carries the question's number** (`cardiovascular system v5
   #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
   `fileTagBase()`, which drops the ` #N`; the question and search keep it.

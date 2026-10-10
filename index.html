@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.61 -->
+<!-- Nidus — Personal Qbank · v6.62 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2827,18 +2827,47 @@ body.hasmig{padding-bottom:64px}
 .figs{margin:16px 0}
 .figs:empty{display:none}
 .figfig{margin:0;position:relative}
-.figfig+.figfig{margin-top:8px}
+.figfig+.figfig{margin-top:12px}
 .figfig .qimg{margin:0}
-.figcap{
-  font-size:14px;line-height:20px;letter-spacing:.25px;
-  color:var(--md-on-surface-variant);margin-top:10px;max-width:var(--measure);
+/* Plume 2.6 · figure plate. A captioned picture is one object: the photo and
+   its caption share a frame, the caption on a tonal strip under the photo.
+   The strip is a tint of on-surface, so it reads as the same plate on the
+   page and inside an explanation card, in both themes. The name ("12-lead
+   ECG") leads as a title; the reading line follows in body text. */
+.figfig.has-cap{
+  border-radius:var(--p-r-l);overflow:hidden;
+  background:color-mix(in oklab,var(--md-on-surface) 5%,transparent);
+  width:fit-content;max-width:100%;
 }
-/* the caption says what to look for in this picture for this item, so it
-   stays under the photo once the photo is attached; the attach-time note
-   sits below it, quieter, because by then it has already done its job */
+.figfig.has-cap .qimg{border-radius:0}
+.figcap{
+  display:grid;grid-template-rows:1fr;contain:inline-size; /* the photo sets the plate's width, never the caption */
+  font:400 14px/20px var(--m3-font);letter-spacing:.2px;
+  color:var(--md-on-surface-variant);
+}
+.figcap__in{min-height:0;overflow:hidden}
+.figcap__pad{display:block;padding:12px 16px 14px;max-width:var(--measure)}
+.figcap__name{
+  display:block;margin-bottom:2px;
+  font-size:14px;line-height:20px;font-weight:600;letter-spacing:.1px;
+  color:var(--md-on-surface);
+}
+.figcap__line{display:block;text-wrap:pretty}
+/* the attach-time note sits below, quieter, because by now it has done its
+   job; a session drops it altogether */
 .figcap .fignote{
-  display:block;margin-top:4px;font-size:13px;line-height:18px;
+  display:block;margin-top:6px;font-size:12px;line-height:16px;
   color:color-mix(in oklab,var(--md-on-surface-variant) 78%,transparent);
+}
+/* a caption held back until the answer unfolds out of the photo's edge when
+   it arrives, the strip opening downward with the text fading in after it */
+.figfig.cap-in .figcap{animation:figCapOpen var(--p-spatial-d) var(--p-spatial) both}
+.figfig.cap-in .figcap__in{animation:figCapText var(--m3-dur-medium) var(--m3-ease-standard) 90ms both}
+@keyframes figCapOpen{from{grid-template-rows:0fr}to{grid-template-rows:1fr}}
+@keyframes figCapText{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .figfig.cap-in .figcap{animation:none}
+  .figfig.cap-in .figcap__in{animation-name:m3Fade;animation-delay:0s}
 }
 .figbar{position:absolute;top:12px;right:12px;display:flex;gap:6px;opacity:0;transition:opacity var(--m3-dur-medium) var(--m3-ease-standard)}
 .figfig:hover .figbar,.figfig:focus-within .figbar{opacity:1}
@@ -2855,7 +2884,7 @@ body.hasmig{padding-bottom:64px}
 .figbar button:active{transform:scale(.92)}
 .figbar button.arm{background:var(--md-error);color:var(--md-on-error)}
 @media (hover:none){.figbar{opacity:1}}
-.figcapin{margin-top:10px;font-family:var(--m3-font);font-size:15px;line-height:1.5}
+.figcapin{margin:10px 0 0;font-family:var(--m3-font);font-size:15px;line-height:1.5}
 
 /* A drop target is still a Material container: an outlined card on a tonal
    fill. The dashed rule it used to carry is a browser upload-widget idiom,
@@ -3131,6 +3160,8 @@ body.hasmig{padding-bottom:64px}
   max-width:60ch;margin:0 auto;max-height:28vh;overflow:auto;overscroll-behavior:contain;
 }
 .lbf:empty{display:none}
+.lbf .figcap__name{display:block;font-weight:600;color:var(--lb-on);margin-bottom:2px}
+.lbf .figcap__line{display:block}
 .lbf .fignote{
   display:block;margin-top:4px;font-size:13px;line-height:18px;
   color:color-mix(in oklab,var(--lb-on) 62%,transparent);
@@ -5785,7 +5816,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.61</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.62</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5841,7 +5872,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.61 · sharded store</span>
+        <span class="chip" id="verChip">v6.62 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -6899,7 +6930,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.61';
+const APP_VERSION='6.62';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8191,8 +8222,8 @@ function figTouch(q){
 
 
 /* ---------- markup ---------- */
-function figOptStr(o){return [(o&&o.add)?'add':'',(o&&o.desc)?'desc':''].filter(Boolean).join(' ')}
-function figOptObj(s){s=' '+(s||'')+' ';return{add:s.indexOf(' add ')>=0,desc:s.indexOf(' desc ')>=0}}
+function figOptStr(o){return [(o&&o.add)?'add':'',(o&&o.desc)?'desc':'',(o&&o.play)?'play':''].filter(Boolean).join(' ')}
+function figOptObj(s){s=' '+(s||'')+' ';return{add:s.indexOf(' add ')>=0,desc:s.indexOf(' desc ')>=0,play:s.indexOf(' play ')>=0}}
 /* The caption is the reading line: what this picture is, and what the item
    turns on inside it. It therefore stays under the photo after the photo is
    attached — that is the moment it is actually useful. The alt note was
@@ -8204,31 +8235,54 @@ function figCapPair(f){
   const note=(cap&&alt&&norm(alt)!==norm(cap))?alt:'';
   return{cap:cap||alt,note};
 }
+/* ARCHIVIST writes a caption as "what it is — what to look for": the name
+   leads as the plate's title and the reading line follows it. A caption
+   without the dash, or one whose head is too long to be a name, is all
+   reading line. */
+function figCapSplit(cap){
+  const m=/^(.{2,60}?)\s+[\u2014\u2013]\s+(\S[\s\S]*)$/.exec(String(cap||''));
+  return m?{name:m[1],line:m[2].charAt(0).toUpperCase()+m[2].slice(1)}:{name:'',line:String(cap||'')};
+}
+function figCapBody(p,play){
+  const c=figCapSplit(p.cap);
+  return (c.name?`<span class="figcap__name">${esc(c.name)}</span>`:'')
+    +`<span class="figcap__line">${esc(c.line)}</span>`
+    +(p.note&&!play?`<span class="fignote">${esc(p.note)}</span>`:'');
+}
+/* The caption of a picture in the question can give the answer away ("ST
+   elevation in II, III and aVF — an inferior infarct"), so in a session it
+   is held back until the explanation is on screen, and arrives with it. */
+function figHeld(qid){
+  if(typeof S==='undefined'||!S||!$('#player').classList.contains('on'))return false;
+  const q=curQ(),it=curIt();
+  return !!(q&&it&&q.id===qid&&!(S.config.mode==='tutor'&&it.submitted));
+}
 /* An <img> carrying data-media is filled in by the media engine once the
    bytes are to hand — from the local store if they are there, from the media
    repository if they are not. data-mkind picks the copy: a thumbnail where
    several figures sit on one screen, the display copy where one is being
    read. The markup never holds the bytes, so a page full of figures costs a
    page full of 64-character strings. */
-function figCardHTML(f,kind){
-  const p=figCapPair(f);
+function figCardHTML(f,kind,opt){
+  opt=opt||{};
+  const p=figCapPair(f),held=!!opt.held&&!!p.cap;
   const dim=(f.w&&f.h)?` width="${f.w}" height="${f.h}"`:'';
   const img=f.media
     ? `<img class="qimg" data-media="${esc(f.media)}" data-mkind="${kind==='thumb'?'thumb':'full'}" loading="lazy"${dim} alt="${esc(p.cap)}" data-figopen="${esc(f.fid)}">`
     : `<img class="qimg" src="${esc(f.src)}" loading="lazy" alt="${esc(p.cap)}" data-figopen="${esc(f.fid)}">`;
-  return `<figure class="figfig" data-fig="${esc(f.fid)}">
-    ${img}
+  return `<figure class="figfig${p.cap&&!held?' has-cap':''}${opt.reveal&&!held?' cap-in':''}" data-fig="${esc(f.fid)}">
+    ${held?img.replace(/ alt="[^"]*"/,' alt="Question figure"'):img}
     <div class="figbar">
       <button data-figact="replace" data-fig="${esc(f.fid)}" title="Replace this photo"><svg class="ic"><use href="#i-swap"/></svg></button>
       <button data-figact="caption" data-fig="${esc(f.fid)}" title="Edit the caption"><svg class="ic"><use href="#i-text"/></svg></button>
       <button data-figact="remove" data-fig="${esc(f.fid)}" title="Remove this photo"><svg class="ic"><use href="#i-trash"/></svg></button>
     </div>
-    ${p.cap?`<figcaption class="figcap">${esc(p.cap)}${p.note?`<span class="fignote">${esc(p.note)}</span>`:''}</figcaption>`:''}
+    ${p.cap&&!held?`<figcaption class="figcap"><span class="figcap__in"><span class="figcap__pad">${figCapBody(p,opt.play)}</span></span></figcaption>`:''}
   </figure>`;
 }
 
-function figPlateHTML(f){
-  const p=figCapPair(f);
+function figPlateHTML(f,held){
+  const p=held?{cap:'',note:''}:figCapPair(f);
   const where=f.slot==='expl'?'It will sit inside the explanation.':'It will sit between the stem and the lead-in.';
   return `<div class="figplate${f.optional?' opt':''}" data-figdrop="${esc(f.fid)}" role="button" tabindex="0">
     <span class="fpi"><svg class="ic"><use href="#i-image"/></svg></span>
@@ -8249,7 +8303,8 @@ function figPlateHTML(f){
 function figHTML(qid,slot,opt){
   opt=opt||{};
   const q=figQ(qid);
-  const attrs=`data-figq="${esc(qid)}" data-figslot="${slot}" data-figopt="${figOptStr(opt)}"`;
+  const held=!!opt.play&&slot==='stem'&&figHeld(qid);
+  const attrs=`data-figq="${esc(qid)}" data-figslot="${slot}" data-figopt="${figOptStr(opt)}"${held?' data-figheld="1"':''}`;
   if(!q)return `<div class="figs" ${attrs}></div>`;
   const list=figsIn(q,slot);
   /* the written description is its own card only on a figure-dependent item, and only when no slot is already carrying it */
@@ -8261,9 +8316,12 @@ function figHTML(qid,slot,opt){
   const add=opt.add
     ?`<div class="figadds" style="margin-top:${list.length?'8px':'0'}"><button class="btn ghost sm figadd" data-figadd="${slot}"><svg class="ic"><use href="#i-imageadd"/></svg>${list.length?'Add another figure':'Add a figure'}</button><button class="btn ghost sm figadd" data-figpaste="${slot}" title="Paste an image you copied"><svg class="ic"><use href="#i-paste"/></svg>Paste</button><button class="btn ghost sm figadd" data-figgal="${slot}" title="Reuse a picture already in your gallery"><svg class="ic"><use href="#i-gallery"/></svg>From gallery</button></div>`
     :'';
-  return `<div class="figs" ${attrs}>${list.map(f=>figFilled(f)?figCardHTML(f,opt.thumb?'thumb':'full'):figPlateHTML(f)).join('')}${desc}${add}</div>`;
+  return `<div class="figs" ${attrs}>${list.map(f=>figFilled(f)?figCardHTML(f,opt.thumb?'thumb':'full',{held,play:opt.play,reveal:opt.reveal}):figPlateHTML(f,held)).join('')}${desc}${add}</div>`;
 }
-function figStemHTML(qid){return figHTML(qid,'stem',{desc:true})}
+function figStemHTML(qid){
+  const was=document.querySelector('#pImages .figs[data-figheld]');
+  return figHTML(qid,'stem',{desc:true,play:true,reveal:!!(was&&was.dataset.figq===qid)});
+}
 
 /* ---------- redraw every surface currently showing this question ---------- */
 function figRefresh(qid){
@@ -8476,7 +8534,7 @@ function figCaptionEdit(btn){
 }
 document.addEventListener('click',e=>{
   const open=e.target.closest('[data-figopen]');
-  if(open){const w=open.closest('.figs');if(w){figOpenViewer(w.dataset.figq,open.dataset.figopen);return}}
+  if(open){const w=open.closest('.figs');if(w){figOpenViewer(w.dataset.figq,open.dataset.figopen,!!w.dataset.figheld);return}}
   const act=e.target.closest('[data-figact]');
   if(act){
     const w=act.closest('.figs');if(!w)return;
@@ -8831,7 +8889,8 @@ document.addEventListener('keydown',e=>{
 function figViewList(){
   if(FIG.view&&FIG.view.gal)return FIG.view.gal.map(e=>e.f);
   const q=FIG.view&&figQ(FIG.view.qid);
-  return q?figList(q).filter(figFilled):[];
+  /* before the answer, only the question's own pictures, and no captions */
+  return q?figList(q).filter(f=>figFilled(f)&&!(FIG.view.held&&f.slot!=='stem')):[];
 }
 /* which question owns the figure currently on the stage */
 function figViewQid(){
@@ -8883,7 +8942,7 @@ function figDrawViewer(){
   if(!list.length)return figCloseViewer();
   if(FIG.view.i>=list.length)FIG.view.i=list.length-1;
   if(FIG.view.i<0)FIG.view.i=0;
-  const f=list[FIG.view.i],alt=esc(f.caption||f.alt||'');
+  const f=list[FIG.view.i],alt=FIG.view.held?'Question figure':esc(f.caption||f.alt||'');
   /* the thumbnail's own pixels stand in until the full picture is to hand,
      so the morph never grows an empty box */
   const th=lbxSource(),ar=(f.w&&f.h)?f.w/f.h:(th&&th.naturalWidth?th.naturalWidth/th.naturalHeight:0);
@@ -8904,8 +8963,8 @@ function figDrawViewer(){
     dots.lastElementChild.style.transform=`translateX(${FIG.view.i*16-4}px)`;
     dots.style.visibility='';
   }else{dots.innerHTML='';dots.style.visibility='hidden'}
-  const vp=figCapPair(f);
-  $('#lbxCap').innerHTML=(vp.cap?esc(vp.cap)+(vp.note?`<span class="fignote">${esc(vp.note)}</span>`:''):'')
+  const vp=FIG.view.held?{cap:'',note:''}:figCapPair(f);
+  $('#lbxCap').innerHTML=(vp.cap?figCapBody(vp,false):'')
     +(f.media?`<span class="lbidrow"><button class="lbid pl-press" data-copyimg="${esc(f.media)}" title="Copy this picture's ID, to reuse it in another question"><svg class="ic"><use href="#i-copy"/></svg>${figImgId(f.media)}</button></span>`:'');
   /* Replace and Remove act on a question; a picture with no owner has neither */
   const qid=figViewQid();
@@ -8993,13 +9052,13 @@ function figOpenGallery(entries,i){
   figDrawViewer();
   lbxShow();
 }
-function figOpenViewer(qid,fid){
+function figOpenViewer(qid,fid,held){
   const q=figQ(qid);if(!q)return;
-  const list=figList(q).filter(figFilled);
+  const list=figList(q).filter(f=>figFilled(f)&&(!held||f.slot==='stem'));
   if(!list.length)return;
   if($('#lbx').__closing)lbxDone();
   const i=list.findIndex(f=>f.fid===fid);
-  FIG.view={qid,i:i<0?0:i};
+  FIG.view={qid,i:i<0?0:i,held:!!held};
   figDrawViewer();
   lbxShow();
 }
@@ -10997,7 +11056,7 @@ function renderExpl(){
   /* figures that belong to the teaching close it, after everything written */
   const efigs=figsIn(q,'expl');
   if(efigs.length)h+=esec('figs',efigs.length>1?'Figures':'Figure',
-    efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{}));
+    efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{play:true}));
   /* the session's actions (copy, note, edit, figures, reading) live in the bar
      and its ⋮ menu, so the panel ends with the teaching */
   h+=`</section>`;
