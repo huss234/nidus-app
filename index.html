@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.60 -->
+<!-- Nidus — Personal Qbank · v6.61 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3660,7 +3660,6 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 .sx-list::-webkit-scrollbar{display:none}
 .sx-detail{position:relative;min-width:0;max-width:760px}
 .sx-detail:focus{outline:none}
-.sx-tint{display:none}
 .setpanel{display:none}
 .setpanel.on{display:block}
 .setpanel.sx-leaving{display:block;position:absolute;left:0;right:0;pointer-events:none}
@@ -4060,19 +4059,25 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
   .sx-list{position:static;max-height:none;overflow:visible;margin:0;padding:0}
   .sx-mark{display:none}
   .sx-detail{
-    position:fixed;inset:0;z-index:80;max-width:none;display:flex;flex-direction:column;
-    background:var(--p-page);visibility:hidden;pointer-events:none;
+    position:fixed;inset:0;z-index:80;max-width:none;display:flex;flex-direction:column;overflow:clip;
+    background:var(--p-page);visibility:hidden;pointer-events:none;touch-action:pan-y;
   }
+  /* the edge the section leads with casts a soft shadow on the list it
+     slides over; at rest it is off screen */
+  .sx-detail.is-open{box-shadow:-10px 0 32px -6px color-mix(in oklab,var(--md-shadow) 28%,transparent)}
+  .sx-scrim{position:fixed;inset:0;z-index:79;pointer-events:none;opacity:0;background:color-mix(in oklab,var(--md-scrim) 22%,transparent)}
+  [data-theme="dark"] .sx-scrim{background:color-mix(in oklab,var(--md-scrim) 40%,transparent)}
   .sx-detail.is-open{visibility:visible;pointer-events:auto}
   .sx-detail.is-closing{pointer-events:none}
-  .sx-tint{display:block;position:absolute;inset:0;z-index:3;background:var(--p-card);opacity:0;pointer-events:none}
   .sx-bar{
     flex:none;margin:0;padding:env(safe-area-inset-top) 4px 0 4px;min-height:calc(64px + env(safe-area-inset-top));
     background:var(--p-page);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
   }
   .sx-detail.is-scrolled .sx-bar{background:var(--p-bar)}
   .sx-title{font:450 24px/32px var(--m3-font);letter-spacing:0}
-  .sx-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 16px calc(40px + env(safe-area-inset-bottom))}
+  /* touch-action is read up to the nearest scroller, so the scroller itself
+     must leave sideways movement to the page for the drag-back to work */
+  .sx-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;padding:8px 16px calc(40px + env(safe-area-inset-bottom))}
   .sx-acts .pl-btn{padding:0 16px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -5737,7 +5742,6 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
           <div class="sx-hits" id="setHits" role="list" aria-live="polite" hidden></div>
         </div>
         <div class="sx-detail" id="setMain" role="region" aria-labelledby="setCrumb">
-          <div class="sx-tint" aria-hidden="true"></div>
           <header class="sx-bar">
             <button class="pl-ib pl-press sx-back" id="setBack" aria-label="All settings"><svg class="ic" data-ic="i-back"></svg></button>
             <h3 class="sx-title" id="setCrumb"></h3>
@@ -5781,7 +5785,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.60</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.61</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5837,7 +5841,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.60 · sharded store</span>
+        <span class="chip" id="verChip">v6.61 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -6895,7 +6899,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.60';
+const APP_VERSION='6.61';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -13999,73 +14003,117 @@ function sxSwitch(id){
   return a.finished.catch(()=>{});
 }
 
-/* ---- the phone layer ---- */
-function sxGrow(open,row){
-  const L=sxLayer(),tint=L.querySelector('.sx-tint'),parts=[L.querySelector('.sx-bar'),$('#sxScroll')];
-  const W=innerWidth,H=innerHeight;
-  let r=row&&row.isConnected?row.getBoundingClientRect():null;
-  if(r&&(!r.width||r.bottom<0||r.top>H))r=null;
-  const cur=getComputedStyle(L).clipPath,op=parseFloat(getComputedStyle(L).opacity);
-  [L,tint].concat(parts).forEach(x=>x.getAnimations().forEach(a=>a.cancel()));
-  L.style.clipPath='';
-  if(Motion.reduced||!r){
-    const k=Motion.reduced?[{opacity:open?0:1},{opacity:open?1:0}]
-      :[{opacity:open?0:1,transform:open?'scale(.94)':'none'},{opacity:open?1:0,transform:open?'none':'scale(.94)'}];
-    return L.animate(k,{duration:open?PL('effect-slow').d:150,easing:open?PL('effect-slow').e:PL_EXIT,fill:open?'none':'forwards'}).finished;
-  }
-  const rcs=getComputedStyle(row),rad=Math.max(parseFloat(rcs.borderTopLeftRadius)||0,parseFloat(rcs.borderBottomLeftRadius)||0);
-  const box='inset('+r.top+'px '+(W-r.right)+'px '+(H-r.bottom)+'px '+r.left+'px round '+rad+'px)',full='inset(0px 0px 0px 0px round 0px)';
-  const from=(cur&&cur!=='none')?cur:(open?box:full),sp=open?PL('spatial-slow'):PL('spatial');
-  const a=L.animate([{clipPath:from},{clipPath:open?full:box}],{duration:sp.d,easing:sp.e,fill:open?'none':'forwards'});
-  if(!open){
-    /* Going back, the layer fades away as it lands, so the real row shows
-       through it and the layer is gone the moment it is invisible. It used
-       to land as a blank tile (the tint) and wait for the spring's tail
-       before being removed: the row looked missing for about a quarter of
-       a second, then popped in. */
-    parts.forEach(p=>p.animate([{opacity:1},{opacity:0}],{duration:90,easing:PL_EXIT,fill:'forwards'}));
-    const f=L.animate([{opacity:1},{opacity:0}],{duration:Math.round(sp.d*.55),delay:Math.round(sp.d*.15),easing:PL('effect').e,fill:'forwards'});
-    return f.finished;
-  }
-  if(open){
-    /* reopened while it was fading back: carry on from that fade */
-    if(op<1)L.animate([{opacity:op},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e});
-    tint.animate([{opacity:1},{opacity:0}],{duration:PL('effect-slow').d,easing:PL('effect-slow').e,delay:50,fill:'backwards'});
-    parts.forEach((p,i)=>p.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
-      {duration:PL('spatial').d,easing:PL('spatial').e,delay:60+i*30,fill:'backwards'}));
-  }
-  return a.finished;
+/* ---- the phone layer (v6.61): a page that slides over the list ----
+   One number drives the whole move: p, from 0 (list) to 1 (section). The
+   section slides in from the right edge with its leading corners rounded
+   while it travels; the list, its app bar and the navigation bar drift left
+   a fifth of the way and dim under a scrim. p moves on a spring stepped per
+   frame, so a tap, Back or a finger can take it over mid-flight with the
+   velocity it has. A finger can drag the section back to the right (1:1),
+   and letting go either finishes the close or springs it home. */
+const SXP={p:0,v:0,raf:0,to:1,done:null};
+const sxUnder=()=>[$('.mobhead'),$('#sxList'),$('#tabbar')].filter(Boolean);
+function sxScrim(){let s=$('#sxScrim');if(!s){s=document.createElement('div');s.id='sxScrim';s.className='sx-scrim';s.setAttribute('aria-hidden','true');document.body.appendChild(s)}return s}
+function sxPaint(p){
+  const L=sxLayer(),W=innerWidth,q=Math.max(0,Math.min(1,p));
+  if(Motion.reduced){L.style.opacity=q;sxScrim().style.opacity=0;return}
+  L.style.transform='translate3d('+(Math.max(0,1-p)*W).toFixed(2)+'px,0,0)';
+  /* the leading corners round as it leaves the edge and square as it lands */
+  const r=Math.min(1,(1-q)*6)*28;
+  L.style.borderRadius=r>.5?r.toFixed(1)+'px 0 0 '+r.toFixed(1)+'px':'';
+  const u='translate3d('+(-.2*W*q).toFixed(2)+'px,0,0)';
+  sxUnder().forEach(e=>{e.style.transform=q>0?u:''});
+  sxScrim().style.opacity=q.toFixed(3);
 }
-let SXD_FROM=null;
+function sxMove(to,v0,done){
+  cancelAnimationFrame(SXP.raf);
+  SXP.to=to;SXP.done=done||null;if(v0!==undefined)SXP.v=v0;
+  const L=sxLayer(),U=sxUnder();
+  L.style.willChange='transform';U.forEach(e=>{e.style.willChange='transform'});
+  /* going: 340 / 0.9; coming back about a third quicker: 520 / 1 */
+  const K=to?340:520,C=2*(to?.9:1)*Math.sqrt(K);
+  let last=performance.now();
+  const step=now=>{
+    const dt=Math.min(.034,(now-last)/1000);last=now;
+    for(let i=0;i<4;i++){const h=dt/4,a=-K*(SXP.p-to)-C*SXP.v;SXP.v+=a*h;SXP.p+=SXP.v*h}
+    if(Math.abs(SXP.p-to)<.0006&&Math.abs(SXP.v)<.02){
+      SXP.p=to;SXP.v=0;sxPaint(to);L.style.willChange='';U.forEach(e=>{e.style.willChange=''});
+      const d=SXP.done;SXP.done=null;if(d)d();return}
+    sxPaint(SXP.p);SXP.raf=requestAnimationFrame(step);
+  };
+  if(Motion.reduced){SXP.p=to;SXP.v=0;
+    const L2=sxLayer();L2.animate([{opacity:to?0:1},{opacity:to?1:0}],{duration:150,easing:'ease-out'}).finished.then(()=>{sxPaint(to);if(done)done()},()=>{});return}
+  SXP.raf=requestAnimationFrame(step);
+}
 function sxHistBack(){try{if(history.state&&history.state.sxd)history.back()}catch(e){}}
-function sxOpen(id,from){
+function sxOpen(id){
   const L=sxLayer();
-  /* a tap while it is still going back reopens it from where it is */
   if(L.classList.contains('is-open')&&!L.classList.contains('is-closing'))return sxSwitch(id);
-  L.classList.remove('is-closing');L.__c=(L.__c||0)+1;
-  showSetSection(id);$('#sxScroll').scrollTop=0;L.classList.remove('is-scrolled');
-  SXD_FROM=from||$('#setList .sx-nav[data-setsec="'+id+'"]');
+  const fresh=!L.classList.contains('is-open');
+  L.classList.remove('is-closing');
+  showSetSection(id);
+  if(fresh){$('#sxScroll').scrollTop=0;L.classList.remove('is-scrolled');SXP.p=0;SXP.v=0;sxPaint(0);
+    /* a page arriving whole: its title is already right, not crossfading */
+    const t=$('#setCrumb');t.getAnimations().forEach(a=>a.cancel());t.__sw=(t.__sw||0)+1;t.textContent=SETSEC(SET_SEC).title}
   L.classList.add('is-open');L.inert=false;document.body.classList.add('setdetail');
   try{if(!(history.state&&history.state.sxd))history.pushState(Object.assign({},history.state||{},{sxd:1}),'')}catch(e){}
   L.tabIndex=-1;L.focus({preventScroll:true});
-  return sxGrow(true,SXD_FROM).catch(()=>{});
+  return new Promise(res=>sxMove(1,undefined,res));
 }
-function sxHide(){const L=sxLayer();
-  [L,L.querySelector('.sx-tint'),L.querySelector('.sx-bar'),$('#sxScroll')].forEach(x=>x.getAnimations().forEach(a=>a.cancel()));
-  L.classList.remove('is-open','is-closing');L.style.clipPath='';L.inert=setPhone();document.body.classList.remove('setdetail')}
-function sxClose(instant){
+function sxHide(){
+  cancelAnimationFrame(SXP.raf);SXP.p=0;SXP.v=0;SXP.done=null;
+  const L=sxLayer();
+  L.classList.remove('is-open','is-closing');L.style.transform='';L.style.borderRadius='';L.style.opacity='';L.style.willChange='';
+  sxUnder().forEach(e=>{e.style.transform='';e.style.willChange=''});
+  const s=$('#sxScrim');if(s)s.style.opacity='0';
+  L.inert=setPhone();document.body.classList.remove('setdetail');
+}
+function sxClose(instant,v0){
   const L=sxLayer();if(!L.classList.contains('is-open'))return;
   if(instant){sxHistBack();sxHide();return}
   if(L.classList.contains('is-closing'))return;
   sxHistBack();
   document.body.classList.remove('setdetail');
-  /* back into the row of the section on screen, or the one it came from */
-  const row=$('#setList .sx-nav[data-setsec="'+SET_SEC+'"]')||SXD_FROM,tok=L.__c=(L.__c||0)+1;
-  L.inert=true;L.classList.add('is-closing');
-  const back=SXD_FROM&&SXD_FROM.isConnected&&!SXD_FROM.closest('.sx-nav')&&SXD_FROM.dataset.setsec===SET_SEC?SXD_FROM:row;
-  sxGrow(false,back).then(()=>{if(L.__c===tok&&!document.body.classList.contains('setdetail'))sxHide()},()=>{});
-  const f=back&&back.closest('button');if(f)f.focus({preventScroll:true});
+  L.classList.add('is-closing');L.inert=true;
+  const row=$('#setList .sx-nav[data-setsec="'+SET_SEC+'"]');
+  sxMove(0,v0,()=>{if(L.classList.contains('is-closing'))sxHide()});
+  if(row)row.focus({preventScroll:true});
 }
+/* drag it back: a horizontal pull to the right that starts anywhere on the
+   section except a control that itself slides (sliders, fields) */
+(function(){
+  const L=sxLayer();let d=null,swallow=false;
+  L.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'||!sxOpenNow()||e.target.closest('.pl-slider,input,textarea,select'))return;
+    d={id:e.pointerId,x0:e.clientX,y0:e.clientY,go:false,p0:SXP.p,pts:[[e.clientX,e.timeStamp]]};
+  },{passive:true});
+  L.addEventListener('pointermove',e=>{
+    if(!d||e.pointerId!==d.id)return;
+    const dx=e.clientX-d.x0,dy=e.clientY-d.y0;
+    if(!d.go){
+      if(Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)){d=null;return}
+      if(dx<12||dx<Math.abs(dy)*1.4)return;
+      d.go=true;d.x0=e.clientX;d.p0=SXP.p;cancelAnimationFrame(SXP.raf);
+      try{L.setPointerCapture(e.pointerId)}catch(err){}
+      L.querySelectorAll('.is-down').forEach(x=>x.classList.remove('is-down'));
+      L.style.willChange='transform';
+    }
+    const W=innerWidth;
+    SXP.p=Math.max(0,Math.min(1,d.p0-(e.clientX-d.x0)/W));sxPaint(SXP.p);
+    d.pts.push([e.clientX,e.timeStamp]);if(d.pts.length>6)d.pts.shift();
+  },{passive:true});
+  const end=e=>{
+    if(!d||e.pointerId!==d.id)return;
+    const g=d;d=null;if(!g.go)return;
+    swallow=true;setTimeout(()=>{swallow=false},0);
+    const a=g.pts[0],b=g.pts[g.pts.length-1],vx=(b[0]-a[0])/Math.max(1,b[1]-a[1]);  /* px per ms */
+    const W=innerWidth,v=-vx*1000/W;
+    if(e.type!=='pointercancel'&&(SXP.p<.62||vx>.45))sxClose(false,v);
+    else sxMove(1,v);
+  };
+  L.addEventListener('pointerup',end);L.addEventListener('pointercancel',end);
+  L.addEventListener('click',e=>{if(swallow){e.preventDefault();e.stopPropagation();swallow=false}},true);
+})();
 function sxGoto(id,from){
   if(VIEW!=='settings'){openSettingsSection(id);return Promise.resolve()}
   if(!setPhone())return sxSwitch(id);

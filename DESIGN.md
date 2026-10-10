@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.4** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.5** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -528,9 +528,17 @@ version of each):
   (bar first, then content, then a bottom bar) under the transform.
 - **Messages wait for motion.** A snackbar triggered by opening a screen
   appears after the screen has landed, never mid-transition.
-- **Hierarchy (list → detail):** a container transform. The tapped card
-  becomes the detail surface (View Transitions API with
-  `view-transition-name`, or a FLIP fallback).
+- **Hierarchy (list → detail): the page slides over (Rule).** The detail
+  page comes in from the right edge as a whole page with its leading
+  corners rounded while it travels and a soft shadow on its edge; the list
+  underneath drifts left about a fifth of the width and dims under a scrim.
+  Back reverses it, a third quicker. One spring stepped per frame drives
+  every layer, so a tap, Back or a finger dragging the page to the right
+  (1:1, close past ~40% or on a flick, else spring home) takes it over
+  mid-flight. **Never a container transform or a grow-from-the-row reveal
+  for a page:** the user found it dated ("from 2017") and its return
+  covered the row (Settings, v6.58–6.60). Existing grow-from-card openings
+  (`plumeOpen` on Home) stay until the user asks about them.
 - **Shared indicators travel.** One active pill in a nav bar, tabs or
   segmented control slides and stretches to the new item
   (`translateX` + `scaleX` on `--p-spatial`). Never crossfade two
@@ -627,10 +635,8 @@ covered, nothing cramped.
   Navigation: bottom nav bar on compact, rail on medium, rail or drawer on
   expanded.
 - **A list → detail screen**: on compact (≤ 860px in Nidus) the detail is a
-  full-screen layer that grows out of the row tapped and returns into it,
-  with its own Back entry; wider, both panes show and one marker travels
-  in the list. While the layer grows, the list stays visible around it:
-  that is the container transform working, not a layering bug.
+  full-screen layer that slides over the list (§6, Hierarchy), with its own
+  Back entry; wider, both panes show and one marker travels in the list.
 - Always check **390px** (phone) and a desktop width. No horizontal scroll,
   ever. Respect `env(safe-area-inset-*)`.
 - **Rule: floating things never cover content at rest.** A screen with a
@@ -968,15 +974,16 @@ The quality bar. A surface is done when it *feels* like §2, and:
     count went while the new one comes in from the other side.
   - **Text swap** (`sxSwap`): any text that changes on a live screen fades
     out in 80ms and the new text fades in, retargetable.
-  - **List → detail on a phone** (`sxOpen` / `sxClose` / `sxGrow`): the
-    section is a fixed layer that grows out of the tapped row by
-    `clip-path: inset()` from the row's box and radius, the row's own colour
-    (`.sx-tint`) fading off it, bar and content rising 14px behind; closing
-    goes back into the row of the section on screen while the layer fades
-    out, so the real row shows through as it lands, and the layer is
-    removed the moment it is invisible. A tap while it is closing reopens
-    it from the current clip and fade (`is-closing`). Its history key is
-    `{sxd:1}`.
+  - **List → detail on a phone** (`sxOpen` / `sxClose` / `sxMove` /
+    `sxPaint`, v6.61): one progress value `SXP.p` (0 list, 1 section) on a
+    per-frame spring (340 / 0.9 going, 520 / 1 coming back) paints the
+    layer's `translate3d`, its leading corner radius (28px while travelling,
+    square once landed), the list, app bar and nav bar drifting −20% and the
+    scrim (`#sxScrim`, z 79). The layer has `touch-action: pan-y`, and so
+    does its scroller (touch-action is read only up to the nearest
+    scroller), so a sideways pull reaches the drag-back handler; it ignores
+    pulls that start on a slider or a field. A tap while it is closing
+    reopens it from where it is. Its history key is `{sxd:1}`.
   - **List → detail on a large screen** (`sxSwitch`, `sxMark`): a 4px
     marker travels to the open row (`translate` transition) and stretches
     in proportion to the distance (a WAAPI `scale` on top); the old section
@@ -1119,6 +1126,11 @@ A surface that is not listed here is legacy.
 - **Plume 2.4** (2026-10-10): a shape whose corners morph rests at its real
   radius (half its height), never 999px; the chosen option's indicator
   squeezes with its label when pressed.
+
+- **Plume 2.5** (2026-10-10): list → detail pages slide over the list
+  (rounded leading edge, list drifting and dimming, drag back with the
+  finger) on one per-frame spring; no container transform or grow-from-row
+  reveal for a page. From the user's correction on Settings.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

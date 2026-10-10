@@ -374,6 +374,13 @@ does) and work in the scratchpad:
 - **Measure the first frame of a button group**: log the indicator's
   `DOMMatrix.m41` per frame after `pointerdown` + `click` on a 2,000-question
   bank (Settings, v6.58: handler 11ms, moving by the second painted frame).
+- **Test a drag on a layer with CDP touch events, and log the pointer
+  events first.** A `pointercancel` right after the first move means the
+  browser took the gesture: `touch-action` is read from the touched element
+  up to the nearest scroller only, so a scroller inside the layer needs
+  `touch-action: pan-y` too (Settings drag-back, v6.61). Check that a short
+  drag springs home, a long one or a flick closes, a vertical swipe still
+  scrolls, and a slider inside still drags.
 - **Measure a corner morph, don't eyeball it.** Log the element's computed
   `borderTopLeftRadius` (and `scale`) on every animation frame through
   `pointerdown`, a hold and `pointerup`. Every frame should step; a value
