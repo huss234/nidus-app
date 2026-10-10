@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 1.9** · Base: Material 3 Expressive (2025 release and later)
+**Version: Plume 1.10** · Base: Material 3 Expressive (2025 release and later)
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -274,10 +274,25 @@ padding or size.
 - Escape closes **only the top layer**: menu, then dialog or figure viewer,
   then the reader, then nothing. One key press never closes two layers.
 - A Plume layer's key handler runs in the **capture phase** and returns
-  early while a dialog (`#mask.on`) or the figure viewer (`#lbx.on`) is
-  open. In bubble phase it runs after the dialog has already closed itself,
+  early while a dialog (`#mask.on`) or the figure viewer (`#lbx` not
+  `hidden`) is open. In bubble phase it runs after the dialog has already closed itself,
   and closes the layer underneath too.
 - Arrow keys move between items only when focus is not in a text field.
+- **Back closes the top full-screen layer, never the app.** Nidus is often
+  the only page in its tab, so a phone's Back with no history entry of the
+  app's own leaves the app. A full-screen layer (the figure viewer) pushes
+  one history entry when it opens (`{lbx:1}` in `history.state`), closes
+  on `popstate` when the entry it lands on lacks that key, and takes the
+  entry back off (`history.back()`) when it is closed any other way. Decide
+  from the state of the entry, never from a counter, so a late Back after a
+  quick close and reopen cannot close the wrong thing. A stale key found at
+  start-up (a reload while open) is cleared with `replaceState`.
+- **Close is always on screen.** Every full-screen layer has its Close (×)
+  as the first item of its bar, top left, and the bar keeps two or three
+  actions at most; the rest go into a ⋮ menu. Measure at 320–430px that no
+  bar control's right edge passes `innerWidth`. (The legacy figure viewer
+  put six buttons in a row, and on a 390px phone Close sat at x=405, off
+  screen: the user could only leave with Back, which closed the tab.)
 
 ### Reduced motion
 
@@ -543,6 +558,29 @@ Errors say what happened and what is safe ("Nothing was lost").
   a flick it closes, otherwise it springs back. Filter chips widen to show
   a check that draws itself (`grid-template-columns: 0fr → 1fr`,
   `stroke-dashoffset`).
+- **A full-screen picture viewer** (`Plume 1.10 · figure viewer`, `#lbx`):
+  bar with Close, title (slot and "2 of 5"), zoom and ⋮ (Replace, Remove;
+  Remove asks twice through `figArm`, the row turning `error`, and the menu
+  stays open between taps). The picture opens out of the thumbnail tapped
+  (`lbxSource()` finds it, `lbxAt()` gives the transform plus a
+  `clip-path: inset(… round r)` that covers the thumbnail's box, so a
+  cropped gallery tile morphs too); the thumbnail is hidden while its
+  picture is in flight and shown again when it lands or goes back. Opening
+  uses `--p-spatial-slow`, closing `--p-spatial` back into the thumbnail,
+  or a 150ms fade and shrink on the exit curve when it has scrolled away or
+  the picture is zoomed. The picture's fitted box is set in pixels
+  (`lbxFit()`) from its known shape (`f.w/f.h`), so the morph and the zoom
+  measure the picture, not a letterbox; the thumbnail's pixels stand in
+  until the full one loads. Two layers, two transforms: `.lbx__frame`
+  carries the morph and the swipe, the `<img>` carries `FZ`. On touch at
+  fit the frame follows the finger: sideways to step (0.55× past the ends),
+  down to close with the scrim and chrome thinning as it goes; a third of
+  the way (a fifth, down) or a flick commits. A step's new picture slides
+  in only once it has loaded (its animation waits paused), and the
+  neighbours' full pictures are fetched ahead. Several pictures show as
+  dots with one travelling pill (12 at most), and, for a mouse, arrows
+  beside the picture. Focus goes to the dialog itself on open (focusing
+  Close showed its focus layer at rest) and back to where it was on close.
 - **A copyable ID** (`.lbid` in the viewer): a mono chip with the copy
   icon; the snackbar says what was copied and where to use it.
 - **A mark that arrives with the verdict** (the lure tag, `Plume 1.8 ·
@@ -589,6 +627,7 @@ A surface that is not listed here is legacy.
 | Player: focus mode button in the bar, and the compact bar for phones | 1.4 | 6.41 | Moved out of the ⋮ menu. Never highlighted since 6.43: the icon carries the state. The other bar buttons keep their legacy press style |
 | Figure viewer: pinch, pan, double-tap and wheel zoom | 1.5 | 6.45 | The gesture and its springs only. The viewer's bar and buttons are still legacy |
 | Gallery picker ("From gallery" in every figure block) and the image ID chip in the viewer | 1.6 | 6.46 | The "From gallery" and "Gallery" buttons sit in legacy figure rows and match them; the sheet itself is Plume |
+| Figure viewer, whole surface: bar, ⋮ menu, open and close from the thumbnail, swipe to step and drag down to close, dots, side arrows, Back closes it | 1.10 | 6.57 | Rebuilt from scratch; the zoom (1.5) and the ID chip (1.6) are kept as they were. The gallery rail's buttons kept their look and took the touch contract |
 | Alignment of every pill beside text in the answer cards (lure, "your answer", Not here / Right in in both layouts) and the verdict's chips | 1.9 | 6.50 | Alignment only; those legacy components keep their look |
 | Lure tag on the answer cards (player, grouped "Choice by choice", bank preview, companion) and the dimmed lure card's edge | 1.8 | 6.49 | The tag only. The cards around it are still legacy; the editor's "This is the lure" switch and the report's "Took the lure" chip use the legacy controls beside them |
 
@@ -626,6 +665,11 @@ A surface that is not listed here is legacy.
   by colour, never by opacity on an inline.
 - **Plume 1.9** (2026-10-09): a pill beside text is centred on that text
   (`.pl-inl`, `.sp-wlc`), never baseline-aligned or nudged by hand.
+- **Plume 1.10** (2026-10-10): Back closes the top full-screen layer
+  through a history entry of its own; Close is always on screen, top left,
+  with a bar of two or three actions and a ⋮ menu for the rest; the
+  full-screen picture viewer (container morph out of a cropped thumbnail,
+  follow-the-finger step and dismiss).
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

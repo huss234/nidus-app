@@ -198,6 +198,13 @@ exactly**, without waiting to be asked.
   sync; v6.52 did that to recover what the old order lost. The manifest
   pull reads at the branch tip, never at an older `d.head`, so a file is
   never marked as delivered in a newer form than the one merged.
+- **Back must never leave the app from an overlay.** Nidus usually is the
+  only page in its tab, so Back with no entry of the app's own closes the
+  tab (the user lost the app that way from the figure viewer until v6.57).
+  The figure viewer pushes `{lbx:1}` on open and listens for `popstate`
+  (`lbxHistPush` / `lbxHistBack`, DESIGN.md §4 Layers and keys). Any new
+  full-screen layer follows the same pattern with its own key. Dialogs
+  (`#mask`), sheets and the companion don't have one yet.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
   it.
@@ -307,5 +314,14 @@ does) and work in the scratchpad:
   headline), close the page, and open a new page in the same context. To
   test recovery of a device the old build broke, run the old file
   (`git show HEAD:index.html`) first, then reopen with the new one.
+- **Test Back with `page.goBack()`.** It fires `popstate` like a phone's
+  Back. After it, `location.href` must be unchanged, the layer closed and
+  the one underneath (`#mask.on`) still open. Also close with ×, Escape
+  and a close then a reopen 30ms later, then press Back once more: each
+  time `history.state` must end without the layer's key.
+- **Measure that Close is on screen** for any full-screen layer: at 320 /
+  390 / 430px, every bar button's `getBoundingClientRect().right` is at
+  most `innerWidth`. A screenshot hides it: the legacy viewer looked fine
+  with Close cut off at x=405.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

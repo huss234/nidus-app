@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.56 -->
+<!-- Nidus — Personal Qbank · v6.57 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3025,52 +3025,122 @@ body.hasmig{padding-bottom:64px}
 .galtile.need.over .gph{border-color:var(--md-primary);background:var(--md-primary-container)}
 .galtile.need.over .gph .ic{color:var(--md-on-primary-container)}
 
-/* ---------- the figure viewer ---------- */
-/* The viewer sits on a near-opaque scrim, so its chrome needs the light end
-   of the neutral palette in both themes. Picking it up from a role token
-   rather than from #fff keeps the seed hue in the viewer too. */
+/* ---------- the figure viewer ----------
+   Plume 1.10 · figure viewer. Rebuilt in v6.57: the legacy bar held six
+   buttons in one row, and on a phone Close was pushed past the right edge,
+   so the only way out was the phone's Back, which closed the tab. Now:
+   - Close is the first thing in the bar, top left, always on screen;
+   - the bar keeps two actions (zoom, more); Replace, Remove and the image ID
+     live in the ⋮ menu, which grows from its button;
+   - the picture grows out of the thumbnail that was tapped and goes back
+     into it (a clip-path + transform morph), or fades if it has scrolled
+     away;
+   - on touch, it follows the finger: sideways to the next picture, down to
+     close, with the scrim thinning as it goes;
+   - opening pushes one history entry, so Back closes the viewer.
+   It sits on a near-opaque scrim, so its chrome takes the light end of the
+   neutral palette in both themes (--lb-on, from a role token, never #fff). */
 .lbx{
   --lb-on:var(--md-on-surface);
-  position:fixed;inset:0;z-index:120;display:none;flex-direction:column;
-  background:color-mix(in oklab,var(--md-scrim) 94%,transparent);
+  --lb-tone:color-mix(in oklab,var(--lb-on) 14%,transparent);
+  position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;
+  color:var(--lb-on);
 }
 [data-theme="light"] .lbx{--lb-on:var(--md-inverse-on-surface)}
-.lbx.on{display:flex;animation:m3Fade var(--m3-dur-medium) var(--m3-ease-standard)}
-.lbx .lbh{display:flex;align-items:center;gap:10px;padding:12px 16px;flex:0 0 auto}
-.lbx .lbh .chip{background:color-mix(in oklab,var(--lb-on) 16%,transparent);color:var(--lb-on)}
-.lbx .lbh .tiny{color:color-mix(in oklab,var(--lb-on) 72%,transparent)}
-.lbx .lbh .tool{color:var(--lb-on)}
-.lbx .lbh .tool.arm{background:var(--md-error);color:var(--md-on-error)}
-.lbstage{flex:1;min-height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0 16px}
-.lbstage img{max-width:100%;max-height:100%;object-fit:contain;border-radius:var(--m3-corner-l);cursor:zoom-in}
-.lbx.zoom .lbstage img{cursor:zoom-out}
-.lbf{
-  flex:0 0 auto;padding:16px 20px calc(20px + env(safe-area-inset-bottom));
-  color:color-mix(in oklab,var(--lb-on) 78%,transparent);
-  font-size:14px;line-height:20px;text-align:center;
+.lbx[hidden]{display:none}
+.lbx:focus{outline:none}
+.lbx__scrim{
+  position:absolute;inset:0;z-index:-1;background:var(--md-scrim);opacity:0;
+  transition:opacity var(--p-effect-slow-d) var(--p-effect-slow);
 }
+.lbx.is-open .lbx__scrim{opacity:.96}
+.lbx.is-drag .lbx__scrim{transition:none}
+/* the chrome fades in one beat after the picture starts to grow, and leaves
+   at once (exit curve) when it goes back */
+.lbx__top,.lbx__foot,.lbx__side{
+  opacity:0;transition:opacity 130ms var(--p-exit);
+}
+.lbx.is-open .lbx__top,.lbx.is-open .lbx__foot,.lbx.is-open .lbx__side{
+  opacity:1;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow) 40ms;
+}
+.lbx.is-drag .lbx__top,.lbx.is-drag .lbx__foot,.lbx.is-drag .lbx__side{opacity:var(--lb-fade,1);transition:none}
+.lbx__top{
+  flex:0 0 auto;display:flex;align-items:center;gap:4px;
+  padding:calc(4px + env(safe-area-inset-top)) 4px 4px;min-height:56px;
+}
+.lbx .pl-ib{color:var(--lb-on)}
+.lbx__ttl{flex:1;min-width:0;padding:0 8px;display:flex;flex-direction:column}
+.lbx__ttl b{font:500 16px/24px var(--m3-font);letter-spacing:.15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lbx__ttl span{font:500 12px/16px var(--m3-font);letter-spacing:.4px;font-variant-numeric:tabular-nums;color:color-mix(in oklab,var(--lb-on) 70%,transparent)}
+.lbx__ttl span:empty{display:none}
+/* the zoom icon is the focus-mode glyph: four corners that turn inward when
+   zoomed and back out at fit (Plume 1.4 icon morph) */
+.lbx__zic path{transform-box:fill-box;transform-origin:center;transition:transform var(--p-spatial-d) var(--p-spatial)}
+.lbx__zic path:nth-child(2){transition-delay:15ms}.lbx__zic path:nth-child(3){transition-delay:30ms}.lbx__zic path:nth-child(4){transition-delay:45ms}
+.lbx.zoom .lbx__zic path{transform:rotate(180deg)}
+.lbx__ib[aria-expanded="true"]::before{opacity:var(--m3-state-press);border-radius:var(--p-r-m)}
+
+.lbstage{
+  position:relative;flex:1;min-height:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;padding:0 12px;
+}
+.lbx__frame{position:relative;flex:none;display:block}
+.lbstage img{display:block;max-width:none;max-height:none;border-radius:var(--p-r-m);cursor:zoom-in}
+.lbx.zoom .lbstage img{cursor:zoom-out}
+
+/* previous / next beside the picture, for a mouse; a thumb swipes instead */
+.lbx__side{position:absolute;top:50%;z-index:1;margin-top:-24px;display:none}
+.lbx__side--l{left:8px}.lbx__side--r{right:8px}
+.lbx__side .pl-ib::before{inset:0;border-radius:var(--p-r-full);background:var(--lb-on);opacity:.14}
+@media (hover:hover) and (pointer:fine){
+  .lbx.is-many .lbx__side{display:block}
+  .lbx__side .pl-ib:hover::before{opacity:.22}
+}
+.lbx.zoom .lbx__side{opacity:0;pointer-events:none}
+
+.lbx__foot{flex:0 0 auto;padding:12px 20px calc(16px + env(safe-area-inset-bottom));text-align:center}
+/* where you are among several pictures: one pill that travels between dots */
+.lbx__dots{position:relative;display:none;width:max-content;gap:8px;height:8px;margin:0 auto 12px}
+.lbx.is-many .lbx__dots{display:flex}
+.lbx__dots i{width:6px;height:6px;margin:1px;border-radius:var(--p-r-full);background:color-mix(in oklab,var(--lb-on) 34%,transparent)}
+.lbx__dots b{
+  position:absolute;left:0;top:0;width:16px;height:8px;border-radius:var(--p-r-full);background:var(--lb-on);
+  transition:transform var(--p-spatial-d) var(--p-spatial);
+}
+.lbf{
+  color:color-mix(in oklab,var(--lb-on) 86%,transparent);
+  font:400 14px/20px var(--m3-font);letter-spacing:.25px;
+  max-width:60ch;margin:0 auto;max-height:28vh;overflow:auto;overscroll-behavior:contain;
+}
+.lbf:empty{display:none}
 .lbf .fignote{
-  display:block;margin-top:6px;font-size:13px;line-height:18px;
-  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
+  display:block;margin-top:4px;font-size:13px;line-height:18px;
+  color:color-mix(in oklab,var(--lb-on) 62%,transparent);
 }
 /* the rail out of the viewer and back into the bank — one row per question
    that carries this picture, because a deduplicated figure can serve several */
-.lbq{flex:0 0 auto;display:none;padding:0 16px calc(18px + env(safe-area-inset-bottom));}
+.lbq{display:none;padding-top:12px}
 .lbq.on{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .lbq button{
   display:inline-flex;align-items:center;gap:8px;max-width:100%;
   height:40px;padding:0 16px;border:none;
-  border-radius:var(--m3-corner-full);
-  background:color-mix(in oklab,var(--lb-on) 16%,transparent);
-  color:var(--lb-on);
-  font-family:var(--m3-font);font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),
-             transform var(--m3-spatial) var(--m3-spring-expressive);
+  border-radius:var(--p-r-full);background:var(--lb-tone);color:var(--lb-on);
+  font:500 14px/20px var(--m3-font);letter-spacing:.1px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
-.lbq button:active{border-radius:var(--m3-corner-s);transform:scale(.96);transition-duration:var(--m3-shape-in)}
+.lbq button.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.lbq button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
 .lbq button .ic{width:18px;height:18px;flex:0 0 18px}
 .lbq button .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .lbq button .mono{font-family:var(--m3-mono);opacity:.8;flex:0 0 auto}
+
+/* the ⋮ menu: a Plume menu on the viewer's own layer, grown from its button */
+.lbx__menu{position:absolute;z-index:2;top:calc(56px + env(safe-area-inset-top));right:8px;transform-origin:calc(100% - 24px) 0}
+.lbx__menu .arm{color:var(--md-error)}
+.lbx__menu .arm .ic{color:var(--md-error)}
+.lbx__menu .t1,.lbx__menu .arm .t0{display:none}
+.lbx__menu .arm .t1{display:inline}
+
 /* Plume 1.5 · figure viewer zoom. The stage takes every touch, because
    the picture zooms and pans by transform alone (FZ, in script): left to
    the browser, two fingers zoomed the whole page instead. Nothing here
@@ -3094,6 +3164,7 @@ body.hasmig{padding-bottom:64px}
 .lbid:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
 .lbid.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);background:color-mix(in oklab,var(--lb-on) 22%,transparent);
   transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+@media (prefers-reduced-motion:reduce){.lbx__zic path,.lbx__dots b{transition:none}}
 
 /* Plume 1.6 · gallery picker. A bottom sheet on phones (rises from the
    edge on --p-spatial-slow, follows the finger down from its handle), a
@@ -5518,7 +5589,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.56</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.57</span></div>
           <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
         </div>
       </div>
@@ -5528,7 +5599,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.56 · sharded store</span>
+        <span class="chip" id="verChip">v6.57 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
@@ -5646,24 +5717,28 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 <div id="toast" role="status" aria-live="polite"></div>
 
 <!-- ============ FIGURE VIEWER ============ -->
-<div class="lbx" id="lbx" aria-hidden="true">
-  <div class="lbh">
-    <span class="chip" id="lbxSlot">figure</span>
-    <span class="tiny muted" id="lbxCount"></span>
-    <div style="margin-left:auto;display:flex;gap:2px">
-      <button class="tool" id="lbxPrev" title="Previous figure"><svg class="ic"><use href="#i-prev"/></svg></button>
-      <button class="tool" id="lbxNext" title="Next figure"><svg class="ic"><use href="#i-next"/></svg></button>
-      <button class="tool" id="lbxZoom" title="Actual size"><svg class="ic"><use href="#i-expand"/></svg></button>
-      <button class="tool" id="lbxSwap" title="Replace this photo"><svg class="ic"><use href="#i-swap"/></svg></button>
-      <button class="tool" id="lbxDel" title="Remove this photo"><svg class="ic"><use href="#i-trash"/></svg></button>
-      <button class="tool" id="lbxClose" title="Close"><svg class="ic"><use href="#i-close"/></svg></button>
-    </div>
+<div class="lbx" id="lbx" role="dialog" aria-modal="true" aria-labelledby="lbxSlot" tabindex="-1" hidden inert>
+  <div class="lbx__scrim"></div>
+  <div class="lbx__top">
+    <button class="pl-ib pl-press" id="lbxClose" title="Close" aria-label="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    <div class="lbx__ttl"><b id="lbxSlot">Question figure</b><span id="lbxCount"></span></div>
+    <button class="pl-ib pl-press" id="lbxZoom" title="Zoom in" aria-label="Zoom in"><svg class="ic lbx__zic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 3.4H3.4v5.8"/><path d="M14.8 3.4h5.8v5.8"/><path d="M20.6 14.8v5.8h-5.8"/><path d="M3.4 14.8v5.8h5.8"/></svg></button>
+    <button class="pl-ib pl-press lbx__ib" id="lbxMore" title="More" aria-label="More" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
   </div>
   <div class="lbstage" id="lbxStage"></div>
-  <div class="lbf" id="lbxCap"></div>
-  <!-- only drawn when the viewer was opened from the gallery: finding the
-       picture is half the errand, the item it teaches is the other half -->
-  <div class="lbq" id="lbxQ"></div>
+  <div class="lbx__side lbx__side--l"><button class="pl-ib pl-press" id="lbxPrev" title="Previous picture" aria-label="Previous picture"><svg class="ic"><use href="#i-prev"/></svg></button></div>
+  <div class="lbx__side lbx__side--r"><button class="pl-ib pl-press" id="lbxNext" title="Next picture" aria-label="Next picture"><svg class="ic"><use href="#i-next"/></svg></button></div>
+  <div class="lbx__foot">
+    <div class="lbx__dots" id="lbxDots" aria-hidden="true"></div>
+    <div class="lbf" id="lbxCap"></div>
+    <!-- only drawn when the viewer was opened from the gallery: finding the
+         picture is half the errand, the item it teaches is the other half -->
+    <div class="lbq" id="lbxQ"></div>
+  </div>
+  <div class="pl-menu lbx__menu" id="lbxMenu" role="menu" hidden>
+    <button class="pl-menu__item pl-press" role="menuitem" id="lbxSwap"><svg class="ic"><use href="#i-swap"/></svg><span><b>Replace photo</b><small>Choose another file for this slot</small></span></button>
+    <button class="pl-menu__item pl-press" role="menuitem" id="lbxDel" title="Remove this photo"><svg class="ic"><use href="#i-trash"/></svg><span><b><span class="t0">Remove photo</span><span class="t1">Tap again to remove</span></b><small>Take it off this question</small></span></button>
+  </div>
 </div>
 
 <!-- ============ GALLERY PICKER (Plume 1.6) ============ -->
@@ -6583,7 +6658,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.56';
+const APP_VERSION='6.57';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8523,24 +8598,84 @@ function figViewQid(){
   if(FIG.view.gal){const e=FIG.view.gal[FIG.view.i];return e?e.qid:null}
   return FIG.view.qid;
 }
+/* Plume 1.10 · figure viewer (v6.57). The picture sits in .lbx__frame, which
+   carries the open/close morph and the swipe; the <img> inside it carries
+   the zoom (FZ), so the two never fight over one transform. */
+const LBX={src:null,tok:0,back:null,step:0};
+/* the thumbnail on screen that shows the picture now on the stage: where the
+   viewer grows from, and where it goes back to */
+function lbxSource(){
+  if(!FIG.view)return null;
+  const f=figViewList()[FIG.view.i];if(!f)return null;
+  let el=null;
+  if(FIG.view.gal){
+    el=document.querySelector(`.galtile[data-galidx="${FIG.view.i}"] img`);
+    if(el&&f.media&&el.getAttribute('data-media')!==f.media)el=null;
+  }else{
+    const all=$$('.figs').filter(w=>w.dataset.figq===FIG.view.qid)
+      .map(w=>w.querySelector(`[data-figopen="${CSS.escape(f.fid)}"]`)).filter(x=>x&&x.getClientRects().length);
+    el=all[all.length-1]||null;
+  }
+  if(!el)return null;
+  const r=el.getBoundingClientRect();
+  if(r.width<8||r.height<8||r.bottom<0||r.top>innerHeight||r.right<0||r.left>innerWidth)return null;
+  return el;
+}
+/* the picture's size at fit: the largest box of its own shape the stage
+   holds, never past its real size. Set in pixels, so the zoom and the morph
+   measure a box that is exactly the picture, never a letterboxed one. */
+function lbxFit(){
+  const st=$('#lbxStage'),im=st&&st.querySelector('img');if(!im)return false;
+  const r=+im.dataset.ar||(im.naturalWidth&&im.naturalHeight?im.naturalWidth/im.naturalHeight:0);
+  if(!r)return false;
+  const cs=getComputedStyle(st),W=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),H=st.clientHeight;
+  if(W<=0||H<=0)return false;
+  let w=W,h=W/r;if(h>H){h=H;w=H*r}
+  const nw=+im.dataset.nw||im.naturalWidth||0;
+  if(nw&&w>nw){w=nw;h=nw/r}
+  im.style.width=Math.round(w)+'px';im.style.height=Math.round(h)+'px';
+  return true;
+}
+addEventListener('resize',()=>{if(!$('#lbx').hidden)lbxFit()});
 function figDrawViewer(){
   const list=figViewList();
   if(!list.length)return figCloseViewer();
   if(FIG.view.i>=list.length)FIG.view.i=list.length-1;
   if(FIG.view.i<0)FIG.view.i=0;
-  const f=list[FIG.view.i];
-  $('#lbxStage').innerHTML=f.media
-    ? `<img data-media="${esc(f.media)}" data-mkind="full" alt="${esc(f.caption||f.alt||'')}">`
-    : `<img src="${esc(f.src)}" alt="${esc(f.caption||f.alt||'')}">`;
-  $('#lbxSlot').textContent=f.slot==='expl'?'explanation figure':'question figure';
+  const f=list[FIG.view.i],alt=esc(f.caption||f.alt||'');
+  /* the thumbnail's own pixels stand in until the full picture is to hand,
+     so the morph never grows an empty box */
+  const th=lbxSource(),ar=(f.w&&f.h)?f.w/f.h:(th&&th.naturalWidth?th.naturalWidth/th.naturalHeight:0);
+  const meta=`data-ar="${ar||''}" data-nw="${f.w||''}" alt="${alt}" draggable="false"`;
+  $('#lbxStage').innerHTML='<div class="lbx__frame">'+(f.media
+    ? `<img data-media="${esc(f.media)}" data-mkind="full" ${meta}>`
+    : `<img src="${esc(f.src)}" ${meta}>`)+'</div>';
+  const im=$('#lbxStage img');
+  if(f.media&&th&&th.currentSrc)im.src=th.currentSrc;
+  im.addEventListener('load',()=>{if(!im.dataset.ar)lbxFit()});
+  $('#lbxSlot').textContent=f.slot==='expl'?'Explanation figure':'Question figure';
   $('#lbxCount').textContent=list.length>1?(FIG.view.i+1)+' of '+list.length:'';
+  const box=$('#lbx'),many=list.length>1;
+  box.classList.toggle('is-many',many);
+  const dots=$('#lbxDots');
+  if(many&&list.length<=12){
+    if(dots.childElementCount!==list.length+1)dots.innerHTML='<i></i>'.repeat(list.length)+'<b></b>';
+    dots.lastElementChild.style.transform=`translateX(${FIG.view.i*16-4}px)`;
+    dots.style.visibility='';
+  }else{dots.innerHTML='';dots.style.visibility='hidden'}
   const vp=figCapPair(f);
   $('#lbxCap').innerHTML=(vp.cap?esc(vp.cap)+(vp.note?`<span class="fignote">${esc(vp.note)}</span>`:''):'')
     +(f.media?`<span class="lbidrow"><button class="lbid pl-press" data-copyimg="${esc(f.media)}" title="Copy this picture's ID, to reuse it in another question"><svg class="ic"><use href="#i-copy"/></svg>${figImgId(f.media)}</button></span>`:'');
-  $('#lbxPrev').style.display=$('#lbxNext').style.display=list.length>1?'inline-flex':'none';
+  /* Replace and Remove act on a question; a picture with no owner has neither */
+  const qid=figViewQid();
+  $('#lbxMore').style.visibility=qid?'':'hidden';
   FZ.reset();
-  $('#lbxDel').classList.remove('arm');
+  const del=$('#lbxDel');clearTimeout(del._armT);del.classList.remove('arm');
+  lbxFit();
   figDrawViewerQ();
+  /* the neighbours' full pictures are fetched ahead, so a swipe finds them */
+  if(list.length>1)[1,-1].forEach(k=>{const n=list[(FIG.view.i+k+list.length)%list.length];
+    if(n&&n.media)try{MEDIA.url(n.media,'full').catch(()=>{})}catch(e){}});
 }
 /* The rail is only for the gallery: inside a question you are already
    standing in the item, so a button offering to take you there is noise. */
@@ -8551,7 +8686,7 @@ function figDrawViewerQ(){
   const ids=(e&&e.qids&&e.qids.length)?e.qids:(e?[e.qid]:[]);
   rail.innerHTML=ids.map(id=>{
     const q=Q_BY_ID[id];if(!q)return '';
-    return `<button data-galopen="${esc(id)}">
+    return `<button class="pl-press" data-galopen="${esc(id)}">
       <svg class="ic"><use href="#i-bank"/></svg>
       <span class="mono">${esc(q.pubId||pubIdOf(q.id))}</span>
       <span class="t">${esc((q.stem||q.leadIn||'Open the question').slice(0,60))}</span>
@@ -8559,42 +8694,183 @@ function figDrawViewerQ(){
   }).join('');
   rail.classList.toggle('on',!!rail.innerHTML);
 }
+/* the morph between the thumbnail and the stage: the frame is moved and
+   scaled until it covers the thumbnail's box, and clipped to that box (a
+   gallery tile crops its picture), with the thumbnail's own corners */
+function lbxAt(fr,src){
+  const F=fr.getBoundingClientRect(),R=src.getBoundingClientRect();
+  if(!F.width||!F.height)return null;
+  const k=Math.max(R.width/F.width,R.height/F.height);
+  const dx=R.left+R.width/2-(F.left+F.width/2),dy=R.top+R.height/2-(F.top+F.height/2);
+  const ix=Math.max(0,(F.width-R.width/k)/2),iy=Math.max(0,(F.height-R.height/k)/2);
+  const rad=(parseFloat(getComputedStyle(src).borderTopLeftRadius)||0)/k;
+  return {transform:`translate(${dx}px,${dy}px) scale(${k})`,clipPath:`inset(${iy}px ${ix}px round ${rad}px)`};
+}
+const LBX_REST='inset(0px 0px round 12px)';
+/* Back closes the viewer. Opening adds one history entry (state lbx), so the
+   phone's Back lands on the page underneath instead of leaving the app;
+   closing any other way takes that entry back off. The decision reads the
+   state of the entry, never a counter, so a Back that arrives late (after a
+   quick close and reopen) cannot close the wrong thing. */
+function lbxHistPush(){try{if(!(history.state&&history.state.lbx))history.pushState(Object.assign({},history.state,{lbx:1}),'')}catch(e){}}
+function lbxHistBack(){try{if(history.state&&history.state.lbx)history.back()}catch(e){}}
+try{if(history.state&&history.state.lbx)history.replaceState(Object.assign({},history.state,{lbx:0}),'')}catch(e){}
+addEventListener('popstate',e=>{
+  if(!(e.state&&e.state.lbx)&&!$('#lbx').hidden)figCloseViewer(true);
+});
+function lbxShow(){
+  const b=$('#lbx');
+  if(b.__closing)lbxDone();
+  const src=lbxSource();
+  LBX.back=document.activeElement;
+  b.hidden=false;b.inert=false;
+  lbxFit();
+  b.getBoundingClientRect();
+  b.classList.add('is-open');
+  document.body.style.overflow='hidden';
+  lbxHistPush();
+  const fr=$('#lbxStage .lbx__frame');
+  if(fr&&fr.animate){
+    const from=src&&!Motion.reduced?lbxAt(fr,src):null;
+    if(from){
+      const sp=PL('spatial-slow'),tok=++LBX.tok;
+      LBX.src=src;src.style.visibility='hidden';
+      fr.animate([from,{transform:'none',clipPath:LBX_REST}],{duration:sp.d,easing:sp.e})
+        .finished.then(()=>{if(tok===LBX.tok&&LBX.src===src&&!b.__closing){src.style.visibility='';LBX.src=null}},()=>{});
+    }else{
+      const sp=PL('spatial');
+      fr.animate(Motion.reduced?[{opacity:0},{opacity:1}]:[{opacity:0,transform:'scale(.92)'},{opacity:1,transform:'none'}],{duration:Motion.reduced?150:sp.d,easing:sp.e});
+    }
+  }
+  requestAnimationFrame(()=>{try{b.focus({preventScroll:true})}catch(e){}});
+}
 /* the gallery's way in: an explicit list, and the index to start at */
 function figOpenGallery(entries,i){
   if(!entries||!entries.length)return;
+  if($('#lbx').__closing)lbxDone();
   FIG.view={qid:null,i:clamp(i|0,0,entries.length-1),gal:entries};
   figDrawViewer();
-  const b=$('#lbx');
-  b.classList.add('on');b.setAttribute('aria-hidden','false');
-  document.body.style.overflow='hidden';
+  lbxShow();
 }
 function figOpenViewer(qid,fid){
   const q=figQ(qid);if(!q)return;
   const list=figList(q).filter(figFilled);
   if(!list.length)return;
+  if($('#lbx').__closing)lbxDone();
   const i=list.findIndex(f=>f.fid===fid);
   FIG.view={qid,i:i<0?0:i};
   figDrawViewer();
-  const b=$('#lbx');
-  b.classList.add('on');b.setAttribute('aria-hidden','false');
-  document.body.style.overflow='hidden';
+  lbxShow();
 }
-function figCloseViewer(){
+/* closing goes back into the thumbnail if it is still on screen (and the
+   picture is not zoomed), otherwise it fades and shrinks in place. The
+   viewer is hidden only once every animation in it has finished. */
+function figCloseViewer(fromHistory){
   const b=$('#lbx');
-  b.classList.remove('on','zoom');b.setAttribute('aria-hidden','true');
+  if(b.hidden||b.__closing)return;
+  if(fromHistory!==true)lbxHistBack();
+  lbxMenu(false,true);
+  b.__closing=1;b.inert=true;
+  const fr=$('#lbxStage .lbx__frame');
+  const cur=fr?getComputedStyle(fr).transform:'none',zoomed=b.classList.contains('zoom');
+  if(fr)fr.getAnimations().forEach(a=>a.cancel());
+  if(LBX.src){LBX.src.style.visibility='';LBX.src=null}
+  const src=zoomed?null:lbxSource();
+  b.classList.remove('is-open','is-drag');
+  const scrim=b.querySelector('.lbx__scrim');scrim.style.opacity='';b.style.removeProperty('--lb-fade');
+  if(fr&&fr.animate&&!Motion.reduced){
+    fr.style.transform='';
+    const to=src?lbxAt(fr,src):null,sp=PL('spatial');
+    if(to){
+      LBX.src=src;src.style.visibility='hidden';
+      fr.animate([{transform:cur,clipPath:LBX_REST},to],{duration:sp.d,easing:sp.e,fill:'forwards'});
+    }else{
+      fr.animate([{opacity:1,transform:cur},{opacity:0,transform:(cur==='none'?'':cur+' ')+'scale(.92)'}],{duration:150,easing:PL_EXIT,fill:'forwards'});
+    }
+  }else if(fr){
+    fr.style.transform='';
+    fr.animate([{opacity:1},{opacity:0}],{duration:150,easing:PL_EXIT,fill:'forwards'});
+  }
+  const tok=++LBX.tok;
+  requestAnimationFrame(()=>{
+    Promise.all(b.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})))
+      .then(()=>{if(tok===LBX.tok&&b.__closing)lbxDone()});
+  });
+  document.body.style.overflow='';
+  const back=LBX.back;LBX.back=null;
+  if(back&&back.isConnected&&back!==document.body)try{back.focus({preventScroll:true})}catch(e){}
+}
+function lbxDone(){
+  const b=$('#lbx');
+  b.getAnimations({subtree:true}).forEach(a=>a.cancel());
+  b.hidden=true;b.__closing=0;b.classList.remove('zoom','is-many');
+  if(LBX.src){LBX.src.style.visibility='';LBX.src=null}
   FZ.reset();
   $('#lbxStage').innerHTML='';
   const rail=$('#lbxQ');if(rail){rail.classList.remove('on');rail.innerHTML=''}
-  document.body.style.overflow='';
   FIG.view=null;
   try{MEDIA.sweep()}catch(e){}
 }
+/* next and previous: the old picture leaves the way it was going (from
+   wherever the finger left it), the new one comes in from the other side */
 function figStep(d){
-  const list=figViewList();if(list.length<2)return;
-  FIG.view.i=(FIG.view.i+d+list.length)%list.length;
-  figDrawViewer();
+  const list=figViewList();if(list.length<2||$('#lbx').__closing)return;
+  const old=$('#lbxStage .lbx__frame'),tok=++LBX.step;
+  const go=()=>{
+    if(tok!==LBX.step||!FIG.view)return;
+    FIG.view.i=(FIG.view.i+d+list.length)%list.length;
+    figDrawViewer();
+    const fr=$('#lbxStage .lbx__frame');if(!fr||!fr.animate)return;
+    const sp=PL('spatial');
+    const a=fr.animate(Motion.reduced?[{opacity:0},{opacity:1}]:[{opacity:0,transform:`translate3d(${48*d}px,0,0)`},{opacity:1,transform:'none'}],{duration:Motion.reduced?150:sp.d,easing:sp.e});
+    /* it comes in only once its pixels are there, so it never lands half
+       faded or blank; a picture that never arrives comes in after 400ms */
+    const im=fr.querySelector('img');
+    if(im&&!(im.complete&&im.naturalWidth)){
+      a.pause();
+      let t=0;const run=()=>{clearTimeout(t);if(a.playState==='paused')a.play()};
+      im.addEventListener('load',run,{once:true});im.addEventListener('error',run,{once:true});
+      t=setTimeout(run,400);
+    }
+  };
+  if(!old||!old.animate||!old.isConnected)return go();
+  const cur=getComputedStyle(old).transform;
+  old.getAnimations().forEach(a=>a.cancel());old.style.transform='';
+  const far=Motion.reduced?cur:(cur==='none'?'':cur+' ')+`translate3d(${-64*d}px,0,0)`;
+  old.animate([{opacity:1,transform:cur},{opacity:0,transform:far}],{duration:110,easing:PL_EXIT,fill:'forwards'})
+    .finished.then(go,go);
 }
-$('#lbxClose').onclick=figCloseViewer;
+/* the ⋮ menu, grown from its button (as cpqMenu); a tap anywhere else
+   closes it */
+function lbxMenu(on,now){
+  const m=$('#lbxMenu'),b=$('#lbxMore');
+  if(on===undefined)on=m.hidden||!!m.__closing;
+  if(on){
+    m.getAnimations({subtree:true}).forEach(a=>a.cancel());
+    m.__closing=0;m.hidden=false;b.setAttribute('aria-expanded','true');
+    if(!Motion.reduced){
+      const sp=PL('spatial');
+      m.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+      [...m.children].forEach((c,j)=>c.animate([{opacity:0,transform:'translate3d(0,-8px,0)'},{opacity:1,transform:'none'}],
+        {duration:sp.d,easing:sp.e,delay:40+j*30,fill:'backwards'}));
+    }else m.animate([{opacity:0},{opacity:1}],{duration:150});
+    requestAnimationFrame(()=>m.firstElementChild.focus({preventScroll:true}));
+    return;
+  }
+  b.setAttribute('aria-expanded','false');
+  const del=$('#lbxDel');clearTimeout(del._armT);del.classList.remove('arm');
+  if(m.hidden)return;
+  if(now||!m.animate){m.getAnimations({subtree:true}).forEach(a=>a.cancel());m.hidden=true;m.__closing=0;return}
+  if(m.__closing)return;m.__closing=1;
+  m.animate([{opacity:1,transform:'none'},{opacity:0,transform:Motion.reduced?'none':'scale(.92)'}],{duration:130,easing:PL_EXIT,fill:'forwards'})
+    .finished.then(()=>{if(m.__closing){m.hidden=true;m.__closing=0;m.getAnimations().forEach(a=>a.cancel())}},()=>{});
+}
+document.addEventListener('pointerdown',e=>{
+  const m=$('#lbxMenu');if(m.hidden||m.__closing)return;
+  if(!e.target.closest('#lbxMenu,#lbxMore'))lbxMenu(false);
+},{passive:true});
+$('#lbxClose').onclick=()=>figCloseViewer();
+$('#lbxMore').onclick=()=>lbxMenu();
 $('#lbxCap').addEventListener('click',e=>{
   const b=e.target.closest('[data-copyimg]');if(!b)return;
   copy(figImgId(b.dataset.copyimg),'Image ID copied. In another question, choose From gallery and paste it into the search.');
@@ -8608,15 +8884,19 @@ $('#lbxStage').addEventListener('click',()=>{
   if(!FZ.swallow())figCloseViewer();
 });
 $('#lbxSwap').onclick=()=>{
+  lbxMenu(false);
   const list=figViewList();if(!list.length)return;
   const f=list[FIG.view.i],qid=figViewQid();
   if(qid)figPick(qid,f.fid,f.slot);
 };
+/* Remove asks twice: the first tap turns the row red and says so, the
+   second removes (figArm), and the menu stays open in between */
 $('#lbxDel').onclick=()=>{
   const list=figViewList();if(!list.length)return;
   const f=list[FIG.view.i],qid=figViewQid();
   if(!qid)return;
   figArm($('#lbxDel'),()=>{
+    lbxMenu(false);
     figRemove(qid,f.fid);
     /* in gallery mode the list is a snapshot, so the entry has to leave it
        by hand or the viewer would go on offering a picture that is gone */
@@ -8624,25 +8904,71 @@ $('#lbxDel').onclick=()=>{
     if(figViewList().length)figDrawViewer();else figCloseViewer();
   });
 };
-/* a photo answers a swipe on a touch screen, which is what every Android
-   gallery has trained the thumb to expect. Only the horizontal axis is
-   claimed, and only while the picture is fit to the screen — once it is
-   zoomed, the drag belongs to the pan. */
+/* On touch the picture follows the finger while it is at fit: sideways to
+   the next one (0.55× past the ends of the list), down to close, with the
+   scrim and chrome thinning as it goes. On release, a third of the way or a
+   flick commits; anything less springs back. Two fingers, or a zoom, hand
+   the touch to FZ. */
 (function(){
-  const st=$('#lbxStage');if(!st)return;
-  let x0=0,y0=0,t0=0,live=false;
+  const st=$('#lbxStage'),box=$('#lbx');if(!st)return;
+  let d=null;
+  const fr=()=>st.querySelector('.lbx__frame');
+  function paint(){
+    const f=fr();if(!f)return;
+    if(d.ax==='x'){f.style.transform=`translate3d(${d.dx}px,0,0)`;return}
+    const H=st.clientHeight||1,p=Math.min(1,Math.max(0,d.dy)/H);
+    f.style.transform=`translate3d(${d.dx*.6}px,${d.dy}px,0) scale(${1-p*.3})`;
+    box.querySelector('.lbx__scrim').style.opacity=String(.96*(1-p*1.6>0?1-p*1.6:0));
+    box.style.setProperty('--lb-fade',String(Math.max(0,1-p*4)));
+  }
+  function back(){
+    const f=fr();box.classList.remove('is-drag');
+    box.querySelector('.lbx__scrim').style.opacity='';box.style.removeProperty('--lb-fade');
+    if(!f)return;
+    const cur=f.style.transform;f.style.transform='';
+    if(cur&&f.animate){const sp=PL('spatial');f.animate([{transform:cur},{transform:'none'}],{duration:sp.d,easing:sp.e})}
+  }
   st.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1||$('#lbx').classList.contains('zoom')){live=false;return}
-    live=true;x0=e.touches[0].clientX;y0=e.touches[0].clientY;t0=Date.now();
+    if(d){if(d.ax)back();d=null;return}
+    if(e.touches.length!==1||box.classList.contains('zoom')||box.__closing)return;
+    const t=e.touches[0];
+    d={x0:t.clientX,y0:t.clientY,ax:null,dx:0,dy:0,tr:[{t:performance.now(),x:0,y:0}]};
   },{passive:true});
-  st.addEventListener('touchend',e=>{
-    if(!live)return;live=false;
-    const t=e.changedTouches[0];if(!t)return;
-    const dx=t.clientX-x0,dy=t.clientY-y0;
-    if(Date.now()-t0>700)return;
-    if(Math.abs(dx)<48||Math.abs(dx)<Math.abs(dy)*1.6)return;
-    figStep(dx<0?1:-1);
+  st.addEventListener('touchmove',e=>{
+    if(!d)return;
+    if(e.touches.length!==1||box.classList.contains('zoom')){if(d.ax)back();d=null;return}
+    const t=e.touches[0];let dx=t.clientX-d.x0,dy=t.clientY-d.y0;
+    if(!d.ax){
+      if(Math.hypot(dx,dy)<10)return;
+      d.ax=Math.abs(dx)>Math.abs(dy)?'x':dy>0?'y':null;
+      if(!d.ax){d=null;return}
+      const f=fr();if(f)f.getAnimations().forEach(a=>a.cancel());
+      if(d.ax==='y')box.classList.add('is-drag');
+      d.x0+=Math.sign(dx)*(d.ax==='x'?10:0);d.y0+=d.ax==='y'?10:0;
+      dx=t.clientX-d.x0;dy=t.clientY-d.y0;
+    }
+    if(d.ax==='x'&&figViewList().length<2)dx*=.55;
+    if(d.ax==='y'&&dy<0)dy*=.55;
+    d.dx=dx;d.dy=dy;
+    d.tr.push({t:performance.now(),x:dx,y:dy});if(d.tr.length>6)d.tr.shift();
+    paint();
   },{passive:true});
+  function end(){
+    if(!d)return;const g=d;d=null;
+    if(!g.ax)return;
+    const a=g.tr[0],z=g.tr[g.tr.length-1],dt=(z.t-a.t)/1000||1;
+    const vx=(z.x-a.x)/dt,vy=(z.y-a.y)/dt;
+    if(g.ax==='x'){
+      const W=st.clientWidth||1;
+      if(figViewList().length>1&&(Math.abs(g.dx)>W/3||(Math.abs(vx)>500&&Math.abs(g.dx)>24)&&Math.sign(vx)===Math.sign(g.dx)))figStep(g.dx<0?1:-1);
+      else back();
+    }else{
+      if(g.dy>(st.clientHeight||1)/5||(vy>700&&g.dy>24))figCloseViewer();
+      else back();
+    }
+  }
+  st.addEventListener('touchend',e=>{if(!e.touches.length)end()},{passive:true});
+  st.addEventListener('touchcancel',()=>{if(d&&d.ax)back();d=null},{passive:true});
 })();
 /* ---------- zoom: pinch, pan, double tap (v6.45 · Plume 1.5) ----------
    The viewer used to offer only an "actual size" switch that relaid the
@@ -8680,7 +9006,11 @@ const FZ=(()=>{
          picture sharp at its new size */
       im.style.willChange=(g||raf||wt)?'transform':'';
     }
-    box.classList.toggle('zoom',s>1.01);
+    const z=s>1.01;
+    if(z!==box.classList.contains('zoom')){
+      box.classList.toggle('zoom',z);
+      const zb=$('#lbxZoom');zb.title=z?'Zoom out':'Zoom in';zb.setAttribute('aria-label',zb.title);
+    }
   }
   /* the picture's fitted box (its centre without the transform), the stage,
      and the ceiling: four times fit, or 1.5× its real size if that is more */
@@ -8815,7 +9145,7 @@ const FZ=(()=>{
     else spring(to);
   },{passive:false});
   addEventListener('resize',()=>{
-    if(!box.classList.contains('on')||(s===1&&!x&&!y))return;
+    if(box.hidden||(s===1&&!x&&!y))return;
     const G=geo();if(G)spring(inside(G,goal||{s,x,y}));
   });
   return {
@@ -8832,8 +9162,10 @@ document.addEventListener('click',e=>{
   setTimeout(()=>previewQuestion(id),90);
 });
 document.addEventListener('keydown',e=>{
-  if(!$('#lbx').classList.contains('on'))return;
-  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();figCloseViewer()}
+  const b=$('#lbx');if(b.hidden||b.__closing)return;
+  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();
+    if(!$('#lbxMenu').hidden){lbxMenu(false);$('#lbxMore').focus();return}
+    figCloseViewer()}
   else if(e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();figStep(1)}
   else if(e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();figStep(-1)}
 },true);
@@ -13948,7 +14280,7 @@ document.addEventListener('pointerdown',e=>{
 /* capture phase: it must see a dialog or the figure viewer before their own
    Escape closes them, or one key press would close two layers */
 document.addEventListener('keydown',e=>{
-  if(!cpqIsOpen()||$('#mask').classList.contains('on')||$('#lbx').classList.contains('on'))return;
+  if(!cpqIsOpen()||$('#mask').classList.contains('on')||!$('#lbx').hidden)return;
   if(e.key==='Escape'){e.preventDefault();
     if(!$('#cpqMenu').hidden){cpqMenu(false);$('#cpqMore').focus();return}
     cpqHide();return}
