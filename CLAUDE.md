@@ -374,5 +374,10 @@ does) and work in the scratchpad:
 - **Measure the first frame of a button group**: log the indicator's
   `DOMMatrix.m41` per frame after `pointerdown` + `click` on a 2,000-question
   bank (Settings, v6.58: handler 11ms, moving by the second painted frame).
+- **Measure a corner morph, don't eyeball it.** Log the element's computed
+  `borderTopLeftRadius` (and `scale`) on every animation frame through
+  `pointerdown`, a hold and `pointerup`. Every frame should step; a value
+  that sits above half the element's height and then lands in one or two
+  frames means it rests at 999px (fixed in v6.60 for Settings).
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

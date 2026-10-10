@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.59 -->
+<!-- Nidus — Personal Qbank · v6.60 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3681,12 +3681,12 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 }
 .sx-search input[type=search]::placeholder{color:var(--md-on-surface-variant)}
 .sx-search__x{
-  position:relative;flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  position:relative;flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:24px;
   color:var(--md-on-surface-variant);opacity:0;transform:scale(.6);pointer-events:none;
-  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast);
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
 .sx-search.has-q .sx-search__x{opacity:1;transform:none;pointer-events:auto}
-.sx-search__x.is-down{transform:scale(var(--p-press-sm));transition-duration:var(--p-effect-fast-d)}
+.sx-search__x.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
 
 /* ---- the hero: a live specimen, theme and accent ---- */
 .sx-hero{margin:0 0 28px;padding:8px 8px 16px;border-radius:var(--p-r-hero);background:var(--p-card)}
@@ -3725,9 +3725,9 @@ button.sx-spec:focus-visible{outline:3px solid var(--md-primary);outline-offset:
 
 /* accent seeds: one ring travels to the chosen colour */
 .sx-seeds{position:relative;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));justify-items:center;margin-top:12px}
-.sx-seed{position:relative;width:44px;height:44px;max-width:100%;display:grid;place-items:center;border-radius:var(--p-r-full)}
+.sx-seed{position:relative;width:44px;height:44px;max-width:100%;display:grid;place-items:center;border-radius:22px}
 .sx-seed i{
-  width:30px;height:30px;border-radius:var(--p-r-full);background:var(--c,var(--md-primary));
+  width:30px;height:30px;border-radius:15px;background:var(--c,var(--md-primary));
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
 .sx-seed[aria-checked="true"] i{transform:scale(.74)}
@@ -3791,7 +3791,7 @@ button.sx-item:focus-visible,.sx-date:focus-within{outline:3px solid var(--md-pr
 /* a section row: tonal shape by category, title, what it is set to */
 .sx-nav{min-height:72px;padding:12px 16px 12px 16px}
 .sx-lead{
-  flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:20px;
   background:var(--p-cat-a);color:var(--p-on-cat-a);
   transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect);
 }
@@ -3867,20 +3867,30 @@ button.sx-item:focus-visible,.sx-date:focus-within{outline:3px solid var(--md-pr
   padding:4px;border-radius:var(--p-r-full);background:var(--p-well);
 }
 .pl-seg__ind{
-  position:absolute;z-index:-1;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / var(--n));border-radius:var(--p-r-full);
+  position:absolute;z-index:-1;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / var(--n));border-radius:20px;
   background:var(--md-primary);transform:translateX(calc(100% * var(--i)));
-  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-fast-d) var(--p-effect-fast);
+  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-d) var(--p-effect),
+             scale var(--p-spatial-fast-d) var(--p-spatial-fast);
 }
-.pl-seg:has(button.is-down[aria-checked="true"]) .pl-seg__ind{border-radius:var(--p-r-m)}
+/* Pressing the chosen option presses the pill under it: it squeezes with its
+   label and its corners square from its real half-height (20px) to 12px. A
+   999px radius only changes visibly below 20px, so the morph used to happen
+   in the last two frames on press and in one frame on release. */
+.pl-seg:has(button.is-down[aria-checked="true"]) .pl-seg__ind{
+  border-radius:var(--p-r-m);scale:var(--p-press);
+  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-fast-d) var(--p-effect-fast),
+             scale var(--p-effect-fast-d) var(--p-effect-fast);
+}
 .pl-seg button{
-  position:relative;min-width:0;height:40px;padding:0 8px;border-radius:var(--p-r-full);
+  position:relative;min-width:0;height:40px;padding:0 8px;border-radius:20px;
   font:550 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  transition:color var(--p-effect-d) var(--p-effect),font-weight var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast);
+  transition:color var(--p-effect-d) var(--p-effect),font-weight var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),
+             border-radius var(--p-effect-d) var(--p-effect);
 }
 .pl-seg button::after{content:"";position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
 @media (hover:hover){.pl-seg button:not([aria-checked="true"]):hover::after{opacity:var(--m3-state-hover)}}
-.pl-seg button.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+.pl-seg button.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
 .pl-seg button[aria-checked="true"]{color:var(--md-on-primary);font-weight:650;transition-delay:var(--lag,0ms)}
 .pl-seg button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
 html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--p-spatial-d) var(--p-spatial),translate var(--p-spatial-d) var(--p-spatial)!important}
@@ -3938,7 +3948,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 /* the stepper: round buttons either side of a number that rolls */
 .sx-step{position:relative;flex:none;display:flex;align-items:center;gap:4px}
 .sx-stb{
-  position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:20px;
   background:var(--md-secondary-container);color:var(--md-on-secondary-container);isolation:isolate;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
@@ -3966,7 +3976,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 
 /* small buttons inside rows (study data) */
 .sx-btn{
-  position:relative;isolation:isolate;flex:none;height:40px;padding:0 16px;border-radius:var(--p-r-full);
+  position:relative;isolation:isolate;flex:none;height:40px;padding:0 16px;border-radius:20px;
   font:550 14px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
@@ -3977,7 +3987,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .sx-btn.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
 .sx-btn[disabled]{opacity:.38;pointer-events:none}
 .sx-icb{
-  position:relative;z-index:2;flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  position:relative;z-index:2;flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:20px;
   color:var(--md-on-surface-variant);isolation:isolate;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
@@ -4000,7 +4010,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 /* sync: the status card is the page's hero */
 .sx-status{display:flex;align-items:center;gap:16px;margin:0 0 12px;padding:20px;border-radius:var(--p-r-hero);background:var(--p-card)}
 .sx-status__ic{
-  flex:none;width:56px;height:56px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  flex:none;width:56px;height:56px;display:grid;place-items:center;border-radius:28px;
   background:var(--p-well);color:var(--md-on-surface-variant);
   transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-slow-d) var(--p-effect-slow);
 }
@@ -5771,7 +5781,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.59</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.60</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5827,7 +5837,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.59 · sharded store</span>
+        <span class="chip" id="verChip">v6.60 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -6885,7 +6895,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.59';
+const APP_VERSION='6.60';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
