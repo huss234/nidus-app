@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.2** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.3** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -500,6 +500,13 @@ version of each):
 - **Departure:** about 30% faster than arrival, with no stagger, shrinking
   back toward the origin. Remove the element only after the exit animation
   has actually finished (measured, never a guessed timer).
+- **Rule: a surface returning into its origin hands off to it; it never
+  covers it.** As it lands it fades out so the real origin shows through,
+  and it is removed as soon as it is invisible, not when a spring's long
+  tail settles. (Settings, v6.58: the closing section landed on its row as
+  a blank card-coloured tile and waited out the spring, so the row the user
+  had tapped looked missing for about a quarter of a second, then popped
+  in. Fixed in v6.59.)
 - **Peer screens:** fade-through. The old screen fades out (≈90ms), then the
   new one fades in with a 12px rise on `--p-spatial`. They never overlap.
 - **A screen opened from a card** (Resume, Companion on Home) grows out of
@@ -952,9 +959,11 @@ The quality bar. A surface is done when it *feels* like §2, and:
     section is a fixed layer that grows out of the tapped row by
     `clip-path: inset()` from the row's box and radius, the row's own colour
     (`.sx-tint`) fading off it, bar and content rising 14px behind; closing
-    goes back into the row of the section on screen. A tap while it is
-    closing reopens it from the current clip (`is-closing`). Its history
-    key is `{sxd:1}`.
+    goes back into the row of the section on screen while the layer fades
+    out, so the real row shows through as it lands, and the layer is
+    removed the moment it is invisible. A tap while it is closing reopens
+    it from the current clip and fade (`is-closing`). Its history key is
+    `{sxd:1}`.
   - **List → detail on a large screen** (`sxSwitch`, `sxMark`): a 4px
     marker travels to the open row (`translate` transition) and stretches
     in proportion to the distance (a WAAPI `scale` on top); the old section
@@ -1089,6 +1098,10 @@ A surface that is not listed here is legacy.
   grows from its row (phone) and the travelling list marker (large screens),
   a control lifted out of a theme change (`sx-ctl`), and search that finds
   single settings. Category hues for leading shapes come from the engine.
+
+- **Plume 2.3** (2026-10-10): a surface returning into its origin hands
+  off to it (fades out as it lands, removed once invisible) and never
+  covers it as a blank tile; found on the Settings close.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
