@@ -12,7 +12,7 @@ commit, without the user asking. Before shipping, check what the work
 taught and write it down:
 
 - a new or changed Plume pattern, helper, component or token → `DESIGN.md`
-  §13 (where it lives) and the §14 ledger, with a Plume version bump if it
+  §14 (where it lives) and the §15 ledger, with a Plume version bump if it
   adds a rule;
 - a bug found and its cause, or a correction from the user → the rule that
   prevents it (`DESIGN.md` for design and motion, this file for workflow
@@ -24,9 +24,20 @@ If nothing was learned, nothing changes; say so in the report.
 ## Design: Plume
 
 Nidus is being redesigned in **Plume**, its own design language built on
-Material 3 Expressive. `DESIGN.md` defines it (the current version is in its
-header). **Read `DESIGN.md` before any visible change and follow it
-exactly**, without waiting to be asked.
+Material 3 Expressive and aiming past it. `DESIGN.md` defines it (the
+current version is in its header). **Read `DESIGN.md` before any visible
+change**, without waiting to be asked. It has three kinds of content:
+**goals** (what a surface must feel like: meet them), **hard rules** (from
+real bugs and the user's corrections: never break them) and **defaults**
+(the numbers: use them unless something better passes the quality bar in
+§13, then record it in §14). Be inventive in how a surface is built; the
+user's favourite motion came from a model given a goal and free rein, not
+a recipe.
+
+- **The foundation lands first.** Plume 2's lighting roles, typeface and
+  radius tokens are app-wide (`DESIGN.md` §9). If the ledger shows them as
+  not landed, the first Plume 2 request lands them in the same change and
+  the report says so.
 
 - **The current UI is legacy.** It was built before Plume and is not a
   reference. Don't copy its colours, shapes, spacing or motion into new
@@ -41,7 +52,7 @@ exactly**, without waiting to be asked.
   1. a CSS block marked `/* Plume <ver> · <surface> */`,
   2. a row in the ledger in `DESIGN.md` §14,
   3. the Plume label in the commit message (see below).
-- **Plume's definition of done** (`DESIGN.md` §12) is the checklist for
+- **Plume's definition of done** (`DESIGN.md` §13) is the checklist for
   every Plume change, including `htmlcheck --shot` screenshots at 390px in
   light and dark.
 - If a change needs a pattern Plume doesn't cover yet, design it within the
@@ -49,6 +60,9 @@ exactly**, without waiting to be asked.
   Plume minor version.
 - The **frontend-design** plugin is installed. Use it for aesthetic
   direction on visual work, but `DESIGN.md` wins whenever they disagree.
+- **The flashcard app (engram-app) is a reference for feel, never a
+  source.** The user pointed at it to show what they mean; don't copy its
+  code, tokens or look into Nidus.
 - **Motion complaints:** when the user says a motion looks wrong or buggy,
   film it frame by frame on the real trigger first, name exactly what
   happens ("Home vanishes in one frame, then a blank screen, then the
@@ -202,7 +216,7 @@ exactly**, without waiting to be asked.
   only page in its tab, so Back with no entry of the app's own closes the
   tab (the user lost the app that way from the figure viewer until v6.57).
   The figure viewer pushes `{lbx:1}` on open and listens for `popstate`
-  (`lbxHistPush` / `lbxHistBack`, DESIGN.md §4 Layers and keys). Any new
+  (`lbxHistPush` / `lbxHistBack`, DESIGN.md §6 Layers and keys). Any new
   full-screen layer follows the same pattern with its own key. Dialogs
   (`#mask`), sheets and the companion don't have one yet.
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
@@ -323,5 +337,20 @@ does) and work in the scratchpad:
   390 / 430px, every bar button's `getBoundingClientRect().right` is at
   most `innerWidth`. A screenshot hides it: the legacy viewer looked fine
   with Close cut off at x=405.
+- **Measure the lighting, don't eyeball it.** In light and dark, read
+  `getComputedStyle` background of the page (`body`) and of a card on it
+  (both are `oklch(L C H)` strings, since the engine writes OKLCH; convert
+  anything else through a canvas). The card's L minus the page's L must be
+  at least 0.035 in light and 0.06 in dark, and never negative. Then put
+  the two screenshots side by side: they must look like the same object,
+  not a negative.
+- **Measure the first frame.** Seed a bank of at least 2,000 questions, then
+  in the page dispatch `pointerdown` and `click` on the control and log
+  the moving element's computed `transform` (a `DOMMatrix`, `m41` for x)
+  on every `requestAnimationFrame` for ~900ms, with the click handler's own
+  duration. The element must have moved by the first or second frame. A
+  long run of identical first values means the motion is waiting for a
+  render. (This found the 40ms freeze in the flashcard app's view switcher,
+  2026-10-10.) The same log shows the spring's overshoot and settling time.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
