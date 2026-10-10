@@ -218,10 +218,24 @@ a recipe.
   The figure viewer pushes `{lbx:1}` on open and listens for `popstate`
   (`lbxHistPush` / `lbxHistBack`, DESIGN.md §6 Layers and keys). Any new
   full-screen layer follows the same pattern with its own key. Dialogs
-  (`#mask`), sheets and the companion don't have one yet.
+  (`#mask`), sheets and the companion don't have one yet. The Settings
+  section layer on phones has one: `{sxd:1}` (`sxOpen` / `sxClose`).
 - **Preferences** are declared once in `SETTINGS_SPEC` (the SETTINGS ENGINE
   section). The Settings screen and the in-session sheet both render from
-  it.
+  it. A section has `cat` (a, b, c, n: the hue of its leading shape on the
+  list, by what it is about) and is listed in `SX_GROUPS`; its summary line
+  is `SX_SUMMARY[id]`, its search words `SX_KEYS[id]`. A row has `label`,
+  an optional `sub` (one short line printed under it) and an optional
+  `hint` (the longer explanation, shown only in the section's (i) note).
+  A row in a static panel that search should reach goes in `SX_STATIC`.
+  Any preference change ends in `applySettings()`, which calls
+  `sxRefresh()` to repaint the list, the seeds and the sync card; never
+  re-render the Settings screen to show a changed value (that cuts the
+  motion of the control under the finger).
+- **Inline icons in Plume surfaces**: `sxIc(id)` (or `<svg data-ic>` +
+  `sxHydrate`) copies a sprite symbol inline. The legacy icon-motion layer
+  hydrates every `<use>` and gives it a generic press motion, which Plume
+  forbids; inline copies are left alone.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget` and
   `nidus_straggler` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
@@ -352,5 +366,13 @@ does) and work in the scratchpad:
   long run of identical first values means the motion is waiting for a
   render. (This found the 40ms freeze in the flashcard app's view switcher,
   2026-10-10.) The same log shows the spring's overshoot and settling time.
+- **Screenshot a fixed full-screen layer at full length**: set its
+  scroller's `overflow` to visible and the layer to `position:absolute;
+  bottom:auto` before `fullPage` (undo after). Film the open with the
+  screencast too: frames taken mid-grow show the list around the growing
+  window, which is correct.
+- **Measure the first frame of a button group**: log the indicator's
+  `DOMMatrix.m41` per frame after `pointerdown` + `click` on a 2,000-question
+  bank (Settings, v6.58: handler 11ms, moving by the second painted frame).
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.57 -->
+<!-- Nidus — Personal Qbank · v6.58 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -78,7 +78,7 @@
 <title>Nidus — Personal Qbank</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,300..800&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wdth,wght,ROND@6..144,25..151,1..1000,0..100&family=Roboto+Flex:opsz,wght@8..144,300..800&family=Roboto+Mono:wght@400;500&display=swap">
 <style>
 /* ============================================================
    NIDUS — Material 3 Expressive (Android 16 "Material You")
@@ -123,17 +123,17 @@
   --md-on-warning: oklch(29.31% 0.1323 82.0);
   --md-warning-container: oklch(37.93% 0.1375 82.0);
   --md-on-warning-container: oklch(91.38% 0.0990 82.0);
-  --md-surface: oklch(18.80% 0.0069 262.0);
+  --md-surface: oklch(14.50% 0.0072 262.0);
   --md-on-surface: oklch(91.38% 0.0057 262.0);
   --md-surface-variant: oklch(39.66% 0.0217 262.0);
   --md-on-surface-variant: oklch(82.76% 0.0186 262.0);
-  --md-surface-dim: oklch(18.80% 0.0069 262.0);
-  --md-surface-bright: oklch(34.48% 0.0078 262.0);
-  --md-surface-container-lowest: oklch(16.42% 0.0067 262.0);
-  --md-surface-container-low: oklch(22.41% 0.0072 262.0);
-  --md-surface-container: oklch(24.14% 0.0073 262.0);
-  --md-surface-container-high: oklch(28.45% 0.0075 262.0);
-  --md-surface-container-highest: oklch(32.76% 0.0077 262.0);
+  --md-surface-dim: oklch(12.50% 0.0072 262.0);
+  --md-surface-bright: oklch(30.00% 0.0064 262.0);
+  --md-surface-container-lowest: oklch(12.00% 0.0072 262.0);
+  --md-surface-container-low: oklch(21.00% 0.0064 262.0);
+  --md-surface-container: oklch(22.80% 0.0064 262.0);
+  --md-surface-container-high: oklch(25.00% 0.0064 262.0);
+  --md-surface-container-highest: oklch(27.50% 0.0072 262.0);
   --md-outline: oklch(65.52% 0.0213 262.0);
   --md-outline-variant: oklch(39.66% 0.0217 262.0);
   --md-inverse-surface: oklch(91.38% 0.0057 262.0);
@@ -143,6 +143,18 @@
   --md-shadow: oklch(0.00% 0.0000 262.0);
   --md-primary-fixed: oklch(91.38% 0.0919 262.0);
   --md-on-primary-fixed: oklch(22.41% 0.1166 262.0);
+  --p-page: oklch(14.50% 0.0072 262.0);
+  --p-bar: oklch(17.50% 0.0064 262.0);
+  --p-card: oklch(21.00% 0.0064 262.0);
+  --p-card-hi: oklch(25.50% 0.0064 262.0);
+  --p-well: oklch(17.00% 0.0072 262.0);
+  --p-float: oklch(28.50% 0.0064 262.0);
+  --p-cat-a: oklch(39.66% 0.0577 262.0);
+  --p-on-cat-a: oklch(91.38% 0.0414 262.0);
+  --p-cat-b: oklch(39.66% 0.0577 337.0);
+  --p-on-cat-b: oklch(91.38% 0.0414 337.0);
+  --p-cat-c: oklch(39.66% 0.0577 157.0);
+  --p-on-cat-c: oklch(91.38% 0.0414 157.0);
 }
 [data-theme="light"]{
   --md-primary: oklch(48.28% 0.1300 262.0);
@@ -169,17 +181,17 @@
   --md-on-warning: oklch(100.00% 0.0000 82.0);
   --md-warning-container: oklch(89.66% 0.1040 82.0);
   --md-on-warning-container: oklch(34.48% 0.1358 82.0);
-  --md-surface: oklch(98.28% 0.0036 262.0);
+  --md-surface: oklch(95.80% 0.0104 262.0);
   --md-on-surface: oklch(22.41% 0.0072 262.0);
   --md-surface-variant: oklch(91.38% 0.0156 262.0);
   --md-on-surface-variant: oklch(39.66% 0.0217 262.0);
-  --md-surface-dim: oklch(88.79% 0.0061 262.0);
-  --md-surface-bright: oklch(98.28% 0.0036 262.0);
+  --md-surface-dim: oklch(92.00% 0.0104 262.0);
+  --md-surface-bright: oklch(98.50% 0.0028 262.0);
   --md-surface-container-lowest: oklch(100.00% 0.0000 262.0);
-  --md-surface-container-low: oklch(96.55% 0.0044 262.0);
-  --md-surface-container: oklch(94.83% 0.0049 262.0);
-  --md-surface-container-high: oklch(93.10% 0.0053 262.0);
-  --md-surface-container-highest: oklch(91.38% 0.0057 262.0);
+  --md-surface-container-low: oklch(99.60% 0.0028 262.0);
+  --md-surface-container: oklch(98.50% 0.0028 262.0);
+  --md-surface-container-high: oklch(97.20% 0.0028 262.0);
+  --md-surface-container-highest: oklch(94.50% 0.0096 262.0);
   --md-outline: oklch(56.90% 0.0219 262.0);
   --md-outline-variant: oklch(82.76% 0.0186 262.0);
   --md-inverse-surface: oklch(31.03% 0.0076 262.0);
@@ -189,6 +201,18 @@
   --md-shadow: oklch(0.00% 0.0000 262.0);
   --md-primary-fixed: oklch(91.38% 0.0919 262.0);
   --md-on-primary-fixed: oklch(22.41% 0.1166 262.0);
+  --p-page: oklch(95.80% 0.0104 262.0);
+  --p-bar: oklch(97.80% 0.0028 262.0);
+  --p-card: oklch(99.60% 0.0028 262.0);
+  --p-card-hi: oklch(100.00% 0.0000 262.0);
+  --p-well: oklch(94.80% 0.0096 262.0);
+  --p-float: oklch(100.00% 0.0000 262.0);
+  --p-cat-a: oklch(91.38% 0.0414 262.0);
+  --p-on-cat-a: oklch(39.66% 0.0577 262.0);
+  --p-cat-b: oklch(91.38% 0.0414 337.0);
+  --p-on-cat-b: oklch(39.66% 0.0577 337.0);
+  --p-cat-c: oklch(91.38% 0.0414 157.0);
+  --p-on-cat-c: oklch(39.66% 0.0577 157.0);
 }
 
 /* ---------- 2. system tokens ---------- */
@@ -251,7 +275,7 @@
   --m3-elev-4:0 6px 10px 4px rgba(0,0,0,.15),0 2px 3px rgba(0,0,0,.30);
 
   /* typeface roles */
-  --m3-font:"Roboto Flex","Roboto","Google Sans",system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --m3-font:"Google Sans Flex","Roboto Flex","Roboto",system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
   --m3-font-brand:var(--m3-font);
   --m3-mono:"Roboto Mono",ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
 
@@ -312,7 +336,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;height:100%}
 body{
-  background:var(--md-surface);
+  background:var(--p-page);
   color:var(--md-on-surface);
   font-family:var(--m3-font);
   font-size:16px;
@@ -466,11 +490,6 @@ html.m-snap .seg button::before{transition:width var(--m3-spatial) var(--m3-spri
   --nx-base:var(--md-primary-container);--nx-lift:var(--md-primary);
   --nx-glyph:var(--md-on-primary-container);--nx-seed:var(--md-tertiary);
   --nx-spring:cubic-bezier(.34,1.5,.6,1);
-}
-[data-theme="light"]{
-  --nx-base:var(--md-on-primary-container);--nx-lift:var(--md-inverse-primary);
-  --nx-glyph:var(--md-primary-container);
-  --nx-seed:color-mix(in oklch,var(--md-tertiary-container) 75%,var(--md-tertiary));
 }
 .nx-wm{display:block;height:28px;width:auto;overflow:visible;color:var(--md-on-surface)}
 .nx-wm path{fill:none;stroke:currentColor;stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
@@ -1019,7 +1038,6 @@ hr.sep{border:none;border-top:1px solid var(--md-outline-variant);margin:24px 0}
   border:1px solid transparent;border-radius:var(--m3-corner-l);
   padding:20px;color:var(--md-on-surface);
 }
-[data-theme="light"] .card{background:var(--md-surface-container-low)}
 
 /* ---------- buttons ----------
    filled (.pri) · tonal (default) · text (.ghost) · error (.danger)
@@ -3180,7 +3198,7 @@ body.hasmig{padding-bottom:64px}
 .fpk.is-open .fpk__scrim{opacity:1;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow)}
 .fpk__sheet{
   position:relative;display:flex;flex-direction:column;width:100%;height:min(88dvh,860px);
-  background:var(--md-surface-container-low);color:var(--md-on-surface);
+  background:var(--p-float);color:var(--md-on-surface);
   border-radius:var(--p-r-xl) var(--p-r-xl) 0 0;padding-bottom:env(safe-area-inset-bottom);
   box-shadow:var(--p-shadow);outline:none;
   transform:translateY(100%);
@@ -3194,7 +3212,7 @@ body.hasmig{padding-bottom:64px}
 .fpk__sub{flex:none;margin:0 24px 16px;font:400 14px/20px var(--m3-font);letter-spacing:.25px;color:var(--md-on-surface-variant)}
 .fpk__find{
   flex:none;margin:0 16px;display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;
-  border-radius:var(--p-r-full);background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+  border-radius:var(--p-r-full);background:var(--p-well);color:var(--md-on-surface-variant);
   outline:2px solid transparent;outline-offset:-2px;cursor:text;
   transition:outline-color var(--p-effect-d) var(--p-effect);
 }
@@ -3244,7 +3262,7 @@ body.hasmig{padding-bottom:64px}
 .fpk__tile.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
 .fpk__tile.is-down::before{opacity:var(--m3-state-press)}
 .fpk__tile:disabled{cursor:default}
-.fpk__ph{position:relative;display:block;aspect-ratio:1;border-radius:var(--p-r-m);overflow:hidden;background:var(--md-surface-container-highest)}
+.fpk__ph{position:relative;display:block;aspect-ratio:1;border-radius:var(--p-r-m);overflow:hidden;background:var(--p-well)}
 .fpk__ph img{display:block;width:100%;height:100%;object-fit:cover}
 .fpk__tile:disabled .fpk__ph img{opacity:.38}
 .fpk__n,.fpk__here{
@@ -3619,245 +3637,437 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 .ovmenu hr{border:none;border-top:1px solid var(--md-outline-variant);margin:8px 10px}
 
 /* ============================================================
-   v6.12 — SETTINGS, REBUILT AS A MATERIAL 3 SETTINGS SCREEN
-   One list of sections and one detail page. Side by side when there
-   is room (the list-detail canonical layout), one at a time on a
-   phone. Every row is an M3 list item inside a grouped container:
-   large outer corners, small inner ones, 2dp between rows. Controls
-   are the stock M3 set — switch, slider, connected button group,
-   radio list, text field — and nothing else.
+   Plume 2.2 · settings
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.58). A hero that is a live specimen of
+   a question (it reads with your own reading settings) above the
+   two quick choices people come here for, theme and accent; then
+   the sections as grouped cards with a tonal leading shape per
+   category and a line that says what each is set to. On a phone a
+   section is a full-screen layer that grows out of the row tapped
+   and goes back into it (Back closes it, never the app); from
+   861px the list and the section sit side by side and one marker
+   travels down the list, the section entering from the direction
+   it went. Controls are Plume's own: the switch, the button group
+   with one travelling indicator, the M3E slider with a value label,
+   the stepper whose number rolls.
    ============================================================ */
-.sx{display:grid;grid-template-columns:minmax(300px,360px) minmax(0,1fr);gap:24px;align-items:start;margin-top:16px}
+.sx{display:grid;grid-template-columns:minmax(320px,380px) minmax(0,1fr);gap:32px;align-items:start;margin-top:8px}
 .sx-list{
-  position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;
-  overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px;
+  position:sticky;top:16px;max-height:calc(100dvh - 32px);overflow:auto;overscroll-behavior:contain;
+  scrollbar-width:none;padding:4px 4px 24px;margin:-4px;
 }
 .sx-list::-webkit-scrollbar{display:none}
-.sx-list input[type=search]{margin-bottom:8px}
-.sx-detail{min-width:0;max-width:760px}
+.sx-detail{position:relative;min-width:0;max-width:760px}
+.sx-detail:focus{outline:none}
+.sx-tint{display:none}
 .setpanel{display:none}
 .setpanel.on{display:block}
+.setpanel.sx-leaving{display:block;position:absolute;left:0;right:0;pointer-events:none}
 
-/* the hand-off: what is on screen leaves first, then the next arrives */
-.sx-list,.sx-detail,.setpanel{transition:opacity 90ms var(--m3-ease-emphasized-accel)}
-.sx-leave{opacity:0!important}
-.sx-arrive{animation:sxArrive 300ms var(--m3-ease-emphasized-decel) backwards}
-@keyframes sxArrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes sxFade{from{opacity:0}to{opacity:1}}
-@media (prefers-reduced-motion:reduce){.sx-arrive{animation-name:sxFade}}
-
-/* detail top bar: back, title, info */
-.sx-bar{display:flex;align-items:center;gap:4px;min-height:64px;margin:0 0 4px}
-.sx-title{
-  flex:1;min-width:0;margin:0;color:var(--md-on-surface);
-  font-size:28px;line-height:36px;font-weight:400;letter-spacing:0;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+/* ---- search ---- */
+.sx-search{
+  position:relative;display:flex;align-items:center;gap:12px;height:56px;margin:0 0 20px;padding:0 4px 0 16px;
+  border-radius:var(--p-r-full);background:var(--p-well);color:var(--md-on-surface-variant);cursor:text;
+  transition:background-color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect);
 }
-.sx-bar .sx-icb{width:48px;height:48px;flex-basis:48px}
-.sx-bar .sx-icb[hidden]{display:none}
-
-/* subheader */
-.sx-sub{
-  margin:24px 16px 8px;color:var(--md-primary);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
+.sx-search:focus-within{background:var(--p-card);box-shadow:inset 0 0 0 2px var(--md-primary)}
+.sx-search .sx-lens{transform-box:view-box;transform-origin:20px 20px}
+.sx-search.is-scan .sx-lens{animation:sxScan 520ms var(--p-effect) 1}
+@keyframes sxScan{0%{transform:none}35%{transform:rotate(-16deg)}70%{transform:rotate(9deg)}100%{transform:none}}
+.sx-search input[type=search]{
+  flex:1;min-width:0;height:100%;padding:0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;
+  font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);outline:none;
 }
-.sx-list .sx-sub:first-of-type{margin-top:16px}
+.sx-search input[type=search]::placeholder{color:var(--md-on-surface-variant)}
+.sx-search__x{
+  position:relative;flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  color:var(--md-on-surface-variant);opacity:0;transform:scale(.6);pointer-events:none;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast);
+}
+.sx-search.has-q .sx-search__x{opacity:1;transform:none;pointer-events:auto}
+.sx-search__x.is-down{transform:scale(var(--p-press-sm));transition-duration:var(--p-effect-fast-d)}
 
-/* the grouped container */
-.sx-grp{display:flex;flex-direction:column;gap:2px;margin:0 0 16px}
+/* ---- the hero: a live specimen, theme and accent ---- */
+.sx-hero{margin:0 0 28px;padding:8px 8px 16px;border-radius:var(--p-r-hero);background:var(--p-card)}
+.sx-spec{
+  position:relative;display:block;width:100%;padding:18px 20px 20px;border-radius:var(--p-r-card);
+  background:var(--p-well);color:var(--md-on-surface);text-align:left;isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.sx-spec::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--md-on-surface);opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){button.sx-spec:hover::after{opacity:var(--m3-state-hover)}}
+button.sx-spec.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+button.sx-spec.is-down::after{opacity:var(--m3-state-press)}
+button.sx-spec:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.sx-spec__meta{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.sx-spec__meta span{
+  display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:var(--p-r-full);
+  background:var(--p-card);font:550 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);
+}
+.sx-spec__stem{
+  display:block;max-width:var(--measure);font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh);
+  transition:font-size var(--p-effect-d) var(--p-effect);
+}
+.sx-hero .sx-spec__stem{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.sx-spec__opt{
+  display:flex;align-items:center;gap:12px;margin-top:14px;padding:10px 16px 10px 10px;border-radius:var(--p-r-l);
+  background:var(--p-card);font-family:var(--qfam);font-size:var(--qfont);line-height:1.35;
+  box-shadow:inset 0 0 0 2px var(--md-primary);
+}
+.sx-spec__opt b{
+  flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:var(--p-r-m);
+  background:var(--md-primary);color:var(--md-on-primary);font:600 14px/1 var(--m3-font);
+}
+.sx-spec__expl{display:block;max-width:var(--measure);margin-top:14px;font-family:var(--qfam);font-size:var(--efont);line-height:var(--qlh);color:var(--md-on-surface-variant)}
+.sx-hero__ctl{padding:16px 8px 0}
+.sx-detail .sx-spec{margin:0 0 20px}
+
+/* accent seeds: one ring travels to the chosen colour */
+.sx-seeds{position:relative;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));justify-items:center;margin-top:12px}
+.sx-seed{position:relative;width:44px;height:44px;max-width:100%;display:grid;place-items:center;border-radius:var(--p-r-full)}
+.sx-seed i{
+  width:30px;height:30px;border-radius:var(--p-r-full);background:var(--c,var(--md-primary));
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.sx-seed[aria-checked="true"] i{transform:scale(.74)}
+.sx-seed.is-down i{transform:scale(.84);border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.sx-seed:focus-visible{outline:3px solid var(--md-primary);outline-offset:0}
+.sx-seed--more i{background:var(--c,var(--sx-hues))}
+.sx-seeds__ring{
+  position:absolute;left:0;top:0;width:var(--rw,40px);height:var(--rw,40px);border-radius:var(--p-r-full);
+  box-shadow:inset 0 0 0 2.5px var(--md-on-surface);pointer-events:none;opacity:0;
+  translate:var(--rx,0px) var(--ry,0px);
+  transition:translate var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect);
+}
+.sx-seeds.is-placed .sx-seeds__ring{opacity:1}
+
+/* ---- section list ---- */
+.sx-nl{position:relative}
+.sx-grp{display:flex;flex-direction:column;gap:2px;margin:0 0 24px}
 .sx-grp:empty{display:none}
-
-/* list item */
 .sx-item{
-  position:relative;display:flex;align-items:center;gap:16px;width:100%;
-  min-height:56px;padding:12px 16px;margin:0;
-  background:var(--md-surface-container);color:var(--md-on-surface);
-  border:0;border-radius:4px;text-align:left;font:inherit;overflow:hidden;
-  -webkit-tap-highlight-color:transparent;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard);
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:16px;width:100%;min-height:64px;padding:12px 20px;
+  border-radius:var(--p-r-xs);background:var(--p-card);color:var(--md-on-surface);text-align:left;
+  font:400 16px/24px var(--m3-font);letter-spacing:.1px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect);
 }
-.sx-grp > .sx-item:first-child{border-top-left-radius:24px;border-top-right-radius:24px}
-.sx-grp > .sx-item:last-child{border-bottom-left-radius:24px;border-bottom-right-radius:24px}
-button.sx-item,label.sx-item,.sx-date{cursor:pointer}
-button.sx-item::after,label.sx-item:not(.sx-in)::after,.sx-date::after,
-.sx-radios button::after,.sx-icb::after,.sx-btn::after,.sx-cg button::after{
-  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:currentColor;opacity:0;
-  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard);
+.sx-grp > .sx-item:first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.sx-grp > .sx-item:last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+button.sx-item,label.sx-item:not(.sx-in),.sx-date{cursor:pointer}
+button.sx-item::after,label.sx-item:not(.sx-in)::after,.sx-date::after{
+  content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;
+  transition:opacity var(--p-effect-d) var(--p-effect);
 }
-@media (hover:hover){
-  button.sx-item:hover::after,label.sx-item:not(.sx-in):hover::after,.sx-date:hover::after,
-  .sx-radios button:hover::after,.sx-icb:hover::after,.sx-btn:hover::after,.sx-cg button:hover::after{opacity:var(--m3-state-hover)}
-}
-button.sx-item:active::after,label.sx-item:not(.sx-in):active::after,.sx-date:active::after,
-.sx-radios button:active::after,.sx-icb:active::after,.sx-btn:active::after,.sx-cg button:active::after{opacity:var(--m3-state-press)}
-button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
-.sx-cg button:focus-visible,.sx-radios button:focus-visible{outline:2px solid var(--md-secondary);outline-offset:-2px}
+@media (hover:hover){button.sx-item:hover::after,label.sx-item:not(.sx-in):hover::after,.sx-date:hover::after{opacity:var(--m3-state-hover)}}
+.sx-item.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-card)!important;transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.sx-item.is-down::after{opacity:var(--m3-state-press)!important}
+button.sx-item:focus-visible,.sx-date:focus-within{outline:3px solid var(--md-primary);outline-offset:2px;z-index:1}
 .sx-item[disabled]{opacity:.38;pointer-events:none}
-
 .sx-tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
-.sx-t{font-size:16px;line-height:24px;letter-spacing:.5px;color:inherit}
-.sx-s{
-  font-size:14px;line-height:20px;letter-spacing:.25px;
-  color:var(--md-on-surface-variant);overflow-wrap:anywhere;
-}
-.sx-s b{font-weight:500;color:var(--md-on-surface)}
-.sx-ic{flex:0 0 24px;width:24px;height:24px;color:var(--md-on-surface-variant)}
-.sx-val{
-  flex:0 0 auto;white-space:nowrap;color:var(--md-on-surface-variant);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;font-variant-numeric:tabular-nums;
-}
-.sx-err,.sx-err .sx-ic{color:var(--md-error)}
+.sx-t{font:450 16px/24px var(--m3-font);letter-spacing:.1px;color:inherit}
+.sx-s{font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.sx-s b{font-weight:600;color:var(--md-on-surface)}
+.sx-val{flex:none;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.sx-ld{flex:none;width:24px;height:24px;display:grid;place-items:center;color:var(--md-on-surface-variant)}
+.sx-ld .ic{width:24px;height:24px}
+.sx-chev{flex:none;width:20px;height:20px;color:var(--md-on-surface-variant)}
+.sx-err{color:var(--md-error)}
+.sx-err .sx-ld{color:var(--md-error)}
+.sx-err .sx-s{color:color-mix(in oklab,var(--md-error) 72%,var(--md-on-surface-variant))}
+.sx-note{display:block}
+.sx-note .mono,.sx-s .mono{font-family:var(--m3-mono);font-size:.92em}
+.sx-sub{margin:28px 4px 10px;font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.setpanel > .sx-sub:first-child{margin-top:4px}
 .sx-tag{
-  display:inline-block;vertical-align:2px;margin-left:8px;padding:0 8px;border-radius:8px;
-  background:var(--md-tertiary-container);color:var(--md-on-tertiary-container);
-  font-size:12px;line-height:20px;font-weight:500;letter-spacing:.5px;
+  display:inline-flex;align-items:center;height:20px;margin-left:8px;padding:0 8px;vertical-align:text-top;
+  border-radius:var(--p-r-full);background:var(--md-warning-container);color:var(--md-on-warning-container);
+  font:600 11px/16px var(--m3-font);letter-spacing:.3px;
 }
+.sx-foot{margin:8px 16px 16px;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.sx-empty{margin:8px 16px 24px;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
 
-/* the section list: a tonal icon, the title, what it is set to */
+/* a section row: tonal shape by category, title, what it is set to */
+.sx-nav{min-height:72px;padding:12px 16px 12px 16px}
 .sx-lead{
-  flex:0 0 40px;width:40px;height:40px;border-radius:50%;
-  display:grid;place-items:center;
-  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  background:var(--p-cat-a);color:var(--p-on-cat-a);
+  transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect);
 }
-.sx-lead .ic{width:24px;height:24px}
+.sx-lead .ic{width:22px;height:22px}
+.sx-lead.k-b{background:var(--p-cat-b);color:var(--p-on-cat-b)}
+.sx-lead.k-c{background:var(--p-cat-c);color:var(--p-on-cat-c)}
+.sx-lead.k-n{background:var(--p-well);color:var(--md-on-surface-variant)}
+.sx-nav .sx-t{transition:font-weight var(--p-effect-d) var(--p-effect)}
 .sx-nav .sx-s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sx-empty{margin:16px;font-size:14px;line-height:20px;color:var(--md-on-surface-variant)}
+.sx-dot{flex:none;width:8px;height:8px;border-radius:var(--p-r-full);background:var(--md-outline);transition:background-color var(--p-effect-d) var(--p-effect)}
+.sx-dot.ok{background:var(--md-success)}.sx-dot.idle{background:var(--md-warning)}
+.sx-dot.busy{background:var(--md-primary)}.sx-dot.err{background:var(--md-error)}
+.sx-mark{
+  position:absolute;left:0;top:0;z-index:2;width:4px;height:28px;border-radius:var(--p-r-full);background:var(--md-primary);
+  pointer-events:none;opacity:0;translate:4px var(--my,0px);
+  transition:translate var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect);
+}
+.sx-mark.is-still{transition:none}
+.sx-hit .sx-t mark{background:none;color:var(--md-primary);font-weight:650}
+.sx-flash{animation:sxFlash 1400ms var(--p-effect-slow) 1}
+@keyframes sxFlash{0%,30%{background-color:color-mix(in oklab,var(--md-primary) 16%,var(--p-card))}100%{background-color:var(--p-card)}}
 
-/* a row whose control sits under its label */
-.sx-col{flex-direction:column;align-items:stretch;gap:8px;padding-top:16px;padding-bottom:16px}
-.sx-row{display:flex;align-items:center;justify-content:space-between;gap:16px}
-.sx-col input[type=range]{width:100%}
+/* ---- detail bar ---- */
+.sx-bar{display:flex;align-items:center;gap:4px;min-height:64px;margin:0 0 12px}
+.sx-title{flex:1;min-width:0;margin:0 0 0 4px;font:450 32px/40px var(--m3-font);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sx-bar .pl-ib[hidden]{display:none}
 
-/* connected button group */
-.sx-cg{display:flex;gap:2px;width:100%}
-.sx-cg button{
-  position:relative;flex:1 1 0;min-width:0;height:48px;padding:0 12px;overflow:hidden;
-  border:0;border-radius:8px;
-  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  white-space:nowrap;text-overflow:ellipsis;
-  transition:border-radius var(--m3-spatial) var(--m3-spring-expressive),
-             background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard);
+/* ---- rows that hold a control ---- */
+.sx-col{flex-direction:column;align-items:stretch;gap:10px;padding-top:16px;padding-bottom:16px}
+.sx-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.sx-num{
+  font:560 22px/1.02 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;
+  font-variant-numeric:tabular-nums;color:var(--md-on-surface);white-space:nowrap;
 }
-.sx-cg button:first-child{border-radius:24px 8px 8px 24px}
-.sx-cg button:last-child{border-radius:8px 24px 24px 8px}
-.sx-cg button.on{background:var(--md-primary);color:var(--md-on-primary);border-radius:24px}
-.sx-cg button:active{border-radius:4px;transition-duration:var(--m3-spatial-fast),var(--m3-dur-medium),var(--m3-dur-medium)}
+.sx-num .u{margin-left:2px;font-size:.6em;font-variation-settings:"wdth" 100;letter-spacing:0;color:var(--md-on-surface-variant)}
 
-/* radio list */
-.sx-radios{display:flex;flex-direction:column;margin:0 -16px -8px}
-.sx-radios button{
-  position:relative;display:flex;align-items:center;gap:16px;min-height:48px;padding:0 16px;
-  border:0;background:none;color:var(--md-on-surface);text-align:left;overflow:hidden;
-  font-size:16px;line-height:24px;letter-spacing:.5px;
+/* the M3E slider: a tall track, a gap round a bar handle, a stop at the end */
+.pl-slider{position:relative;--m3-val:50%}
+.pl-slider input[type=range]{display:block;width:100%;height:44px;margin:0;background:transparent;cursor:pointer;touch-action:pan-y}
+.pl-slider input[type=range]::-webkit-slider-runnable-track{
+  height:16px;border-radius:var(--p-r-s);
+  background:
+    radial-gradient(circle at calc(100% - 8px) 50%,var(--md-primary) 0 2px,transparent 2.5px),
+    linear-gradient(to right,var(--md-primary) 0 calc(var(--m3-val) - 6px),transparent calc(var(--m3-val) - 6px) calc(var(--m3-val) + 6px),
+      var(--md-secondary-container) calc(var(--m3-val) + 6px) 100%);
 }
-.sx-rd{
-  position:relative;flex:0 0 20px;width:20px;height:20px;border-radius:50%;
-  border:2px solid var(--md-on-surface-variant);
-  transition:border-color var(--m3-dur-medium) var(--m3-ease-standard);
+.pl-slider input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:4px;height:44px;margin-top:-14px;border:0;border-radius:var(--p-r-full);
+  background:var(--md-primary);transition:width var(--p-effect-fast-d) var(--p-effect-fast);
 }
-.sx-rd::after{
-  content:"";position:absolute;inset:3px;border-radius:50%;background:var(--md-primary);
-  transform:scale(0);transition:transform var(--m3-spatial) var(--m3-spring-expressive);
+.pl-slider input[type=range]:active::-webkit-slider-thumb{width:2px}
+.pl-slider input[type=range]::-moz-range-track{height:16px;border-radius:var(--p-r-s);background:var(--md-secondary-container)}
+.pl-slider input[type=range]::-moz-range-progress{height:16px;border-radius:var(--p-r-s);background:var(--md-primary)}
+.pl-slider input[type=range]::-moz-range-thumb{width:4px;height:44px;border:0;border-radius:var(--p-r-full);background:var(--md-primary)}
+.pl-slider input[type=range]:focus-visible{outline:none}
+.pl-slider input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 3px var(--p-card),0 0 0 6px var(--md-primary)}
+.pl-slider--hue input[type=range]::-webkit-slider-runnable-track{background:var(--sx-hues)}
+.pl-slider--hue input[type=range]::-moz-range-track{background:var(--sx-hues)}
+.pl-slider--hue input[type=range]::-moz-range-progress{background:transparent}
+.pl-slider--hue input[type=range]::-webkit-slider-thumb{background:var(--md-on-surface);box-shadow:0 0 0 3px var(--p-card)}
+.pl-slider__v{
+  position:absolute;left:var(--m3-val);bottom:calc(100% - 2px);z-index:2;min-width:44px;height:32px;padding:0 10px;
+  display:grid;place-items:center;border-radius:var(--p-r-full);background:var(--md-inverse-surface);color:var(--md-inverse-on-surface);
+  font:600 14px/1 var(--m3-font);font-variant-numeric:tabular-nums;pointer-events:none;
+  opacity:0;transform:translate(-50%,8px) scale(.6);transform-origin:50% 100%;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast);
 }
-.sx-radios button.on .sx-rd{border-color:var(--md-primary)}
-.sx-radios button.on .sx-rd::after{transform:scale(1)}
+.pl-slider.is-drag .pl-slider__v{opacity:1;transform:translate(-50%,0) scale(1)}
 
-/* a text field that is the row itself */
-.sx-in{flex-direction:column;align-items:stretch;gap:0;padding-top:10px;padding-bottom:10px;cursor:text}
-.sx-lab{
-  font-size:12px;line-height:16px;letter-spacing:.4px;color:var(--md-on-surface-variant);
-  transition:color var(--m3-dur-short2) var(--m3-ease-standard);
+/* the button group: one track, one indicator that travels */
+.pl-seg{
+  --i:0;--n:2;position:relative;isolation:isolate;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));
+  padding:4px;border-radius:var(--p-r-full);background:var(--p-well);
 }
+.pl-seg__ind{
+  position:absolute;z-index:-1;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / var(--n));border-radius:var(--p-r-full);
+  background:var(--md-primary);transform:translateX(calc(100% * var(--i)));
+  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-fast-d) var(--p-effect-fast);
+}
+.pl-seg:has(button.is-down[aria-checked="true"]) .pl-seg__ind{border-radius:var(--p-r-m)}
+.pl-seg button{
+  position:relative;min-width:0;height:40px;padding:0 8px;border-radius:var(--p-r-full);
+  font:550 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  transition:color var(--p-effect-d) var(--p-effect),font-weight var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast);
+}
+.pl-seg button::after{content:"";position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pl-seg button:not([aria-checked="true"]):hover::after{opacity:var(--m3-state-hover)}}
+.pl-seg button.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+.pl-seg button[aria-checked="true"]{color:var(--md-on-primary);font-weight:650;transition-delay:var(--lag,0ms)}
+.pl-seg button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--p-spatial-d) var(--p-spatial),translate var(--p-spatial-d) var(--p-spatial)!important}
+::view-transition-old(sx-ctl){display:none}
+::view-transition-new(sx-ctl){animation:none}
+/* colour style: the same group, each choice a swatch of what it gives */
+.pl-seg--sw{border-radius:var(--p-r-card)}
+.pl-seg--sw .pl-seg__ind{border-radius:var(--p-r-lx);background:var(--p-card-hi);box-shadow:inset 0 0 0 2px var(--md-primary)}
+.pl-seg--sw button{height:auto;padding:12px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;border-radius:var(--p-r-lx);font-size:13px}
+.pl-seg--sw button[aria-checked="true"]{color:var(--md-on-surface)}
+.sx-sw3{display:flex}
+.sx-sw3 i{width:18px;height:18px;border-radius:var(--p-r-full);background:var(--c);box-shadow:0 0 0 2px var(--p-well)}
+.sx-sw3 i + i{margin-left:-5px}
+
+/* the switch: a well track; the thumb grows and carries a check when on */
+.sx-sw{min-height:64px}
+.pl-sw{position:relative;flex:none;width:52px;height:32px}
+.pl-sw input[type=checkbox]{
+  position:absolute;inset:0;width:52px!important;height:32px!important;margin:0;cursor:pointer;
+  -webkit-appearance:none;appearance:none;border-radius:var(--p-r-full);
+  background:var(--p-well);border:2px solid var(--md-outline);
+  transition:background-color var(--p-effect-d) var(--p-effect),border-color var(--p-effect-d) var(--p-effect);
+}
+.pl-sw input[type=checkbox]::before,.pl-sw input[type=checkbox]::after{content:none;display:none}
+.pl-sw input[type=checkbox]:checked{background:var(--md-primary);border-color:var(--md-primary)}
+.pl-sw input[type=checkbox]:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.pl-sw__t{
+  position:absolute;left:2px;top:2px;width:28px;height:28px;border-radius:var(--p-r-full);pointer-events:none;
+  display:grid;place-items:center;background:var(--md-outline);transform:translateX(0) scale(.5714);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),background-color var(--p-effect-d) var(--p-effect);
+}
+.pl-sw__t svg{width:16px;height:16px;fill:none;stroke:var(--md-primary);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.pl-sw__t path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+.pl-sw input:checked + .pl-sw__t{transform:translateX(20px) scale(.8571);background:var(--md-on-primary)}
+.pl-sw input:checked + .pl-sw__t path{stroke-dashoffset:0;transition-delay:60ms}
+.is-down .pl-sw__t,.pl-sw input:active + .pl-sw__t{transform:translateX(0) scale(1)}
+.is-down .pl-sw input:checked + .pl-sw__t,.pl-sw input:checked:active + .pl-sw__t{transform:translateX(20px) scale(1)}
+.pl-sw input:disabled{opacity:.38}
+
+/* a text field that is the whole row */
+.sx-in{flex-direction:column;align-items:stretch;gap:2px;padding-top:10px;padding-bottom:12px;cursor:text;overflow:hidden}
+.sx-lab{font:500 12px/16px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
 .sx-in input,.sx-in input:focus{
-  width:100%;height:auto;margin:0;padding:2px 0;
-  background:none;border:0;border-radius:0;box-shadow:none;outline:none;
-  color:var(--md-on-surface);font-size:16px;line-height:24px;letter-spacing:.5px;
+  width:100%;height:28px;padding:0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;
+  font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);
 }
+.sx-in input::placeholder{color:color-mix(in oklab,var(--md-on-surface-variant) 70%,transparent)}
 .sx-in::before{
-  content:"";position:absolute;left:16px;right:16px;bottom:6px;height:2px;border-radius:1px;
-  background:var(--md-primary);transform:scaleX(0);
-  transition:transform var(--m3-dur-medium) var(--m3-ease-emphasized-decel);
+  content:"";position:absolute;left:20px;right:20px;bottom:6px;height:2px;border-radius:var(--p-r-full);background:var(--md-primary);
+  transform:scaleX(0);transition:transform var(--p-spatial-d) var(--p-spatial);
 }
 .sx-in:focus-within::before{transform:scaleX(1)}
 .sx-in:focus-within .sx-lab{color:var(--md-primary)}
 
-/* stepper */
-.sx-step{display:flex;align-items:center;gap:4px;flex:0 0 auto}
-.sx-step input,.sx-step input:focus{
-  width:52px;height:40px;padding:0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;
-  text-align:center;color:var(--md-on-surface);font-size:16px;line-height:24px;font-weight:500;
-  font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield;
+/* the stepper: round buttons either side of a number that rolls */
+.sx-step{position:relative;flex:none;display:flex;align-items:center;gap:4px}
+.sx-stb{
+  position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
+.sx-stb::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.sx-stb:hover::after{opacity:var(--m3-state-hover)}}
+.sx-stb.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.sx-stb.is-down::after{opacity:var(--m3-state-press)}
+.sx-stb svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.sx-step .sx-numw{position:relative;width:64px;height:40px;overflow:hidden}
+.sx-step input.sx-num{
+  position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;border:0;background:none;box-shadow:none;outline:none;
+  text-align:center;-moz-appearance:textfield;
+}
+.sx-step input.sx-num:focus-visible{box-shadow:inset 0 -2px 0 var(--md-primary)}
 .sx-step input::-webkit-inner-spin-button,.sx-step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.sx-ghost{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
 
-/* a date row: the whole row opens the system date picker */
-.sx-date input[type=date]{
-  position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;padding:0;
-  border:0;opacity:0;cursor:pointer;
+/* a date row: the whole row opens the picker */
+.sx-date input[type=date]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:1;border:0;padding:0;margin:0}
+.sx-clr{
+  position:relative;z-index:2;flex:none;width:40px;height:40px;opacity:0;transform:scale(.6);pointer-events:none;visibility:hidden;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),visibility 0s linear var(--p-effect-d);
 }
-.sx-date .sx-icb{z-index:2}
+.sx-clr.is-on{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition-delay:0s}
 
-/* icon button */
-.sx-icb{
-  position:relative;display:inline-grid;place-items:center;flex:0 0 40px;width:40px;height:40px;
-  padding:0;border:0;border-radius:20px;background:none;color:var(--md-on-surface-variant);overflow:hidden;
-  transition:border-radius var(--m3-spatial-fast) var(--m3-spring-expressive);
-}
-.sx-icb.tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-.sx-icb:active{border-radius:12px}
-.sx-icb .ic,.sx-gl{width:24px;height:24px}
-.sx-gl{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
-
-/* buttons */
-.sx-acts{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+/* small buttons inside rows (study data) */
 .sx-btn{
-  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:0 0 auto;
-  height:40px;padding:0 24px;border:0;border-radius:20px;overflow:hidden;white-space:nowrap;
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  transition:border-radius var(--m3-spatial-fast) var(--m3-spring-expressive);
+  position:relative;isolation:isolate;flex:none;height:40px;padding:0 16px;border-radius:var(--p-r-full);
+  font:550 14px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
-.sx-btn.filled{background:var(--md-primary);color:var(--md-on-primary)}
 .sx-btn.tonal{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-.sx-btn.sm{height:32px;padding:0 12px;border-radius:16px}
-.sx-btn:active{border-radius:8px}
-.sx-btn[disabled]{
-  background:color-mix(in srgb,var(--md-on-surface) 12%,transparent);
-  color:color-mix(in srgb,var(--md-on-surface) 38%,transparent);pointer-events:none;
+.sx-btn.filled{background:var(--md-primary);color:var(--md-on-primary)}
+.sx-btn::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.sx-btn:hover::after{opacity:var(--m3-state-hover)}}
+.sx-btn.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.sx-btn[disabled]{opacity:.38;pointer-events:none}
+.sx-icb{
+  position:relative;z-index:2;flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  color:var(--md-on-surface-variant);isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
+.sx-icb::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.sx-icb:hover::after{opacity:var(--m3-state-hover)}}
+.sx-icb.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.sx-icb .ic{width:22px;height:22px}
+.sx-prog{position:relative;height:8px;border-radius:var(--p-r-full);background:var(--md-secondary-container);overflow:hidden}
+.sx-prog i{position:absolute;left:0;top:0;bottom:0;border-radius:var(--p-r-full);background:var(--md-primary)}
+.sx-prog b{display:none}
 
-/* linear progress */
-.sx-prog{display:flex;gap:4px;height:4px}
-.sx-prog i{border-radius:2px;background:var(--md-primary)}
-.sx-prog b{flex:1;border-radius:2px;background:var(--md-secondary-container)}
+/* stat tiles (bank) */
+.sx-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:0 0 8px}
+.sx-stat{padding:16px 16px 14px;border-radius:var(--p-r-lx);background:var(--p-card)}
+.sx-stat b{display:block;font:540 32px/1.02 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.sx-stat span{display:block;margin-top:6px;font:500 13px/18px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.sx-stat.is-hot b{color:var(--md-primary)}
+.sx-cap{margin:0 4px 24px;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
 
-.sx-foot{margin:8px 16px 16px;font-size:14px;line-height:20px;letter-spacing:.25px;color:var(--md-on-surface-variant)}
-.sx-detail .preview{margin:0 0 16px;border-radius:24px}
+/* sync: the status card is the page's hero */
+.sx-status{display:flex;align-items:center;gap:16px;margin:0 0 12px;padding:20px;border-radius:var(--p-r-hero);background:var(--p-card)}
+.sx-status__ic{
+  flex:none;width:56px;height:56px;display:grid;place-items:center;border-radius:var(--p-r-full);
+  background:var(--p-well);color:var(--md-on-surface-variant);
+  transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-slow-d) var(--p-effect-slow);
+}
+.sx-status__ic .ic{width:28px;height:28px}
+.sx-status .sx-rot{transform-box:view-box;transform-origin:12px 12px}
+.sx-slash{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-slow-d) var(--p-effect-slow)}
+.sx-status.st-off .sx-slash{stroke-dashoffset:0}
+.sx-status.st-ok .sx-status__ic{background:var(--md-success-container);color:var(--md-on-success-container)}
+.sx-status.st-busy .sx-status__ic{background:var(--md-primary-container);color:var(--md-on-primary-container);border-radius:var(--p-r-m)}
+.sx-status.st-idle .sx-status__ic{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.sx-status.st-err .sx-status__ic{background:var(--md-error-container);color:var(--md-on-error-container)}
+.sx-status__tx{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.sx-status__tx b{font:500 20px/26px var(--m3-font);letter-spacing:0;overflow-wrap:anywhere}
+.sx-status .chip{
+  display:inline-flex;align-items:center;gap:6px;height:24px;margin:0;padding:0 10px;border:0;border-radius:var(--p-r-full);
+  background:var(--p-well);color:var(--md-on-surface-variant);font:600 12px/16px var(--m3-font);letter-spacing:.3px;
+}
+.sx-status .chip.jade{background:var(--md-success-container);color:var(--md-on-success-container)}
+.sx-status .chip.amber{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.sx-status .chip.rose{background:var(--md-error-container);color:var(--md-on-error-container)}
+.sx-status .chip.acc{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.sx-acts{display:flex;gap:8px;margin:0 0 24px}
+.sx-acts .pl-btn{flex:1 1 0;min-width:0}
+.sx-acts .pl-btn:disabled{opacity:.38;pointer-events:none}
+#installBtn{flex:none}
+#installBtn:disabled{opacity:.38}
+.setpanel[data-sec="about"] .nx-hero{border-radius:var(--p-r-hero);background:var(--p-card);margin:0 0 24px}
 
-/* the reading/session sheet inside a study session */
-.sx-sheet .sx-sub.sx-sec{margin:20px 4px 8px;color:var(--md-on-surface);font-size:16px;line-height:24px;letter-spacing:.15px}
+/* search hits */
+.sx-hits .sx-item{min-height:64px}
+
+/* the reading/session sheet inside a study session (legacy dialog) */
+.sx-sheet .sx-sub.sx-sec{margin:24px 4px 10px;font:500 16px/24px var(--m3-font);color:var(--md-on-surface)}
 .sx-sheet .sx-sub.sx-sec:first-child{margin-top:4px}
-.sx-sheet .sx-sub:not(.sx-sec){margin-left:4px}
-.sx-sheet .sx-item{background:var(--md-surface-container-highest)}
-.sx-sheet .sx-cg button:not(.on){background:var(--md-surface-container)}
+.sx-sheet .sx-item{background:var(--p-card)}
+.sx-sheet .sx-spec{margin:16px 0 0}
 
-/* list-detail on large screens; one pane at a time on a phone */
 @media (min-width:861px){
   .sx-back{display:none!important}
-  .sx-nav.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-  .sx-nav.on .sx-s{color:inherit;opacity:.8}
+  .sx-nav .sx-chev{display:none}
+  .sx-nav[aria-current="true"] .sx-t{font-weight:650}
+  .sx-nav[aria-current="true"] .sx-lead{border-radius:var(--p-r-m)}
+  .sx-mark.is-on{opacity:1}
 }
 @media (max-width:860px){
   .sx{display:block;margin-top:0}
-  .sx-list{position:static;max-height:none;overflow:visible;padding-bottom:0}
-  body:not(.setdetail) .sx-detail{display:none}
-  body.setdetail .sx-list{display:none}
-  .sx-bar{margin:-8px 0 4px -8px}
-  .sx-title{font-size:22px;line-height:28px}
-  .sx-acts .sx-btn{flex:1 1 0}
+  .sx-list{position:static;max-height:none;overflow:visible;margin:0;padding:0}
+  .sx-mark{display:none}
+  .sx-detail{
+    position:fixed;inset:0;z-index:80;max-width:none;display:flex;flex-direction:column;
+    background:var(--p-page);visibility:hidden;pointer-events:none;
+  }
+  .sx-detail.is-open{visibility:visible;pointer-events:auto}
+  .sx-detail.is-closing{pointer-events:none}
+  .sx-tint{display:block;position:absolute;inset:0;z-index:3;background:var(--p-card);opacity:0;pointer-events:none}
+  .sx-bar{
+    flex:none;margin:0;padding:env(safe-area-inset-top) 4px 0 4px;min-height:calc(64px + env(safe-area-inset-top));
+    background:var(--p-page);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+  }
+  .sx-detail.is-scrolled .sx-bar{background:var(--p-bar)}
+  .sx-title{font:450 24px/32px var(--m3-font);letter-spacing:0}
+  .sx-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 16px calc(40px + env(safe-area-inset-bottom))}
+  .sx-acts .pl-btn{padding:0 16px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pl-seg__ind,.sx-seeds__ring,.sx-mark,.pl-sw__t{transition-property:opacity,background-color,border-radius!important}
+  .sx-search.is-scan .sx-lens{animation:none}
 }
 #themeBtnM[hidden]{display:none!important}
 
@@ -4585,7 +4795,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    ============================================================ */
 :root{
   --p-r-xs:4px;--p-r-s:8px;--p-r-m:12px;--p-r-l:16px;
-  --p-r-lx:20px;--p-r-xl:28px;--p-r-xxl:48px;--p-r-full:999px;
+  --p-r-lx:20px;--p-r-card:24px;--p-r-xl:28px;--p-r-hero:32px;--p-r-xxl:48px;--p-r-full:999px;
   /* spatial 800/0.6 · 380/0.8 · 200/0.8 — effects 3800/1 · 1600/1 · 800/1 */
   --p-spatial-fast:linear(0,0.0247 2.5%,0.0895 5%,0.1816 7.5%,0.2898 10%,0.4052 12.5%,0.5205 15%,0.6303 17.5%,0.7308 20%,0.8195 22.5%,0.895 25%,0.9571 27.5%,1.006 30%,1.0427 32.5%,1.0684 35%,1.0846 37.5%,1.0929 40%,1.0947 42.5%,1.0916 45%,1.085 47.5%,1.0759 50%,1.0655 52.5%,1.0545 55%,1.0436 57.5%,1.0333 60%,1.024 62.5%,1.0158 65%,1.0089 67.5%,1.0032 70%,0.9988 72.5%,0.9955 75%,0.9932 77.5%,0.9918 80%,0.9911 82.5%,0.991 85%,0.9914 87.5%,0.9921 90%,0.993 92.5%,0.994 95%,0.995 97.5%,1);
   --p-spatial-fast-d:330ms; /* overshoot 9.5% */
@@ -4669,7 +4879,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 /* floating toolbar */
 .pl-tb{
   display:flex;align-items:center;gap:2px;padding:8px;height:64px;
-  border-radius:var(--p-r-full);background:var(--md-surface-container-high);color:var(--md-on-surface);
+  border-radius:var(--p-r-full);background:var(--p-float);color:var(--md-on-surface);
   box-shadow:var(--p-shadow);
 }
 .pl-tb__sep{width:1px;height:24px;margin:0 6px;background:var(--md-outline-variant)}
@@ -4697,7 +4907,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 /* menu: grows from its anchor; rows are rounded inside a rounded sheet */
 .pl-menu{
   position:fixed;z-index:95;min-width:244px;max-width:calc(100vw - 32px);padding:4px;
-  border-radius:var(--p-r-l);background:var(--md-surface-container);color:var(--md-on-surface);
+  border-radius:var(--p-r-l);background:var(--p-float);color:var(--md-on-surface);
   box-shadow:var(--p-shadow);display:flex;flex-direction:column;gap:2px;
 }
 .pl-menu[hidden]{display:none}
@@ -4717,7 +4927,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .pl-menu__item small{display:block;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);letter-spacing:.2px}
 
 /* filled text field: the label floats, the indicator grows from the centre */
-.pl-field{position:relative;border-radius:var(--p-r-s) var(--p-r-s) 0 0;background:var(--md-surface-container-highest);transition:background-color var(--p-effect-d) var(--p-effect)}
+.pl-field{position:relative;border-radius:var(--p-r-s) var(--p-r-s) 0 0;background:var(--p-well);transition:background-color var(--p-effect-d) var(--p-effect)}
 .pl-field textarea{
   display:block;width:100%;min-height:112px;resize:vertical;border:0;outline:0;background:transparent;
   padding:28px 16px 12px;font:400 16px/24px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface);
@@ -4735,7 +4945,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .pl-field::after{height:2px;background:var(--md-primary);transform:scaleX(0);transition:transform var(--p-spatial-d) var(--p-spatial)}
 .pl-field:focus-within::after{transform:none}
 .pl-field:focus-within label{color:var(--md-primary)}
-@media (hover:hover){.pl-field:hover{background:color-mix(in oklab,var(--md-on-surface) 6%,var(--md-surface-container-highest))}}
+@media (hover:hover){.pl-field:hover{background:color-mix(in oklab,var(--md-on-surface) 6%,var(--p-well))}}
 .pl-help{display:flex;justify-content:space-between;gap:12px;padding:4px 16px 0;font:400 12px/16px var(--m3-font);letter-spacing:.4px;color:var(--md-on-surface-variant)}
 
 /* ============================================================
@@ -4744,15 +4954,15 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
    for the session, the question index under it, and a reader
    that grows out of the tile it was opened from.
    ============================================================ */
-.cp{display:none;min-height:100vh;min-height:100dvh;background:var(--md-surface);color:var(--md-on-surface)}
+.cp{display:none;min-height:100vh;min-height:100dvh;background:var(--p-page);color:var(--md-on-surface)}
 .cp.on{display:block}
 
 .cp-bar{
   position:sticky;top:0;z-index:31;display:flex;align-items:center;gap:4px;
   height:calc(64px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 4px 0;
-  background:var(--md-surface);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+  background:var(--p-page);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
 }
-.cp-bar.is-scrolled{background:var(--md-surface-container)}
+.cp-bar.is-scrolled{background:var(--p-bar)}
 .cp-bar__t{position:relative;flex:1;min-width:0;height:28px;margin-left:4px;overflow:hidden}
 .cp-bar__a,.cp-bar__b{
   position:absolute;inset:0;font:400 22px/28px var(--m3-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
@@ -4775,14 +4985,14 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 
 /* ---- the session card ---- */
 .cp-hero{
-  padding:20px 20px 20px;border-radius:var(--p-r-xl);
-  background:var(--md-surface-container);
+  padding:20px 20px 20px;border-radius:var(--p-r-hero);
+  background:var(--p-card);
 }
 .cp-hero__top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:32px}
 .cp-state{
   display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 14px 0 12px;border-radius:16px;
   font:500 13px/18px var(--m3-font);letter-spacing:.2px;
-  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
+  background:var(--p-well);color:var(--md-on-surface-variant);
 }
 .cp-state i{width:8px;height:8px;border-radius:50%;background:currentColor}
 .cp-state.st-live{background:var(--md-success-container);color:var(--md-on-success-container)}
@@ -4812,7 +5022,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cp-live:empty{display:none}
 .cp-dev{
   display:flex;align-items:center;gap:14px;margin-top:18px;padding:12px 16px 12px 12px;
-  border-radius:var(--p-r-l);background:var(--md-surface-container-high);
+  border-radius:var(--p-r-l);background:var(--p-well);
 }
 .cp-dev__ic{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:var(--p-r-m);background:var(--md-primary-container);color:var(--md-on-primary-container)}
 .cp-dev__ic .ic{width:22px;height:22px}
@@ -4834,7 +5044,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cp-sec__head span{font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
 .cp-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;padding:0 4px;font:500 12px/16px var(--m3-font);letter-spacing:.4px;color:var(--md-on-surface-variant)}
 .cp-legend span{display:inline-flex;align-items:center;gap:6px}
-.cp-legend i{width:10px;height:10px;border-radius:3px;background:var(--md-surface-container-highest)}
+.cp-legend i{width:10px;height:10px;border-radius:3px;background:var(--p-well)}
 .cp-legend .lg-c{background:var(--md-success-container);box-shadow:inset 0 0 0 1.5px var(--md-success)}
 .cp-legend .lg-w{background:var(--md-error-container);box-shadow:inset 0 0 0 1.5px var(--md-error)}
 .cp-legend .lg-a{background:var(--md-secondary-container);box-shadow:inset 0 0 0 1.5px var(--md-secondary)}
@@ -4844,7 +5054,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:8px;margin-top:16px}
 .cp-q{
   position:relative;isolation:isolate;aspect-ratio:1;min-height:48px;display:grid;place-items:center;
-  border-radius:var(--p-r-l);background:var(--md-surface-container-high);color:var(--md-on-surface);
+  border-radius:var(--p-r-l);background:var(--p-card);color:var(--md-on-surface);
   font:500 16px/1 var(--m3-font);font-variant-numeric:tabular-nums;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-spatial-d) var(--p-effect),
              background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
@@ -4863,7 +5073,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cp-q.is-now.is-down{border-radius:var(--p-r-l)}
 .cp-q.is-f::after{
   content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;
-  background:var(--md-tertiary);box-shadow:0 0 0 2px var(--md-surface-container-high);
+  background:var(--md-tertiary);box-shadow:0 0 0 2px var(--p-card);
 }
 .cp-q.is-c.is-f::after{box-shadow:0 0 0 2px var(--md-success-container)}
 .cp-q.is-w.is-f::after{box-shadow:0 0 0 2px var(--md-error-container)}
@@ -4880,16 +5090,16 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 /* ============================================================
    Plume 1.0 · companion reader
    ============================================================ */
-.cpq{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;background:var(--md-surface);color:var(--md-on-surface)}
+.cpq{position:fixed;inset:0;z-index:90;display:flex;flex-direction:column;background:var(--p-page);color:var(--md-on-surface)}
 .cpq[hidden]{display:none}
 /* the colour of the tile it grew from, fading out as it opens */
 .cpq-tint{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0}
 .cpq-bar{
   position:relative;z-index:2;flex:none;display:flex;align-items:center;gap:4px;
   height:calc(64px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 4px 0;
-  background:var(--md-surface);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+  background:var(--p-page);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
 }
-.cpq-bar.is-scrolled{background:var(--md-surface-container)}
+.cpq-bar.is-scrolled{background:var(--p-bar)}
 .cpq-bar__t{flex:1;min-width:0;margin:0 0 0 4px;font:400 22px/28px var(--m3-font);font-variant-numeric:tabular-nums}
 .cpq-bar__t b{font-weight:600}
 .cpq-bar__t span{color:var(--md-on-surface-variant)}
@@ -4905,13 +5115,13 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cpq-opts{display:flex;flex-direction:column;gap:2px;margin-top:20px}
 .cpq-opt{
   display:flex;align-items:flex-start;gap:14px;padding:14px 16px 14px 14px;border-radius:var(--p-r-xs);
-  background:var(--md-surface-container-low);
+  background:var(--p-card);
 }
 .cpq-opt:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
 .cpq-opt:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
 .cpq-k{
   flex:none;min-width:32px;height:32px;padding:0 4px;display:grid;place-items:center;border-radius:16px;
-  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);font:500 14px/1 var(--m3-font);
+  background:var(--p-well);color:var(--md-on-surface-variant);font:500 14px/1 var(--m3-font);
 }
 .cpq-opt__t{flex:1;min-width:0;padding-top:4px;font-family:var(--qfam);font-size:calc(var(--qfont) - 1px);line-height:1.5}
 .cpq-opt.is-mine{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
@@ -4922,7 +5132,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 }
 
 /* the spoiler: shut on every question, opened on purpose */
-.cpq-rv{margin-top:28px;border-radius:var(--p-r-xl);background:var(--md-surface-container);overflow:clip}
+.cpq-rv{margin-top:28px;border-radius:var(--p-r-xl);background:var(--p-card);overflow:clip}
 .cpq-rv__h{
   position:relative;isolation:isolate;width:100%;min-height:76px;display:flex;align-items:center;gap:16px;
   padding:16px 20px 16px 16px;text-align:left;border-radius:var(--p-r-xl);
@@ -4962,7 +5172,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cpq-key,.cpq-mine{display:flex;align-items:flex-start;gap:14px;padding:14px 16px 14px 14px;border-radius:var(--p-r-l)}
 .cpq-key{background:var(--md-success-container);color:var(--md-on-success-container)}
 .cpq-key .cpq-k{background:var(--md-success);color:var(--md-on-success);border-radius:var(--p-r-m)}
-.cpq-mine{margin-top:8px;background:var(--md-surface-container-high)}
+.cpq-mine{margin-top:8px;background:var(--p-well)}
 .cpq-mine.is-c .cpq-k{background:var(--md-success);color:var(--md-on-success)}
 .cpq-mine.is-w .cpq-k{background:var(--md-error);color:var(--md-on-error)}
 .cpq-kt{flex:1;min-width:0;padding-top:1px}
@@ -4973,7 +5183,7 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
 .cpq-disp{margin-top:12px;padding:14px 16px;border-radius:var(--p-r-l);background:var(--md-error-container);color:var(--md-on-error-container);font:400 14px/20px var(--m3-font)}
 .cpq-disp__h{display:block;margin-bottom:4px;font-weight:500}
 .cpq-ch{display:flex;flex-direction:column;gap:2px}
-.cpq-ch > div{padding:14px 16px 14px 14px;border-radius:var(--p-r-xs);background:var(--md-surface-container-high)}
+.cpq-ch > div{padding:14px 16px 14px 14px;border-radius:var(--p-r-xs);background:var(--p-well)}
 .cpq-ch > div:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
 .cpq-ch > div:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
 .cpq-ch__h{display:flex;align-items:flex-start;gap:12px}
@@ -5492,38 +5702,102 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       </div><!-- /pane prompt -->
     </section>
 
-    <!-- ============ SETTINGS ============ -->
-    <!-- One list of sections and one detail page: side by side when there is
-         room, one at a time on a phone. The preference panels are filled from
-         SETTINGS_SPEC, so the gear inside a session and this screen can never
-         drift apart; the other panels carry their own rows here. -->
+    <!-- ============ SETTINGS (Plume 2.2) ============ -->
+    <!-- The list and one section at a time. On a phone a section is a
+         full-screen layer that grows out of the row you tapped and goes back
+         into it; from 861px the two sit side by side and one marker travels
+         down the list to the open section. The preference panels are filled
+         from SETTINGS_SPEC, so the gear inside a session and this screen can
+         never drift apart; the other panels carry their own rows here.
+         Icons are inline copies of the sprite (data-ic), so nothing in here
+         moves an icon by a generic press motion. -->
     <section class="view" id="v-settings">
       <h2 class="vt">Settings</h2>
       <div class="sx" id="sx">
         <div class="sx-list" id="sxList">
-          <input type="search" id="setSearch" placeholder="Search settings" autocomplete="off" aria-label="Search settings">
-          <div id="setList"></div>
+          <label class="sx-search">
+            <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
+            <input type="search" id="setSearch" placeholder="Search settings" autocomplete="off" aria-label="Search settings" aria-controls="setHits">
+            <button type="button" class="sx-search__x pl-press" id="setSearchX" aria-label="Clear search" tabindex="-1"><svg class="ic" data-ic="i-close"></svg></button>
+          </label>
+          <div class="sx-browse" id="sxBrowse">
+            <div class="sx-hero" id="sxHero"></div>
+            <div class="sx-nl" id="setList" role="list"></div>
+          </div>
+          <div class="sx-hits" id="setHits" role="list" aria-live="polite" hidden></div>
         </div>
-        <div class="sx-detail" id="setMain">
+        <div class="sx-detail" id="setMain" role="region" aria-labelledby="setCrumb">
+          <div class="sx-tint" aria-hidden="true"></div>
           <header class="sx-bar">
-            <button class="sx-icb sx-back" id="setBack" aria-label="All settings"><svg class="ic"><use href="#i-back"/></svg></button>
+            <button class="pl-ib pl-press sx-back" id="setBack" aria-label="All settings"><svg class="ic" data-ic="i-back"></svg></button>
             <h3 class="sx-title" id="setCrumb"></h3>
-            <button class="sx-icb" id="setInfo" data-note="" aria-label="About this section"><svg class="ic"><use href="#i-info"/></svg></button>
+            <button class="pl-ib pl-press" id="setInfo" data-note="" aria-label="About this section"><svg class="ic" data-ic="i-info"></svg></button>
           </header>
+          <div class="sx-scroll" id="sxScroll">
 
+      <div class="setpanel" data-sec="appearance"></div>
       <div class="setpanel" data-sec="reading"></div>
       <div class="setpanel" data-sec="explanations"></div>
       <div class="setpanel" data-sec="session"></div>
-      <div class="setpanel" data-sec="appearance"></div>
       <div class="setpanel" data-sec="copying"></div>
 
-      <!-- ---- bank & classification ---- -->
-      <div class="setpanel" data-sec="bank">
-        <div class="sx-grp" id="classInfo"></div>
+      <!-- ---- cloud sync ---- -->
+      <div class="setpanel" data-sec="sync">
+        <div class="sx-status" id="sxSyncCard">
+          <span class="sx-status__ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><g class="sx-rot"><path d="M19.6 10.2a7.8 7.8 0 0 0-13.4-3.5"/><path d="M4.4 13.8a7.8 7.8 0 0 0 13.4 3.5"/><path d="M6.2 3v3.7h3.7"/><path d="M17.8 21v-3.7h-3.7"/></g><path class="sx-slash" pathLength="1" d="M4 4l16 16"/></svg></span>
+          <span class="sx-status__tx"><b id="syncMsg">Not connected</b><span class="chip" id="syncChip">Off</span></span>
+        </div>
+        <div class="sx-acts">
+          <button class="pl-btn pl-btn--m pl-btn--filled pl-press" id="ghSyncNow"><svg class="ic" data-ic="i-refresh"></svg><span>Sync now</span></button>
+          <button class="pl-btn pl-btn--m pl-btn--tonal pl-press" id="ghSave"><span>Save and connect</span></button>
+        </div>
         <div class="sx-grp">
-          <button class="sx-item" id="reclassBtn"><svg class="ic sx-ic"><use href="#i-review"/></svg><span class="sx-tx"><span class="sx-t">Reclassify the bank</span></span></button>
-          <button class="sx-item" id="reclassForce"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Reclassify, including locked ones</span></span></button>
-          <button class="sx-item" id="dupScan2"><svg class="ic sx-ic"><use href="#i-copy"/></svg><span class="sx-tx"><span class="sx-t">Scan for duplicates</span></span></button>
+          <label class="sx-item sx-sw pl-press"><span class="sx-tx"><span class="sx-t">Sync automatically</span><span class="sx-s">After every change, and when you come back to the app</span></span><span class="pl-sw"><input type="checkbox" role="switch" id="ghAuto" checked><span class="pl-sw__t" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg></span></span></label>
+        </div>
+        <h4 class="sx-sub">Repository</h4>
+        <div class="sx-grp">
+          <label class="sx-item sx-in"><span class="sx-lab">GitHub username</span><input type="text" id="ghOwner" placeholder="your-username" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Private data repository</span><input type="text" id="ghRepo" placeholder="nidus-data" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Private media repository</span><input type="text" id="ghMRepo" placeholder="nidus-media" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Branch</span><input type="text" id="ghBranch" placeholder="main" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Folder inside the repo</span><input type="text" id="ghDir" placeholder="nidus" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+          <label class="sx-item sx-in"><span class="sx-lab">Fine-grained token · contents: read and write</span><input type="password" id="ghToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
+        </div>
+        <div class="sx-grp">
+          <button class="sx-item pl-press" id="ghDevCopy"><span class="sx-ld"><svg class="ic" data-ic="i-device"></svg></span><span class="sx-tx"><span class="sx-t">Settings from another device</span></span></button>
+          <button class="sx-item pl-press" id="ghRepair"><span class="sx-ld"><svg class="ic" data-ic="i-review"></svg></span><span class="sx-tx"><span class="sx-t">Repair sync</span><span class="sx-s">Read everything in the repository again</span></span></button>
+          <button class="sx-item pl-press" id="ghHelp"><span class="sx-ld"><svg class="ic" data-ic="i-link"></svg></span><span class="sx-tx"><span class="sx-t">Setup guide</span></span></button>
+          <button class="sx-item sx-err pl-press" id="ghForget"><span class="sx-ld"><svg class="ic" data-ic="i-cloudoff"></svg></span><span class="sx-tx"><span class="sx-t">Disconnect this device</span></span></button>
+        </div>
+        <h4 class="sx-sub">This device</h4>
+        <div class="sx-grp">
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.58</span></div>
+          <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
+        </div>
+      </div>
+
+      <!-- ---- data & storage ---- -->
+      <div class="setpanel" data-sec="data">
+        <div class="sx-grp" id="storeInfo"></div>
+        <div class="sx-grp">
+          <button class="sx-item pl-press" data-go="import"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Backup &amp; export</span></span><svg class="ic sx-chev" data-ic="i-next"></svg></button>
+          <button class="sx-item pl-press" data-setsec="studydata"><span class="sx-ld"><svg class="ic" data-ic="i-history"></svg></span><span class="sx-tx"><span class="sx-t">Study data</span></span><svg class="ic sx-chev" data-ic="i-next"></svg></button>
+        </div>
+        <h4 class="sx-sub">Photos on this device</h4>
+        <div class="sx-grp">
+          <div class="sx-item sx-col">
+            <div class="sx-row"><span class="sx-t">Room for photos</span><span class="sx-num" id="mediaCapTxt">250 MB</span></div>
+            <div class="pl-slider"><input type="range" id="mediaCap" min="50" max="2000" step="50" value="250" aria-label="Room for photos"></div>
+            <span class="sx-s" id="mediaInfo">Reading…</span>
+          </div>
+          <button class="sx-item pl-press" id="mediaUp"><span class="sx-ld"><svg class="ic" data-ic="i-cloudup"></svg></span><span class="sx-tx"><span class="sx-t">Upload anything waiting</span></span></button>
+          <button class="sx-item pl-press" id="mediaClean"><span class="sx-ld"><svg class="ic" data-ic="i-image"></svg></span><span class="sx-tx"><span class="sx-t">Clean unused media…</span></span></button>
+          <button class="sx-item pl-press" id="mediaUpgrade"><span class="sx-ld"><svg class="ic" data-ic="i-swap"></svg></span><span class="sx-tx"><span class="sx-t">Storage format…</span></span></button>
+        </div>
+        <h4 class="sx-sub">Start over</h4>
+        <div class="sx-grp">
+          <button class="sx-item sx-err pl-press" id="resetStats"><span class="sx-ld"><svg class="ic" data-ic="i-stats"></svg></span><span class="sx-tx"><span class="sx-t">Reset all statistics</span><span class="sx-s">Questions and notes stay</span></span></button>
+          <button class="sx-item sx-err pl-press" id="wipeAll"><span class="sx-ld"><svg class="ic" data-ic="i-trash"></svg></span><span class="sx-tx"><span class="sx-t">Delete everything</span><span class="sx-s">On this device</span></span></button>
         </div>
       </div>
 
@@ -5538,59 +5812,13 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
         <div id="sdSess"></div>
       </div>
 
-      <!-- ---- data & storage ---- -->
-      <div class="setpanel" data-sec="data">
-        <div class="sx-grp" id="storeInfo"></div>
+      <!-- ---- bank & classification ---- -->
+      <div class="setpanel" data-sec="bank">
+        <div id="classInfo"></div>
         <div class="sx-grp">
-          <button class="sx-item" data-go="import"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Backup &amp; export</span></span></button>
-          <button class="sx-item" data-setsec="studydata"><svg class="ic sx-ic"><use href="#i-history"/></svg><span class="sx-tx"><span class="sx-t">Study data</span></span></button>
-        </div>
-        <div class="sx-grp">
-          <button class="sx-item sx-err" id="resetStats"><svg class="ic sx-ic"><use href="#i-stats"/></svg><span class="sx-tx"><span class="sx-t">Reset all statistics</span></span></button>
-          <button class="sx-item sx-err" id="wipeAll"><svg class="ic sx-ic"><use href="#i-trash"/></svg><span class="sx-tx"><span class="sx-t">Delete everything</span></span></button>
-        </div>
-        <h4 class="sx-sub">Photos on this device</h4>
-        <div class="sx-grp">
-          <div class="sx-item sx-col">
-            <div class="sx-row"><span class="sx-t">Room for photos</span><span class="sx-val" id="mediaCapTxt">250 MB</span></div>
-            <input type="range" id="mediaCap" min="50" max="2000" step="50" value="250" aria-label="Room for photos">
-            <span class="sx-s" id="mediaInfo">Reading…</span>
-          </div>
-          <button class="sx-item" id="mediaUp"><svg class="ic sx-ic"><use href="#i-cloudup"/></svg><span class="sx-tx"><span class="sx-t">Upload anything waiting</span></span></button>
-          <button class="sx-item" id="mediaClean"><svg class="ic sx-ic"><use href="#i-image"/></svg><span class="sx-tx"><span class="sx-t">Clean unused media…</span></span></button>
-          <button class="sx-item" id="mediaUpgrade"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Storage format…</span></span></button>
-        </div>
-      </div>
-
-      <!-- ---- cloud sync ---- -->
-      <div class="setpanel" data-sec="sync">
-        <div class="sx-grp">
-          <div class="sx-item"><svg class="ic sx-ic"><use href="#i-cloud"/></svg><span class="sx-tx"><span class="sx-t" id="syncMsg">Not connected</span></span><span class="chip" id="syncChip">Off</span></div>
-        </div>
-        <h4 class="sx-sub">Repository</h4>
-        <div class="sx-grp">
-          <label class="sx-item sx-in"><span class="sx-lab">GitHub username</span><input type="text" id="ghOwner" placeholder="your-username" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="sx-item sx-in"><span class="sx-lab">Private data repository</span><input type="text" id="ghRepo" placeholder="nidus-data" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="sx-item sx-in"><span class="sx-lab">Private media repository</span><input type="text" id="ghMRepo" placeholder="nidus-media" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="sx-item sx-in"><span class="sx-lab">Branch</span><input type="text" id="ghBranch" placeholder="main" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="sx-item sx-in"><span class="sx-lab">Folder inside the repo</span><input type="text" id="ghDir" placeholder="nidus" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
-          <label class="sx-item sx-in"><span class="sx-lab">Fine-grained token · contents: read and write</span><input type="password" id="ghToken" placeholder="github_pat_…" autocomplete="off" spellcheck="false"></label>
-        </div>
-        <div class="sx-acts">
-          <button class="sx-btn filled" id="ghSave">Save and connect</button>
-          <button class="sx-btn tonal" id="ghSyncNow">Sync now</button>
-        </div>
-        <div class="sx-grp">
-          <label class="sx-item"><span class="sx-tx"><span class="sx-t">Sync automatically</span></span><input type="checkbox" id="ghAuto" checked></label>
-          <button class="sx-item" id="ghDevCopy"><svg class="ic sx-ic"><use href="#i-swap"/></svg><span class="sx-tx"><span class="sx-t">Settings from another device</span></span></button>
-          <button class="sx-item" id="ghRepair"><svg class="ic sx-ic"><use href="#i-review"/></svg><span class="sx-tx"><span class="sx-t">Repair sync</span></span></button>
-          <button class="sx-item" id="ghHelp"><svg class="ic sx-ic"><use href="#i-link"/></svg><span class="sx-tx"><span class="sx-t">Setup guide</span></span></button>
-          <button class="sx-item sx-err" id="ghForget"><svg class="ic sx-ic"><use href="#i-cloudoff"/></svg><span class="sx-tx"><span class="sx-t">Disconnect this device</span></span></button>
-        </div>
-        <h4 class="sx-sub">This device</h4>
-        <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.57</span></div>
-          <div class="sx-item"><span class="sx-tx"><span class="sx-s" id="ghDetail"></span></span></div>
+          <button class="sx-item pl-press" id="reclassBtn"><span class="sx-ld"><svg class="ic" data-ic="i-review"></svg></span><span class="sx-tx"><span class="sx-t">Reclassify the bank</span><span class="sx-s">Questions you locked by hand stay as they are</span></span></button>
+          <button class="sx-item pl-press" id="reclassForce"><span class="sx-ld"><svg class="ic" data-ic="i-swap"></svg></span><span class="sx-tx"><span class="sx-t">Reclassify, including locked ones</span></span></button>
+          <button class="sx-item pl-press" id="dupScan2"><span class="sx-ld"><svg class="ic" data-ic="i-copy"></svg></span><span class="sx-tx"><span class="sx-t">Scan for duplicates</span></span></button>
         </div>
       </div>
 
@@ -5599,17 +5827,18 @@ button.sx-item:focus-visible,.sx-icb:focus-visible,.sx-btn:focus-visible,
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.57 · sharded store</span>
+        <span class="chip" id="verChip">v6.58 · sharded store</span>
       </div>
         <div class="sx-grp">
-          <div class="sx-item" id="installRow"><svg class="ic sx-ic"><use href="#i-import"/></svg><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="sx-btn tonal sm" id="installBtn">Install</button></div>
-          <button class="sx-item" id="helpBtn3"><svg class="ic sx-ic"><use href="#i-keys"/></svg><span class="sx-tx"><span class="sx-t">Keyboard shortcuts</span></span></button>
-          <button class="sx-item" data-go="prompt"><svg class="ic sx-ic"><use href="#i-prompt"/></svg><span class="sx-tx"><span class="sx-t">Extractor prompt</span></span></button>
-          <button class="sx-item" data-setsec="data"><svg class="ic sx-ic"><use href="#i-bank"/></svg><span class="sx-tx"><span class="sx-t">Where things live</span></span></button>
+          <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
+          <button class="sx-item pl-press" id="helpBtn3"><span class="sx-ld"><svg class="ic" data-ic="i-keys"></svg></span><span class="sx-tx"><span class="sx-t">Keyboard shortcuts</span></span></button>
+          <button class="sx-item pl-press" data-go="prompt"><span class="sx-ld"><svg class="ic" data-ic="i-prompt"></svg></span><span class="sx-tx"><span class="sx-t">Extractor prompt</span></span><svg class="ic sx-chev" data-ic="i-next"></svg></button>
+          <button class="sx-item pl-press" data-setsec="data"><span class="sx-ld"><svg class="ic" data-ic="i-bank"></svg></span><span class="sx-tx"><span class="sx-t">Where things live</span></span><svg class="ic sx-chev" data-ic="i-next"></svg></button>
         </div>
         <p class="sx-foot">A nidus is where something takes hold and grows. Built as a single file: back it up, copy it anywhere, it runs offline.</p>
       </div>
 
+          </div>
         </div>
       </div>
     </section>
@@ -6517,8 +6746,6 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
        state layer in the shape of its indicator (see the .tabbar rules). */
     '.subtabs button,' +
     '.nav button,.navstrip button,.qrow,.pool,.ch,.fab,.fabitem,' +
-    /* settings: list items, their buttons and the date rows that open a picker */
-    'button.sx-item,label.sx-item:not(.sx-in),.sx-date,.sx-cg button,.sx-radios button,.sx-icb,.sx-btn,' +
     /* .galtile .gph, not .galtile: the photo box is the part that already
        clips and is positioned, so the ripple lands inside the picture */
     '.galtile .gph,.galsec .galh,' +
@@ -6658,7 +6885,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.57';
+const APP_VERSION='6.58';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -11137,9 +11364,24 @@ const COPYFIELDS=[
   ['refs','References','Citations carried on the question'],
   ['note','My own note','']
 ];
-/* row kinds: range | seg | toggle | text | number | copy */
+/* row kinds: range | seg | toggle | text | number | date | copy | grp
+   `sub` is the one short line a row prints under its label; `hint` is the
+   longer explanation, gathered into the section's (i) note. `cat` gives the
+   section's leading shape its hue on the Settings list: a = how it looks,
+   b = how you study, c = where your data lives, n = about. */
 const SETTINGS_SPEC=[
-  {id:'reading',icon:'i-text',title:'Reading',group:'Study',session:true,preview:true,
+  {id:'appearance',icon:'i-theme',title:'Appearance',cat:'a',session:true,
+   blurb:'The whole palette, every surface, container and accent, is generated from one hue. Pick one and the app is rebuilt around it.',
+   rows:[
+     {k:'theme',kind:'seg',label:'Theme',hint:'System follows your device',opts:[['dark','Dark'],['light','Light'],['auto','System']]},
+     {k:'hue',kind:'range',label:'Accent colour',hint:'The seed the palette is generated from',min:0,max:360,step:1,unit:'°'},
+     {k:'palette',kind:'seg',label:'Colour style',hint:'How much colour the generated palette carries',opts:[['tonal','Tonal'],['vibrant','Vibrant'],['expressive','Expressive'],['neutral','Neutral']]},
+     {k:'contrast',kind:'seg',label:'Contrast',hint:'Raises the separation between text and its background',opts:[['0','Standard'],['1','Medium'],['2','High']]},
+     {kind:'grp',label:'You'},
+     {k:'name',kind:'text',label:'Your name',hint:'Used only for the greeting on the home screen',ph:'Optional'},
+     {k:'brand',kind:'text',label:'App title',hint:'Shown under the wordmark and in the browser tab',ph:'Personal Qbank'}
+   ]},
+  {id:'reading',icon:'i-text',title:'Reading',cat:'a',session:true,preview:true,
    blurb:'How a question reads on the page. Changes apply the moment you make them, mid-session included.',
    rows:[
      {k:'font',kind:'range',label:'Question text',hint:'Stem, lead-in and the options',min:15,max:26,step:1,unit:'px'},
@@ -11148,36 +11390,29 @@ const SETTINGS_SPEC=[
      {k:'family',kind:'seg',label:'Typeface',hint:'',opts:[['sans','Sans'],['serif','Serif'],['mono','Mono']]},
      {k:'width',kind:'seg',label:'Column width',hint:'How wide a line of text is allowed to run',opts:[['narrow','Narrow'],['comfortable','Medium'],['wide','Wide']]}
    ]},
-  {id:'explanations',icon:'i-note',title:'Explanations',group:'Study',session:true,preview:true,
+  {id:'explanations',icon:'i-note',title:'Explanations',cat:'a',session:true,
    blurb:'Where the reasoning for each option sits, and how much of the explanation is open before you go looking for it.',
    rows:[
      {k:'explLayout',kind:'seg',label:'Where reasoning appears',hint:'Under each option, or gathered into one block after them',opts:[['inline','Under each'],['grouped','Grouped']],rerender:true},
      {k:'explOpen',kind:'seg',label:'Sections start',hint:'Explanation, objective and the rest',opts:[['1','Open'],['0','Collapsed']],bool:true,rerender:true}
    ]},
-  {id:'session',icon:'i-new',title:'Session',group:'Study',session:true,
+  {id:'session',icon:'i-new',title:'Session',cat:'b',session:true,
    blurb:'How a run of questions behaves and what counts as a full day of work.',
    rows:[
-     {k:'autoNext',kind:'toggle',label:'Auto-advance',hint:'Move on by itself after a correct answer in tutor mode',on:'On'},
-     {k:'showClock',kind:'toggle',label:'Show clock',hint:'Hiding it only takes it off the screen; the session is still timed. Also a switch in the ⋮ menu inside a session',on:'On'},
-     {k:'goal',kind:'number',label:'Daily goal',hint:'Questions per day — drives the ring and the streak on the dashboard',min:0,step:5},
+     {k:'autoNext',kind:'toggle',label:'Auto-advance',sub:'After a correct answer in tutor mode',hint:'Move on by itself after a correct answer in tutor mode'},
+     {k:'showClock',kind:'toggle',label:'Show clock',sub:'The session is timed either way',hint:'Hiding it only takes it off the screen; the session is still timed. Also a switch in the ⋮ menu inside a session'},
+     {k:'goal',kind:'number',label:'Daily goal',sub:'Questions a day',hint:'Questions per day: drives the ring and the streak on the dashboard',min:0,step:5},
      {k:'examDate',kind:'date',label:'Exam date',hint:'Turns Home into a countdown and works out the pace the rest of the bank needs'}
    ]},
-  {id:'copying',icon:'i-copy',title:'Copying',group:'Study',session:true,
+  {id:'copying',icon:'i-copy',title:'Copying',cat:'b',session:true,
    blurb:'What the copy button puts on your clipboard, in the same order the question is drawn on screen. Every surface offers two buttons: everything, or the question and its options alone.',
    rows:COPYFIELDS.map(f=>f[0]==='@'?{kind:'grp',label:f[1]}
-     :({k:f[0],kind:'copy',label:f[1],hint:f[2]||'',on:'Include'}))},
-  {id:'appearance',icon:'i-theme',title:'Appearance',group:'App',session:true,
-   blurb:'The look of the app and the name it goes by on this device.',
-   rows:[
-     {k:'theme',kind:'seg',label:'Theme',hint:'Also on the Theme button in the sidebar',opts:[['dark','Dark'],['light','Light']]},
-     {k:'name',kind:'text',label:'Your name',hint:'Used only for the greeting on the dashboard',ph:'Optional'},
-     {k:'brand',kind:'text',label:'App title',hint:'Shown under the wordmark and in the browser tab',ph:'Personal Qbank'}
-   ]},
-  {id:'bank',icon:'i-bank',title:'Bank & classification',group:'App',static:true},
-  {id:'studydata',icon:'i-history',title:'Study data',group:'App',static:true},
-  {id:'data',icon:'i-import',title:'Data & storage',group:'App',static:true},
-  {id:'sync',icon:'i-cloud',title:'Cloud sync',group:'App',static:true},
-  {id:'about',icon:'i-keys',title:'About',group:'App',static:true}
+     :({k:f[0],kind:'copy',label:f[1],sub:f[2]||''}))},
+  {id:'sync',icon:'i-cloud',title:'Cloud sync',cat:'c',static:true},
+  {id:'data',icon:'i-import',title:'Data & storage',cat:'c',static:true},
+  {id:'studydata',icon:'i-history',title:'Study data',cat:'c',static:true},
+  {id:'bank',icon:'i-bank',title:'Bank & classification',cat:'c',static:true},
+  {id:'about',icon:'i-keys',title:'About',cat:'n',static:true}
 ];
 const SETSEC=id=>SETTINGS_SPEC.find(s=>s.id===id);
 function setVal(k){const s=DB.settings,d=DEFAULTS.settings;return s[k]===undefined||s[k]===null?d[k]:s[k]}
@@ -11216,51 +11451,80 @@ const DEVSET={
   markFresh(v){try{v?localStorage.setItem(this.RESTORE,'1'):localStorage.removeItem(this.RESTORE)}catch(e){}}
 };
 
-/* ---------- one row renderer, used by both surfaces ----------
-   Every row is a Material 3 list item. A choice of up to three short
-   options is a connected button group under its label, anything longer
-   a radio list. Hints are not printed under the rows: they are collected
-   into the section's (i) note instead (setNoteHTML). */
-const SX_MINUS='<svg class="sx-gl" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>';
-const SX_PLUS='<svg class="sx-gl" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>';
+/* ---------- one row renderer, used by both surfaces (Plume 2.2) ----------
+   Every row is a card in a grouped list. A choice is a button group with one
+   travelling indicator (the colour style's choices are swatches of what they
+   give), an on/off is the Plume switch, a range the M3E slider with a value
+   label, a count a stepper whose number rolls. Hints are not printed under
+   the rows: they are collected into the section's (i) note (setNoteHTML). */
+const SETROW=k=>SETTINGS_SPEC.reduce((f,s)=>f||((s.rows||[]).find(r=>r.k===k)),null);
+/* a copy of a sprite symbol, drawn inline: the icon-motion layer only
+   hydrates <use>, so a static label icon here never gets a generic motion */
+const SXI_C={};
+function sxIcSrc(id){if(!(id in SXI_C)){const y=document.getElementById(id);SXI_C[id]=y?y.innerHTML:''}return SXI_C[id]}
+function sxIc(id,cls){return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+sxIcSrc(id)+'</svg>'}
+function sxHydrate(root){(root||document).querySelectorAll('svg[data-ic]').forEach(s=>{
+  const id=s.dataset.ic;s.removeAttribute('data-ic');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('aria-hidden','true');s.innerHTML=sxIcSrc(id)})}
+const SX_MINUS='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>';
+const SX_PLUS='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v12M6 12h12"/></svg>';
+const SX_CHECK='<svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg>';
 const sxTx=(t,s)=>'<span class="sx-tx"><span class="sx-t">'+t+'</span>'+(s?'<span class="sx-s">'+s+'</span>':'')+'</span>';
 const sxStat=(t,v,s)=>'<div class="sx-item">'+sxTx(t,s)+(v!==undefined?'<span class="sx-val">'+v+'</span>':'')+'</div>';
 const sxDate=v=>new Date(v+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+/* "12 March 2027 · 153 days to go" */
+function sxDateSub(v){
+  if(!v)return 'Not set';
+  const d=Math.round((new Date(v+'T00:00:00')-new Date(new Date().toDateString()))/864e5);
+  return esc(sxDate(v))+(d>1?' · '+d+' days to go':d===1?' · tomorrow':d===0?' · today':'');
+}
+/* an expressive value: the number, then a quieter unit */
+function sxFmt(k,v){
+  const r=SETROW(k)||{},u=r.unit||'';
+  const n=k==='lh'?Number(v).toFixed(2):(Math.round(v*10)/10);
+  return n+(u?'<span class="u">'+u+'</span>':'');
+}
+const sxPlain=(k,v)=>String(sxFmt(k,v)).replace(/<[^>]+>/g,'');
+function sxSegHTML(r,v){
+  const sw=r.k==='palette',i=Math.max(0,r.opts.findIndex(o=>o[0]===v)),L=esc(r.label);
+  return '<div class="pl-seg'+(sw?' pl-seg--sw':'')+'" data-seg="'+r.k+'" role="radiogroup" aria-label="'+L+'" style="--n:'+r.opts.length+';--i:'+i+'">'+
+    '<span class="pl-seg__ind" aria-hidden="true"></span>'+
+    r.opts.map(o=>'<button type="button" class="pl-press'+(v===o[0]?' on':'')+'" role="radio" aria-checked="'+(v===o[0])+'" data-v="'+o[0]+'">'+
+      (sw?'<span class="sx-sw3" data-pal="'+o[0]+'" aria-hidden="true"><i></i><i></i><i></i></span>':'')+'<span>'+esc(o[1])+'</span></button>').join('')+'</div>';
+}
 function setRowHTML(r){
   const s=DB.settings,co=Object.assign({},DEFAULTS.settings.copyOpts,s.copyOpts||{});
-  const L=esc(r.label);
+  const L=esc(r.label),R=' data-row="'+r.k+'"';
   if(r.kind==='range'){
     const v=setVal(r.k);
-    return '<div class="sx-item sx-col"><div class="sx-row"><span class="sx-t">'+L+'</span>'+
-      '<span class="sx-val" data-val="'+r.k+'">'+v+(r.unit||'')+'</span></div>'+
-      '<input type="range" data-rng="'+r.k+'" min="'+r.min+'" max="'+r.max+'" step="'+r.step+'" value="'+v+'" aria-label="'+L+'"></div>';
+    return '<div class="sx-item sx-col"'+R+'><div class="sx-row"><span class="sx-t">'+L+'</span>'+
+      '<span class="sx-num" data-val="'+r.k+'">'+sxFmt(r.k,v)+'</span></div>'+
+      '<div class="pl-slider'+(r.k==='hue'?' pl-slider--hue':'')+'"><input type="range" data-rng="'+r.k+'" min="'+r.min+'" max="'+r.max+'" step="'+r.step+'" value="'+v+'" aria-label="'+L+'">'+
+      '<span class="pl-slider__v" aria-hidden="true">'+sxPlain(r.k,v)+'</span></div></div>';
   }
   if(r.kind==='seg'){
-    const v=r.bool?(setVal(r.k)===false?'0':'1'):setVal(r.k);
-    const short=r.opts.length<=3&&r.opts.reduce((n,o)=>n+o[1].length,0)<=24;
-    return '<div class="sx-item sx-col"><span class="sx-t">'+L+'</span>'+
-      '<div class="'+(short?'sx-cg':'sx-radios')+'" data-seg="'+r.k+'" role="radiogroup" aria-label="'+L+'">'+
-      r.opts.map(o=>'<button type="button" role="radio" aria-checked="'+(v===o[0])+'" data-v="'+o[0]+'"'+(v===o[0]?' class="on"':'')+'>'+
-        (short?'':'<span class="sx-rd"></span>')+esc(o[1])+'</button>').join('')+'</div></div>';
+    const v=r.bool?(setVal(r.k)===false?'0':'1'):String(setVal(r.k));
+    return '<div class="sx-item sx-col"'+R+'><span class="sx-t">'+L+'</span>'+sxSegHTML(r,v)+'</div>';
   }
   if(r.kind==='toggle'||r.kind==='copy'){
     const on=r.kind==='copy'?co[r.k]!==false:!!setVal(r.k);
-    return '<label class="sx-item">'+sxTx(L)+'<input type="checkbox" '+(r.kind==='copy'?'data-copy':'data-chk')+'="'+r.k+'"'+(on?' checked':'')+'></label>';
+    return '<label class="sx-item sx-sw pl-press"'+R+'>'+sxTx(L,r.sub?esc(r.sub):'')+
+      '<span class="pl-sw"><input type="checkbox" role="switch" '+(r.kind==='copy'?'data-copy':'data-chk')+'="'+r.k+'"'+(on?' checked':'')+'>'+
+      '<span class="pl-sw__t" aria-hidden="true">'+SX_CHECK+'</span></span></label>';
   }
   if(r.kind==='text')
-    return '<label class="sx-item sx-in"><span class="sx-lab">'+L+'</span>'+
+    return '<label class="sx-item sx-in"'+R+'><span class="sx-lab">'+L+'</span>'+
       '<input type="text" data-txt="'+r.k+'" value="'+esc(String(setVal(r.k)||''))+'" placeholder="'+esc(r.ph||'')+'"></label>';
   if(r.kind==='number')
-    return '<div class="sx-item">'+sxTx(L)+'<span class="sx-step">'+
-      '<button type="button" class="sx-icb tonal" data-stepdn="'+r.k+'" aria-label="Fewer">'+SX_MINUS+'</button>'+
-      '<input type="number" inputmode="numeric" data-num="'+r.k+'" value="'+esc(String(setVal(r.k)||0))+'"'+
-        (r.min!==undefined?' min="'+r.min+'"':'')+(r.step?' step="'+r.step+'"':'')+' aria-label="'+L+'">'+
-      '<button type="button" class="sx-icb tonal" data-stepup="'+r.k+'" aria-label="More">'+SX_PLUS+'</button></span></div>';
+    return '<div class="sx-item"'+R+'>'+sxTx(L,r.sub?esc(r.sub):'')+'<span class="sx-step">'+
+      '<button type="button" class="sx-stb pl-press" data-stepdn="'+r.k+'" aria-label="Fewer">'+SX_MINUS+'</button>'+
+      '<span class="sx-numw"><input type="number" inputmode="numeric" class="sx-num" data-num="'+r.k+'" value="'+esc(String(setVal(r.k)||0))+'"'+
+        (r.min!==undefined?' min="'+r.min+'"':'')+(r.step?' step="'+r.step+'"':'')+' aria-label="'+L+'"></span>'+
+      '<button type="button" class="sx-stb pl-press" data-stepup="'+r.k+'" aria-label="More">'+SX_PLUS+'</button></span></div>';
   if(r.kind==='date'){
     const v=String(setVal(r.k)||'');
-    return '<div class="sx-item sx-date">'+sxTx(L,v?esc(sxDate(v)):'Not set')+
+    return '<div class="sx-item sx-date pl-press"'+R+'>'+sxTx(L,sxDateSub(v))+
       '<input type="date" data-date="'+r.k+'" value="'+esc(v)+'" aria-label="'+L+'">'+
-      (v?'<button type="button" class="sx-icb" data-dateclr="'+r.k+'" aria-label="Clear '+L+'"><svg class="ic"><use href="#i-close"/></svg></button>':'')+'</div>';
+      '<button type="button" class="sx-icb sx-clr pl-press'+(v?' is-on':'')+'" data-dateclr="'+r.k+'" aria-label="Clear '+L+'">'+sxIc('i-close')+'</button></div>';
   }
   return '';
 }
@@ -11277,59 +11541,125 @@ function setSheetHTML(sec){
 /* what the section's (i) says: its blurb, then every row that has a hint */
 function setNoteHTML(sec){
   return (sec.blurb?'<p class="tiny">'+esc(sec.blurb)+'</p>':'')+
-    sec.rows.filter(r=>r.hint).map(r=>'<p class="tiny" style="margin-top:12px"><b>'+esc(r.label)+'</b> — '+esc(r.hint)+'</p>').join('')+
+    sec.rows.filter(r=>r.hint).map(r=>'<p class="tiny" style="margin-top:12px"><b>'+esc(r.label)+'</b>: '+esc(r.hint)+'</p>').join('')+
     (sec.session?'<p class="tiny" style="margin-top:12px">Also on the gear inside a session.</p>':'');
 }
-const SET_PREVIEW='<div class="preview">A 54-year-old man presents with three days of pleuritic chest pain.<span>The explanation reads at this size — long enough to judge before you commit to it.</span></div>';
+/* the specimen: a question drawn with the reader's own settings, so every
+   reading choice is seen on real text the moment it is made */
+function sxSpecHTML(full){
+  return '<span class="sx-spec__meta" aria-hidden="true"><span>Cardiovascular</span><span>Pathophysiology</span></span>'+
+    '<span class="sx-spec__stem">A 54-year-old man has had three days of sharp chest pain that eases when he sits up and leans forward.</span>'+
+    '<span class="sx-spec__opt"><b>C</b><span>Acute pericarditis</span></span>'+
+    (full?'<span class="sx-spec__expl">Positional, pleuritic pain with diffuse ST elevation points to the pericardium, not the myocardium.</span>':'');
+}
+const SET_PREVIEW='<div class="sx-spec" aria-hidden="true">'+sxSpecHTML(true)+'</div>';
+
+/* ---------- small motions the rows share ---------- */
+/* a slider's track, its value label and the label's position follow the value */
+function sxSlider(el){
+  const w=el.parentNode;if(!w||!w.classList.contains('pl-slider'))return;
+  const mn=parseFloat(el.min||0),mx=parseFloat(el.max||100),v=parseFloat(el.value);
+  const pct=(mx>mn?(v-mn)/(mx-mn)*100:50).toFixed(2)+'%';
+  el.style.setProperty('--m3-val',pct);w.style.setProperty('--m3-val',pct);
+  const lb=w.querySelector('.pl-slider__v');if(lb&&el.dataset.rng)lb.textContent=sxPlain(el.dataset.rng,v);
+  if(!w.__drag){w.__drag=1;
+    const on=()=>w.classList.add('is-drag'),off=()=>w.classList.remove('is-drag');
+    el.addEventListener('pointerdown',on);['pointerup','pointercancel','blur','change'].forEach(t=>el.addEventListener(t,off));}
+}
+/* the indicator travels to the chosen segment on this frame; the label it
+   lands on takes its colour as it arrives (--lag), not on its own schedule */
+function sxSegMark(g,v){
+  const bs=[...g.querySelectorAll('[data-v]')],b=bs.find(x=>x.dataset.v===v);if(!b)return;
+  const i=bs.indexOf(b),i0=parseFloat(g.style.getPropertyValue('--i'))||0;
+  g.style.setProperty('--lag',Math.min(200,40+50*Math.max(0,Math.abs(i-i0)-1))+'ms');
+  g.style.setProperty('--i',i);
+  bs.forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-checked',String(on))});
+}
+/* a text that changes crossfades: the old words leave, the new ones arrive */
+function sxSwap(el,html){
+  if(!el||el.innerHTML===html)return;
+  if(Motion.reduced||!el.getClientRects().length){el.innerHTML=html;return}
+  const tok=el.__sw=(el.__sw||0)+1;
+  el.getAnimations().forEach(a=>a.cancel());
+  el.animate([{opacity:1},{opacity:0}],{duration:80,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>{
+    if(el.__sw!==tok)return;el.innerHTML=html;el.getAnimations().forEach(a=>a.cancel());
+    el.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e});
+  },()=>{});
+}
+/* a number rolls: the old value leaves the way the count went, the new one
+   comes in from the other side */
+function sxRoll(inp,old,up){
+  if(Motion.reduced||!inp.getClientRects().length)return;
+  const w=inp.parentNode,g=document.createElement('span'),cs=getComputedStyle(inp);
+  g.className='sx-ghost sx-num';g.textContent=old;g.style.font=cs.font;g.style.fontVariationSettings=cs.fontVariationSettings;
+  w.appendChild(g);
+  const d=up?-1:1,sp=PL('spatial-fast');
+  g.animate([{transform:'none',opacity:1},{transform:'translateY('+(d*22)+'px)',opacity:0}],{duration:140,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>g.remove(),()=>g.remove());
+  inp.animate([{transform:'translateY('+(-d*22)+'px)',opacity:0},{transform:'none',opacity:1}],{duration:sp.d,easing:sp.e});
+}
 
 /* ---------- one binder, used by both surfaces ---------- */
 function bindSettings(root){
   const repaint=r=>{if(!r||!S)return;const it=curIt();
     if(it&&it.submitted){renderChoices();renderExpl()}};
-  root.querySelectorAll('[data-rng]').forEach(el=>el.addEventListener('input',()=>{
+  root.querySelectorAll('[data-rng]').forEach(el=>{sxSlider(el);el.addEventListener('input',()=>{
     const k=el.dataset.rng,v=parseFloat(el.value);
-    DB.settings[k]=v;
-    const lbl=root.querySelector('[data-val="'+k+'"]');if(lbl)lbl.textContent=v+(k==='lh'?'':'px');
+    DB.settings[k]=v;sxSlider(el);
+    document.querySelectorAll('[data-val="'+k+'"]').forEach(l=>{l.innerHTML=sxFmt(k,v)});
     /* a drag fires input several times a frame, and every applySettings
        regenerates the whole palette — collapse them to one per frame */
     /* and snapped: easing each surface's colour over 250 ms made the palette
        trail a quarter-second behind the accent slider under the thumb */
     Motion.frame('settings',()=>{Motion.snap(applySettings);save()});
-  }));
+  })});
   root.querySelectorAll('[data-seg]').forEach(g=>g.addEventListener('click',e=>{
-    const b=e.target.closest('[data-v]');if(!b)return;
-    const k=g.dataset.seg,v=b.dataset.v;
-    const row=SETTINGS_SPEC.reduce((f,s)=>f||((s.rows||[]).find(r=>r.k===k)),null);
+    const b=e.target.closest('[data-v]');if(!b||b.getAttribute('aria-checked')==='true')return;
+    const k=g.dataset.seg,v=b.dataset.v,row=SETROW(k);
     DB.settings[k]=(row&&row.bool)?(v==='1'):v;
-    const mark=()=>g.querySelectorAll('button').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-checked',String(x===b))});
-    /* theme, palette and contrast repaint every surface at once — composite
-       the change instead, growing out of the chosen segment. The segment is
-       marked inside the change, so the old snapshot still shows the old one */
-    if(k==='theme'||k==='palette'||k==='contrast')Motion.morph(()=>{mark();applySettings();repaint(row&&row.rerender)},{from:b}).then(save);
-    else{mark();applySettings();repaint(row&&row.rerender);save()}
+    /* the indicator moves first, on this frame; every other copy of the
+       same choice (the hero's theme and Appearance's) follows silently */
+    sxSegMark(g,v);
+    document.querySelectorAll('[data-seg="'+k+'"]').forEach(x=>{if(x!==g)sxSegMark(x,v)});
+    /* theme, palette and contrast repaint every surface at once, as one
+       composited change; the group itself is lifted out of it (sx-ctl), so
+       its indicator keeps sliding in the new colours instead of crossfading */
+    if(k==='theme'||k==='palette'||k==='contrast'){
+      g.style.viewTransitionName='sx-ctl';
+      Motion.morph(()=>{applySettings();repaint(row&&row.rerender)},{from:b}).then(()=>{g.style.viewTransitionName='';save()});
+    }
+    else{applySettings();repaint(row&&row.rerender);save()}
   }));
   root.querySelectorAll('[data-chk]').forEach(c=>c.addEventListener('change',()=>{
     DB.settings[c.dataset.chk]=c.checked;applySettings();save()}));
   root.querySelectorAll('[data-copy]').forEach(c=>c.addEventListener('change',()=>{
-    DB.settings.copyOpts=Object.assign({},DB.settings.copyOpts,{[c.dataset.copy]:c.checked});save()}));
+    DB.settings.copyOpts=Object.assign({},DB.settings.copyOpts,{[c.dataset.copy]:c.checked});save();if(window.sxRefresh)sxRefresh()}));
   root.querySelectorAll('[data-txt]').forEach(t=>t.addEventListener('input',()=>{
     DB.settings[t.dataset.txt]=t.value;applySettings();save()}));
   root.querySelectorAll('[data-num]').forEach(n=>n.addEventListener('input',()=>{
     DB.settings[n.dataset.num]=parseInt(n.value||'0',10)||0;applySettings();save()}));
-  /* the stepper's buttons move the field by its step and let it report */
+  /* the stepper's buttons move the field by its step, roll the number and
+     let the field report */
   root.querySelectorAll('[data-stepup],[data-stepdn]').forEach(b=>b.addEventListener('click',()=>{
     const k=b.dataset.stepup||b.dataset.stepdn,n=root.querySelector('[data-num="'+k+'"]');if(!n)return;
-    const st=parseFloat(n.step)||1,mn=n.min===''?-Infinity:parseFloat(n.min);
-    n.value=Math.max(mn,(parseInt(n.value||'0',10)||0)+(b.dataset.stepup?st:-st));
+    const st=parseFloat(n.step)||1,mn=n.min===''?-Infinity:parseFloat(n.min),old=parseInt(n.value||'0',10)||0;
+    const nv=Math.max(mn,old+(b.dataset.stepup?st:-st));if(nv===old)return;
+    n.value=nv;sxRoll(n,old,nv>old);
     n.dispatchEvent(new Event('input',{bubbles:true}));
   }));
-  root.querySelectorAll('[data-date]').forEach(d=>d.addEventListener('change',()=>{
-    DB.settings[d.dataset.date]=d.value||'';applySettings();save();
-    const sub=d.closest('.sx-date')&&d.closest('.sx-date').querySelector('.sx-s');if(sub)sub.textContent=d.value?sxDate(d.value):'Not set';
-    if(VIEW==='dash')renderDash();if(VIEW==='settings')renderSettings()}));
-  root.querySelectorAll('[data-dateclr]').forEach(b=>b.addEventListener('click',()=>{
-    DB.settings[b.dataset.dateclr]='';applySettings();save();
-    if(VIEW==='dash')renderDash();renderSettings()}));
+  /* a date row says what it is set to, and its clear button eases in or out;
+     nothing else on the screen is rebuilt */
+  const dated=(k,v)=>{
+    DB.settings[k]=v||'';applySettings();save();
+    document.querySelectorAll('[data-row="'+k+'"]').forEach(r=>{
+      const i=r.querySelector('[data-date]');if(i&&i.value!==v)i.value=v||'';
+      sxSwap(r.querySelector('.sx-s'),sxDateSub(v));
+      const c=r.querySelector('.sx-clr');if(c)c.classList.toggle('is-on',!!v);
+    });
+    if(VIEW==='dash')renderDash();
+  };
+  root.querySelectorAll('[data-date]').forEach(d=>d.addEventListener('change',()=>dated(d.dataset.date,d.value)));
+  root.querySelectorAll('[data-dateclr]').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();dated(b.dataset.dateclr,'')}));
+  if(window.sxPaintSwatches)sxPaintSwatches(root);
 }
 /* ---------- reset one section back to the shipped defaults ---------- */
 function resetSection(id,quiet){
@@ -13406,102 +13736,433 @@ $('#restorePrompt').onclick=()=>{DB.prompt=null;save();renderPrompt();toast('Def
 /* ============================================================
    SETTINGS + INIT
    ============================================================ */
-/* ---------- surface 2: the Settings screen ----------
-   The list (#setList, drawn by renderSetList further down) and one
-   section at a time in #setMain. On a phone body.setdetail says which
-   of the two is on screen; on a large screen both are. */
-let SET_SEC='reading',SET_FX=0,SET_LISTY=0;
+/* ---------- surface 2: the Settings screen (Plume 2.2) ----------
+   The list (#setList) under a hero, and one section at a time in #setMain.
+   Phone: #setMain is a full-screen layer that grows out of the row tapped
+   (clip-path from the row's box, the row's own colour fading off it) and
+   goes back into it; it has a history entry of its own ({sxd:1}), so Back
+   closes it and never the app. From 861px both are on screen and one marker
+   travels down the list to the open section, which enters from the side the
+   marker went. Every panel is built when the screen opens, so a tap only
+   flips classes and starts motion: nothing is rendered on the first frame. */
+let SET_SEC='appearance';
 /* the static panels already have a note of their own */
 const SET_NOTE={bank:'bankclass',studydata:'studydata',data:'storage',sync:'sync'};
 const setPhone=()=>matchMedia('(max-width:860px)').matches;
+const SX_ORDER=()=>SETTINGS_SPEC.map(s=>s.id);
+const SX_GROUPS=[['appearance','reading','explanations'],['session','copying'],['sync','data','studydata','bank'],['about']];
+const SX_SEEDS=[262,222,186,150,96,42,350];
+const sxLayer=()=>$('#setMain');
+const sxOpenNow=()=>setPhone()&&sxLayer().classList.contains('is-open')&&!sxLayer().classList.contains('is-closing');
+
+/* ---- what each list row says it is set to ---- */
+function sxHueName(h){
+  const N=[[15,'Red'],[45,'Orange'],[70,'Amber'],[100,'Lime'],[150,'Green'],[180,'Teal'],[200,'Cyan'],[240,'Blue'],[275,'Violet'],[300,'Purple'],[330,'Magenta'],[350,'Pink'],[361,'Red']];
+  h=((+h||0)%360+360)%360;for(const n of N)if(h<n[0])return n[1];return 'Red';
+}
+function sxSyncState(){
+  let on=false,st=null;try{on=!!(window.SYNC&&SYNC.connected())}catch(e){}
+  try{st=SYNC.status()}catch(e){}
+  const ph=(st&&st.phase)||(on?'ok':'off');
+  return {on,ph,txt:on?((st&&st.short)||'Connected'):'Not connected'};
+}
+const SX_SUMMARY={
+  appearance:()=>[{dark:'Dark',light:'Light',auto:'System'}[setVal('theme')]||'Dark',sxHueName(setVal('hue')),
+    ({tonal:'Tonal',vibrant:'Vibrant',expressive:'Expressive',neutral:'Neutral'}[setVal('palette')]||'Tonal')].join(' · '),
+  reading:()=>Math.round(setVal('font'))+'px · '+({sans:'Sans',serif:'Serif',mono:'Mono'}[setVal('family')]||'Sans')+' · '+
+    ({narrow:'Narrow',comfortable:'Medium',wide:'Wide'}[setVal('width')]||'Medium')+' column',
+  explanations:()=>(setVal('explLayout')==='grouped'?'Grouped':'Under each option')+' · '+(setVal('explOpen')===false?'start collapsed':'start open'),
+  session:()=>{const g=setVal('goal')||0,x=String(setVal('examDate')||'');
+    return (g?g+' a day':'No daily goal')+' · '+(x?'exam '+new Date(x+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'}):'auto-advance '+(setVal('autoNext')?'on':'off'))},
+  copying:()=>{const o=DB.settings.copyOpts||{},ks=COPYFIELDS.filter(f=>f[0]!=='@').map(f=>f[0]);
+    const n=ks.filter(k=>o[k]!==false).length;return n===ks.length?'Everything is included':n+' of '+ks.length+' parts included'},
+  sync:()=>sxSyncState().txt,
+  data:()=>({indexeddb:'IndexedDB',localstorage:'localStorage',memory:'Memory only, not saved'}[STORE_MODE]||STORE_MODE)+' · '+DB.questions.length+' questions',
+  studydata:()=>{const r=DB.dataRules||{};let n=0,ex=0;try{n=rawAttemptCount()}catch(e){}
+    ['days','sessions'].forEach(k=>Object.values(r[k]||{}).forEach(x=>{if(x&&x.s)ex++}));if(r.before&&r.before.v)ex++;
+    return n+' answer'+(n===1?'':'s')+' · '+(ex?ex+' rule'+(ex===1?'':'s')+' leaving some out':'all counted')},
+  bank:()=>{const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
+    return DB.questions.length+' questions · '+(un?un+' to classify':'all classified')},
+  about:()=>'Version '+String(APP_VERSION||'').replace(/^v?/,'v')+' · shortcuts'
+};
+/* words a section should be found by, beyond its rows */
+const SX_KEYS={
+  appearance:'theme dark light system colour color accent hue palette contrast name title wordmark',
+  reading:'font size text typeface serif sans mono line spacing column width legibility',
+  explanations:'reasoning inline grouped collapsed open explanation objective',
+  session:'auto advance daily goal streak target tutor clock exam date countdown',
+  copying:'copy clipboard markdown fields references notes links telegram answer attempt order',
+  sync:'cloud github repository token devices merge commit branch',
+  data:'storage backup export restore reset delete wipe indexeddb photos media',
+  studydata:'exclude excluded delete purge remove testing day days session sessions undo recount',
+  bank:'classify classification reclassify taxonomy duplicates scan locked verified',
+  about:'version build shortcuts keys install prompt'
+};
+/* the rows of the static panels, so search reaches them too */
+const SX_STATIC=[
+  ['Sync now','sync','#ghSyncNow'],['Save and connect','sync','#ghSave'],['Sync automatically','sync','#ghAuto'],
+  ['GitHub username','sync','#ghOwner'],['Data repository','sync','#ghRepo'],['Media repository','sync','#ghMRepo'],
+  ['Branch','sync','#ghBranch'],['Access token','sync','#ghToken'],['Settings from another device','sync','#ghDevCopy'],
+  ['Repair sync','sync','#ghRepair'],['Setup guide','sync','#ghHelp'],['Disconnect this device','sync','#ghForget'],
+  ['Backup & export','data','[data-go="import"]'],['Room for photos','data','#mediaCap'],['Upload anything waiting','data','#mediaUp'],
+  ['Clean unused media','data','#mediaClean'],['Storage format','data','#mediaUpgrade'],['Reset all statistics','data','#resetStats'],
+  ['Delete everything','data','#wipeAll'],['Ignore answers before a date','studydata','#sdBefore'],
+  ['Exclude a day','studydata','#sdDays'],['Exclude a session','studydata','#sdSess'],['Download a backup','studydata','#sdSummary'],
+  ['Reclassify the bank','bank','#reclassBtn'],['Reclassify locked questions','bank','#reclassForce'],['Scan for duplicates','bank','#dupScan2'],
+  ['Install app','about','#installRow'],['Keyboard shortcuts','about','#helpBtn3'],['Extractor prompt','about','[data-go="prompt"]'],['Version','about','#nxHero']
+];
+
+/* ---- the list, built once and then only repainted ---- */
+function sxNavHTML(id){
+  const s=SETSEC(id);
+  return '<button class="sx-item sx-nav pl-press" data-setsec="'+id+'">'+
+    '<span class="sx-lead k-'+(s.cat||'n')+'">'+sxIc(s.icon)+'</span>'+
+    sxTx(esc(s.title),'<span class="sx-sum"></span>')+(id==='sync'?'<span class="sx-dot" aria-hidden="true"></span>':'')+
+    sxIc('i-next','sx-chev')+'</button>';
+}
+function sxBuildList(){
+  const host=$('#setList');if(!host||host.firstChild)return;
+  host.innerHTML='<span class="sx-mark is-still" aria-hidden="true"></span>'+
+    SX_GROUPS.map(g=>'<div class="sx-grp">'+g.map(sxNavHTML).join('')+'</div>').join('');
+}
+function sxPaintList(){
+  $$('#setList [data-setsec]').forEach(b=>{
+    const id=b.dataset.setsec,el=b.querySelector('.sx-sum');let v='';
+    try{v=esc(SX_SUMMARY[id]())}catch(e){}
+    if(el)sxSwap(el,v);
+    b.setAttribute('aria-label',SETSEC(id).title+(v?', '+v.replace(/&amp;/g,'&'):''));
+  });
+  const d=$('#setList .sx-dot');if(d)d.className='sx-dot '+sxSyncState().ph;
+}
+/* desktop: one marker travels to the open section and stretches as it goes */
+function sxMark(){
+  const m=$('#setList .sx-mark');if(!m)return;
+  const row=$('#setList .sx-nav[data-setsec="'+SET_SEC+'"]');
+  const show=row&&!setPhone()&&!$('#sxBrowse').hidden;
+  m.classList.toggle('is-on',!!show);if(!show)return;
+  const y=row.offsetTop+row.offsetHeight/2-14,prev=parseFloat(m.dataset.y);
+  m.style.setProperty('--my',y+'px');m.dataset.y=y;
+  if(m.classList.contains('is-still')){void m.offsetWidth;m.classList.remove('is-still');return}
+  if(!isNaN(prev)&&Math.abs(prev-y)>4&&!Motion.reduced)
+    m.animate([{scale:'1 1'},{scale:'1 '+Math.min(2.4,1+Math.abs(prev-y)/160),offset:.3},{scale:'1 1'}],{duration:PL('spatial').d,easing:'ease-in-out'});
+}
+
+/* ---- the hero: specimen, theme, accent ---- */
+function sxHeroHTML(){
+  return '<button class="sx-spec pl-press" data-setsec="reading" aria-label="Reading settings">'+sxSpecHTML(false)+'</button>'+
+    '<div class="sx-hero__ctl">'+sxSegHTML(SETROW('theme'),String(setVal('theme')))+
+    '<div class="sx-seeds" role="radiogroup" aria-label="Accent colour"><span class="sx-seeds__ring" aria-hidden="true"></span>'+
+    SX_SEEDS.map(h=>'<button type="button" class="sx-seed pl-press" role="radio" aria-checked="false" data-hue="'+h+'" aria-label="'+sxHueName(h)+'"><i></i></button>').join('')+
+    '<button type="button" class="sx-seed sx-seed--more pl-press" role="radio" aria-checked="false" data-setsec="appearance" aria-label="Another colour, in Appearance"><i></i></button></div></div>';
+}
+const sxDark=()=>{const t=setVal('theme');return t==='light'?false:t==='dark'?true:!matchMedia('(prefers-color-scheme: light)').matches};
+/* the colours here are generated by the engine from the settings, never typed */
+function sxSeedCol(h,variant){
+  const M=window.M3C;if(!M)return '';
+  const v=M.VARIANTS[variant||setVal('palette')]||M.VARIANTS.tonal;
+  return M.css({h:h,c:Math.max(v.p,.09)},sxDark()?80:40);
+}
+function sxHueTrack(){
+  const M=window.M3C;if(!M)return '';
+  const st=[];for(let h=0;h<=360;h+=30)st.push(M.css({h:h,c:.15},sxDark()?75:55)+' '+(h/3.6).toFixed(1)+'%');
+  return 'linear-gradient(to right,'+st.join(',')+')';
+}
+function sxPaintSwatches(root){
+  const M=window.M3C;if(!M)return;
+  const dark=sxDark(),hue=parseFloat(setVal('hue'))||262;
+  (root||document).querySelectorAll('.sx-sw3[data-pal]').forEach(w=>{
+    const p=M.palettes(hue,w.dataset.pal),is=w.querySelectorAll('i');
+    [[p.P,dark?80:40],[p.S,dark?70:60],[p.T,dark?80:40]].forEach((x,i)=>{if(is[i])is[i].style.setProperty('--c',M.css(x[0],x[1]))});
+  });
+  const tr=sxHueTrack();
+  if(tr)document.documentElement.style.setProperty('--sx-hues',tr);
+}
+function sxPaintSeeds(){
+  const box=$('#sxHero .sx-seeds');if(!box)return;
+  const hue=Math.round(parseFloat(setVal('hue'))||262);
+  let sel=null;
+  box.querySelectorAll('[data-hue]').forEach(b=>{
+    const h=+b.dataset.hue;b.querySelector('i').style.setProperty('--c',sxSeedCol(h));
+    const on=Math.abs(h-hue)<1;b.setAttribute('aria-checked',String(on));if(on)sel=b});
+  const more=box.querySelector('.sx-seed--more');
+  more.querySelector('i').style.setProperty('--c',sel?'':sxSeedCol(hue));
+  more.setAttribute('aria-checked',String(!sel));
+  sxRing(sel||more);
+}
+function sxRing(b){
+  const box=b&&b.parentNode,ring=box&&box.querySelector('.sx-seeds__ring');if(!ring||!b.offsetWidth)return;
+  const w=Math.min(b.offsetWidth,40);
+  ring.style.setProperty('--rw',w+'px');
+  ring.style.setProperty('--rx',(b.offsetLeft+(b.offsetWidth-w)/2)+'px');
+  ring.style.setProperty('--ry',(b.offsetTop+(b.offsetHeight-w)/2)+'px');
+  if(!box.classList.contains('is-placed')){ring.style.transition='none';void ring.offsetWidth;ring.style.transition='';box.classList.add('is-placed')}
+}
+function sxBindHero(){
+  const hero=$('#sxHero');
+  bindSettings(hero);
+  hero.querySelectorAll('[data-hue]').forEach(b=>b.addEventListener('click',()=>{
+    const h=+b.dataset.hue;if(Math.abs((parseFloat(setVal('hue'))||0)-h)<1)return;
+    DB.settings.hue=h;sxRing(b);
+    hero.querySelectorAll('.sx-seed').forEach(x=>x.setAttribute('aria-checked',String(x===b)));
+    document.querySelectorAll('[data-rng="hue"]').forEach(i=>{i.value=h;sxSlider(i)});
+    document.querySelectorAll('[data-val="hue"]').forEach(l=>{l.innerHTML=sxFmt('hue',h)});
+    const box=b.parentNode;box.style.viewTransitionName='sx-ctl';
+    Motion.morph(()=>applySettings(),{from:b}).then(()=>{box.style.viewTransitionName='';save()});
+  }));
+}
+
+/* ---- search: it finds single settings, not just sections ---- */
+function sxIndex(){
+  const out=[];
+  SETTINGS_SPEC.forEach(s=>{
+    (s.rows||[]).forEach(r=>{if(r.kind!=='grp')out.push({t:r.label,sec:s.id,sel:'[data-row="'+r.k+'"]',hay:(r.hint||'')+' '+(r.sub||'')})});
+    out.push({t:s.title,sec:s.id,sel:null,hay:SX_KEYS[s.id]||''});
+  });
+  SX_STATIC.forEach(x=>out.push({t:x[0],sec:x[1],sel:x[2],hay:''}));
+  return out;
+}
+let SX_HITS=[];
+function sxSearch(q){
+  q=String(q||'').trim().toLowerCase();
+  const box=$('#sxList .sx-search');box.classList.toggle('has-q',!!q);
+  const browse=$('#sxBrowse'),hits=$('#setHits');
+  if(q){
+    const ws=q.split(/\s+/);
+    SX_HITS=sxIndex().map(x=>{
+      const t=x.t.toLowerCase(),hay=t+' '+SETSEC(x.sec).title.toLowerCase()+' '+x.hay.toLowerCase();
+      if(!ws.every(w=>hay.indexOf(w)>=0))return null;
+      return Object.assign({sc:(t.indexOf(q)===0?0:t.indexOf(q)>0?1:2)+(x.sel?0:.5)},x);
+    }).filter(Boolean).sort((a,b)=>a.sc-b.sc).slice(0,14);
+    const mk=t=>{const i=t.toLowerCase().indexOf(ws[0]);return i<0?esc(t):esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+ws[0].length))+'</mark>'+esc(t.slice(i+ws[0].length))};
+    hits.innerHTML=SX_HITS.length?'<div class="sx-grp">'+SX_HITS.map((x,i)=>{const s=SETSEC(x.sec);
+      return '<button class="sx-item sx-hit pl-press" data-hit="'+i+'"><span class="sx-lead k-'+(s.cat||'n')+'">'+sxIc(s.icon)+'</span>'+
+        sxTx(mk(x.t),x.sel?esc(s.title):'Section')+'</button>'}).join('')+'</div>'
+      :'<p class="sx-empty">Nothing matches that. Try a word like <b>font</b>, <b>goal</b>, <b>backup</b> or <b>colour</b>.</p>';
+  }
+  const want=!q;
+  if(browse.hidden===!want)return;
+  /* the list and the results swap as a fade-through, never a cut */
+  const out=want?hits:browse,inn=want?browse:hits,tok=sxSearch.t=(sxSearch.t||0)+1;
+  const swap=()=>{if(sxSearch.t!==tok)return;out.hidden=true;out.getAnimations().forEach(a=>a.cancel());inn.hidden=false;sxMark();
+    if(!Motion.reduced)inn.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none'}],{duration:PL('spatial').d,easing:PL('spatial').e})};
+  if(Motion.reduced||out.hidden)swap();
+  else out.animate([{opacity:1},{opacity:0}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(swap,()=>{});
+}
+function sxReveal(sel){
+  if(!sel)return;
+  const t=$('#setMain .setpanel.on '+sel)||$('#setMain .setpanel.on').querySelector(sel);if(!t)return;
+  const row=t.closest('.sx-item')||t.closest('.sx-grp')||t;
+  row.scrollIntoView({block:'center',behavior:Motion.reduced?'auto':'smooth'});
+  row.classList.remove('sx-flash');void row.offsetWidth;row.classList.add('sx-flash');
+  row.addEventListener('animationend',()=>row.classList.remove('sx-flash'),{once:true});
+}
+
+/* ---- which section is showing ---- */
 function showSetSection(id){
-  if(!SETSEC(id))id='reading';
+  if(!SETSEC(id))id='appearance';
   SET_SEC=id;
-  $$('#setList [data-setsec]').forEach(b=>{const on=b.dataset.setsec===id;b.classList.toggle('on',on);
-    if(on)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
+  $$('#setList [data-setsec]').forEach(b=>{if(b.dataset.setsec===id)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current')});
   $$('#setMain .setpanel').forEach(p=>p.classList.toggle('on',p.dataset.sec===id));
-  $('#setCrumb').textContent=SETSEC(id).title;
+  sxSwap($('#setCrumb'),esc(SETSEC(id).title));
   const note=SET_NOTE[id]||('set-'+id),info=$('#setInfo');
   info.dataset.note=note;info.hidden=!NOTES[note];
+  sxMark();
 }
-/* A move between the list and a section, or between two sections, is a
-   fade-through: what is on screen leaves by itself, and only then does
-   the next page rise in. A second tap mid-move takes over the first. */
-function setShown(){
-  if(!setPhone())return $('#setMain .setpanel.on');
-  return document.body.classList.contains('setdetail')?$('#setMain'):$('#sxList');
+/* a move between two sections: the old one steps out the way it came, the
+   new one enters from the side the marker went */
+function sxSwitch(id){
+  const old=$('#setMain .setpanel.on');
+  if(id===SET_SEC&&old)return Promise.resolve();
+  const o=SX_ORDER(),dir=Math.sign(o.indexOf(id)-o.indexOf(SET_SEC))||1;
+  if(old&&!Motion.reduced){
+    old.getAnimations().forEach(a=>a.cancel());
+    const top=old.offsetTop;old.classList.add('sx-leaving');old.style.top=top+'px';
+    old.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateY('+(-dir*12)+'px)'}],{duration:90,easing:PL_EXIT,fill:'forwards'})
+      .finished.then(()=>{old.classList.remove('sx-leaving');old.style.top='';old.getAnimations().forEach(a=>a.cancel())},()=>{});
+  }
+  showSetSection(id);
+  const sc=setPhone()?$('#sxScroll'):null;
+  if(sc)sc.scrollTop=0;else if(window.scrollY>0)window.scrollTo({top:0,behavior:Motion.reduced?'auto':'smooth'});
+  const neu=$('#setMain .setpanel.on');
+  const a=Motion.reduced?neu.animate([{opacity:0},{opacity:1}],{duration:150})
+    :neu.animate([{opacity:0,transform:'translateY('+(dir*24)+'px)'},{opacity:1,transform:'none'}],{duration:PL('spatial').d,easing:PL('spatial').e,delay:40,fill:'backwards'});
+  return a.finished.catch(()=>{});
 }
-function setMove(change){
-  const tok=++SET_FX,out=setShown();
-  const arrive=()=>{
-    /* a page hidden mid-rise never reports animationend, so clear both */
-    $$('#v-settings .sx-leave,#v-settings .sx-arrive').forEach(x=>x.classList.remove('sx-leave','sx-arrive'));
-    change();
-    const inn=setShown();if(!inn)return;
-    inn.classList.remove('sx-arrive');void inn.offsetWidth;inn.classList.add('sx-arrive');
-    inn.addEventListener('animationend',()=>inn.classList.remove('sx-arrive'),{once:true});
-  };
-  if(!out||VIEW!=='settings'){arrive();return}
-  out.classList.add('sx-leave');
-  setTimeout(()=>{if(tok===SET_FX)arrive()},90);
+
+/* ---- the phone layer ---- */
+function sxGrow(open,row){
+  const L=sxLayer(),tint=L.querySelector('.sx-tint'),parts=[L.querySelector('.sx-bar'),$('#sxScroll')];
+  const W=innerWidth,H=innerHeight;
+  let r=row&&row.isConnected?row.getBoundingClientRect():null;
+  if(r&&(!r.width||r.bottom<0||r.top>H))r=null;
+  const cur=getComputedStyle(L).clipPath;
+  [L,tint].concat(parts).forEach(x=>x.getAnimations().forEach(a=>a.cancel()));
+  L.style.clipPath='';
+  if(Motion.reduced||!r){
+    const k=Motion.reduced?[{opacity:open?0:1},{opacity:open?1:0}]
+      :[{opacity:open?0:1,transform:open?'scale(.94)':'none'},{opacity:open?1:0,transform:open?'none':'scale(.94)'}];
+    return L.animate(k,{duration:open?PL('effect-slow').d:150,easing:open?PL('effect-slow').e:PL_EXIT,fill:open?'none':'forwards'}).finished;
+  }
+  const rcs=getComputedStyle(row),rad=Math.max(parseFloat(rcs.borderTopLeftRadius)||0,parseFloat(rcs.borderBottomLeftRadius)||0);
+  const box='inset('+r.top+'px '+(W-r.right)+'px '+(H-r.bottom)+'px '+r.left+'px round '+rad+'px)',full='inset(0px 0px 0px 0px round 0px)';
+  const from=(cur&&cur!=='none')?cur:(open?box:full),sp=open?PL('spatial-slow'):PL('spatial');
+  const a=L.animate([{clipPath:from},{clipPath:open?full:box}],{duration:sp.d,easing:sp.e,fill:open?'none':'forwards'});
+  if(open){
+    tint.animate([{opacity:1},{opacity:0}],{duration:PL('effect-slow').d,easing:PL('effect-slow').e,delay:50,fill:'backwards'});
+    parts.forEach((p,i)=>p.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],
+      {duration:PL('spatial').d,easing:PL('spatial').e,delay:60+i*30,fill:'backwards'}));
+  }else{
+    parts.forEach(p=>p.animate([{opacity:1},{opacity:0}],{duration:90,easing:PL_EXIT,fill:'forwards'}));
+    tint.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e,fill:'forwards'});
+  }
+  return a.finished;
 }
-function openSetDetail(id){
-  const phone=setPhone(),inDetail=document.body.classList.contains('setdetail');
-  if(!phone&&id===SET_SEC&&$('#setMain .setpanel.on'))return;
-  setMove(()=>{
-    if(phone&&!inDetail){SET_LISTY=window.scrollY;document.body.classList.add('setdetail')}
-    showSetSection(id);
-    window.scrollTo(0,0);
-  });
+let SXD_FROM=null;
+function sxHistBack(){try{if(history.state&&history.state.sxd)history.back()}catch(e){}}
+function sxOpen(id,from){
+  const L=sxLayer();
+  /* a tap while it is still going back reopens it from where it is */
+  if(L.classList.contains('is-open')&&!L.classList.contains('is-closing'))return sxSwitch(id);
+  L.classList.remove('is-closing');L.__c=(L.__c||0)+1;
+  showSetSection(id);$('#sxScroll').scrollTop=0;L.classList.remove('is-scrolled');
+  SXD_FROM=from||$('#setList .sx-nav[data-setsec="'+id+'"]');
+  L.classList.add('is-open');L.inert=false;document.body.classList.add('setdetail');
+  try{if(!(history.state&&history.state.sxd))history.pushState(Object.assign({},history.state||{},{sxd:1}),'')}catch(e){}
+  L.tabIndex=-1;L.focus({preventScroll:true});
+  return sxGrow(true,SXD_FROM).catch(()=>{});
 }
-function closeSetDetail(){
-  setMove(()=>{document.body.classList.remove('setdetail');window.scrollTo(0,SET_LISTY)});
+function sxHide(){const L=sxLayer();
+  [L,L.querySelector('.sx-tint'),L.querySelector('.sx-bar'),$('#sxScroll')].forEach(x=>x.getAnimations().forEach(a=>a.cancel()));
+  L.classList.remove('is-open','is-closing');L.style.clipPath='';L.inert=setPhone();document.body.classList.remove('setdetail')}
+function sxClose(instant){
+  const L=sxLayer();if(!L.classList.contains('is-open'))return;
+  if(instant){sxHistBack();sxHide();return}
+  if(L.classList.contains('is-closing'))return;
+  sxHistBack();
+  document.body.classList.remove('setdetail');
+  /* back into the row of the section on screen, or the one it came from */
+  const row=$('#setList .sx-nav[data-setsec="'+SET_SEC+'"]')||SXD_FROM,tok=L.__c=(L.__c||0)+1;
+  L.inert=true;L.classList.add('is-closing');
+  const back=SXD_FROM&&SXD_FROM.isConnected&&!SXD_FROM.closest('.sx-nav')&&SXD_FROM.dataset.setsec===SET_SEC?SXD_FROM:row;
+  sxGrow(false,back).then(()=>{if(L.__c===tok&&!document.body.classList.contains('setdetail'))sxHide()},()=>{});
+  const f=back&&back.closest('button');if(f)f.focus({preventScroll:true});
 }
-function openSettingsSection(id){go('settings');showSetSection(id);document.body.classList.add('setdetail')}
+function sxGoto(id,from){
+  if(VIEW!=='settings'){openSettingsSection(id);return Promise.resolve()}
+  if(!setPhone())return sxSwitch(id);
+  return sxOpen(id,from);
+}
+function openSettingsSection(id){
+  go('settings');
+  if(setPhone())requestAnimationFrame(()=>sxOpen(id));
+  else showSetSection(id);
+}
 window.openSettingsSection=openSettingsSection;
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-setsec]');if(!b)return;
-  e.preventDefault();
-  if(VIEW==='settings')openSetDetail(b.dataset.setsec);
-  else openSettingsSection(b.dataset.setsec);
+  e.preventDefault();sxGoto(b.dataset.setsec,b);
 });
-$('#setBack').onclick=closeSetDetail;
+document.addEventListener('click',e=>{
+  const h=e.target.closest&&e.target.closest('[data-hit]');if(!h)return;
+  const x=SX_HITS[+h.dataset.hit];if(!x)return;
+  sxGoto(x.sec,h).then(()=>sxReveal(x.sel));
+});
+$('#setBack').onclick=()=>sxClose();
+window.addEventListener('popstate',()=>{if(sxOpenNow()&&!(history.state&&history.state.sxd))sxClose()});
+try{if(history.state&&history.state.sxd){const st=Object.assign({},history.state);delete st.sxd;history.replaceState(st,'')}}catch(e){}
+/* Escape closes the layer and nothing under it; a dialog or a sheet on top
+   closes first (capture phase, so it runs before they have closed) */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!sxOpenNow())return;
+  if($('#mask.on')||($('#lbx')&&!$('#lbx').hidden)||($('#fpk')&&!$('#fpk').hidden)||$('#ovMenu.on'))return;
+  e.stopPropagation();sxClose();
+},true);
+$('#sxScroll').addEventListener('scroll',function(){sxLayer().classList.toggle('is-scrolled',this.scrollTop>4)},{passive:true});
+matchMedia('(max-width:860px)').addEventListener('change',()=>{sxHide();sxMark()});
+/* leaving the screen any other way closes the layer at once */
+{const _go=go;go=function(v){if(sxLayer().classList.contains('is-open'))sxClose(true);return _go.apply(this,arguments)}}
+/* search */
+{const q=$('#setSearch'),box=$('#sxList .sx-search');
+  q.addEventListener('input',()=>sxSearch(q.value));
+  q.addEventListener('focus',()=>{if(Motion.reduced)return;box.classList.remove('is-scan');void box.offsetWidth;box.classList.add('is-scan')});
+  box.addEventListener('animationend',()=>box.classList.remove('is-scan'));
+  $('#setSearchX').addEventListener('click',e=>{e.preventDefault();q.value='';sxSearch('');q.focus()});}
 /* a date row is the whole row: wherever it is tapped, the picker opens */
 document.addEventListener('click',e=>{
   const d=e.target.closest&&e.target.closest('.sx-date input[type=date]');
   if(d&&d.showPicker)try{d.showPicker()}catch(err){}
 });
+sxHydrate($('#v-settings'));
+/* the sync engine paints its chip; the status card and the list follow it */
+new MutationObserver(()=>{try{sxRefresh()}catch(e){}}).observe($('#syncChip'),{attributes:true,childList:true,characterData:true,subtree:true});
+sxLayer().inert=setPhone();
+
+/* repaint what the screen says, after any preference changed */
+function sxRefresh(){
+  if(!$('#setList'))return;
+  sxPaintList();sxPaintSeeds();sxPaintSwatches();
+  const sy=$('#sxSyncCard');
+  if(sy){const st=sxSyncState(),ph={ok:'ok',idle:'idle',busy:'busy',err:'err',off:'off'}[st.ph]||'ok';
+    sy.className='sx-status st-'+ph;sxSyncSpin(ph==='busy');
+    const now=$('#ghSyncNow'),sv=$('#ghSave');
+    if(now&&sv){now.disabled=!st.on;now.classList.toggle('pl-btn--filled',st.on);now.classList.toggle('pl-btn--tonal',!st.on);
+      sv.classList.toggle('pl-btn--filled',!st.on);sv.classList.toggle('pl-btn--tonal',st.on);}
+  }
+}
+window.sxRefresh=sxRefresh;window.sxPaintSwatches=sxPaintSwatches;
+/* the sync icon: while a sync runs its arrows travel round their own arc;
+   when it ends they glide on to their drawn place and stop */
+function sxSyncSpin(on){
+  const g=$('#sxSyncCard .sx-rot');if(!g)return;
+  if(on&&!g.__spin&&!Motion.reduced){
+    g.__spin=g.animate([{transform:'rotate(0deg)'},{transform:'rotate(360deg)'}],{duration:1100,iterations:Infinity,easing:'linear'});
+  }else if(!on&&g.__spin){
+    const a=g.__spin,t=(a.currentTime||0)%1100,deg=t/1100*360;g.__spin=null;a.cancel();
+    const sp=PL('spatial');g.animate([{transform:'rotate('+deg+'deg)'},{transform:'rotate(360deg)'}],{duration:sp.d,easing:sp.e});
+  }
+}
+
 function renderSettings(){
   /* preference panels are rebuilt from the spec every time this screen opens,
      so they always show what is actually stored */
   SETTINGS_SPEC.filter(s=>!s.static).forEach(sec=>{
     const panel=$('#setMain .setpanel[data-sec="'+sec.id+'"]');if(!panel)return;
     panel.innerHTML=(sec.preview?SET_PREVIEW:'')+setSheetHTML(sec)+
-      '<div class="sx-grp"><button class="sx-item" data-setreset="'+sec.id+'"><svg class="ic sx-ic"><use href="#i-history"/></svg>'+sxTx('Reset to defaults')+'</button></div>';
+      '<div class="sx-grp"><button class="sx-item pl-press" data-setreset="'+sec.id+'"><span class="sx-ld">'+sxIc('i-history')+'</span>'+sxTx('Reset '+esc(sec.title.toLowerCase())+' to defaults')+'</button></div>';
     bindSettings(panel);
-    panel.querySelector('[data-setreset]').onclick=()=>{resetSection(sec.id);renderSettings();showSetSection(sec.id)};
+    panel.querySelector('[data-setreset]').onclick=()=>{
+      resetSection(sec.id);renderSettings();
+      if(!Motion.reduced)$('#setMain .setpanel[data-sec="'+sec.id+'"]').animate([{opacity:.25},{opacity:1}],{duration:PL('effect-slow').d,easing:PL('effect-slow').e});
+    };
     NOTES['set-'+sec.id]=[sec.title,setNoteHTML(sec)];
   });
+  sxBuildList();
+  const hero=$('#sxHero');if(hero){hero.innerHTML=sxHeroHTML();sxBindHero()}
   showSetSection(SET_SEC);
   const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
   const lk=DB.questions.filter(q=>q.classLocked).length;
   const dp=DB.questions.filter(q=>q.dupCandidate).length;
   const rp=DB.questions.filter(q=>(q.seenCount||0)>1).length;
   const vf=DB.questions.filter(q=>q.verified).length;
-  $('#classInfo').innerHTML=sxStat('Taxonomy v'+(DB.taxVersion||1),undefined,
-      SYSTEMS.length+' systems · '+SUBJECTS.length+' subjects · '+ARCHETYPES.length+' question types')+
-    sxStat('Unclassified',un)+sxStat('Locked by hand',lk)+sxStat('Verified by you',vf)+
-    sxStat('Seen more than once',rp)+sxStat('Possible duplicates',dp);
-  const modes={indexeddb:'IndexedDB (best — large banks and images are fine)',localstorage:'localStorage (works, but roughly 5 MB total)',memory:'Memory only — this browser is blocking storage, so nothing survives a refresh. Export a backup.'};
-  const fmtName={v3:'sharded store (v3)',locked:'old format — upgrade pending',fresh:'nothing in the repository yet',legacy:'old format',unknown:'checking…'};
+  const tile=(n,t,hot)=>'<div class="sx-stat'+(hot&&n?' is-hot':'')+'"><b>'+n+'</b><span>'+t+'</span></div>';
+  $('#classInfo').innerHTML='<div class="sx-stats">'+tile(DB.questions.length,'Questions')+tile(un,'Unclassified',1)+tile(lk,'Locked by hand')+
+    tile(vf,'Verified by you')+tile(rp,'Seen more than once')+tile(dp,'Possible duplicates',1)+'</div>'+
+    '<p class="sx-cap">Taxonomy v'+(DB.taxVersion||1)+' · '+SYSTEMS.length+' systems · '+SUBJECTS.length+' subjects · '+ARCHETYPES.length+' question types</p>';
+  const modes={indexeddb:'IndexedDB: large banks and photos are fine',localstorage:'localStorage: works, but holds about 5 MB in all',memory:'Memory only: this browser is blocking storage, so nothing survives a refresh. Export a backup.'};
+  const fmtName={v3:'Sharded store (v3)',locked:'Old format, upgrade pending',fresh:'Nothing in the repository yet',legacy:'Old format',unknown:'Checking…'};
   const mode=(window.V3&&V3.mode)?V3.mode():'legacy';
   $('#storeInfo').innerHTML=sxStat('Saving to',undefined,esc(modes[STORE_MODE])+(IDB.v2?' · photos kept as files, not inside the questions':''))+
     sxStat('Repository format',undefined,esc(fmtName[mode]||mode))+
     sxStat('On this device',undefined,`${DB.questions.length} questions · ${allAttempts().length} answers · ${DB.sessions.length} sessions`)+
     (DB.updatedAt?sxStat('Last saved',undefined,esc(new Date(DB.updatedAt).toLocaleString())):'');
   try{TOOLS.bind();TOOLS.renderMedia()}catch(e){}
+  const mc=$('#mediaCap');if(mc&&!mc.__sx){mc.__sx=1;mc.parentNode.insertAdjacentHTML('beforeend','<span class="pl-slider__v" aria-hidden="true"></span>');
+    mc.addEventListener('input',()=>{sxSlider(mc);const v=mc.parentNode.querySelector('.pl-slider__v');if(v)v.textContent=$('#mediaCapTxt').textContent})}
+  if(mc){sxSlider(mc);const v=mc.parentNode.querySelector('.pl-slider__v');if(v)v.textContent=$('#mediaCapTxt').textContent}
   renderStudyData();
   if(window.SYNC)window.SYNC.render();
+  sxSearch($('#setSearch').value);
+  sxRefresh();
 }
 function applySettings(){
   const s=DB.settings,R=document.documentElement.style;
@@ -13520,6 +14181,7 @@ function applySettings(){
   $('#brandTag').textContent=s.brand||'Personal Qbank';
   document.title='Nidus — '+(s.brand||'Personal Qbank');
   try{if($('#player').classList.contains('on'))renderMeta()}catch(e){}
+  try{if(window.sxRefresh)sxRefresh()}catch(e){}
 }
 $('#reclassBtn').onclick=()=>{const n=reclassifyAll(false);renderSettings();toast(`Reclassified ${n} question${n===1?'':'s'}.`)};
 $('#reclassForce').onclick=()=>modal('Reclassify everything?','<p class="tiny">This re-runs the classifier over every question, including the ones you locked by hand. Your own labels, notes, flags and attempt history are untouched — only system, subject, question type, task, level and format are rewritten.</p>',
@@ -13557,17 +14219,17 @@ function renderStudyData(){
   const pct=raw?Math.round(live/raw*100):100;
   host.innerHTML=`<div class="sx-grp">
       <div class="sx-item sx-col">
-        <div class="sx-row"><span class="sx-t">Counted</span><span class="sx-val">${live} of ${raw}</span></div>
-        <div class="sx-prog" aria-hidden="true"><i style="width:${pct}%"></i>${pct<100?'<b></b>':''}</div>
+        <div class="sx-row"><span class="sx-t">Counted</span><span class="sx-num">${live}<span class="u"> of ${raw}</span></span></div>
+        <div class="sx-prog" aria-hidden="true"><i style="width:${pct}%"></i></div>
         <span class="sx-s">${raw===live?'Every answer on this device is being counted.'
           :`<b>${raw-live}</b> answer${raw-live===1?' is':'s are'} out of the statistics — the questions behind them are back in the unused pool and off the review schedule.`}</span>
       </div>
       ${sxStat('Days excluded',exDays.length)}${sxStat('Sessions excluded',exSess.length)}
     </div>
     <div class="sx-grp">
-      <button class="sx-item" id="sdBackup"><svg class="ic sx-ic"><use href="#i-import"/></svg>${sxTx('Download a backup')}</button>
-      ${(exDays.length||exSess.length||r.before.v)?`<button class="sx-item" id="sdClearRules"><svg class="ic sx-ic"><use href="#i-check"/></svg>${sxTx('Count everything again')}</button>`:''}
-      ${rec?`<button class="sx-item" id="sdUndo"><svg class="ic sx-ic"><use href="#i-history"/></svg>${sxTx('Undo: '+esc(rec.label)+' ('+rec.n+')','Deleted '+esc(new Date(rec.ts).toLocaleString())+' · kept until the next deletion replaces it')}</button>`:''}
+      <button class="sx-item pl-press" id="sdBackup"><span class="sx-ld">${sxIc('i-import')}</span>${sxTx('Download a backup')}</button>
+      ${(exDays.length||exSess.length||r.before.v)?`<button class="sx-item pl-press" id="sdClearRules"><span class="sx-ld">${sxIc('i-check')}</span>${sxTx('Count everything again')}</button>`:''}
+      ${rec?`<button class="sx-item pl-press" id="sdUndo"><span class="sx-ld">${sxIc('i-history')}</span>${sxTx('Undo: '+esc(rec.label)+' ('+rec.n+')','Deleted '+esc(new Date(rec.ts).toLocaleString())+' · kept until the next deletion replaces it')}</button>`:''}
     </div>`;
 
   /* the cut-off — one control that usually settles the whole problem */
@@ -13575,9 +14237,9 @@ function renderStudyData(){
   $('#sdBefore').innerHTML=`<div class="sx-item sx-date">
       ${sxTx('Ignore anything earlier',cut?'Answers before '+esc(cut.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}))+' are not counted':'Not set')}
       <input type="date" id="sdBeforeInput" value="${cut?dayKey(cut):''}" aria-label="Ignore anything earlier">
-      ${cut?'<button class="sx-icb" id="sdBeforeClr" aria-label="Clear the cut-off"><svg class="ic"><use href="#i-close"/></svg></button>':''}
+      ${cut?'<button class="sx-icb pl-press" id="sdBeforeClr" aria-label="Clear the cut-off">'+sxIc('i-close')+'</button>':''}
     </div>
-    ${cut?`<button class="sx-item sx-err" id="sdBeforeDel"><svg class="ic sx-ic"><use href="#i-trash"/></svg>${sxTx('Delete what is before it',esc(sdCount({before:r.before.v}))+' would be removed for good')}</button>`:''}`;
+    ${cut?`<button class="sx-item sx-err pl-press" id="sdBeforeDel"><span class="sx-ld">${sxIc('i-trash')}</span>${sxTx('Delete what is before it',esc(sdCount({before:r.before.v}))+' would be removed for good')}</button>`:''}`;
 
   /* day ledger */
   const days=dayLedger(), goal=DB.settings.goal||0;
@@ -13590,8 +14252,8 @@ function renderStudyData(){
         ${sxTx(esc(dt.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'}))+
           (off?`<span class="sx-tag">${hard?'Before the cut-off':'Excluded'}</span>`:''),
           `${d.n} answered · ${acc}% · ${fmtDur(d.ms)} · ${Object.keys(d.sess).length} session${Object.keys(d.sess).length===1?'':'s'}${goal&&d.n>=goal?' · goal met':''}`)}
-        <button class="sx-btn tonal sm" data-sdday="${d.k}"${hard?' disabled':''}>${drDay(d.k)?'Count it':'Exclude'}</button>
-        <button class="sx-icb" data-sddel="${d.k}" aria-label="Delete this day permanently" title="Delete this day permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
+        <button class="sx-btn tonal pl-press" data-sdday="${d.k}"${hard?' disabled':''}>${drDay(d.k)?'Count it':'Exclude'}</button>
+        <button class="sx-icb pl-press" data-sddel="${d.k}" aria-label="Delete this day permanently" title="Delete this day permanently">${sxIc('i-trash')}</button>
         </div>`}).join('')}</div>
       ${days.length>120?`<p class="sx-foot">Showing the 120 most recent of ${days.length} days.</p>`:''}`
     :`<div class="sx-grp">${sxStat('No answers yet',undefined,'Every day you study will be listed here.')}</div>`;
@@ -13605,8 +14267,8 @@ function renderStudyData(){
       return `<div class="sx-item">
         ${sxTx(esc(x.config&&x.config.label||'Session')+(off?`<span class="sx-tag">${soft?'Excluded by day':'Excluded'}</span>`:''),
           `${new Date(x.ts).toLocaleString()} · ${n} question${n===1?'':'s'} · ${sc.p}% · ${fmtDur(x.elapsed||0)} · ${esc(SESS_LABEL[sessState(x)]||'')}`)}
-        <button class="sx-btn tonal sm" data-sdsess="${x.id}">${drSess(x.id)?'Count it':'Exclude'}</button>
-        <button class="sx-icb" data-sdsdel="${x.id}" aria-label="Delete this session permanently" title="Delete this session permanently"><svg class="ic"><use href="#i-trash"/></svg></button>
+        <button class="sx-btn tonal pl-press" data-sdsess="${x.id}">${drSess(x.id)?'Count it':'Exclude'}</button>
+        <button class="sx-icb pl-press" data-sdsdel="${x.id}" aria-label="Delete this session permanently" title="Delete this session permanently">${sxIc('i-trash')}</button>
         </div>`}).join('')}</div>
       ${ss.length>120?`<p class="sx-foot">Showing the 120 most recent of ${ss.length} sessions.</p>`:''}`
     :`<div class="sx-grp">${sxStat('No sessions yet',undefined,'Build one from the bank and it will be listed here.')}</div>`;
@@ -17972,11 +18634,52 @@ const BRAND=(function(){
       /* fixed accents used by chips and the plate, tuned per theme */
       out['--md-primary-fixed'] = css(pal.P, dark ? 90 : 90);
       out['--md-on-primary-fixed'] = css(pal.P, 10);
+
+      /* Plume 2 · lighting roles. Light comes from above in both themes:
+         whatever is closer to the user is lighter. Lightness is set
+         directly (OKLCH L) on the neutral palette's hue, the light page
+         carrying a faint tint of the seed. The M3 surface ladder is
+         retuned to the same model, so screens that still use it get the
+         same depth: surface is the page, container-low a card, and
+         container-highest a well. (M3's own light ladder ran the other
+         way, which is what made the light theme read as a negative.) */
+      var hN = ((pal.N.h % 360) + 360) % 360, cn = pal.N.c;
+      var lit = function (L, c) { return 'oklch(' + (L * 100).toFixed(2) + '% ' + c.toFixed(4) + ' ' + hN.toFixed(1) + ')'; };
+      var k = col - 1;
+      var Lx = dark
+        ? { page: .145 - .015 * k, bar: .175, card: .21, hi: .255, well: .17 - .01 * k, flt: .285,
+            lowest: .12, cont: .228, high: .25, highest: .275, dim: .125, bright: .30 }
+        : { page: .958 - .008 * k, bar: .978, card: .996, hi: 1, well: .948 - .008 * k, flt: 1,
+            lowest: 1, cont: .985, high: .972, highest: .945 - .008 * k, dim: .92, bright: .985 };
+      var cPg = cn * (dark ? .9 : 1.3), cCd = cn * (dark ? .8 : .35), cWl = cn * (dark ? .9 : 1.2);
+      out['--md-surface'] = lit(Lx.page, cPg);
+      out['--md-surface-dim'] = lit(Lx.dim, cPg);
+      out['--md-surface-bright'] = lit(Lx.bright, cCd);
+      out['--md-surface-container-lowest'] = lit(Lx.lowest, dark ? cPg : 0);
+      out['--md-surface-container-low'] = lit(Lx.card, cCd);
+      out['--md-surface-container'] = lit(Lx.cont, cCd);
+      out['--md-surface-container-high'] = lit(Lx.high, cCd);
+      out['--md-surface-container-highest'] = lit(Lx.highest, cWl);
+      out['--p-page'] = lit(Lx.page, cPg);
+      out['--p-bar'] = lit(Lx.bar, cCd);
+      out['--p-card'] = lit(Lx.card, cCd);
+      out['--p-card-hi'] = lit(Lx.hi, dark ? cCd : 0);
+      out['--p-well'] = lit(Lx.well, cWl);
+      out['--p-float'] = lit(Lx.flt, dark ? cCd : 0);
+      /* one hue per category for leading icon shapes (Settings): the seed,
+         and two hues set well apart from it, as tonal containers */
+      var cc = Math.max(pal.S.c, pal.P.c * .45);
+      [['a', 0], ['b', 75], ['c', -105]].forEach(function (x) {
+        var ph = { h: hue + x[1], c: cc };
+        out['--p-cat-' + x[0]] = css(ph, dark ? 30 : 90);
+        out['--p-on-cat-' + x[0]] = css(ph, dark ? 90 : 30);
+      });
       return out;
     }
 
     return { scheme: scheme, palettes: palettes, css: css, toneL: toneL, VARIANTS: VARIANTS };
   })();
+  window.M3C = M3C;
 
   /* ---------- 1. applying a scheme ---------- */
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
@@ -18037,7 +18740,7 @@ const BRAND=(function(){
     try {
       var scrolled = document.body && document.body.classList.contains('scrolled');
       var cs = getComputedStyle(document.documentElement);
-      var hex = oklchHex(cs.getPropertyValue(scrolled ? '--md-surface-container' : '--md-surface'));
+      var hex = oklchHex(cs.getPropertyValue(scrolled ? '--md-surface-container' : '--p-page'));
       if (!hex && document.body) hex = oklchHex(getComputedStyle(document.body).backgroundColor);
       if (!hex) return;
       var meta = document.querySelector('meta[name="theme-color"]');
@@ -18101,45 +18804,7 @@ const BRAND=(function(){
     }
   } catch (e) {}
 
-  /* ---------- 3. the appearance section, rebuilt ---------- */
-  try {
-    var ap = SETTINGS_SPEC.filter(function (x) { return x.id === 'appearance'; })[0];
-    if (ap) {
-      ap.blurb = 'Material You generates the entire palette — every surface, container and accent — from a single hue. Pick one and the app is rebuilt around it.';
-      ap.rows = [
-        { k: 'theme', kind: 'seg', label: 'Theme', hint: 'System follows your device',
-          opts: [['dark', 'Dark'], ['light', 'Light'], ['auto', 'System']] },
-        { k: 'hue', kind: 'range', label: 'Accent colour', hint: 'The seed the palette is generated from',
-          min: 0, max: 360, step: 1, unit: '°' },
-        { k: 'palette', kind: 'seg', label: 'Colour style', hint: 'How much colour the generated palette carries',
-          opts: [['tonal', 'Tonal'], ['vibrant', 'Vibrant'], ['expressive', 'Expressive'], ['neutral', 'Neutral']] },
-        { k: 'contrast', kind: 'seg', label: 'Contrast', hint: 'Raises the separation between text and its background',
-          opts: [['0', 'Standard'], ['1', 'Medium'], ['2', 'High']] },
-        { k: 'name', kind: 'text', label: 'Your name', hint: 'Used only for the greeting on the home screen', ph: 'Optional' },
-        { k: 'brand', kind: 'text', label: 'App title', hint: 'Shown under the wordmark and in the browser tab', ph: 'Personal Qbank' }
-      ];
-    }
-  } catch (e) {}
-
-  /* the app's range binder writes "px" after every value; the hue is in
-     degrees, so correct the read-out after it and repaint the palette */
-  if (typeof bindSettings === 'function') {
-    var _bind = bindSettings;
-    bindSettings = function (root) {
-      _bind.apply(this, arguments);
-      if (!root || !root.querySelectorAll) return;
-      root.querySelectorAll('[data-rng="hue"]').forEach(function (el) {
-        el.addEventListener('input', function () {
-          var lbl = root.querySelector('[data-val="hue"]');
-          if (lbl) lbl.textContent = Math.round(parseFloat(el.value)) + '°';
-          /* the core binder has already queued applySettings — which carries
-             applyM3Theme — for this frame; nothing more to do here */
-        });
-      });
-      /* theme, palette and contrast segments are repainted by the core binder,
-         inside Motion.morph, so they need no second pass here */
-    };
-  }
+  /* ---------- 3. the appearance rows now live in SETTINGS_SPEC (v6.58) ---------- */
 
   /* ---------- 4. the top app bar knows where you are ---------- */
   var TITLES = {
@@ -18899,160 +19564,6 @@ const BRAND=(function(){
   }, true);
 
   /* ==========================================================
-     3. SETTINGS — Android 16 list -> detail
-     ----------------------------------------------------------
-     v3.5 grouped nine sections under "Study" and "App", which
-     told you where the code lived rather than what the setting
-     was about. Reading, Explanations and Appearance are all the
-     same question — how the app looks to me — while Bank, Data
-     and Sync are all the same question: where my questions
-     live. Regrouped on that basis, and every row now shows what
-     it is currently set to, so the list answers most questions
-     without being opened at all.
-     ========================================================== */
-  var GROUPS = [
-    ['Personalisation', ['appearance', 'reading', 'explanations']],
-    ['Studying',        ['session', 'copying']],
-    ['Questions & data',['bank', 'studydata', 'sync', 'data']],
-    ['About',           ['about']]
-  ];
-
-  var HUES = [
-    [15, 'Red'], [45, 'Orange'], [70, 'Amber'], [100, 'Lime'], [150, 'Green'],
-    [180, 'Teal'], [200, 'Cyan'], [230, 'Blue'], [265, 'Violet'], [290, 'Purple'],
-    [320, 'Magenta'], [345, 'Pink'], [361, 'Red']
-  ];
-  function hueName(h) {
-    h = ((+h || 0) % 360 + 360) % 360;
-    for (var i = 0; i < HUES.length; i++) if (h < HUES[i][0]) return HUES[i][1];
-    return 'Red';
-  }
-  function sv(k) { try { return setVal(k); } catch (e) { return undefined; } }
-
-  /* what each row says underneath its title */
-  var SUMMARY = {
-    appearance: function () {
-      return [themeValue(), hueName(sv('hue')) + ' accent',
-              ({ tonal: 'Tonal', vibrant: 'Vibrant', expressive: 'Expressive', neutral: 'Neutral' }[sv('palette')] || 'Tonal')
-             ].join(' · ');
-    },
-    reading: function () {
-      var fam = { sans: 'Sans', serif: 'Serif', mono: 'Mono' }[sv('family')] || 'Sans';
-      var w = { narrow: 'Narrow', comfortable: 'Medium', wide: 'Wide' }[sv('width')] || 'Medium';
-      return Math.round(sv('font')) + 'px · ' + fam + ' · ' + w + ' column';
-    },
-    explanations: function () {
-      return (sv('explLayout') === 'grouped' ? 'Grouped' : 'Under each option') +
-             ' · starts ' + (String(sv('explOpen')) === '0' || sv('explOpen') === false ? 'collapsed' : 'open');
-    },
-    session: function () {
-      var g = sv('goal') || 0;
-      return (sv('autoNext') ? 'Auto-advance on' : 'Auto-advance off') +
-             ' · ' + (g ? g + ' a day' : 'no daily goal');
-    },
-    copying: function () {
-      var d = db(), o = (d && d.settings && d.settings.copyOpts) || {};
-      var keys = ['meta', 'links', 'mine', 'choiceExpl', 'refs', 'note'];
-      var n = keys.filter(function (k) { return o[k] !== false; }).length;
-      return n + ' of ' + keys.length + ' fields included';
-    },
-    bank: function () {
-      var d = db(); if (!d) return 'Classification and duplicates';
-      var un = 0;
-      try { un = d.questions.filter(function (q) {
-        return q.system === UNCLASSIFIED || q.subject === UNCLASSIFIED; }).length; } catch (e) {}
-      return d.questions.length + ' questions' + (un ? ' · ' + un + ' need classifying' : ' · all classified');
-    },
-    sync: function () {
-      var on = false;
-      try { on = !!(window.SYNC && window.SYNC.connected()); } catch (e) {}
-      var st = null;
-      try { st = window.SYNC.status(); } catch (e) {}
-      return on ? (st && st.short ? st.short : 'Connected') : 'Not connected';
-    },
-    data: function () {
-      var m = { indexeddb: 'IndexedDB', localstorage: 'localStorage', memory: 'Memory only — not saved' };
-      var mode = 'indexeddb';
-      try { mode = STORE_MODE; } catch (e) {}
-      var d = db();
-      return (m[mode] || mode) + (d ? ' · ' + d.questions.length + ' questions' : '');
-    },
-    studydata: function () {
-      var d = db(); if (!d) return 'Which answers count';
-      var r = d.dataRules || {}, n = 0, ex = 0;
-      try { n = rawAttemptCount(); } catch (e) {}
-      ['days', 'sessions'].forEach(function (kind) {
-        var m = r[kind] || {};
-        Object.keys(m).forEach(function (k) { if (m[k] && m[k].s) ex++; });
-      });
-      if (r.before && r.before.v) ex++;
-      return n + ' answers recorded · ' + (ex ? ex + ' rule' + (ex === 1 ? '' : 's') + ' excluding some' : 'all counted');
-    },
-    about: function () { return 'Version, storage and shortcuts'; }
-  };
-
-  /* words a row should match when searched, beyond its own title */
-  var KEYWORDS = {
-    appearance: 'theme dark light system colour color accent hue palette contrast name title wordmark',
-    reading:    'font size text typeface serif sans mono line spacing column width legibility',
-    explanations: 'reasoning inline grouped collapsed open explanation objective',
-    session:    'auto advance autoadvance daily goal streak target tutor',
-    copying:    'copy clipboard markdown export fields references notes links telegram answer attempt order sequence',
-    bank:       'classify classification reclassify taxonomy duplicates scan locked verified',
-    sync:       'cloud github repository backup devices merge commit token',
-    studydata:  'exclude excluded delete purge remove clean testing test data contaminated day days session sessions ledger undo recount',
-    data:       'storage backup export restore reset delete wipe indexeddb',
-    about:      'version build shortcuts keys storage'
-  };
-
-  function secTitle(id) {
-    try { var s = SETSEC(id); return s ? s.title : id; } catch (e) { return id; }
-  }
-  function secIcon(id) {
-    var fallback = { bank: 'i-bank', data: 'i-import', sync: 'i-cloud', about: 'i-keys' };
-    try { var s = SETSEC(id); return (s && s.icon) || fallback[id] || 'i-settings'; }
-    catch (e) { return fallback[id] || 'i-settings'; }
-  }
-
-  function renderSetList(filter) {
-    var host = el('setList');
-    if (!host) return;
-    filter = (filter || '').trim().toLowerCase();
-    var html = '';
-    GROUPS.forEach(function (g) {
-      var ids = g[1].filter(function (id) {
-        if (!filter) return true;
-        var hay = secTitle(id) + ' ' + (KEYWORDS[id] || '');
-        try { if (SUMMARY[id]) hay += ' ' + SUMMARY[id](); } catch (e) {}
-        return hay.toLowerCase().indexOf(filter) >= 0;
-      });
-      if (!ids.length) return;
-      html += '<h4 class="sx-sub">' + esc2(g[0]) + '</h4><div class="sx-grp">';
-      ids.forEach(function (id) {
-        var v = '';
-        try { v = SUMMARY[id] ? SUMMARY[id]() : ''; } catch (e) { v = ''; }
-        var on = (typeof SET_SEC !== 'undefined' && SET_SEC === id);
-        html += '<button class="sx-item sx-nav' + (on ? ' on' : '') + '" data-setsec="' + id + '"' + (on ? ' aria-current="true"' : '') + '>' +
-                '<span class="sx-lead"><svg class="ic"><use href="#' + secIcon(id) + '"/></svg></span>' +
-                '<span class="sx-tx"><span class="sx-t">' + esc2(secTitle(id)) + '</span>' +
-                (v ? '<span class="sx-s">' + esc2(v) + '</span>' : '') + '</span>' +
-                '</button>';
-      });
-      html += '</div>';
-    });
-    if (!html) html = '<p class="sx-empty">Nothing here matches that. Try a word like <b>font</b>, <b>goal</b>, <b>backup</b> or <b>colour</b>.</p>';
-    host.innerHTML = html;
-  }
-
-  /* the search field filters the list as you type */
-  function bindSettingsSearch() {
-    var q = el('setSearch');
-    if (!q || q.dataset.bound) return;
-    q.dataset.bound = '1';
-    q.addEventListener('input', function () { renderSetList(this.value); });
-  }
-
-  /* ==========================================================
      WIRING
      ========================================================== */
   function boot() {
@@ -19063,44 +19574,10 @@ const BRAND=(function(){
       ovOpenNow() ? closeOverflow() : openOverflow();
     });
 
-    /* regroup the settings spec, then reorder it to match the list, so the
-       desktop rail and the phone list can never disagree about either */
-    try {
-      GROUPS.forEach(function (g) {
-        g[1].forEach(function (id) { var s = SETSEC(id); if (s) s.group = g[0]; });
-      });
-      var order = [];
-      GROUPS.forEach(function (g) { order = order.concat(g[1]); });
-      SETTINGS_SPEC.sort(function (a, b) {
-        return order.indexOf(a.id) - order.indexOf(b.id);
-      });
-    } catch (e) {}
-
-    bindSettingsSearch();
-
-    /* keep the list, the tab counts and the overflow honest after any render */
-    if (typeof window.renderSettings === 'function') {
-      var _rs = window.renderSettings;
-      window.renderSettings = function () {
-        _rs.apply(this, arguments);
-        var q = el('setSearch');
-        renderSetList(q ? q.value : '');
-      };
-    }
+    /* keep the tab counts honest after any render */
     if (typeof window.renderHistory === 'function') {
       var _rh = window.renderHistory;
       window.renderHistory = function () { _rh.apply(this, arguments); paintSessCnt(); };
-    }
-    /* any preference change can change what the list says */
-    if (typeof window.applySettings === 'function') {
-      var _as = window.applySettings;
-      window.applySettings = function () {
-        _as.apply(this, arguments);
-        if (el('setList')) {
-          var q = el('setSearch');
-          renderSetList(q ? q.value : '');
-        }
-      };
     }
 
     paintSessCnt();
