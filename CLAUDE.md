@@ -255,6 +255,12 @@ a recipe.
 
 ## Testing locally
 
+- **Test on the user's two devices, tablet first.** Nidus is studied mostly
+  on a Galaxy Tab S6 Lite in **portrait** (viewport about 800×1220,
+  `deviceScaleFactor` 1.5), then a 6.7" phone (about 412×860, 2.625). Shoot
+  every visible change at both; 390px alone missed that the 2.7 viewer card
+  left a zoomed picture no room.
+
 `htmlcheck` only loads the page empty. To see real screens, drive the app
 with playwright-core (Chromium at `~/.cache/ms-playwright`, as `htmlcheck`
 does) and work in the scratchpad:

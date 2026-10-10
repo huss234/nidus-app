@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.63 -->
+<!-- Nidus — Personal Qbank · v6.64 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3107,32 +3107,41 @@ body.hasmig{padding-bottom:64px}
 .lbx.is-drag .lbx__scrim{transition:none}
 /* the chrome fades in one beat after the picture starts to grow, and leaves
    at once (exit curve) when it goes back */
-.lbx__top,.lbx__foot,.lbx__side{
+.lbx__top,.lbx__sheet,.lbx__side{
   opacity:0;transition:opacity 130ms var(--p-exit);
 }
-.lbx.is-open .lbx__top,.lbx.is-open .lbx__foot,.lbx.is-open .lbx__side{
+.lbx.is-open .lbx__top,.lbx.is-open .lbx__sheet,.lbx.is-open .lbx__side{
   opacity:1;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow) 40ms;
 }
-.lbx.is-drag .lbx__top,.lbx.is-drag .lbx__foot,.lbx.is-drag .lbx__side{opacity:var(--lb-fade,1);transition:none}
+.lbx.is-drag .lbx__top,.lbx.is-drag .lbx__sheet,.lbx.is-drag .lbx__side{opacity:var(--lb-fade,1);transition:none}
 .lbx__top{
-  flex:0 0 auto;display:flex;align-items:center;gap:4px;
+  position:absolute;left:0;right:0;top:0;z-index:2;pointer-events:none;
+  display:flex;align-items:center;gap:4px;
   padding:calc(8px + env(safe-area-inset-top)) 8px 4px;min-height:60px;
 }
-/* the bar's buttons sit on a tone of their own, so they read over any
-   picture, dark or light, without a gradient behind them */
+.lbx__top>*{pointer-events:auto}
+/* zoomed, the picture runs under the bar; a shade that fades to nothing
+   rises behind the icons then, and only then, so they stay readable over a
+   white film without the bar ever becoming a solid strip */
+.lbx__top::before{
+  content:"";position:absolute;inset:0 0 -40px;z-index:-1;pointer-events:none;opacity:0;
+  background:linear-gradient(color-mix(in oklab,var(--md-scrim) 55%,transparent),transparent);
+  transition:opacity var(--p-effect-d) var(--p-effect);
+}
+.lbx.zoom .lbx__top::before{opacity:1}
+/* Plume 2.8 · the bar floats over the picture with no fill of its own, so
+   the picture has the whole screen. The icons carry a soft shadow instead,
+   which keeps them readable over a white film once it is zoomed under them. */
 .lbx .pl-ib{color:var(--lb-on)}
-.lbx__btn::before{inset:4px;border-radius:var(--p-r-full);background:var(--lb-on);opacity:.1}
-@media (hover:hover){.lbx__btn:hover::before{opacity:.18}}
-/* where you are, as one pill in the middle of the bar */
+.lbx__btn .ic{filter:drop-shadow(0 1px 2px color-mix(in oklab,var(--md-scrim) 70%,transparent))}
+@media (hover:hover){.lbx__btn:hover::before{background:var(--lb-on);opacity:.12;border-radius:var(--p-r-full)}}
 .lbx__pos{
   flex:1;display:flex;justify-content:center;min-width:0;
   font:550 14px/20px var(--m3-font);letter-spacing:.1px;font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 3px color-mix(in oklab,var(--md-scrim) 80%,transparent);
 }
-.lbx__pos b{
-  padding:6px 14px;border-radius:var(--p-r-full);background:var(--lb-tone);
-  font-weight:600;
-}
-.lbx__pos b i{font-style:normal;color:color-mix(in oklab,var(--lb-on) 62%,transparent);font-weight:450}
+.lbx__pos b{font-weight:600}
+.lbx__pos b i{font-style:normal;color:color-mix(in oklab,var(--lb-on) 66%,transparent);font-weight:450}
 /* the zoom icon is the focus-mode glyph: four corners that turn inward when
    zoomed and back out at fit (Plume 1.4 icon morph) */
 .lbx__zic path{transform-box:fill-box;transform-origin:center;transition:transform var(--p-spatial-d) var(--p-spatial)}
@@ -3141,7 +3150,7 @@ body.hasmig{padding-bottom:64px}
 .lbx__ib[aria-expanded="true"]::before{opacity:var(--m3-state-press);border-radius:var(--p-r-m)}
 
 .lbstage{
-  position:relative;flex:1;min-height:0;overflow:hidden;
+  position:absolute;inset:0;overflow:hidden;
   display:flex;align-items:center;justify-content:center;padding:0 12px;
 }
 .lbx__frame{position:relative;flex:none;display:block}
@@ -3158,24 +3167,107 @@ body.hasmig{padding-bottom:64px}
 }
 .lbx.zoom .lbx__side{opacity:0;pointer-events:none}
 
-/* Plume 2.7 · figure viewer, the info card. Everything about the picture
-   on the stage sits in one card under it: what kind of figure, its size,
-   its name as the title, the caption's reading line, and the actions, with
-   Copy image ID as the one big button at the bottom, under the thumb. The
-   card is a tone of the viewer's light (--lb-on), so it reads as part of
-   the same dark room in both themes. */
-.lbx__foot{
-  flex:0 0 auto;width:100%;max-width:680px;margin:0 auto;box-sizing:border-box;
-  padding:8px 12px calc(12px + env(safe-area-inset-bottom));
+/* Plume 2.8 · the picture's sheet (it replaced 2.7's info card, which took
+   the bottom third of the screen, so a zoomed picture had only the top to
+   move in). At rest the sheet shows one row: what the picture is called and
+   Copy ID, the one thing this screen is used for most, under the thumb.
+   Lifted (drag, or tap the handle or the title), it shows the caption, Save,
+   the size, the filmstrip and, from the gallery, the questions that use it.
+   Zoomed, it goes below the edge. It is a tone of the viewer's light mixed
+   into the scrim: solid, so nothing of the page shows through it. */
+.lbx__sheet{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;margin:0 auto;
+  width:100%;max-width:640px;box-sizing:border-box;
+  border-radius:var(--p-r-xl) var(--p-r-xl) 0 0;background:var(--lb-card);color:var(--lb-on);
+  padding:0 16px env(safe-area-inset-bottom);
+  transform:translate3d(0,var(--sh-y,0px),0);
+  transition:transform var(--p-spatial-d) var(--p-spatial),opacity 130ms var(--p-exit);
 }
+.lbx.is-open .lbx__sheet{transition:transform var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-slow-d) var(--p-effect-slow) 40ms}
+.lbx__sheet.is-hold{transition:none!important}
+.lbx.zoom .lbx__sheet{transform:translate3d(0,calc(100% + 24px),0)}
+.lbx__grab{display:flex;justify-content:center;padding:10px 0 6px;cursor:grab;touch-action:none;outline:none}
+.lbx__grab i{width:32px;height:4px;border-radius:2px;background:color-mix(in oklab,var(--lb-on) 40%,transparent);
+  transition:width var(--p-spatial-fast-d) var(--p-spatial-fast),background-color var(--p-effect-d) var(--p-effect)}
+.lbx__grab:focus-visible i,.lbx__sheet.is-hold .lbx__grab i{width:44px;background:var(--lb-on)}
+.lbx__head{display:flex;align-items:center;gap:12px;padding:0 0 14px;touch-action:none}
+.lbx__hd{flex:1;min-width:0;cursor:pointer;padding-left:4px}
+.lbx__slot{
+  display:flex;align-items:center;gap:6px;
+  font:600 12px/16px var(--m3-font);letter-spacing:.5px;color:var(--lb-acc-text);
+}
+.lbx__slot .ic{width:16px;height:16px;flex:0 0 16px}
+.lbx__title{
+  margin:2px 0 0;font:500 20px/26px var(--m3-font);letter-spacing:-.005em;
+  font-variation-settings:"wdth" 104;color:var(--lb-on);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.lbx__title:empty{display:none}
+/* the body is drawn at full height and the sheet sits lowered by exactly
+   its height (--sh-y), so lifting it is one transform, never a relayout */
+.lbx__body{max-height:min(58vh,560px);overflow:auto;overscroll-behavior:contain;padding:0 4px 16px}
+.lbx__cap{
+  font:400 15px/22px var(--m3-font);letter-spacing:.15px;text-wrap:pretty;
+  color:color-mix(in oklab,var(--lb-on) 82%,transparent);
+}
+.lbx__cap:empty{display:none}
+.lbx__cap .figcap__line{display:block}
+.lbx__cap .fignote{display:block;margin-top:8px;font-size:13px;line-height:18px;color:color-mix(in oklab,var(--lb-on) 58%,transparent)}
+.lbx__held{display:flex;align-items:center;gap:8px;color:color-mix(in oklab,var(--lb-on) 62%,transparent)}
+.lbx__held .ic{width:18px;height:18px;flex:0 0 18px}
+.lbx__acts{display:flex;align-items:center;gap:12px;margin-top:16px}
+.lbx__dim{
+  margin-left:auto;font:500 12px/16px var(--m3-font);letter-spacing:.3px;font-variant-numeric:tabular-nums;
+  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
+}
+.lbx__dim:empty{display:none}
+
+/* Copy ID: the filled button of this screen, on the fixed primary roles
+   (one tone in both themes, as the viewer is one dark room in both) */
+.lbx__copy{
+  flex:0 0 auto;height:52px;padding:0 20px 0 16px;border:0;
+  display:flex;align-items:center;gap:10px;text-align:left;
+  border-radius:26px;background:var(--md-primary-fixed);color:var(--md-on-primary-fixed);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect);
+}
+.lbx__copy[hidden]{display:none}
+.lbx__copy.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-l);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.lbx__copy:focus-visible{outline:3px solid var(--lb-on);outline-offset:2px}
+@media (hover:hover){.lbx__copy:hover{background:color-mix(in oklab,var(--md-on-primary-fixed) 8%,var(--md-primary-fixed))}}
+.lbx__cic{position:relative;width:22px;height:22px;flex:0 0 22px}
+.lbx__cic .ic{position:absolute;inset:0;width:22px;height:22px;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__c1{opacity:0;transform:scale(.4) rotate(-45deg);stroke-dasharray:24;stroke-dashoffset:24}
+.lbx__copy.is-done .lbx__c0{opacity:0;transform:scale(.4) rotate(45deg)}
+.lbx__copy.is-done .lbx__c1{opacity:1;transform:none;stroke-dashoffset:0;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),stroke-dashoffset 260ms var(--p-effect) 60ms}
+.lbx__cl{display:flex;flex-direction:column;gap:1px;min-width:0}
+.lbx__ct{position:relative;font:600 15px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap}
+.lbx__ct span{display:inline-block;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__ct .t1{position:absolute;left:0;top:0;opacity:0;transform:translateY(6px)}
+.lbx__copy.is-done .t0{opacity:0;transform:translateY(-6px)}
+.lbx__copy.is-done .t1{opacity:1;transform:none}
+.lbx__cl code{font:500 11.5px/14px var(--m3-mono);letter-spacing:.3px;white-space:nowrap;color:color-mix(in oklab,var(--md-on-primary-fixed) 72%,transparent)}
+
+/* Save: a tonal pill with its label; on a tap the arrow drops into the tray */
+.lbx__save{
+  height:40px;padding:0 18px 0 14px;border:0;border-radius:20px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--lb-tone);color:var(--lb-on);font:600 14px/20px var(--m3-font);letter-spacing:.1px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.lbx__save .ic{width:20px;height:20px}
+.lbx__save.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.lbx__save:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.lbx__sic .ar{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.lbx__save.is-go .lbx__sic .ar{transform:translateY(3px);transition-duration:120ms}
+
 /* the filmstrip: every picture in the set; the one on the stage is larger,
    squarer and fully lit, and the strip keeps it centred */
 .lbx__strip{
   display:none;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
-  padding:6px 4px 12px;margin:0 -12px;padding-inline:16px;
-  scroll-padding-inline:50%;overscroll-behavior-x:contain;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 16px),transparent);
+  margin:16px -20px 0;padding:4px 20px;overscroll-behavior-x:contain;
 }
 .lbx.is-many .lbx__strip{display:flex;justify-content:safe center}
 .lbx__strip::-webkit-scrollbar{display:none}
@@ -3188,97 +3280,14 @@ body.hasmig{padding-bottom:64px}
              transform var(--p-spatial-fast-d) var(--p-spatial-fast);
 }
 .lbx__th img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-.lbx__th[aria-current="true"]{
-  flex-basis:52px;width:52px;height:52px;margin:0;opacity:1;border-radius:var(--p-r-l);
-  box-shadow:0 0 0 2px var(--lb-on);
-}
+.lbx__th[aria-current="true"]{flex-basis:52px;width:52px;height:52px;margin:0;opacity:1;border-radius:var(--p-r-l);box-shadow:0 0 0 2px var(--lb-on)}
 @media (hover:hover){.lbx__th:hover{opacity:.82}}
 .lbx__th.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
 .lbx__th:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
 
-.lbx__card{
-  border-radius:var(--p-r-xl);background:var(--lb-card);
-  padding:16px 16px 12px;color:var(--lb-on);
-}
-.lbx__kick{display:flex;align-items:center;gap:8px;min-height:24px;margin:0 4px}
-.lbx__slot{
-  display:inline-flex;align-items:center;gap:6px;
-  font:600 12px/16px var(--m3-font);letter-spacing:.5px;
-  color:var(--lb-acc-text);
-}
-.lbx__slot .ic{width:16px;height:16px}
-.lbx__dim{
-  margin-left:auto;font:500 12px/16px var(--m3-font);letter-spacing:.3px;font-variant-numeric:tabular-nums;
-  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
-}
-.lbx__dim:empty{display:none}
-.lbx__title{
-  margin:6px 4px 0;font:500 22px/28px var(--m3-font);letter-spacing:-.005em;
-  font-variation-settings:"wdth" 104;color:var(--lb-on);text-wrap:balance;
-}
-.lbx__title:empty{display:none}
-.lbx__cap{
-  margin:6px 4px 0;max-height:22vh;overflow:auto;overscroll-behavior:contain;
-  font:400 15px/22px var(--m3-font);letter-spacing:.15px;text-wrap:pretty;
-  color:color-mix(in oklab,var(--lb-on) 80%,transparent);
-}
-.lbx__cap:empty{display:none}
-.lbx__cap .figcap__line{display:block}
-.lbx__cap .fignote{
-  display:flex;gap:6px;margin-top:10px;font-size:13px;line-height:18px;
-  color:color-mix(in oklab,var(--lb-on) 58%,transparent);
-}
-/* a caption held back until the answer says so, quietly, in its place */
-.lbx__held{display:flex;align-items:center;gap:8px;color:color-mix(in oklab,var(--lb-on) 62%,transparent)}
-.lbx__held .ic{width:18px;height:18px;flex:0 0 18px}
-
-.lbx__acts{display:flex;gap:8px;align-items:center;margin-top:16px}
-.lbx__acts:empty,.lbx__acts.is-none{display:none}
-/* the image ID is what this screen is used for most, so it is the one
-   filled button: full width, 56px, at the bottom edge where the thumb is.
-   It uses the fixed primary roles, which keep one tone in both themes, as
-   this card sits in the same dark room in both. */
-.lbx__copy{
-  flex:1;min-width:0;height:56px;padding:0 20px 0 16px;border:0;
-  display:flex;align-items:center;gap:12px;text-align:left;
-  border-radius:28px;background:var(--md-primary-fixed);color:var(--md-on-primary-fixed);
-  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
-             background-color var(--p-effect-d) var(--p-effect);
-}
-.lbx__copy[hidden]{display:none}
-.lbx__copy.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-l);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
-.lbx__copy:focus-visible{outline:3px solid var(--lb-on);outline-offset:2px}
-@media (hover:hover){.lbx__copy:hover{background:color-mix(in oklab,var(--md-on-primary-fixed) 8%,var(--md-primary-fixed))}}
-.lbx__cic{position:relative;width:24px;height:24px;flex:0 0 24px}
-.lbx__cic .ic{position:absolute;inset:0;width:24px;height:24px;
-  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
-.lbx__c1{opacity:0;transform:scale(.4) rotate(-45deg)}
-.lbx__copy.is-done .lbx__c0{opacity:0;transform:scale(.4) rotate(45deg)}
-.lbx__copy.is-done .lbx__c1{opacity:1;transform:none}
-/* the check draws itself */
-.lbx__c1{stroke-dasharray:24;stroke-dashoffset:24}
-.lbx__copy.is-done .lbx__c1{stroke-dashoffset:0;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),stroke-dashoffset 260ms var(--p-effect) 60ms}
-.lbx__cl{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.lbx__ct{position:relative;font:600 15px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap}
-.lbx__ct .t1{position:absolute;left:0;top:0;opacity:0;transform:translateY(6px)}
-.lbx__ct span{display:inline-block;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
-.lbx__copy.is-done .t0{opacity:0;transform:translateY(-6px)}
-.lbx__copy.is-done .t1{opacity:1;transform:none}
-.lbx__cl code{
-  font:500 12px/16px var(--m3-mono);letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  color:color-mix(in oklab,var(--md-on-primary-fixed) 72%,transparent);
-}
-/* Save: a tonal round button beside it, 56px to share the row's height;
-   on a tap the arrow drops into the tray */
-.lbx__save{width:56px;height:56px;flex:0 0 56px;color:var(--lb-on)}
-.lbx__save::before{inset:0;border-radius:var(--p-r-full);background:var(--lb-on);opacity:.12}
-@media (hover:hover){.lbx__save:hover::before{opacity:.2}}
-.lbx__sic .ar{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
-.lbx__save.is-go .lbx__sic .ar{transform:translateY(3px);transition-duration:120ms}
-
 /* the rail out of the viewer and back into the bank — one row per question
    that carries this picture, because a deduplicated figure can serve several */
-.lbq{display:none;margin-top:12px}
+.lbq{display:none;margin-top:16px}
 .lbq.on{display:flex;flex-direction:column;gap:2px}
 .lbq__h{margin:0 4px 6px;font:600 12px/16px var(--m3-font);letter-spacing:.5px;color:color-mix(in oklab,var(--lb-on) 62%,transparent)}
 .lbq button{
@@ -5915,7 +5924,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.63</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.64</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -5971,7 +5980,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.63 · sharded store</span>
+        <span class="chip" id="verChip">v6.64 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -6101,25 +6110,34 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
   <div class="lbstage" id="lbxStage"></div>
   <div class="lbx__side lbx__side--l"><button class="pl-ib pl-press" id="lbxPrev" title="Previous picture" aria-label="Previous picture"><svg class="ic"><use href="#i-prev"/></svg></button></div>
   <div class="lbx__side lbx__side--r"><button class="pl-ib pl-press" id="lbxNext" title="Next picture" aria-label="Next picture"><svg class="ic"><use href="#i-next"/></svg></button></div>
-  <div class="lbx__foot">
-    <!-- every picture in this set, as a row of thumbnails; a tap goes there -->
-    <div class="lbx__strip" id="lbxStrip" role="group" aria-label="Pictures"></div>
-    <section class="lbx__card">
-      <div class="lbx__kick"><span class="lbx__slot" id="lbxSlot">Question figure</span><span class="lbx__dim" id="lbxDim"></span></div>
-      <h2 class="lbx__title" id="lbxTitle"></h2>
-      <div class="lbx__cap" id="lbxCap"></div>
-      <div class="lbx__acts" id="lbxActs">
-        <button class="lbx__copy pl-press" id="lbxCopy" title="Copy this picture's ID, to reuse it in another question">
-          <span class="lbx__cic" aria-hidden="true"><svg class="ic lbx__c0"><use href="#i-copy"/></svg><svg class="ic lbx__c1"><use href="#i-check"/></svg></span>
-          <span class="lbx__cl"><span class="lbx__ct"><span class="t0">Copy image ID</span><span class="t1">Copied</span></span><code id="lbxId"></code></span>
-        </button>
-        <button class="pl-ib pl-press lbx__save" id="lbxSave" title="Save this picture" aria-label="Save this picture"><svg class="ic lbx__sic" viewBox="0 0 24 24" aria-hidden="true"><path class="ar" d="M12 4.2v10.6M7.6 10.6l4.4 4.4 4.4-4.4"/><path d="M4.6 15.6v2.2a2 2 0 0 0 2 2h10.8a2 2 0 0 0 2-2v-2.2"/></svg></button>
+  <!-- Plume 2.8 · the picture's sheet. At rest it is one row (title and
+       Copy image ID) at the foot of the screen; lifted, it shows the rest.
+       Zooming in sends it away, so the picture has the whole screen. -->
+  <section class="lbx__sheet" id="lbxSheet" aria-label="About this picture">
+    <div class="lbx__grab" id="lbxGrab" role="button" tabindex="0" aria-label="Show details" aria-expanded="false"><i></i></div>
+    <div class="lbx__head" id="lbxHead">
+      <div class="lbx__hd">
+        <span class="lbx__slot" id="lbxSlot">Question figure</span>
+        <h2 class="lbx__title" id="lbxTitle"></h2>
       </div>
+      <button class="lbx__copy pl-press" id="lbxCopy" title="Copy this picture's ID, to reuse it in another question">
+        <span class="lbx__cic" aria-hidden="true"><svg class="ic lbx__c0"><use href="#i-copy"/></svg><svg class="ic lbx__c1"><use href="#i-check"/></svg></span>
+        <span class="lbx__cl"><span class="lbx__ct"><span class="t0">Copy ID</span><span class="t1">Copied</span></span><code id="lbxId"></code></span>
+      </button>
+    </div>
+    <div class="lbx__body" id="lbxBody">
+      <div class="lbx__cap" id="lbxCap"></div>
+      <div class="lbx__acts">
+        <button class="lbx__save pl-press" id="lbxSave" title="Save this picture"><svg class="ic lbx__sic" viewBox="0 0 24 24" aria-hidden="true"><path class="ar" d="M12 4.2v10.6M7.6 10.6l4.4 4.4 4.4-4.4"/><path d="M4.6 15.6v2.2a2 2 0 0 0 2 2h10.8a2 2 0 0 0 2-2v-2.2"/></svg>Save picture</button>
+        <span class="lbx__dim" id="lbxDim"></span>
+      </div>
+      <!-- every picture in this set, as a row of thumbnails; a tap goes there -->
+      <div class="lbx__strip" id="lbxStrip" role="group" aria-label="Pictures"></div>
       <!-- only drawn when the viewer was opened from the gallery: finding the
            picture is half the errand, the item it teaches is the other half -->
       <div class="lbq" id="lbxQ"></div>
-    </section>
-  </div>
+    </div>
+  </section>
   <div class="pl-menu lbx__menu" id="lbxMenu" role="menu" hidden>
     <button class="pl-menu__item pl-press" role="menuitem" id="lbxSwap"><svg class="ic"><use href="#i-swap"/></svg><span><b>Replace photo</b><small>Choose another file for this slot</small></span></button>
     <button class="pl-menu__item pl-press" role="menuitem" id="lbxDel" title="Remove this photo"><svg class="ic"><use href="#i-trash"/></svg><span><b><span class="t0">Remove photo</span><span class="t1">Tap again to remove</span></b><small>Take it off this question</small></span></button>
@@ -7041,7 +7059,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.63';
+const APP_VERSION='6.64';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9012,7 +9030,7 @@ function figViewQid(){
 /* Plume 1.10 · figure viewer (v6.57). The picture sits in .lbx__frame, which
    carries the open/close morph and the swipe; the <img> inside it carries
    the zoom (FZ), so the two never fight over one transform. */
-const LBX={src:null,tok:0,back:null,step:0};
+const LBX={src:null,tok:0,back:null,step:0,open:false};
 /* the thumbnail on screen that shows the picture now on the stage: where the
    viewer grows from, and where it goes back to */
 function lbxSource(){
@@ -9039,7 +9057,7 @@ function lbxFit(){
   const st=$('#lbxStage'),im=st&&st.querySelector('img');if(!im)return false;
   const r=+im.dataset.ar||(im.naturalWidth&&im.naturalHeight?im.naturalWidth/im.naturalHeight:0);
   if(!r)return false;
-  const cs=getComputedStyle(st),W=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),H=st.clientHeight;
+  const cs=getComputedStyle(st),W=st.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight),H=st.clientHeight-2*lbxChrome();
   if(W<=0||H<=0)return false;
   let w=W,h=W/r;if(h>H){h=H;w=H*r}
   const nw=+im.dataset.nw||im.naturalWidth||0;
@@ -9047,7 +9065,7 @@ function lbxFit(){
   im.style.width=Math.round(w)+'px';im.style.height=Math.round(h)+'px';
   return true;
 }
-addEventListener('resize',()=>{if(!$('#lbx').hidden)lbxFit()});
+addEventListener('resize',()=>{if(!$('#lbx').hidden){lbxSheet(LBX.open,true);lbxFit()}});
 function figDrawViewer(){
   const list=figViewList();
   if(!list.length)return figCloseViewer();
@@ -9085,7 +9103,9 @@ function lbxInfo(f,list){
   $('#lbxSlot').innerHTML=`<svg class="ic"><use href="#i-${f.slot==='expl'?'bulb':'image'}"/></svg>${f.slot==='expl'?'Explanation figure':'Question figure'}`;
   $('#lbxDim').textContent=(f.w&&f.h)?f.w+' \u00d7 '+f.h:'';
   const p=held?{cap:'',note:''}:figCapPair(f),c=figCapSplit(p.cap);
-  $('#lbxTitle').textContent=c.name;
+  /* the title is the caption's name; a caption without one lends its first
+     words, and the kind of figure stands in when there is no caption */
+  $('#lbxTitle').textContent=c.name||c.line||(f.slot==='expl'?'Explanation figure':'Question figure');
   $('#lbxCap').innerHTML=held
     ?`<span class="lbx__held"><svg class="ic"><use href="#i-info"/></svg>The caption shows once you answer.</span>`
     :(c.line?`<span class="figcap__line">${esc(c.line)}</span>`:'')+(p.note?`<span class="fignote">${esc(p.note)}</span>`:'');
@@ -9095,6 +9115,28 @@ function lbxInfo(f,list){
   $('#lbxId').textContent=figImgId(f.media);
   $('#lbx').classList.toggle('is-many',n>1);
   lbxStrip(list,i);
+  lbxSheet(LBX.open,true);
+}
+/* The sheet is drawn at full height and lowered by its body's height
+   (--sh-y), so lifting it is one transform. At rest only the head shows,
+   and the picture is fitted between the bar and that head. */
+function lbxSheet(open,now){
+  const sh=$('#lbxSheet'),body=$('#lbxBody');if(!sh)return;
+  LBX.open=!!open;
+  if(now)sh.classList.add('is-hold');
+  sh.style.setProperty('--sh-y',(open?0:body.offsetHeight)+'px');
+  if(now){sh.getBoundingClientRect();sh.classList.remove('is-hold')}
+  const g=$('#lbxGrab');g.setAttribute('aria-expanded',open?'true':'false');g.setAttribute('aria-label',open?'Hide details':'Show details');
+  body.inert=!open;
+}
+/* how much of the screen's height the chrome keeps at rest: the larger of
+   the bar and the sheet's head, kept on both sides so the picture stays
+   centred on the screen, which is where the zoom centres it too */
+function lbxChrome(){
+  const sh=$('#lbxSheet'),body=$('#lbxBody'),top=$('#lbx .lbx__top');
+  if(!sh||!top)return 0;
+  const head=sh.offsetHeight-body.offsetHeight;
+  return Math.max(top.offsetHeight,head)+8;
 }
 function lbxStrip(list,i){
   const st=$('#lbxStrip');
@@ -9162,6 +9204,7 @@ function lbxShow(){
   const src=lbxSource();
   LBX.back=document.activeElement;
   b.hidden=false;b.inert=false;
+  lbxSheet(false,true);
   lbxFit();
   b.getBoundingClientRect();
   b.classList.add('is-open');
@@ -9247,6 +9290,7 @@ function lbxDone(){
   $('#lbxStage').innerHTML='';
   const rail=$('#lbxQ');if(rail){rail.classList.remove('on');rail.innerHTML=''}
   FIG.view=null;
+  LBX.open=false;
   try{MEDIA.sweep()}catch(e){}
 }
 /* next and previous: the old picture leaves the way it was going (from
@@ -9347,8 +9391,40 @@ $('#lbxZoom').onclick=()=>FZ.toggle(null,null,'actual');
 /* a tap on the dark around the picture closes; a tap on the picture, or
    the end of any drag or pinch, belongs to the zoom (FZ decides which) */
 $('#lbxStage').addEventListener('click',()=>{
-  if(!FZ.swallow())figCloseViewer();
+  if(FZ.swallow())return;
+  if(LBX.open)return lbxSheet(false);
+  figCloseViewer();
 });
+/* the sheet follows the finger from its handle or its head; a tap there (not
+   on Copy) lifts or lowers it, and on release half way or a flick decides */
+(function(){
+  const sh=$('#lbxSheet');if(!sh)return;
+  let d=null;
+  sh.addEventListener('pointerdown',e=>{
+    if(!e.target.closest('.lbx__grab,.lbx__head')||e.target.closest('button'))return;
+    const max=$('#lbxBody').offsetHeight;
+    d={y0:e.clientY,base:LBX.open?0:max,max,moved:false,id:e.pointerId,tr:[{t:performance.now(),y:e.clientY}]};
+  });
+  sh.addEventListener('pointermove',e=>{
+    if(!d||e.pointerId!==d.id)return;
+    const dy=e.clientY-d.y0;
+    if(!d.moved){if(Math.abs(dy)<6)return;d.moved=true;sh.classList.add('is-hold');try{sh.setPointerCapture(d.id)}catch(_){}}
+    let y=d.base+dy;
+    if(y<0)y*=.3;else if(y>d.max)y=d.max+(y-d.max)*.3;
+    sh.style.setProperty('--sh-y',y+'px');
+    d.tr.push({t:performance.now(),y:e.clientY});if(d.tr.length>5)d.tr.shift();
+  });
+  const end=e=>{
+    if(!d||e.pointerId!==d.id)return;const g=d;d=null;
+    sh.classList.remove('is-hold');
+    if(!g.moved){if(e.type==='pointerup')lbxSheet(!LBX.open);return}
+    const a=g.tr[0],z=g.tr[g.tr.length-1],v=(z.y-a.y)/(((z.t-a.t)/1000)||1);
+    const y=g.base+(e.clientY-g.y0);
+    lbxSheet(Math.abs(v)>400?v<0:y<g.max/2);
+  };
+  sh.addEventListener('pointerup',end);sh.addEventListener('pointercancel',end);
+  $('#lbxGrab').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();lbxSheet(!LBX.open)}});
+})();
 $('#lbxSwap').onclick=()=>{
   lbxMenu(false);
   const list=figViewList();if(!list.length)return;
@@ -9631,6 +9707,7 @@ document.addEventListener('keydown',e=>{
   const b=$('#lbx');if(b.hidden||b.__closing)return;
   if(e.key==='Escape'){e.preventDefault();e.stopPropagation();
     if(!$('#lbxMenu').hidden){lbxMenu(false);$('#lbxMore').focus();return}
+    if(LBX.open){lbxSheet(false);return}
     figCloseViewer()}
   else if(e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();figStep(1)}
   else if(e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();figStep(-1)}

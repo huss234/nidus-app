@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.7** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.8** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1044,21 +1044,29 @@ The quality bar. A surface is done when it *feels* like §2, and:
   `--p-spatial`, padding on an inner `.figcap__pad` so nothing jumps) with
   its text fading in after (`.cap-in`).
 
-- **Figure viewer, info card** (`Plume 2.7 · figure viewer, the info
-  card`, v6.63): under the stage, a filmstrip (`lbxStrip`, every picture in
-  the set; the one on the stage grows to 52px with `--p-r-l` corners and a
-  ring, and is kept centred; a tap jumps there through `figStep(0, i)`)
-  and one solid card (`--lb-card`, `on` mixed into the scrim, never
-  translucent: the page showed through). The card holds the kind of figure
-  and its size, the caption's name as the title (`figCapSplit`), the
-  reading line, and the actions. **The viewer's hero is Copy image ID**: a
-  full-width 56px filled button on the fixed primary roles
-  (`--md-primary-fixed`, the same tone in both themes, since the viewer is
-  one dark room in both), ID in mono under the label, copy icon turning
-  into a check that draws in. Save sits beside it (the arrow drops into the
-  tray). The position pill sits in the middle of the top bar. In the
-  gallery, "Used in" lists the questions as a grouped list. `lbxInfo()`
-  draws it all.
+- **Figure viewer, the picture's sheet** (`Plume 2.8 · the picture's
+  sheet`, v6.64; it replaced 2.7's info card): the stage is the whole
+  screen. The top bar floats over it with **no fill**: icons carry a drop
+  shadow, and only while zoomed a shade that fades to clear rises behind
+  them. Everything about the picture is a bottom sheet (`#lbxSheet`). At
+  rest it shows one row, the title (the caption's name, else its first
+  words, else the kind of figure) and **Copy ID** (52px, filled, fixed
+  primary roles, ID in mono under the label; the copy icon turns into a
+  check that draws in). Lifted, by dragging the handle or head or by a tap
+  there, it shows the caption, Save picture (the arrow drops into the
+  tray), the size, the filmstrip (the current picture larger, with a ring,
+  kept centred; a tap jumps there through `figStep(0, i)`) and, from the
+  gallery, "Used in". The body is drawn at full height and the sheet sits
+  lowered by exactly its height (`--sh-y`, `lbxSheet()`), so lifting is one
+  transform; a drag follows the finger with 0.3× rubber past the ends, and
+  half way or a flick decides. **Zooming sends the sheet below the edge.**
+  At rest the picture is fitted between the bar and the sheet's head, the
+  same space kept above and below (`lbxChrome()`), so it stays centred on
+  the screen, where the zoom centres it too. A tap on the stage lowers a
+  lifted sheet before it would close the viewer, and so does Escape.
+  The sheet is solid (`--lb-card`, `on` mixed into the scrim) and spans
+  the width up to 640px, on the bottom edge on every screen: a gap under
+  it let the body peek out at rest.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1081,6 +1089,7 @@ A surface that is not listed here is legacy.
 | Settings, whole screen (list, hero, every section, search, phone layer, desktop list-detail) and the controls in the in-session settings sheet | 2.2 | 6.58 | Rebuilt from scratch. The in-session sheet's dialog around the rows is still legacy |
 | Figure captions (`figCardHTML`): the plate in the player, explanation, bank and editor, and the name / line in the viewer | 2.6 | 6.62 | The figure blocks' edit buttons, empty-slot plates and "Add a figure" row are still legacy |
 | Figure viewer, around the picture: top bar, position pill, filmstrip, info card (kind, size, title, caption), Copy image ID, Save, the gallery's "Used in" list | 2.7 | 6.63 | Rebuilt from scratch on the user's request. The stage, the open/close morph, swipe and zoom (1.5, 1.10) are kept; the dots were replaced by the filmstrip and the ID chip by the Copy button |
+| Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 
 ## 16. Language changelog
 
@@ -1171,6 +1180,11 @@ A surface that is not listed here is legacy.
 - **Plume 2.7** (2026-10-10): the figure viewer's info card. A viewer's
   most used action is its one full-width filled button, at the bottom in
   thumb reach; a card over a scrim is solid, never translucent.
+
+- **Plume 2.8** (2026-10-10): a viewer gives the picture the whole screen.
+  Chrome over a picture has no fill; details live in a sheet that rests as
+  one row and lifts; zooming clears every piece of chrome but the bar. From
+  the user: the 2.7 card took the bottom third, so zooming had no room.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
