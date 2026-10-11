@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.9** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.10** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1084,6 +1084,26 @@ The quality bar. A surface is done when it *feels* like §2, and:
   item's centre minus the strip's centre is 0 for every tap and swipe.
   (The viewer's filmstrip left end items up to 274px off centre and mid
   items 8–24px off; the user found it useless. Fixed in v6.65.)
+- **Option tables and picture options** (`Plume 2.10 · option tables and
+  picture options`, v6.68). An option table stays a stack of the session's
+  own option cards, one row each: cells on equal columns split by a
+  hairline in the card's ink (`.chx-row`, `.chx-c`), headings in Label M
+  above them. **Rule: a heading row is drawn inside an invisible copy of
+  the surface's own option row** (`chHeadRow` + `.chx-th`: same key slot,
+  same trailing slot, no fill, no pointer events), never positioned by hand,
+  so each heading sits exactly over its column at every width, reading font
+  and size, before and after the answer. The options list is a size
+  container (`.chx-host`, `data-cols`): once a column would be narrower than
+  ≈76px, each card turns its row into heading/value pairs (2fr / 3fr, so the
+  values align from card to card) and the heading row steps aside. A
+  picture option is the figure plate inside the card (`figChHTML`,
+  `.chx-pic`): its width comes from the picture's own shape
+  (`--w`/`--h`, capped by `--chx-maxh`) so nothing moves when it loads; a
+  tap on the picture is a tap on the option; the corner button (36px, 48px
+  target, inverse surface at 72% with a blur) opens it full screen. When
+  every option is a picture the cards become tiles (`.chx-tiles`): letter
+  and cross on the top line, the picture across the card, two to a row
+  from 600px. The caption arrives with the verdict, under the picture.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1108,6 +1128,7 @@ A surface that is not listed here is legacy.
 | Figure viewer, around the picture: top bar, position pill, filmstrip, info card (kind, size, title, caption), Copy image ID, Save, the gallery's "Used in" list | 2.7 | 6.63 | Rebuilt from scratch on the user's request. The stage, the open/close morph, swipe and zoom (1.5, 1.10) are kept; the dots were replaced by the filmstrip and the ID chip by the Copy button |
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
+| Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
 
 ## 16. Language changelog
 
@@ -1213,3 +1234,11 @@ Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
 system) bumps the major version, and the ledger records which surfaces
 were built under which version.
+
+- **Plume 2.10** (2026-10-11): option tables and picture options. A heading
+  row rides in an invisible copy of the surface's own option row so it can
+  never drift off its columns; a table too narrow for its columns turns
+  each row into heading/value pairs; a picture option is the figure plate
+  inside its card, sized from its own shape before it loads, chosen by a
+  tap and opened full screen from its corner; all-picture options become
+  tiles, two to a row from 600px.

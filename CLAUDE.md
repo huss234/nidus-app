@@ -164,6 +164,40 @@ a recipe.
   auto slot holds `imageDescription` there), never an order to attach.
   Captions and `imageDescription` are untouched. Never reintroduce a
   reader-facing instruction to attach, add or find a picture.
+- **Options that are not a line of text** (v6.68, ARCHIVIST 3.7 section
+  4B). An *option table* stores its headings in `q.choiceColumns` ("" for
+  an unheaded column, null when the options are ordinary) and one string
+  per heading in `c.cells` on every option; `c.text` is always the cells
+  joined by " · " (the importer and the editor both write it), so search,
+  the fingerprint, copies and reports keep working. A *picture option* is a
+  figure in `q.images` with slot `choice:<label>` (`figChSlot`,
+  `figIsCh`, `figChLab`; the extractor writes `{"slot":"choice","choice":"B"}`
+  and `figSlotIn()` reads it), so storage by hash, sync, Export missing
+  figures, the gallery, the viewer and cleanup need no second path. Its
+  `c.text` is only the words printed beside it, often "". Rules:
+  - Every surface draws an option through `chLine` (text or cells),
+    `chPicHTML` (pictures) and `chHeadRow` (headings in an invisible copy of
+    that surface's own option row, `.chx-th`, so columns line up), and names
+    one with `chSay` (HTML) / `chPlain` / `chPlainMD`. Never `aFmt(c.text)`
+    for an option again.
+  - An option picture's caption gives the answer away: it is drawn only
+    where the key is (`cap`), and the viewer opened from a held option
+    shows no caption. Tapping the picture in a session chooses the option;
+    the corner button (`data-chzoom`) opens it full screen.
+  - Option letters name picture slots, so anything that relabels options
+    moves the pictures in one pass (`edRelabel` in the editor); removing an
+    option buries its pictures first.
+  - `figMerge` (import with update) walks every slot either copy holds; a
+    fixed `['stem','expl']` list dropped option pictures.
+  - `chHoist(raw)` moves a picture hung on the option itself into images.
+    It runs in `figAbsorb` *and* `normalizeQ`: run only in `normalizeQ`, the
+    picture skipped the media store and stayed in the bank as base64.
+  - A picture option with no words takes its picture's hash into the
+    fingerprint (`chFpText`) and never matches by the loose wording key in
+    `findExisting`, or two papers' "which of these images…" would merge.
+  - `hasImage` means a picture printed with the question; an item whose only
+    pictures are options has it false (else `figList` makes an empty stem
+    slot).
 - **The file tag carries the question's number** (`cardiovascular system v5
   #11`, ARCHIVIST 3.2 section 7). The Tags filter groups by file through
   `fileTagBase()`, which drops the ` #N`; the question and search keep it.
@@ -416,5 +450,18 @@ does) and work in the scratchpad:
   `pointerdown`, a hold and `pointerup`. Every frame should step; a value
   that sits above half the element's height and then lands in one or two
   frames means it rests at 999px (fixed in v6.60 for Settings).
+- **Test option tables and picture options through the real importer.**
+  Build a bank with a two-column table, a five-column table (it must turn
+  into heading/value pairs on the phone and stay columns on the tablet), a
+  question whose options are all pictures (one hung on the option itself),
+  and one with an empty picture slot; `importText` it and check
+  `JSON.stringify(DB.questions)` holds no `data:image/`. Then, with real
+  touch: a tap on an option picture chooses it and the viewer stays shut,
+  the corner button opens the viewer with the caption held, Back closes
+  it; after Submit the captions show. Round-trip the editor (edit a cell,
+  remove option A of the picture question: B's picture becomes A's), Export
+  missing figures (`slot: "choice"`, `choice: "B"`) and fill it, re-import
+  with update (option pictures kept) and re-run export (columns, cells,
+  slots carried).
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
