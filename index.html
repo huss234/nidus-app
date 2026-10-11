@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.70 -->
+<!-- Nidus — Personal Qbank · v6.71 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5908,10 +5908,16 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   box-shadow:inset 0 0 0 1px var(--md-outline-variant);color:var(--md-on-surface-variant);font:550 13px/18px var(--m3-font);white-space:nowrap;
   transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
 .pg-chip.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container);box-shadow:none}
-.pg-chip__ck{display:grid;grid-template-columns:0fr;transition:grid-template-columns var(--p-spatial-fast-d) var(--p-spatial-fast)}
-.pg-chip__ck svg{min-width:0;width:18px;height:18px;overflow:visible}
+/* the check's slot is a grid column that really collapses: a bare 0fr track
+   keeps its content's width (the 18px check), so every unchosen chip showed
+   an empty gap before its word (v6.70). minmax(0,…) lets it reach zero, and
+   the gap after the check lives inside the slot, so it opens with it. */
+.pg-chip__ck{display:grid;grid-template-columns:minmax(0,0fr);overflow:hidden;
+  transition:grid-template-columns var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-chip__ck > span{display:block;min-width:0;width:24px;padding-right:6px;box-sizing:border-box}
+.pg-chip__ck svg{display:block;width:18px;height:18px}
+.pg-chip.on .pg-chip__ck{grid-template-columns:minmax(0,1fr)}
 .pg-chip__ck path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
-.pg-chip.on .pg-chip__ck{grid-template-columns:1fr;margin-right:6px;margin-left:-4px}
 .pg-chip.on .pg-chip__ck path{stroke-dashoffset:0;transition-delay:80ms}
 .pg-chip.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
 .pg-chip:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
@@ -6376,7 +6382,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.70</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.71</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6432,7 +6438,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.70 · sharded store</span>
+        <span class="chip" id="verChip">v6.71 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7536,7 +7542,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.70';
+const APP_VERSION='6.71';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -14417,7 +14423,7 @@ function pgAreasHTML(){
     <div class="pg-qleg"><span><i class="s-right"></i>Right last time <b>${b.right}</b></span><span><i class="s-wrong"></i>Missed last time <b>${b.wrong}</b></span><span><i class="s-new"></i>New <b>${b.new}</b></span></div>
     ${lo&&hi&&lo!==hi?`<p class="pg-hero__def">Least done of the big systems: <b>${esc(lo.k)}</b>, ${Math.round((lo.n-lo.new)/lo.n*100)}% of ${lo.n}. Most done: ${esc(hi.k)}, ${Math.round((hi.n-hi.new)/hi.n*100)}%.</p>`:''}`;
   const have=PG_AREA.filter(a=>a[0]===PG.area||DB.questions.some(q=>facetValues(FACET_BY[a[0]],q).some(v=>v&&v!=='—')));
-  const chips=`<div class="pg-chips" role="radiogroup" aria-label="Classify by">${have.map(a=>`<button type="button" class="pg-chip pl-press${a[0]===PG.area?' on':''}" role="radio" aria-checked="${a[0]===PG.area}" data-pgfacet="${a[0]}"><span class="pg-chip__ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg></span>${a[1]}</button>`).join('')}</div>`;
+  const chips=`<div class="pg-chips" role="radiogroup" aria-label="Classify by">${have.map(a=>`<button type="button" class="pg-chip pl-press${a[0]===PG.area?' on':''}" role="radio" aria-checked="${a[0]===PG.area}" data-pgfacet="${a[0]}"><span class="pg-chip__ck" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg></span></span>${a[1]}</button>`).join('')}</div>`;
   const tool=pgSeg('asort',[['size','Largest'],['least','Least done'],['weak','Weakest']],PG.asort,'Order');
   return pgCard('',hero,{cls:'pg-hero'})+pgCard('Every area',`${chips}${tool}<div id="pgAreas">${pgAreaList()}</div>`,
     {sub:'Each bar is the area’s questions: right last time, missed last time, and new. Tap an area for its detail and to practise it. All time.'});

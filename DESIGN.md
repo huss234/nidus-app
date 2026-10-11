@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.12** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.13** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -574,6 +574,16 @@ version of each):
   segmented control slides and stretches to the new item
   (`translateX` + `scaleX` on `--p-spatial`). Never crossfade two
   indicators.
+- **Rule: a slot that opens and closes collapses to zero (2.13).** A
+  `grid-template-columns` / `-rows` reveal uses `minmax(0,0fr)` ↔
+  `minmax(0,1fr)` on an `overflow:hidden` wrapper, never a bare `0fr`: a
+  bare `0fr` track keeps its content's minimum size, so the closed slot
+  still takes the width of what it hides. Spacing that belongs to the
+  revealed thing (the gap after a chip's check) lives inside the slot, never
+  as a margin that switches on with the state. Measure it: a closed chip's
+  text sits exactly its padding from both edges. (Areas chips, v6.70: every
+  unchosen chip kept an empty 18px gap before its word; the user spotted it.
+  Fixed in v6.71.)
 - **Layout changes glide.** When an item is added, removed or reordered, the
   rest move to their new places with FLIP (WAAPI, `--p-spatial`). Nothing
   jumps.
@@ -1189,6 +1199,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
@@ -1316,3 +1327,7 @@ were built under which version.
   figures when narrow. From the user's phone, where the hours chart's
   labels overlapped. The chip row with a drawn check and the three-part
   state bar (Areas) join §14.
+
+- **Plume 2.13** (2026-10-11): a slot that opens and closes collapses to
+  zero (`minmax(0,0fr)`, never a bare `0fr`), and its spacing moves with it.
+  From the user, on the Areas chips.
