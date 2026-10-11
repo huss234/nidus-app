@@ -311,6 +311,15 @@ a recipe.
     many of each were tagged and how many came from the record.
   - *Where the marks are* ranks areas by marks at stake: miss rate × the
     bank's questions in that area, eight answers minimum in the range.
+  - *Time* (v6.72): question time is `studyOf()` (everything spent on a
+    question, every visit), answer time `ansOf()` (to the commit; none when
+    left blank). The averages the user watches are **means**, question time
+    over every attempt in the period and answer time over the answered ones,
+    by day, week, month and all time (`pgTsum`, `pgTbuckets`). Session time is
+    the session's own `elapsed`, shown as is, never recomputed. The user
+    reads average question time as their pace and strength: keep it the
+    lead figure of the Time view, and never change how the clocks are
+    recorded without asking.
   - *Pace* uses 90 s as exam pace (`PG_PACE`); *stamina* reads position in
     blocks of 20 or more.
   - *Areas* reads any facet in `FACETS` (except answer confidence) through

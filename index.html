@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.71 -->
+<!-- Nidus — Personal Qbank · v6.72 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5947,6 +5947,56 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-area__a .pl-btn:disabled{opacity:.38;pointer-events:none}
 .pg-pane:not(.is-pre) .pg-area{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger))}
 .pg-pane:not(.is-pre) .pg-qst i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards 80ms}
+/* ---- v6.72: the Time view ---- */
+@media (max-width:440px){.pg-tabs button{font-size:12.5px;font-variation-settings:"wdth" 86;letter-spacing:0}}
+.pg-rngrow--wide{max-width:520px}
+.pg-tpair{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:end;margin-top:6px}
+.pg-tpair > div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pg-tpair b:not(.pg-n){font:500 15px/20px var(--m3-font);margin-top:6px}
+.pg-tpair span:not(.pg-tdl){font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-disp--t{font-size:60px}
+@media (max-width:360px){.pg-disp--t{font-size:42px}.pg-tpair .pg-big{font-size:25px}.pg-trio span{font-size:19px}}
+.pg-disp--t .pg-u,.pg-tpair .pg-big .pg-u{font-size:.42em}
+.pg-n[data-f="t"]{white-space:nowrap}
+.pg-tpair .pg-big{font-size:34px}
+@media (max-width:440px){.pg-disp--t{font-size:48px}.pg-tpair .pg-big{font-size:28px}.pg-tpair{gap:14px}.pg-trio span{font-size:21px}}
+.pg-trio span{white-space:nowrap}
+.pg-tdl{margin-top:6px;font:550 12px/16px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-stack--t{margin-top:20px;height:12px}
+.pg-trio span .pg-u{font-size:.5em}
+.pg-line--a{stroke:var(--pg-k2);stroke-width:2.5;stroke-dasharray:none}
+.pg-pane:not(.is-pre) .pg-line--a{animation:pgFade 600ms var(--p-effect-slow) backwards 300ms}
+.pg-dots--q circle{fill:var(--p-card);stroke:var(--md-primary);stroke-width:2}
+#pgTchart .pg-line--a{stroke-dasharray:5 5}
+.pg-tl{list-style:none;margin:0;padding:0;display:grid;gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-tl > li:not(.pg-tl--btn),.pg-tl__btn{display:grid;grid-template-columns:minmax(0,1fr) 72px 100px;align-items:center;gap:12px;padding:12px 14px;background:var(--p-well);width:100%;text-align:left;color:var(--md-on-surface)}
+.pg-tl__btn{position:relative;isolation:isolate;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-tl__btn::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pg-tl__btn:hover::after{opacity:var(--m3-state-hover)}}
+.pg-tl__btn.is-down{transform:scale(var(--p-press-card))}
+.pg-tl__btn.is-down::after{opacity:var(--m3-state-press)}
+.pg-tl__btn:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.pg-tl__t{display:flex;flex-direction:column;min-width:0}
+.pg-tl__t b{font:500 14px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-tl__t em,.pg-tl__v em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-tl__v em{white-space:nowrap}
+.pg-tl__v{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.pg-tl__v b{font:520 17px/22px var(--m3-font);font-variation-settings:"wdth" 110;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:420px){.pg-tl > li:not(.pg-tl--btn),.pg-tl__btn{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t v" "b b";row-gap:8px}
+  .pg-tl__t{grid-area:t}.pg-tl__v{grid-area:v}.pg-tl .pg-bar{grid-area:b}}
+.pg-tl + .pg-txt{margin-top:8px}
+.pg-tsp{display:grid;gap:3px}
+.pg-tsp .pg-bar{height:7px}
+.pg-bar.is-a i{background:var(--pg-k2)}
+.pg-hrs--t li{grid-template-columns:96px minmax(0,1fr) 72px}
+.t-ans2{background:var(--md-primary)}
+.t-rev2{background:var(--pg-k2)}
+.pg-srow__m{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.pg-srow__m b{font:520 16px/20px var(--m3-font);font-variation-settings:"wdth" 110;color:var(--md-on-surface);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pg-srow__m em{font:400 12px/16px var(--m3-font);font-style:normal;white-space:nowrap}
+@media (max-width:440px){.pg-srow__m{max-width:92px}.pg-srow__m em{white-space:normal}}
+@media (max-width:360px){.pg-tpair{grid-template-columns:minmax(0,1fr);gap:16px}.pg-trio span{font-size:17px}.pg-trio > div{padding:12px 10px 10px}}
+.pg-pane:not(.is-pre) .pg-tl > li{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger))}
 /* ---- arrival: data draws itself ---- */
 .pg-pane:not(.is-pre) .pg-bar i,.pg-pane:not(.is-pre) .pg-rd__seg i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger) + 60ms)}
 .pg-pane:not(.is-pre) .pg-col__t i,.pg-pane:not(.is-pre) .pg-fc i,.pg-pane:not(.is-pre) .pg-sspark i{animation:pgGrowY var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(min(var(--i,0),12) * 22ms + 60ms)}
@@ -6228,8 +6278,9 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
     </section>
 
     <!-- ============ PROGRESS (Plume 2.11) ============ -->
-    <!-- Five questions, one view each: how good you are right now and
-         which way it is going (Form), whether you are showing up (Habit),
+    <!-- Six questions, one view each: how good you are right now and
+         which way it is going (Form), how long a question takes you (Time),
+         whether you are showing up (Habit),
          how much of each area of the bank is done (Areas), what is costing
          marks (Gaps), and the sessions themselves. One
          button group with a travelling indicator switches them; each view
@@ -6238,9 +6289,10 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
     <section class="view" id="v-stats">
       <p class="eyebrow">Read-out <span class="rule"></span> <span id="rangeSpan"></span></p>
       <h2 class="vt">Progress</h2>
-      <div class="pg-tabs pl-seg" id="pgTabs" role="radiogroup" aria-label="Progress view" style="--n:5;--i:0">
+      <div class="pg-tabs pl-seg" id="pgTabs" role="radiogroup" aria-label="Progress view" style="--n:6;--i:0">
         <span class="pl-seg__ind" aria-hidden="true"></span>
         <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="form">Form</button>
+        <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="time">Time</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="habit">Habit</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="areas">Areas</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="gaps">Gaps</button>
@@ -6249,6 +6301,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div id="rangeWarn"></div>
       <div class="pg-stage" id="pgStage">
         <div class="pg-pane" data-pg="form"></div>
+        <div class="pg-pane" data-pg="time" hidden></div>
         <div class="pg-pane" data-pg="habit" hidden></div>
         <div class="pg-pane" data-pg="areas" hidden></div>
         <div class="pg-pane" data-pg="gaps" hidden></div>
@@ -6382,7 +6435,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.71</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.72</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6438,7 +6491,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.71 · sharded store</span>
+        <span class="chip" id="verChip">v6.72 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7542,7 +7595,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.71';
+const APP_VERSION='6.72';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -13989,6 +14042,11 @@ function hgram(el,cols){
                on exam day every question is a first sighting and a
                window counted in questions is steady where a window
                counted in days swings with how much you did.
+     Time      the clock, which the user reads as their pace: average
+               question time (everything spent on a question) and answer
+               time (to the commit), for today, this week, this month and
+               all time, how they move period by period, how the times
+               spread, and the total of each session.
      Habit     whether you are showing up: today against the goal,
                the streak, this week, a heat map of the last months,
                week by week, and what the schedule asks of you next.
@@ -14006,9 +14064,9 @@ function hgram(el,cols){
      Sessions  every session, its score, its report.
    ============================================================ */
 const PG={view:'form',tok:0,built:{},rng:{trend:'90',gaps:'30'},grp:'system',day:null,all:false,shown:30,prev:{},E:null,QS:null,w:0,
-  area:'system',asort:'size',aopen:null,aall:false,hrs:'hours',per:'weeks'};
-const PG_ORDER=['form','habit','areas','gaps','sess'];
-const PG_NAME={form:'Form',habit:'Habit',areas:'Areas',gaps:'Gaps',sess:'Sessions'};
+  area:'system',asort:'size',aopen:null,aall:false,hrs:'hours',per:'weeks',tper:'day'};
+const PG_ORDER=['form','time','habit','areas','gaps','sess'];
+const PG_NAME={form:'Form',time:'Time',habit:'Habit',areas:'Areas',gaps:'Gaps',sess:'Sessions'};
 const PG_FIRST=100;                       /* the form window, in first sightings */
 const PG_PACE=90;                         /* Step 1: 40 questions an hour */
 
@@ -14047,6 +14105,11 @@ const pgMed=xs=>{if(!xs.length)return null;const a=xs.slice().sort((x,y)=>x-y),m
 /* an expressive number that counts to its value; k names it so a later
    render counts from where it was, and only a difference moves */
 function pgN(k,v,dec){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-d="${dec||0}">${(+v).toFixed(dec||0)}</b>`}
+/* a duration in seconds, drawn as 1m 24s with quiet units, that counts like any number */
+const pgTfmt=v=>{v=Math.max(0,Math.round(v));const h=Math.floor(v/3600),m=Math.floor(v%3600/60),x=v%60;
+  return h?`${h}<small class="pg-u">h</small> ${m}<small class="pg-u">m</small>`:m?`${m}<small class="pg-u">m</small> ${pad(x)}<small class="pg-u">s</small>`:`${x}<small class="pg-u">s</small>`};
+const pgTtxt=v=>pgTfmt(v).replace(/<[^>]+>/g,'');
+function pgT(k,v){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-f="t">${pgTfmt(v)}</b>`}
 const pgU=u=>`<small class="pg-u">${u}</small>`;
 const pgEmpty=(t,s)=>`<div class="pg-empty"><span class="pg-empty__shape" aria-hidden="true"></span><b>${t}</b><span>${s}</span></div>`;
 function pgCard(title,body,opt){
@@ -14244,6 +14307,145 @@ function pgBestsCard(E){
   ].filter(Boolean);
   return pgCard('Your bests',`<div class="pg-tiles">${tiles.map(t=>`<${t[5]?`button type="button" class="pg-tile pl-press" data-open="${t[5]}"`:'div class="pg-tile"'}><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b><em>${esc(t[4])}</em></${t[5]?'button':'div'}>`).join('')}</div>`,
     {sub:'Sessions of 20 questions or more; weeks of 50 answers or more.'});
+}
+
+/* ============================================================
+   TIME
+   ------------------------------------------------------------
+   Question time is studyOf(): everything spent on a question,
+   answering, then the explanation and every visit back. Answer time
+   is ansOf(): from the question appearing to the commit, absent on a
+   question left blank. Averages are means over the attempts in the
+   period (answer time over the answered ones). Session time is the
+   session's own clock (elapsed), never recomputed here.
+   ============================================================ */
+const PG_TPER=[['day','Day'],['week','Week'],['month','Month'],['all','All time']];
+function pgTsum(list){const o={n:list.length,q:0,a:0,an:0};list.forEach(x=>{o.q+=x.study;if(x.ans!=null){o.a+=x.ans;o.an++}});
+  o.mq=o.n?o.q/o.n/1000:null;o.ma=o.an?o.a/o.an/1000:null;o.tot=o.q/1000;return o}
+/* the period that holds now, and the one before it */
+function pgTwin(per){
+  const t=sod(Date.now()),now=Date.now()+1;
+  if(per==='day')return{cur:[t.getTime(),now],prev:[addDays(t,-1).getTime(),t.getTime()],cl:'Today',pl:'yesterday'};
+  if(per==='week'){const w0=addDays(t,-dowIdx(t));return{cur:[w0.getTime(),now],prev:[addDays(w0,-7).getTime(),w0.getTime()],cl:'This week',pl:'last week'}}
+  if(per==='month'){const m0=new Date(t.getFullYear(),t.getMonth(),1);return{cur:[m0.getTime(),now],prev:[new Date(t.getFullYear(),t.getMonth()-1,1).getTime(),m0.getTime()],cl:'This month',pl:'last month'}}
+  return{cur:[0,now],prev:null,cl:'All time',pl:''};
+}
+/* the buckets the chart and the list read: days, weeks or months */
+function pgTbuckets(per,E){
+  const t=sod(Date.now()),out=[];let unit=per;
+  if(per==='all'){const first=E.length?sod(E[0].ts):t,span=Math.round((t-first)/DAYMS)+1;unit=span<=120?'week':'month'}
+  if(unit==='day'){for(let i=29;i>=0;i--){const s=addDays(t,-i);out.push({s:s.getTime(),e:addDays(s,1).getTime(),
+    lab:String(s.getDate()),full:i===0?'Today':i===1?'Yesterday':pgDate(s,{weekday:'short',day:'numeric',month:'short'})})}}
+  else if(unit==='week'){const w0=addDays(t,-dowIdx(t));let k=per==='all'?Math.ceil(((t-(E.length?sod(E[0].ts):t))/DAYMS+1)/7):16;k=Math.max(k,4);
+    for(let i=k-1;i>=0;i--){const s=addDays(w0,-7*i);out.push({s:s.getTime(),e:addDays(s,7).getTime(),lab:s.getDate()+'/'+(s.getMonth()+1),
+      full:i===0?'This week':i===1?'Last week':'Week of '+pgDate(s,{day:'numeric',month:'short'})})}}
+  else{let k=12;if(per==='all'&&E.length){const f=new Date(E[0].ts);k=Math.max(3,(t.getFullYear()-f.getFullYear())*12+t.getMonth()-f.getMonth()+1)}
+    for(let i=k-1;i>=0;i--){const s=new Date(t.getFullYear(),t.getMonth()-i,1);out.push({s:s.getTime(),e:new Date(s.getFullYear(),s.getMonth()+1,1).getTime(),
+      lab:pgDate(s,{month:'short'}),full:i===0?'This month':pgDate(s,{month:'long',year:'numeric'})})}}
+  let j=0;const B=out.map(()=>[]);E.forEach(a=>{while(j<out.length&&a.ts>=out[j].e)j++;if(j<out.length&&a.ts>=out[j].s)B[j].push(a)});
+  out.forEach((b,i)=>Object.assign(b,pgTsum(B[i])));
+  return {out,unit};
+}
+function pgTimeHTML(){
+  const E=pgData();
+  if(!E.length)return pgCard('',pgEmpty('No time recorded yet','Answer a few questions and your pace appears here.'),{cls:'pg-hero'});
+  const tool=pgSeg('tper',PG_TPER,PG.tper,'Period');
+  return `<div class="pg-rngrow pg-rngrow--wide">${tool}</div><div class="pg-grid" id="pgTimeBody">${pgTimeBody()}</div>`;
+}
+function pgTimeBody(){
+  const E=pgData(),W=pgTwin(PG.tper),cur=pgTsum(between(E,W.cur[0],W.cur[1])),prv=W.prev?pgTsum(between(E,W.prev[0],W.prev[1])):null;
+  const dl=(a,b)=>{if(a==null||b==null)return '';const d=Math.round(a-b);if(!d)return `<span class="pg-tdl">same as ${W.pl}</span>`;
+    return `<span class="pg-tdl">${pgTtxt(Math.abs(d))} ${d<0?'quicker':'longer'} than ${W.pl}</span>`};
+  let dev='';
+  if(PG.tper==='all'&&E.length>=200){const f=pgTsum(E.slice(0,100)),l=pgTsum(E.slice(-100));
+    dev=`<p class="pg-hero__def">Your first 100 questions took ${pgTtxt(f.mq)} each; your last 100, ${pgTtxt(l.mq)}.</p>`}
+  const empty=!cur.n;
+  const last=empty&&W.prev&&prv&&prv.n?prv:null;
+  const hero=`<span class="pg-over">${W.cl} · time per question</span>
+    ${empty?`<p class="pg-hero__say">Nothing answered ${W.cl.toLowerCase()==='today'?'today':W.cl.toLowerCase()} yet.${last?` ${W.pl[0].toUpperCase()+W.pl.slice(1)}: ${pgTtxt(last.mq)} a question, ${pgTtxt(last.ma||0)} to answer, over ${last.n} questions.`:''}</p>`:
+    `<div class="pg-tpair">
+      <div class="pg-tpair__main"><div class="pg-disp pg-disp--t">${pgT('tq',cur.mq)}</div><b>Question time</b><span>everything spent on a question</span>${dl(cur.mq,prv&&prv.n?prv.mq:null)}</div>
+      <div class="pg-tpair__side"><div class="pg-big">${pgT('ta',cur.ma)}</div><b>Answer time</b><span>until you commit</span>${dl(cur.ma,prv&&prv.an?prv.ma:null)}</div>
+    </div>
+    <div class="pg-stack pg-stack--t"><i class="t-ans" style="flex:${cur.a}"></i><i class="t-rev" style="flex:${Math.max(0,cur.q-cur.a)};--i:1"></i></div>
+    <div class="pg-qleg"><span><i class="t-ans"></i>Answering <b>${cur.q?Math.round(cur.a/cur.q*100):0}%</b></span><span><i class="t-rev"></i>Reading after <b>${cur.q?Math.round((cur.q-cur.a)/cur.q*100):0}%</b></span></div>
+    <div class="pg-trio"><div><span>${pgN('tn',cur.n)}</span><em>questions</em></div><div><span>${pgT('tt',cur.tot)}</span><em>time studied</em></div><div><span>${pgT('tx',cur.n?cur.tot/Math.max(1,new Set(between(E,W.cur[0],W.cur[1]).map(a=>a.sess||dayKey(a.ts))).size):0)}</span><em>per session</em></div></div>`}
+    ${dev}`;
+  return pgCard('',hero,{cls:'pg-hero'})+pgTchartCard(E)+pgTlistCard(E)+pgTspreadCard(E)+pgTsessCard();
+}
+function pgTchartCard(E){
+  const {out,unit}=pgTbuckets(PG.tper,E);PG.tchart={out,unit};
+  return pgCard('How your pace is moving',`<div class="pg-chart" id="pgTchart">${pgTchartSVG()}</div>`,
+    {sub:`Average per question, each ${unit}. Solid: question time. Dashed: answer time. Touch the chart to read a ${unit}.`});
+}
+function pgTchartSVG(){
+  const T=PG.tchart,out=T.out,live=out.filter(b=>b.n>=3);
+  if(live.length<2)return pgEmpty('Two '+T.unit+'s with answers draw the lines','Each '+T.unit+' you study adds a point.');
+  const W=Math.max(280,PG.w-40),H=220,top=12,vb=30,base=H-vb-24,L=8,Rt=44;
+  const mx=Math.max(...live.map(b=>b.mq))*1.12,step=mx>600?300:mx>240?60:mx>120?30:mx>60?20:10;
+  const x=i=>L+(out.length<2?0:i*(W-L-Rt)/(out.length-1)),y=v=>top+(1-v/mx)*(base-top);
+  const pq=out.map((b,i)=>b.n>=3?[x(i),y(b.mq)]:null).filter(Boolean),pa=out.map((b,i)=>b.n>=3&&b.ma!=null?[x(i),y(b.ma)]:null).filter(Boolean);
+  const vm=Math.max(1,...out.map(b=>b.n)),bw=Math.max(2,Math.min(16,(W-L-Rt)/out.length*.5)),every=Math.ceil(out.length/6);
+  const grid=[];for(let g=step;g<mx;g+=step)grid.push(g);
+  PG.tx=x;
+  return `<svg class="pg-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Average time per question over time">
+    ${grid.map(g=>`<line class="pg-gl" x1="${L}" x2="${W-Rt+4}" y1="${y(g)}" y2="${y(g)}"/><text class="pg-ax" x="${W-2}" y="${y(g)+4}" text-anchor="end">${pgTtxt(g)}</text>`).join('')}
+    <g class="pg-vol">${out.map((b,i)=>b.n?`<rect style="--i:${i}" x="${x(i)-bw/2}" y="${H-24-b.n/vm*vb}" width="${bw}" height="${b.n/vm*vb}" rx="${Math.min(3,bw/2)}"/>`:'').join('')}</g>
+    ${pa.length>1?`<path class="pg-line pg-line--a" d="${pgSmooth(pa)}"/>`:''}
+    <path class="pg-line" pathLength="1" d="${pgSmooth(pq)}"/>
+    <g class="pg-dots pg-dots--q">${pq.map((p,i)=>`<circle style="--i:${i}" cx="${p[0]}" cy="${p[1]}" r="3"/>`).join('')}</g>
+    ${out.map((b,i)=>(i%every===0||i===out.length-1)&&!(i!==out.length-1&&out.length-1-i<every*.6)?`<text class="pg-ax" x="${x(i)}" y="${H-4}" text-anchor="middle">${esc(b.lab)}</text>`:'').join('')}
+    <line class="pg-guide" x1="0" x2="0" y1="${top}" y2="${H-24}"/>
+  </svg><p class="pg-read" aria-live="polite">${pgTread(out.length-1)}</p>`;
+}
+function pgTread(i){
+  const b=PG.tchart&&PG.tchart.out[i];if(!b)return '';
+  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} questions · question ${pgTtxt(b.mq)} · answer ${b.ma==null?'—':pgTtxt(b.ma)} · ${pgTtxt(b.tot)} in all`:'nothing answered'}`;
+}
+/* the same numbers as a list you can read period by period, newest first */
+function pgTlistCard(E){
+  const {out,unit}=pgTbuckets(PG.tper,E);
+  const rows=out.filter(b=>b.n).reverse().slice(0,unit==='day'?14:12);
+  if(!rows.length)return '';
+  const mx=Math.max(...rows.map(b=>b.mq));
+  const name={day:'Day by day',week:'Week by week',month:'Month by month'}[unit];
+  return pgCard(name,`<ul class="pg-tl">${rows.map((b,i)=>`<li style="--i:${Math.min(i,8)}">
+      <span class="pg-tl__t"><b>${esc(b.full)}</b><em>${b.n} question${b.n===1?'':'s'} · ${pgTtxt(b.tot)}</em></span>
+      ${pgBar(b.mq/mx)}
+      <span class="pg-tl__v"><b>${pgTtxt(b.mq)}</b><em>answer ${b.ma==null?'—':pgTtxt(b.ma)}</em></span></li>`).join('')}</ul>`,
+    {sub:`Average question time and answer time for each ${unit} you studied, newest first. The bar is question time.`});
+}
+/* how long questions take you: the spread behind the average */
+const PG_TB=[[0,30,'Under 30s'],[30,60,'30s–1m'],[60,90,'1m–1m 30s'],[90,120,'1m 30s–2m'],[120,180,'2–3m'],[180,300,'3–5m'],[300,1e9,'Over 5m']];
+function pgTspreadCard(E){
+  const W=pgTwin(PG.tper==='day'?'week':PG.tper),A=between(E,W.cur[0],W.cur[1]);
+  const per=PG.tper==='day'?'This week':W.cl;
+  if(A.length<10)return '';
+  const r=PG_TB.map(b=>({b,n:0,a:0}));
+  A.forEach(x=>{const q=x.study/1000;r.find(z=>q>=z.b[0]&&q<z.b[1]).n++;if(x.ans!=null){const v=x.ans/1000;r.find(z=>v>=z.b[0]&&v<z.b[1]).a++}});
+  const live=r.filter(z=>z.n||z.a),mx=Math.max(...live.map(z=>Math.max(z.n,z.a)));
+  const med=pgMed(A.map(x=>x.study/1000)),over=A.filter(x=>x.study>PG_PACE*1000).length;
+  return pgCard('How long questions take you',`<ul class="pg-hrs pg-hrs--t">${live.map((z,i)=>`<li style="--i:${i}">
+      <span class="pg-hrs__t"><b>${z.b[2]}</b></span>
+      <span class="pg-tsp">${pgBar(z.n/mx)}${pgBar(z.a/mx,'is-a')}</span>
+      <span class="pg-hrs__v"><b>${z.n}</b><em>${z.a} answered</em></span></li>`).join('')}</ul>
+    <div class="pg-qleg"><span><i class="t-ans2"></i>Question time</span><span><i class="t-rev2"></i>Answer time</span></div>
+    <p class="pg-note">${per}: half your questions take under ${pgTtxt(med)}; ${over} of ${A.length} took longer than ${PG_PACE}s in all.</p>`,
+    {sub:`${per}. How many questions fall in each length, by question time and by answer time.`,cls:'is-half'});
+}
+/* the session's own clock, total and per question */
+function pgTsessCard(){
+  const fin=sessCounted().filter(s=>s.status==='done'&&s.order&&s.order.length).sort((a,b)=>(b.finishedAt||b.ts||0)-(a.finishedAt||a.ts||0)).slice(0,8);
+  if(!fin.length)return '';
+  const mx=Math.max(...fin.map(s=>s.elapsed||0),1);
+  return pgCard('Session by session',`<ul class="pg-tl">${fin.map((s,i)=>{const n=s.order.length,el=(s.elapsed||0)/1000;
+      const an=s.order.map(id=>s.items[id]).filter(it=>it&&it.chosen&&it.ansMs!=null),ma=an.length?an.reduce((x,it)=>x+it.ansMs,0)/an.length/1000:null;
+      return `<li class="pg-tl--btn" style="--i:${i}"><button type="button" class="pg-tl__btn pl-press" data-open="${s.id}">
+      <span class="pg-tl__t"><b>${esc(s.config.label||'Session')}</b><em>${pgDate(s.ts)} · ${n} questions · ${pgTtxt(el/n)} each${ma!=null?' · answer '+pgTtxt(ma):''}</em></span>
+      ${pgBar(el/(mx/1000))}
+      <span class="pg-tl__v"><b>${pgTtxt(el)}</b><em>in all</em></span></button></li>`}).join('')}</ul>
+    <button type="button" class="pg-txt pl-press" data-pgto="sess">All sessions</button>`,
+    {sub:'Each session’s total on its own clock, and what that is per question. Tap one for its report, where every question has its own times.',cls:'is-half'});
 }
 
 /* ============================================================
@@ -14594,8 +14796,8 @@ function pgSessHTML(){
     const C=2*Math.PI*16;
     return `<div class="pg-srow${done?'':' is-open'}" data-sid="${s.id}" ${done?`data-open="${s.id}" role="button" tabindex="0"`:''}>
       <span class="pg-sring" style="--p:${done?(sc.p/100).toFixed(3):(sc.n?ans/sc.n:0).toFixed(3)}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16"/><circle cx="20" cy="20" r="16" pathLength="1"/></svg><b>${done?sc.p:ans}</b></span>
-      <span class="pg-srow__t"><b>${esc(s.config.label||'Session')}</b><span>${pgDate(s.ts)} · ${s.config.mode==='test'?'Exam':'Tutor'} · ${sc.n} questions · ${fmtDur(s.elapsed||0)}${done?'':' · '+SESS_LABEL[st].toLowerCase()}</span></span>
-      ${done?`<span class="pg-srow__m">${sc.c}/${sc.n}</span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
+      <span class="pg-srow__t"><b>${esc(s.config.label||'Session')}</b><span>${pgDate(s.ts)} · ${s.config.mode==='test'?'Exam':'Tutor'} · ${sc.n} questions${done?'':' · '+fmtDur(s.elapsed||0)+' · '+SESS_LABEL[st].toLowerCase()}</span></span>
+      ${done?`<span class="pg-srow__m"><b>${pgTtxt((s.elapsed||0)/1000)}</b><em>${sc.c}/${sc.n} · ${pgTtxt((s.elapsed||0)/1000/Math.max(1,sc.n))} each</em></span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
       <button type="button" class="pl-ib pl-press pg-sdel" data-pgdel="${s.id}" aria-label="Delete this session">${sxIc('i-trash')}</button></div>`};
   const shown=fin.slice(0,PG.shown);
   return pgCard('',`<div class="pg-tiles">${tiles.map(t=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
@@ -14607,7 +14809,7 @@ function pgSessHTML(){
 /* ============================================================
    THE VIEW: switching, building, the data arriving alive
    ============================================================ */
-const PG_BUILD={form:pgFormHTML,habit:pgHabitHTML,areas:pgAreasHTML,gaps:pgGapsHTML,sess:pgSessHTML};
+const PG_BUILD={form:pgFormHTML,time:pgTimeHTML,habit:pgHabitHTML,areas:pgAreasHTML,gaps:pgGapsHTML,sess:pgSessHTML};
 const pgPane=v=>document.querySelector('#pgStage .pg-pane[data-pg="'+v+'"]');
 function pgBuild(v,pre){
   const p=pgPane(v);if(!p)return;
@@ -14620,14 +14822,15 @@ function pgBuild(v,pre){
 function pgAlive(root){
   root.querySelectorAll('.pg-n').forEach(el=>{
     const k=el.dataset.k,to=+el.dataset.v,d=+el.dataset.d||0,from=PG.prev[k];
+    const put=el.dataset.f==='t'?v=>{el.innerHTML=pgTfmt(v)}:v=>{el.textContent=v.toFixed(d)};
     PG.prev[k]=to;
     if(Motion.reduced||from===to)return;
     const f=from==null?0:from,t0=performance.now(),D=from==null?PL('spatial-slow').d+250:PL('spatial').d+120,tok=PG.tok;
-    el.textContent=f.toFixed(d);
+    put(f);
     /* a view that has left stops counting at once: its text changes would
        still cost a layout every frame under the next view's motion */
-    const step=t=>{if(tok!==PG.tok||!el.isConnected){el.textContent=to.toFixed(d);return}
-      const q=Math.min(1,(t-t0)/D),e=1-Math.pow(1-q,3);el.textContent=(f+(to-f)*e).toFixed(d);if(q<1)requestAnimationFrame(step)};
+    const step=t=>{if(tok!==PG.tok||!el.isConnected){put(to);return}
+      const q=Math.min(1,(t-t0)/D),e=1-Math.pow(1-q,3);put(f+(to-f)*e);if(q<1)requestAnimationFrame(step)};
     requestAnimationFrame(step);
   });
 }
@@ -14690,6 +14893,7 @@ function pgSegTap(g,b){
     if(id==='trend'){PG.rng.trend=b.dataset.v;pgRe('#pgTrend',pgTrendSVG(),dir)}
     else if(id==='gaps'){PG.rng.gaps=b.dataset.v;PG.all=false;pgRe('#pgGapsBody',pgGapsBody(),dir)}
     else if(id==='grp'){PG.grp=b.dataset.v;PG.all=false;pgRe('#pgWeak',pgWeakList(),dir)}
+    else if(id==='tper'){PG.tper=b.dataset.v;pgRe('#pgTimeBody',pgTimeBody(),dir)}
     else if(id==='asort'){PG.asort=b.dataset.v;PG.aopen=null;pgRe('#pgAreas',pgAreaList(),dir)}
     else if(id==='hrs'){PG.hrs=b.dataset.v;pgRe('#pgHrs',pgHrsHTML(),dir)}
     else if(id==='per'){PG.per=b.dataset.v;const h=g.closest('.pg-card').querySelector('.pg-card__h h3');sxSwap(h,PG.per==='months'?'Month by month':'Week by week');pgRe('#pgPer',pgPerHTML(),dir)}
@@ -14724,6 +14928,7 @@ $('#pgStage').addEventListener('click',e=>{
     else u.classList.remove('is-open');
     return}
   if(e.target.closest('[data-pgall]')){PG.all=!PG.all;pgRe('#pgWeak',pgWeakList());return}
+  const to=e.target.closest('[data-pgto]');if(to){pgShow(to.dataset.pgto,true);window.scrollTo({top:0,behavior:'smooth'});return}
   if(e.target.closest('[data-pgaall]')){PG.aall=!PG.aall;pgRe('#pgAreas',pgAreaList());return}
   const fc=e.target.closest('[data-pgfacet]');
   if(fc){if(fc.classList.contains('on'))return;
@@ -14766,6 +14971,11 @@ $('#pgStage').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&
 $('#pgStage').addEventListener('pointermove',pgScrub);
 $('#pgStage').addEventListener('pointerdown',pgScrub);
 function pgScrub(e){
+  const ts=e.target.closest&&e.target.closest('#pgTchart .pg-svg');
+  if(ts&&PG.tchart&&PG.tx){const r=ts.getBoundingClientRect(),x=(e.clientX-r.left)*ts.viewBox.baseVal.width/r.width;
+    let bi=0,bd=1e9;PG.tchart.out.forEach((b,i)=>{const d=Math.abs(PG.tx(i)-x);if(d<bd){bd=d;bi=i}});
+    const g=ts.querySelector('.pg-guide');g.setAttribute('x1',PG.tx(bi));g.setAttribute('x2',PG.tx(bi));ts.classList.add('is-scrub');
+    const rd=ts.parentNode.querySelector('.pg-read');if(rd&&rd.__i!==bi){rd.__i=bi;rd.innerHTML=pgTread(bi)}return}
   const svg=e.target.closest&&e.target.closest('#pgTrend .pg-svg');if(!svg||!PG.trend)return;
   const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal,x=(e.clientX-r.left)*vb.width/r.width;
   const T=PG.trend;let bi=0,bd=1e9;T.out.forEach((b,i)=>{const d=Math.abs(T.x(i)-x);if(d<bd){bd=d;bi=i}});
@@ -14776,7 +14986,7 @@ function pgScrub(e){
 let pgRzT=0,pgRzW=0;
 window.addEventListener('resize',()=>{clearTimeout(pgRzT);pgRzT=setTimeout(()=>{
   if(VIEW!=='stats')return;const p=pgPane(PG.view);if(!p||Math.abs(p.clientWidth-pgRzW)<24)return;pgRzW=p.clientWidth;
-  if(PG.view==='form'||PG.view==='habit'){const keep=PG.prev;pgBuild(PG.view);PG.prev=keep}},200)});
+  if(PG.view==='form'||PG.view==='habit'||PG.view==='time'){const keep=PG.prev;pgBuild(PG.view);PG.prev=keep}},200)});
 
 document.addEventListener('click',e=>{
   const o=e.target.closest('[data-open]');if(o){const s=DB.sessions.find(x=>x.id===o.dataset.open);if(s)showResults(s);return}

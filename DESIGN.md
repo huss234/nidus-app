@@ -1174,6 +1174,15 @@ The quality bar. A surface is done when it *feels* like §2, and:
     phone and wraps from 600px.
   - **Labelled rows** (`.pg-hrs`, `.pg-lad`): name, bar, figure; reuse for
     any category chart (§3 rule above).
+  - **A duration that counts** (`pgT(key,seconds)`, v6.72): drawn as
+    `1m 24s` with quiet units (`pgTfmt`), never wrapping, counting like any
+    number. Plain text for read-outs is `pgTtxt`.
+  - **Period list** (`.pg-tl`): one row per day / week / month, newest first:
+    name with its count and total, a bar, the average and its companion
+    figure; on a phone the bar drops under the row. Session rows reuse it as
+    buttons (`.pg-tl__btn`).
+  - **One period switch drives a whole view** (Time): the hero, the chart's
+    buckets and the list all follow `PG.tper`, rebuilt together by `pgRe`.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1199,6 +1208,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| Progress: Time view (time per question for today / this week / this month / all time, trend, period list, spread, session totals); session rows lead with their total time; six tabs | 2.13 | 6.72 | From the user: average time per question is how they monitor themselves |
 | Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
