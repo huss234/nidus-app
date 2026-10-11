@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.68 -->
+<!-- Nidus — Personal Qbank · v6.69 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5492,6 +5492,373 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
   .cp-bar__b,.cp-bar.is-named .cp-bar__a,.cpq-dock.is-hid{transform:none}
   #compPull.is-busy .ic{animation:none}
 }
+/* ============================================================
+   Plume 2.11 · progress
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.69). Four views behind one button group
+   (Form, Habit, Gaps, Sessions); each view is a column of lit cards
+   on the page, two to a row from 720px where a card is a half. Data
+   is spent on small things: one primary ink for every measure, the
+   page-tone well for every track, and hues turned from the seed
+   only where a category means something (the causes of a miss, the
+   readiness segments). Verdict colours stay out: a weak area is
+   found by its rank, not painted red. Numbers are expressive and
+   count to their value; bars, columns and rings grow from their
+   base when they are inserted, lines draw along their length.
+   ============================================================ */
+#v-stats{
+  --pg-k1:var(--md-primary);
+  --pg-k2:oklch(from var(--md-primary) l c calc(h + 75));
+  --pg-k3:oklch(from var(--md-primary) l c calc(h - 105));
+  --pg-k4:oklch(from var(--md-primary) l calc(c * .9) calc(h + 160));
+  --pg-ink2:color-mix(in oklab,var(--md-primary) 45%,var(--p-well));
+}
+.pg-tabs{margin:4px 0 20px;max-width:560px}
+.pg-tabs button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.pg-cnt{font:600 11px/16px var(--m3-font);font-variant-numeric:tabular-nums;padding:0 6px;border-radius:8px;background:color-mix(in oklab,currentColor 14%,transparent)}
+.pg-stage{position:relative}
+.pg-pane[hidden]{display:none}
+.pg-pane.is-pre{position:absolute;left:0;right:0;top:0;visibility:hidden;pointer-events:none}
+.pg-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:720px){.pg-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+.pg-grid > *{grid-column:1/-1;min-width:0}
+@media (min-width:720px){.pg-grid > .is-half{grid-column:auto}}
+.pg-rngrow{margin:0 0 16px;max-width:420px}
+
+/* ---- cards ---- */
+.pg-card{background:var(--p-card);border-radius:var(--p-r-card);padding:20px;color:var(--md-on-surface)}
+@media (min-width:600px){.pg-card{padding:24px}}
+.pg-card__h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:0 0 16px}
+.pg-card__h h3{margin:0;font:500 18px/24px var(--m3-font);letter-spacing:0}
+.pg-card__h p{margin:4px 0 0;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant);max-width:62ch}
+.pg-card__h .pl-ib{margin:-12px -12px -12px 0}
+.pg-trend .pg-card__h{flex-wrap:wrap}
+.pg-trend .pg-seg{flex:1 1 240px;max-width:300px}
+.pg-card .pg-seg + div{margin-top:16px}
+.pg-seg button{height:36px;font-size:13px}
+.pg-seg .pl-seg__ind{border-radius:18px}
+.pg-note{margin:14px 0 0;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.pg-h{margin:12px 0 -4px;font:500 16px/24px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-over{display:block;font:600 12px/16px var(--m3-font);letter-spacing:.08em;text-transform:uppercase;color:var(--md-on-surface-variant)}
+
+/* ---- expressive numbers ---- */
+.pg-n{font:inherit;font-variant-numeric:tabular-nums}
+.pg-disp,.pg-big,.pg-tile__v,.pg-stick__v,.pg-trio span,.pg-calib__v,.pg-ring__n,.pg-causes strong{
+  font-family:var(--m3-font);font-variant-numeric:tabular-nums;font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;
+}
+.pg-u{font-size:.5em;font-weight:500;font-variation-settings:"wdth" 100;letter-spacing:0;margin-left:2px;color:var(--md-on-surface-variant)}
+.pg-disp{font-size:72px;line-height:1;font-weight:540}
+@media (max-width:380px){.pg-disp{font-size:60px}}
+.pg-big{font-size:36px;line-height:1.05;font-weight:520}
+
+/* ---- hero ---- */
+.pg-hero{border-radius:var(--p-r-hero);padding:24px}
+@media (min-width:600px){.pg-hero{padding:28px 32px}}
+.pg-hero__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.pg-hero__lead .pg-over{margin:0 0 6px}
+.pg-hero__ci{display:block;margin-top:6px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-delta{
+  flex:none;display:inline-flex;align-items:baseline;gap:1px;height:36px;padding:0 14px;align-items:center;border-radius:18px;
+  background:var(--p-well);font:600 16px/20px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);
+}
+.pg-delta small{font-size:12px;margin-left:2px}
+.pg-delta.is-up{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.pg-hero__say{margin:18px 0 0;font:450 18px/26px var(--m3-font);max-width:48ch}
+.pg-hero__def{margin:6px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin:22px -4px -4px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-trio > div{background:var(--p-well);padding:14px 14px 12px;min-width:0}
+.pg-trio span{display:block;font-size:26px;line-height:1.1;font-weight:520}
+.pg-trio em{display:block;margin-top:4px;font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+
+/* ---- empty state ---- */
+.pg-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:20px 8px}
+.pg-empty__shape{width:56px;height:56px;margin-bottom:8px;background:var(--md-secondary-container);
+  clip-path:path("M28 0C33 0 35 5 39 7S49 7 51 11S50 21 52 25S56 33 54 37S45 42 43 46S41 56 36 56S30 51 28 51S21 56 16 55S13 46 9 43S1 41 0 36S5 29 4 25S0 15 4 11S13 9 17 6S23 0 28 0Z")}
+.pg-empty b{font:500 16px/24px var(--m3-font)}
+.pg-empty span:not(.pg-empty__shape){font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant);max-width:40ch}
+
+/* ---- trend chart ---- */
+.pg-chart{margin:0 -4px}
+.pg-svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y;cursor:crosshair}
+.pg-svg .pg-gl{stroke:var(--md-outline-variant);stroke-width:1;stroke-dasharray:2 4}
+.pg-ax{fill:var(--md-on-surface-variant);font:500 11px var(--m3-font);font-variant-numeric:tabular-nums}
+.pg-vol rect{fill:var(--p-well);transform-box:fill-box;transform-origin:50% 100%}
+.pg-line{fill:none;stroke:var(--md-primary);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1}
+.pg-dots circle{fill:var(--p-card);stroke:var(--pg-ink2);stroke-width:2;transform-box:fill-box;transform-origin:center}
+.pg-guide{stroke:var(--md-on-surface-variant);stroke-width:1;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.pg-svg.is-scrub .pg-guide{opacity:.5}
+.pg-read{margin:8px 4px 0;min-height:20px;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-read b{font-weight:600;color:var(--md-on-surface)}
+
+/* ---- bars (horizontal) ---- */
+.pg-bar{display:block;height:8px;border-radius:4px;background:var(--p-well);overflow:hidden}
+.pg-bar i{display:block;height:100%;border-radius:4px;background:var(--md-primary);transform-origin:0 50%;transform:scaleX(var(--s));
+  transition:transform var(--p-spatial-d) var(--p-spatial)}
+.pg-bar.is-ref i{background:var(--md-outline)}
+.pg-bar.is-thin i{background:var(--pg-ink2)}
+
+/* ---- is it sticking ---- */
+.pg-stick{display:flex;align-items:center;gap:18px}
+.pg-stick + .pg-stick{margin-top:18px}
+.pg-stick__v{flex:none;width:96px;font-size:40px;line-height:1;font-weight:520}
+.pg-stick__t{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.pg-stick__t b{font:500 16px/22px var(--m3-font)}
+.pg-stick__t span{font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-stick__t .pg-bar{margin-top:6px}
+.pg-stick__t em{font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+
+/* ---- readiness ---- */
+.pg-rd__top{display:flex;align-items:baseline;gap:14px;margin:0 0 16px}
+.pg-rd__w{font:500 18px/24px var(--m3-font)}
+.pg-rd{display:flex;gap:4px;height:14px}
+.pg-rd__seg{position:relative;border-radius:var(--p-r-xs);background:var(--p-well);overflow:hidden}
+.pg-rd__seg:first-child{border-radius:7px var(--p-r-xs) var(--p-r-xs) 7px}
+.pg-rd__seg:last-child{border-radius:var(--p-r-xs) 7px 7px var(--p-r-xs)}
+.pg-rd__seg i,.pg-key{background:var(--pg-k1)}
+.pg-rd__seg i{position:absolute;inset:0;transform-origin:0 50%;transform:scaleX(var(--s))}
+.pg-rd__seg i[style*="--i:1"],.pg-key[style*="--i:1"]{background:var(--pg-k2)}
+.pg-rd__seg i[style*="--i:2"],.pg-key[style*="--i:2"]{background:var(--pg-k3)}
+.pg-rd__seg i[style*="--i:3"],.pg-key[style*="--i:3"]{background:var(--pg-k4)}
+.pg-rd__l{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+.pg-rd__l li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;column-gap:12px;align-items:start}
+.pg-rd__l b{font:500 14px/20px var(--m3-font)}
+.pg-rd__l span:not(.pg-key){grid-column:2;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-rd__l em{grid-column:3;grid-row:1;font:600 14px/20px var(--m3-font);font-style:normal;font-variant-numeric:tabular-nums}
+.pg-key{display:block;width:10px;height:10px;border-radius:3px;margin-top:5px}
+
+/* ---- tiles ---- */
+.pg-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+@media (min-width:600px){.pg-tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pg-tile{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;padding:16px;background:var(--p-well);color:var(--md-on-surface);text-align:left;font:inherit;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+button.pg-tile{cursor:pointer}
+button.pg-tile::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;border-radius:inherit;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){button.pg-tile:hover::after{opacity:var(--m3-state-hover)}}
+button.pg-tile.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+button.pg-tile.is-down::after{opacity:var(--m3-state-press)}
+button.pg-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.pg-tile__v{font-size:30px;line-height:1.1;font-weight:520;margin-bottom:4px}
+.pg-tile > b{font:500 14px/20px var(--m3-font)}
+.pg-tile em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-dl{display:inline-block;font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.pg-dl.is-up{color:var(--md-primary)}
+.pg-dl::after{content:" on the 30 before";font-weight:400}
+
+/* ---- habit: today ---- */
+.pg-today{display:flex;align-items:center;gap:24px}
+.pg-ring{position:relative;flex:none;width:136px;height:136px}
+.pg-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pg-ring circle{fill:none;stroke-width:12}
+.pg-ring__t{stroke:var(--p-well)}
+.pg-ring__f{stroke:var(--md-primary);stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:calc(1 - var(--p));transition:stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.pg-ring[style*="--p:0.0000"] .pg-ring__f{opacity:0}
+.pg-ring__c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pg-ring__n{font-size:40px;line-height:1;font-weight:540}
+.pg-ring__c span{font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-today__r{min-width:0}
+.pg-today__line{margin:6px 0 14px;font:450 18px/26px var(--m3-font)}
+.pg-streak{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:10px}
+.pg-streak em{font:500 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:22px}
+.pg-wd{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pg-wd i{display:block;width:100%;max-width:44px;height:28px;border-radius:14px;background:var(--p-well);transform-origin:50% 100%}
+.pg-wd.is-on i{background:var(--pg-ink2)}
+.pg-wd.is-met i{background:var(--md-primary)}
+.pg-wd.is-fut i{background:none;box-shadow:inset 0 0 0 1.5px var(--md-outline-variant)}
+.pg-wd.is-today i{outline:2px solid var(--md-on-surface);outline-offset:2px}
+.pg-wd em{font:600 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-wd.is-today em{color:var(--md-on-surface)}
+@media (max-width:420px){.pg-today{gap:18px}.pg-ring{width:112px;height:112px}.pg-ring__n{font-size:34px}.pg-today__line{font-size:16px;line-height:22px}}
+
+/* ---- habit: heat map ---- */
+.pg-heat{--gap:4px}
+.pg-heat__m,.pg-heat__g{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--gap)}
+.pg-heat__m{margin:0 0 6px;font:500 11px/14px var(--m3-font);color:var(--md-on-surface-variant);white-space:nowrap}
+.pg-heat__m span{overflow:visible;min-width:0}
+.pg-heat__g{grid-template-rows:repeat(7,auto);grid-auto-flow:column}
+.pg-pane:not(.is-pre) .pg-heat__g{animation:pgFade var(--p-effect-slow-d) var(--p-effect-slow) backwards 60ms}
+.pg-hc{display:block;aspect-ratio:1;width:100%;min-width:0;border-radius:4px;background:var(--p-well);padding:0;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect)}
+.pg-hc.l1{background:color-mix(in oklab,var(--md-primary) 26%,var(--p-well))}
+.pg-hc.l2{background:color-mix(in oklab,var(--md-primary) 50%,var(--p-well))}
+.pg-hc.l3{background:color-mix(in oklab,var(--md-primary) 78%,var(--p-well))}
+.pg-hc.l4{background:var(--md-primary)}
+.pg-hc.is-fut{background:none}
+.pg-hc.is-today{box-shadow:inset 0 0 0 2px var(--md-on-surface)}
+button.pg-hc{cursor:pointer}
+button.pg-hc.is-down{transform:scale(.86);border-radius:50%;transition-duration:var(--p-effect-fast-d)}
+button.pg-hc.is-sel{box-shadow:0 0 0 2px var(--p-card),0 0 0 4px var(--md-on-surface);border-radius:6px}
+button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1px}
+.pg-heat__f{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 16px;margin-top:14px}
+.pg-heat__f .pg-note{margin:0}
+.pg-hl{display:inline-flex;align-items:center;gap:4px}
+.pg-hl .pg-hc{width:12px;height:12px;border-radius:3px}
+.pg-hl em{font:500 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);margin:0 4px}
+.pg-unfold{display:grid;grid-template-rows:0fr;transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.pg-unfold > div{min-height:0;overflow:hidden;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.pg-unfold.is-open{grid-template-rows:1fr}
+.pg-unfold.is-open > div{opacity:1;transition-delay:60ms}
+.pg-day{margin-top:16px;padding:16px;border-radius:var(--p-r-l);background:var(--p-well);display:flex;flex-direction:column;gap:10px}
+.pg-day > b{font:500 16px/22px var(--m3-font)}
+.pg-day .pg-note{margin:0}
+.pg-day__f{display:flex;flex-wrap:wrap;gap:8px 24px}
+.pg-day__f span{display:flex;flex-direction:column;font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-day__f b{font:520 22px/28px var(--m3-font);font-variation-settings:"wdth" 112;color:var(--md-on-surface);font-variant-numeric:tabular-nums}
+.pg-day__s{display:flex;flex-wrap:wrap;gap:8px}
+.pg-chipbtn{position:relative;isolation:isolate;height:32px;padding:0 12px;border-radius:var(--p-r-s);background:var(--p-card);color:var(--md-on-surface);font:550 13px/18px var(--m3-font);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-chipbtn.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+
+/* ---- columns (weeks, hours, calibration, pace, stamina, forecast) ---- */
+.pg-cols{position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;height:200px;padding-top:4px}
+.pg-col{display:grid;grid-template-rows:18px 1fr 18px 16px;justify-items:center;min-width:0}
+.pg-col__n{font:600 11px/18px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.pg-col__t{position:relative;width:100%;max-width:40px;height:100%;border-radius:8px;background:var(--p-well);overflow:hidden;display:block}
+.pg-col__t i{position:absolute;left:0;right:0;bottom:0;height:100%;border-radius:8px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(var(--s));
+  transition:transform var(--p-spatial-d) var(--p-spatial)}
+.pg-col.is-met .pg-col__t i,.pg-hours .is-best .pg-col__t i,.pg-calib .pg-col__t i{background:var(--md-primary)}
+.pg-col.is-now .pg-col__l{color:var(--md-on-surface);font-weight:650}
+.pg-col__l{font:500 11px/18px var(--m3-font);color:var(--md-on-surface-variant);white-space:nowrap}
+.pg-col__a{font:500 11px/16px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-cols__goal{position:absolute;left:0;right:0;bottom:calc(52px + (100% - 56px) * var(--y));border-top:1.5px dashed var(--md-outline);z-index:1;pointer-events:none}
+.pg-cols__goal em{position:absolute;right:0;bottom:2px;font:600 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);background:var(--p-card);padding:0 0 0 6px}
+@media (max-width:420px){.pg-cols{gap:3px}.pg-col__l{font-size:10px}.pg-col__n{font-size:10px}}
+
+.pg-hours,.pg-calib{display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:8px;height:190px}
+.pg-calib{--n:3;height:200px}
+.pg-calib--4{--n:4;margin-top:20px;height:170px}
+.pg-calib--2{--n:2}.pg-calib--3{--n:3}.pg-calib--5{--n:5}
+.pg-hours > div,.pg-calib > div{display:grid;grid-template-rows:auto 1fr auto auto;justify-items:center;min-width:0;text-align:center}
+.pg-hours__a{font:600 13px/20px var(--m3-font);font-variant-numeric:tabular-nums;margin-bottom:6px}
+.pg-calib__v{font-size:22px;line-height:1.1;font-weight:520;margin-bottom:8px}
+.pg-hours .pg-col__t,.pg-calib .pg-col__t{max-width:56px}
+.pg-hours > div > b,.pg-calib > div > b{margin-top:8px;font:500 13px/18px var(--m3-font)}
+.pg-hours em,.pg-calib em{font:400 11px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);white-space:nowrap}
+.pg-hours > div:not(.is-best) .pg-hours__a{color:var(--md-on-surface-variant)}
+
+.pg-ahead{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pg-ahead > div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pg-ahead em{font:500 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-fc{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px;height:76px;margin-top:18px}
+.pg-fc span{display:grid;grid-template-rows:1fr 16px;justify-items:center;min-width:0}
+.pg-fc i{display:block;width:100%;height:100%;border-radius:4px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(max(var(--s),.04))}
+.pg-fc span:first-child i{background:var(--md-primary)}
+.pg-fc em{font:500 10px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-pace{display:grid;gap:10px;margin-top:20px}
+.pg-pace > div{display:grid;grid-template-columns:80px minmax(0,1fr) 84px;align-items:center;gap:12px;font:500 13px/18px var(--m3-font)}
+.pg-pace span{color:var(--md-on-surface-variant)}
+.pg-pace b{text-align:right;font-variant-numeric:tabular-nums}
+
+/* ---- gaps: misses ---- */
+.pg-misshead{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.pg-misshead em{font:500 14px/20px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-stack{display:flex;gap:3px;height:20px}
+.pg-stack i{min-width:6px;border-radius:var(--p-r-xs);transform-origin:0 50%}
+.pg-stack i:first-child{border-radius:10px var(--p-r-xs) var(--p-r-xs) 10px}
+.pg-stack i:last-child{border-radius:var(--p-r-xs) 10px 10px var(--p-r-xs)}
+.pg-stack i:only-child{border-radius:10px}
+.c-gap{background:var(--pg-k1)}
+.c-trap{background:var(--pg-k2)}
+.c-read{background:var(--pg-k3)}
+.c-fast{background:color-mix(in oklab,var(--pg-k2) 50%,var(--p-well))}
+.c-struck{background:color-mix(in oklab,var(--pg-k3) 50%,var(--p-well))}
+.c-time{background:var(--pg-k4)}
+.c-none{background:var(--md-outline-variant)}
+.pg-causes{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:14px}
+.pg-causes li{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:12px;align-items:start}
+.pg-causes li > div{display:flex;flex-direction:column;min-width:0}
+.pg-causes li > div > b{font:500 15px/20px var(--m3-font)}
+.pg-causes span:not(.pg-key){font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-causes em{font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);margin-top:2px}
+.pg-causes strong{display:flex;flex-direction:column;align-items:flex-end;font-size:22px;line-height:1.05;font-weight:520}
+.pg-causes strong small{font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant);letter-spacing:0}
+
+/* ---- gaps: weakest areas ---- */
+.pg-weak{list-style:none;margin:0;padding:0;display:grid;gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-weak li{display:grid;grid-template-columns:minmax(0,1fr) 64px 48px;grid-template-areas:"t s d" "b s d";column-gap:12px;row-gap:8px;align-items:center;padding:14px 8px 14px 16px;background:var(--p-well)}
+.pg-weak__t{grid-area:t;display:flex;flex-direction:column;min-width:0}
+.pg-weak__t b{font:500 15px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-weak__t span{font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-weak__bar{grid-area:b;position:relative}
+.pg-weak__bar .pg-bar{background:var(--p-card)}
+.pg-avg{position:absolute;top:-3px;bottom:-3px;left:calc(var(--avg) * 100%);width:2px;margin-left:-1px;border-radius:1px;background:var(--md-on-surface)}
+.pg-weak__s{grid-area:s;display:flex;flex-direction:column;align-items:flex-end}
+.pg-weak__s b{font:520 22px/1.1 var(--m3-font);font-variation-settings:"wdth" 116;font-variant-numeric:tabular-nums}
+.pg-weak__s em{font:500 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.pg-drill{grid-area:d;position:relative;isolation:isolate;width:48px;height:48px;display:grid;place-items:center;border-radius:24px;color:var(--md-on-secondary-container);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+.pg-drill::before{content:"";position:absolute;inset:4px;z-index:-1;border-radius:20px;background:var(--md-secondary-container);transition:border-radius var(--p-effect-d) var(--p-effect)}
+.pg-drill .ic{width:20px;height:20px}
+.pg-drill.is-down{transform:scale(var(--p-press-sm));transition-duration:var(--p-effect-fast-d)}
+.pg-drill.is-down::before{border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.pg-drill:focus-visible{outline:3px solid var(--md-primary);outline-offset:-2px}
+.pg-weak__f{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px}
+.pg-weak__f .pg-note{margin:0;display:inline-flex;align-items:center;gap:8px}
+.pg-avgkey{display:inline-block;width:2px;height:14px;border-radius:1px;background:var(--md-on-surface)}
+.pg-txt{position:relative;height:40px;padding:0 12px;border-radius:20px;color:var(--md-primary);font:550 14px/20px var(--m3-font);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-txt.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+
+/* ---- sessions ---- */
+.pg-sspark{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:3px;height:84px;margin-top:20px;align-items:end}
+.pg-sspark button{position:relative;height:100%;display:flex;align-items:flex-end;border-radius:6px;padding:0;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-sspark i{display:block;width:100%;height:100%;border-radius:6px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(var(--s))}
+.pg-sspark button:last-child i{background:var(--md-primary)}
+.pg-sspark button.is-down{transform:scale(.92)}
+.pg-grp{display:flex;flex-direction:column;gap:2px}
+.pg-srow{position:relative;isolation:isolate;display:flex;align-items:center;gap:14px;min-height:72px;padding:12px 8px 12px 16px;background:var(--p-card);border-radius:var(--p-r-xs);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+.pg-grp > .pg-srow:first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.pg-grp > .pg-srow:last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+.pg-srow[data-open]{cursor:pointer}
+.pg-srow[data-open]::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pg-srow[data-open]:hover::after{opacity:var(--m3-state-hover)}}
+.pg-srow[data-open]:active:not(:has(button:active)){transform:scale(var(--p-press-card));border-radius:var(--p-r-card)}
+.pg-srow:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;z-index:1}
+.pg-srow > .pg-empty{flex:1}
+.pg-sring{position:relative;flex:none;width:44px;height:44px}
+.pg-sring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pg-sring circle{fill:none;stroke-width:4}
+.pg-sring circle:first-child{stroke:var(--p-well)}
+.pg-sring circle + circle{stroke:var(--md-primary);stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:calc(1 - var(--p))}
+.pg-srow.is-open .pg-sring circle + circle{stroke:var(--pg-ink2)}
+.pg-sring b{position:absolute;inset:0;display:grid;place-items:center;font:600 13px/1 var(--m3-font);font-variant-numeric:tabular-nums}
+.pg-srow__t{flex:1;min-width:0;display:flex;flex-direction:column}
+.pg-srow__t b{font:500 16px/22px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-srow__t span{font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-srow__m{flex:none;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-srow__a{flex:none;display:flex;gap:4px}
+.pg-sdel .ic{width:20px;height:20px}
+.pg-sdel.is-armed{color:var(--md-on-error)}
+.pg-sdel.is-armed::before{opacity:1;background:var(--md-error)}
+@media (max-width:520px){.pg-srow.is-open{flex-wrap:wrap}.pg-srow.is-open .pg-srow__a{order:3;width:100%;padding-left:58px}}
+.pg-more{display:flex;justify-content:center;margin-top:4px}
+.pg-ledger{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:12px 12px 12px 20px;border-radius:var(--p-r-card);background:var(--p-card);font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-ledger span{flex:1 1 220px}
+
+/* ---- arrival: data draws itself ---- */
+.pg-pane:not(.is-pre) .pg-bar i,.pg-pane:not(.is-pre) .pg-rd__seg i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger) + 60ms)}
+.pg-pane:not(.is-pre) .pg-col__t i,.pg-pane:not(.is-pre) .pg-fc i,.pg-pane:not(.is-pre) .pg-sspark i{animation:pgGrowY var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(min(var(--i,0),12) * 22ms + 60ms)}
+.pg-pane:not(.is-pre) .pg-vol rect{animation:pgGrowY var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(min(var(--i,0),30) * 12ms)}
+.pg-pane:not(.is-pre) .pg-line{animation:pgDraw 900ms var(--p-spatial-slow) backwards 120ms}
+.pg-pane:not(.is-pre) .pg-dots circle{animation:pgPop var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(min(var(--i,0),30) * 16ms + 200ms)}
+.pg-pane:not(.is-pre) .pg-ring__f,.pg-pane:not(.is-pre) .pg-sring circle + circle{animation:pgRing var(--p-spatial-slow-d) var(--p-spatial-slow) backwards 80ms}
+.pg-pane:not(.is-pre) .pg-stack i{animation:pgGrowX var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * 40ms + 60ms)}
+.pg-pane:not(.is-pre) .pg-wd i{animation:pgGrowY var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(var(--i,0) * 30ms + 80ms)}
+.pg-pane:not(.is-pre) .pg-weak li{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(min(var(--i,0),6) * var(--p-stagger))}
+
+@keyframes pgGrowX{from{transform:scaleX(0)}}
+@keyframes pgGrowY{from{transform:scaleY(0)}}
+@keyframes pgDraw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes pgPop{from{transform:scale(0);opacity:0}}
+@keyframes pgRing{from{stroke-dashoffset:1}}
+@keyframes pgFade{from{opacity:0}}
+@keyframes pgRise{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){
+  .pg-pane *{animation-name:pgFade!important;animation-duration:150ms!important;animation-delay:0ms!important}
+  .pg-bar i,.pg-col__t i{transition:none}
+}
 </style>
 </head>
 <body>
@@ -5750,153 +6117,30 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="row" style="justify-content:center;margin-top:16px"><button class="btn ghost" id="galMore" style="display:none">Show more</button></div>
     </section>
 
-    <!-- ============ STATS ============ -->
+    <!-- ============ PROGRESS (Plume 2.11) ============ -->
+    <!-- Four questions, one view each: how good you are right now and
+         which way it is going (Form), whether you are showing up (Habit),
+         what is costing marks (Gaps), and the sessions themselves. One
+         button group with a travelling indicator switches them; each view
+         is built when first shown and enters from the side the indicator
+         went. Every figure says what window it is measured over. -->
     <section class="view" id="v-stats">
       <p class="eyebrow">Read-out <span class="rule"></span> <span id="rangeSpan"></span></p>
       <h2 class="vt">Progress</h2>
-      <p class="sub">Whether you showed up, whether it is going in, and where the gaps are.</p>
-
-      <div class="subtabs" id="progTabs" role="tablist">
-        <button role="tab" data-pane="over" class="on" aria-selected="true">Overview</button>
-        <button role="tab" data-pane="habit" aria-selected="false">Habit</button>
-        <button role="tab" data-pane="mastery" aria-selected="false">Mastery</button>
-        <button role="tab" data-pane="memory" aria-selected="false">Memory</button>
-        <button role="tab" data-pane="sess" aria-selected="false">Sessions<span class="cnt" id="sessCnt">0</span></button>
-      </div>
-
-      <div class="rngbar">
-        <div class="seg" id="rangeSeg">
-          <button data-range="7">7 days</button>
-          <button data-range="30" class="on">30 days</button>
-          <button data-range="90">90 days</button>
-          <button data-range="365">Year</button>
-          <button data-range="all">All time</button>
-        </div>
-        <span class="tiny muted" id="rangeNote"></span>
+      <div class="pg-tabs pl-seg" id="pgTabs" role="radiogroup" aria-label="Progress view" style="--n:4;--i:0">
+        <span class="pl-seg__ind" aria-hidden="true"></span>
+        <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="form">Form</button>
+        <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="habit">Habit</button>
+        <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="gaps">Gaps</button>
+        <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="sess">Sessions<span class="pg-cnt" id="sessCnt">0</span></button>
       </div>
       <div id="rangeWarn"></div>
-
-      <!-- ============ OVERVIEW — the story in one screen ============ -->
-      <div class="pane on" data-pane="over">
-        <div class="statgrid" id="statTop"></div>
-
-        <h3 class="sec">Readiness<button class="ib" data-note="readiness" aria-label="How readiness is worked out"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card" id="statReady"></div>
-
-        <h3 class="sec">First sightings against repeats<button class="ib" data-note="firstpass" aria-label="First sighting vs repeats"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statPass"></div><p class="tiny muted" id="passNote" style="margin:14px 0 0;line-height:1.7"></p></div>
-
-        <h3 class="sec">Volume and accuracy</h3>
-        <div class="card">
-          <div class="hgram" id="volChart"></div>
-          <p class="tiny muted" id="volNote" style="margin:12px 0 0"></p>
-          <hr class="sep">
-          <svg class="spark" id="accChart" viewBox="0 0 600 130" preserveAspectRatio="none"></svg>
-          <div class="tiny muted" id="accNote" style="margin-top:6px"></div>
-        </div>
-
-        <h3 class="sec">Time per question<button class="ib" data-note="timing" aria-label="What each time measures"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card">
-          <svg class="spark" id="timeChart" viewBox="0 0 600 130" preserveAspectRatio="none"></svg>
-          <div class="tiny muted" id="timeNote" style="margin-top:6px"></div>
-        </div>
-
-        <h3 class="sec">Where the marks are<button class="ib" data-note="leverage" aria-label="How this list is ordered"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statLev"></div><p class="tiny muted" id="statLevNote" style="margin:14px 0 0;line-height:1.7"></p></div>
-
-        <h3 class="sec">This week and this month</h3>
-        <div class="cmpgrid" id="statCompare"></div>
-      </div><!-- /pane over -->
-
-      <!-- ============ HABIT — did you turn up ============ -->
-      <div class="pane" data-pane="habit">
-        <div class="adh">
-          <div class="card goalcard">
-            <div class="ring" id="goalRing"></div>
-            <div class="gsub" id="goalSub">Today</div>
-            <div class="gline" id="goalLine"></div>
-          </div>
-          <div class="grid" style="grid-template-columns:1fr">
-            <div class="statgrid" id="adhStats"></div>
-            <div class="card">
-              <p class="eyebrow" style="margin-bottom:12px">Last 14 days <span class="rule"></span></p>
-              <div class="wkstrip" id="wkStrip"></div>
-              <p class="tiny muted" id="ribNote" style="margin:12px 0 0"></p>
-            </div>
-          </div>
-        </div>
-
-        <h3 class="sec">Calendar</h3>
-        <div class="card">
-          <div class="calhead">
-            <button class="btn ghost sm" id="calPrev" title="Previous month"><svg class="ic"><use href="#i-prev"/></svg></button>
-            <b id="calTitle"></b>
-            <button class="btn ghost sm" id="calNext" title="Next month"><svg class="ic"><use href="#i-next"/></svg></button>
-            <button class="btn ghost sm" id="calToday">Today</button>
-            <span class="tiny muted" id="calSum" style="margin-left:auto"></span>
-          </div>
-          <div class="calgrid dow" id="calDow"></div>
-          <div class="calgrid" id="calGrid"></div>
-          <div class="callegend">
-            <span><b style="background:var(--jade)"></b>&ge;70%</span>
-            <span><b style="background:var(--amber)"></b>50–69%</span>
-            <span><b style="background:var(--rose)"></b>&lt;50%</span>
-            <span><b style="background:var(--amber);border-radius:50%;width:6px;height:6px"></b>Goal met</span>
-            <span>Shade = volume · tap a day for the detail</span>
-          </div>
-        </div>
-        <div id="calDay"></div>
-
-        <h3 class="sec">Week by week</h3>
-        <div class="card"><div class="bars" id="statWeeks"></div></div>
-
-        <h3 class="sec">Month by month</h3>
-        <div class="card"><div class="bars" id="statMonths"></div></div>
-
-        <h3 class="sec">When you work best<button class="ib" data-note="hours" aria-label="Reading this chart"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statHour"></div><hr class="sep"><div class="bars" id="statDow"></div></div>
-      </div><!-- /pane habit -->
-
-      <!-- ============ MASTERY — where the gaps are ============ -->
-      <div class="pane" data-pane="mastery">
-        <h3 class="sec">By system</h3>
-        <div class="card"><div class="bars" id="statSystems"></div></div>
-        <h3 class="sec">By subject</h3>
-        <div class="card"><div class="bars" id="statSubjects"></div></div>
-        <h3 class="sec">Blueprint coverage<button class="ib" data-note="coverage" aria-label="Reading this chart"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statCoverage"></div></div>
-        <h3 class="sec">By question type<button class="ib" data-note="archetype" aria-label="Reading this chart"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statArch"></div></div>
-        <h3 class="sec">By physician task</h3>
-        <div class="card"><div class="bars" id="statTask"></div></div>
-        <h3 class="sec">By cognitive level and format</h3>
-        <div class="card"><div class="bars" id="statDepth"></div><hr class="sep"><div class="bars" id="statFormat"></div></div>
-        <h3 class="sec">Confidence calibration<button class="ib" data-note="calib" aria-label="Reading this chart"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statConf"></div></div>
-        <h3 class="sec">Why I missed them</h3>
-        <div class="card"><div class="bars" id="statMiss"></div></div>
-        <h3 class="sec">Timing<button class="ib" data-note="timing" aria-label="What each time measures"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="bars" id="statTime"></div></div>
-      </div><!-- /pane mastery -->
-
-      <!-- ============ MEMORY — what the schedule thinks ============ -->
-      <div class="pane" data-pane="memory">
-        <h3 class="sec">Memory health<button class="ib" data-note="memory" aria-label="Reading this chart"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-        <div class="card"><div class="statgrid" id="statSrs"></div><div class="bars" id="statSrsBars" style="margin-top:14px"></div></div>
-
-        <h3 class="sec">Review forecast</h3>
-        <div class="card"><div class="hgram" id="fcChart"></div><p class="tiny muted" id="fcNote" style="margin:12px 0 0;line-height:1.7"></p></div>
-      </div><!-- /pane memory -->
-
-      <!-- ============ SESSIONS ============ -->
-      <div class="pane" data-pane="sess">
-        <h3 class="sec">Session summary</h3>
-        <div id="statSess"></div>
-
-        <h3 class="sec">Every session</h3>
-        <p class="tiny muted" style="margin:0 0 16px">Reopen any session to walk through the explanations again.</p>
-        <div id="histList"></div>
-      </div><!-- /pane sess -->
+      <div class="pg-stage" id="pgStage">
+        <div class="pg-pane" data-pg="form"></div>
+        <div class="pg-pane" data-pg="habit" hidden></div>
+        <div class="pg-pane" data-pg="gaps" hidden></div>
+        <div class="pg-pane" data-pg="sess" hidden></div>
+      </div>
     </section>
 
     <!-- ============ IMPORT ============ -->
@@ -6025,7 +6269,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.68</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.69</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6081,7 +6325,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.68 · sharded store</span>
+        <span class="chip" id="verChip">v6.69 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7185,7 +7429,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.68';
+const APP_VERSION='6.69';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9952,7 +10196,7 @@ function go(v){
   if(v==='review')renderReview();
   if(v==='bank')renderBank(true);
   if(v==='gallery')renderGallery(true);
-  if(v==='stats'){renderStats();renderHistory()}
+  if(v==='stats')renderStats(true);
   if(v==='settings')renderSettings();
   if(v==='import')renderPrompt();
   if(pane&&window.showPane)showPane(v,pane);
@@ -13611,484 +13855,645 @@ function hgram(el,cols){
       <div class="t"><div class="f" style="height:${h}%;animation-delay:${Math.min(i*18,300)}ms">${c.n&&!c.flat?`<div class="cq" style="height:${cp}%"></div><div class="wq" style="height:${100-cp}%"></div>`:''}</div></div>
       <div class="l">${lab}</div></div>`}).join('');
 }
-function renderStats(){
-  if(timeBackfill())save();           // sessions a sync just brought in
-  SA=allAttempts();SMAP=byDay(SA);
-  const t=totals(), from=rangeFrom();
-  const A=SA.filter(inRange);                       // everything below is range-scoped
-  const map=byDay(A);
-  const s=sumOf(A);
-  const firstTs=SA.length?SA[0].ts:Date.now();
-  const spanStart=Math.max(from,sod(firstTs).getTime());
-  const spanDays=SA.length?Math.max(1,Math.round((sod(Date.now())-spanStart)/DAYMS)+1):0;
-  const avgT=A.length?s.ms/A.length/1000:0, avgA=s.an?s.ans/s.an/1000:null;
-  const done=sessCounted().filter(x=>x.status==='done');
-  const doneR=done.filter(x=>x.ts>=from);
-  $$('#rangeSeg button').forEach(b=>b.classList.toggle('on',b.dataset.range===RANGE));
-  $('#rangeSpan').textContent = RANGE==='all'?'All time':(rangeDays()+' days');
-  $('#rangeNote').textContent = !SA.length?'Nothing recorded yet.'
-    : `${new Date(spanStart).toLocaleDateString(undefined,{day:'numeric',month:'short'})} — ${new Date().toLocaleDateString(undefined,{day:'numeric',month:'short'})} · ${spanDays} day${spanDays===1?'':'s'}. Overview, Habit, Mastery and Sessions are scoped to this window; readiness, bank coverage and the whole Memory tab are all-time, because a schedule and a first sighting have no window.`;
+/* ============================================================
+   PROGRESS (Plume 2.11)
+   ------------------------------------------------------------
+   Rebuilt from what a session records, not from what was on the
+   old screen. Every answer leaves: when (ts), what was chosen
+   (null = left blank), right or wrong, answer time (timeMs, to the
+   commit) and question time (studyMs, reading the explanation
+   included), the confidence given, the miss tag, and its session.
+   Joined to its session it also says which position in the block
+   it was, the block's size and mode, which options were crossed
+   out (so "crossed out the right answer" is measurable), and,
+   through the question, whether it had a lure and the lure was
+   taken. The spacing schedule adds interval, ease and lapses.
 
-  /* The headline is eight figures and every one of them is scoped to the
-     window above, so a 7-day read and an all-time read are different
-     sentences about different things rather than the same eight numbers
-     barely moving. Each carries what it is measured against, because a
-     figure with nothing beside it cannot be judged. */
-  const prevW=rangeDays()?between(SA,rangeFrom()-rangeDays()*DAYMS,rangeFrom()):[];
-  const ps=sumOf(prevW);
-  const fpW=firstPassOf(A);
-  const tile=(v,k,x,d)=>`<div class="stat"><div class="v">${unitize(v)}${d||''}</div><div class="k">${esc(k)}</div>${x?`<div class="x">${esc(x)}</div>`:''}</div>`;
-  $('#statTop').innerHTML=[
-    tile(A.length,'Answered',spanDays?Math.round(A.length/Math.max(spanDays,1))+' a day':'',
-      prevW.length?delta(A.length,ps.n):''),
-    tile(s.acc==null?'—':Math.round(s.acc)+'<small>%</small>','Accuracy','every sighting',
-      (s.acc!=null&&ps.acc!=null)?delta(Math.round(s.acc),Math.round(ps.acc),'pt'):''),
-    tile(fpW.p==null?'—':Math.round(fpW.p)+'<small>%</small>','First-pass',fpW.n?fpW.n+' first sightings':''),
-    tile(fmtDur(s.ms),'Time studied',s.days?fmtDur(s.ms/Math.max(s.days,1))+' an active day':''),
-    tile(avgA==null?'—':fmtT(avgA),'Avg answer time','question time '+fmtT(avgT)),
-    tile(s.days+'<small>/ '+spanDays+'</small>','Days active',
-      spanDays?Math.round(s.days/Math.max(spanDays,1)*100)+'% of the window':''),
-    tile(streak()+'<small>d</small>','Streak','best '+longestStreak()+'d'),
-    tile(t.total?Math.round(t.used/t.total*100)+'<small>%</small>':'0<small>%</small>','Bank covered',
-      t.used+' of '+t.total+' · all time')
-  ].join('');
+   Four views, each answering one question with those numbers:
+     Form      how good you are right now, and which way it goes.
+               The headline is first-sighting accuracy over your
+               last 100 first sightings, with its 95% range, because
+               on exam day every question is a first sighting and a
+               window counted in questions is steady where a window
+               counted in days swings with how much you did.
+     Habit     whether you are showing up: today against the goal,
+               the streak, this week, a heat map of the last months,
+               week by week, and what the schedule asks of you next.
+     Gaps      what is costing marks: why the misses happened (your
+               tags first, then what the record shows by itself: the
+               lure taken, the key crossed out, an answer far faster
+               than your usual), the areas ranked by marks at stake,
+               calibration, pace and stamina through a block.
+     Sessions  every session, its score, its report.
+   ============================================================ */
+const PG={view:'form',tok:0,built:{},rng:{trend:'90',gaps:'30'},grp:'system',day:null,all:false,shown:30,prev:{},E:null,w:0};
+const PG_ORDER=['form','habit','gaps','sess'];
+const PG_NAME={form:'Form',habit:'Habit',gaps:'Gaps',sess:'Sessions'};
+const PG_FIRST=100;                       /* the form window, in first sightings */
+const PG_PACE=90;                         /* Step 1: 40 questions an hour */
 
-  /* readiness, repeated here so Progress opens on the same verdict Home
-     closes on rather than making you hold one in your head */
-  const R=readiness();
-  $('#statReady').innerHTML=`
-    <div class="rdhead">
-      <div class="rdnum">${R.score}<small>/100</small></div>
-      <div class="rdword">${READY_WORD(R.score)}<span>${R.thin?'Too little history to lean on yet — treat it as a direction, not a verdict.':'Weighted from the four measures below, all time. Not a predicted score.'}</span></div>
-    </div>
-    <div class="bars" style="margin-top:18px">${R.parts.map(pt=>barRow(pt.k,pt.v==null?0:pt.v,
-        pt.v==null?'—':Math.round(pt.v)+'%',pt.v==null?'var(--panel3)':accCol(pt.v))).join('')}</div>
-    <div class="rdlegend">${R.parts.map(pt=>`<span><b>${esc(pt.k)}</b>${esc(pt.lab)}</span>`).join('')}</div>`;
-
-  const lv=leverage(8);
-  $('#statLev').innerHTML=lv.length
-    ? lv.map(r=>barRow(r.k,r.p,Math.round(r.p)+'% · '+r.impact+' at stake',accCol(r.p))).join('')
-    : '<span class="tiny muted">Not enough answered yet to rank anything.</span>';
-  $('#statLevNote').textContent=lv.length
-    ? 'The share you get wrong multiplied by how many questions of that system your bank holds — roughly how many questions are sitting behind each weakness. All time, so the ordering does not swing about with the window above.'
-    : '';
-
-  /* when part of the record has been set aside, say so here rather than
-     letting a quietly smaller number pass for the whole truth */
-  const raw=rawAttemptCount(), hid=raw-allAttempts().length;
-  $('#rangeWarn').innerHTML = hid>0
-    ? `<div class="card" style="margin-bottom:20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-        <span class="chip amber">Ledger</span>
-        <span class="tiny muted" style="flex:1 1 220px;line-height:1.7"><b>${hid}</b> recorded answer${hid===1?' is':'s are'} being left out of every figure on this screen, by your own rule.</span>
-        <button class="btn ghost sm" data-setsec="studydata">Study data</button></div>`
-    : '';
-
-  renderSessStats(from);
-  renderAdherence(A,map,spanDays);
-  renderCalendar();
-  renderForecast();
-  renderVolume(A);renderTimeTrend(A);
-  renderCompare();
-  renderPeriodBars();
-  renderRhythm(A);
-  renderPassDepth(A);
-  renderMemory();
-  /* v4.9 — the per-session accuracy spark used to sit here as a second
-     chart saying what the accuracy line under the volume histogram already
-     says, one screen further down. One accuracy line is enough; the session
-     shape it also carried lives on the Sessions tab, next to the sessions. */
-  const draw=(el,rows)=>{$(el).innerHTML=rows.length?rows.map(r=>barRow(r.k,r.p,Math.round(r.p)+'% · '+r.c+'/'+r.n,r.p>=70?'var(--jade)':r.p>=50?'var(--amber)':'var(--rose)')).join(''):'<span class="tiny muted">Not enough data yet.</span>'};
-  draw('#statSystems',groupPerf('system',inRange));
-  draw('#statSubjects',groupPerf('subject',inRange));
-  draw('#statArch',groupPerfBy(FACET_BY.archetype,3,inRange));
-  draw('#statTask',groupPerfBy(FACET_BY.task,3,inRange));
-  draw('#statDepth',groupPerfBy(FACET_BY.depth,1,inRange));
-  draw('#statFormat',groupPerfBy(FACET_BY.resource,3,inRange));
-  // blueprint coverage — attempted share of each canonical system present in the bank
-  const cov={};
-  DB.questions.forEach(q=>{const k=q.system||UNCLASSIFIED;cov[k]=cov[k]||{c:0,n:0};cov[k].n++;if(attOf(q.id).length)cov[k].c++});
-  const covRows=Object.keys(cov).sort((a,b)=>cov[b].n-cov[a].n).map(k=>({k,c:cov[k].c,n:cov[k].n,p:cov[k].c/cov[k].n*100}));
-  $('#statCoverage').innerHTML=covRows.length?covRows.map(r=>barRow(r.k,r.p,r.c+'/'+r.n+' seen',r.p>=70?'var(--jade)':r.p>=30?'var(--amber)':'var(--rose)')).join(''):'<span class="tiny muted">Import some questions first.</span>';
-  // calibration
-  const conf={sure:{c:0,n:0},unsure:{c:0,n:0},guess:{c:0,n:0}};
-  A.forEach(a=>{if(a.conf&&conf[a.conf]){conf[a.conf].n++;if(a.correct)conf[a.conf].c++}});
-  const cr=Object.keys(conf).filter(k=>conf[k].n).map(k=>({k:k[0].toUpperCase()+k.slice(1),p:conf[k].c/conf[k].n*100,c:conf[k].c,n:conf[k].n}));
-  draw('#statConf',cr);
-  // miss reasons
-  const mm={};A.filter(a=>!a.correct&&a.miss).forEach(a=>mm[a.miss]=(mm[a.miss]||0)+1);
-  const tot=Object.values(mm).reduce((a,b)=>a+b,0);
-  $('#statMiss').innerHTML=tot?Object.keys(mm).sort((a,b)=>mm[b]-mm[a]).map(k=>{
-    const lab=(MISS.find(m=>m[0]===k)||[k,k])[1];
-    return barRow(lab,mm[k]/tot*100,mm[k]+' misses','var(--amber)')}).join('')
-    :'<span class="tiny muted">Tag your misses in tutor mode or in a session report and the pattern shows up here.</span>';
-  // timing
-  /* v6.13 — the four clocks, each under its own name (the (i) defines them) */
-  const tA=A.filter(a=>ansOf(a)!=null),cT=tA.filter(a=>a.correct),wT=tA.filter(a=>!a.correct),oT=A.filter(a=>ansOf(a)==null);
-  const mean=(x,f)=>x.length?x.reduce((s,a)=>s+f(a),0)/x.length/1000:0;
-  const tm=sumOf(A),skipMs=Math.max(0,tm.ms-tm.ans-tm.rev);
-  const head=t=>`<p class="eyebrow" style="margin:6px 0 -2px">${t} <span class="rule"></span></p>`;
-  const avgs=[['Answer time',mean(tA,ansOf),'var(--md-primary)'],['Review time',mean(tA,revOf),'var(--amber)'],['Question time',mean(A,studyOf),'var(--md-outline)']];
-  const mxA=Math.max(...avgs.map(r=>r[1]),1);
-  const split=(f,list3)=>{const v=list3.map(r=>[r[0],r[1].length?mean(r[1],f):null,r[2]]).filter(r=>r[1]!=null);
-    const m=Math.max(...v.map(r=>r[1]),1);return v.map(r=>barRow(r[0],r[1]/m*100,fmtT(r[1]),r[2])).join('')};
-  $('#statTime').innerHTML=A.length?[
-    head('Where the time went'),
-    barRow('Answer time',tm.ms?tm.ans/tm.ms*100:0,fmtDur(tm.ans),'var(--md-primary)'),
-    barRow('Review time',tm.ms?tm.rev/tm.ms*100:0,fmtDur(tm.rev),'var(--amber)'),
-    skipMs?barRow('Skipped',skipMs/tm.ms*100,fmtDur(skipMs),'var(--md-outline)'):'',
-    barRow('Question time',100,fmtDur(tm.ms),'var(--md-outline)'),
-    head('Average per question'),
-    avgs.map(r=>barRow(r[0],r[1]/mxA*100,fmtT(r[1]),r[2])).join(''),
-    head('Answer time · correct vs incorrect'),
-    tA.length?split(ansOf,[['When correct',cT,'var(--jade)'],['When incorrect',wT,'var(--rose)']]):'<span class="tiny muted">Nothing answered in this window.</span>',
-    head('Question time · correct vs incorrect'),
-    split(studyOf,[['When correct',cT,'var(--jade)'],['When incorrect',wT,'var(--rose)'],['When skipped',oT,'var(--md-outline)']])
-  ].join(''):'<span class="tiny muted">No timing data yet.</span>';
-}
-
-/* ---------- adherence: did you actually show up ---------- */
-/* Sessions as their own unit of work: how long one runs, how much of it
-   actually gets answered, and whether the sets are being finished at all. */
-function renderSessStats(from){
-  const el=$('#statSess');if(!el)return;
-  const all=sessCounted().filter(s=>s.order&&s.order.length);
-  const fin=all.filter(s=>s.status==='done'&&s.ts>=from);
-  const open=sessUnfinished();
-  if(!all.length){el.innerHTML='<div class="card"><span class="tiny muted">No sessions yet. Build one from the bank and it will be measured here.</span></div>';return}
-  const ms=fin.reduce((a,s)=>a+(s.elapsed||0),0);
-  const qs=fin.reduce((a,s)=>a+s.order.length,0);
-  /* answer time per session item: the item's own since 6.13, the attempt's before */
-  const ansL=[];fin.forEach(s=>s.order.forEach(id=>{const it=s.items[id];if(!it||!it.chosen)return;
-    if(it.ansMs!=null)return ansL.push(it.ansMs);
-    const a=((DB.stats[id]||{}).attempts||[]).filter(x=>x.sess===s.id).pop();ansL.push(a?(a.timeMs||0):(it.timeMs||0))}));
-  const cor=fin.reduce((a,s)=>a+sessScore(s).c,0);
-  const omit=fin.reduce((a,s)=>a+s.order.filter(id=>!s.items[id].chosen).length,0);
-  const accs=fin.map(s=>sessScore(s).p);
-  const best=accs.length?Math.max.apply(null,accs):null;
-  const worst=accs.length?Math.min.apply(null,accs):null;
-  const finRate=all.length?Math.round(all.filter(s=>s.status==='done').length/all.length*100):0;
-  const tiles=[
-    ['Finished',fin.length],
-    ['Still open',open.length],
-    ['Session time',fin.length?fmtDur(ms):'—'],
-    ['Avg length',fin.length?fmtDur(ms/fin.length):'—'],
-    ['Avg set size',fin.length?Math.round(qs/fin.length):'—'],
-    ['Avg question time',qs?fmtT(ms/qs/1000):'—'],
-    ['Avg answer time',ansL.length?fmtT(ansL.reduce((a,b)=>a+b,0)/ansL.length/1000):'—'],
-    ['Session accuracy',qs?Math.round(cor/qs*100)+'%':'—'],
-    ['Left omitted',qs?Math.round(omit/qs*100)+'%':'—'],
-    ['Completion rate',finRate+'%']
-  ];
-  el.innerHTML=`<div class="statgrid" style="margin-bottom:14px">${
-    tiles.map(([k,v])=>`<div class="stat"><div class="v">${unitize(v)}</div><div class="k">${k}</div></div>`).join('')}</div>
-    <div class="card"><div class="bars">${
-      fin.length?fin.slice(-8).reverse().map(x=>{const sc=sessScore(x);
-        return barRow((x.config.label||'Session').slice(0,26),sc.p,sc.c+'/'+sc.n,sc.p>=70?'var(--jade)':sc.p>=50?'var(--amber)':'var(--rose)')}).join('')
-      :'<span class="tiny muted">Nothing finished in this window.</span>'}</div>
-      <p class="tiny muted" style="margin:12px 0 0;line-height:1.7">${
-        best==null?'Finish a session and its shape shows up here.'
-        :'Best set '+best+'%, weakest '+worst+'%.'} ${
-        open.length?'<b>'+open.length+'</b> session'+(open.length===1?' is':'s are')+' still open — an unfinished set is not counted above.':'Every session has been finished.'}</p></div>`;
-}
-function renderAdherence(A,map,spanDays){
-  const goal=DB.settings.goal||0, tk=today();
-  const doneToday=(SMAP[tk]||{n:0}).n;
-  const pct=goal?clamp(doneToday/goal*100,0,100):(doneToday?100:0);
-  const col=goal?(pct>=100?'var(--jade)':pct>=50?'var(--amber)':'var(--accent)'):'var(--accent)';
-  $('#goalRing').innerHTML=ringSVG(pct,col)+`<div class="cv"><b>${doneToday}</b><span>${goal?'of '+goal:'today'}</span></div>`;
-  $('#goalSub').textContent=goal?(doneToday>=goal?'Goal met':'Today'):'Today';
-  $('#goalLine').textContent = !goal ? 'No daily goal set — add one in Settings and this becomes an adherence tracker.'
-    : doneToday>=goal ? `${doneToday-goal} past the goal. Everything from here is surplus.`
-    : `${goal-doneToday} more to close today out.`;
-
-  const act=Object.keys(map).length;
-  const met=goal?Object.keys(map).filter(k=>map[k].n>=goal).length:0;
-  const adh=spanDays?Math.round((goal?met:act)/spanDays*100):0;
-  const best=Object.keys(map).reduce((m,k)=>Math.max(m,map[k].n),0);
-  const ms=A.reduce((x,a)=>x+studyOf(a),0);
-  $('#adhStats').innerHTML=[
-    ['Current streak',streak()+'d'],
-    ['Longest streak',longestStreak()+'d'],
-    [goal?'Days on goal':'Days studied',goal?met+' / '+spanDays:act+' / '+spanDays],
-    [goal?'Adherence':'Show-up rate',adh+'%'],
-    ['Avg / active day',act?Math.round(A.length/act):0],
-    ['Best day',best],
-    ['Rest days',Math.max(0,spanDays-act)],
-    ['Time / active day',act?fmtDur(ms/act):'—']
-  ].map(([k,v])=>`<div class="stat"><div class="v">${unitize(v)}</div><div class="k">${k}</div></div>`).join('');
-
-  /* 14-day ribbon — height is volume, colour is that day's accuracy */
-  const t0=sod(Date.now()), goalLine=goal||0, cols=[];
-  for(let i=13;i>=0;i--){const d=addDays(t0,-i),k=dayKey(d),v=SMAP[k];cols.push({d,k,n:v?v.n:0,c:v?v.c:0,ms:v?v.ms:0})}
-  const mx=Math.max(goalLine,...cols.map(c=>c.n),1);
-  $('#wkStrip').innerHTML=cols.map((c,i)=>{
-    const acc=c.n?c.c/c.n*100:null;
-    const h=c.n?Math.max(5,c.n/mx*100):0;
-    const on=goalLine&&c.n>=goalLine;
-    return `<div class="wkcol${on?' met':''}" title="${c.d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})} — ${c.n} answered${c.n?', '+Math.round(acc)+'% correct, '+fmtDur(c.ms):''}">
-      <div class="t">${c.n?`<div class="f" style="height:${h}%;background:${accCol(acc)};animation-delay:${i*22}ms"></div>`:''}</div>
-      <div class="l">${c.d.getDate()}</div></div>`}).join('');
-  const rn=cols.reduce((x,c)=>x+c.n,0), rd=cols.filter(c=>c.n).length;
-  $('#ribNote').textContent = rn?`${rn} answered · ${rd} of 14 days active${goalLine?` · ${cols.filter(c=>c.n>=goalLine).length} on goal`:''}`:'nothing yet';
-}
-
-/* ---------- calendar ---------- */
-function shiftMonth(n){
-  const b=CALM||{y:new Date().getFullYear(),m:new Date().getMonth()};
-  const x=new Date(b.y,b.m+n,1);CALM={y:x.getFullYear(),m:x.getMonth()};renderCalendar();
-}
-function renderCalendar(){
-  const now=new Date();
-  if(!CALM)CALM={y:now.getFullYear(),m:now.getMonth()};
-  const first=new Date(CALM.y,CALM.m,1), dim=new Date(CALM.y,CALM.m+1,0).getDate();
-  const goal=DB.settings.goal||0, t0=sod(now).getTime();
-  $('#calTitle').textContent=first.toLocaleDateString(undefined,{month:'long',year:'numeric'});
-  $('#calDow').innerHTML=DOWL.map(d=>`<span>${d[0]}</span>`).join('');
-  let mn=0,mc=0,mms=0,md=0,peak=1;
-  for(let d=1;d<=dim;d++){const v=SMAP[dayKey(new Date(CALM.y,CALM.m,d))];
-    if(v){mn+=v.n;mc+=v.c;mms+=v.ms;md++;if(v.n>peak)peak=v.n}}
-  const scale=goal?Math.max(goal,peak*0.6):peak;
-  let html='';
-  for(let i=0;i<dowIdx(first);i++)html+='<div class="cday pad"></div>';
-  for(let d=1;d<=dim;d++){
-    const dt=new Date(CALM.y,CALM.m,d),k=dayKey(dt),v=SMAP[k];
-    const acc=v&&v.n?v.c/v.n*100:null;
-    const op=v?(0.10+0.42*clamp(v.n/scale,0,1)).toFixed(2):0;
-    const cls=[v?'':'void',k===today()?'today':'',(goal&&v&&v.n>=goal)?'met':'',k===CALSEL?'sel':'',dt.getTime()>t0?'fut':''].filter(Boolean).join(' ');
-    html+=`<button class="cday${cls?' '+cls:''}" data-day="${k}" title="${dt.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}${v?` — ${v.n} answered · ${Math.round(acc)}% · ${fmtDur(v.ms)}`:' — nothing logged'}">${v?`<i style="background:${accCol(acc)};opacity:${op}"></i>`:''}<b>${d}</b>${v?`<em style="color:${accCol(acc)}">${v.n}</em>`:''}</button>`;
-  }
-  $('#calGrid').innerHTML=html;
-  $('#calSum').textContent=mn?`${mn} answered · ${Math.round(mc/mn*100)}% · ${fmtDur(mms)} · ${md} active day${md===1?'':'s'}`:'nothing logged this month';
-  renderCalDay();
-}
-function renderCalDay(){
-  const el=$('#calDay');
-  if(!CALSEL){el.innerHTML='';return}
-  const d=new Date(CALSEL+'T00:00:00');
-  const list=SA.filter(a=>dayKey(a.ts)===CALSEL);
-  const o=sumOf(list);
-  const goal=DB.settings.goal||0;
-  const sys={};list.forEach(a=>{const k=(a.q&&a.q.system)||UNCLASSIFIED;const b=sys[k]||(sys[k]={c:0,n:0});b.n++;if(a.correct)b.c++});
-  const rows=Object.keys(sys).map(k=>({k,c:sys[k].c,n:sys[k].n,p:sys[k].c/sys[k].n*100})).sort((a,b)=>b.n-a.n).slice(0,6);
-  const sess=sessCounted().filter(s=>dayKey(s.ts)===CALSEL&&s.status==='done');
-  const hrs=list.map(a=>new Date(a.ts).getHours());
-  const win=hrs.length?`${pad(Math.min.apply(null,hrs))}:00 — ${pad(Math.max.apply(null,hrs))}:59`:'';
-  const first=list.length?new Date(list[0].ts):null;
-  el.innerHTML=`<div class="card" style="margin-top:14px">
-    <div class="dayhead">
-      <b>${d.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</b>
-      ${CALSEL===today()?'<span class="chip acc">Today</span>':''}
-      ${goal&&o.n>=goal?'<span class="chip amber">Goal met</span>':''}
-      <button class="btn ghost sm" id="calClear" style="margin-left:auto">Close</button>
-    </div>
-    ${o.n?`<div class="statgrid">
-      ${[['Answered',o.n],['Accuracy',Math.round(o.acc)+'%'],['Question time',fmtDur(o.ms)],['Answer time',fmtDur(o.ans)],
-         ['Avg question time',fmtT(o.ms/o.n/1000)],['Avg answer time',o.an?fmtT(o.ans/o.an/1000):'—'],['Sessions',sess.length],['Worked',win]]
-        .map(([k,v])=>`<div class="stat"><div class="v" style="${String(v).length>6?'font-size:19px':''}">${v}</div><div class="k">${k}</div></div>`).join('')}
-    </div>
-    <hr class="sep">
-    <p class="eyebrow" style="margin-bottom:10px">What you touched <span class="rule"></span></p>
-    <div class="bars">${rows.map(r=>barRow(r.k,r.p,Math.round(r.p)+'% · '+r.c+'/'+r.n,accCol(r.p))).join('')}</div>
-    ${sess.length?`<hr class="sep"><p class="eyebrow" style="margin-bottom:10px">Sessions <span class="rule"></span></p>${sess.map(sessionRow).join('')}`:''}`
-    :`<div class="empty"><h4>A rest day</h4><p class="tiny">Nothing was answered on this date.</p></div>`}
-  </div>`;
-  const cc=$('#calClear');if(cc)cc.onclick=()=>{CALSEL=null;renderCalendar()};
-}
-
-/* ---------- forward look: what the schedule is about to ask for ---------- */
-function renderForecast(){
-  const days=14, arr=new Array(days).fill(0);
-  let over=0, sched=0, t0=sod(Date.now()).getTime();
-  DB.questions.forEach(q=>{const st=DB.stats[q.id];
-    if(!st||!st.srs||!st.srs.due||!attOf(q.id).length)return;
-    sched++;
-    const d=Math.round((sod(st.srs.due).getTime()-t0)/DAYMS);
-    if(d<0)over++;else if(d<days)arr[d]++;
+/* ---------- the record, joined once per render ---------- */
+function pgData(){
+  if(PG.E)return PG.E;
+  if(timeBackfill())save();
+  const SS={};sessCounted().forEach(s=>{SS[s.id]=s});
+  PG.E=allAttempts().map(a=>{
+    const s=a.sess&&SS[a.sess],it=s&&s.items?s.items[a.qid]:null;
+    const key=(a.q.choices||[]).find(c=>c.isCorrect);
+    a.s=s||null;a.pos=s?s.order.indexOf(a.qid):-1;a.size=s?s.order.length:0;
+    a.ans=ansOf(a);a.study=studyOf(a);
+    a.struckKey=!!(it&&key&&a.chosen!==key.label&&(it.struck||[]).indexOf(key.label)>=0);
+    a.hasLure=(a.q.choices||[]).some(isLure);a.lure=tookLure(a.q,a);
+    return a;
   });
-  const cols=arr.map((n,i)=>{const dt=addDays(new Date(t0),i);
-    return {n,c:0,flat:true,lab:i===0?'Now':String(dt.getDate()),
-      full:i===0?'Due today':dt.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'})}});
-  hgram('#fcChart',cols);
-  const wk=arr.slice(0,7).reduce((a,b)=>a+b,0);
-  $('#fcNote').textContent = sched
-    ? `${over} overdue · ${arr[0]} due today · ${wk} in the next seven days · ${sched} questions on the schedule. ${over>wk?'The backlog is bigger than the week ahead — clear it before adding new material.':'The load ahead is manageable.'}`
-    : 'Answer a few questions and the spacing schedule starts filling this in.';
+  return PG.E;
 }
+const pgSince=days=>days==='all'?0:sod(Date.now()).getTime()-(parseInt(days,10)-1)*DAYMS;
+function pgWilson(c,n){
+  if(!n)return null;
+  const z=1.96,p=c/n,d=1+z*z/n,m=p+z*z/(2*n),r=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n));
+  return [Math.max(0,(m-r)/d*100),Math.min(100,(m+r)/d*100)];
+}
+/* first sightings before t: the last PG_FIRST of them, and the block before that */
+function pgForm(F,t,skip){
+  let k=F.length;if(t!=null){let lo=0,hi=F.length;while(lo<hi){const m=(lo+hi)>>1;if(F[m].ts<t)lo=m+1;else hi=m}k=lo}
+  const hi=k-(skip||0),lo=Math.max(0,hi-PG_FIRST),w=hi>0?F.slice(lo,hi):[];
+  const c=w.filter(a=>a.correct).length;
+  return {n:w.length,c,p:w.length?c/w.length*100:null};
+}
+const pgMed=xs=>{if(!xs.length)return null;const a=xs.slice().sort((x,y)=>x-y),m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2};
 
-/* ---------- volume + accuracy across the window ---------- */
-function renderVolume(A){
-  const bs=bucketSeries(A), out=bs.out, per=bs.mode;
-  hgram('#volChart',out);
-  const active=out.filter(b=>b.n).length, peak=Math.max(0,...out.map(b=>b.n));
-  $('#volNote').textContent = A.length
-    ? `Each column is one ${per}; the green base is what you got right. ${out.length} ${per}s shown, ${active} with activity, busiest ${per} ${peak} questions.`
-    : 'No answers in this window.';
-  const pts=out.map(b=>b.n?b.c/b.n*100:null);
-  const have=pts.map((v,i)=>[v,i]).filter(p=>p[0]!=null);
-  const svg=$('#accChart');
-  if(have.length<2){svg.innerHTML='';$('#accNote').textContent=`Two active ${per}s and the accuracy line appears.`;return}
-  const W=600,H=130,pd=8;
-  const x=i=>pd+(out.length<2?0:i*(W-2*pd)/(out.length-1)), y=v=>H-pd-(v/100)*(H-2*pd);
-  const dd=have.map(p=>`${x(p[1])},${y(p[0])}`).join(' ');
-  svg.innerHTML=`<line class="gr" x1="0" y1="${y(50)}" x2="${W}" y2="${y(50)}"/><line class="gr" x1="0" y1="${y(75)}" x2="${W}" y2="${y(75)}"/>
-    <polyline class="ln" points="${dd}"/>${have.map(p=>`<circle class="pt" cx="${x(p[1])}" cy="${y(p[0])}" r="2.5"/>`).join('')}`;
-  const lastV=have[have.length-1][0], firstV=have[0][0];
-  const dir=lastV-firstV;
-  $('#accNote').textContent=`Accuracy per ${per} · lines at 50% and 75%. Latest ${Math.round(lastV)}%, ${Math.abs(dir)<2?'flat across the window':(dir>0?'up':'down')+' '+Math.abs(Math.round(dir))+' points since the start of it'}.`;
+/* ---------- small pieces of markup ---------- */
+/* an expressive number that counts to its value; k names it so a later
+   render counts from where it was, and only a difference moves */
+function pgN(k,v,dec){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-d="${dec||0}">${(+v).toFixed(dec||0)}</b>`}
+const pgU=u=>`<small class="pg-u">${u}</small>`;
+const pgEmpty=(t,s)=>`<div class="pg-empty"><span class="pg-empty__shape" aria-hidden="true"></span><b>${t}</b><span>${s}</span></div>`;
+function pgCard(title,body,opt){
+  opt=opt||{};
+  return `<section class="pg-card${opt.cls?' '+opt.cls:''}"${opt.id?` id="${opt.id}"`:''}>
+    ${title?`<header class="pg-card__h"><div><h3>${title}</h3>${opt.sub?`<p>${opt.sub}</p>`:''}</div>${opt.tool||''}</header>`:''}
+    <div class="pg-card__b">${body}</div></section>`;
 }
-/* v6.13 — average answer time (solid) and question time (dashed) per bucket */
-function renderTimeTrend(A){
-  const bs=bucketSeries(A), out=bs.out, per=bs.mode, svg=$('#timeChart');
-  const qa=out.map((b,i)=>[b.an?b.ans/b.an/1000:null,i]).filter(p=>p[0]!=null);
-  const qt=out.map((b,i)=>[b.n?b.ms/b.n/1000:null,i]).filter(p=>p[0]!=null);
-  if(qt.length<2){svg.innerHTML='';$('#timeNote').textContent=`Two active ${per}s and the time lines appear.`;return}
-  const W=600,H=130,pd=8,top=Math.max(...qt.map(p=>p[0]),...qa.map(p=>p[0]),1)*1.1;
-  const x=i=>pd+(out.length<2?0:i*(W-2*pd)/(out.length-1)), y=v=>H-pd-(v/top)*(H-2*pd);
-  const line=(pts,cls)=>`<polyline class="ln${cls}" points="${pts.map(p=>`${x(p[1])},${y(p[0])}`).join(' ')}"/>`;
-  svg.innerHTML=`<line class="gr" x1="0" y1="${y(top/2)}" x2="${W}" y2="${y(top/2)}"/>`+line(qt,' dash')+
-    (qa.length>1?line(qa,'')+qa.map(p=>`<circle class="pt" cx="${x(p[1])}" cy="${y(p[0])}" r="2.5"/>`).join(''):'');
-  const la=qa.length?qa[qa.length-1][0]:null, lt=qt[qt.length-1][0];
-  $('#timeNote').textContent=`Per ${per}, averaged per question. Solid: answer time. Dashed: question time. Dotted line at ${fmtT(top/2)}. Latest ${per}: ${la==null?'no answers':'answer '+fmtT(la)}, question ${fmtT(lt)}.`;
+function pgSeg(id,opts,v,label){
+  const i=Math.max(0,opts.findIndex(o=>o[0]===v));
+  return `<div class="pl-seg pg-seg" data-pgseg="${id}" role="radiogroup" aria-label="${esc(label)}" style="--n:${opts.length};--i:${i}">
+    <span class="pl-seg__ind" aria-hidden="true"></span>${opts.map(o=>`<button type="button" class="pl-press${o[0]===v?' on':''}" role="radio" aria-checked="${o[0]===v}" data-v="${o[0]}">${esc(o[1])}</button>`).join('')}</div>`;
 }
-
-/* ---------- like-for-like period comparison ---------- */
-function cmpCard(title,note,now,prev){
-  const a=sumOf(now), b=sumOf(prev);
-  const r=[
-    ['Questions',a.n,delta(a.n,b.n)],
-    ['Accuracy',a.acc==null?'—':Math.round(a.acc)+'%',(a.acc!=null&&b.acc!=null)?delta(Math.round(a.acc),Math.round(b.acc),'pt'):''],
-    ['Time studied',fmtDur(a.ms),delta(Math.round(a.ms/60000),Math.round(b.ms/60000),'m')],
-    ['Avg answer time',a.an?fmtT(a.ans/a.an/1000):'—',(a.an&&b.an)?delta(Math.round(a.ans/a.an/1000),Math.round(b.ans/b.an/1000),'s').replace(/delta (up|down)/,'delta'):''],  // faster is not better or worse by itself, so no colour
-    ['Active days',a.days,delta(a.days,b.days)],
-    ['Avg / active day',a.days?Math.round(a.n/a.days):0,delta(a.days?Math.round(a.n/a.days):0,b.days?Math.round(b.n/b.days):0)]
-  ];
-  return `<div class="card"><p class="eyebrow" style="margin-bottom:10px">${esc(title)} <span class="rule"></span></p>
-    ${r.map(row=>`<div class="cmprow"><span class="k">${row[0]}</span><span class="v">${row[1]}${row[2]||''}</span></div>`).join('')}
-    <p class="tiny muted" style="margin:12px 0 0">${esc(note)}</p></div>`;
-}
-function renderCompare(){
-  const now=new Date(), t=sod(now);
-  const intoWeek=dowIdx(t)+1, intoMonth=now.getDate();
-  const w0=addDays(t,-(intoWeek-1)).getTime();
-  const wPrev=addDays(new Date(w0),-7).getTime();
-  const m0=new Date(now.getFullYear(),now.getMonth(),1).getTime();
-  const mPrev=new Date(now.getFullYear(),now.getMonth()-1,1).getTime();
-  const mPrevEnd=Math.min(addDays(new Date(mPrev),intoMonth).getTime(),m0);
-  $('#statCompare').innerHTML=
-    cmpCard('This week vs last','Compared against the same '+intoWeek+' day'+(intoWeek===1?'':'s')+' of last week, so a half-finished week is not judged against a whole one.',
-      between(SA,w0,Date.now()+1), between(SA,wPrev,addDays(new Date(wPrev),intoWeek).getTime()))
-    + cmpCard('This month vs last','Measured through day '+intoMonth+' of each month.',
-      between(SA,m0,Date.now()+1), between(SA,mPrev,mPrevEnd));
-}
-
-/* ---------- week and month ladders ---------- */
-function ladder(el,items){
-  const any=items.some(i=>i.n);
-  $(el).innerHTML=any?items.map(i=>barRow(i.k,i.n?i.p:0,i.n?Math.round(i.p)+'% · '+i.n+'q':'—',i.n?accCol(i.p):'var(--panel3)')).join('')
-    :'<span class="tiny muted">Not enough history yet.</span>';
-}
-function renderPeriodBars(){
-  const t=sod(Date.now()), w0=addDays(t,-dowIdx(t));
-  const wk=[];
-  for(let i=7;i>=0;i--){const s=addDays(w0,-7*i), e=addDays(s,7);
-    const o=sumOf(between(SA,s.getTime(),e.getTime()));
-    wk.push({k:i===0?'This week':s.toLocaleDateString(undefined,{day:'numeric',month:'short'}),n:o.n,p:o.acc||0})}
-  ladder('#statWeeks',wk);
-  const mo=[];
-  for(let i=5;i>=0;i--){const s=new Date(t.getFullYear(),t.getMonth()-i,1), e=new Date(t.getFullYear(),t.getMonth()-i+1,1);
-    const o=sumOf(between(SA,s.getTime(),e.getTime()));
-    mo.push({k:i===0?'This month':s.toLocaleDateString(undefined,{month:'long'}),n:o.n,p:o.acc||0})}
-  ladder('#statMonths',mo);
-}
-
-/* ---------- when in the day, and which day ---------- */
-const HBLOCKS=[[0,5,'Late night 00–05'],[5,9,'Early 05–09'],[9,12,'Morning 09–12'],[12,17,'Afternoon 12–17'],[17,21,'Evening 17–21'],[21,24,'Night 21–24']];
-function renderRhythm(A){
-  const hb=HBLOCKS.map(b=>({k:b[2],c:0,n:0}));
-  const dw=DOWL.map(d=>({k:d,c:0,n:0}));
-  A.forEach(a=>{const d=new Date(a.ts), h=d.getHours();
-    for(let i=0;i<HBLOCKS.length;i++)if(h>=HBLOCKS[i][0]&&h<HBLOCKS[i][1]){hb[i].n++;if(a.correct)hb[i].c++;break}
-    const j=dowIdx(d);dw[j].n++;if(a.correct)dw[j].c++;});
-  const paint=(el,rows)=>{const live=rows.filter(r=>r.n);
-    $(el).innerHTML=live.length?live.map(r=>{const p=r.c/r.n*100;
-      return barRow(r.k,p,Math.round(p)+'% · '+r.n+'q',accCol(p))}).join(''):'<span class="tiny muted">Not enough data in this window.</span>'};
-  paint('#statHour',hb);paint('#statDow',dw);
-}
-
-/* ---------- first sighting vs the ones you came back to ---------- */
-function renderPassDepth(A){
-  const b=[{k:'First sighting',c:0,n:0},{k:'Second sighting',c:0,n:0},{k:'Third or later',c:0,n:0}];
-  A.forEach(a=>{const i=a.seq===0?0:a.seq===1?1:2;b[i].n++;if(a.correct)b[i].c++});
-  const live=b.filter(r=>r.n);
-  $('#statPass').innerHTML=live.length?live.map(r=>{const p=r.c/r.n*100;
-    return barRow(r.k,p,Math.round(p)+'% · '+r.c+'/'+r.n,accCol(p))}).join(''):'<span class="tiny muted">Not enough data in this window.</span>';
-  let rec=0,recN=0;
-  DB.questions.forEach(q=>{const at=attOf(q.id);
-    for(let i=0;i<at.length-1;i++){if(!at[i].correct){recN++;if(at[i+1].correct)rec++;break}}});
-  $('#passNote').textContent = recN
-    ? `Of ${recN} question${recN===1?'':'s'} you first missed and later saw again, ${Math.round(rec/recN*100)}% came back right.`
-    : 'Nothing missed and met again yet.';
-}
-
-/* ---------- what the spacing schedule thinks of your bank ---------- */
-function renderMemory(){
-  let never=0,learn=0,young=0,mature=0,lapses=0,ease=0,en=0,dueNow=0,leech=0;
-  DB.questions.forEach(q=>{const st=DB.stats[q.id];
-    if(!st||!st.srs||!attOf(q.id).length){never++;return}
-    const r=st.srs;lapses+=r.lapses||0;ease+=r.ease||0;en++;
-    if((r.lapses||0)>=3)leech++;
-    if(r.due<=Date.now())dueNow++;
-    if((r.int||0)<7)learn++;else if(r.int<21)young++;else mature++;
-  });
-  $('#statSrs').innerHTML=[
-    ['In rotation',en],['Never seen',never],['Due now',dueNow],['Learning',learn],
-    ['Maturing',young],['Mature',mature],['Total lapses',lapses],['Avg ease',en?(ease/en).toFixed(2):'—']
-  ].map(([k,v])=>`<div class="stat"><div class="v">${unitize(v)}</div><div class="k">${k}</div></div>`).join('');
-  const tot=learn+young+mature;
-  $('#statSrsBars').innerHTML=tot?[
-    barRow('Learning (<7d)',learn/tot*100,learn+' q','var(--rose)'),
-    barRow('Maturing (7–21d)',young/tot*100,young+' q','var(--amber)'),
-    barRow('Mature (21d+)',mature/tot*100,mature+' q','var(--jade)'),
-    barRow('Lapsed 3+ times',tot?leech/tot*100:0,leech+' q','var(--accent)')
-  ].join(''):'<span class="tiny muted">Nothing is on the schedule yet.</span>';
-}
-
-/* ---------- progress controls ---------- */
-$('#rangeSeg').addEventListener('click',e=>{const b=e.target.closest('[data-range]');if(!b)return;
-  RANGE=b.dataset.range;renderStats()});
-$('#calPrev').onclick=()=>shiftMonth(-1);
-$('#calNext').onclick=()=>shiftMonth(1);
-$('#calToday').onclick=()=>{const n=new Date();CALM={y:n.getFullYear(),m:n.getMonth()};CALSEL=today();renderCalendar();
-  const c=$('#calDay').firstElementChild;if(c)c.scrollIntoView({behavior:'smooth',block:'nearest'})};
-$('#calGrid').addEventListener('click',e=>{const b=e.target.closest('[data-day]');if(!b)return;
-  CALSEL=(CALSEL===b.dataset.day)?null:b.dataset.day;renderCalendar();
-  const c=$('#calDay').firstElementChild;if(c)c.scrollIntoView({behavior:'smooth',block:'nearest'})});
+/* a bar that grows from its start; --s is its share, 0–1 */
+const pgBar=(s,cls)=>`<span class="pg-bar${cls?' '+cls:''}"><i style="--s:${clamp(s,0,1).toFixed(4)}"></i></span>`;
+/* one formatter per set of options: a heat map labels ~190 days, and a new
+   toLocaleDateString each time cost 20ms of the Habit build */
+const PG_DTF={};
+const pgDate=(t,o)=>{o=o||{weekday:'short',day:'numeric',month:'short'};const k=JSON.stringify(o);
+  return (PG_DTF[k]||(PG_DTF[k]=new Intl.DateTimeFormat(undefined,o))).format(new Date(t))};
 
 /* ============================================================
-   HISTORY
+   FORM
    ============================================================ */
-function renderHistory(){
-  const list=DB.sessions.slice().sort((a,b)=>(b.ts||0)-(a.ts||0));
-  const open=list.filter(sessOpen),shut=list.filter(s=>!sessOpen(s));
-  const row=s=>{
-    const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s);
-    return `<div class="qrow"><div style="min-width:0"><div class="stem">${esc(s.config.label||'Session')} — ${sc.n} questions</div>
-      <div class="meta">${sessChip(s)}
-      <span class="chip">${new Date(s.ts).toLocaleString()}</span>
-      <span class="chip ${s.config.mode==='test'?'acc':''}">${s.config.mode==='test'?'Exam':'Tutor'}</span>
-      <span class="chip">${fmtLong((s.elapsed||0)/1000)}</span>
-      <span class="chip">${st==='done'?sc.c+'/'+sc.n+' correct':ans+'/'+sc.n+' answered'}</span></div></div>
-      <div class="acts"><span class="mono tiny" style="align-self:center;color:${sc.p>=70?'var(--jade)':'var(--dim)'}">${st==='done'?sc.p+'%':''}</span>
-      ${st==='done'
-        ?`<button class="btn ghost sm" data-open="${s.id}">Report</button>`
-        :`<button class="btn sm" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button class="btn ghost sm" data-sessfinish="${s.id}">Finish</button>`}
-      <button class="btn ghost sm" data-delsess="${s.id}">Delete</button></div></div>`;
-  };
-  $('#histList').innerHTML=(list.length
-    ?(open.length?'<p class="figsub">Still open</p>'+open.map(row).join('')+'<p class="figsub" style="margin-top:22px">Finished</p>':'')
-      +(shut.length?shut.map(row).join(''):'<div class="empty"><h4>Nothing finished yet</h4></div>')
-    :'<div class="empty"><h4>No sessions yet</h4></div>');
+function pgFormHTML(){
+  const E=pgData(),F=E.filter(a=>a.seq===0),t=totals();
+  if(F.length<10)return pgCard('',pgEmpty('Your form appears after ten new questions','It is worked out from questions you meet for the first time, the only kind the exam gives you.'),{cls:'pg-hero'});
+  const now=pgForm(F),was=pgForm(F,null,PG_FIRST),ci=pgWilson(now.c,now.n);
+  const d=was.n>=30?now.p-was.p:null;
+  const w7=E.filter(a=>a.ts>=pgSince(7)),c7=w7.filter(a=>a.correct).length;
+  const best=pgBestForm(F);
+  let say;
+  if(now.n<PG_FIRST)say=`From your first ${now.n} new questions. It settles once you reach ${PG_FIRST}.`;
+  else if(d==null)say='Your last 100 new questions. The comparison starts after 130.';
+  else if(Math.abs(d)<2.5)say=`Level with the 100 before. A change under three points is within the noise.`;
+  else if(d>0)say=`${Math.round(d)} points better than the 100 before${best&&now.p>=best-0.5?', your best stretch so far':''}.`;
+  else say=`${Math.round(-d)} points below the 100 before. Open Gaps to see what changed.`;
+  const hero=`<div class="pg-hero__top">
+      <div class="pg-hero__lead">
+        <span class="pg-over">Your form</span>
+        <div class="pg-disp">${pgN('form',now.p)}${pgU('%')}</div>
+        <span class="pg-hero__ci">${ci?`likely ${Math.round(ci[0])}–${Math.round(ci[1])}%`:''}</span>
+      </div>
+      ${d!=null?`<span class="pg-delta ${d>=2.5?'is-up':d<=-2.5?'is-down':''}">${d>=0?'+':'−'}${pgN('formd',Math.abs(d))}<small>pt</small></span>`:''}
+    </div>
+    <p class="pg-hero__say">${say}</p>
+    <p class="pg-hero__def">Accuracy on your last ${now.n} first sightings: questions you had never met before.</p>
+    <div class="pg-trio">
+      <div><span>${pgN('f7',w7.length?c7/w7.length*100:null)}${w7.length?pgU('%'):''}</span><em>Every answer, 7 days</em></div>
+      <div><span>${pgN('n7',w7.length)}</span><em>Answered, 7 days</em></div>
+      <div><span>${pgN('cov',t.total?t.used/t.total*100:0)}${pgU('%')}</span><em>${t.used} of ${t.total} seen</em></div>
+    </div>`;
+  return pgCard('',hero,{cls:'pg-hero'})+pgTrendCard()+pgStickCard(E)+pgReadyCard()+pgBestsCard(E);
 }
+/* the best form ever reached: the highest window of 100 first sightings */
+function pgBestForm(F){
+  if(F.length<PG_FIRST)return null;
+  let c=0,best=0;
+  for(let i=0;i<F.length;i++){if(F[i].correct)c++;if(i>=PG_FIRST&&F[i-PG_FIRST].correct)c--;if(i>=PG_FIRST-1)best=Math.max(best,c)}
+  return best/PG_FIRST*100;
+}
+/* buckets across the chosen range: days for a month, weeks after that,
+   months once the record is longer than seven of them */
+function pgBuckets(rng,E){
+  const end=sod(Date.now()),first=E.length?sod(E[0].ts):end;
+  const span=rng==='all'?Math.max(14,Math.round((end-first)/DAYMS)+1):parseInt(rng,10);
+  const out=[];
+  if(span<=31){for(let i=span-1;i>=0;i--){const s=addDays(end,-i);out.push({s:s.getTime(),e:addDays(s,1).getTime(),lab:String(s.getDate()),full:pgDate(s)})}}
+  else if(span<=210){const w0=addDays(end,-dowIdx(end));for(let i=Math.ceil(span/7)-1;i>=0;i--){const s=addDays(w0,-7*i);
+    out.push({s:s.getTime(),e:addDays(s,7).getTime(),lab:s.getDate()+' '+s.toLocaleDateString(undefined,{month:'short'}),full:'Week of '+pgDate(s,{day:'numeric',month:'long'})})}}
+  else{for(let i=Math.ceil(span/30.4);i>=0;i--){const s=new Date(end.getFullYear(),end.getMonth()-i,1);
+    out.push({s:s.getTime(),e:new Date(s.getFullYear(),s.getMonth()+1,1).getTime(),lab:s.toLocaleDateString(undefined,{month:'short'}),full:s.toLocaleDateString(undefined,{month:'long',year:'numeric'})})}}
+  out.forEach(b=>{b.n=0;b.c=0});
+  let j=0;E.forEach(a=>{while(j<out.length&&a.ts>=out[j].e)j++;if(j<out.length&&a.ts>=out[j].s){out[j].n++;if(a.correct)out[j].c++}});
+  return {out,unit:span<=31?'day':span<=210?'week':'month'};
+}
+function pgTrendCard(){
+  const tool=pgSeg('trend',[['30','30 days'],['90','90 days'],['all','All']],PG.rng.trend,'Chart range');
+  return pgCard('Accuracy over time',`<div class="pg-chart" id="pgTrend">${pgTrendSVG()}</div>`,
+    {sub:'The line is your form; each dot is every answer in that period, larger when you did more.',tool,cls:'pg-trend'});
+}
+function pgTrendSVG(){
+  const E=pgData(),F=E.filter(a=>a.seq===0);
+  const {out,unit}=pgBuckets(PG.rng.trend,E);
+  if(out.filter(b=>b.n).length<2)return pgEmpty('Two active '+unit+'s draw the line','Each '+unit+' you study adds a point.');
+  const W=Math.max(280,PG.w-40),H=210,top=12,vb=34,base=H-vb-22,L=8,Rt=34;
+  const x=i=>L+(out.length<2?0:i*(W-L-Rt)/(out.length-1)),y=p=>top+(1-p/100)*(base-top);
+  const mx=Math.max(1,...out.map(b=>b.n));
+  const fl=out.map((b,i)=>{const f=pgForm(F,b.e);return f.n>=20?[x(i),y(f.p),f]:null});
+  const pts=fl.filter(Boolean);
+  const path=pts.length>1?pgSmooth(pts):'';
+  const bw=Math.max(2,Math.min(18,(W-L-Rt)/out.length*.55));
+  const every=Math.ceil(out.length/6);
+  PG.trend={out,fl,x,unit};
+  return `<svg class="pg-svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Accuracy over time">
+    ${[25,50,75].map(g=>`<line class="pg-gl" x1="${L}" x2="${W-Rt+4}" y1="${y(g)}" y2="${y(g)}"/><text class="pg-ax" x="${W-2}" y="${y(g)+4}" text-anchor="end">${g}%</text>`).join('')}
+    <g class="pg-vol">${out.map((b,i)=>b.n?`<rect style="--i:${i}" x="${x(i)-bw/2}" y="${H-22-b.n/mx*vb}" width="${bw}" height="${b.n/mx*vb}" rx="${Math.min(3,bw/2)}"/>`:'').join('')}</g>
+    ${path?`<path class="pg-line" pathLength="1" d="${path}"/>`:''}
+    <g class="pg-dots">${out.map((b,i)=>b.n>=3?`<circle style="--i:${i}" cx="${x(i)}" cy="${y(b.c/b.n*100)}" r="${(2.5+3.5*Math.sqrt(b.n/mx)).toFixed(1)}"/>`:'').join('')}</g>
+    ${out.map((b,i)=>(i%every===0||i===out.length-1)&&!(i!==out.length-1&&out.length-1-i<every*.6)?`<text class="pg-ax" x="${x(i)}" y="${H-4}" text-anchor="middle">${esc(b.lab)}</text>`:'').join('')}
+    <line class="pg-guide" x1="0" x2="0" y1="${top}" y2="${H-22}"/>
+  </svg><p class="pg-read" aria-live="polite">${pgTrendRead(out.length-1)}</p>`;
+}
+/* a curve through the points that never overshoots them (monotone) */
+function pgSmooth(p){
+  const n=p.length,m=[];
+  for(let i=0;i<n;i++){
+    const d0=i>0?(p[i][1]-p[i-1][1])/(p[i][0]-p[i-1][0]):null,d1=i<n-1?(p[i+1][1]-p[i][1])/(p[i+1][0]-p[i][0]):null;
+    m.push(d0==null?d1:d1==null?d0:(d0*d1<=0?0:(d0+d1)/2));
+  }
+  let d=`M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
+  for(let i=0;i<n-1;i++){const h=(p[i+1][0]-p[i][0])/3;
+    d+=` C${(p[i][0]+h).toFixed(1)},${(p[i][1]+m[i]*h).toFixed(1)} ${(p[i+1][0]-h).toFixed(1)},${(p[i+1][1]-m[i+1]*h).toFixed(1)} ${p[i+1][0].toFixed(1)},${p[i+1][1].toFixed(1)}`}
+  return d;
+}
+function pgTrendRead(i){
+  const T=PG.trend;if(!T)return '';const b=T.out[i],f=T.fl[i];
+  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} answered, ${Math.round(b.c/b.n*100)}% right`:'nothing answered'}${f?` · form ${Math.round(f[2].p)}%`:''}`;
+}
+/* Is it sticking: the two things a second sighting can tell you */
+function pgStickCard(E){
+  let rec=0,recN=0,ret=0,retN=0;
+  const by={};E.forEach(a=>{(by[a.qid]=by[a.qid]||[]).push(a)});
+  Object.keys(by).forEach(id=>{const at=by[id];
+    for(let i=0;i<at.length-1;i++){if(!at[i].correct){recN++;if(at[i+1].correct)rec++;break}}
+    for(let i=0;i<at.length-1;i++){if(at[i].correct){retN++;if(at[i+1].correct)ret++;break}}});
+  if(recN+retN<5)return pgCard('Is it sticking?',pgEmpty('Meet a question twice and this fills in','The review queue brings them back.'));
+  const one=(k,lab,c,n,def)=>`<div class="pg-stick">
+      <div class="pg-stick__v">${n?pgN(k,c/n*100)+pgU('%'):'—'}</div>
+      <div class="pg-stick__t"><b>${lab}</b><span>${def}</span>${n?pgBar(c/n):''}<em>${c} of ${n}</em></div></div>`;
+  return pgCard('Is it sticking?',
+    one('rec','Recovered',rec,recN,'Missed the first time, right the next')+
+    one('ret','Kept',ret,retN,'Right the first time, still right the next'),
+    {sub:'What happens the next time you meet a question. All time.',cls:'is-half'});
+}
+/* readiness: the same four measures Home shows, drawn as one bar whose
+   segments are as wide as their weight and as full as their score */
+function pgReadyCard(){
+  const R=readiness();
+  const seg=R.parts.map((p,i)=>`<span class="pg-rd__seg" style="flex:${p.w}"><i style="--s:${p.v==null?0:(p.v/100).toFixed(3)};--i:${i}"></i></span>`).join('');
+  const rows=R.parts.map((p,i)=>`<li><span class="pg-key" style="--i:${i}"></span><b>${esc(p.k)}</b><span>${esc(p.lab)}</span><em>${p.v==null?'—':Math.round(p.v)}</em></li>`).join('');
+  return pgCard('Readiness',`<div class="pg-rd__top"><div class="pg-big">${pgN('ready',R.score)}<small class="pg-u">/100</small></div><b class="pg-rd__w">${READY_WORD(R.score)}</b></div>
+    <div class="pg-rd">${seg}</div><ul class="pg-rd__l">${rows}</ul>
+    <p class="pg-note">${R.thin?'Too little history to lean on yet. Read it as a direction.':'Each segment is as wide as its weight and as full as its score. Not a predicted exam score.'}</p>`,
+    {cls:'is-half',tool:'<button class="pl-ib pl-press" data-note="readiness" aria-label="How readiness is worked out">'+sxIc('i-info')+'</button>'});
+}
+function pgBestsCard(E){
+  const fin=sessCounted().filter(s=>s.status==='done'&&s.order&&s.order.length>=20);
+  let bs=null;fin.forEach(s=>{const sc=sessScore(s);if(!bs||sc.p>bs.p)bs=Object.assign({s},sc)});
+  const map=byDay(E),dy={},wk={};
+  Object.keys(map).forEach(k=>{const v=map[k],d=new Date(k+'T00:00:00'),wkk=dayKey(addDays(d,-dowIdx(d)));dy[k]=v.n;
+    const w=wk[wkk]||(wk[wkk]={n:0,c:0,k:wkk});w.n+=v.n;w.c+=v.c});
+  let bw=null;Object.values(wk).forEach(w=>{if(w.n>=50&&(!bw||w.c/w.n>bw.c/bw.n))bw=w});
+  let bd=null;Object.keys(dy).forEach(k=>{if(!bd||dy[k]>dy[bd])bd=k});
+  const tiles=[
+    bs&&['bs',bs.p,'%','Best session',`${bs.c} of ${bs.n} · ${pgDate(bs.s.ts,{day:'numeric',month:'short'})}`,bs.s.id],
+    bw&&['bw',bw.c/bw.n*100,'%','Best week',`${bw.n} answered · from ${pgDate(new Date(bw.k+'T00:00:00'),{day:'numeric',month:'short'})}`],
+    bd&&['bd',dy[bd],'','Most in a day',pgDate(new Date(bd+'T00:00:00'),{day:'numeric',month:'short',year:'numeric'})],
+    ['bstk',longestStreak(),'d','Longest streak',streak()?'now '+streak()+' days':'not running']
+  ].filter(Boolean);
+  return pgCard('Your bests',`<div class="pg-tiles">${tiles.map(t=>`<${t[5]?`button type="button" class="pg-tile pl-press" data-open="${t[5]}"`:'div class="pg-tile"'}><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b><em>${esc(t[4])}</em></${t[5]?'button':'div'}>`).join('')}</div>`,
+    {sub:'Sessions of 20 questions or more; weeks of 50 answers or more.'});
+}
+
+/* ============================================================
+   HABIT
+   ============================================================ */
+function pgHabitHTML(){
+  const E=pgData(),goal=DB.settings.goal||0,map=byDay(E),tk=today();
+  const n0=(map[tk]||{n:0}).n,pct=goal?Math.min(1,n0/goal):(n0?1:0);
+  const st=streak(),t0=sod(Date.now()),w0=addDays(t0,-dowIdx(t0));
+  const days=DOWL.map((l,i)=>{const d=addDays(w0,i),k=dayKey(d),v=map[k],fut=d>t0;
+    const cls=fut?'is-fut':!v?'is-rest':goal&&v.n>=goal?'is-met':'is-on';
+    return `<span class="pg-wd ${cls}${k===tk?' is-today':''}" style="--i:${i}" title="${pgDate(d,{weekday:'long',day:'numeric',month:'short'})}${v?' — '+v.n+' answered':''}"><i></i><em>${l[0]}</em></span>`}).join('');
+  const R=52,C=2*Math.PI*R;
+  const line=!goal?'Set a daily goal in Settings and this ring keeps you to it.'
+    :n0>=goal?`Goal met. ${n0-goal?n0-goal+' past it; the rest is surplus.':'Exactly on it.'}`
+    :n0?`${goal-n0} more closes today.`:`Nothing yet today. ${goal} closes it.`;
+  const hero=`<div class="pg-today">
+      <div class="pg-ring" style="--p:${pct.toFixed(4)};--c:${C.toFixed(2)}">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pg-ring__t" cx="60" cy="60" r="${R}"/><circle class="pg-ring__f" cx="60" cy="60" r="${R}" pathLength="1"/></svg>
+        <div class="pg-ring__c"><b class="pg-ring__n">${pgN('today',n0)}</b><span>${goal?'of '+goal:'today'}</span></div>
+      </div>
+      <div class="pg-today__r">
+        <span class="pg-over">Today</span>
+        <p class="pg-today__line">${line}</p>
+        <div class="pg-streak"><span class="pg-big">${pgN('stk',st)}${pgU(st===1?'day':'days')}</span><em>streak · best ${longestStreak()}</em></div>
+      </div>
+    </div>
+    <div class="pg-week" aria-label="This week">${days}</div>`;
+  return pgCard('',hero,{cls:'pg-hero'})+pgHeatCard(map,goal)+pgAdhCard(E,map,goal)+pgWeeksCard(E,goal)+pgAheadCard()+pgHoursCard(E);
+}
+function pgHeatCard(map,goal){
+  const inner=Math.max(260,PG.w-40),gap=4;
+  const cols=clamp(Math.floor((inner+gap)/(16+gap)),10,27);
+  const t0=sod(Date.now()),last=addDays(t0,6-dowIdx(t0)),start=addDays(last,-(cols*7-1));
+  const act=Object.keys(map).map(k=>map[k].n).sort((a,b)=>a-b);
+  const ref=goal||pgMed(act)||1;
+  const lvl=n=>!n?0:n<ref*.5?1:n<ref?2:n<ref*1.5?3:4;
+  let cells='',months='',on=0,met=0,days=0;
+  for(let c=0;c<cols;c++){
+    const top=addDays(start,c*7);
+    const m=[0,1,2,3,4,5,6].map(r=>addDays(top,r)).find(d=>d.getDate()===1);
+    /* the first column names its month only if the next one does not start within two weeks */
+    const lead=c===0&&addDays(top,7).getMonth()===top.getMonth()&&addDays(top,20).getMonth()===top.getMonth();
+    months+=`<span>${m||lead?esc(pgDate(m||top,{month:'short'})):''}</span>`;
+    for(let r=0;r<7;r++){const d=addDays(top,r),k=dayKey(d),v=map[k],fut=d>t0;
+      if(!fut){days++;if(v){on++;if(goal&&v.n>=goal)met++}}
+      cells+=fut?'<span class="pg-hc is-fut"></span>'
+        :`<button type="button" class="pg-hc pl-press l${lvl(v&&v.n)}${k===PG.day?' is-sel':''}${k===today()?' is-today':''}" data-pgday="${k}" style="--c:${c}" aria-label="${pgDate(d,{weekday:'long',day:'numeric',month:'long'})}: ${v?v.n+' answered':'rest day'}"></button>`}
+  }
+  const legend=`<span class="pg-hl"><em>Less</em>${[0,1,2,3,4].map(l=>`<span class="pg-hc l${l}"></span>`).join('')}<em>More</em></span>`;
+  return pgCard('Every day',`<div class="pg-heat" style="--cols:${cols}"><div class="pg-heat__m">${months}</div><div class="pg-heat__g" id="pgHeat">${cells}</div></div>
+    <div class="pg-heat__f"><span class="pg-note">${on} of ${days} days active${goal?` · ${met} on goal`:''}</span>${legend}</div>
+    <div class="pg-unfold${PG.day?' is-open':''}" id="pgDay"><div>${PG.day?pgDayHTML(PG.day):''}</div></div>`,
+    {sub:goal?`Darker is more. The darkest two steps are days at or past your goal of ${goal}.`:'Darker is more, measured against your usual day. Tap a day for its detail.'});
+}
+function pgDayHTML(k){
+  const E=pgData(),list=E.filter(a=>dayKey(a.ts)===k),o=sumOf(list),d=new Date(k+'T00:00:00');
+  const ss=sessCounted().filter(s=>s.status==='done'&&dayKey(s.ts)===k);
+  if(!o.n)return `<div class="pg-day"><b>${pgDate(d,{weekday:'long',day:'numeric',month:'long'})}</b><span class="pg-note">A rest day. Nothing was answered.</span></div>`;
+  return `<div class="pg-day"><b>${pgDate(d,{weekday:'long',day:'numeric',month:'long'})}</b>
+    <div class="pg-day__f"><span><b>${o.n}</b>answered</span><span><b>${Math.round(o.acc)}%</b>right</span><span><b>${fmtDur(o.ms)}</b>studied</span><span><b>${ss.length}</b>session${ss.length===1?'':'s'}</span></div>
+    ${ss.length?`<div class="pg-day__s">${ss.map(s=>{const sc=sessScore(s);return `<button type="button" class="pg-chipbtn pl-press" data-open="${s.id}">${esc(s.config.label||'Session')} · ${sc.p}%</button>`}).join('')}</div>`:''}</div>`;
+}
+function pgAdhCard(E,map,goal){
+  const t0=sod(Date.now()).getTime(),cnt=(a,b)=>{let on=0,met=0,n=0,ms=0;
+    for(let i=a;i<b;i++){const v=map[dayKey(t0-i*DAYMS)];if(v){on++;n+=v.n;ms+=v.ms;if(goal&&v.n>=goal)met++}}return{on,met,n,ms}};
+  const a=cnt(0,30),b=cnt(30,60);
+  const dl=(x,y)=>b.on||b.n?`<span class="pg-dl ${x>y?'is-up':x<y?'is-down':''}">${x>y?'+':x<y?'−':'±'}${Math.abs(Math.round(x-y))}</span>`:'';
+  const t=[
+    ['a30',a.on,'/30','Days active',dl(a.on,b.on)],
+    goal?['m30',a.met,'/30','Days on goal',dl(a.met,b.met)]:null,
+    ['pd',a.on?a.n/a.on:0,'','Per active day',dl(a.on?a.n/a.on:0,b.on?b.n/b.on:0)],
+    ['td',a.on?a.ms/a.on/60000:0,'min','Time per active day',dl(a.on?a.ms/a.on/60000:0,b.on?b.ms/b.on/60000:0)]
+  ].filter(Boolean);
+  return pgCard('The last 30 days',`<div class="pg-tiles">${t.map(x=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></div>`).join('')}</div>`,
+    {sub:'Each figure against the 30 days before.'});
+}
+function pgWeeksCard(E,goal){
+  const t0=sod(Date.now()),w0=addDays(t0,-dowIdx(t0)),W=[];
+  for(let i=11;i>=0;i--){const s=addDays(w0,-7*i),e=addDays(s,7);W.push(Object.assign({s},sumOf(between(E,s.getTime(),e.getTime()))))}
+  if(!W.some(w=>w.n))return pgCard('Week by week',pgEmpty('Nothing in the last twelve weeks','Each week you study becomes a column.'));
+  const tgt=goal*7,mx=Math.max(tgt,...W.map(w=>w.n),1);
+  return pgCard('Week by week',`<div class="pg-cols" style="--n:12">
+      ${tgt?`<span class="pg-cols__goal" style="--y:${(tgt/mx).toFixed(4)}"><em>${tgt} a week</em></span>`:''}
+      ${W.map((w,i)=>`<div class="pg-col${tgt&&w.n>=tgt?' is-met':''}${i===11?' is-now':''}" title="Week of ${pgDate(w.s,{day:'numeric',month:'short'})}: ${w.n} answered${w.n?', '+Math.round(w.acc)+'% right':''}">
+        <span class="pg-col__n">${w.n||''}</span><span class="pg-col__t"><i style="--s:${(w.n/mx).toFixed(4)};--i:${i}"></i></span>
+        <span class="pg-col__l">${i===11?'Now':w.s.getDate()+'/'+(w.s.getMonth()+1)}</span><span class="pg-col__a">${w.n?Math.round(w.acc)+'%':''}</span></div>`).join('')}
+    </div>`,{sub:goal?'Questions answered each week; filled when the week reached seven days of your goal. Accuracy underneath.':'Questions answered each week, accuracy underneath.'});
+}
+function pgAheadCard(){
+  const days=14,arr=new Array(days).fill(0),t0=sod(Date.now()).getTime();let over=0;
+  DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs||!st.srs.due||!attOf(q.id).length)return;
+    const d=Math.floor((st.srs.due-t0)/DAYMS);if(st.srs.due<=Date.now())over++;else if(d<days)arr[Math.max(0,d)]++});
+  const t=totals(),ex=examInfo(),A=pgData(),pace=paceWindow(A,7,0).per;
+  const mx=Math.max(1,...arr);
+  const fc=`<div class="pg-fc">${arr.map((n,i)=>`<span title="${i?pgDate(t0+i*DAYMS,{weekday:'long',day:'numeric'}):'Later today'}: ${n} due"><i style="--s:${(n/mx).toFixed(4)};--i:${i}"></i><em>${i===0?'T':i%2?'':new Date(t0+i*DAYMS).getDate()}</em></span>`).join('')}</div>`;
+  let hz='';
+  if(ex&&ex.days>0&&t.unused){const need=t.unused/ex.days,m=Math.max(need,pace,1);
+    hz=`<div class="pg-pace"><div><span>Your pace</span>${pgBar(pace/m)}<b>${Math.round(pace)} a day</b></div><div><span>Needed</span>${pgBar(need/m,'is-ref')}<b>${Math.ceil(need)} a day</b></div></div>
+    <p class="pg-note">${t.unused} new questions and ${ex.days} days to the exam. ${pace>=need?'Your last seven days are enough to finish the bank.':`To finish the bank, ${Math.ceil(need-pace)} more a day than your last seven days.`}</p>`}
+  else if(t.unused&&pace>.5)hz=`<p class="pg-note">${t.unused} new questions left. At your last seven days' pace of ${Math.round(pace)} a day, about ${Math.ceil(t.unused/pace)} days. Set an exam date in Settings to see the pace you need.</p>`;
+  return pgCard('What is coming',`<div class="pg-ahead"><div><span class="pg-big">${pgN('due',over)}</span><em>due now</em></div><div><span class="pg-big">${pgN('due7',arr.slice(0,7).reduce((a,b)=>a+b,0))}</span><em>due in 7 days</em></div></div>
+    ${fc}${hz}`,{sub:'The review schedule for the next two weeks.',cls:'is-half'});
+}
+const PG_HB=[[5,9,'Early','5–9'],[9,12,'Morning','9–12'],[12,17,'Afternoon','12–17'],[17,21,'Evening','17–21'],[21,24,'Night','21–24'],[0,5,'Late','0–5']];
+function pgHoursCard(E){
+  const A=E.filter(a=>a.ts>=pgSince(90));
+  if(A.length<60)return '';
+  const hb=PG_HB.map(b=>({b,n:0,c:0}));
+  A.forEach(a=>{const h=new Date(a.ts).getHours();const x=hb.find(r=>h>=r.b[0]&&h<r.b[1]);x.n++;if(a.correct)x.c++});
+  const live=hb.filter(r=>r.n),mx=Math.max(...live.map(r=>r.n));
+  const ok=live.filter(r=>r.n>=30),all=A.filter(a=>a.correct).length/A.length*100;
+  const best=ok.length>1?ok.reduce((m,r)=>r.c/r.n>m.c/m.n?r:m):null,worst=ok.length>1?ok.reduce((m,r)=>r.c/r.n<m.c/m.n?r:m):null;
+  const gap=best&&worst?(best.c/best.n-worst.c/worst.n)*100:0;
+  return pgCard('When you study best',`<div class="pg-hours" style="--n:${live.length}">${live.map((r,i)=>`<div class="${r===best&&gap>=6?'is-best':''}"><span class="pg-hours__a">${Math.round(r.c/r.n*100)}%</span><span class="pg-col__t"><i style="--s:${(r.n/mx).toFixed(4)};--i:${i}"></i></span><b>${r.b[2]}</b><em>${r.b[3]}</em></div>`).join('')}</div>
+    <p class="pg-note">${gap>=6?`You are ${Math.round(gap)} points more accurate in the ${best.b[2].toLowerCase()} than in the ${worst.b[2].toLowerCase()}. Put the hardest blocks there.`:`Your accuracy holds at every hour (${Math.round(all)}% overall). Study whenever suits you.`}</p>`,
+    {sub:'Height is how much you study then; the figure is accuracy. Last 90 days.',cls:'is-half'});
+}
+
+/* ============================================================
+   GAPS
+   ============================================================ */
+const PG_CAUSE=[
+  ['gap','Knowledge gap','You did not know it. Read the explanation, then meet it again.'],
+  ['trap','Fell for a distractor','A wrong option pulled you in, the lure included.'],
+  ['read','Misread or slipped','You knew it and lost it to the reading.'],
+  ['fast','Rushed','Answered in under half your usual time.'],
+  ['struck','Crossed out the answer','You eliminated the right option.'],
+  ['time','Time or left blank','Ran out of time, or gave no answer.'],
+  ['none','Not named yet','Tag these in a session report.']
+];
+function pgGapsHTML(){
+  const tool=pgSeg('gaps',[['30','30 days'],['90','90 days'],['all','All time']],PG.rng.gaps,'Range for Gaps');
+  return `<div class="pg-rngrow">${tool}</div><div class="pg-grid" id="pgGapsBody">${pgGapsBody()}</div>`;
+}
+function pgGapsBody(){
+  const E=pgData(),A=E.filter(a=>a.ts>=pgSince(PG.rng.gaps));
+  if(A.length<20)return pgCard('',pgEmpty('Twenty answers in this range and the gaps show','Pick a longer range, or answer a few more.'),{cls:'pg-hero'});
+  return pgMissCard(A)+pgWeakCard(A)+pgPaceCard(A)+pgCalibCard(A)+pgStaminaCard(A);
+}
+function pgMissCard(A){
+  const W=A.filter(a=>!a.correct),med=pgMed(A.filter(a=>a.correct&&a.ans!=null).map(a=>a.ans));
+  const cnt={},tag={},det={};PG_CAUSE.forEach(c=>{cnt[c[0]]=0;tag[c[0]]=0;det[c[0]]=0});
+  W.forEach(a=>{
+    let k=null,by=tag;
+    if(a.chosen==null)k='time';
+    else if(a.miss)k={gap:'gap',trap:'trap',misread:'read',silly:'read',time:'time'}[a.miss]||null;
+    if(!k){by=det;k=a.lure?'trap':a.struckKey?'struck':(med&&a.ans!=null&&a.ans<Math.max(8000,med*.5))?'fast':null}
+    if(!k){k='none';by=null}
+    cnt[k]++;if(by)by[k]++;
+  });
+  const n=W.length,ans=A.length;
+  if(!n)return pgCard('Where the misses came from',pgEmpty('No misses in this range','Nothing to diagnose. Try a longer range.'));
+  const live=PG_CAUSE.filter(c=>cnt[c[0]]);
+  const bar=`<div class="pg-stack" role="img" aria-label="Misses by cause">${live.map((c,i)=>`<i class="c-${c[0]}" style="flex:${cnt[c[0]]};--i:${i}"></i>`).join('')}</div>`;
+  const rows=live.map(c=>{const k=c[0],src=[tag[k]?tag[k]+' tagged':'',det[k]?det[k]+' from the record':''].filter(Boolean).join(' · ');
+    return `<li><span class="pg-key c-${k}"></span><div><b>${c[1]}</b><span>${c[2]}</span>${src&&k!=='none'?`<em>${src}</em>`:''}</div><strong>${pgN('mc_'+k,cnt[k])}<small>${Math.round(cnt[k]/n*100)}%</small></strong></li>`}).join('');
+  const lureQ=A.filter(a=>a.hasLure&&!a.correct&&a.chosen!=null),lureN=lureQ.filter(a=>a.lure).length;
+  return pgCard('Where the misses came from',`<div class="pg-misshead"><span class="pg-big">${pgN('miss',n)}</span><em>misses in ${ans} answers · ${Math.round(n/ans*100)}%</em></div>${bar}<ul class="pg-causes">${rows}</ul>
+    ${lureQ.length>=5?`<p class="pg-note">When a question had a lure and you missed it, you chose the lure ${Math.round(lureN/lureQ.length*100)}% of the time (${lureN} of ${lureQ.length})${lureN/lureQ.length>.4?'. Those questions are built for someone who knows most of the topic: you are close, and the last detail is what is missing.':'.'}</p>`:''}`,
+    {sub:'Your own tag counts first. An untagged miss is placed by what the record shows: the lure chosen, the right option crossed out, or an answer far faster than your usual.'});
+}
+const PG_GRP=[['system','System',q=>q.system],['subject','Subject',q=>q.subject],['archetype','Question type',q=>q.archetype],['task','Task',q=>q.task]];
+function pgWeakCard(A){
+  const tool=pgSeg('grp',PG_GRP.map(g=>[g[0],g[1]]),PG.grp,'Group by');
+  return pgCard('Where the marks are',`${tool}<div id="pgWeak">${pgWeakList(A)}</div>`,{sub:'Ranked by marks at stake: the share you miss times how many of those questions your bank holds. A big area at 60% outranks a small one at 30%.'});
+}
+function pgWeakList(A){
+  A=A||pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps));
+  const g=PG_GRP.find(x=>x[0]===PG.grp),get=g[2],bank={},m={};
+  DB.questions.forEach(q=>{const k=get(q);if(k)bank[k]=(bank[k]||0)+1});
+  A.forEach(a=>{const k=get(a.q);if(!k||k===UNCLASSIFIED)return;const r=m[k]||(m[k]={k,n:0,c:0});r.n++;if(a.correct)r.c++});
+  const avg=A.filter(a=>a.correct).length/A.length;
+  const rows=Object.values(m).filter(r=>r.n>=8).map(r=>Object.assign(r,{p:r.c/r.n,stake:Math.round((1-r.c/r.n)*(bank[r.k]||r.n))})).sort((a,b)=>b.stake-a.stake);
+  if(!rows.length)return pgEmpty('Not enough answers per area yet','An area joins the list at eight answers in this range.');
+  const show=PG.all?rows:rows.slice(0,6);
+  return `<ul class="pg-weak" style="--avg:${avg.toFixed(4)}">${show.map((r,i)=>`<li style="--i:${i}">
+      <div class="pg-weak__t"><b>${esc(r.k)}</b><span>${Math.round(r.p*100)}% of ${r.n}${r.n<20?' · few answers':''}</span></div>
+      <div class="pg-weak__bar">${pgBar(r.p,r.n<20?'is-thin':'')}<span class="pg-avg" aria-hidden="true"></span></div>
+      <div class="pg-weak__s"><b>${r.stake}</b><em>at stake</em></div>
+      <button type="button" class="pg-drill pl-press" data-pgdrill="${esc(r.k)}" aria-label="Practise ${esc(r.k)}">${sxIc('i-play')}</button></li>`).join('')}</ul>
+    <div class="pg-weak__f"><span class="pg-note"><span class="pg-avgkey"></span>your average, ${Math.round(avg*100)}%</span>${rows.length>6?`<button type="button" class="pg-txt pl-press" data-pgall>${PG.all?'Show fewer':'Show all '+rows.length}</button>`:''}</div>`;
+}
+function pgCalibCard(A){
+  const L=[['sure','Sure'],['unsure','Unsure'],['guess','Guessed']];
+  const r=L.map(([k,l])=>{const x=A.filter(a=>a.conf===k&&a.chosen!=null);return{k,l,n:x.length,c:x.filter(a=>a.correct).length}});
+  const tot=r.reduce((s,x)=>s+x.n,0);
+  if(tot<15)return pgCard('Do you know when you know?',pgEmpty('Answer with confidence on','Turn on Ask my confidence when you build a session, and this fills in.'));
+  const sure=r[0],guess=r[2],sw=sure.n-sure.c;
+  let say=[];
+  if(sure.n>=10)say.push(sure.c/sure.n>=.85?`When you are sure you are right ${Math.round(sure.c/sure.n*100)}% of the time: you can trust it.`:`When you are sure you are right only ${Math.round(sure.c/sure.n*100)}% of the time. Slow down on the questions that feel easy.`);
+  if(sw)say.push(`${sw} sure-but-wrong answer${sw===1?'':'s'}: beliefs to correct, the misses an exam punishes most.`);
+  if(guess.n>=10&&guess.c/guess.n>=.35)say.push(`Your guesses land ${Math.round(guess.c/guess.n*100)}% of the time, well above chance: you know more than you think.`);
+  return pgCard('Do you know when you know?',`<div class="pg-calib">${r.map((x,i)=>`<div><span class="pg-calib__v">${x.n?pgN('cal_'+x.k,x.c/x.n*100)+pgU('%'):'—'}</span><span class="pg-col__t"><i style="--s:${x.n?(x.c/x.n).toFixed(4):0};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></div>`).join('')}</div>
+    <p class="pg-note">${say.join(' ')}</p>`,{sub:'Accuracy by the confidence you gave before answering. Sure should sit near the top, guessed near the bottom.',cls:'is-half'});
+}
+function pgPaceCard(A){
+  const T=A.filter(a=>a.ans!=null).sort((a,b)=>a.ans-b.ans);
+  if(T.length<20)return '';
+  const med=pgMed(T.map(a=>a.ans))/1000,over=T.filter(a=>a.ans>PG_PACE*1000).length/T.length*100;
+  const q=[0,1,2,3].map(i=>{const x=T.slice(Math.floor(i*T.length/4),Math.floor((i+1)*T.length/4));
+    return{lo:x[0].ans/1000,hi:x[x.length-1].ans/1000,p:x.filter(a=>a.correct).length/x.length*100}});
+  const all=T.filter(a=>a.correct).length/T.length*100;
+  let say;
+  if(q[0].p<all-8)say=`Your fastest quarter is your weakest (${Math.round(q[0].p)}%). On a quick answer, read the last line of the stem once more before committing.`;
+  else if(q[3].p<all-8)say=`Your slowest quarter is your weakest (${Math.round(q[3].p)}%). Long deliberation rarely rescues a question: past about two minutes, commit and move on.`;
+  else say='Your accuracy holds at every speed. Pace is not where the marks are going.';
+  const lab=s=>Math.round(s);
+  return pgCard('Pace',`<div class="pg-ahead"><div><span class="pg-big">${pgN('med',Math.round(med))}${pgU('s')}</span><em>typical answer · exam pace ${PG_PACE}s</em></div><div><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${PG_PACE} seconds</em></div></div>
+    <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<div><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${lab(x.lo)}–${lab(x.hi)}s</em></div>`).join('')}</div>
+    <p class="pg-note">${say}</p>`,{sub:'Answer time, from the question appearing to your answer. Your answers split into four equal groups by speed, with the accuracy of each.'});
+}
+function pgStaminaCard(A){
+  const B=[[0,10,'1–10'],[10,20,'11–20'],[20,30,'21–30'],[30,40,'31–40'],[40,1e4,'41+']];
+  const S=A.filter(a=>a.size>=20&&a.pos>=0);
+  const r=B.map(b=>{const x=S.filter(a=>a.pos>=b[0]&&a.pos<b[1]);return{l:b[2],n:x.length,p:x.length?x.filter(a=>a.correct).length/x.length*100:null}}).filter(x=>x.n>=15);
+  if(r.length<2)return '';
+  const d=r[r.length-1].p-r[0].p;
+  return pgCard('Stamina',`<div class="pg-calib pg-calib--${r.length}">${r.map((x,i)=>`<div><span class="pg-calib__v">${pgN('sta'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></div>`).join('')}</div>
+    <p class="pg-note">${d<=-6?`You lose ${Math.round(-d)} points from the start of a block to the end. Build up to full 40-question blocks so the exam's length is not the hard part.`:d>=6?`You get ${Math.round(d)} points better as a block goes on: you start cold. A few easy questions before a block may help.`:'Your accuracy holds from the first question of a block to the last.'}</p>`,
+    {sub:'Accuracy by position in the block, from sessions of 20 questions or more.',cls:'is-half'});
+}
+
+/* ============================================================
+   SESSIONS
+   ============================================================ */
+function pgSessHTML(){
+  const all=sessCounted().filter(s=>s.order&&s.order.length);
+  if(!all.length)return pgCard('',pgEmpty('No sessions yet','Build one from the bank and it is measured here.'),{cls:'pg-hero'});
+  const fin=all.filter(s=>s.status==='done').sort((a,b)=>(b.finishedAt||b.ts||0)-(a.finishedAt||a.ts||0));
+  const open=sessUnfinished();
+  const last=fin.slice(0,20).reverse();
+  const l10=fin.slice(0,10),avg=l10.length?l10.reduce((a,s)=>a+sessScore(s).p,0)/l10.length:null;
+  const ms=fin.reduce((a,s)=>a+(s.elapsed||0),0);
+  const tiles=[['sf',fin.length,'','Finished'],['sa',avg,'%','Average, last 10'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started']];
+  const spark=last.length>=3?`<div class="pg-sspark" style="--n:${last.length}">${last.map((s,i)=>{const p=sessScore(s).p;return `<button type="button" class="pl-press" data-open="${s.id}" title="${esc(s.config.label||'Session')} · ${pgDate(s.ts)} · ${p}%" aria-label="${esc(s.config.label||'Session')}, ${p}%"><i style="--s:${(p/100).toFixed(3)};--i:${i}"></i></button>`}).join('')}</div><p class="pg-note">Your last ${last.length} sessions, oldest on the left. Tap one for its report.</p>`:'';
+  const row=s=>{const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s),done=st==='done';
+    const C=2*Math.PI*16;
+    return `<div class="pg-srow${done?'':' is-open'}" data-sid="${s.id}" ${done?`data-open="${s.id}" role="button" tabindex="0"`:''}>
+      <span class="pg-sring" style="--p:${done?(sc.p/100).toFixed(3):(sc.n?ans/sc.n:0).toFixed(3)}"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16"/><circle cx="20" cy="20" r="16" pathLength="1"/></svg><b>${done?sc.p:ans}</b></span>
+      <span class="pg-srow__t"><b>${esc(s.config.label||'Session')}</b><span>${pgDate(s.ts)} · ${s.config.mode==='test'?'Exam':'Tutor'} · ${sc.n} questions · ${fmtDur(s.elapsed||0)}${done?'':' · '+SESS_LABEL[st].toLowerCase()}</span></span>
+      ${done?`<span class="pg-srow__m">${sc.c}/${sc.n}</span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
+      <button type="button" class="pl-ib pl-press pg-sdel" data-pgdel="${s.id}" aria-label="Delete this session">${sxIc('i-trash')}</button></div>`};
+  const shown=fin.slice(0,PG.shown);
+  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
+    +(open.length?`<h3 class="pg-h">Still open</h3><div class="pg-grp">${open.map(row).join('')}</div>`:'')
+    +`<h3 class="pg-h">Finished</h3><div class="pg-grp">${shown.length?shown.map(row).join(''):'<div class="pg-srow">'+pgEmpty('Nothing finished yet','A finished session lands here with its report.')+'</div>'}</div>`
+    +(fin.length>PG.shown?`<div class="pg-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgmore>Show ${Math.min(30,fin.length-PG.shown)} more</button></div>`:'');
+}
+
+/* ============================================================
+   THE VIEW: switching, building, the data arriving alive
+   ============================================================ */
+const PG_BUILD={form:pgFormHTML,habit:pgHabitHTML,gaps:pgGapsHTML,sess:pgSessHTML};
+const pgPane=v=>document.querySelector('#pgStage .pg-pane[data-pg="'+v+'"]');
+function pgBuild(v,pre){
+  const p=pgPane(v);if(!p)return;
+  PG.w=($('#pgStage').clientWidth||$('#v-stats').clientWidth||360);
+  p.innerHTML=v==='gaps'?PG_BUILD[v]():'<div class="pg-grid">'+PG_BUILD[v]()+'</div>';PG.built[v]=true;
+  sxHydrate(p);if(!pre)pgAlive(p);
+}
+/* numbers count from where they last stood (zero on arrival) and bars grow
+   from their base, so a re-render moves only what changed */
+function pgAlive(root){
+  root.querySelectorAll('.pg-n').forEach(el=>{
+    const k=el.dataset.k,to=+el.dataset.v,d=+el.dataset.d||0,from=PG.prev[k];
+    PG.prev[k]=to;
+    if(Motion.reduced||from===to)return;
+    const f=from==null?0:from,t0=performance.now(),D=from==null?PL('spatial-slow').d+250:PL('spatial').d+120,tok=PG.tok;
+    el.textContent=f.toFixed(d);
+    /* a view that has left stops counting at once: its text changes would
+       still cost a layout every frame under the next view's motion */
+    const step=t=>{if(tok!==PG.tok||!el.isConnected){el.textContent=to.toFixed(d);return}
+      const q=Math.min(1,(t-t0)/D),e=1-Math.pow(1-q,3);el.textContent=(f+(to-f)*e).toFixed(d);if(q<1)requestAnimationFrame(step)};
+    requestAnimationFrame(step);
+  });
+}
+function pgShow(v,tap){
+  if(!PG_BUILD[v])v='form';
+  const old=PG.view;PG.view=v;PG.tok=(PG.tok||0)+1;
+  sxSegMark($('#pgTabs'),v);
+  $('#rangeSpan').textContent=PG_NAME[v];
+  if(!tap||old===v||Motion.reduced||!$('#v-stats').classList.contains('on')){pgSwap(old,v,!tap||old===v);return}
+  /* the indicator is already moving; let it paint before any building */
+  requestAnimationFrame(()=>setTimeout(()=>{if(PG.view===v)pgSwap(old,v,false)},0));
+}
+/* The old view stays on screen until the new one is built and laid out
+   (invisibly, .is-pre), so the swap never shows an empty page while a heavy
+   view renders; then the old fades out and the new enters from the side the
+   indicator went. Its bars, counts and lines start at that reveal. */
+function pgSwap(old,v,instant){
+  const po=pgPane(old),pn=pgPane(v),dir=PG_ORDER.indexOf(v)>=PG_ORDER.indexOf(old)?1:-1;
+  const all=[...document.querySelectorAll('#pgStage .pg-pane')];
+  const reveal=(anim,keep)=>{
+    all.forEach(p=>{if(p!==pn&&p!==keep){p.hidden=true;p.classList.remove('is-pre');p.getAnimations().forEach(a=>a.cancel())}});
+    pn.hidden=false;
+    const fresh=!PG.built[v];if(fresh)pgBuild(v,true);
+    pn.classList.remove('is-pre');pgAlive(pn);
+    if(anim){const sp=PL('spatial');pn.animate([{opacity:0,transform:`translateX(${dir*28}px)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:keep?70:0,fill:'backwards'})}
+  };
+  if(instant||Motion.reduced||!po||po===pn||po.hidden){reveal(!instant&&!Motion.reduced);return}
+  if(!PG.built[v]){pn.classList.add('is-pre');pn.hidden=false;pgBuild(v,true)}
+  /* one frame for the browser to lay the new view out under the old one */
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(PG.view!==v)return;
+    /* the old view steps out of the flow and fades over the new one, whose
+       entrance waits 70ms: its first paint happens under the fade, so no
+       frame is empty, and the two are never both visible for long */
+    po.getAnimations().forEach(a=>a.cancel());
+    Object.assign(po.style,{position:'absolute',left:'0',right:'0',top:'0',zIndex:'1',pointerEvents:'none'});
+    reveal(true,po);
+    po.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*12}px)`}],{duration:90,easing:PL_EXIT,fill:'forwards'})
+      .finished.then(()=>{po.removeAttribute('style');if(PG.view!==old){po.hidden=true;po.getAnimations().forEach(a=>a.cancel())}},()=>{po.removeAttribute('style')});
+  }));
+}
+/* a card's own control rebuilds only what it controls */
+function pgRe(sel,html,dir){
+  const el=$(sel);if(!el)return;
+  if(Motion.reduced||!el.getClientRects().length){el.innerHTML=html;sxHydrate(el);pgAlive(el);return}
+  const tok=el.__pg=(el.__pg||0)+1;
+  el.getAnimations().forEach(a=>a.cancel());
+  el.animate([{opacity:1},{opacity:0,transform:`translateX(${-(dir||0)*10}px)`}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>{
+    if(el.__pg!==tok)return;
+    el.innerHTML=html;sxHydrate(el);el.getAnimations().forEach(a=>a.cancel());pgAlive(el);
+    const sp=PL('spatial');el.animate([{opacity:0,transform:`translateX(${(dir||0)*20}px)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+  },()=>{});
+}
+function pgSegTap(g,b){
+  const id=g.dataset.pgseg,bs=[...g.querySelectorAll('[data-v]')];
+  const i0=bs.findIndex(x=>x.classList.contains('on')),i1=bs.indexOf(b),dir=Math.sign(i1-i0);
+  if(i0===i1)return;
+  sxSegMark(g,b.dataset.v);
+  requestAnimationFrame(()=>setTimeout(()=>{
+    if(id==='trend'){PG.rng.trend=b.dataset.v;pgRe('#pgTrend',pgTrendSVG(),dir)}
+    else if(id==='gaps'){PG.rng.gaps=b.dataset.v;PG.all=false;pgRe('#pgGapsBody',pgGapsBody(),dir)}
+    else if(id==='grp'){PG.grp=b.dataset.v;PG.all=false;pgRe('#pgWeak',pgWeakList(),dir)}
+  },0));
+}
+/* the entry points the rest of the app already calls */
+function renderStats(arrive){
+  PG.E=null;PG.built={};PG.stamp=performance.now();
+  if(arrive){PG.prev={};PG.day=null;PG.all=false;PG.shown=30;return}   /* pgShow builds on arrival */
+  if(VIEW==='stats')pgBuild(PG.view);
+  pgLedger();
+}
+function renderHistory(){
+  PG.built.sess=false;
+  if(VIEW==='stats'&&PG.view==='sess'&&performance.now()-(PG.stamp||0)>50)pgBuild('sess');
+}
+/* when part of the record is set aside, say so rather than letting a
+   smaller number pass for the whole truth */
+function pgLedger(){
+  const hid=rawAttemptCount()-allAttempts().length,el=$('#rangeWarn');if(!el)return;
+  el.innerHTML=hid>0?`<div class="pg-ledger"><span>${hid} recorded answer${hid===1?' is':'s are'} left out of every figure here, by your own rule.</span><button type="button" class="pl-btn pl-btn--text pl-press" data-setsec="studydata">Study data</button></div>`:'';
+}
+
+$('#pgTabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||b.classList.contains('on'))return;pgShow(b.dataset.v,true)});
+$('#pgStage').addEventListener('click',e=>{
+  const sg=e.target.closest('[data-pgseg] [data-v]');if(sg){pgSegTap(sg.closest('[data-pgseg]'),sg);return}
+  const dy=e.target.closest('[data-pgday]');
+  if(dy){const k=dy.dataset.pgday,was=PG.day;PG.day=was===k?null:k;
+    $$('#pgHeat .pg-hc').forEach(c=>c.classList.toggle('is-sel',c.dataset.pgday===PG.day));
+    const u=$('#pgDay');if(!u)return;
+    if(PG.day){if(was)pgRe('#pgDay > div',pgDayHTML(PG.day));else{u.firstElementChild.innerHTML=pgDayHTML(PG.day);void u.offsetWidth}u.classList.add('is-open')}
+    else u.classList.remove('is-open');
+    return}
+  if(e.target.closest('[data-pgall]')){PG.all=!PG.all;pgRe('#pgWeak',pgWeakList());return}
+  if(e.target.closest('[data-pgmore]')){PG.shown+=30;pgBuild('sess');return}
+  const dr=e.target.closest('[data-pgdrill]');
+  if(dr){const k=dr.dataset.pgdrill;F.pool='all';clearFacets();F.sets[PG.grp].add(k);startSession('Weak spot: '+k);return}
+  const del=e.target.closest('[data-pgdel]');
+  if(del){e.stopPropagation();
+    if(!del.classList.contains('is-armed')){del.classList.add('is-armed');del.setAttribute('aria-label','Tap again to delete');
+      clearTimeout(del.__t);del.__t=setTimeout(()=>{del.classList.remove('is-armed');del.setAttribute('aria-label','Delete this session')},2600);return}
+    const id=del.dataset.pgdel,row=del.closest('.pg-srow');
+    /* the row slides away, then the rows under it glide up into its place */
+    const go=()=>{const at={};$$('#pgStage .pg-srow[data-sid]').forEach(r=>{at[r.dataset.sid]=r.getBoundingClientRect().top});
+      const i=DB.sessions.findIndex(x=>x.id===id);if(i<0)return;
+      DB.sessions.splice(i,1);save();renderDash();
+      PG.E=null;PG.built={};const keep=PG.prev;pgBuild('sess');PG.prev=keep;pgLedger();toast('Session deleted.');
+      if(Motion.reduced)return;const sp=PL('spatial');
+      $$('#pgStage .pg-srow[data-sid]').forEach(r=>{const y=at[r.dataset.sid];if(y==null)return;const d=y-r.getBoundingClientRect().top;
+        if(Math.abs(d)>1)r.animate([{transform:`translateY(${d}px)`},{transform:'none'}],{duration:sp.d,easing:sp.e})})};
+    if(Motion.reduced||!row)return go();
+    row.animate([{opacity:1,transform:'none'},{opacity:0,transform:'translateX(32px)'}],{duration:PL('spatial').d*.7,easing:PL_EXIT,fill:'forwards'}).finished.then(go,go);
+    return}
+},true);
+/* a session row opens its report by Enter too, like the button it acts as */
+$('#pgStage').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.pg-srow[data-open]')){e.preventDefault();e.target.click()}});
+/* the trend chart reads out the period under the finger */
+$('#pgStage').addEventListener('pointermove',pgScrub);
+$('#pgStage').addEventListener('pointerdown',pgScrub);
+function pgScrub(e){
+  const svg=e.target.closest&&e.target.closest('#pgTrend .pg-svg');if(!svg||!PG.trend)return;
+  const r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal,x=(e.clientX-r.left)*vb.width/r.width;
+  const T=PG.trend;let bi=0,bd=1e9;T.out.forEach((b,i)=>{const d=Math.abs(T.x(i)-x);if(d<bd){bd=d;bi=i}});
+  const g=svg.querySelector('.pg-guide');g.setAttribute('x1',T.x(bi));g.setAttribute('x2',T.x(bi));svg.classList.add('is-scrub');
+  const rd=svg.parentNode.querySelector('.pg-read');if(rd&&rd.__i!==bi){rd.__i=bi;rd.innerHTML=pgTrendRead(bi)}
+}
+/* a new width redraws the charts that are measured to it */
+let pgRzT=0,pgRzW=0;
+window.addEventListener('resize',()=>{clearTimeout(pgRzT);pgRzT=setTimeout(()=>{
+  if(VIEW!=='stats')return;const p=pgPane(PG.view);if(!p||Math.abs(p.clientWidth-pgRzW)<24)return;pgRzW=p.clientWidth;
+  if(PG.view==='form'||PG.view==='habit'){const keep=PG.prev;pgBuild(PG.view);PG.prev=keep}},200)});
+
 document.addEventListener('click',e=>{
   const o=e.target.closest('[data-open]');if(o){const s=DB.sessions.find(x=>x.id===o.dataset.open);if(s)showResults(s);return}
   const d=e.target.closest('[data-delsess]');if(d){const i=DB.sessions.findIndex(x=>x.id===d.dataset.delsess);
@@ -20201,7 +20606,7 @@ const BRAND=(function(){
   /* ==========================================================
      1. SECONDARY TABS
      ========================================================== */
-  var DEFAULT_PANE = { stats: 'over', import: 'paste' };
+  var DEFAULT_PANE = { stats: 'form', import: 'paste' };
 
   /* The indicator and the label colour are two class flips and cost nothing,
      so they happen on the tap frame. Swapping the pane is a display:block on a
@@ -20211,6 +20616,7 @@ const BRAND=(function(){
      passed from the click path; programmatic callers still swap synchronously
      so nothing can read a stale pane. */
   function showPane(view, pane, defer) {
+    if (view === 'stats' && window.pgShow) { pgShow(pane); return; }   /* Progress has its own group (Plume 2.11) */
     var sec = el('v-' + view);
     if (!sec) return;
     $a('.subtabs button', sec).forEach(function (b) {

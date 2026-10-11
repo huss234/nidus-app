@@ -287,6 +287,30 @@ a recipe.
   `sxHydrate`) copies a sprite symbol inline. The legacy icon-motion layer
   hydrates every `<use>` and gives it a generic press motion, which Plume
   forbids; inline copies are left alone.
+- **Progress measures what a session records, and says its window**
+  (v6.69, the PROGRESS section). `pgData()` joins every counted attempt
+  (`allAttempts()`: ts, chosen, correct, answer time, question time, conf,
+  miss, sess, seq) to its session item once per render: position in the
+  block, block size and mode, `struckKey` (the key was crossed out) and,
+  through the question, `hasLure` / `lure`. A new field a session starts
+  recording is added there, and every view can use it. The definitions:
+  - *Form* is accuracy on the last 100 first sightings (`PG_FIRST`), with a
+    Wilson 95% range and the change on the 100 before (under 2.5 points is
+    called level). Never a lifetime figure as the headline.
+  - *Where the misses came from* puts each miss in one cause: left blank →
+    time; else the user's tag; else, measured, the lure taken → distractor,
+    the key crossed out, or an answer under half the median correct answer
+    time (and under 8s floor) → rushed; else "not named". The card shows how
+    many of each were tagged and how many came from the record.
+  - *Where the marks are* ranks areas by marks at stake: miss rate × the
+    bank's questions in that area, eight answers minimum in the range.
+  - *Pace* uses 90 s as exam pace (`PG_PACE`); *stamina* reads position in
+    blocks of 20 or more.
+  Entry points stay `renderStats()` (data changed: rebuild the open view)
+  and `renderHistory()`; `go('stats')` calls `renderStats(true)` (arrival:
+  counts start from zero) and `showPane('stats', …)` hands over to
+  `pgShow`, so the `history` alias still lands on Sessions. Readiness is
+  still `readiness()`, shared with Home.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget` and
   `nidus_straggler` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
@@ -463,5 +487,18 @@ does) and work in the scratchpad:
   missing figures (`slot: "choice"`, `choice: "B"`) and fill it, re-import
   with update (option pictures kept) and re-run export (columns, cells,
   slots carried).
+- **Profile a view's build per card.** In the page, time each builder five
+  times (`pgFormHTML`, `pgHeatCard(...)`, …) on the seeded bank and fix the
+  outlier: a `toLocaleDateString` per heat-map cell cost 20ms (cache
+  `Intl.DateTimeFormat`, `pgDate`), and a linear scan per chart point was
+  quadratic (binary search in `pgForm`). Then log long tasks
+  (`PerformanceObserver` `longtask`) with the indicator's `m41` per frame at
+  `setCPUThrottlingRate` 4, waiting 2.5s between taps so the last view's
+  count-ups are not measured as the next one's cost.
+- **A seed for Progress** needs months of history to show anything: the
+  scratch generator writes ~3,500 questions, ~80 sessions over 75 days with
+  rest days, confidence, miss tags, lures on 60% of questions and crossed-out
+  options in the session items. Fewer questions than answers seen leaves
+  coverage near 100%, which hides the pace and coverage cards.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
