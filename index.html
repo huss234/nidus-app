@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.73 -->
+<!-- Nidus — Personal Qbank · v6.74 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5507,7 +5507,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
    count to their value; bars, columns and rings grow from their
    base when they are inserted, lines draw along their length.
    ============================================================ */
-#v-stats{
+#v-stats,.pgx{
   --pg-k1:var(--md-primary);
   --pg-k2:oklch(from var(--md-primary) l c calc(h + 75));
   --pg-k3:oklch(from var(--md-primary) l c calc(h - 105));
@@ -5567,7 +5567,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .pg-hero__say{margin:18px 0 0;font:450 18px/26px var(--m3-font);max-width:48ch}
 .pg-hero__def{margin:6px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
 .pg-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin:22px -4px -4px;border-radius:var(--p-r-l);overflow:hidden}
-.pg-trio > div{background:var(--p-well);padding:14px 14px 12px;min-width:0}
+.pg-trio > *{background:var(--p-well);padding:14px 14px 12px;min-width:0}
 .pg-trio span{display:block;font-size:26px;line-height:1.1;font-weight:520}
 .pg-trio em{display:block;margin-top:4px;font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
 
@@ -5731,21 +5731,21 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-calib{--n:3;height:200px}
 .pg-calib--4{--n:4;margin-top:20px;height:170px}
 .pg-calib--2{--n:2}.pg-calib--3{--n:3}.pg-calib--5{--n:5}
-.pg-hours > div,.pg-calib > div{display:grid;grid-template-rows:auto 1fr auto auto;justify-items:center;min-width:0;text-align:center}
+.pg-hours > *,.pg-calib > *{display:grid;grid-template-rows:auto 1fr auto auto;justify-items:center;min-width:0;text-align:center}
 .pg-hours__a{font:600 13px/20px var(--m3-font);font-variant-numeric:tabular-nums;margin-bottom:6px}
 .pg-calib__v{font-size:22px;line-height:1.1;font-weight:520;margin-bottom:8px}
 .pg-hours .pg-col__t,.pg-calib .pg-col__t{max-width:56px}
-.pg-hours > div > b,.pg-calib > div > b{margin-top:8px;font:500 13px/18px var(--m3-font)}
+.pg-hours > * > b,.pg-calib > * > b{margin-top:8px;font:500 13px/18px var(--m3-font)}
 .pg-hours em,.pg-calib em{font:400 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
 .pg-hours > div:not(.is-best) .pg-hours__a{color:var(--md-on-surface-variant)}
 
 .pg-ahead{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.pg-ahead > div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pg-ahead > *{display:flex;flex-direction:column;gap:2px;min-width:0}
 .pg-ahead em{font:500 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
 .pg-fc{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px;height:76px;margin-top:18px}
-.pg-fc span{display:grid;grid-template-rows:1fr 16px;justify-items:center;min-width:0}
+.pg-fc > *{display:grid;grid-template-rows:1fr 16px;justify-items:center;min-width:0}
 .pg-fc i{display:block;width:100%;height:100%;border-radius:4px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(max(var(--s),.04))}
-.pg-fc span:first-child i{background:var(--md-primary)}
+.pg-fc > :first-child i{background:var(--md-primary)}
 .pg-fc em{font:500 10px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
 .pg-pace{display:grid;gap:10px;margin-top:20px}
 .pg-pace > div{display:grid;grid-template-columns:80px minmax(0,1fr) 84px;align-items:center;gap:12px;font:500 13px/18px var(--m3-font)}
@@ -5860,7 +5860,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 /* accuracy by sighting, and the small heading that opens a second part of a card */
 .pg-lad{display:grid;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--md-outline-variant)}
 .pg-lad__h{display:block;font:550 13px/18px var(--m3-font);color:var(--md-on-surface-variant);margin-bottom:2px}
-.pg-lad > div{display:grid;grid-template-columns:104px minmax(0,1fr) 40px 36px;align-items:center;gap:10px;font:500 13px/18px var(--m3-font)}
+.pg-lad > *:not(.pg-lad__h){display:grid;grid-template-columns:104px minmax(0,1fr) 40px 36px;align-items:center;gap:10px;font:500 13px/18px var(--m3-font)}
 .pg-lad b{text-align:right;font-variant-numeric:tabular-nums}
 .pg-lad em{font:400 12px/16px var(--m3-font);font-style:normal;text-align:right;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
 /* memory and the time split reuse the cause list */
@@ -5874,7 +5874,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-causes--mem strong{font-size:18px}
 .pg-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin-top:16px;border-radius:var(--p-r-l);overflow:hidden}
 .pg-mini--6{grid-template-columns:repeat(3,minmax(0,1fr))}
-.pg-mini > div{display:flex;flex-direction:column;gap:2px;padding:12px;background:var(--p-well);min-width:0}
+.pg-mini > *{display:flex;flex-direction:column;gap:2px;padding:12px;background:var(--p-well);min-width:0}
 .pg-mini b{font:520 20px/24px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums}
 .pg-mini span{font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
 .pg-split{margin-top:22px;padding-top:18px;border-top:1px solid var(--md-outline-variant)}
@@ -5883,7 +5883,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-cmp{display:grid;grid-template-columns:minmax(0,1fr) repeat(2,minmax(0,1.1fr));row-gap:2px;column-gap:2px;border-radius:var(--p-r-l);overflow:hidden}
 .pg-cmp > b{padding:8px 12px;font:550 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
 .pg-cmp > span{padding:12px;background:var(--p-well);font:500 13px/18px var(--m3-font);display:flex;align-items:center}
-.pg-cmp > div{padding:10px 12px;background:var(--p-well);display:flex;flex-direction:column;min-width:0}
+.pg-cmp > div,.pg-cmp > button{padding:10px 12px;background:var(--p-well);display:flex;flex-direction:column;min-width:0}
 .pg-cmp > span:first-child{background:none}
 .pg-cmp strong{font:520 18px/22px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums}
 .pg-dd{font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
@@ -5942,7 +5942,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-area.is-open .pg-area__chev{transform:rotate(180deg)}
 .pg-area__d{padding:0 12px 16px 16px}
 .pg-area__d .pg-mini{margin-top:0}
-.pg-area__d .pg-mini > div{background:var(--p-card)}
+.pg-area__d .pg-mini > *{background:var(--p-card)}
 .pg-area__a{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .pg-area__a .pl-btn{padding:0 18px}
 .pg-area__a .pl-btn:disabled{opacity:.38;pointer-events:none}
@@ -5952,9 +5952,9 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 @media (max-width:440px){.pg-tabs button{font-size:12.5px;font-variation-settings:"wdth" 86;letter-spacing:0}}
 .pg-rngrow--wide{max-width:520px}
 .pg-tpair{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px;align-items:end;margin-top:6px}
-.pg-tpair > div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pg-tpair > *{display:flex;flex-direction:column;gap:2px;min-width:0}
 .pg-tpair b:not(.pg-n){font:500 15px/20px var(--m3-font);margin-top:6px}
-.pg-tpair span:not(.pg-tdl){font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-tpair > * > span:not(.pg-tdl):not(.pg-disp):not(.pg-big){font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
 .pg-disp--t{font-size:60px}
 @media (max-width:360px){.pg-disp--t{font-size:42px}.pg-tpair .pg-big{font-size:25px}.pg-trio span{font-size:19px}}
 .pg-disp--t .pg-u,.pg-tpair .pg-big .pg-u{font-size:.42em}
@@ -5996,7 +5996,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-srow__m b{font:520 16px/20px var(--m3-font);font-variation-settings:"wdth" 110;color:var(--md-on-surface);font-variant-numeric:tabular-nums;white-space:nowrap}
 .pg-srow__m em{font:400 12px/16px var(--m3-font);font-style:normal;white-space:nowrap}
 @media (max-width:440px){.pg-srow__m{max-width:92px}.pg-srow__m em{white-space:normal}}
-@media (max-width:360px){.pg-tpair{grid-template-columns:minmax(0,1fr);gap:16px}.pg-trio span{font-size:17px}.pg-trio > div{padding:12px 10px 10px}}
+@media (max-width:360px){.pg-tpair{grid-template-columns:minmax(0,1fr);gap:16px}.pg-trio span{font-size:17px}.pg-trio > *{padding:12px 10px 10px}}
 .pg-pane:not(.is-pre) .pg-tl > li{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger))}
 /* ---- arrival: data draws itself ---- */
 .pg-pane:not(.is-pre) .pg-bar i,.pg-pane:not(.is-pre) .pg-rd__seg i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger) + 60ms)}
@@ -6008,6 +6008,120 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-pane:not(.is-pre) .pg-stack i{animation:pgGrowX var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * 40ms + 60ms)}
 .pg-pane:not(.is-pre) .pg-wd i{animation:pgGrowY var(--p-spatial-fast-d) var(--p-spatial-fast) backwards;animation-delay:calc(var(--i,0) * 30ms + 80ms)}
 .pg-pane:not(.is-pre) .pg-weak li{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(min(var(--i,0),6) * var(--p-stagger))}
+
+/* ============================================================
+   Plume 2.15 · functional interactivity (Progress)
+   ------------------------------------------------------------
+   Every figure answers a touch (DESIGN.md §6). A figure that opens
+   its peek is a .pg-tap: the touch contract, a state layer in its own
+   shape, and .is-src while its peek is up so the source stays marked
+   under the sheet. A bare figure (a hero number) gets a press area
+   past its text (--bare) so the layer never hugs the glyphs. A part of
+   a whole isolates in place: its group (.is-fg) dims every other part.
+   ============================================================ */
+:where(button.pg-tap){padding:0;text-align:inherit;font:inherit;color:inherit}
+.pg-tap{position:relative;isolation:isolate;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),opacity var(--p-effect-d) var(--p-effect)}
+.pg-tap::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pg-tap:hover::after{opacity:var(--m3-state-hover)}}
+.pg-tap.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d),var(--p-effect-fast-d),var(--p-effect-d);transition-timing-function:var(--p-effect-fast)}
+.pg-tap.is-down::after,.pg-tap.is-src::after{opacity:var(--m3-state-press)}
+.pg-tap:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;z-index:1}
+.pg-tap--bare{margin:-8px -12px;padding:8px 12px;border-radius:var(--p-r-l)}
+/* rows of a list: the layer reaches past the text into the gap */
+.pg-causes li.pg-tap,.pg-rd__l li.pg-tap,.pg-lad > .pg-tap,.pg-hrs li.pg-tap{margin:-6px -10px;padding:6px 10px;border-radius:var(--p-r-m)}
+.pg-lad > .pg-tap{width:calc(100% + 20px);text-align:left}
+.pg-weak li.pg-tap{cursor:pointer}
+.pg-weak li.pg-tap.is-down{transform:scale(.99)}
+.pg-weak li.pg-tap::after{border-radius:0}
+/* figures that sit in wells */
+.pg-trio > .pg-tap,.pg-mini > .pg-tap,.pg-cmp > .pg-tap{text-align:left;border-radius:0}
+.pg-trio > .pg-tap.is-down,.pg-mini > .pg-tap.is-down,.pg-cmp > .pg-tap.is-down{border-radius:var(--p-r-m)}
+.pg-calib > .pg-tap,.pg-fc > .pg-tap,.pg-col.pg-tap{border-radius:var(--p-r-m)}
+.pg-calib > .pg-tap{padding:4px 0 6px}
+.pg-col.pg-tap{height:100%}
+.pg-fc > .pg-tap{height:100%;min-width:0}
+.pg-col.pg-tap.is-down,.pg-fc > .pg-tap.is-down,.pg-calib > .pg-tap.is-down{transform:scale(.94)}
+.pg-ahead > .pg-tap{align-items:flex-start;text-align:left;margin:-8px 0 -8px -12px}
+.pg-hero__lead.pg-tap,.pg-tpair > .pg-tap,.pg-streak.pg-tap,.pg-misshead.pg-tap,.pg-rd__top.pg-tap{text-align:left}
+.pg-misshead.pg-tap,.pg-rd__top.pg-tap{display:flex;width:calc(100% + 24px)}
+.pg-misshead.pg-tap{margin-bottom:6px}.pg-rd__top.pg-tap{margin-bottom:8px}
+.pg-hero__lead .pg-disp,.pg-tpair .pg-disp,.pg-tpair .pg-big,.pg-stick__v{display:block}
+.pg-delta.pg-tap::after{border-radius:18px}
+.pg-ring.pg-tap{padding:0;border-radius:50%}
+.pg-ring.pg-tap.is-down{transform:scale(.95)}
+.pg-wd.pg-tap{border-radius:var(--p-r-m);padding:4px 0}
+.pg-wd.pg-tap.is-down{transform:scale(.92)}
+.pg-stick.pg-tap{width:calc(100% + 24px);margin:-10px -12px;padding:10px 12px;border-radius:var(--p-r-l);text-align:left}
+.pg-stick.pg-tap + .pg-stick.pg-tap{margin-top:8px}
+.pg-qleg > .pg-tap{display:inline-flex;align-items:center;gap:8px;min-height:32px;margin:-4px -8px;padding:4px 8px;border-radius:var(--p-r-s);color:var(--md-on-surface-variant)}
+.pg-qleg > .pg-tap.is-on{color:var(--md-on-surface)}
+.pg-link{position:relative;padding:0 2px;margin:0 -2px;border-radius:4px;color:var(--md-primary);font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-link.is-down{transform:scale(.96)}
+.pg-link:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+/* a chart's read-out is the way into the period it names */
+.pg-chart .pg-read{display:block;width:calc(100% - 8px);min-height:36px;padding:6px 34px 6px 10px;margin:4px 4px 0;border-radius:var(--p-r-m);text-align:left}
+.pg-read__go{position:absolute;right:8px;top:50%;margin-top:-9px;width:18px;height:18px;fill:none;stroke:var(--md-primary);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pg-svg{cursor:pointer}
+/* a part of a whole isolates: the rest steps back */
+[data-pgfg] [data-pgf]{transition:opacity var(--p-effect-d) var(--p-effect)}
+[data-pgfg] .pg-stack [data-pgf],[data-pgfg] .pg-rd__seg,[data-pgfg] .pg-qst [data-pgf]{cursor:pointer}
+[data-pgfg].is-fg .pg-stack [data-pgf]:not(.is-on),[data-pgfg].is-fg .pg-rd__seg:not(.is-on),[data-pgfg].is-fg .pg-qst [data-pgf]:not(.is-on){opacity:.28}
+[data-pgfg].is-fg li[data-pgf]:not(.is-on),[data-pgfg].is-fg .pg-qleg [data-pgf]:not(.is-on){opacity:.5}
+/* the heat map's legend isolates a step */
+.pg-hl .pg-hlb{width:16px;height:16px;border-radius:4px;padding:0;position:relative}
+.pg-hl .pg-hlb::before{content:"";position:absolute;inset:-8px -2px}
+.pg-hlb.is-on{box-shadow:0 0 0 2px var(--p-card),0 0 0 4px var(--md-on-surface)}
+.pg-heat__g .pg-hc{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect),opacity var(--p-effect-d) var(--p-effect)}
+.pg-heat__g[data-lv="0"] .pg-hc:not(.l0):not(.is-fut),.pg-heat__g[data-lv="1"] .pg-hc:not(.l1):not(.is-fut),.pg-heat__g[data-lv="2"] .pg-hc:not(.l2):not(.is-fut),
+.pg-heat__g[data-lv="3"] .pg-hc:not(.l3):not(.is-fut),.pg-heat__g[data-lv="4"] .pg-hc:not(.l4):not(.is-fut){opacity:.16}
+
+/* ---- the peek: one sheet for every figure. It rises from the bottom
+   edge on --p-spatial-slow, follows the finger down from its handle, and
+   is never wider than 640px, so on the tablet it stays in thumb reach. ---- */
+.pgx{position:fixed;inset:0;z-index:110;display:flex;align-items:flex-end;justify-content:center}
+.pgx[hidden]{display:none}
+.pgx__scrim{position:absolute;inset:0;background:color-mix(in oklab,var(--md-scrim) 32%,transparent);opacity:0;
+  transition:opacity calc(var(--p-effect-slow-d) * .7) var(--p-exit)}
+.pgx.is-open .pgx__scrim{opacity:1;transition:opacity var(--p-effect-slow-d) var(--p-effect-slow)}
+.pgx__sheet{position:relative;display:flex;flex-direction:column;width:min(100%,640px);max-height:min(88dvh,920px);
+  background:var(--p-float);color:var(--md-on-surface);border-radius:var(--p-r-xl) var(--p-r-xl) 0 0;padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:var(--p-shadow);outline:none;transform:translateY(100%);transition:transform calc(var(--p-spatial-slow-d) * .7) var(--p-exit)}
+.pgx.is-open .pgx__sheet{transform:none;transition:transform var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.pgx__grab{flex:none;height:24px;display:grid;place-items:center;touch-action:none;cursor:grab}
+.pgx__grab::before{content:"";width:32px;height:4px;border-radius:var(--p-r-full);background:var(--md-outline)}
+.pgx__h{flex:none;display:flex;align-items:flex-start;gap:8px;padding:0 12px 0 24px;touch-action:none}
+.pgx__h > div{flex:1;min-width:0;padding-top:6px}
+.pgx__h h3{margin:4px 0 0;font:450 24px/32px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+.pgx__body{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:16px 24px 24px}
+.pgx__fig{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 14px}
+.pgx__fig .pg-big{font-size:52px;line-height:1;font-weight:540}
+.pgx__fig .pg-u{font-size:.42em}
+.pgx__cap{font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pgx__p{margin:14px 0 0;font:400 15px/22px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);max-width:60ch}
+.pgx__hd{margin:24px 0 10px}
+.pgx .pg-mini{margin-top:16px}
+.pgx .pg-hrs li{grid-template-columns:minmax(96px,1.2fr) minmax(0,1fr) 64px}
+.pgx .pg-hrs__t b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgx .pg-hrs__v b{color:var(--md-on-surface)}
+.pgx .pg-day__s{display:flex;flex-wrap:wrap;gap:8px}
+.pgx .pg-chipbtn{background:var(--p-well)}
+.pgx .pg-tl > li:not(.pg-tl--btn),.pgx .pg-tl__btn{background:var(--p-well)}
+.pgx__acts{display:flex;flex-direction:column;gap:8px;margin-top:28px}
+.pgx__acts .pl-btn{width:100%}
+.pgx__acts .pl-btn:disabled{opacity:.38;pointer-events:none}
+.pgx__spark{display:grid;grid-template-columns:repeat(30,minmax(0,1fr));gap:2px;height:80px;align-items:end;margin-top:20px}
+.pgx__spark i{display:block;height:100%;border-radius:3px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(max(var(--s),.03))}
+.pgx__spark i.is-now{background:var(--md-primary)}
+.pgx__sparkax{display:flex;justify-content:space-between;margin-top:6px;font:500 11px/14px var(--m3-font);color:var(--md-on-surface-variant)}
+/* what a peek holds draws itself, as the cards do */
+.pgx .pg-bar i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger) + 120ms)}
+.pgx__spark i{animation:pgGrowY var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * 12ms + 120ms)}
+.m-reduce .pgx__sheet,.m-reduce .pgx.is-open .pgx__sheet{transform:none}
+.m-reduce .pgx__sheet{opacity:0;transition:opacity 150ms var(--p-effect)}
+.m-reduce .pgx.is-open .pgx__sheet{opacity:1;transition:opacity 150ms var(--p-effect)}
+@media (prefers-reduced-motion:reduce){.pgx *{animation-name:pgFade!important;animation-duration:150ms!important;animation-delay:0ms!important}}
 
 @keyframes pgGrowX{from{transform:scaleX(0)}}
 @keyframes pgGrowY{from{transform:scaleY(0)}}
@@ -6436,7 +6550,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.73</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.74</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6492,7 +6606,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.73 · sharded store</span>
+        <span class="chip" id="verChip">v6.74 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -6676,6 +6790,19 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   </section>
 </div>
 <input type="file" id="figInput" accept="image/*" multiple hidden>
+
+<!-- ============ PROGRESS PEEK (Plume 2.15) ============ -->
+<div class="pgx" id="pgx" hidden inert>
+  <div class="pgx__scrim" data-pgxclose></div>
+  <section class="pgx__sheet" id="pgxSheet" role="dialog" aria-modal="true" aria-labelledby="pgxT" tabindex="-1">
+    <div class="pgx__grab" aria-hidden="true"></div>
+    <header class="pgx__h">
+      <div><span class="pg-over" id="pgxO"></span><h3 id="pgxT"></h3></div>
+      <button class="pl-ib pl-press" data-pgxclose aria-label="Close" title="Close"><svg class="ic"><use href="#i-close"/></svg></button>
+    </header>
+    <div class="pgx__body" id="pgxBody"></div>
+  </section>
+</div>
 
 <!-- ============ NAVIGATION BAR (phones) ============ -->
 <nav class="tabbar" id="tabbar">
@@ -7596,7 +7723,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.73';
+const APP_VERSION='6.74';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -11124,6 +11251,7 @@ function inPool(q){
     case 'dupe':return !!q.dupCandidate;
     case 'unverified':return (q.trust||0)<=1;
     case 'repeat':return (q.seenCount||0)>1;
+    case 'ids':return !!(F.ids&&F.ids.has(q.id));
     default:return true;
   }
 }
@@ -11230,6 +11358,14 @@ function drillWeakest(){
   startSession('Weak spot: '+g[0].k);
 }
 
+/* a session from an exact set of questions (Progress's peeks: "practise
+   these"). It takes the user's usual block size and order, then the pool
+   goes back to what the builder shows. */
+function startIds(ids,label){
+  ids=[...new Set(ids)];if(!ids.length)return toast('No questions to practise there.');
+  const p=F.pool;F.pool='ids';F.ids=new Set(ids);clearFacets();
+  try{startSession(label)}finally{F.pool=p==='ids'?'unused':p;F.ids=null}
+}
 function startSession(label){
   const m=matching();
   if(!m.length)return toast('No questions match those filters.');
@@ -14112,6 +14248,8 @@ const pgTfmt=v=>{v=Math.max(0,Math.round(v));const h=Math.floor(v/3600),m=Math.f
 const pgTtxt=v=>pgTfmt(v).replace(/<[^>]+>/g,'');
 function pgT(k,v){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-f="t">${pgTfmt(v)}</b>`}
 const pgU=u=>`<small class="pg-u">${u}</small>`;
+/* the chevron that ends a chart's read-out: the line opens that period */
+const PG_GO='<svg class="pg-read__go" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg>';
 const pgEmpty=(t,s)=>`<div class="pg-empty"><span class="pg-empty__shape" aria-hidden="true"></span><b>${t}</b><span>${s}</span></div>`;
 function pgCard(title,body,opt){
   opt=opt||{};
@@ -14149,19 +14287,19 @@ function pgFormHTML(){
   else if(d>0)say=`${Math.round(d)} points better than the 100 before${best&&now.p>=best-0.5?', your best stretch so far':''}.`;
   else say=`${Math.round(-d)} points below the 100 before. Open Gaps to see what changed.`;
   const hero=`<div class="pg-hero__top">
-      <div class="pg-hero__lead">
+      <button type="button" class="pg-hero__lead pg-tap pg-tap--bare pl-press" data-pk="form">
         <span class="pg-over">Your form</span>
-        <div class="pg-disp">${pgN('form',now.p)}${pgU('%')}</div>
+        <span class="pg-disp">${pgN('form',now.p)}${pgU('%')}</span>
         <span class="pg-hero__ci">${ci?`likely ${Math.round(ci[0])}–${Math.round(ci[1])}%`:''}</span>
-      </div>
-      ${d!=null?`<span class="pg-delta ${d>=2.5?'is-up':d<=-2.5?'is-down':''}">${d>=0?'+':'−'}${pgN('formd',Math.abs(d))}<small>pt</small></span>`:''}
+      </button>
+      ${d!=null?`<button type="button" class="pg-delta pg-tap pl-press ${d>=2.5?'is-up':d<=-2.5?'is-down':''}" data-pk="form" aria-label="Change on the 100 before">${d>=0?'+':'−'}${pgN('formd',Math.abs(d))}<small>pt</small></button>`:''}
     </div>
     <p class="pg-hero__say">${say}</p>
     <p class="pg-hero__def">Accuracy on your last ${now.n} first sightings: questions you had never met before.</p>
     <div class="pg-trio">
-      <div><span>${pgN('f7',w7.length?c7/w7.length*100:null)}${w7.length?pgU('%'):''}</span><em>Every answer, 7 days</em></div>
-      <div><span>${pgN('n7',w7.length)}</span><em>Answered, 7 days</em></div>
-      <div><span>${pgN('cov',t.total?t.used/t.total*100:0)}${pgU('%')}</span><em>${t.used} of ${t.total} seen</em></div>
+      <button type="button" class="pg-tap pl-press" data-pk="d7"><span>${pgN('f7',w7.length?c7/w7.length*100:null)}${w7.length?pgU('%'):''}</span><em>Every answer, 7 days</em></button>
+      <button type="button" class="pg-tap pl-press" data-pk="d7"><span>${pgN('n7',w7.length)}</span><em>Answered, 7 days</em></button>
+      <button type="button" class="pg-tap pl-press" data-pgto="areas"><span>${pgN('cov',t.total?t.used/t.total*100:0)}${pgU('%')}</span><em>${t.used} of ${t.total} seen</em></button>
     </div>`;
   return pgCard('',hero,{cls:'pg-hero'})+pgTrendCard()+pgStickCard(E)+pgMemoryCard()+pgReadyCard()+pgCompareCard(E)+pgBestsCard(E);
 }
@@ -14174,9 +14312,9 @@ function pgMemoryCard(){
     if((r.int||0)<7)learn++;else if(r.int<21)young++;else mature++});
   if(!en)return pgCard('Memory',pgEmpty('Nothing on the schedule yet','A question joins it the first time you answer it.'),{cls:'is-half'});
   const seg=[['learn','Learning','back within a week',learn],['young','Settling','back in 1–3 weeks',young],['mature','Held','gone 3 weeks or more',mature]];
-  return pgCard('Memory',`<div class="pg-stack pg-stack--mem">${seg.filter(x=>x[3]).map((x,i)=>`<i class="m-${x[0]}" style="flex:${x[3]};--i:${i}"></i>`).join('')}</div>
-    <ul class="pg-causes pg-causes--mem">${seg.map(x=>`<li><span class="pg-key m-${x[0]}"></span><div><b>${x[1]}</b><span>${x[2]}</span></div><strong>${pgN('mem_'+x[0],x[3])}<small>${Math.round(x[3]/en*100)}%</small></strong></li>`).join('')}</ul>
-    <div class="pg-mini"><div><b>${pgN('lap',lapses)}</b><span>slips back in all</span></div><div><b>${pgN('leech',leech)}</b><span>missed 3 times or more</span></div><div><b>${never}</b><span>never answered</span></div></div>
+  return pgCard('Memory',`<div data-pgfg="mem"><div class="pg-stack pg-stack--mem">${seg.filter(x=>x[3]).map((x,i)=>`<i class="m-${x[0]}" data-pgf="${x[0]}" style="flex:${x[3]};--i:${i}"></i>`).join('')}</div>
+    <ul class="pg-causes pg-causes--mem">${seg.map(x=>`<li class="pg-tap pl-press" role="button" tabindex="0" data-pk="mem:${x[0]}" data-pgf="${x[0]}"><span class="pg-key m-${x[0]}"></span><div><b>${x[1]}</b><span>${x[2]}</span></div><strong>${pgN('mem_'+x[0],x[3])}<small>${Math.round(x[3]/en*100)}%</small></strong></li>`).join('')}</ul></div>
+    <div class="pg-mini"><button type="button" class="pg-tap pl-press" data-pk="mem:leech"><b>${pgN('lap',lapses)}</b><span>slips back in all</span></button><button type="button" class="pg-tap pl-press" data-pk="mem:leech"><b>${pgN('leech',leech)}</b><span>missed 3 times or more</span></button><button type="button" class="pg-tap pl-press" data-pk="mem:never"><b>${never}</b><span>never answered</span></button></div>
     <p class="pg-note">${leech?`${leech} question${leech===1?' keeps':'s keep'} coming back wrong. That is usually the explanation, not your memory: read ${leech===1?'it':'them'} rather than drilling again.`:'Nothing keeps slipping back.'}</p>`,
     {sub:`${en} questions on the review schedule, by how long each one is holding.`,cls:'is-half'});
 }
@@ -14187,13 +14325,14 @@ function pgCompareCard(E){
   const m0=new Date(now.getFullYear(),now.getMonth(),1).getTime(),mp=new Date(now.getFullYear(),now.getMonth()-1,1).getTime();
   const mpe=Math.min(addDays(new Date(mp),now.getDate()).getTime(),m0),end=Date.now()+1;
   const C=[[sumOf(between(E,w0,end)),sumOf(between(E,wp,wp+iw*DAYMS))],[sumOf(between(E,m0,end)),sumOf(between(E,mp,mpe))]];
+  /* pgCmpWin (the peeks) reads the same windows */
   if(!C[0][0].n&&!C[0][1].n&&!C[1][0].n&&!C[1][1].n)return pgCard('This week, this month',pgEmpty('Nothing to compare yet','A week of study and this fills in.'),{cls:'is-half'});
   const dd=(a,b,u,f)=>{if(a==null||b==null||!isFinite(a)||!isFinite(b))return '';const d=Math.round(a)-Math.round(b);
     return `<span class="pg-dd ${d>0?'is-up':d<0?'is-down':''}">${d>0?'+':d<0?'−':'±'}${Math.abs(d)}${u||''}</span>`};
   const R=[['Questions',x=>x.n,x=>String(x.n),''],['Accuracy',x=>x.acc,x=>x.acc==null?'—':Math.round(x.acc)+'%','pt'],
     ['Time studied',x=>x.ms/60000,x=>fmtDur(x.ms),'m'],['Active days',x=>x.days,x=>String(x.days),'']];
   return pgCard('This week, this month',`<div class="pg-cmp"><span></span><b>This week</b><b>This month</b>
-    ${R.map(r=>`<span>${r[0]}</span>${C.map(c=>`<div><strong>${r[2](c[0])}</strong>${dd(r[1](c[0]),r[1](c[1]),r[3])}</div>`).join('')}`).join('')}</div>`,
+    ${R.map((r,ri)=>`<span>${r[0]}</span>${C.map((c,ci)=>`<button type="button" class="pg-tap pl-press" data-pk="cmp:${ri}.${ci}"><strong>${r[2](c[0])}</strong>${dd(r[1](c[0]),r[1](c[1]),r[3])}</button>`).join('')}`).join('')}</div>`,
     {sub:`Against the same ${iw} day${iw===1?'':'s'} of last week and the first ${now.getDate()} days of last month.`,cls:'is-half'});
 }
 /* the best form ever reached: the highest window of 100 first sightings */
@@ -14243,7 +14382,7 @@ function pgTrendSVG(){
     <g class="pg-dots">${out.map((b,i)=>b.n>=3?`<circle style="--i:${i}" cx="${x(i)}" cy="${y(b.c/b.n*100)}" r="${(2.5+3.5*Math.sqrt(b.n/mx)).toFixed(1)}"/>`:'').join('')}</g>
     ${out.map((b,i)=>(i%every===0||i===out.length-1)&&!(i!==out.length-1&&out.length-1-i<every*.6)?`<text class="pg-ax" x="${x(i)}" y="${H-4}" text-anchor="middle">${esc(b.lab)}</text>`:'').join('')}
     <line class="pg-guide" x1="0" x2="0" y1="${top}" y2="${H-22}"/>
-  </svg><p class="pg-read" aria-live="polite">${pgTrendRead(out.length-1)}</p>`;
+  </svg><button type="button" class="pg-read pg-tap pl-press" aria-live="polite">${pgTrendRead(out.length-1)}</button>`;
 }
 /* a curve through the points that never overshoots them (monotone) */
 function pgSmooth(p){
@@ -14259,7 +14398,7 @@ function pgSmooth(p){
 }
 function pgTrendRead(i){
   const T=PG.trend;if(!T)return '';const b=T.out[i],f=T.fl[i];
-  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} answered, ${Math.round(b.c/b.n*100)}% right`:'nothing answered'}${f?` · form ${Math.round(f[2].p)}%`:''}`;
+  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} answered, ${Math.round(b.c/b.n*100)}% right`:'nothing answered'}${f?` · form ${Math.round(f[2].p)}%`:''}${PG_GO}`;
 }
 /* Is it sticking: the two things a second sighting can tell you */
 function pgStickCard(E){
@@ -14269,13 +14408,13 @@ function pgStickCard(E){
     for(let i=0;i<at.length-1;i++){if(!at[i].correct){recN++;if(at[i+1].correct)rec++;break}}
     for(let i=0;i<at.length-1;i++){if(at[i].correct){retN++;if(at[i+1].correct)ret++;break}}});
   if(recN+retN<5)return pgCard('Is it sticking?',pgEmpty('Meet a question twice and this fills in','The review queue brings them back.'));
-  const one=(k,lab,c,n,def)=>`<div class="pg-stick">
-      <div class="pg-stick__v">${n?pgN(k,c/n*100)+pgU('%'):'—'}</div>
-      <div class="pg-stick__t"><b>${lab}</b><span>${def}</span>${n?pgBar(c/n):''}<em>${c} of ${n}</em></div></div>`;
+  const one=(k,lab,c,n,def)=>`<button type="button" class="pg-stick pg-tap pl-press" data-pk="stick:${k}">
+      <span class="pg-stick__v">${n?pgN(k,c/n*100)+pgU('%'):'—'}</span>
+      <span class="pg-stick__t"><b>${lab}</b><span>${def}</span>${n?pgBar(c/n):''}<em>${c} of ${n}</em></span></button>`;
   /* accuracy by how many times you have met the question */
   const L=[{l:'First sighting',n:0,c:0},{l:'Second',n:0,c:0},{l:'Third or later',n:0,c:0}];
   E.forEach(a=>{const x=L[Math.min(2,a.seq)];x.n++;if(a.correct)x.c++});
-  const lad=`<div class="pg-lad"><span class="pg-lad__h">Accuracy by sighting</span>${L.filter(x=>x.n).map((x,i)=>`<div style="--i:${i}"><span>${x.l}</span>${pgBar(x.c/x.n)}<b>${Math.round(x.c/x.n*100)}%</b><em>${x.n}</em></div>`).join('')}</div>`;
+  const lad=`<div class="pg-lad"><span class="pg-lad__h">Accuracy by sighting</span>${L.map((x,i)=>x.n?`<button type="button" class="pg-tap pl-press" data-pk="sight:${i}" style="--i:${i}"><span>${x.l}</span>${pgBar(x.c/x.n)}<b>${Math.round(x.c/x.n*100)}%</b><em>${x.n}</em></button>`:'').join('')}</div>`;
   return pgCard('Is it sticking?',
     one('rec','Recovered',rec,recN,'Missed the first time, right the next')+
     one('ret','Kept',ret,retN,'Right the first time, still right the next')+lad,
@@ -14285,10 +14424,10 @@ function pgStickCard(E){
    segments are as wide as their weight and as full as their score */
 function pgReadyCard(){
   const R=readiness();
-  const seg=R.parts.map((p,i)=>`<span class="pg-rd__seg" style="flex:${p.w}"><i style="--s:${p.v==null?0:(p.v/100).toFixed(3)};--i:${i}"></i></span>`).join('');
-  const rows=R.parts.map((p,i)=>`<li><span class="pg-key" style="--i:${i}"></span><b>${esc(p.k)}</b><span>${esc(p.lab)}</span><em>${p.v==null?'—':Math.round(p.v)}</em></li>`).join('');
-  return pgCard('Readiness',`<div class="pg-rd__top"><div class="pg-big">${pgN('ready',R.score)}<small class="pg-u">/100</small></div><b class="pg-rd__w">${READY_WORD(R.score)}</b></div>
-    <div class="pg-rd">${seg}</div><ul class="pg-rd__l">${rows}</ul>
+  const seg=R.parts.map((p,i)=>`<span class="pg-rd__seg" data-pgf="${i}" style="flex:${p.w}"><i style="--s:${p.v==null?0:(p.v/100).toFixed(3)};--i:${i}"></i></span>`).join('');
+  const rows=R.parts.map((p,i)=>`<li class="pg-tap pl-press" role="button" tabindex="0" data-pk="rd:${i}" data-pgf="${i}"><span class="pg-key" style="--i:${i}"></span><b>${esc(p.k)}</b><span>${esc(p.lab)}</span><em>${p.v==null?'—':Math.round(p.v)}</em></li>`).join('');
+  return pgCard('Readiness',`<button type="button" class="pg-rd__top pg-tap pg-tap--bare pl-press" data-pk="rd:all"><span class="pg-big">${pgN('ready',R.score)}<small class="pg-u">/100</small></span><b class="pg-rd__w">${READY_WORD(R.score)}</b></button>
+    <div data-pgfg="rd"><div class="pg-rd">${seg}</div><ul class="pg-rd__l">${rows}</ul></div>
     <p class="pg-note">${R.thin?'Too little history to lean on yet. Read it as a direction.':'Each segment is as wide as its weight and as full as its score. Not a predicted exam score.'}</p>`,
     {cls:'is-half',tool:'<button class="pl-ib pl-press" data-note="readiness" aria-label="How readiness is worked out">'+sxIc('i-info')+'</button>'});
 }
@@ -14302,11 +14441,11 @@ function pgBestsCard(E){
   let bd=null;Object.keys(dy).forEach(k=>{if(!bd||dy[k]>dy[bd])bd=k});
   const tiles=[
     bs&&['bs',bs.p,'%','Best session',`${bs.c} of ${bs.n} · ${pgDate(bs.s.ts,{day:'numeric',month:'short'})}`,bs.s.id],
-    bw&&['bw',bw.c/bw.n*100,'%','Best week',`${bw.n} answered · from ${pgDate(new Date(bw.k+'T00:00:00'),{day:'numeric',month:'short'})}`],
-    bd&&['bd',dy[bd],'','Most in a day',pgDate(new Date(bd+'T00:00:00'),{day:'numeric',month:'short',year:'numeric'})],
-    ['bstk',longestStreak(),'d','Longest streak',streak()?'now '+streak()+' days':'not running']
+    bw&&['bw',bw.c/bw.n*100,'%','Best week',`${bw.n} answered · from ${pgDate(new Date(bw.k+'T00:00:00'),{day:'numeric',month:'short'})}`,null,'bw:'+bw.k],
+    bd&&['bd',dy[bd],'','Most in a day',pgDate(new Date(bd+'T00:00:00'),{day:'numeric',month:'short',year:'numeric'}),null,'day:'+bd],
+    ['bstk',longestStreak(),'d','Longest streak',streak()?'now '+streak()+' days':'not running',null,'streak']
   ].filter(Boolean);
-  return pgCard('Your bests',`<div class="pg-tiles">${tiles.map(t=>`<${t[5]?`button type="button" class="pg-tile pl-press" data-open="${t[5]}"`:'div class="pg-tile"'}><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b><em>${esc(t[4])}</em></${t[5]?'button':'div'}>`).join('')}</div>`,
+  return pgCard('Your bests',`<div class="pg-tiles">${tiles.map(t=>`<${t[5]?`button type="button" class="pg-tile pl-press" data-open="${t[5]}"`:t[6]?`button type="button" class="pg-tile pl-press" data-pk="${t[6]}"`:'div class="pg-tile"'}><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b><em>${esc(t[4])}</em></${t[5]||t[6]?'button':'div'}>`).join('')}</div>`,
     {sub:'Sessions of 20 questions or more; weeks of 50 answers or more.'});
 }
 
@@ -14365,12 +14504,12 @@ function pgTimeBody(){
   const hero=`<span class="pg-over">${W.cl} · time per question</span>
     ${empty?`<p class="pg-hero__say">Nothing answered ${W.cl.toLowerCase()==='today'?'today':W.cl.toLowerCase()} yet.${last?` ${W.pl[0].toUpperCase()+W.pl.slice(1)}: ${pgTtxt(last.mq)} a question, ${pgTtxt(last.ma||0)} to answer, over ${last.n} questions.`:''}</p>`:
     `<div class="pg-tpair">
-      <div class="pg-tpair__main"><div class="pg-disp pg-disp--t">${pgT('tq',cur.mq)}</div><b>Question time</b><span>everything spent on a question</span>${dl(cur.mq,prv&&prv.n?prv.mq:null)}</div>
-      <div class="pg-tpair__side"><div class="pg-big">${pgT('ta',cur.ma)}</div><b>Answer time</b><span>until you commit</span>${dl(cur.ma,prv&&prv.an?prv.ma:null)}</div>
+      <button type="button" class="pg-tpair__main pg-tap pg-tap--bare pl-press" data-pk="tq"><span class="pg-disp pg-disp--t">${pgT('tq',cur.mq)}</span><b>Question time</b><span>everything spent on a question</span>${dl(cur.mq,prv&&prv.n?prv.mq:null)}</button>
+      <button type="button" class="pg-tpair__side pg-tap pg-tap--bare pl-press" data-pk="tq:ta"><span class="pg-big">${pgT('ta',cur.ma)}</span><b>Answer time</b><span>until you commit</span>${dl(cur.ma,prv&&prv.an?prv.ma:null)}</button>
     </div>
-    <div class="pg-stack pg-stack--t"><i class="t-ans" style="flex:${cur.a}"></i><i class="t-rev" style="flex:${Math.max(0,cur.q-cur.a)};--i:1"></i></div>
-    <div class="pg-qleg"><span><i class="t-ans"></i>Answering <b>${cur.q?Math.round(cur.a/cur.q*100):0}%</b></span><span><i class="t-rev"></i>Reading after <b>${cur.q?Math.round((cur.q-cur.a)/cur.q*100):0}%</b></span></div>
-    <div class="pg-trio"><div><span>${pgN('tn',cur.n)}</span><em>questions</em></div><div><span>${pgT('tt',cur.tot)}</span><em>time studied</em></div><div><span>${pgT('tx',cur.n?cur.tot/Math.max(1,new Set(between(E,W.cur[0],W.cur[1]).map(a=>a.sess||dayKey(a.ts))).size):0)}</span><em>per session</em></div></div>`}
+    <div data-pgfg="tsplit"><div class="pg-stack pg-stack--t"><i class="t-ans" data-pgf="a" style="flex:${cur.a}"></i><i class="t-rev" data-pgf="r" style="flex:${Math.max(0,cur.q-cur.a)};--i:1"></i></div>
+    <div class="pg-qleg"><button type="button" class="pg-tap pl-press" data-pgf="a" aria-pressed="false"><i class="t-ans"></i>Answering <b>${cur.q?Math.round(cur.a/cur.q*100):0}%</b> · ${pgTtxt(cur.a/1000)}</button><button type="button" class="pg-tap pl-press" data-pgf="r" aria-pressed="false"><i class="t-rev"></i>Reading after <b>${cur.q?Math.round((cur.q-cur.a)/cur.q*100):0}%</b> · ${pgTtxt(Math.max(0,cur.q-cur.a)/1000)}</button></div></div>
+    <div class="pg-trio"><button type="button" class="pg-tap pl-press" data-pk="tper"><span>${pgN('tn',cur.n)}</span><em>questions</em></button><button type="button" class="pg-tap pl-press" data-pk="tper"><span>${pgT('tt',cur.tot)}</span><em>time studied</em></button><button type="button" class="pg-tap pl-press" data-pk="tper"><span>${pgT('tx',cur.n?cur.tot/Math.max(1,new Set(between(E,W.cur[0],W.cur[1]).map(a=>a.sess||dayKey(a.ts))).size):0)}</span><em>per session</em></button></div>`}
     ${dev}`;
   return pgCard('',hero,{cls:'pg-hero'})+pgTchartCard(E)+pgTlistCard(E)+pgTspreadCard(E)+pgTsessCard();
 }
@@ -14397,23 +14536,24 @@ function pgTchartSVG(){
     <g class="pg-dots pg-dots--q">${pq.map((p,i)=>`<circle style="--i:${i}" cx="${p[0]}" cy="${p[1]}" r="3"/>`).join('')}</g>
     ${out.map((b,i)=>(i%every===0||i===out.length-1)&&!(i!==out.length-1&&out.length-1-i<every*.6)?`<text class="pg-ax" x="${x(i)}" y="${H-4}" text-anchor="middle">${esc(b.lab)}</text>`:'').join('')}
     <line class="pg-guide" x1="0" x2="0" y1="${top}" y2="${H-24}"/>
-  </svg><p class="pg-read" aria-live="polite">${pgTread(out.length-1)}</p>`;
+  </svg><button type="button" class="pg-read pg-tap pl-press" aria-live="polite">${pgTread(out.length-1)}</button>`;
 }
 function pgTread(i){
   const b=PG.tchart&&PG.tchart.out[i];if(!b)return '';
-  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} questions · question ${pgTtxt(b.mq)} · answer ${b.ma==null?'—':pgTtxt(b.ma)} · ${pgTtxt(b.tot)} in all`:'nothing answered'}`;
+  return `<b>${esc(b.full)}</b> · ${b.n?`${b.n} questions · question ${pgTtxt(b.mq)} · answer ${b.ma==null?'—':pgTtxt(b.ma)} · ${pgTtxt(b.tot)} in all`:'nothing answered'}${PG_GO}`;
 }
 /* the same numbers as a list you can read period by period, newest first */
 function pgTlistCard(E){
   const {out,unit}=pgTbuckets(PG.tper,E);
+  out.forEach((b,i)=>{b.i=i});
   const rows=out.filter(b=>b.n).reverse().slice(0,unit==='day'?14:12);
   if(!rows.length)return '';
   const mx=Math.max(...rows.map(b=>b.mq));
   const name={day:'Day by day',week:'Week by week',month:'Month by month'}[unit];
-  return pgCard(name,`<ul class="pg-tl">${rows.map((b,i)=>`<li style="--i:${Math.min(i,8)}">
+  return pgCard(name,`<ul class="pg-tl">${rows.map((b,i)=>`<li class="pg-tl--btn" style="--i:${Math.min(i,8)}"><button type="button" class="pg-tl__btn pl-press" data-pk="tb:${b.i}">
       <span class="pg-tl__t"><b>${esc(b.full)}</b><em>${b.n} question${b.n===1?'':'s'} · ${pgTtxt(b.tot)}</em></span>
       ${pgBar(b.mq/mx)}
-      <span class="pg-tl__v"><b>${pgTtxt(b.mq)}</b><em>answer ${b.ma==null?'—':pgTtxt(b.ma)}</em></span></li>`).join('')}</ul>`,
+      <span class="pg-tl__v"><b>${pgTtxt(b.mq)}</b><em>answer ${b.ma==null?'—':pgTtxt(b.ma)}</em></span></button></li>`).join('')}</ul>`,
     {sub:`Average question time and answer time for each ${unit} you studied, newest first. The bar is question time.`});
 }
 /* how long questions take you: the spread behind the average */
@@ -14426,7 +14566,8 @@ function pgTspreadCard(E){
   A.forEach(x=>{const q=x.study/1000;r.find(z=>q>=z.b[0]&&q<z.b[1]).n++;if(x.ans!=null){const v=x.ans/1000;r.find(z=>v>=z.b[0]&&v<z.b[1]).a++}});
   const live=r.filter(z=>z.n||z.a),mx=Math.max(...live.map(z=>Math.max(z.n,z.a)));
   const med=pgMed(A.map(x=>x.study/1000)),over=A.filter(x=>x.study>PG_PACE*1000).length;
-  return pgCard('How long questions take you',`<ul class="pg-hrs pg-hrs--t">${live.map((z,i)=>`<li style="--i:${i}">
+  PG.tsp={A,rows:live,per};
+  return pgCard('How long questions take you',`<ul class="pg-hrs pg-hrs--t">${live.map((z,i)=>`<li class="pg-tap pl-press" role="button" tabindex="0" data-pk="tsp:${i}" style="--i:${i}">
       <span class="pg-hrs__t"><b>${z.b[2]}</b></span>
       <span class="pg-tsp">${pgBar(z.n/mx)}${pgBar(z.a/mx,'is-a')}</span>
       <span class="pg-hrs__v"><b>${z.n}</b><em>${z.a} answered</em></span></li>`).join('')}</ul>
@@ -14458,20 +14599,22 @@ function pgHabitHTML(){
   const st=streak(),t0=sod(Date.now()),w0=addDays(t0,-dowIdx(t0));
   const days=DOWL.map((l,i)=>{const d=addDays(w0,i),k=dayKey(d),v=map[k],fut=d>t0;
     const cls=fut?'is-fut':!v?'is-rest':goal&&v.n>=goal?'is-met':'is-on';
-    return `<span class="pg-wd ${cls}${k===tk?' is-today':''}" style="--i:${i}" title="${pgDate(d,{weekday:'long',day:'numeric',month:'short'})}${v?' — '+v.n+' answered':''}"><i></i><em>${l[0]}</em></span>`}).join('');
+    const lab=`${pgDate(d,{weekday:'long',day:'numeric',month:'short'})}${v?' — '+v.n+' answered':''}`;
+    return fut?`<span class="pg-wd ${cls}" style="--i:${i}" title="${lab}"><i></i><em>${l[0]}</em></span>`
+      :`<button type="button" class="pg-wd pg-tap pl-press ${cls}${k===tk?' is-today':''}" data-pk="day:${k}" style="--i:${i}" aria-label="${lab}"><i></i><em>${l[0]}</em></button>`}).join('');
   const R=52,C=2*Math.PI*R;
   const line=!goal?'Set a daily goal in Settings and this ring keeps you to it.'
     :n0>=goal?`Goal met. ${n0-goal?n0-goal+' past it; the rest is surplus.':'Exactly on it.'}`
     :n0?`${goal-n0} more closes today.`:`Nothing yet today. ${goal} closes it.`;
   const hero=`<div class="pg-today">
-      <div class="pg-ring" style="--p:${pct.toFixed(4)};--c:${C.toFixed(2)}">
+      <button type="button" class="pg-ring pg-tap pl-press" data-pk="today" style="--p:${pct.toFixed(4)};--c:${C.toFixed(2)}" aria-label="Today, details">
         <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pg-ring__t" cx="60" cy="60" r="${R}"/><circle class="pg-ring__f" cx="60" cy="60" r="${R}" pathLength="1"/></svg>
-        <div class="pg-ring__c"><b class="pg-ring__n">${pgN('today',n0)}</b><span>${goal?'of '+goal:'today'}</span></div>
-      </div>
+        <span class="pg-ring__c"><b class="pg-ring__n">${pgN('today',n0)}</b><span>${goal?'of '+goal:'today'}</span></span>
+      </button>
       <div class="pg-today__r">
         <span class="pg-over">Today</span>
         <p class="pg-today__line">${line}</p>
-        <div class="pg-streak"><span class="pg-big">${pgN('stk',st)}${pgU(st===1?'day':'days')}</span><em>streak · best ${longestStreak()}</em></div>
+        <button type="button" class="pg-streak pg-tap pg-tap--bare pl-press" data-pk="streak"><span class="pg-big">${pgN('stk',st)}${pgU(st===1?'day':'days')}</span><em>streak · best ${longestStreak()}</em></button>
       </div>
     </div>
     <div class="pg-week" aria-label="This week">${days}</div>`;
@@ -14496,7 +14639,8 @@ function pgHeatCard(map,goal){
       cells+=fut?'<span class="pg-hc is-fut"></span>'
         :`<button type="button" class="pg-hc pl-press l${lvl(v&&v.n)}${k===PG.day?' is-sel':''}${k===today()?' is-today':''}" data-pgday="${k}" style="--c:${c}" aria-label="${pgDate(d,{weekday:'long',day:'numeric',month:'long'})}: ${v?v.n+' answered':'rest day'}"></button>`}
   }
-  const legend=`<span class="pg-hl"><em>Less</em>${[0,1,2,3,4].map(l=>`<span class="pg-hc l${l}"></span>`).join('')}<em>More</em></span>`;
+  /* a legend step isolates its days on the map */
+  const legend=`<span class="pg-hl"><em>Less</em>${[0,1,2,3,4].map(l=>`<button type="button" class="pg-hc pg-hlb pl-press l${l}" data-pglv="${l}" aria-pressed="false" aria-label="${['Rest days','Light days','Days under your '+(goal?'goal':'usual'),'Days '+(goal?'past your goal':'over your usual'),'Your biggest days'][l]}"></button>`).join('')}<em>More</em></span>`;
   return pgCard('Every day',`<div class="pg-heat" style="--cols:${cols}"><div class="pg-heat__m">${months}</div><div class="pg-heat__g" id="pgHeat">${cells}</div></div>
     <div class="pg-heat__f"><span class="pg-note">${on} of ${days} days active${goal?` · ${met} on goal`:''}</span>${legend}</div>
     <div class="pg-unfold${PG.day?' is-open':''}" id="pgDay"><div>${PG.day?pgDayHTML(PG.day):''}</div></div>`,
@@ -14523,7 +14667,7 @@ function pgAdhCard(E,map,goal){
     ['n30',a.n,'','Answered',dl(a.n,b.n)],
     ['h30',Math.round(a.ms/360000)/10,'h','Time studied',dl(a.ms/3600000,b.ms/3600000)]
   ].filter(Boolean);
-  return pgCard('The last 30 days',`<div class="pg-tiles pg-tiles--${t.length}">${t.map(x=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></div>`).join('')}</div>`,
+  return pgCard('The last 30 days',`<div class="pg-tiles pg-tiles--${t.length}">${t.map(x=>`<button type="button" class="pg-tile pl-press" data-pk="a30:${x[0]}"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></button>`).join('')}</div>`,
     {sub:'Each figure against the 30 days before.'});
 }
 function pgWeeksCard(E,goal){
@@ -14539,12 +14683,12 @@ function pgPerHTML(E,goal){
     W.push(Object.assign({s,lab:i?pgDate(s,{month:'short'}):'Now',full:pgDate(s,{month:'long',year:'numeric'})},sumOf(between(E,s.getTime(),e.getTime()))))}}
   else{const w0=addDays(t0,-dowIdx(t0));for(let i=11;i>=0;i--){const s=addDays(w0,-7*i),e=addDays(s,7);
     W.push(Object.assign({s,lab:i?s.getDate()+'/'+(s.getMonth()+1):'Now',full:'Week of '+pgDate(s,{day:'numeric',month:'short'})},sumOf(between(E,s.getTime(),e.getTime()))))}}
-  const tgt=mo?0:goal*7,mx=Math.max(tgt,...W.map(w=>w.n),1),n=W.length;
+  const tgt=mo?0:goal*7,mx=Math.max(tgt,...W.map(w=>w.n),1),n=W.length;PG.perW=W;
   return `<div class="pg-cols" style="--n:${n}">
       ${tgt?`<span class="pg-cols__goal" style="--y:${(tgt/mx).toFixed(4)}"><em>${tgt} a week</em></span>`:''}
-      ${W.map((w,i)=>`<div class="pg-col${tgt&&w.n>=tgt?' is-met':''}${i===n-1?' is-now':''}" title="${esc(w.full)}: ${w.n} answered${w.n?', '+Math.round(w.acc)+'% right, '+fmtDur(w.ms):''}">
+      ${W.map((w,i)=>`<button type="button" class="pg-col pg-tap pl-press${tgt&&w.n>=tgt?' is-met':''}${i===n-1?' is-now':''}" data-pk="per:${i}" aria-label="${esc(w.full)}: ${w.n} answered${w.n?', '+Math.round(w.acc)+'% right, '+fmtDur(w.ms):''}">
         <span class="pg-col__n">${w.n||''}</span><span class="pg-col__t"><i style="--s:${(w.n/mx).toFixed(4)};--i:${i}"></i></span>
-        <span class="pg-col__l">${esc(w.lab)}</span><span class="pg-col__a">${w.n?Math.round(w.acc)+'%':''}</span></div>`).join('')}
+        <span class="pg-col__l">${esc(w.lab)}</span><span class="pg-col__a">${w.n?Math.round(w.acc)+'%':''}</span></button>`).join('')}
     </div>`;
 }
 function pgAheadCard(){
@@ -14553,13 +14697,13 @@ function pgAheadCard(){
     const d=Math.floor((st.srs.due-t0)/DAYMS);if(st.srs.due<=Date.now())over++;else if(d<days)arr[Math.max(0,d)]++});
   const t=totals(),ex=examInfo(),A=pgData(),pace=paceWindow(A,7,0).per;
   const mx=Math.max(1,...arr);
-  const fc=`<div class="pg-fc">${arr.map((n,i)=>`<span title="${i?pgDate(t0+i*DAYMS,{weekday:'long',day:'numeric'}):'Later today'}: ${n} due"><i style="--s:${(n/mx).toFixed(4)};--i:${i}"></i><em>${i===0?'T':i%2?'':new Date(t0+i*DAYMS).getDate()}</em></span>`).join('')}</div>`;
+  const fc=`<div class="pg-fc">${arr.map((n,i)=>`<button type="button" class="pg-tap pl-press" data-pk="due:${i}" aria-label="${i?pgDate(t0+i*DAYMS,{weekday:'long',day:'numeric'}):'Later today'}: ${n} due"><i style="--s:${(n/mx).toFixed(4)};--i:${i}"></i><em>${i===0?'T':i%2?'':new Date(t0+i*DAYMS).getDate()}</em></button>`).join('')}</div>`;
   let hz='';
   if(ex&&ex.days>0&&t.unused){const need=t.unused/ex.days,m=Math.max(need,pace,1);
     hz=`<div class="pg-pace"><div><span>Your pace</span>${pgBar(pace/m)}<b>${Math.round(pace)} a day</b></div><div><span>Needed</span>${pgBar(need/m,'is-ref')}<b>${Math.ceil(need)} a day</b></div></div>
     <p class="pg-note">${t.unused} new questions and ${ex.days} days to the exam. ${pace>=need?'Your last seven days are enough to finish the bank.':`To finish the bank, ${Math.ceil(need-pace)} more a day than your last seven days.`}</p>`}
   else if(t.unused&&pace>.5)hz=`<p class="pg-note">${t.unused} new questions left. At your last seven days' pace of ${Math.round(pace)} a day, about ${Math.ceil(t.unused/pace)} days. Set an exam date in Settings to see the pace you need.</p>`;
-  return pgCard('What is coming',`<div class="pg-ahead"><div><span class="pg-big">${pgN('due',over)}</span><em>due now</em></div><div><span class="pg-big">${pgN('due7',arr.slice(0,7).reduce((a,b)=>a+b,0))}</span><em>due in 7 days</em></div></div>
+  return pgCard('What is coming',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:now"><span class="pg-big">${pgN('due',over)}</span><em>due now</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:7"><span class="pg-big">${pgN('due7',arr.slice(0,7).reduce((a,b)=>a+b,0))}</span><em>due in 7 days</em></button></div>
     ${fc}${hz}`,{sub:'The review schedule for the next two weeks.',cls:'is-half'});
 }
 const PG_HB=[[5,9,'Early','5–9'],[9,12,'Morning','9–12'],[12,17,'Afternoon','12–17'],[17,21,'Evening','17–21'],[21,24,'Night','21–24'],[0,5,'Late','0–5']];
@@ -14577,13 +14721,13 @@ function pgHrsHTML(A){
   const rows=days?DOWL.map(d=>({name:d,sub:'',n:0,c:0})):PG_HB.map(b=>({b,name:b[2],sub:b[3],n:0,c:0}));
   A.forEach(a=>{const d=new Date(a.ts);let x;
     if(days)x=rows[dowIdx(d)];else{const h=d.getHours();x=rows.find(r=>h>=r.b[0]&&h<r.b[1])}
-    x.n++;if(a.correct)x.c++});
-  const live=rows.filter(r=>r.n),mx=Math.max(...live.map(r=>r.n));
+    x.n++;if(a.correct)x.c++;(x.L||(x.L=[])).push(a)});
+  const live=rows.filter(r=>r.n),mx=Math.max(...live.map(r=>r.n));PG.hrsRows=live;PG.hrsA=A;
   const ok=live.filter(r=>r.n>=30),all=A.filter(a=>a.correct).length/A.length*100;
   const best=ok.length>1?ok.reduce((m,r)=>r.c/r.n>m.c/m.n?r:m):null,worst=ok.length>1?ok.reduce((m,r)=>r.c/r.n<m.c/m.n?r:m):null;
   const gap=best&&worst?(best.c/best.n-worst.c/worst.n)*100:0;
   const nm=r=>days?pgDate(addDays(new Date(2024,0,1),DOWL.indexOf(r.name)),{weekday:'long'}):r.name.toLowerCase();
-  return `<ul class="pg-hrs">${live.map((r,i)=>`<li class="${r===best&&gap>=6?'is-best':''}" style="--i:${i}">
+  return `<ul class="pg-hrs">${live.map((r,i)=>`<li class="pg-tap pl-press${r===best&&gap>=6?' is-best':''}" role="button" tabindex="0" data-pk="hr:${i}" style="--i:${i}">
       <span class="pg-hrs__t"><b>${r.name}</b>${r.sub?`<em>${r.sub}</em>`:''}</span>${pgBar(r.n/mx,r===best&&gap>=6?'':'is-thin')}
       <span class="pg-hrs__v"><b>${Math.round(r.c/r.n*100)}%</b><em>${r.n}</em></span></li>`).join('')}</ul>
     <p class="pg-note">${gap>=6?`You are ${Math.round(gap)} points more accurate ${days?'on '+nm(best)+'s than on '+nm(worst)+'s':'in the '+nm(best)+' than in the '+nm(worst)}. Put the hardest blocks there.`:`Your accuracy holds across ${days?'the week':'the day'} (${Math.round(all)}% overall). Study whenever suits you.`}</p>`;
@@ -14611,7 +14755,7 @@ function pgAreaRows(key){
   else rows.sort((a,b)=>b.n-a.n||String(a.k).localeCompare(String(b.k)));
   return rows;
 }
-const pgStackQ=r=>`<span class="pg-qst"><i class="s-right" style="flex:${r.right}"></i><i class="s-wrong" style="flex:${r.wrong}"></i><i class="s-new" style="flex:${r.new}"></i></span>`;
+const pgStackQ=r=>`<span class="pg-qst"><i class="s-right" data-pgf="right" style="flex:${r.right}"></i><i class="s-wrong" data-pgf="wrong" style="flex:${r.wrong}"></i><i class="s-new" data-pgf="new" style="flex:${r.new}"></i></span>`;
 function pgAreasHTML(){
   const tot=DB.questions.length;
   if(!tot)return pgCard('',pgEmpty('Nothing in the bank yet','Import questions and every area of the bank is measured here.'),{cls:'pg-hero'});
@@ -14622,9 +14766,9 @@ function pgAreasHTML(){
   const hero=`<span class="pg-over">The bank</span>
     <div class="pg-hero__top"><div class="pg-disp">${pgN('adone',done/tot*100)}${pgU('%')}</div></div>
     <p class="pg-hero__say">${done} of ${tot} questions done${done?`, and ${b.right} of them right as things stand`:''}.</p>
-    ${pgStackQ(b)}
-    <div class="pg-qleg"><span><i class="s-right"></i>Right last time <b>${b.right}</b></span><span><i class="s-wrong"></i>Missed last time <b>${b.wrong}</b></span><span><i class="s-new"></i>New <b>${b.new}</b></span></div>
-    ${lo&&hi&&lo!==hi?`<p class="pg-hero__def">Least done of the big systems: <b>${esc(lo.k)}</b>, ${Math.round((lo.n-lo.new)/lo.n*100)}% of ${lo.n}. Most done: ${esc(hi.k)}, ${Math.round((hi.n-hi.new)/hi.n*100)}%.</p>`:''}`;
+    <div data-pgfg="bank">${pgStackQ(b)}
+    <div class="pg-qleg">${[['right','Right last time'],['wrong','Missed last time'],['new','New']].map(x=>`<button type="button" class="pg-tap pl-press" data-pk="bank:${x[0]}" data-pgf="${x[0]}"><i class="s-${x[0]}"></i>${x[1]} <b>${b[x[0]]}</b></button>`).join('')}</div></div>
+    ${lo&&hi&&lo!==hi?`<p class="pg-hero__def">Least done of the big systems: <button type="button" class="pg-link pl-press" data-pgareago="${esc(lo.k)}">${esc(lo.k)}</button>, ${Math.round((lo.n-lo.new)/lo.n*100)}% of ${lo.n}. Most done: <button type="button" class="pg-link pl-press" data-pgareago="${esc(hi.k)}">${esc(hi.k)}</button>, ${Math.round((hi.n-hi.new)/hi.n*100)}%.</p>`:''}`;
   const have=PG_AREA.filter(a=>a[0]===PG.area||DB.questions.some(q=>facetValues(FACET_BY[a[0]],q).some(v=>v&&v!=='—')));
   const chips=`<div class="pg-chips" role="radiogroup" aria-label="Classify by">${have.map(a=>`<button type="button" class="pg-chip pl-press${a[0]===PG.area?' on':''}" role="radio" aria-checked="${a[0]===PG.area}" data-pgfacet="${a[0]}"><span class="pg-chip__ck" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg></span></span>${a[1]}</button>`).join('')}</div>`;
   const tool=pgSeg('asort',[['size','Largest'],['least','Least done'],['weak','Weakest']],PG.asort,'Order');
@@ -14656,6 +14800,7 @@ function pgAreaRow(r,i){
       <div class="pg-area__a">
         <button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgprac="new" data-k="${k}"${r.new?'':' disabled'}>${sxIc('i-play')}Practise new · ${r.new}</button>
         <button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgprac="missed" data-k="${k}"${r.wrong?'':' disabled'}>${sxIc('i-review')}Practise missed · ${r.wrong}</button>
+        ${r.due?`<button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgprac="due" data-k="${k}">${sxIc('i-review')}Review due · ${r.due}</button>`:''}
       </div></div></div></div></li>`;
 }
 
@@ -14680,25 +14825,29 @@ function pgGapsBody(){
   if(A.length<20)return pgCard('',pgEmpty('Twenty answers in this range and the gaps show','Pick a longer range, or answer a few more.'),{cls:'pg-hero'});
   return pgMissCard(A)+pgWeakCard(A)+pgPaceCard(A)+pgCalibCard(A)+pgStaminaCard(A);
 }
-function pgMissCard(A){
+/* each miss in one cause: your tag first, then what the record shows */
+function pgCauses(A){
   const W=A.filter(a=>!a.correct),med=pgMed(A.filter(a=>a.correct&&a.ans!=null).map(a=>a.ans));
-  const cnt={},tag={},det={};PG_CAUSE.forEach(c=>{cnt[c[0]]=0;tag[c[0]]=0;det[c[0]]=0});
+  const cnt={},tag={},det={},list={};PG_CAUSE.forEach(c=>{cnt[c[0]]=0;tag[c[0]]=0;det[c[0]]=0;list[c[0]]=[]});
   W.forEach(a=>{
     let k=null,by=tag;
     if(a.chosen==null)k='time';
     else if(a.miss)k={gap:'gap',trap:'trap',misread:'read',silly:'read',time:'time'}[a.miss]||null;
     if(!k){by=det;k=a.lure?'trap':a.struckKey?'struck':(med&&a.ans!=null&&a.ans<Math.max(8000,med*.5))?'fast':null}
     if(!k){k='none';by=null}
-    cnt[k]++;if(by)by[k]++;
+    cnt[k]++;list[k].push(a);if(by)by[k]++;
   });
-  const n=W.length,ans=A.length;
+  return{W,n:W.length,cnt,tag,det,list};
+}
+function pgMissCard(A){
+  const {cnt,tag,det,n}=pgCauses(A),ans=A.length;
   if(!n)return pgCard('Where the misses came from',pgEmpty('No misses in this range','Nothing to diagnose. Try a longer range.'));
   const live=PG_CAUSE.filter(c=>cnt[c[0]]);
-  const bar=`<div class="pg-stack" role="img" aria-label="Misses by cause">${live.map((c,i)=>`<i class="c-${c[0]}" style="flex:${cnt[c[0]]};--i:${i}"></i>`).join('')}</div>`;
+  const bar=`<div class="pg-stack" role="img" aria-label="Misses by cause">${live.map((c,i)=>`<i class="c-${c[0]}" data-pgf="${c[0]}" style="flex:${cnt[c[0]]};--i:${i}"></i>`).join('')}</div>`;
   const rows=live.map(c=>{const k=c[0],src=[tag[k]?tag[k]+' tagged':'',det[k]?det[k]+' from the record':''].filter(Boolean).join(' · ');
-    return `<li><span class="pg-key c-${k}"></span><div><b>${c[1]}</b><span>${c[2]}</span>${src&&k!=='none'?`<em>${src}</em>`:''}</div><strong>${pgN('mc_'+k,cnt[k])}<small>${Math.round(cnt[k]/n*100)}%</small></strong></li>`}).join('');
+    return `<li class="pg-tap pl-press" role="button" tabindex="0" data-pk="cause:${k}" data-pgf="${k}"><span class="pg-key c-${k}"></span><div><b>${c[1]}</b><span>${c[2]}</span>${src&&k!=='none'?`<em>${src}</em>`:''}</div><strong>${pgN('mc_'+k,cnt[k])}<small>${Math.round(cnt[k]/n*100)}%</small></strong></li>`}).join('');
   const lureQ=A.filter(a=>a.hasLure&&!a.correct&&a.chosen!=null),lureN=lureQ.filter(a=>a.lure).length;
-  return pgCard('Where the misses came from',`<div class="pg-misshead"><span class="pg-big">${pgN('miss',n)}</span><em>misses in ${ans} answers · ${Math.round(n/ans*100)}%</em></div>${bar}<ul class="pg-causes">${rows}</ul>
+  return pgCard('Where the misses came from',`<button type="button" class="pg-misshead pg-tap pg-tap--bare pl-press" data-pk="misses"><span class="pg-big">${pgN('miss',n)}</span><em>misses in ${ans} answers · ${Math.round(n/ans*100)}%</em></button><div data-pgfg="cause">${bar}<ul class="pg-causes">${rows}</ul></div>
     ${lureQ.length>=5?`<p class="pg-note">When a question had a lure and you missed it, you chose the lure ${Math.round(lureN/lureQ.length*100)}% of the time (${lureN} of ${lureQ.length})${lureN/lureQ.length>.4?'. Those questions are built for someone who knows most of the topic: you are close, and the last detail is what is missing.':'.'}</p>`:''}`,
     {sub:'Your own tag counts first. An untagged miss is placed by what the record shows: the lure chosen, the right option crossed out, or an answer far faster than your usual.'});
 }
@@ -14716,7 +14865,7 @@ function pgWeakList(A){
   const rows=Object.values(m).filter(r=>r.n>=8).map(r=>Object.assign(r,{p:r.c/r.n,stake:Math.round((1-r.c/r.n)*(bank[r.k]||r.n))})).sort((a,b)=>b.stake-a.stake);
   if(!rows.length)return pgEmpty('Not enough answers per area yet','An area joins the list at eight answers in this range.');
   const show=PG.all?rows:rows.slice(0,6);
-  return `<ul class="pg-weak" style="--avg:${avg.toFixed(4)}">${show.map((r,i)=>`<li style="--i:${i}">
+  return `<ul class="pg-weak" style="--avg:${avg.toFixed(4)}">${show.map((r,i)=>`<li class="pg-tap pl-press" role="button" tabindex="0" data-pk="weak:${esc(r.k)}" style="--i:${i}">
       <div class="pg-weak__t"><b>${esc(r.k)}</b><span>${Math.round(r.p*100)}% of ${r.n}${r.n<20?' · few answers':''}</span></div>
       <div class="pg-weak__bar">${pgBar(r.p,r.n<20?'is-thin':'')}<span class="pg-avg" aria-hidden="true"></span></div>
       <div class="pg-weak__s"><b>${r.stake}</b><em>at stake</em></div>
@@ -14733,7 +14882,7 @@ function pgCalibCard(A){
   if(sure.n>=10)say.push(sure.c/sure.n>=.85?`When you are sure you are right ${Math.round(sure.c/sure.n*100)}% of the time: you can trust it.`:`When you are sure you are right only ${Math.round(sure.c/sure.n*100)}% of the time. Slow down on the questions that feel easy.`);
   if(sw)say.push(`${sw} sure-but-wrong answer${sw===1?'':'s'}: beliefs to correct, the misses an exam punishes most.`);
   if(guess.n>=10&&guess.c/guess.n>=.35)say.push(`Your guesses land ${Math.round(guess.c/guess.n*100)}% of the time, well above chance: you know more than you think.`);
-  return pgCard('Do you know when you know?',`<div class="pg-calib">${r.map((x,i)=>`<div><span class="pg-calib__v">${x.n?pgN('cal_'+x.k,x.c/x.n*100)+pgU('%'):'—'}</span><span class="pg-col__t"><i style="--s:${x.n?(x.c/x.n).toFixed(4):0};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></div>`).join('')}</div>
+  return pgCard('Do you know when you know?',`<div class="pg-calib">${r.map((x,i)=>`<button type="button" class="pg-tap pl-press" data-pk="cal:${x.k}"><span class="pg-calib__v">${x.n?pgN('cal_'+x.k,x.c/x.n*100)+pgU('%'):'—'}</span><span class="pg-col__t"><i style="--s:${x.n?(x.c/x.n).toFixed(4):0};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></button>`).join('')}</div>
     <p class="pg-note">${say.join(' ')}</p>`,{sub:'Accuracy by the confidence you gave before answering. Sure should sit near the top, guessed near the bottom.',cls:'is-half'});
 }
 function pgPaceCard(A){
@@ -14748,8 +14897,8 @@ function pgPaceCard(A){
   else if(q[3].p<all-8)say=`Your slowest quarter is your weakest (${Math.round(q[3].p)}%). Long deliberation rarely rescues a question: past about two minutes, commit and move on.`;
   else say='Your accuracy holds at every speed. Pace is not where the marks are going.';
   const lab=s=>Math.round(s);
-  return pgCard('Pace',`<div class="pg-ahead"><div><span class="pg-big">${pgN('med',Math.round(med))}${pgU('s')}</span><em>typical answer · exam pace ${PG_PACE}s</em></div><div><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${PG_PACE} seconds</em></div></div>
-    <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<div><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${lab(x.lo)}–${lab(x.hi)}s</em></div>`).join('')}</div>
+  return pgCard('Pace',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgN('med',Math.round(med))}${pgU('s')}</span><em>typical answer · exam pace ${PG_PACE}s</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${PG_PACE} seconds</em></button></div>
+    <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<button type="button" class="pg-tap pl-press" data-pk="pq:${i}"><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${lab(x.lo)}–${lab(x.hi)}s</em></button>`).join('')}</div>
     <p class="pg-note">${say}</p>${pgTimeSplit(A,T)}`,{sub:'Answer time, from the question appearing to your answer. Your answers split into four equal groups by speed, with the accuracy of each.'});
 }
 /* the two clocks: deciding (to the answer) and learning (reading after it) */
@@ -14757,20 +14906,20 @@ function pgTimeSplit(A,T){
   let ans=0,rev=0;T.forEach(a=>{ans+=a.ans;rev+=Math.max(0,a.study-a.ans)});
   const tot=ans+rev;if(!tot)return '';
   const r=pgMed(T.filter(a=>a.correct).map(a=>a.ans)),w=pgMed(T.filter(a=>!a.correct).map(a=>a.ans));
-  return `<div class="pg-split"><span class="pg-lad__h">Where the time goes</span>
-    <div class="pg-stack"><i class="t-ans" style="flex:${ans}"></i><i class="t-rev" style="flex:${rev};--i:1"></i></div>
-    <ul class="pg-causes pg-causes--mem"><li><span class="pg-key t-ans"></span><div><b>Answering</b><span>to the moment you commit</span></div><strong>${fmtDur(ans)}<small>${Math.round(ans/tot*100)}%</small></strong></li>
-    <li><span class="pg-key t-rev"></span><div><b>Reading after</b><span>the explanation, coming back to it</span></div><strong>${fmtDur(rev)}<small>${Math.round(rev/tot*100)}%</small></strong></li></ul>
+  return `<div class="pg-split" data-pgfg="split"><span class="pg-lad__h">Where the time goes</span>
+    <div class="pg-stack"><i class="t-ans" data-pgf="a" style="flex:${ans}"></i><i class="t-rev" data-pgf="r" style="flex:${rev};--i:1"></i></div>
+    <ul class="pg-causes pg-causes--mem"><li class="pg-tap pl-press" role="button" tabindex="0" data-pgf="a" aria-pressed="false"><span class="pg-key t-ans"></span><div><b>Answering</b><span>to the moment you commit</span></div><strong>${fmtDur(ans)}<small>${Math.round(ans/tot*100)}%</small></strong></li>
+    <li class="pg-tap pl-press" role="button" tabindex="0" data-pgf="r" aria-pressed="false"><span class="pg-key t-rev"></span><div><b>Reading after</b><span>the explanation, coming back to it</span></div><strong>${fmtDur(rev)}<small>${Math.round(rev/tot*100)}%</small></strong></li></ul>
     ${r!=null&&w!=null?`<div class="pg-mini"><div><b>${Math.round(r/1000)}s</b><span>typical when right</span></div><div><b>${Math.round(w/1000)}s</b><span>typical when wrong</span></div><div><b>${A.length?fmtDur(A.reduce((x,a)=>x+a.study,0)):'—'}</b><span>studied in this range</span></div></div>`:''}
     <p class="pg-note">${rev/tot<.25?'Most of your time goes on answering. A miss is only fixed by the reading after it: give the explanations more of your time.':w&&r&&w>r*1.4?'You spend far longer on the questions you get wrong. If a question has not opened up by about 90 seconds, the extra time is rarely what saves it.':'A healthy split between answering and learning from the answer.'}</p></div>`;
 }
 function pgStaminaCard(A){
   const B=[[0,10,'1–10'],[10,20,'11–20'],[20,30,'21–30'],[30,40,'31–40'],[40,1e4,'41+']];
   const S=A.filter(a=>a.size>=20&&a.pos>=0);
-  const r=B.map(b=>{const x=S.filter(a=>a.pos>=b[0]&&a.pos<b[1]);return{l:b[2],n:x.length,p:x.length?x.filter(a=>a.correct).length/x.length*100:null}}).filter(x=>x.n>=15);
+  const r=B.map((b,j)=>{const x=S.filter(a=>a.pos>=b[0]&&a.pos<b[1]);return{j,l:b[2],n:x.length,p:x.length?x.filter(a=>a.correct).length/x.length*100:null}}).filter(x=>x.n>=15);
   if(r.length<2)return '';
   const d=r[r.length-1].p-r[0].p;
-  return pgCard('Stamina',`<div class="pg-calib pg-calib--${r.length}">${r.map((x,i)=>`<div><span class="pg-calib__v">${pgN('sta'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></div>`).join('')}</div>
+  return pgCard('Stamina',`<div class="pg-calib pg-calib--${r.length}">${r.map((x,i)=>`<button type="button" class="pg-tap pl-press" data-pk="sta:${x.j}"><span class="pg-calib__v">${pgN('sta'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${x.l}</b><em>${x.n} answers</em></button>`).join('')}</div>
     <p class="pg-note">${d<=-6?`You lose ${Math.round(-d)} points from the start of a block to the end. Build up to full 40-question blocks so the exam's length is not the hard part.`:d>=6?`You get ${Math.round(d)} points better as a block goes on: you start cold. A few easy questions before a block may help.`:'Your accuracy holds from the first question of a block to the last.'}</p>`,
     {sub:'Accuracy by position in the block, from sessions of 20 questions or more.',cls:'is-half'});
 }
@@ -14788,10 +14937,12 @@ function pgSessHTML(){
   const ms=fin.reduce((a,s)=>a+(s.elapsed||0),0);
   const qs=fin.reduce((a,s)=>a+s.order.length,0),blank=fin.reduce((a,s)=>a+s.order.filter(id=>!(s.items[id]||{}).chosen).length,0);
   const ansL=[];fin.forEach(s=>s.order.forEach(id=>{const it=s.items[id];if(it&&it.chosen&&it.ansMs!=null)ansL.push(it.ansMs)}));
-  const big=fin.filter(s=>s.order.length>=10).map(s=>sessScore(s).p);
-  const tiles=[['sf',fin.length,'','Finished'],['sa',avg,'%','Average, last 10'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started'],
-    ['saa',ansL.length?pgMed(ansL)/1000:null,'s','Typical answer'],['sbl',qs?blank/qs*100:null,'%','Left blank'],
-    ['sbe',big.length?Math.max(...big):null,'%','Best set'],['swo',big.length?Math.min(...big):null,'%','Weakest set']];
+  const bigS=fin.filter(s=>s.order.length>=10),big=bigS.map(s=>sessScore(s).p);
+  const bS=bigS[big.indexOf(Math.max(...big))],wS=bigS[big.indexOf(Math.min(...big))];
+  /* [key, value, unit, name, what a tap does: a peek, or a session's report] */
+  const tiles=[['sf',fin.length,'','Finished','pk=ss:sf'],['sa',avg,'%','Average, last 10','pk=ss:sa'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length','pk=ss:sl'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started','pk=ss:sr'],
+    ['saa',ansL.length?pgMed(ansL)/1000:null,'s','Typical answer','pk=tq:ta.all'],['sbl',qs?blank/qs*100:null,'%','Left blank','pk=ss:sbl'],
+    ['sbe',big.length?Math.max(...big):null,'%','Best set',bS?'open='+bS.id:''],['swo',big.length?Math.min(...big):null,'%','Weakest set',wS?'open='+wS.id:'']];
   const spark=last.length>=3?`<div class="pg-sspark" style="--n:${last.length}">${last.map((s,i)=>{const p=sessScore(s).p;return `<button type="button" class="pl-press" data-open="${s.id}" title="${esc(s.config.label||'Session')} · ${pgDate(s.ts)} · ${p}%" aria-label="${esc(s.config.label||'Session')}, ${p}%"><i style="--s:${(p/100).toFixed(3)};--i:${i}"></i></button>`}).join('')}</div><p class="pg-note">Your last ${last.length} sessions, oldest on the left. Tap one for its report.</p>`:'';
   const row=s=>{const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s),done=st==='done';
     const C=2*Math.PI*16;
@@ -14801,7 +14952,7 @@ function pgSessHTML(){
       ${done?`<span class="pg-srow__m"><b>${pgTtxt((s.elapsed||0)/1000)}</b><em>${sc.c}/${sc.n} · ${pgTtxt((s.elapsed||0)/1000/Math.max(1,sc.n))} each</em></span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
       <button type="button" class="pl-ib pl-press pg-sdel" data-pgdel="${s.id}" aria-label="Delete this session">${sxIc('i-trash')}</button></div>`};
   const shown=fin.slice(0,PG.shown);
-  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
+  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>t[4]?`<button type="button" class="pg-tile pl-press" data-${t[4].replace('=','="')}"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></button>`:`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
     +(open.length?`<h3 class="pg-h">Still open</h3><div class="pg-grp">${open.map(row).join('')}</div>`:'')
     +`<h3 class="pg-h">Finished</h3><div class="pg-grp">${shown.length?shown.map(row).join(''):'<div class="pg-srow">'+pgEmpty('Nothing finished yet','A finished session lands here with its report.')+'</div>'}</div>`
     +(fin.length>PG.shown?`<div class="pg-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgmore>Show ${Math.min(30,fin.length-PG.shown)} more</button></div>`:'');
@@ -14902,7 +15053,7 @@ function pgSegTap(g,b){
 }
 /* the entry points the rest of the app already calls */
 function renderStats(arrive){
-  PG.E=null;PG.QS=null;PG.built={};PG.stamp=performance.now();
+  PG.E=null;PG.QS=null;PG.QM=null;PG.built={};PG.stamp=performance.now();
   if(arrive){PG.prev={};PG.day=null;PG.all=false;PG.shown=30;return}   /* pgShow builds on arrival */
   if(VIEW==='stats')pgBuild(PG.view);
   pgLedger();
@@ -14918,9 +15069,479 @@ function pgLedger(){
   el.innerHTML=hid>0?`<div class="pg-ledger"><span>${hid} recorded answer${hid===1?' is':'s are'} left out of every figure here, by your own rule.</span><button type="button" class="pl-btn pl-btn--text pl-press" data-setsec="studydata">Study data</button></div>`:'';
 }
 
+/* ============================================================
+   FUNCTIONAL INTERACTIVITY (Plume 2.15)
+   ------------------------------------------------------------
+   Every figure on Progress answers a touch with something it could
+   not show at rest (DESIGN.md §6, Functional interactivity):
+     a figure   opens its peek (#pgx): what it is, how it was worked
+                out from your record, what it is made of, and the act
+                that does something about the questions it counts;
+     a part     of a whole (a segment, its legend row) isolates in
+                place: it stays lit and its siblings step back;
+     a mark     in a series (a point, a column, a period row) reads
+                out under the finger, and a tap opens its period.
+   Markup: data-pk="kind:arg" on a button opens PG_PK[kind](arg);
+   data-pgfg on the holder of a group of parts, data-pgf="key" on
+   each part (a legend row can carry both).
+   ============================================================ */
+const PG_PK={};
+const pgBlockN=()=>clamp(parseInt(($('#cfgCount')||{}).value||'20',10)||20,1,999);
+const pgQ=id=>{if(!PG.QM)PG.QM=new Map(DB.questions.map(q=>[q.id,q]));return PG.QM.get(id)};
+const pgQids=L=>[...new Set(L.map(a=>a.qid))];
+const pgxFig=(v,cap)=>`<div class="pgx__fig"><span class="pg-big">${v}</span>${cap?`<span class="pgx__cap">${cap}</span>`:''}</div>`;
+const pgxP=t=>t?`<p class="pgx__p">${t}</p>`:'';
+const pgxH=t=>`<span class="pg-lad__h pgx__hd">${t}</span>`;
+const pgxMini=a=>`<div class="pg-mini">${a.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>`;
+/* rows of name, bar, figure: [name, small line, share 0–1, figure, small figure] */
+const pgxRows=R=>R.length?`<ul class="pg-hrs pgx__rows">${R.map((r,i)=>`<li style="--i:${Math.min(i,8)}"><span class="pg-hrs__t"><b>${r[0]}</b>${r[1]?`<em>${r[1]}</em>`:''}</span>${pgBar(r[2])}<span class="pg-hrs__v"><b>${r[3]}</b>${r[4]!=null?`<em>${r[4]}</em>`:''}</span></li>`).join('')}</ul>`:'';
+/* the acts at the foot of a peek. run() fires once the sheet has started
+   to leave; pk swaps the sheet to another peek in place */
+function pgxPrac(ids,label,lab,primary){
+  const n=ids.length,b=pgBlockN();
+  return {l:(lab||'Practise these')+' · '+(n>b?b+' of '+n:n),ic:'i-play',primary,dis:!n,run:()=>startIds(ids,label)};
+}
+const pgxPool=(pool,label,lab,n,primary,facet)=>({l:lab+(n!=null?' · '+(n>pgBlockN()?pgBlockN()+' of '+n:n):''),ic:pool==='due'?'i-review':'i-play',primary,dis:n===0,
+  run:()=>{F.pool=pool;clearFacets();if(facet)F.sets[facet[0]].add(facet[1]);startSession(label)}});
+const pgxGo=(v,lab)=>({l:lab,ic:'i-next',run:()=>{pgShow(v,true);window.scrollTo({top:0,behavior:'smooth'})}});
+const pgxPk=(pk,lab)=>({l:lab,ic:'i-next',pk});
+/* where a set of attempts (or questions) falls, by system */
+function pgxBySys(L,lab){
+  const m={};L.forEach(a=>{const q=a.q||a,k=q&&q.system;if(!k||k===UNCLASSIFIED)return;m[k]=(m[k]||0)+1});
+  const R=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,5);if(!R.length)return '';
+  const mx=R[0][1];
+  return pgxH(lab||'Where they fall')+pgxRows(R.map(([k,n])=>[esc(k),'',n/mx,n,Math.round(n/L.length*100)+'%']));
+}
+/* the causes of a set of misses, as rows (the Gaps classification, pgCauses) */
+function pgxCauseRows(C,keep){
+  const R=PG_CAUSE.map(c=>[c,C.list[c[0]].filter(keep).length]).filter(x=>x[1]),n=R.reduce((s,x)=>s+x[1],0);
+  return n?pgxH('What the misses were')+pgxRows(R.map(([c,m])=>[c[1],'',m/n,m,Math.round(m/n*100)+'%'])):'';
+}
+/* sessions as rows that open their reports */
+function pgxSessRows(ss,lab){
+  if(!ss.length)return '';
+  const mx=Math.max(...ss.map(s=>sessScore(s).p),1);
+  return (lab?pgxH(lab):'')+`<ul class="pg-tl pgx__tl">${ss.map((s,i)=>{const sc=sessScore(s),el=(s.elapsed||0)/1000;
+    return `<li class="pg-tl--btn" style="--i:${Math.min(i,8)}"><button type="button" class="pg-tl__btn pl-press" data-open="${s.id}">
+      <span class="pg-tl__t"><b>${esc(s.config.label||'Session')}</b><em>${pgDate(s.ts)} · ${sc.n} questions · ${pgTtxt(el)}</em></span>
+      ${pgBar(sc.p/100)}<span class="pg-tl__v"><b>${sc.p}%</b><em>${sc.c} of ${sc.n}</em></span></button></li>`}).join('')}</ul>`;
+}
+function pgxSess(a,b){
+  const ss=sessCounted().filter(s=>s.status==='done'&&s.order&&s.order.length&&s.ts>=a&&s.ts<b).sort((x,y)=>y.ts-x.ts);
+  return pgxSessRows(ss.slice(0,8),ss.length>8?`Sessions · newest 8 of ${ss.length}`:'Sessions');
+}
+/* any stretch of time: what was done in it, where it went wrong, and its sessions */
+function pgxPeriod(a,b,full,extra,o0){
+  const L=between(pgData(),a,b),o=sumOf(L),miss=L.filter(x=>!x.correct);
+  if(!o.n)return{o:o0,t:full,body:pgxP('Nothing was answered in this stretch.')+(extra||'')};
+  const F=L.filter(x=>x.seq===0),fc=F.filter(x=>x.correct).length;
+  return{o:o0,t:full,fig:pgxFig(pgN('px',o.acc)+pgU('%'),`${o.c} of ${o.n} right`),
+    body:pgxMini([[o.n,'answered'],[F.length?Math.round(fc/F.length*100)+'%':'—','first sightings right'],[pgTtxt(o.ms/1000),'studied'],
+      [pgTtxt(o.ms/o.n/1000),'per question'],[o.an?pgTtxt(o.ans/o.an/1000):'—','to answer'],[o.days,o.days===1?'day active':'days active']])
+      +(extra||'')+pgxBySys(miss,'Where the misses were')+pgxSess(a,b),
+    acts:[pgxPrac(pgQids(miss),'Missed · '+full.replace(/<[^>]+>/g,''),'Practise the misses',true)]};
+}
+
+/* ---------- Form ---------- */
+PG_PK.form=()=>{
+  const E=pgData(),F=E.filter(a=>a.seq===0),now=pgForm(F),was=pgForm(F,null,PG_FIRST),ci=pgWilson(now.c,now.n),best=pgBestForm(F);
+  const miss=F.slice(Math.max(0,F.length-PG_FIRST)).filter(a=>!a.correct);
+  return{o:'Form',t:'Your form',fig:pgxFig(pgN('px',now.p)+pgU('%'),`${now.c} of ${now.n} first sightings right`),
+    body:pgxP(`Accuracy on the last ${now.n} questions you met for the first time. Every question on exam day is a first sighting, so this is the figure closest to it.`)
+      +pgxMini([[ci?Math.round(ci[0])+'–'+Math.round(ci[1])+'%':'—','likely range'],[was.n>=30?Math.round(was.p)+'%':'—','the 100 before'],[best!=null?Math.round(best)+'%':'—','best stretch']])
+      +pgxP(ci?`Over ${now.n} questions, chance alone moves the figure a few points either way: the likely range is where your true accuracy sits, 95 times in 100.`:'')
+      +pgxBySys(miss,'Where these misses were'),
+    acts:[pgxPrac(pgQids(miss),'Form misses','Practise these misses',true),pgxPool('unused','New questions','Practise new',totals().unused)]};
+};
+PG_PK.d7=()=>{
+  const E=pgData(),t0=sod(Date.now()),R=[];let mx=1;
+  for(let i=0;i<7;i++){const s=addDays(t0,-i),L=between(E,s.getTime(),addDays(s,1).getTime());R.push({s,i,n:L.length,c:L.filter(a=>a.correct).length});mx=Math.max(mx,L.length)}
+  const L=E.filter(a=>a.ts>=pgSince(7)),o=sumOf(L),miss=L.filter(a=>!a.correct);
+  return{o:'Form',t:'The last 7 days',fig:pgxFig(o.n?pgN('px',o.acc)+pgU('%'):'—',`${o.c} of ${o.n} right, repeats included`),
+    body:pgxP('Every answer of the last seven days, first sightings and reviews alike. It moves with what you chose to study, which is why your form leaves the reviews out.')
+      +pgxH('Day by day')+pgxRows(R.map(r=>[r.i===0?'Today':r.i===1?'Yesterday':pgDate(r.s,{weekday:'short',day:'numeric'}),'',r.n/mx,r.n?Math.round(r.c/r.n*100)+'%':'—',r.n+' answered']))
+      +pgxBySys(miss,'Where the misses were'),
+    acts:[pgxPrac(pgQids(miss),'Missed this week','Practise the misses',true)]};
+};
+PG_PK.tr=i=>{const T=PG.trend,b=T&&T.out[+i];if(!b)return null;const f=T.fl[+i];
+  return pgxPeriod(b.s,b.e,esc(b.full),f?pgxP(`Your form at the end of it: ${Math.round(f[2].p)}%, over the ${f[2].n} first sightings before then.`):'','Accuracy over time')};
+PG_PK.stick=k=>{
+  const E=pgData(),by={},rec=k==='rec',yes=[],no=[];E.forEach(a=>{(by[a.qid]=by[a.qid]||[]).push(a)});
+  Object.keys(by).forEach(id=>{const at=by[id];for(let i=0;i<at.length-1;i++){if(rec?!at[i].correct:at[i].correct){(at[i+1].correct?yes:no).push(at[i+1]);break}}});
+  const n=yes.length+no.length;
+  return{o:'Is it sticking?',t:rec?'Recovered':'Kept',fig:pgxFig(n?pgN('px',yes.length/n*100)+pgU('%'):'—',`${yes.length} of ${n} questions`),
+    body:pgxP(rec?'Questions you missed the first time, and how the next meeting went. Recovery is what reading the explanation buys you.':'Questions you got right the first time, and whether they were still right the next time. A slip is a guess that landed, or something forgotten.')
+      +pgxMini([[yes.length,rec?'right the next time':'still right'],[no.length,rec?'missed again':'slipped'],[n,'met twice or more']])
+      +pgxBySys(no,rec?'Where they were missed again':'Where they slipped'),
+    acts:[pgxPrac(pgQids(no),rec?'Missed twice':'Slipped',rec?'Practise the ones missed again':'Practise the ones that slipped',true)]};
+};
+PG_PK.sight=i=>{
+  i=+i;const E=pgData(),L=E.filter(a=>Math.min(2,a.seq)===i),c=L.filter(a=>a.correct).length,miss=L.filter(a=>!a.correct);
+  const F=E.filter(a=>a.seq===0),fp=F.length?F.filter(a=>a.correct).length/F.length*100:null,p=L.length?c/L.length*100:null;
+  const d=fp!=null&&p!=null?Math.round(p-fp):null;
+  return{o:'Accuracy by sighting',t:['First sighting','Second sighting','Third sighting or later'][i],fig:pgxFig(p==null?'—':pgN('px',p)+pgU('%'),`${c} of ${L.length} answers right`),
+    body:pgxP(i===0?'Every question the first time you meet it: the exam’s own conditions.'
+      :`Answers on the ${i===1?'second':'third or later'} meeting with a question${d==null?'.':d>=0?`, ${d} points above your first sightings: what coming back to a question earns you.`:`, ${-d} points below your first sightings. The questions that come back most are the hard ones, so this can sit lower.`}`)
+      +pgxBySys(miss,'Where the misses were'),
+    acts:[i===0?pgxPool('unused','New questions','Practise new',totals().unused,true):pgxPrac(pgQids(miss),'Missed again','Practise the misses',true)]};
+};
+PG_PK.mem=k=>{
+  const S={learn:[],young:[],mature:[],leech:[],never:[]};let lap=0;
+  DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs||!attOf(q.id).length){S.never.push(q);return}
+    const r=st.srs;lap+=r.lapses||0;if((r.lapses||0)>=3)S.leech.push(q);((r.int||0)<7?S.learn:r.int<21?S.young:S.mature).push(q)});
+  const D={learn:['Learning','Back within a week. The schedule is still testing these, so they come round often.'],
+    young:['Settling','Back in one to three weeks. Each right answer pushes the next meeting further out.'],
+    mature:['Held','Three weeks or more between meetings. These are the ones you own.'],
+    leech:['Missed three times or more','A question that keeps coming back wrong is usually a misunderstanding, not a memory problem: read its explanation properly rather than drilling it again.'],
+    never:['Never answered','In the bank, not yet met. A question joins the schedule the first time you answer it.']};
+  const L=S[k],en=DB.questions.length-S.never.length,due=L.filter(q=>isDue(q.id)).length,ids=L.map(q=>q.id);
+  const fig=k==='leech'?pgxFig(pgN('px',L.length),`questions · ${lap} slips back in all`):pgxFig(pgN('px',L.length),k==='never'?`of ${DB.questions.length} in the bank`:`${en?Math.round(L.length/en*100):0}% of the ${en} on the schedule`);
+  return{o:'Memory',t:D[k][0],fig,body:pgxP(D[k][1])+(k==='never'?'':pgxMini([[due,'due now'],[L.length-due,'not due yet'],[k==='leech'?lap:en,k==='leech'?'slips in all':'on the schedule']]))+pgxBySys(L,'By system'),
+    acts:[k==='never'?pgxPool('unused','New questions','Practise new',L.length,true):pgxPrac(ids,D[k][0],k==='leech'?'Practise these':'Review these',true)]};
+};
+const PG_RDHOW=['The share of the bank you have answered at least once.',
+  'Your first-sighting accuracy on a scale where 40% scores nothing and 85% scores full marks.',
+  'Of the questions you missed and met again, the share you got right the next time.',
+  'Days with at least one answer in the last 21.'];
+PG_PK.rd=i=>{
+  const R=readiness();
+  if(i==='all'){const lo=R.parts.map((p,j)=>({p,j,gap:(100-(p.v||0))*p.w})).sort((a,b)=>b.gap-a.gap)[0];
+    return{o:'Readiness',t:'Readiness',fig:pgxFig(pgN('px',R.score)+pgU('/100'),READY_WORD(R.score)),
+      body:pgxP('Four things you can act on this week, each weighted by how much it matters. Not a predicted exam score.')
+        +pgxH('What each part gives')+pgxRows(R.parts.map(p=>[esc(p.k),esc(p.lab),p.v==null?0:p.v/100,(p.v==null?0:Math.round(p.v*p.w))+pgU('/'+Math.round(p.w*100)),null]))
+        +pgxP(`The most to gain: ${esc(lo.p.k.toLowerCase())}, ${Math.round(lo.gap)} points short of full.`),
+      acts:[pgxPk('rd:'+lo.j,'Open '+lo.p.k.toLowerCase())]}}
+  const p=R.parts[+i];if(!p)return null;
+  const go=[pgxGo('areas','Open Areas'),pgxPk('form','Open your form'),pgxPk('stick:rec','Open recovered'),pgxGo('habit','Open Habit')][+i];
+  return{o:'Readiness',t:esc(p.k),fig:pgxFig(p.v==null?'—':pgN('px',p.v)+pgU('/100'),esc(p.lab)),
+    body:pgxP(PG_RDHOW[+i])+pgxMini([[Math.round(p.w*100)+'%','of readiness'],[p.v==null?'—':Math.round(p.v*p.w),'points it gives'],[Math.round(p.w*100-(p.v||0)*p.w),'points to gain']]),
+    acts:[go]};
+};
+/* this week / this month against the same stretch before: the windows pgCompareCard reads */
+function pgCmpWin(){
+  const now=new Date(),t=sod(now),iw=dowIdx(t)+1,w0=addDays(t,-(iw-1)).getTime(),wp=w0-7*DAYMS;
+  const m0=new Date(now.getFullYear(),now.getMonth(),1).getTime(),mp=new Date(now.getFullYear(),now.getMonth()-1,1).getTime();
+  const mpe=Math.min(addDays(new Date(mp),now.getDate()).getTime(),m0),end=Date.now()+1;
+  return [{cur:[w0,end],prev:[wp,wp+iw*DAYMS],n:iw,cl:'This week',pl:'last week'},{cur:[m0,end],prev:[mp,mpe],n:now.getDate(),cl:'This month',pl:'last month'}];
+}
+const PG_CMPR=[['Questions',L=>L.length,v=>String(v)],['Accuracy',L=>L.length?L.filter(a=>a.correct).length/L.length*100:null,v=>v==null?'—':Math.round(v)+'%'],
+  ['Time studied',L=>L.reduce((x,a)=>x+studyOf(a),0)/1000,v=>pgTtxt(v)],['Active days',L=>Object.keys(byDay(L)).length,v=>String(v)]];
+PG_PK.cmp=a=>{
+  const [r,c]=String(a).split('.').map(Number),W=pgCmpWin()[c],M=PG_CMPR[r],E=pgData();
+  const cur=between(E,W.cur[0],W.cur[1]),prv=between(E,W.prev[0],W.prev[1]),vc=M[1](cur),vp=M[1](prv);
+  const day=(s,i)=>between(E,s+i*DAYMS,s+(i+1)*DAYMS);
+  const R=[];let mx=0;
+  for(let i=W.n-1;i>=0;i--){const x=M[1](day(W.cur[0],i)),y=M[1](day(W.prev[0],i));R.push({i,x,y});if(x!=null)mx=Math.max(mx,r===3?1:x);if(y!=null)mx=Math.max(mx,r===3?1:y)}
+  const lab=i=>pgDate(W.cur[0]+i*DAYMS,c?{day:'numeric',month:'short'}:{weekday:'short',day:'numeric'});
+  const d=vc!=null&&vp!=null?vc-vp:null;
+  return{o:'This week, this month',t:`${M[0]} · ${W.cl.toLowerCase()}`,fig:pgxFig(r===2?pgT('px',vc):r===1?(vc==null?'—':pgN('px',vc)+pgU('%')):pgN('px',vc),
+      `${M[2](vp)} in the same ${W.n} day${W.n===1?'':'s'} of ${W.pl}${d==null?'':` · ${d>0?'+':d<0?'−':'±'}${r===2?pgTtxt(Math.abs(d)):Math.abs(Math.round(d))+(r===1?' pt':'')}`}`),
+    body:pgxP(`Day ${W.n===1?'1':'1 to '+W.n} of ${W.cl.toLowerCase()} against the same days of ${W.pl}, so a half-done ${c?'month':'week'} is compared fairly.`)
+      +pgxH(`Day by day · ${W.pl} in small`)+pgxRows(R.map(o=>[lab(o.i),'',r===3?(o.x?1:0):mx?(o.x||0)/mx:0,r===3?(o.x?'Studied':'Rest'):M[2](o.x),r===3?(o.y?'studied':'rest'):M[2](o.y)])),
+    acts:[]};
+};
+PG_PK.bw=k=>{const s=new Date(k+'T00:00:00');return pgxPeriod(s.getTime(),addDays(s,7).getTime(),'Week of '+pgDate(s,{day:'numeric',month:'long'}),'','Your best week')};
+PG_PK.day=k=>{const d=new Date(k+'T00:00:00');return pgxPeriod(d.getTime(),addDays(d,1).getTime(),pgDate(d,{weekday:'long',day:'numeric',month:'long'}),'',k===today()?'Today':'A day')};
+PG_PK.streak=()=>{
+  const keys=Object.keys(activeDays()).sort(),runs=[];let run=null;
+  keys.forEach(k=>{const d=new Date(k+'T00:00:00');if(run&&dayKey(addDays(run.b,1))===k){run.b=d;run.n++}else{run={a:d,b:d,n:1};runs.push(run)}});
+  const st=streak(),top=runs.slice().sort((x,y)=>y.n-x.n||y.b-x.b).slice(0,5),mx=top.length?top[0].n:1;
+  const f=d=>pgDate(d,{day:'numeric',month:'short'});
+  return{o:'Habit',t:'Your streak',fig:pgxFig(pgN('px',st)+pgU(st===1?'day':'days'),st?'running now':'not running'),
+    body:pgxP('Days in a row with at least one answer. Today counts once you answer something; until then the streak is held from yesterday.')
+      +pgxMini([[st,'now'],[mx,'longest'],[keys.length,'active days in all']])
+      +(top.length?pgxH('Your longest runs')+pgxRows(top.map(r=>[r.n===1?f(r.a):f(r.a)+' – '+f(r.b),r===runs[runs.length-1]&&st?'running now':'',r.n/mx,r.n+pgU('d'),null])):''),
+    acts:[pgxPool('due','Due review','Start due review',totals().due,true)]};
+};
+PG_PK.today=()=>{
+  const goal=DB.settings.goal||0,r=PG_PK.day(today()),n=between(pgData(),sod(Date.now()).getTime(),Date.now()+1).length;
+  r.o='Habit';r.t='Today';
+  r.body=pgxP(goal?(n>=goal?`Your goal of ${goal} is met${n>goal?`, and ${n-goal} past it`:''}.`:`${goal-n} more reach your goal of ${goal}.`):'No daily goal set. A goal gives the ring something to close.')+(r.body||'');
+  r.acts=[pgxPool('due','Due review','Start due review',totals().due,true),{l:goal?'Change the daily goal':'Set a daily goal',ic:'i-settings',run:()=>openSettingsSection('session')}];
+  return r;
+};
+/* the last 30 days, one bar a day, for whichever figure was tapped */
+const PG_A30={a30:['Days active',v=>v.n?1:0,'Days with at least one answer.'],m30:['Days on goal',v=>v.n>=(DB.settings.goal||1e9)?1:0,'Days that reached your daily goal.'],
+  pd:['Per active day',v=>v.n,'Questions answered on the days you studied.'],td:['Time per active day',v=>v.ms/1000,'Time spent on the days you studied.'],
+  n30:['Answered',v=>v.n,'Every answer, repeats included.'],h30:['Time studied',v=>v.ms/1000,'Question time, answering and reading after.']};
+PG_PK.a30=k=>{
+  const D=PG_A30[k];if(!D)return null;const map=byDay(pgData()),t0=sod(Date.now()).getTime(),Z={n:0,ms:0};
+  const vals=[],prev=[];for(let i=29;i>=0;i--){vals.push(D[1](map[dayKey(t0-i*DAYMS)]||Z));prev.push(D[1](map[dayKey(t0-(i+30)*DAYMS)]||Z))}
+  const per=k==='pd'||k==='td',tm=k==='td'||k==='h30';
+  /* per active day: rest days hold 0 and are left out of the average */
+  const agg=a=>{const s=a.reduce((x,y)=>x+y,0),on=a.filter(v=>v).length;return per?(on?s/on:0):s};
+  const vc=agg(vals),vp=agg(prev),mx=Math.max(...vals,1);
+  const fmt=v=>tm?pgTtxt(v):String(Math.round(v));
+  return{o:'The last 30 days',t:D[0],fig:pgxFig(tm?pgT('px',vc):pgN('px',vc),`the 30 days before: ${fmt(vp)}`),
+    body:pgxP(D[2]+(per?' Rest days are left out of the average.':''))
+      +`<div class="pgx__spark" role="img" aria-label="${esc(D[0])}, each of the last 30 days">${vals.map((v,i)=>`<i style="--s:${(v/mx).toFixed(4)};--i:${i}"${i===29?' class="is-now"':''}></i>`).join('')}</div>
+      <div class="pgx__sparkax"><span>${pgDate(t0-29*DAYMS,{day:'numeric',month:'short'})}</span><span>Today</span></div>`,
+    acts:[]};
+};
+PG_PK.per=i=>{const w=PG.perW&&PG.perW[+i];if(!w)return null;const e=PG.per==='months'?new Date(w.s.getFullYear(),w.s.getMonth()+1,1):addDays(w.s,7);
+  return pgxPeriod(w.s.getTime(),e.getTime(),esc(w.full),'',PG.per==='months'?'Month by month':'Week by week')};
+/* what the schedule holds: due now, or due on a day ahead */
+function pgDueOn(i){
+  const t0=sod(Date.now()).getTime(),now=Date.now(),out=[];
+  DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs||!st.srs.due||!attOf(q.id).length)return;const due=st.srs.due;
+    if(i==='now'?due<=now:i==='7'?due>now&&due<t0+7*DAYMS:due>now&&Math.max(0,Math.floor((due-t0)/DAYMS))===+i)out.push(q)});
+  return out;
+}
+PG_PK.due=i=>{
+  const L=pgDueOn(i),ids=L.map(q=>q.id),t0=sod(Date.now()).getTime();
+  const t=i==='now'?'Due now':i==='7'?'Due in the next 7 days':+i===0?'Due later today':pgDate(t0+(+i)*DAYMS,{weekday:'long',day:'numeric',month:'short'});
+  return{o:'What is coming',t,fig:pgxFig(pgN('px',L.length),L.length===1?'question':'questions'),
+    body:pgxP(i==='now'?'The schedule wants these back today. Each right answer sends a question further out; a miss brings it back within days.'
+      :'Not due yet. Reviewing early is fine; the schedule simply counts it as one more meeting.')+pgxBySys(L,'By system'),
+    acts:[i==='now'?pgxPool('due','Due review','Start due review',L.length,true):pgxPrac(ids,'Early review','Review these early',true)]};
+};
+PG_PK.hr=i=>{
+  const r=PG.hrsRows&&PG.hrsRows[+i];if(!r)return null;
+  const A=PG.hrsA,all=A.filter(a=>a.correct).length/A.length*100,p=r.c/r.n*100,o=sumOf(r.L),miss=r.L.filter(a=>!a.correct);
+  return{o:'When you study best',t:esc(PG.hrs==='days'?pgDate(addDays(new Date(2024,0,1),DOWL.indexOf(r.name)),{weekday:'long'})+'s':r.name+(r.sub?' · '+r.sub:'')),
+    fig:pgxFig(pgN('px',p)+pgU('%'),`${r.c} of ${r.n} right · last 90 days`),
+    body:pgxP(`${Math.abs(Math.round(p-all))} points ${p>=all?'above':'below'} your ${Math.round(all)}% overall.${r.n<30?' Few answers here, so read it as a hint.':''}`)
+      +pgxMini([[Math.round(r.n/A.length*100)+'%','of your answers'],[o.an?pgTtxt(o.ans/o.an/1000):'—','to answer'],[pgTtxt(o.ms/r.n/1000),'per question']])
+      +pgxBySys(miss,'Where the misses were'),acts:[]};
+};
+
+/* ---------- Time ---------- */
+PG_PK.tq=k=>{
+  const ans=k.startsWith('ta'),per=k.split('.')[1]||PG.tper,W=pgTwin(per),L=between(pgData(),W.cur[0],W.cur[1]);
+  const V=L.map(a=>({a,v:(ans?a.ans:a.study)})).filter(x=>x.v!=null);
+  if(!V.length)return{o:'Time',t:ans?'Answer time':'Question time',body:pgxP('Nothing answered in this period yet.')};
+  const xs=V.map(x=>x.v/1000),mean=xs.reduce((a,b)=>a+b,0)/xs.length,med=pgMed(xs);
+  const P=W.prev?between(pgData(),W.prev[0],W.prev[1]).map(a=>ans?a.ans:a.study).filter(v=>v!=null):[],pm=P.length?P.reduce((a,b)=>a+b,0)/P.length/1000:null;
+  const slow=V.slice().sort((a,b)=>b.v-a.v).slice(0,5),mx=slow[0].v;
+  return{o:W.cl+' · time per question',t:ans?'Answer time':'Question time',fig:pgxFig(pgT('px',mean),`the average over ${xs.length} question${xs.length===1?'':'s'}`),
+    body:pgxP(ans?'From the question appearing to the moment you commit. Left blank, a question has no answer time.':'Everything spent on a question: answering, then the explanation and every visit back to it.')
+      +pgxMini([[pgTtxt(med),'typical (median)'],[pm==null?'—':pgTtxt(pm),W.pl||'—'],[Math.round(xs.filter(v=>v>PG_PACE).length/xs.length*100)+'%','over '+PG_PACE+'s']])
+      +pgxP(med<mean*.8?'A few long questions pull the average above the typical one.':'')
+      +pgxH('The longest')+pgxRows(slow.map(x=>[esc(x.a.q.system&&x.a.q.system!==UNCLASSIFIED?x.a.q.system:'Unclassified'),pgDate(x.a.ts,{weekday:'short',day:'numeric',month:'short'})+' · '+(x.a.correct?'right':x.a.chosen==null?'left blank':'missed'),x.v/mx,pgTtxt(x.v/1000),null])),
+    acts:[pgxGo('gaps','Pace in Gaps')]};
+};
+PG_PK.tper=()=>{const W=pgTwin(PG.tper);return pgxPeriod(W.cur[0],W.cur[1],W.cl,'','Time')};
+PG_PK.tb=i=>{const b=PG.tchart&&PG.tchart.out[+i];if(!b)return null;return pgxPeriod(b.s,b.e,esc(b.full),'','How your pace is moving')};
+PG_PK.tsp=i=>{
+  const T=PG.tsp,z=T&&T.rows[+i];if(!z)return null;
+  const L=T.A.filter(a=>{const q=a.study/1000;return q>=z.b[0]&&q<z.b[1]}),c=L.filter(a=>a.correct).length,all=T.A.filter(a=>a.correct).length/T.A.length*100;
+  const miss=L.filter(a=>!a.correct),p=L.length?c/L.length*100:null;
+  return{o:'How long questions take you',t:z.b[2],fig:pgxFig(L.length?pgN('px',p)+pgU('%'):'—',`${c} of ${L.length} right · ${T.per.toLowerCase()}`),
+    body:pgxP(`Questions whose whole time fell in this length. ${p==null?'':`${Math.abs(Math.round(p-all))} points ${p>=all?'above':'below'} your ${Math.round(all)}% for the period.`}`)
+      +pgxMini([[L.length,'questions'],[z.a,'answered in this time'],[Math.round(L.length/T.A.length*100)+'%','of the period']])
+      +pgxBySys(miss,'Where the misses were'),
+    acts:[pgxPrac(pgQids(miss),'Missed · '+z.b[2],'Practise the misses',true)]};
+};
+
+/* ---------- Areas ---------- */
+PG_PK.bank=k=>{
+  const S=pgQState(),L=DB.questions.filter(q=>S[q.id].st===k),tot=DB.questions.length;
+  const D={right:['Right last time','Questions whose last answer was right.','correct','Practise again'],wrong:['Missed last time','Questions whose last answer was wrong or blank. Answer one right and it moves across.','incorrect','Practise missed'],
+    new:['New','Questions you have never answered.','unused','Practise new']}[k];
+  return{o:'The bank',t:D[0],fig:pgxFig(pgN('px',L.length),`${Math.round(L.length/tot*100)}% of ${tot} questions`),
+    body:pgxP(D[1])+pgxBySys(L,'By system'),acts:[k==='wrong'?pgxPrac(L.map(q=>q.id),'Missed last time',D[3],true):pgxPool(D[2],D[0],D[3],L.length,true)]};
+};
+
+/* ---------- Gaps ---------- */
+const PG_FIX={gap:'Read the explanation, then meet the question again within a few days.',trap:'Before committing, say why each tempting option is wrong for this patient.',
+  read:'Read the last line of the stem first, then the stem with that question in mind.',fast:'On a quick answer, read the last line once more before you commit.',
+  struck:'Recheck an elimination before trusting it: these answers were crossed out and right.',time:'Commit by about 90 seconds; a blank always scores nothing.',
+  none:'Tag your misses in a session report and this sharpens.'};
+PG_PK.cause=k=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),C=pgCauses(A),c=PG_CAUSE.find(x=>x[0]===k);if(!c)return null;
+  const L=C.list[k],n=C.n;
+  return{o:'Where the misses came from',t:c[1],fig:pgxFig(pgN('px',L.length),`${n?Math.round(L.length/n*100):0}% of ${n} misses · ${PG.rng.gaps==='all'?'all time':'last '+PG.rng.gaps+' days'}`),
+    body:pgxP(c[2]+' '+PG_FIX[k])+(k==='none'?'':pgxMini([[C.tag[k],'you tagged'],[C.det[k],'from the record'],[pgQids(L).length,'questions']]))+pgxBySys(L,'Where they fall'),
+    acts:[pgxPrac(pgQids(L),c[1],'Practise these',true)]};
+};
+PG_PK.misses=()=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),W=A.filter(a=>!a.correct);
+  return{o:'Gaps',t:'Misses',fig:pgxFig(pgN('px',W.length),`of ${A.length} answers · ${A.length?Math.round(W.length/A.length*100):0}%`),
+    body:pgxP('Every wrong or blank answer in this range, repeats included.')+pgxMini([[pgQids(W).length,'questions'],[W.filter(a=>a.seq===0).length,'on first sighting'],[W.filter(a=>a.chosen==null).length,'left blank']])+pgxBySys(W,'Where they fall'),
+    acts:[pgxPrac(pgQids(W),'Misses','Practise the misses',true)]};
+};
+PG_PK.weak=k=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),g=PG_GRP.find(x=>x[0]===PG.grp),get=g[2];
+  const L=A.filter(a=>get(a.q)===k),c=L.filter(a=>a.correct).length,p=L.length?c/L.length:0,bank=DB.questions.filter(q=>get(q)===k).length;
+  const avg=A.filter(a=>a.correct).length/A.length,stake=Math.round((1-p)*bank),F=L.filter(a=>a.seq===0),miss=L.filter(a=>!a.correct);
+  const wrongNow=DB.questions.filter(q=>get(q)===k&&statusOf(q.id)==='incorrect').length;
+  return{o:'Where the marks are · '+g[1].toLowerCase(),t:esc(k),fig:pgxFig(pgN('px',p*100)+pgU('%'),`${c} of ${L.length} right · your average ${Math.round(avg*100)}%`),
+    body:pgxP(`Marks at stake: you miss ${Math.round((1-p)*100)}% here, and the bank holds ${bank} of these questions, so about ${stake} are marks you are likely to drop.`)
+      +pgxMini([[stake,'at stake'],[F.length?Math.round(F.filter(a=>a.correct).length/F.length*100)+'%':'—','first sightings right'],[wrongNow,'missed last time']])
+      +pgxCauseRows(pgCauses(A),a=>get(a.q)===k),
+    acts:[pgxPool('incorrect','Missed · '+k,'Practise missed',wrongNow,true,[PG.grp,k]),pgxPool('all','Weak spot: '+k,'Practise all',bank,false,[PG.grp,k])]};
+};
+PG_PK.cal=k=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),L=A.filter(a=>a.conf===k&&a.chosen!=null),c=L.filter(a=>a.correct).length,miss=L.filter(a=>!a.correct);
+  const nm={sure:'Sure',unsure:'Unsure',guess:'Guessed'}[k];
+  return{o:'Do you know when you know?',t:nm,fig:pgxFig(L.length?pgN('px',c/L.length*100)+pgU('%'):'—',`${c} of ${L.length} right`),
+    body:pgxP(k==='sure'?`${miss.length} sure-but-wrong answer${miss.length===1?'':'s'}: beliefs to correct, and the misses an exam punishes most.`:k==='guess'?'Chance on five options is 20%. Well above it, your guesses carry knowledge you did not trust.':'Answers you were unsure of. This is where reading the explanation pays most.')
+      +pgxBySys(miss,'Where the misses were'),
+    acts:[pgxPrac(pgQids(miss),nm+' but wrong','Practise the misses',true)]};
+};
+PG_PK.pq=i=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),T=A.filter(a=>a.ans!=null).sort((a,b)=>a.ans-b.ans);i=+i;
+  const L=T.slice(Math.floor(i*T.length/4),Math.floor((i+1)*T.length/4));if(!L.length)return null;
+  const c=L.filter(a=>a.correct).length,miss=L.filter(a=>!a.correct),all=T.filter(a=>a.correct).length/T.length*100,p=c/L.length*100;
+  return{o:'Pace',t:['Fastest quarter','Quick quarter','Slower quarter','Slowest quarter'][i],fig:pgxFig(pgN('px',p)+pgU('%'),`${c} of ${L.length} right · ${Math.round(L[0].ans/1000)}–${Math.round(L[L.length-1].ans/1000)}s`),
+    body:pgxP(`A quarter of your answers, by answer time. ${Math.abs(Math.round(p-all))} points ${p>=all?'above':'below'} your ${Math.round(all)}% overall.`)+pgxBySys(miss,'Where the misses were'),
+    acts:[pgxPrac(pgQids(miss),'Missed at this pace','Practise the misses',true)]};
+};
+PG_PK.pmed=()=>{const r=PG_PK.tq('ta.all');r.o='Pace';return r};
+PG_PK.sta=i=>{
+  const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)&&a.size>=20&&a.pos>=0),B=[[0,10,'1–10'],[10,20,'11–20'],[20,30,'21–30'],[30,40,'31–40'],[40,1e4,'41+']][+i];if(!B)return null;
+  const L=A.filter(a=>a.pos>=B[0]&&a.pos<B[1]),c=L.filter(a=>a.correct).length,F=A.filter(a=>a.pos<10),fp=F.length?F.filter(a=>a.correct).length/F.length*100:null,p=L.length?c/L.length*100:null;
+  const o=sumOf(L);
+  return{o:'Stamina',t:'Questions '+B[2]+' of a block',fig:pgxFig(p==null?'—':pgN('px',p)+pgU('%'),`${c} of ${L.length} right`),
+    body:pgxP(+i===0?'The opening ten of every block of 20 or more: your baseline.':fp==null||p==null?'':`${Math.abs(Math.round(p-fp))} points ${p>=fp?'above':'below'} the opening ten.`)
+      +pgxMini([[o.an?pgTtxt(o.ans/o.an/1000):'—','to answer'],[L.filter(a=>a.chosen==null).length,'left blank'],[L.length,'answers']]),acts:[]};
+};
+
+/* ---------- Sessions ---------- */
+PG_PK.ss=k=>{
+  const fin=sessCounted().filter(s=>s.status==='done'&&s.order&&s.order.length).sort((a,b)=>(b.finishedAt||b.ts||0)-(a.finishedAt||a.ts||0));
+  if(k==='sa'){const L=fin.slice(0,10),avg=L.length?L.reduce((a,s)=>a+sessScore(s).p,0)/L.length:0;
+    return{o:'Sessions',t:'Average, last 10',fig:pgxFig(pgN('px',avg)+pgU('%'),`over ${L.length} session${L.length===1?'':'s'}`),body:pgxP('The plain average of your last ten scores, every session counting the same whatever its length.')+pgxSessRows(L,'The ten'),acts:[]}}
+  if(k==='sl'){const L=fin.filter(s=>s.elapsed).slice(0,30),xs=L.map(s=>s.elapsed/1000),mean=xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:0;
+    const top=L.slice().sort((a,b)=>b.elapsed-a.elapsed).slice(0,5),mx=top.length?top[0].elapsed:1;
+    return{o:'Sessions',t:'Typical length',fig:pgxFig(pgT('px',mean),`the average of your last ${L.length}`),
+      body:pgxP('Each session on its own clock, pauses left out.')+pgxMini([[xs.length?pgTtxt(pgMed(xs)):'—','median'],[xs.length?pgTtxt(Math.min(...xs)):'—','shortest'],[xs.length?pgTtxt(Math.max(...xs)):'—','longest']])
+        +pgxH('The longest')+pgxRows(top.map(s=>[esc(s.config.label||'Session'),pgDate(s.ts)+' · '+s.order.length+' questions',s.elapsed/mx,pgTtxt(s.elapsed/1000),null])),acts:[]}}
+  if(k==='sbl'){const om=DB.questions.filter(q=>statusOf(q.id)==='omitted');
+    return{o:'Sessions',t:'Left blank',fig:pgxFig(pgN('px',om.length),om.length===1?'question still blank on its last answer':'questions still blank on their last answer'),
+      body:pgxP('A blank scores nothing, and on the exam a guess scores one time in five. Commit to an answer before moving on.')+pgxBySys(om,'By system'),
+      acts:[pgxPool('omitted','Left blank','Practise the blanks',om.length,true)]}}
+  if(k==='sf'){const m={};fin.forEach(s=>{const d=new Date(s.ts),kk=d.getFullYear()*12+d.getMonth(),r=m[kk]||(m[kk]={d:new Date(d.getFullYear(),d.getMonth(),1),n:0,p:0});r.n++;r.p+=sessScore(s).p});
+    const R=Object.values(m).sort((a,b)=>b.d-a.d).slice(0,8),mx=Math.max(1,...R.map(r=>r.n));
+    return{o:'Sessions',t:'Finished',fig:pgxFig(pgN('px',fin.length),'sessions finished'),
+      body:pgxH('Month by month')+pgxRows(R.map(r=>[pgDate(r.d,{month:'long',year:'numeric'}),'',r.n/mx,r.n,'average '+Math.round(r.p/r.n)+'%'])),acts:[]}}
+  if(k==='sr'){const open=sessUnfinished();
+    return{o:'Sessions',t:'Finished of started',fig:pgxFig(pgN('px',fin.length+open.length?fin.length/(fin.length+open.length)*100:0)+pgU('%'),`${open.length} still open`),
+      body:pgxP(open.length?'Sessions left open still hold their answers. Finish one and its questions count in every figure here.':'Every session you started is finished.')
+        +(open.length?pgxH('Still open')+`<div class="pg-day__s">${open.slice(0,8).map(s=>`<button type="button" class="pg-chipbtn pl-press" data-sessresume="${s.id}">${esc(s.config.label||'Session')} · ${sessAnswered(s)} of ${s.order.length}</button>`).join('')}</div>`:''),acts:[]}}
+  return null;
+};
+
+/* ---------- the peek: one sheet for every figure ---------- */
+function pgxIsOpen(){const el=$('#pgx');return !!el&&el.classList.contains('is-open')}
+function pgxDraw(r,dir){
+  const body=$('#pgxBody');
+  Object.keys(PG.prev).forEach(k=>{if(k.startsWith('px'))delete PG.prev[k]});
+  $('#pgxO').textContent=(r.o||'').replace(/<[^>]+>/g,'');$('#pgxT').innerHTML=r.t||'';
+  PG.pxa=(r.acts||[]).filter(Boolean);
+  body.innerHTML=(r.fig||'')+(r.body||'')+(PG.pxa.length?`<div class="pgx__acts">${PG.pxa.map((a,i)=>`<button type="button" class="pl-btn pl-btn--m ${a.primary?'pl-btn--filled':'pl-btn--tonal'} pl-press" data-pxa="${i}"${a.dis?' disabled':''}>${sxIc(a.ic||'i-next')}${esc(a.l)}</button>`).join('')}</div>`:'');
+  sxHydrate(body);body.scrollTop=0;pgAlive(body);
+  if(dir&&!Motion.reduced){const sp=PL('spatial');body.animate([{opacity:0,transform:`translateX(${dir*24}px)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e})}
+}
+function pgPeek(pk,from){
+  const i=pk.indexOf(':'),kind=i<0?pk:pk.slice(0,i),arg=i<0?'':pk.slice(i+1),fn=PG_PK[kind];if(!fn)return;
+  const r=fn(arg);if(!r)return;
+  const el=$('#pgx');
+  if(pgxIsOpen()){pgxDraw(r,1);return}
+  pgxDraw(r,0);
+  PG.pxFrom=from||null;
+  if(from){from.classList.add('is-src');const g=from.closest('[data-pgfg]');if(g&&from.dataset.pgf)pgFocus(g,from.dataset.pgf,true)}
+  el.hidden=false;el.inert=false;
+  el.getBoundingClientRect();
+  el.classList.add('is-open');
+  try{if(!PG.pxBack&&!(history.state&&history.state.pgx))history.pushState(Object.assign({},history.state||{},{pgx:1}),'')}catch(e){}
+  $('#pgxSheet').focus({preventScroll:true});
+}
+/* closing pops the sheet's history entry; an act waits for that pop, so a
+   layer it opens (Settings pushes its own entry) is never the one popped */
+function pgxClose(after,fromPop){
+  const el=$('#pgx');if(!pgxIsOpen()){if(after)after();return}
+  const sh=$('#pgxSheet');
+  el.classList.remove('is-open');el.inert=true;sh.style.transform='';sh.style.transition='';
+  el.getBoundingClientRect();
+  Promise.all(el.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{}))).then(()=>{if(!pgxIsOpen())el.hidden=true});
+  const f=PG.pxFrom;PG.pxFrom=null;
+  if(f){f.classList.remove('is-src');const g=f.closest('[data-pgfg]');if(g&&f.dataset.pgf&&g.__pgPeekFocus)pgFocus(g,null);
+    if(f.isConnected)try{f.focus({preventScroll:true})}catch(e){}}
+  let wait=false;
+  if(!fromPop)try{if(history.state&&history.state.pgx){PG.pxBack=true;history.back();wait=true}}catch(e){}
+  if(!after)return;
+  if(!wait){after();return}
+  PG.pxAfter=after;setTimeout(()=>{if(PG.pxAfter===after){PG.pxAfter=null;after()}},400);
+}
+addEventListener('popstate',e=>{
+  if(e.state&&e.state.pgx)return;
+  /* our own pop: run the waiting act; a peek opened again before the pop
+     landed keeps the screen and gets its entry back */
+  if(PG.pxBack){PG.pxBack=false;const f=PG.pxAfter;PG.pxAfter=null;if(f)f();
+    if(pgxIsOpen())try{history.pushState(Object.assign({},history.state||{},{pgx:1}),'')}catch(_){}
+    return}
+  if(pgxIsOpen())pgxClose(null,true);
+});
+/* a part of a whole isolates in place: it stays lit, its siblings step back */
+function pgFocus(g,key,byPeek){
+  const on=key!=null&&!(g.dataset.on===key&&!byPeek);
+  g.__pgPeekFocus=!!byPeek&&on;
+  if(on)g.dataset.on=key;else delete g.dataset.on;
+  g.classList.toggle('is-fg',on);
+  g.querySelectorAll('[data-pgf]').forEach(p=>{const me=on&&p.dataset.pgf===key;p.classList.toggle('is-on',me);if(p.matches('button'))p.setAttribute('aria-pressed',String(me))});
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest||!e.target.closest('#pgx'))return;
+  if(e.target.closest('[data-pgxclose]')){pgxClose();return}
+  const a=e.target.closest('[data-pxa]');
+  if(a&&!a.disabled){const x=PG.pxa[+a.dataset.pxa];if(!x)return;
+    if(x.pk){const i=x.pk.indexOf(':'),fn=PG_PK[i<0?x.pk:x.pk.slice(0,i)],r=fn&&fn(i<0?'':x.pk.slice(i+1));if(r)pgxDraw(r,1);return}
+    pgxClose(x.run);return}
+  /* a report, a session or a settings page opened from a peek takes its place */
+  if(e.target.closest('[data-open],[data-sessresume],[data-setsec]'))pgxClose();
+},true);
+document.addEventListener('keydown',e=>{
+  if(!pgxIsOpen())return;
+  if(e.key==='Escape'){e.stopImmediatePropagation();e.preventDefault();pgxClose()}
+},true);
+/* the sheet follows the finger down from its handle or title; past a third
+   of its height or on a flick it goes, anything less springs back */
+(function(){
+  const sh=$('#pgxSheet');if(!sh)return;
+  let live=false,id=null,y0=0,dy=0,trail=[];
+  sh.addEventListener('pointerdown',e=>{
+    if(!e.target.closest('.pgx__grab,.pgx__h')||e.target.closest('button'))return;
+    if(Motion.reduced)return;
+    live=true;id=e.pointerId;y0=e.clientY;dy=0;trail=[{t:performance.now(),y:0}];
+    try{sh.setPointerCapture(id)}catch(_){}
+    sh.style.transition='none';
+  });
+  sh.addEventListener('pointermove',e=>{
+    if(!live||e.pointerId!==id)return;
+    const d=e.clientY-y0;dy=d<0?d*.55:d;sh.style.transform=`translateY(${dy}px)`;
+    trail.push({t:performance.now(),y:dy});if(trail.length>6)trail.shift();
+  });
+  const end=e=>{
+    if(!live||e.pointerId!==id)return;live=false;
+    const a=trail[0],b=trail[trail.length-1],v=b.t>a.t?(b.y-a.y)/(b.t-a.t)*1000:0;
+    if(dy>sh.offsetHeight/3||(v>700&&dy>12))pgxClose();
+    else{sh.style.transition='';sh.style.transform=''}
+  };
+  sh.addEventListener('pointerup',end);sh.addEventListener('pointercancel',end);
+})();
+
 $('#pgTabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||b.classList.contains('on'))return;pgShow(b.dataset.v,true)});
 $('#pgStage').addEventListener('click',e=>{
   const sg=e.target.closest('[data-pgseg] [data-v]');if(sg){pgSegTap(sg.closest('[data-pgseg]'),sg);return}
+  /* a chart: a tap (not a scrub) or its read-out opens the period read out */
+  const ch=e.target.closest('#pgTrend .pg-svg,#pgTrend .pg-read,#pgTchart .pg-svg,#pgTchart .pg-read');
+  if(ch){if(PG.scrubX0!=null&&Math.abs(e.clientX-PG.scrubX0)>10&&!ch.matches('.pg-read'))return;
+    const box=ch.closest('.pg-chart'),rd=box.querySelector('.pg-read'),T=box.id==='pgTchart'?PG.tchart:PG.trend;if(!T)return;
+    pgPeek((box.id==='pgTchart'?'tb:':'tr:')+(rd&&rd.__i!=null?rd.__i:T.out.length-1),rd||ch);return}
+  /* a legend step on the heat map isolates its days */
+  const lv=e.target.closest('[data-pglv]');
+  if(lv){const g=$('#pgHeat');if(!g)return;const on=g.dataset.lv!==lv.dataset.pglv;
+    if(on)g.dataset.lv=lv.dataset.pglv;else delete g.dataset.lv;
+    $$('#pgStage [data-pglv]').forEach(b=>{const me=on&&b===lv;b.classList.toggle('is-on',me);b.setAttribute('aria-pressed',String(me))});return}
+  /* a named area opens in Areas' own list */
+  const ag=e.target.closest('[data-pgareago]');
+  if(ag){const k=ag.dataset.pgareago,cs=$$('#pgStage [data-pgfacet]');
+    if(PG.area!=='system'){PG.area='system';cs.forEach(x=>{const on=x.dataset.pgfacet==='system';x.classList.toggle('on',on);x.setAttribute('aria-checked',String(on))})}
+    PG.aopen=k;PG.aall=true;const box=$('#pgAreas');if(!box)return;box.innerHTML=pgAreaList();sxHydrate(box);
+    const row=[...box.querySelectorAll('[data-pgarea]')].find(b=>b.dataset.pgarea===k);
+    if(row){row.closest('.pg-area').scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'center'});row.focus({preventScroll:true})}
+    return}
   const dy=e.target.closest('[data-pgday]');
   if(dy){const k=dy.dataset.pgday,was=PG.day;PG.day=was===k?null:k;
     $$('#pgHeat .pg-hc').forEach(c=>c.classList.toggle('is-sel',c.dataset.pgday===PG.day));
@@ -14944,11 +15565,14 @@ $('#pgStage').addEventListener('click',e=>{
       li.classList.toggle('is-open',on);li.querySelector('.pg-unfold').classList.toggle('is-open',on);h.setAttribute('aria-expanded',String(on))});
     return}
   const pr=e.target.closest('[data-pgprac]');
-  if(pr){const k=pr.dataset.k,nw=pr.dataset.pgprac==='new';F.pool=nw?'unused':'incorrect';clearFacets();F.sets[PG.area].add(k);
-    startSession((nw?'New · ':'Missed · ')+k);return}
+  if(pr){const k=pr.dataset.k,m=pr.dataset.pgprac;F.pool={new:'unused',missed:'incorrect',due:'due'}[m];clearFacets();F.sets[PG.area].add(k);
+    startSession({new:'New · ',missed:'Missed · ',due:'Due · '}[m]+k);return}
   if(e.target.closest('[data-pgmore]')){PG.shown+=30;pgBuild('sess');return}
   const dr=e.target.closest('[data-pgdrill]');
   if(dr){const k=dr.dataset.pgdrill;F.pool='all';clearFacets();F.sets[PG.grp].add(k);startSession('Weak spot: '+k);return}
+  /* a figure opens its peek; a part of a whole isolates in place */
+  const pk=e.target.closest('[data-pk]');if(pk){pgPeek(pk.dataset.pk,pk);return}
+  const pf=e.target.closest('[data-pgf]');if(pf){const g=pf.closest('[data-pgfg]');if(g)pgFocus(g,pf.dataset.pgf);return}
   const del=e.target.closest('[data-pgdel]');
   if(del){e.stopPropagation();
     if(!del.classList.contains('is-armed')){del.classList.add('is-armed');del.setAttribute('aria-label','Tap again to delete');
@@ -14958,7 +15582,7 @@ $('#pgStage').addEventListener('click',e=>{
     const go=()=>{const at={};$$('#pgStage .pg-srow[data-sid]').forEach(r=>{at[r.dataset.sid]=r.getBoundingClientRect().top});
       const i=DB.sessions.findIndex(x=>x.id===id);if(i<0)return;
       DB.sessions.splice(i,1);save();renderDash();
-      PG.E=null;PG.QS=null;PG.built={};const keep=PG.prev;pgBuild('sess');PG.prev=keep;pgLedger();toast('Session deleted.');
+      PG.E=null;PG.QS=null;PG.QM=null;PG.built={};const keep=PG.prev;pgBuild('sess');PG.prev=keep;pgLedger();toast('Session deleted.');
       if(Motion.reduced)return;const sp=PL('spatial');
       $$('#pgStage .pg-srow[data-sid]').forEach(r=>{const y=at[r.dataset.sid];if(y==null)return;const d=y-r.getBoundingClientRect().top;
         if(Math.abs(d)>1)r.animate([{transform:`translateY(${d}px)`},{transform:'none'}],{duration:sp.d,easing:sp.e})})};
@@ -14967,11 +15591,12 @@ $('#pgStage').addEventListener('click',e=>{
     return}
 },true);
 /* a session row opens its report by Enter too, like the button it acts as */
-$('#pgStage').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.pg-srow[data-open]')){e.preventDefault();e.target.click()}});
+$('#pgStage').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.pg-srow[data-open],li[role="button"]')){e.preventDefault();e.target.click()}});
 /* the trend chart reads out the period under the finger */
 $('#pgStage').addEventListener('pointermove',pgScrub);
 $('#pgStage').addEventListener('pointerdown',pgScrub);
 function pgScrub(e){
+  if(e.type==='pointerdown')PG.scrubX0=e.clientX;
   const ts=e.target.closest&&e.target.closest('#pgTchart .pg-svg');
   if(ts&&PG.tchart&&PG.tx){const r=ts.getBoundingClientRect(),x=(e.clientX-r.left)*ts.viewBox.baseVal.width/r.width;
     let bi=0,bd=1e9;PG.tchart.out.forEach((b,i)=>{const d=Math.abs(PG.tx(i)-x);if(d<bd){bd=d;bi=i}});

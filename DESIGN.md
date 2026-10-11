@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.14** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.15** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -83,6 +83,10 @@ These are the findings behind Plume 2, measured on the real apps
 6. **The first frame never waits** (§6). That same control lags because the
    app builds the new page *before* the pill can move. Motion starts on the
    frame the finger lands; heavy work comes after.
+7. **An app is not a photo of its data** (§6, Functional interactivity,
+   2026-10-11). The rebuilt Progress looked right and still read as a PDF:
+   every figure, bar and legend was a picture. The user's rule: everything
+   on screen answers a touch with something it could not show at rest.
 
 ---
 
@@ -477,6 +481,66 @@ touch triggers may wait for rendering, data or layout.
 Pressing never shifts layout: `transform` only, never margin, padding or
 size.
 
+### Functional interactivity (Goal and Rule)
+
+**Goal:** a Plume screen is an instrument, not a printout. Every element the
+eye stops on (a number, a bar, a segment, a legend key, a point on a chart,
+a column, a tile, a coloured square, a name) answers a touch, and the answer
+is **function or information it could not show at rest**. The touch contract
+says how an element moves under the finger; this says what the finger gets.
+It is the user's own principle (2026-10-11): it is what makes a surface feel
+high quality, and it is why visuals are encouraged. A shape that opens up is
+worth drawing; a static one is decoration.
+
+**The test for every element:** *if I tap this, what do I learn or what can
+I do that I couldn't a moment ago?* If there is a real answer, build it. If
+there is none, the element stays still. **Never force it:** an axis label,
+a card's subtitle, a sentence of advice and a unit have nothing behind them,
+and making them tappable only adds noise. Interactivity that reveals nothing
+is worse than none.
+
+**Four answers, one per kind of element** (pick by what the element *is*,
+so the same kind always answers the same way across the app):
+
+| Element | Answer | Example (Progress) |
+|---|---|---|
+| **A figure** (a number, a tile, a hero value) | Opens its **peek**: a sheet that says what the figure is, how it was worked out from the user's own record (the counts behind it, its comparison), what it is made of (where it falls, its parts), and ends with the **act** that does something about it | Form 63% → the window, its likely range, the 100 before, the best stretch, where the misses were, *Practise these misses* |
+| **A part of a whole** (a stacked segment, a ring segment, a legend key, a heat-map step) | **Isolates in place**: the part stays lit, its siblings step back to about 30% (rows to 50%), on the effects spring; tap it again to clear. The segment and its legend row are one part: touching either lights both. A legend row that also has a peek opens it, and the part stays lit under the sheet | Misses by cause: tapping *Fell for a distractor* lights its segment in the bar and opens its peek |
+| **A mark in a series** (a chart point, a column, a period row, a day) | **Reads out** under the finger (scrub), and a tap, or a tap on the read-out, opens **that period's peek** | A day on the pace chart → that day's questions, time, misses by system, its sessions |
+| **A figure owned elsewhere** | **Goes there**: switches to the view or opens the row that owns it | *1736 of 3500 seen* → Areas; *least done: Renal* → Renal's row in Areas, open |
+
+**Rules:**
+
+- **Every peek ends in substance.** At minimum the figure's definition and
+  the numbers it came from. When the figure counts questions, the peek's
+  main act practises exactly those questions (*Practise these · 20 of 37*:
+  the user's block size, honest about the total). A peek is never a tooltip
+  that repeats the label.
+- **The source stays marked.** While a peek is up, the element that opened
+  it keeps its pressed layer (`is-src`) and, if it is a part, its isolation,
+  so the user sees under the scrim where the sheet came from. Closing
+  clears both and returns focus to it.
+- **One container.** Every figure on a surface opens the same peek sheet
+  (§8), never a mix of dialogs, tooltips and pages. A peek may lead to
+  another peek in place (the content slides 24px forward); it never stacks.
+- **Signal it quietly.** Interactivity is the house convention, so it is not
+  shouted with underlines or chevrons on everything. Each tappable element
+  has the touch contract, a hover layer in its own shape, a pointer cursor,
+  and a press area larger than its glyphs (`--bare`: 8×12px past a bare
+  number, so the layer never hugs the text). A chart's read-out ends in a
+  small chevron because a scrub line is not otherwise known to open. Names
+  that jump elsewhere inside running text are links (primary, underlined).
+- **Small marks get real targets.** A heat cell or a legend square may draw
+  at 12–16px, but its hit area reaches 32px (`::before`), and dense series
+  are read by scrubbing, not by aiming.
+- **Look may change to make it work, features never go.** Turning a block
+  into a button is allowed to change its padding or shape; it may not drop
+  a figure (§ "A rebuild keeps every measure", `CLAUDE.md`).
+- **Keyboard and screen readers.** Tappable figures are `<button>`s (rows
+  that hold other content are `role="button"` with `tabindex="0"` and
+  Enter/Space); a part that isolates is `aria-pressed`; the peek is a
+  dialog that Escape and Back close.
+
 ### Icons move by their own logic (Rule)
 
 **Every icon has a logic you can read from its shape, and its motion acts
@@ -746,6 +810,7 @@ goals and rules above win). All follow the touch contract (§6).
 | **Cards** | `--p-card` on `--p-page`, `--p-r-card`. Press compresses to 0.98. A card that opens something uses the container transform. Stat tiles are cards with an expressive number |
 | **Lists** | Grouped cards (§5), 56–72px rows, leading icon in a 40px tonal shape, title + one supporting line, trailing meta or chevron |
 | **Menus** | `--p-float`, `--p-r-xl`, 4px inner padding, rows `--p-r-m` 48px high, grouped sections with 2px gaps instead of dividers. Grows from its anchor (scale 0.85 + fade, `transform-origin` at the anchor) on `--p-spatial`. Selected row: `secondary-container` with a check |
+| **Peek** (functional interactivity) | A bottom sheet, `--p-float`, at most 640px wide so it stays in thumb reach on the tablet. Overline (where it came from), headline (the figure's name), the figure as an expressive number that counts in with its caption, one or two plain sentences, a mini-tile row of the numbers behind it, labelled rows of what it is made of, and its acts as full-width 56px buttons (the main one filled). Rises on `--p-spatial-slow`, drags down from its head, closes on scrim, ×, Escape and Back. What it holds draws itself (bars grow with a stagger) |
 | **Bottom sheet** | `--p-float`, `--p-r-xl` top corners, a 32×4px drag handle, draggable with velocity and snap points, scrim fade. Rises on `--p-spatial-slow`. Closes on scrim tap, Escape, back gesture, or flick down |
 | **Dialog** | `--p-float`, `--p-r-xl`, 24px padding, actions bottom-right as text or tonal buttons. Arrives with scale 0.9 + fade from the centre (or from its trigger). On compact screens prefer a bottom sheet |
 | **Snackbar** | `inverse-surface`, `--p-r-s`, slides up 16px + fade, one optional action, auto-dismiss 4–6s, swipe to dismiss. One at a time; a new one replaces the old with a quick crossfade |
@@ -862,6 +927,10 @@ Errors say what happened and what is safe ("Nothing was lost").
 - A blank frame, or parts arriving at different times, between two screens.
 - One key press closing two layers.
 - A colour that gives away a hidden answer.
+- A figure, bar, segment or legend that does nothing when touched, on a
+  surface rebuilt since Plume 2.15, when there is something real behind it.
+- An element made tappable with nothing behind it, or a peek that only
+  repeats its label.
 
 ---
 
@@ -884,6 +953,11 @@ The quality bar. A surface is done when it *feels* like §2, and:
       raw values.
 - [ ] Every interactive element follows the touch contract (press, release
       spring, hover, focus, cancel, disabled).
+- [ ] **Functional interactivity:** walk every element on the surface and
+      apply the test (§6). Every figure opens its peek, every part isolates,
+      every mark reads out and opens its period; nothing tappable is empty.
+      Drive every `data-pk` in a script and check each opens with content
+      (`CLAUDE.md`, Testing).
 - [ ] **Butter:** nothing on the surface changes in a single frame
       (filmed); every value, label, icon and item transitions.
 - [ ] **Icons:** every icon that moves passes the one-sentence test (§6)
@@ -1212,6 +1286,34 @@ The quality bar. A surface is done when it *feels* like §2, and:
     buttons (`.pg-tl__btn`).
   - **One period switch drives a whole view** (Time): the hero, the chart's
     buckets and the list all follow `PG.tper`, rebuilt together by `pgRe`.
+- **Functional interactivity on Progress** (`Plume 2.15 · functional
+  interactivity`, v6.74; the FUNCTIONAL INTERACTIVITY block of the PROGRESS
+  script). Reuse it for any data surface:
+  - **`data-pk="kind:arg"`** on a button opens `pgPeek` with
+    `PG_PK[kind](arg)`, which returns `{o, t, fig, body, acts}`: overline,
+    title, the figure, the body and the acts. Builders: `pgxFig`, `pgxP`,
+    `pgxH`, `pgxMini`, `pgxRows` (name, bar, figure), `pgxBySys` (where a set
+    of attempts or questions falls), `pgxCauseRows`, `pgxSessRows` (sessions
+    that open their reports), and `pgxPeriod(a,b,name)`, the peek of any
+    stretch of time (answered, first sightings, time, misses by system, its
+    sessions, *Practise the misses*). Acts: `pgxPrac(ids,…)` (an exact set of
+    questions through `startIds`), `pgxPool(pool,…)` (a builder pool, with an
+    optional facet), `pgxGo(view)`, `pgxPk(pk)` (another peek, in place).
+  - **The sheet** (`#pgx`, `pgxDraw`, `pgxClose`): one per app, z-index 110
+    like the gallery picker; a history entry so Back closes it; an act runs
+    after that entry has popped (`PG.pxBack`), so a layer the act opens
+    (Settings pushes its own entry) is never the one popped, and a peek
+    opened again before the pop keeps its entry.
+  - **Parts:** `data-pgfg` on the holder, `data-pgf="key"` on each part,
+    `pgFocus(holder,key)`; CSS dims the rest. The heat map's legend steps
+    use `data-pglv` on the grid.
+  - **`.pg-tap`**: the touch contract for any element turned into a button
+    (state layer in its own shape, `is-src`, `--bare` press area); list rows
+    reach their layer into the row gap with a negative margin.
+  - **Rule learnt:** turning a `div` into a `button` or `span` re-matches
+    descendant selectors written for the old markup (`.pg-tpair span` shrank
+    the Time hero's figures to 13px). After converting, screenshot every
+    view and scope such rules to direct children.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1237,6 +1339,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| **Progress: functional interactivity** (every figure opens a peek, every part isolates, every chart point, column, period row, day and forecast day opens its period, names jump to their area; the peek sheet; *Practise these* from any figure that counts questions; Review due in an area) | 2.15 | 6.74 | From the user: the rebuilt Progress was static, like a PDF. Nothing removed; blocks became buttons |
 | **Wells across Plume: `--p-well` is a veil over its holder** (Progress view switcher and period switchers, Settings search, every track, field and tile in Settings and Progress); `--p-card-hi` raised in dark; swatch rings | 2.14 | 6.73 | From the user: the switcher's track and the search bar did not stand out from the page in either theme. Measured ΔL: see §3 |
 | Progress: Time view (time per question for today / this week / this month / all time, trend, period list, spread, session totals); session rows lead with their total time; six tabs | 2.13 | 6.72 | From the user: average time per question is how they monitor themselves |
 | Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
@@ -1377,3 +1480,10 @@ were built under which version.
   card or a float alike; in dark it lightens, because the page is the floor.
   Anything raised on a well clears it. From the user: the view switcher and
   the Settings search did not stand out from the page in either theme.
+- **Plume 2.15** (2026-10-11): functional interactivity. Every element
+  answers a touch with function or information it could not show at rest,
+  by kind: a figure opens its peek (definition, the numbers behind it, what
+  it is made of, the act), a part isolates in place, a mark reads out and
+  opens its period, a figure owned elsewhere goes there; nothing is made
+  tappable with nothing behind it. The peek sheet joins §8. From the user,
+  on Progress: an app is not a photo or a PDF.

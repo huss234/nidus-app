@@ -294,6 +294,15 @@ a recipe.
   the user found it "significantly less". When rebuilding a surface, carry
   over everything it measured, restructured where that helps; propose cuts,
   don't make them.
+- **Every Progress figure is interactive (functional interactivity, v6.74,
+  `DESIGN.md` §6).** A new figure, bar, legend or chart on Progress ships
+  with its answer in the same change: a `data-pk` and a `PG_PK` builder for
+  a figure, `data-pgf` inside a `data-pgfg` holder for a part, a peek of its
+  period for a mark. A peek reads the same data as its card (refactor the
+  card's maths into a shared function, as `pgCauses` and `pgCmpWin` are,
+  rather than writing it twice), and its act practises exactly the
+  questions it counts through `startIds(ids,label)` (pool `ids`; the user's
+  block size and order; the builder's pool is restored after).
 - **Progress measures what a session records, and says its window**
   (v6.69, the PROGRESS section; Areas since v6.70). `pgData()` joins every counted attempt
   (`allAttempts()`: ts, chosen, correct, answer time, question time, conf,
@@ -534,6 +543,15 @@ does) and work in the scratchpad:
   that overlap by more than a third of a line, plus text past the stage's
   edge. Zero is the bar. (The scratch `overlap.js`; it found the hours,
   week-column and stamina collisions in v6.69 that the 412px shots hid.)
+- **Drive every interactive element on Progress.** In the page, for each
+  view, click every `[data-pk]` in turn and record `pgxIsOpen()`, the
+  peek's title, its text length and its acts, then `pgxClose()`; click the
+  first part of every `[data-pgfg]` twice (isolated, then cleared); finally
+  run one act and check a session started with the right label and that
+  `history.state` holds no `pgx`. A peek that stays shut means a key with
+  no builder (`data-pk="ta"` did, v6.74). Then take full-page shots of
+  every view in both themes: a `div` turned into a `button` re-matches old
+  descendant selectors (the scratch `t.js`).
 - **A seed for Progress** needs months of history to show anything: the
   scratch generator writes ~3,500 questions, ~80 sessions over 75 days with
   rest days, confidence, miss tags, lures on 60% of questions and crossed-out
