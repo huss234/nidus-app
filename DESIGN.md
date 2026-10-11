@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.13** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.14** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -151,10 +151,34 @@ themes.** Recessed things are darker than what holds them.
 | Page | `--p-page` | The screen background, behind everything | 0.955–0.965, a hint of the seed hue (chroma ≈ 0.01) | 0.13–0.15 |
 | Bar | `--p-bar` | Navigation bar, rail | between page and card | between page and card |
 | Card | `--p-card` | Cards, list rows, hero card, stat tiles | 0.99–1.0 | 0.20–0.22 |
-| Card, raised | `--p-card-hi` | A raised thing inside a card (a selected tile, a pressed row's lift) | 1.0, separated by shadow or edge | 0.25–0.27 |
-| Well | `--p-well` | Recessed things: text fields, progress and slider tracks, chart backgrounds, a switch track, inactive segments of a button group | slightly below its holder (≈ page tone) | slightly below its holder (≈ 0.16–0.18) |
+| Card, raised | `--p-card-hi` | A raised thing inside a card or on its well (a selected tile, a pressed row's lift) | 1.0, separated by shadow or edge | 0.32: above a well in a card (≈ 0.29) |
+| Well | `--p-well` | Recessed things: text fields, search, progress and slider tracks, chart backgrounds, a switch track, the track of a button group | a **veil**, not a tone: on-surface ink (L 0.22) at 9.5% over its holder, ≈ ΔL −0.06 on the page and on a card | a veil of on-surface ink (L 0.92) at 9%, ≈ ΔL +0.09 on the page, +0.08 on a card |
 | Float | `--p-float` | Menus, sheets, dialogs, snackbars excluded (they are inverse) | 1.0 + Plume shadow | 0.27–0.30 + dark shadow |
 
+- **Rule: a well is a veil over its holder, never a fixed tone (2.14).**
+  `--p-well` is translucent on-surface ink, so it is one clear step from
+  *whatever it sits on*: the page, a card, a float, another well. Until
+  v6.73 it was a fixed lightness between page and card. That read as a well
+  only inside a card; on the page it was the page's own colour in light
+  (ΔL −0.01) and lighter than the page in dark, so the Progress view
+  switcher, the Settings search and every track set on the page vanished
+  (from the user: "its colour has never been thought about"). Consequences:
+  - In dark the page is the floor: nothing can be darker than it and still
+    be seen, so the dark veil lightens. A well in dark is a fill (as M3's
+    tracks are), lighter than its holder; in light it is a recess, darker.
+  - The contrast setting thickens the veil (+2.5% per step), like every
+    other gap.
+  - Anything raised **on** a well must clear it: `--p-card-hi` is 0.32 in
+    dark, above a well in a card.
+  - A ring that cuts a gap in the well's colour (overlapping swatches)
+    is the veil over its holder, both layers: `0 0 0 2px var(--p-well),
+    0 0 0 2px var(--p-card)`. A translucent ring alone shows what it
+    overlaps.
+  - `color-mix(…, var(--p-well))` stays valid (the quieter data ink, the
+    heat-map steps): the mix keeps some of the veil's transparency and
+    lands on the holder the same way.
+  - Measure it: a well on the page and in a card must be |ΔL| ≥ 0.05 from
+    its holder, in both themes, at every contrast setting (§13).
 - **Minimum gap** between page and card: **ΔL ≥ 0.035 in light, ≥ 0.06 in
   dark**, measured on computed colours. Below that, cards dissolve.
 - The page is **never pure white** in light. White is reserved for what
@@ -848,6 +872,9 @@ The quality bar. A surface is done when it *feels* like §2, and:
 - [ ] **Light:** in both themes the page is lower than the cards and cards
       are lighter than the page; the gap is measured on computed colours
       (ΔL ≥ 0.035 light, ≥ 0.06 dark). No large coloured fill.
+- [ ] **Wells:** every well (track, search, field, tile) is |ΔL| ≥ 0.05
+      from what it actually sits on, measured on the page *and* in a card,
+      in both themes (§3, 2.14).
 - [ ] **Parity:** screenshots at 390px in light and dark look like the same
       object in different light, not a negative of each other
       (`htmlcheck --shot`, and a desktop width).
@@ -893,6 +920,8 @@ The quality bar. A surface is done when it *feels* like §2, and:
   −105°) as tonal containers for leading icon shapes. The static fallback
   palette at the top of the file is generated from the engine (hue 262,
   tonal, standard contrast); regenerate it whenever the engine changes.
+  `--p-well` is the one role with alpha: on-surface ink at 9.5% (light) /
+  9% (dark), +2.5% per contrast step (2.14, §3).
   Google Sans Flex is `--m3-font`; `--p-r-card` (24) and `--p-r-hero` (32)
   are in the tokens block.
 - **Tokens:** CSS block `Plume 1.0 · tokens` — radii `--p-r-*`, the six
@@ -1208,6 +1237,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| **Wells across Plume: `--p-well` is a veil over its holder** (Progress view switcher and period switchers, Settings search, every track, field and tile in Settings and Progress); `--p-card-hi` raised in dark; swatch rings | 2.14 | 6.73 | From the user: the switcher's track and the search bar did not stand out from the page in either theme. Measured ΔL: see §3 |
 | Progress: Time view (time per question for today / this week / this month / all time, trend, period list, spread, session totals); session rows lead with their total time; six tabs | 2.13 | 6.72 | From the user: average time per question is how they monitor themselves |
 | Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
@@ -1341,3 +1371,9 @@ were built under which version.
 - **Plume 2.13** (2026-10-11): a slot that opens and closes collapses to
   zero (`minmax(0,0fr)`, never a bare `0fr`), and its spacing moves with it.
   From the user, on the Areas chips.
+
+- **Plume 2.14** (2026-10-11): a well is a veil of on-surface ink over its
+  holder, not a fixed tone, so it stands one clear step from the page, a
+  card or a float alike; in dark it lightens, because the page is the floor.
+  Anything raised on a well clears it. From the user: the view switcher and
+  the Settings search did not stand out from the page in either theme.

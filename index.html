@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.72 -->
+<!-- Nidus — Personal Qbank · v6.73 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -146,8 +146,8 @@
   --p-page: oklch(14.50% 0.0072 262.0);
   --p-bar: oklch(17.50% 0.0064 262.0);
   --p-card: oklch(21.00% 0.0064 262.0);
-  --p-card-hi: oklch(25.50% 0.0064 262.0);
-  --p-well: oklch(17.00% 0.0072 262.0);
+  --p-card-hi: oklch(32.00% 0.0064 262.0);
+  --p-well: oklch(92.00% 0.0048 262.0 / 0.090);
   --p-float: oklch(28.50% 0.0064 262.0);
   --p-cat-a: oklch(39.66% 0.0577 262.0);
   --p-on-cat-a: oklch(91.38% 0.0414 262.0);
@@ -205,7 +205,7 @@
   --p-bar: oklch(97.80% 0.0028 262.0);
   --p-card: oklch(99.60% 0.0028 262.0);
   --p-card-hi: oklch(100.00% 0.0000 262.0);
-  --p-well: oklch(94.80% 0.0096 262.0);
+  --p-well: oklch(22.00% 0.0112 262.0 / 0.095);
   --p-float: oklch(100.00% 0.0000 262.0);
   --p-cat-a: oklch(91.38% 0.0414 262.0);
   --p-on-cat-a: oklch(39.66% 0.0577 262.0);
@@ -4040,7 +4040,8 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .pl-seg--sw button{height:auto;padding:12px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;border-radius:var(--p-r-lx);font-size:13px}
 .pl-seg--sw button[aria-checked="true"]{color:var(--md-on-surface)}
 .sx-sw3{display:flex}
-.sx-sw3 i{width:18px;height:18px;border-radius:var(--p-r-full);background:var(--c);box-shadow:0 0 0 2px var(--p-well)}
+.sx-sw3 i{width:18px;height:18px;border-radius:var(--p-r-full);background:var(--c);box-shadow:0 0 0 2px var(--p-well),0 0 0 2px var(--p-card)}
+.pl-seg--sw button[aria-checked="true"] .sx-sw3 i{box-shadow:0 0 0 2px var(--p-card-hi)}
 .sx-sw3 i + i{margin-left:-5px}
 
 /* the switch: a well track; the thumb grows and carries a check when on */
@@ -6435,7 +6436,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.72</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.73</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6491,7 +6492,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.72 · sharded store</span>
+        <span class="chip" id="verChip">v6.73 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7595,7 +7596,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.72';
+const APP_VERSION='6.73';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -20374,9 +20375,9 @@ const BRAND=(function(){
       var lit = function (L, c) { return 'oklch(' + (L * 100).toFixed(2) + '% ' + c.toFixed(4) + ' ' + hN.toFixed(1) + ')'; };
       var k = col - 1;
       var Lx = dark
-        ? { page: .145 - .015 * k, bar: .175, card: .21, hi: .255, well: .17 - .01 * k, flt: .285,
+        ? { page: .145 - .015 * k, bar: .175, card: .21, hi: .32, flt: .285,
             lowest: .12, cont: .228, high: .25, highest: .275, dim: .125, bright: .30 }
-        : { page: .958 - .008 * k, bar: .978, card: .996, hi: 1, well: .948 - .008 * k, flt: 1,
+        : { page: .958 - .008 * k, bar: .978, card: .996, hi: 1, flt: 1,
             lowest: 1, cont: .985, high: .972, highest: .945 - .008 * k, dim: .92, bright: .985 };
       var cPg = cn * (dark ? .9 : 1.3), cCd = cn * (dark ? .8 : .35), cWl = cn * (dark ? .9 : 1.2);
       out['--md-surface'] = lit(Lx.page, cPg);
@@ -20391,7 +20392,18 @@ const BRAND=(function(){
       out['--p-bar'] = lit(Lx.bar, cCd);
       out['--p-card'] = lit(Lx.card, cCd);
       out['--p-card-hi'] = lit(Lx.hi, dark ? cCd : 0);
-      out['--p-well'] = lit(Lx.well, cWl);
+      /* The well is not a tone but a veil: on-surface ink at a fixed
+         opacity, laid over whatever holds it. A fixed tone (it was L .948 /
+         .17) only read as a well inside a card: on the page it was the
+         page's own colour in light and lighter than the page in dark, so
+         every track and search field set on the page vanished (v6.73). A
+         veil is one clear step from its holder on the page, a card, a
+         float or another well, in both themes, with no list of contexts.
+         Dark has no room below its page, so there the veil lightens: a
+         well reads as a fill, as in M3. Raised things inside a well
+         (--p-card-hi) sit above that step. */
+      var wInk = dark ? .92 : .22, wA = (dark ? .09 : .095) + .025 * k;
+      out['--p-well'] = 'oklch(' + (wInk * 100).toFixed(2) + '% ' + (cn * (dark ? .6 : 1.4)).toFixed(4) + ' ' + hN.toFixed(1) + ' / ' + wA.toFixed(3) + ')';
       out['--p-float'] = lit(Lx.flt, dark ? cCd : 0);
       /* one hue per category for leading icon shapes (Settings): the seed,
          and two hues set well apart from it, as tonal containers */

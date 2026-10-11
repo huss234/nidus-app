@@ -462,6 +462,15 @@ does) and work in the scratchpad:
   at least 0.035 in light and 0.06 in dark, and never negative. Then put
   the two screenshots side by side: they must look like the same object,
   not a negative.
+- **Measure every well against what it sits on, not against the page.**
+  For each element whose computed background has alpha (the `--p-well`
+  veil), find the nearest ancestor with an opaque background, composite
+  the two through a 1×1 canvas and take the OKLab L of each: |ΔL| must be
+  at least 0.05 for every well on Progress and Settings, in both themes and
+  at contrast 0, 1 and 2 (`DB.settings.contrast`). Measuring only the
+  page-to-card gap missed that the old fixed-tone well was the page's own
+  colour wherever it sat on the page (v6.73). The engine writes the roles
+  as inline styles on `<html>`, so a CSS experiment needs `!important`.
 - **Measure the first frame.** Seed a bank of at least 2,000 questions, then
   in the page dispatch `pointerdown` and `click` on the control and log
   the moving element's computed `transform` (a `DOMMatrix`, `m41` for x)
