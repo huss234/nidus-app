@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.74 -->
+<!-- Nidus — Personal Qbank · v6.75 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2289,7 +2289,7 @@ body.scrolled .phead{background:var(--md-surface-container)}
 }
 .ptop .timer{
   font-family:var(--m3-mono);font-size:14px;letter-spacing:.2px;
-  padding:0 12px;height:32px;min-width:74px;
+  padding:0 12px;height:32px;min-width:calc(7ch + 24px);white-space:nowrap;
   display:inline-flex;align-items:center;justify-content:center;
   border-radius:var(--m3-corner-s);
   background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
@@ -3541,7 +3541,7 @@ body.hasmig{padding-bottom:64px}
   .pbody{padding:12px 16px 168px}
   .ptop{padding:0 4px;gap:4px}
   .ptop .qn{font-size:18px}
-  .ptop .timer{font-size:13px;padding:0 10px;height:32px;min-width:60px;margin:0 0 0 8px}
+  .ptop .timer{font-size:13px;padding:0 10px;height:32px;min-width:calc(7ch + 20px);margin:0 0 0 8px}
   .navstrip{padding:4px 12px 10px}
   .navstrip button{width:42px;height:42px;font-size:14px}
   .ch{padding:14px 14px 14px 17px}
@@ -6550,7 +6550,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.74</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.75</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6606,7 +6606,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.74 · sharded store</span>
+        <span class="chip" id="verChip">v6.75 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7723,7 +7723,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.74';
+const APP_VERSION='6.75';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -7736,8 +7736,16 @@ const esc = s => String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 const onlyMarks = h => String(h||'').replace(/<(?!\/?(?:mark|table|thead|tbody|tr|th|td|div|span)\b)[^>]*>/gi,'');
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const pad=n=>String(n).padStart(2,'0');
-const fmtT=s=>{s=Math.max(0,Math.round(s));return pad(Math.floor(s/60))+':'+pad(s%60)};
-const fmtLong=s=>{s=Math.round(s);const h=Math.floor(s/3600);return (h?h+'h ':'')+Math.floor((s%3600)/60)+'m '+(s%60)+'s'};
+/* every duration in the app, seconds in: the two largest units, a zero one
+   left out — 45s, 3m 25s, 1m, 1h 5m, 1h. Never a unit past its size (no 65m,
+   no 90s); hours keep counting past a day; a no-break space keeps the pair
+   on one line. pgTfmt draws the same parts with quiet units. */
+const durParts=s=>{s=Math.max(0,Math.round(s||0));let p;
+  if(s<3600)p=[[Math.floor(s/60),'m'],[s%60,'s']];
+  else{const m=Math.round(s/60);p=[[Math.floor(m/60),'h'],[m%60,'m']]}
+  p=p.filter(x=>x[0]);return p.length?p:[[0,'s']]};
+const fmtT=s=>durParts(s).map(x=>x[0]+x[1]).join('\u00a0');
+const fmtLong=fmtT;
 const dayKey=d=>{const x=new Date(d);return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate())};
 const today=()=>dayKey(Date.now());
 const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
@@ -11457,9 +11465,8 @@ function sessScore(s){
 function sessAgo(ms){
   const d=Date.now()-(ms||0);
   if(d<90000)return 'just now';
-  const m=Math.round(d/60000);if(m<60)return m+' min ago';
-  const h=Math.round(m/60);if(h<36)return h+' hour'+(h===1?'':'s')+' ago';
-  const y=Math.round(h/24);return y+' day'+(y===1?'':'s')+' ago';
+  if(d<36*3600000)return fmtT(d/1000)+' ago';
+  const y=Math.round(d/86400000);return y+' day'+(y===1?'':'s')+' ago';
 }
 function sessChip(s){
   const st=sessState(s);
@@ -13207,7 +13214,7 @@ function showResults(s){
           <div><b>${avgA==null?'—':fmtT(avgA)}</b><span>Avg answer time</span></div>
           <div><b>${fmtT(avg)}</b><span>Avg question time</span></div>
           <div><b>${fmtT(times[slow])}</b><span>Slowest · Q${slow+1}</span></div>
-          <div><b>${fmtLong(Math.max(sum,(s.elapsed||0)/1000)).replace(/^0m /,'')}</b><span>Session time</span></div>
+          <div><b>${fmtLong(Math.max(sum,(s.elapsed||0)/1000))}</b><span>Session time</span></div>
           ${secs?`<div><b>${over}</b><span>Over the ${fmtT(secs)} limit</span></div>`:''}
         </div>
       </div>
@@ -14101,8 +14108,7 @@ function timeBackfill(){let n=0;
 function between(list,a,b){return list.filter(x=>x.ts>=a&&x.ts<b)}
 function unitize(v){if(typeof v!=='string'||v.indexOf('<')>=0)return v;
   return v.replace(/(\d)(%|h|m|s|d)(?=\s|$)/g,'$1<small>$2</small>')}
-function fmtDur(ms){const s=Math.round((ms||0)/1000);if(s<60)return s+'s';const m=Math.round(s/60);
-  if(m<60)return m+'m';return Math.floor(m/60)+'h '+pad(m%60)+'m'}
+function fmtDur(ms){return fmtT((ms||0)/1000)}
 function accCol(p){return p==null?'var(--faint)':p>=70?'var(--jade)':p>=50?'var(--amber)':'var(--rose)'}
 function activeDays(){const s={};DB.questions.forEach(q=>attOf(q.id).forEach(a=>s[dayKey(a.ts)]=1));return s}
 function longestStreak(){
@@ -14242,9 +14248,8 @@ const pgMed=xs=>{if(!xs.length)return null;const a=xs.slice().sort((x,y)=>x-y),m
 /* an expressive number that counts to its value; k names it so a later
    render counts from where it was, and only a difference moves */
 function pgN(k,v,dec){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-d="${dec||0}">${(+v).toFixed(dec||0)}</b>`}
-/* a duration in seconds, drawn as 1m 24s with quiet units, that counts like any number */
-const pgTfmt=v=>{v=Math.max(0,Math.round(v));const h=Math.floor(v/3600),m=Math.floor(v%3600/60),x=v%60;
-  return h?`${h}<small class="pg-u">h</small> ${m}<small class="pg-u">m</small>`:m?`${m}<small class="pg-u">m</small> ${pad(x)}<small class="pg-u">s</small>`:`${x}<small class="pg-u">s</small>`};
+/* a duration in seconds, drawn as 1m 24s with quiet units (fmtT's parts), that counts like any number */
+const pgTfmt=v=>durParts(v).map(x=>`${x[0]}<small class="pg-u">${x[1]}</small>`).join('\u00a0');
 const pgTtxt=v=>pgTfmt(v).replace(/<[^>]+>/g,'');
 function pgT(k,v){return v==null||!isFinite(v)?'—':`<b class="pg-n" data-k="${k}" data-v="${v}" data-f="t">${pgTfmt(v)}</b>`}
 const pgU=u=>`<small class="pg-u">${u}</small>`;
@@ -14328,11 +14333,11 @@ function pgCompareCard(E){
   /* pgCmpWin (the peeks) reads the same windows */
   if(!C[0][0].n&&!C[0][1].n&&!C[1][0].n&&!C[1][1].n)return pgCard('This week, this month',pgEmpty('Nothing to compare yet','A week of study and this fills in.'),{cls:'is-half'});
   const dd=(a,b,u,f)=>{if(a==null||b==null||!isFinite(a)||!isFinite(b))return '';const d=Math.round(a)-Math.round(b);
-    return `<span class="pg-dd ${d>0?'is-up':d<0?'is-down':''}">${d>0?'+':d<0?'−':'±'}${Math.abs(d)}${u||''}</span>`};
+    return `<span class="pg-dd ${d>0?'is-up':d<0?'is-down':''}">${d>0?'+':d<0?'−':'±'}${f?f(Math.abs(d)):Math.abs(d)+(u||'')}</span>`};
   const R=[['Questions',x=>x.n,x=>String(x.n),''],['Accuracy',x=>x.acc,x=>x.acc==null?'—':Math.round(x.acc)+'%','pt'],
-    ['Time studied',x=>x.ms/60000,x=>fmtDur(x.ms),'m'],['Active days',x=>x.days,x=>String(x.days),'']];
+    ['Time studied',x=>x.ms/1000,x=>fmtDur(x.ms),'',fmtT],['Active days',x=>x.days,x=>String(x.days),'']];
   return pgCard('This week, this month',`<div class="pg-cmp"><span></span><b>This week</b><b>This month</b>
-    ${R.map((r,ri)=>`<span>${r[0]}</span>${C.map((c,ci)=>`<button type="button" class="pg-tap pl-press" data-pk="cmp:${ri}.${ci}"><strong>${r[2](c[0])}</strong>${dd(r[1](c[0]),r[1](c[1]),r[3])}</button>`).join('')}`).join('')}</div>`,
+    ${R.map((r,ri)=>`<span>${r[0]}</span>${C.map((c,ci)=>`<button type="button" class="pg-tap pl-press" data-pk="cmp:${ri}.${ci}"><strong>${r[2](c[0])}</strong>${dd(r[1](c[0]),r[1](c[1]),r[3],r[4])}</button>`).join('')}`).join('')}</div>`,
     {sub:`Against the same ${iw} day${iw===1?'':'s'} of last week and the first ${now.getDate()} days of last month.`,cls:'is-half'});
 }
 /* the best form ever reached: the highest window of 100 first sightings */
@@ -14557,7 +14562,7 @@ function pgTlistCard(E){
     {sub:`Average question time and answer time for each ${unit} you studied, newest first. The bar is question time.`});
 }
 /* how long questions take you: the spread behind the average */
-const PG_TB=[[0,30,'Under 30s'],[30,60,'30s–1m'],[60,90,'1m–1m 30s'],[90,120,'1m 30s–2m'],[120,180,'2–3m'],[180,300,'3–5m'],[300,1e9,'Over 5m']];
+const PG_TB=[[0,30],[30,60],[60,90],[90,120],[120,180],[180,300],[300,1e9]].map(([a,b])=>[a,b,!a?'Under '+fmtT(b):b>=1e9?'Over '+fmtT(a):fmtT(a)+'–'+fmtT(b)]);
 function pgTspreadCard(E){
   const W=pgTwin(PG.tper==='day'?'week':PG.tper),A=between(E,W.cur[0],W.cur[1]);
   const per=PG.tper==='day'?'This week':W.cl;
@@ -14572,7 +14577,7 @@ function pgTspreadCard(E){
       <span class="pg-tsp">${pgBar(z.n/mx)}${pgBar(z.a/mx,'is-a')}</span>
       <span class="pg-hrs__v"><b>${z.n}</b><em>${z.a} answered</em></span></li>`).join('')}</ul>
     <div class="pg-qleg"><span><i class="t-ans2"></i>Question time</span><span><i class="t-rev2"></i>Answer time</span></div>
-    <p class="pg-note">${per}: half your questions take under ${pgTtxt(med)}; ${over} of ${A.length} took longer than ${PG_PACE}s in all.</p>`,
+    <p class="pg-note">${per}: half your questions take under ${pgTtxt(med)}; ${over} of ${A.length} took longer than ${fmtT(PG_PACE)} in all.</p>`,
     {sub:`${per}. How many questions fall in each length, by question time and by answer time.`,cls:'is-half'});
 }
 /* the session's own clock, total and per question */
@@ -14658,16 +14663,17 @@ function pgAdhCard(E,map,goal){
   const t0=sod(Date.now()).getTime(),cnt=(a,b)=>{let on=0,met=0,n=0,ms=0;
     for(let i=a;i<b;i++){const v=map[dayKey(t0-i*DAYMS)];if(v){on++;n+=v.n;ms+=v.ms;if(goal&&v.n>=goal)met++}}return{on,met,n,ms}};
   const a=cnt(0,30),b=cnt(30,60);
-  const dl=(x,y)=>b.on||b.n?`<span class="pg-dl ${x>y?'is-up':x<y?'is-down':''}">${x>y?'+':x<y?'−':'±'}${Math.abs(Math.round(x-y))}</span>`:'';
+  const dl=(x,y,t)=>{if(!(b.on||b.n))return '';if(t){x=Math.round(x);y=Math.round(y)}
+    return `<span class="pg-dl ${x>y?'is-up':x<y?'is-down':''}">${x>y?'+':x<y?'−':'±'}${t?fmtT(Math.abs(x-y)):Math.abs(Math.round(x-y))}</span>`};
   const t=[
     ['a30',a.on,'/30','Days active',dl(a.on,b.on)],
     goal?['m30',a.met,'/30','Days on goal',dl(a.met,b.met)]:null,
     ['pd',a.on?a.n/a.on:0,'','Per active day',dl(a.on?a.n/a.on:0,b.on?b.n/b.on:0)],
-    ['td',a.on?a.ms/a.on/60000:0,'min','Time per active day',dl(a.on?a.ms/a.on/60000:0,b.on?b.ms/b.on/60000:0)],
+    ['td',a.on?a.ms/a.on/1000:0,'t','Time per active day',dl(a.on?a.ms/a.on/1000:0,b.on?b.ms/b.on/1000:0,1)],
     ['n30',a.n,'','Answered',dl(a.n,b.n)],
-    ['h30',Math.round(a.ms/360000)/10,'h','Time studied',dl(a.ms/3600000,b.ms/3600000)]
+    ['h30',a.ms/1000,'t','Time studied',dl(a.ms/1000,b.ms/1000,1)]
   ].filter(Boolean);
-  return pgCard('The last 30 days',`<div class="pg-tiles pg-tiles--${t.length}">${t.map(x=>`<button type="button" class="pg-tile pl-press" data-pk="a30:${x[0]}"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></button>`).join('')}</div>`,
+  return pgCard('The last 30 days',`<div class="pg-tiles pg-tiles--${t.length}">${t.map(x=>`<button type="button" class="pg-tile pl-press" data-pk="a30:${x[0]}"><span class="pg-tile__v">${x[2]==='t'?pgT(x[0],x[1]):pgN(x[0],x[1])+pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></button>`).join('')}</div>`,
     {sub:'Each figure against the 30 days before.'});
 }
 function pgWeeksCard(E,goal){
@@ -14894,11 +14900,10 @@ function pgPaceCard(A){
   const all=T.filter(a=>a.correct).length/T.length*100;
   let say;
   if(q[0].p<all-8)say=`Your fastest quarter is your weakest (${Math.round(q[0].p)}%). On a quick answer, read the last line of the stem once more before committing.`;
-  else if(q[3].p<all-8)say=`Your slowest quarter is your weakest (${Math.round(q[3].p)}%). Long deliberation rarely rescues a question: past about two minutes, commit and move on.`;
+  else if(q[3].p<all-8)say=`Your slowest quarter is your weakest (${Math.round(q[3].p)}%). Long deliberation rarely rescues a question: past about 2m, commit and move on.`;
   else say='Your accuracy holds at every speed. Pace is not where the marks are going.';
-  const lab=s=>Math.round(s);
-  return pgCard('Pace',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgN('med',Math.round(med))}${pgU('s')}</span><em>typical answer · exam pace ${PG_PACE}s</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${PG_PACE} seconds</em></button></div>
-    <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<button type="button" class="pg-tap pl-press" data-pk="pq:${i}"><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${lab(x.lo)}–${lab(x.hi)}s</em></button>`).join('')}</div>
+  return pgCard('Pace',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgT('med',med)}</span><em>typical answer · exam pace ${fmtT(PG_PACE)}</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="pmed"><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${fmtT(PG_PACE)}</em></button></div>
+    <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<button type="button" class="pg-tap pl-press" data-pk="pq:${i}"><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${fmtT(x.lo)}–${fmtT(x.hi)}</em></button>`).join('')}</div>
     <p class="pg-note">${say}</p>${pgTimeSplit(A,T)}`,{sub:'Answer time, from the question appearing to your answer. Your answers split into four equal groups by speed, with the accuracy of each.'});
 }
 /* the two clocks: deciding (to the answer) and learning (reading after it) */
@@ -14910,7 +14915,7 @@ function pgTimeSplit(A,T){
     <div class="pg-stack"><i class="t-ans" data-pgf="a" style="flex:${ans}"></i><i class="t-rev" data-pgf="r" style="flex:${rev};--i:1"></i></div>
     <ul class="pg-causes pg-causes--mem"><li class="pg-tap pl-press" role="button" tabindex="0" data-pgf="a" aria-pressed="false"><span class="pg-key t-ans"></span><div><b>Answering</b><span>to the moment you commit</span></div><strong>${fmtDur(ans)}<small>${Math.round(ans/tot*100)}%</small></strong></li>
     <li class="pg-tap pl-press" role="button" tabindex="0" data-pgf="r" aria-pressed="false"><span class="pg-key t-rev"></span><div><b>Reading after</b><span>the explanation, coming back to it</span></div><strong>${fmtDur(rev)}<small>${Math.round(rev/tot*100)}%</small></strong></li></ul>
-    ${r!=null&&w!=null?`<div class="pg-mini"><div><b>${Math.round(r/1000)}s</b><span>typical when right</span></div><div><b>${Math.round(w/1000)}s</b><span>typical when wrong</span></div><div><b>${A.length?fmtDur(A.reduce((x,a)=>x+a.study,0)):'—'}</b><span>studied in this range</span></div></div>`:''}
+    ${r!=null&&w!=null?`<div class="pg-mini"><div><b>${fmtT(r/1000)}</b><span>typical when right</span></div><div><b>${fmtT(w/1000)}</b><span>typical when wrong</span></div><div><b>${A.length?fmtDur(A.reduce((x,a)=>x+a.study,0)):'—'}</b><span>studied in this range</span></div></div>`:''}
     <p class="pg-note">${rev/tot<.25?'Most of your time goes on answering. A miss is only fixed by the reading after it: give the explanations more of your time.':w&&r&&w>r*1.4?'You spend far longer on the questions you get wrong. If a question has not opened up by about 90 seconds, the extra time is rarely what saves it.':'A healthy split between answering and learning from the answer.'}</p></div>`;
 }
 function pgStaminaCard(A){
@@ -14940,8 +14945,8 @@ function pgSessHTML(){
   const bigS=fin.filter(s=>s.order.length>=10),big=bigS.map(s=>sessScore(s).p);
   const bS=bigS[big.indexOf(Math.max(...big))],wS=bigS[big.indexOf(Math.min(...big))];
   /* [key, value, unit, name, what a tap does: a peek, or a session's report] */
-  const tiles=[['sf',fin.length,'','Finished','pk=ss:sf'],['sa',avg,'%','Average, last 10','pk=ss:sa'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length','pk=ss:sl'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started','pk=ss:sr'],
-    ['saa',ansL.length?pgMed(ansL)/1000:null,'s','Typical answer','pk=tq:ta.all'],['sbl',qs?blank/qs*100:null,'%','Left blank','pk=ss:sbl'],
+  const tiles=[['sf',fin.length,'','Finished','pk=ss:sf'],['sa',avg,'%','Average, last 10','pk=ss:sa'],['sl',fin.length?ms/fin.length/1000:0,'t','Typical length','pk=ss:sl'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started','pk=ss:sr'],
+    ['saa',ansL.length?pgMed(ansL)/1000:null,'t','Typical answer','pk=tq:ta.all'],['sbl',qs?blank/qs*100:null,'%','Left blank','pk=ss:sbl'],
     ['sbe',big.length?Math.max(...big):null,'%','Best set',bS?'open='+bS.id:''],['swo',big.length?Math.min(...big):null,'%','Weakest set',wS?'open='+wS.id:'']];
   const spark=last.length>=3?`<div class="pg-sspark" style="--n:${last.length}">${last.map((s,i)=>{const p=sessScore(s).p;return `<button type="button" class="pl-press" data-open="${s.id}" title="${esc(s.config.label||'Session')} · ${pgDate(s.ts)} · ${p}%" aria-label="${esc(s.config.label||'Session')}, ${p}%"><i style="--s:${(p/100).toFixed(3)};--i:${i}"></i></button>`}).join('')}</div><p class="pg-note">Your last ${last.length} sessions, oldest on the left. Tap one for its report.</p>`:'';
   const row=s=>{const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s),done=st==='done';
@@ -14952,7 +14957,7 @@ function pgSessHTML(){
       ${done?`<span class="pg-srow__m"><b>${pgTtxt((s.elapsed||0)/1000)}</b><em>${sc.c}/${sc.n} · ${pgTtxt((s.elapsed||0)/1000/Math.max(1,sc.n))} each</em></span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
       <button type="button" class="pl-ib pl-press pg-sdel" data-pgdel="${s.id}" aria-label="Delete this session">${sxIc('i-trash')}</button></div>`};
   const shown=fin.slice(0,PG.shown);
-  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>t[4]?`<button type="button" class="pg-tile pl-press" data-${t[4].replace('=','="')}"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></button>`:`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
+  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>t[4]?`<button type="button" class="pg-tile pl-press" data-${t[4].replace('=','="')}"><span class="pg-tile__v">${t[2]==='t'?pgT(t[0],t[1]):pgN(t[0],t[1])+(t[1]!=null&&t[2]?pgU(t[2]):'')}</span><b>${t[3]}</b></button>`:`<div class="pg-tile"><span class="pg-tile__v">${t[2]==='t'?pgT(t[0],t[1]):pgN(t[0],t[1])+(t[1]!=null&&t[2]?pgU(t[2]):'')}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
     +(open.length?`<h3 class="pg-h">Still open</h3><div class="pg-grp">${open.map(row).join('')}</div>`:'')
     +`<h3 class="pg-h">Finished</h3><div class="pg-grp">${shown.length?shown.map(row).join(''):'<div class="pg-srow">'+pgEmpty('Nothing finished yet','A finished session lands here with its report.')+'</div>'}</div>`
     +(fin.length>PG.shown?`<div class="pg-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgmore>Show ${Math.min(30,fin.length-PG.shown)} more</button></div>`:'');
@@ -15315,7 +15320,7 @@ PG_PK.tq=k=>{
   const slow=V.slice().sort((a,b)=>b.v-a.v).slice(0,5),mx=slow[0].v;
   return{o:W.cl+' · time per question',t:ans?'Answer time':'Question time',fig:pgxFig(pgT('px',mean),`the average over ${xs.length} question${xs.length===1?'':'s'}`),
     body:pgxP(ans?'From the question appearing to the moment you commit. Left blank, a question has no answer time.':'Everything spent on a question: answering, then the explanation and every visit back to it.')
-      +pgxMini([[pgTtxt(med),'typical (median)'],[pm==null?'—':pgTtxt(pm),W.pl||'—'],[Math.round(xs.filter(v=>v>PG_PACE).length/xs.length*100)+'%','over '+PG_PACE+'s']])
+      +pgxMini([[pgTtxt(med),'typical (median)'],[pm==null?'—':pgTtxt(pm),W.pl||'—'],[Math.round(xs.filter(v=>v>PG_PACE).length/xs.length*100)+'%','over '+fmtT(PG_PACE)]])
       +pgxP(med<mean*.8?'A few long questions pull the average above the typical one.':'')
       +pgxH('The longest')+pgxRows(slow.map(x=>[esc(x.a.q.system&&x.a.q.system!==UNCLASSIFIED?x.a.q.system:'Unclassified'),pgDate(x.a.ts,{weekday:'short',day:'numeric',month:'short'})+' · '+(x.a.correct?'right':x.a.chosen==null?'left blank':'missed'),x.v/mx,pgTtxt(x.v/1000),null])),
     acts:[pgxGo('gaps','Pace in Gaps')]};
@@ -15345,7 +15350,7 @@ PG_PK.bank=k=>{
 /* ---------- Gaps ---------- */
 const PG_FIX={gap:'Read the explanation, then meet the question again within a few days.',trap:'Before committing, say why each tempting option is wrong for this patient.',
   read:'Read the last line of the stem first, then the stem with that question in mind.',fast:'On a quick answer, read the last line once more before you commit.',
-  struck:'Recheck an elimination before trusting it: these answers were crossed out and right.',time:'Commit by about 90 seconds; a blank always scores nothing.',
+  struck:'Recheck an elimination before trusting it: these answers were crossed out and right.',time:'Commit by about 1m 30s; a blank always scores nothing.',
   none:'Tag your misses in a session report and this sharpens.'};
 PG_PK.cause=k=>{
   const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),C=pgCauses(A),c=PG_CAUSE.find(x=>x[0]===k);if(!c)return null;
@@ -15383,7 +15388,7 @@ PG_PK.pq=i=>{
   const A=pgData().filter(a=>a.ts>=pgSince(PG.rng.gaps)),T=A.filter(a=>a.ans!=null).sort((a,b)=>a.ans-b.ans);i=+i;
   const L=T.slice(Math.floor(i*T.length/4),Math.floor((i+1)*T.length/4));if(!L.length)return null;
   const c=L.filter(a=>a.correct).length,miss=L.filter(a=>!a.correct),all=T.filter(a=>a.correct).length/T.length*100,p=c/L.length*100;
-  return{o:'Pace',t:['Fastest quarter','Quick quarter','Slower quarter','Slowest quarter'][i],fig:pgxFig(pgN('px',p)+pgU('%'),`${c} of ${L.length} right · ${Math.round(L[0].ans/1000)}–${Math.round(L[L.length-1].ans/1000)}s`),
+  return{o:'Pace',t:['Fastest quarter','Quick quarter','Slower quarter','Slowest quarter'][i],fig:pgxFig(pgN('px',p)+pgU('%'),`${c} of ${L.length} right · ${fmtT(L[0].ans/1000)}–${fmtT(L[L.length-1].ans/1000)}`),
     body:pgxP(`A quarter of your answers, by answer time. ${Math.abs(Math.round(p-all))} points ${p>=all?'above':'below'} your ${Math.round(all)}% overall.`)+pgxBySys(miss,'Where the misses were'),
     acts:[pgxPrac(pgQids(miss),'Missed at this pace','Practise the misses',true)]};
 };
@@ -16863,8 +16868,7 @@ function plumeAbort(dest){
 })();
 
 /* ---------- the index ---------- */
-function compClock(ms){const s=Math.max(0,Math.round((ms||0)/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);
-  return h?h+':'+pad(m)+':'+pad(s%60):m+':'+pad(s%60)}
+function compClock(ms){return fmtT((ms||0)/1000)}
 /* the question open on the other device: its beacon when that is the fresher word */
 function compNowIdx(s){const L=COMP.live;
   return (L&&L.id===s.id&&L.ts>=(s.heart||0))?(L.idx||0):(s.idx||0)}
@@ -20143,8 +20147,7 @@ const SYNCUI=(function(){
   function ago(t){
     const s=Math.max(0,(Date.now()-t)/1000);
     if(s<60)return 'just now';
-    if(s<3600)return Math.round(s/60)+' min ago';
-    if(s<86400)return Math.round(s/3600)+' h ago';
+    if(s<86400)return fmtT(s)+' ago';
     return when(t);
   }
   function infoRows(){

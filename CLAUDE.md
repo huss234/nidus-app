@@ -557,5 +557,10 @@ does) and work in the scratchpad:
   rest days, confidence, miss tags, lures on 60% of questions and crossed-out
   options in the session items. Fewer questions than answers seen leaves
   coverage near 100%, which hides the pace and coverage cards.
+- **Audit durations by rendered text.** After seeding, read each Progress
+  view's `innerText` and look for any time outside the DESIGN.md duration
+  rule (a lone `65m`, `90s` in prose, `0m 45s`, `1h 0m`, `12:34`); a
+  duration can also hide in a `pgN` tile with a time unit, an aria-label or
+  a hard-coded bucket label (v6.75).
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

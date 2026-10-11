@@ -1280,6 +1280,16 @@ The quality bar. A surface is done when it *feels* like §2, and:
   - **A duration that counts** (`pgT(key,seconds)`, v6.72): drawn as
     `1m 24s` with quiet units (`pgTfmt`), never wrapping, counting like any
     number. Plain text for read-outs is `pgTtxt`.
+  - **Every duration in the app reads the same** (v6.75, the user's rule):
+    the two largest units with a zero one left out — `45s`, `1m`,
+    `3m 25s`, `1h`, `1h 5m`, `2h 14m`. Never a unit past its size (`65m`
+    is `1h 5m`, `90s` is `1m 30s`), never a clock (`12:34`), never a
+    padded zero (`0m 45s`, `1h 0m`, `3m 05s`). Hours keep counting past a
+    day. A no-break space keeps the pair on one line. One source:
+    `durParts` → `fmtT` (text; `fmtLong`, `fmtDur(ms)`, `compClock(ms)` all
+    call it) and `pgTfmt` (quiet units). A figure that is a duration is
+    `pgT`, never `pgN` with an `s` / `min` / `h` unit; prose says `1m 30s`,
+    not "90 seconds".
   - **Period list** (`.pg-tl`): one row per day / week / month, newest first:
     name with its count and total, a bar, the average and its companion
     figure; on a phone the bar drops under the row. Session rows reuse it as
