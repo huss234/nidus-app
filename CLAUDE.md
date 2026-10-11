@@ -287,8 +287,15 @@ a recipe.
   `sxHydrate`) copies a sprite symbol inline. The legacy icon-motion layer
   hydrates every `<use>` and gives it a generic press motion, which Plume
   forbids; inline copies are left alone.
+- **A rebuild keeps every measure unless the user drops it.** The first
+  Progress rebuild (v6.69) cut about half the old statistics to a shorter
+  list I judged better (completion by area, memory health, time split,
+  sighting ladder, like-for-like comparisons, weekday accuracy, months), and
+  the user found it "significantly less". When rebuilding a surface, carry
+  over everything it measured, restructured where that helps; propose cuts,
+  don't make them.
 - **Progress measures what a session records, and says its window**
-  (v6.69, the PROGRESS section). `pgData()` joins every counted attempt
+  (v6.69, the PROGRESS section; Areas since v6.70). `pgData()` joins every counted attempt
   (`allAttempts()`: ts, chosen, correct, answer time, question time, conf,
   miss, sess, seq) to its session item once per render: position in the
   block, block size and mode, `struckKey` (the key was crossed out) and,
@@ -306,6 +313,13 @@ a recipe.
     bank's questions in that area, eight answers minimum in the range.
   - *Pace* uses 90 s as exam pace (`PG_PACE`); *stamina* reads position in
     blocks of 20 or more.
+  - *Areas* reads any facet in `FACETS` (except answer confidence) through
+    `facetValues`, so a new facet in `FACETS` only needs a row in
+    `PG_AREA`. A question counts as done once it has any counted attempt;
+    its state is its last answer (`pgQState`, cached per render with
+    `PG.QS`, cleared wherever `PG.E` is). Practise sets `F.pool` to
+    `unused` or `incorrect` plus that one facet value and calls
+    `startSession`, the same path as the builder.
   Entry points stay `renderStats()` (data changed: rebuild the open view)
   and `renderHistory()`; `go('stats')` calls `renderStats(true)` (arrival:
   counts start from zero) and `showPane('stats', …)` hands over to
@@ -495,6 +509,13 @@ does) and work in the scratchpad:
   (`PerformanceObserver` `longtask`) with the indicator's `m41` per frame at
   `setCPUThrottlingRate` 4, waiting 2.5s between taps so the last view's
   count-ups are not measured as the next one's cost.
+- **Measure text collisions, don't trust one screenshot.** For every card in
+  every Progress view, at 320 / 360 / 390 / 412 / 800px and in both themes,
+  collect the client rects of each text node (clipped to any ancestor with
+  overflow, so ellipsis and closed unfolds don't count) and report pairs
+  that overlap by more than a third of a line, plus text past the stage's
+  edge. Zero is the bar. (The scratch `overlap.js`; it found the hours,
+  week-column and stamina collisions in v6.69 that the 412px shots hid.)
 - **A seed for Progress** needs months of history to show anything: the
   scratch generator writes ~3,500 questions, ~80 sessions over 75 days with
   rest days, confidence, miss tags, lures on 60% of questions and crossed-out

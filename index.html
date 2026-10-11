@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.69 -->
+<!-- Nidus — Personal Qbank · v6.70 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -5495,8 +5495,8 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 /* ============================================================
    Plume 2.11 · progress
    ------------------------------------------------------------
-   Rebuilt from scratch (v6.69). Four views behind one button group
-   (Form, Habit, Gaps, Sessions); each view is a column of lit cards
+   Rebuilt from scratch (v6.69). Five views behind one button group
+   (Form, Habit, Areas, Gaps, Sessions; Areas since v6.70); each view is a column of lit cards
    on the page, two to a row from 720px where a card is a half. Data
    is spent on small things: one primary ink for every measure, the
    page-tone well for every track, and hues turned from the seed
@@ -5555,7 +5555,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .pg-hero{border-radius:var(--p-r-hero);padding:24px}
 @media (min-width:600px){.pg-hero{padding:28px 32px}}
 .pg-hero__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
-.pg-hero__lead .pg-over{margin:0 0 6px}
+.pg-hero__lead .pg-over,.pg-hero > .pg-card__b > .pg-over{margin:0 0 8px}
 .pg-hero__ci{display:block;margin-top:6px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
 .pg-delta{
   flex:none;display:inline-flex;align-items:baseline;gap:1px;height:36px;padding:0 14px;align-items:center;border-radius:18px;
@@ -5710,7 +5710,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-chipbtn.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
 
 /* ---- columns (weeks, hours, calibration, pace, stamina, forecast) ---- */
-.pg-cols{position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;height:200px;padding-top:4px}
+.pg-cols{container-type:inline-size;position:relative;display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px;height:200px;padding-top:4px}
 .pg-col{display:grid;grid-template-rows:18px 1fr 18px 16px;justify-items:center;min-width:0}
 .pg-col__n{font:600 11px/18px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
 .pg-col__t{position:relative;width:100%;max-width:40px;height:100%;border-radius:8px;background:var(--p-well);overflow:hidden;display:block}
@@ -5723,6 +5723,8 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-cols__goal{position:absolute;left:0;right:0;bottom:calc(52px + (100% - 56px) * var(--y));border-top:1.5px dashed var(--md-outline);z-index:1;pointer-events:none}
 .pg-cols__goal em{position:absolute;right:0;bottom:2px;font:600 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);background:var(--p-card);padding:0 0 0 6px}
 @media (max-width:420px){.pg-cols{gap:3px}.pg-col__l{font-size:10px}.pg-col__n{font-size:10px}}
+/* twelve columns on a 320px phone leave ~20px each: the small figures shrink to fit */
+@container (max-width:300px){.pg-col__a,.pg-col__l,.pg-col__n{font-size:8.5px;letter-spacing:-.03em}}
 
 .pg-hours,.pg-calib{display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:8px;height:190px}
 .pg-calib{--n:3;height:200px}
@@ -5733,7 +5735,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-calib__v{font-size:22px;line-height:1.1;font-weight:520;margin-bottom:8px}
 .pg-hours .pg-col__t,.pg-calib .pg-col__t{max-width:56px}
 .pg-hours > div > b,.pg-calib > div > b{margin-top:8px;font:500 13px/18px var(--m3-font)}
-.pg-hours em,.pg-calib em{font:400 11px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);white-space:nowrap}
+.pg-hours em,.pg-calib em{font:400 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
 .pg-hours > div:not(.is-best) .pg-hours__a{color:var(--md-on-surface-variant)}
 
 .pg-ahead{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -5837,6 +5839,108 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 .pg-ledger{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:12px 12px 12px 20px;border-radius:var(--p-r-card);background:var(--p-card);font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
 .pg-ledger span{flex:1 1 220px}
 
+/* ---- v6.70: five views, Areas, and the measures brought back ---- */
+@media (max-width:440px){.pg-tabs button{font-size:13px;padding:0 2px}.pg-cnt{display:none}}
+.pg-tiles--6{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:600px){.pg-tiles--6{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pg-card .pg-seg + div,.pg-card .pg-chips + .pg-seg{margin-top:16px}
+/* rows that never collide: name, bar, figure */
+.pg-hrs{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.pg-hrs li{display:grid;grid-template-columns:88px minmax(0,1fr) 52px;align-items:center;gap:12px}
+.pg-hrs__t{display:flex;flex-direction:column;min-width:0}
+.pg-hrs__t b{font:500 14px/20px var(--m3-font)}
+.pg-hrs__t em,.pg-hrs__v em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-hrs__v{display:flex;flex-direction:column;align-items:flex-end}
+.pg-hrs__v b{font:520 18px/22px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.pg-hrs li.is-best .pg-hrs__v b{color:var(--md-on-surface)}
+.pg-hrs .pg-bar{height:10px;border-radius:5px}
+.pg-hrs .pg-bar i{border-radius:5px}
+.pg-pane:not(.is-pre) .pg-hrs .pg-bar i{animation-delay:calc(var(--i,0) * var(--p-stagger) + 60ms)}
+/* accuracy by sighting, and the small heading that opens a second part of a card */
+.pg-lad{display:grid;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--md-outline-variant)}
+.pg-lad__h{display:block;font:550 13px/18px var(--m3-font);color:var(--md-on-surface-variant);margin-bottom:2px}
+.pg-lad > div{display:grid;grid-template-columns:104px minmax(0,1fr) 40px 36px;align-items:center;gap:10px;font:500 13px/18px var(--m3-font)}
+.pg-lad b{text-align:right;font-variant-numeric:tabular-nums}
+.pg-lad em{font:400 12px/16px var(--m3-font);font-style:normal;text-align:right;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+/* memory and the time split reuse the cause list */
+.m-learn{background:color-mix(in oklab,var(--md-primary) 30%,var(--p-well))}
+.m-young{background:color-mix(in oklab,var(--md-primary) 62%,var(--p-well))}
+.m-mature{background:var(--md-primary)}
+.t-ans{background:var(--md-primary)}
+.t-rev{background:var(--pg-k2)}
+.pg-stack--mem{margin-top:2px}
+.pg-causes--mem{gap:10px;margin-top:14px}
+.pg-causes--mem strong{font-size:18px}
+.pg-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin-top:16px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-mini--6{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pg-mini > div{display:flex;flex-direction:column;gap:2px;padding:12px;background:var(--p-well);min-width:0}
+.pg-mini b{font:520 20px/24px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums}
+.pg-mini span{font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-split{margin-top:22px;padding-top:18px;border-top:1px solid var(--md-outline-variant)}
+.pg-split .pg-stack{margin-top:8px}
+/* like for like */
+.pg-cmp{display:grid;grid-template-columns:minmax(0,1fr) repeat(2,minmax(0,1.1fr));row-gap:2px;column-gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-cmp > b{padding:8px 12px;font:550 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-cmp > span{padding:12px;background:var(--p-well);font:500 13px/18px var(--m3-font);display:flex;align-items:center}
+.pg-cmp > div{padding:10px 12px;background:var(--p-well);display:flex;flex-direction:column;min-width:0}
+.pg-cmp > span:first-child{background:none}
+.pg-cmp strong{font:520 18px/22px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums}
+.pg-dd{font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.pg-dd.is-up{color:var(--md-primary)}
+/* Areas: the bank as a map */
+.pg-qst{display:flex;gap:2px;height:12px;border-radius:6px;overflow:hidden;background:var(--p-well)}
+.pg-qst i{min-width:0;transform-origin:0 50%}
+.pg-qst i:not([style*="flex:0"]){min-width:3px}
+.s-right{background:var(--md-primary)}
+.s-wrong{background:var(--pg-k2)}
+.s-new{background:var(--p-well)}
+.pg-hero .pg-qst{height:16px;border-radius:8px;margin-top:18px}
+.pg-area .pg-qst .s-new,.pg-area .pg-qst{background:var(--p-card)}
+.pg-qleg{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.pg-qleg span{display:inline-flex;align-items:center;gap:8px}
+.pg-qleg i{width:10px;height:10px;border-radius:3px}
+.pg-qleg i.s-new{box-shadow:inset 0 0 0 1.5px var(--md-outline)}
+.pg-qleg b{color:var(--md-on-surface);font-variant-numeric:tabular-nums}
+.pg-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:2px 20px}
+.pg-chips::-webkit-scrollbar{display:none}
+@media (min-width:600px){.pg-chips{flex-wrap:wrap;overflow:visible;margin:0;padding:0}}
+.pg-chip{position:relative;isolation:isolate;flex:none;display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:var(--p-r-s);
+  box-shadow:inset 0 0 0 1px var(--md-outline-variant);color:var(--md-on-surface-variant);font:550 13px/18px var(--m3-font);white-space:nowrap;
+  transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-chip.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container);box-shadow:none}
+.pg-chip__ck{display:grid;grid-template-columns:0fr;transition:grid-template-columns var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-chip__ck svg{min-width:0;width:18px;height:18px;overflow:visible}
+.pg-chip__ck path{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+.pg-chip.on .pg-chip__ck{grid-template-columns:1fr;margin-right:6px;margin-left:-4px}
+.pg-chip.on .pg-chip__ck path{stroke-dashoffset:0;transition-delay:80ms}
+.pg-chip.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+.pg-chip:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.pg-areas{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.pg-area{background:var(--p-well)}
+.pg-area__h{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto 24px;grid-template-areas:"t p c" "b b c";gap:8px 12px;align-items:center;width:100%;padding:14px 12px 14px 16px;text-align:left;color:var(--md-on-surface);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.pg-area__h::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.pg-area__h:hover::after{opacity:var(--m3-state-hover)}}
+.pg-area__h.is-down{transform:scale(var(--p-press-card))}
+.pg-area__h.is-down::after{opacity:var(--m3-state-press)}
+.pg-area__h:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.pg-area__t{grid-area:t;display:flex;flex-direction:column;min-width:0}
+.pg-area__t b{font:500 15px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pg-area__t span{font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.pg-area__p{grid-area:p;font:520 22px/1 var(--m3-font);font-variation-settings:"wdth" 116;font-variant-numeric:tabular-nums}
+.pg-area__p small{font-size:12px;margin-left:1px;color:var(--md-on-surface-variant)}
+.pg-area__bar{grid-area:b}
+.pg-area__chev{grid-area:c;width:24px;height:24px;fill:none;stroke:var(--md-on-surface-variant);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform var(--p-spatial-d) var(--p-spatial)}
+.pg-area.is-open .pg-area__chev{transform:rotate(180deg)}
+.pg-area__d{padding:0 12px 16px 16px}
+.pg-area__d .pg-mini{margin-top:0}
+.pg-area__d .pg-mini > div{background:var(--p-card)}
+.pg-area__a{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pg-area__a .pl-btn{padding:0 18px}
+.pg-area__a .pl-btn:disabled{opacity:.38;pointer-events:none}
+.pg-pane:not(.is-pre) .pg-area{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger))}
+.pg-pane:not(.is-pre) .pg-qst i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards 80ms}
 /* ---- arrival: data draws itself ---- */
 .pg-pane:not(.is-pre) .pg-bar i,.pg-pane:not(.is-pre) .pg-rd__seg i{animation:pgGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * var(--p-stagger) + 60ms)}
 .pg-pane:not(.is-pre) .pg-col__t i,.pg-pane:not(.is-pre) .pg-fc i,.pg-pane:not(.is-pre) .pg-sspark i{animation:pgGrowY var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(min(var(--i,0),12) * 22ms + 60ms)}
@@ -6118,19 +6222,21 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
     </section>
 
     <!-- ============ PROGRESS (Plume 2.11) ============ -->
-    <!-- Four questions, one view each: how good you are right now and
+    <!-- Five questions, one view each: how good you are right now and
          which way it is going (Form), whether you are showing up (Habit),
-         what is costing marks (Gaps), and the sessions themselves. One
+         how much of each area of the bank is done (Areas), what is costing
+         marks (Gaps), and the sessions themselves. One
          button group with a travelling indicator switches them; each view
          is built when first shown and enters from the side the indicator
          went. Every figure says what window it is measured over. -->
     <section class="view" id="v-stats">
       <p class="eyebrow">Read-out <span class="rule"></span> <span id="rangeSpan"></span></p>
       <h2 class="vt">Progress</h2>
-      <div class="pg-tabs pl-seg" id="pgTabs" role="radiogroup" aria-label="Progress view" style="--n:4;--i:0">
+      <div class="pg-tabs pl-seg" id="pgTabs" role="radiogroup" aria-label="Progress view" style="--n:5;--i:0">
         <span class="pl-seg__ind" aria-hidden="true"></span>
         <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="form">Form</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="habit">Habit</button>
+        <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="areas">Areas</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="gaps">Gaps</button>
         <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="sess">Sessions<span class="pg-cnt" id="sessCnt">0</span></button>
       </div>
@@ -6138,6 +6244,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="pg-stage" id="pgStage">
         <div class="pg-pane" data-pg="form"></div>
         <div class="pg-pane" data-pg="habit" hidden></div>
+        <div class="pg-pane" data-pg="areas" hidden></div>
         <div class="pg-pane" data-pg="gaps" hidden></div>
         <div class="pg-pane" data-pg="sess" hidden></div>
       </div>
@@ -6269,7 +6376,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.69</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.70</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6325,7 +6432,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.69 · sharded store</span>
+        <span class="chip" id="verChip">v6.70 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7429,7 +7536,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.69';
+const APP_VERSION='6.70';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -13884,11 +13991,18 @@ function hgram(el,cols){
                lure taken, the key crossed out, an answer far faster
                than your usual), the areas ranked by marks at stake,
                calibration, pace and stamina through a block.
+     Areas     the classification system read as a map of the bank:
+               for any facet (system, subject, question type, task,
+               cognitive level, format, difficulty, source, file, topic,
+               your labels), how much of each area is done, how much of
+               it is right as things stand, and first-sighting accuracy,
+               with a way straight into its new or missed questions.
      Sessions  every session, its score, its report.
    ============================================================ */
-const PG={view:'form',tok:0,built:{},rng:{trend:'90',gaps:'30'},grp:'system',day:null,all:false,shown:30,prev:{},E:null,w:0};
-const PG_ORDER=['form','habit','gaps','sess'];
-const PG_NAME={form:'Form',habit:'Habit',gaps:'Gaps',sess:'Sessions'};
+const PG={view:'form',tok:0,built:{},rng:{trend:'90',gaps:'30'},grp:'system',day:null,all:false,shown:30,prev:{},E:null,QS:null,w:0,
+  area:'system',asort:'size',aopen:null,aall:false,hrs:'hours',per:'weeks'};
+const PG_ORDER=['form','habit','areas','gaps','sess'];
+const PG_NAME={form:'Form',habit:'Habit',areas:'Areas',gaps:'Gaps',sess:'Sessions'};
 const PG_FIRST=100;                       /* the form window, in first sightings */
 const PG_PACE=90;                         /* Step 1: 40 questions an hour */
 
@@ -13979,7 +14093,38 @@ function pgFormHTML(){
       <div><span>${pgN('n7',w7.length)}</span><em>Answered, 7 days</em></div>
       <div><span>${pgN('cov',t.total?t.used/t.total*100:0)}${pgU('%')}</span><em>${t.used} of ${t.total} seen</em></div>
     </div>`;
-  return pgCard('',hero,{cls:'pg-hero'})+pgTrendCard()+pgStickCard(E)+pgReadyCard()+pgBestsCard(E);
+  return pgCard('',hero,{cls:'pg-hero'})+pgTrendCard()+pgStickCard(E)+pgMemoryCard()+pgReadyCard()+pgCompareCard(E)+pgBestsCard(E);
+}
+/* what the spacing schedule thinks of the bank: how far each question has
+   got, how often things slip back, and the ones that keep slipping */
+function pgMemoryCard(){
+  let never=0,learn=0,young=0,mature=0,lapses=0,leech=0,ease=0,en=0;
+  DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs||!attOf(q.id).length){never++;return}
+    const r=st.srs;en++;lapses+=r.lapses||0;ease+=r.ease||0;if((r.lapses||0)>=3)leech++;
+    if((r.int||0)<7)learn++;else if(r.int<21)young++;else mature++});
+  if(!en)return pgCard('Memory',pgEmpty('Nothing on the schedule yet','A question joins it the first time you answer it.'),{cls:'is-half'});
+  const seg=[['learn','Learning','back within a week',learn],['young','Settling','back in 1–3 weeks',young],['mature','Held','gone 3 weeks or more',mature]];
+  return pgCard('Memory',`<div class="pg-stack pg-stack--mem">${seg.filter(x=>x[3]).map((x,i)=>`<i class="m-${x[0]}" style="flex:${x[3]};--i:${i}"></i>`).join('')}</div>
+    <ul class="pg-causes pg-causes--mem">${seg.map(x=>`<li><span class="pg-key m-${x[0]}"></span><div><b>${x[1]}</b><span>${x[2]}</span></div><strong>${pgN('mem_'+x[0],x[3])}<small>${Math.round(x[3]/en*100)}%</small></strong></li>`).join('')}</ul>
+    <div class="pg-mini"><div><b>${pgN('lap',lapses)}</b><span>slips back in all</span></div><div><b>${pgN('leech',leech)}</b><span>missed 3 times or more</span></div><div><b>${never}</b><span>never answered</span></div></div>
+    <p class="pg-note">${leech?`${leech} question${leech===1?' keeps':'s keep'} coming back wrong. That is usually the explanation, not your memory: read ${leech===1?'it':'them'} rather than drilling again.`:'Nothing keeps slipping back.'}</p>`,
+    {sub:`${en} questions on the review schedule, by how long each one is holding.`,cls:'is-half'});
+}
+/* like for like: this week against the same days of last week, this month
+   against the same days of last month, so a half-done week is fair */
+function pgCompareCard(E){
+  const now=new Date(),t=sod(now),iw=dowIdx(t)+1,w0=addDays(t,-(iw-1)).getTime(),wp=w0-7*DAYMS;
+  const m0=new Date(now.getFullYear(),now.getMonth(),1).getTime(),mp=new Date(now.getFullYear(),now.getMonth()-1,1).getTime();
+  const mpe=Math.min(addDays(new Date(mp),now.getDate()).getTime(),m0),end=Date.now()+1;
+  const C=[[sumOf(between(E,w0,end)),sumOf(between(E,wp,wp+iw*DAYMS))],[sumOf(between(E,m0,end)),sumOf(between(E,mp,mpe))]];
+  if(!C[0][0].n&&!C[0][1].n&&!C[1][0].n&&!C[1][1].n)return pgCard('This week, this month',pgEmpty('Nothing to compare yet','A week of study and this fills in.'),{cls:'is-half'});
+  const dd=(a,b,u,f)=>{if(a==null||b==null||!isFinite(a)||!isFinite(b))return '';const d=Math.round(a)-Math.round(b);
+    return `<span class="pg-dd ${d>0?'is-up':d<0?'is-down':''}">${d>0?'+':d<0?'−':'±'}${Math.abs(d)}${u||''}</span>`};
+  const R=[['Questions',x=>x.n,x=>String(x.n),''],['Accuracy',x=>x.acc,x=>x.acc==null?'—':Math.round(x.acc)+'%','pt'],
+    ['Time studied',x=>x.ms/60000,x=>fmtDur(x.ms),'m'],['Active days',x=>x.days,x=>String(x.days),'']];
+  return pgCard('This week, this month',`<div class="pg-cmp"><span></span><b>This week</b><b>This month</b>
+    ${R.map(r=>`<span>${r[0]}</span>${C.map(c=>`<div><strong>${r[2](c[0])}</strong>${dd(r[1](c[0]),r[1](c[1]),r[3])}</div>`).join('')}`).join('')}</div>`,
+    {sub:`Against the same ${iw} day${iw===1?'':'s'} of last week and the first ${now.getDate()} days of last month.`,cls:'is-half'});
 }
 /* the best form ever reached: the highest window of 100 first sightings */
 function pgBestForm(F){
@@ -14057,9 +14202,13 @@ function pgStickCard(E){
   const one=(k,lab,c,n,def)=>`<div class="pg-stick">
       <div class="pg-stick__v">${n?pgN(k,c/n*100)+pgU('%'):'—'}</div>
       <div class="pg-stick__t"><b>${lab}</b><span>${def}</span>${n?pgBar(c/n):''}<em>${c} of ${n}</em></div></div>`;
+  /* accuracy by how many times you have met the question */
+  const L=[{l:'First sighting',n:0,c:0},{l:'Second',n:0,c:0},{l:'Third or later',n:0,c:0}];
+  E.forEach(a=>{const x=L[Math.min(2,a.seq)];x.n++;if(a.correct)x.c++});
+  const lad=`<div class="pg-lad"><span class="pg-lad__h">Accuracy by sighting</span>${L.filter(x=>x.n).map((x,i)=>`<div style="--i:${i}"><span>${x.l}</span>${pgBar(x.c/x.n)}<b>${Math.round(x.c/x.n*100)}%</b><em>${x.n}</em></div>`).join('')}</div>`;
   return pgCard('Is it sticking?',
     one('rec','Recovered',rec,recN,'Missed the first time, right the next')+
-    one('ret','Kept',ret,retN,'Right the first time, still right the next'),
+    one('ret','Kept',ret,retN,'Right the first time, still right the next')+lad,
     {sub:'What happens the next time you meet a question. All time.',cls:'is-half'});
 }
 /* readiness: the same four measures Home shows, drawn as one bar whose
@@ -14161,22 +14310,33 @@ function pgAdhCard(E,map,goal){
     ['a30',a.on,'/30','Days active',dl(a.on,b.on)],
     goal?['m30',a.met,'/30','Days on goal',dl(a.met,b.met)]:null,
     ['pd',a.on?a.n/a.on:0,'','Per active day',dl(a.on?a.n/a.on:0,b.on?b.n/b.on:0)],
-    ['td',a.on?a.ms/a.on/60000:0,'min','Time per active day',dl(a.on?a.ms/a.on/60000:0,b.on?b.ms/b.on/60000:0)]
+    ['td',a.on?a.ms/a.on/60000:0,'min','Time per active day',dl(a.on?a.ms/a.on/60000:0,b.on?b.ms/b.on/60000:0)],
+    ['n30',a.n,'','Answered',dl(a.n,b.n)],
+    ['h30',Math.round(a.ms/360000)/10,'h','Time studied',dl(a.ms/3600000,b.ms/3600000)]
   ].filter(Boolean);
-  return pgCard('The last 30 days',`<div class="pg-tiles">${t.map(x=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></div>`).join('')}</div>`,
+  return pgCard('The last 30 days',`<div class="pg-tiles pg-tiles--${t.length}">${t.map(x=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(x[0],x[1])}${pgU(x[2])}</span><b>${x[3]}</b><em>${x[4]||'&nbsp;'}</em></div>`).join('')}</div>`,
     {sub:'Each figure against the 30 days before.'});
 }
 function pgWeeksCard(E,goal){
-  const t0=sod(Date.now()),w0=addDays(t0,-dowIdx(t0)),W=[];
-  for(let i=11;i>=0;i--){const s=addDays(w0,-7*i),e=addDays(s,7);W.push(Object.assign({s},sumOf(between(E,s.getTime(),e.getTime()))))}
-  if(!W.some(w=>w.n))return pgCard('Week by week',pgEmpty('Nothing in the last twelve weeks','Each week you study becomes a column.'));
-  const tgt=goal*7,mx=Math.max(tgt,...W.map(w=>w.n),1);
-  return pgCard('Week by week',`<div class="pg-cols" style="--n:12">
+  if(!E.length)return pgCard('Week by week',pgEmpty('Nothing answered yet','Each week you study becomes a column.'));
+  const tool=pgSeg('per',[['weeks','Weeks'],['months','Months']],PG.per,'Group by');
+  return pgCard(PG.per==='months'?'Month by month':'Week by week',`${tool}<div id="pgPer">${pgPerHTML(E,goal)}</div>`,
+    {sub:goal?'Questions answered in each period, accuracy underneath. A week is filled once it reaches seven days of your goal.':'Questions answered in each period, accuracy underneath.'});
+}
+function pgPerHTML(E,goal){
+  E=E||pgData();goal=goal==null?(DB.settings.goal||0):goal;
+  const t0=sod(Date.now()),W=[],mo=PG.per==='months';
+  if(mo){for(let i=5;i>=0;i--){const s=new Date(t0.getFullYear(),t0.getMonth()-i,1),e=new Date(t0.getFullYear(),t0.getMonth()-i+1,1);
+    W.push(Object.assign({s,lab:i?pgDate(s,{month:'short'}):'Now',full:pgDate(s,{month:'long',year:'numeric'})},sumOf(between(E,s.getTime(),e.getTime()))))}}
+  else{const w0=addDays(t0,-dowIdx(t0));for(let i=11;i>=0;i--){const s=addDays(w0,-7*i),e=addDays(s,7);
+    W.push(Object.assign({s,lab:i?s.getDate()+'/'+(s.getMonth()+1):'Now',full:'Week of '+pgDate(s,{day:'numeric',month:'short'})},sumOf(between(E,s.getTime(),e.getTime()))))}}
+  const tgt=mo?0:goal*7,mx=Math.max(tgt,...W.map(w=>w.n),1),n=W.length;
+  return `<div class="pg-cols" style="--n:${n}">
       ${tgt?`<span class="pg-cols__goal" style="--y:${(tgt/mx).toFixed(4)}"><em>${tgt} a week</em></span>`:''}
-      ${W.map((w,i)=>`<div class="pg-col${tgt&&w.n>=tgt?' is-met':''}${i===11?' is-now':''}" title="Week of ${pgDate(w.s,{day:'numeric',month:'short'})}: ${w.n} answered${w.n?', '+Math.round(w.acc)+'% right':''}">
+      ${W.map((w,i)=>`<div class="pg-col${tgt&&w.n>=tgt?' is-met':''}${i===n-1?' is-now':''}" title="${esc(w.full)}: ${w.n} answered${w.n?', '+Math.round(w.acc)+'% right, '+fmtDur(w.ms):''}">
         <span class="pg-col__n">${w.n||''}</span><span class="pg-col__t"><i style="--s:${(w.n/mx).toFixed(4)};--i:${i}"></i></span>
-        <span class="pg-col__l">${i===11?'Now':w.s.getDate()+'/'+(w.s.getMonth()+1)}</span><span class="pg-col__a">${w.n?Math.round(w.acc)+'%':''}</span></div>`).join('')}
-    </div>`,{sub:goal?'Questions answered each week; filled when the week reached seven days of your goal. Accuracy underneath.':'Questions answered each week, accuracy underneath.'});
+        <span class="pg-col__l">${esc(w.lab)}</span><span class="pg-col__a">${w.n?Math.round(w.acc)+'%':''}</span></div>`).join('')}
+    </div>`;
 }
 function pgAheadCard(){
   const days=14,arr=new Array(days).fill(0),t0=sod(Date.now()).getTime();let over=0;
@@ -14197,15 +14357,97 @@ const PG_HB=[[5,9,'Early','5–9'],[9,12,'Morning','9–12'],[12,17,'Afternoon',
 function pgHoursCard(E){
   const A=E.filter(a=>a.ts>=pgSince(90));
   if(A.length<60)return '';
-  const hb=PG_HB.map(b=>({b,n:0,c:0}));
-  A.forEach(a=>{const h=new Date(a.ts).getHours();const x=hb.find(r=>h>=r.b[0]&&h<r.b[1]);x.n++;if(a.correct)x.c++});
-  const live=hb.filter(r=>r.n),mx=Math.max(...live.map(r=>r.n));
+  const tool=pgSeg('hrs',[['hours','Time of day'],['days','Day of week']],PG.hrs,'Group by');
+  return pgCard('When you study best',`${tool}<div id="pgHrs">${pgHrsHTML(A)}</div>`,
+    {sub:'The bar is how much you study then; the figure is your accuracy. Last 90 days.',cls:'is-half'});
+}
+/* one row per block, so a long name never runs into its neighbour */
+function pgHrsHTML(A){
+  A=A||pgData().filter(a=>a.ts>=pgSince(90));
+  const days=PG.hrs==='days';
+  const rows=days?DOWL.map(d=>({name:d,sub:'',n:0,c:0})):PG_HB.map(b=>({b,name:b[2],sub:b[3],n:0,c:0}));
+  A.forEach(a=>{const d=new Date(a.ts);let x;
+    if(days)x=rows[dowIdx(d)];else{const h=d.getHours();x=rows.find(r=>h>=r.b[0]&&h<r.b[1])}
+    x.n++;if(a.correct)x.c++});
+  const live=rows.filter(r=>r.n),mx=Math.max(...live.map(r=>r.n));
   const ok=live.filter(r=>r.n>=30),all=A.filter(a=>a.correct).length/A.length*100;
   const best=ok.length>1?ok.reduce((m,r)=>r.c/r.n>m.c/m.n?r:m):null,worst=ok.length>1?ok.reduce((m,r)=>r.c/r.n<m.c/m.n?r:m):null;
   const gap=best&&worst?(best.c/best.n-worst.c/worst.n)*100:0;
-  return pgCard('When you study best',`<div class="pg-hours" style="--n:${live.length}">${live.map((r,i)=>`<div class="${r===best&&gap>=6?'is-best':''}"><span class="pg-hours__a">${Math.round(r.c/r.n*100)}%</span><span class="pg-col__t"><i style="--s:${(r.n/mx).toFixed(4)};--i:${i}"></i></span><b>${r.b[2]}</b><em>${r.b[3]}</em></div>`).join('')}</div>
-    <p class="pg-note">${gap>=6?`You are ${Math.round(gap)} points more accurate in the ${best.b[2].toLowerCase()} than in the ${worst.b[2].toLowerCase()}. Put the hardest blocks there.`:`Your accuracy holds at every hour (${Math.round(all)}% overall). Study whenever suits you.`}</p>`,
-    {sub:'Height is how much you study then; the figure is accuracy. Last 90 days.',cls:'is-half'});
+  const nm=r=>days?pgDate(addDays(new Date(2024,0,1),DOWL.indexOf(r.name)),{weekday:'long'}):r.name.toLowerCase();
+  return `<ul class="pg-hrs">${live.map((r,i)=>`<li class="${r===best&&gap>=6?'is-best':''}" style="--i:${i}">
+      <span class="pg-hrs__t"><b>${r.name}</b>${r.sub?`<em>${r.sub}</em>`:''}</span>${pgBar(r.n/mx,r===best&&gap>=6?'':'is-thin')}
+      <span class="pg-hrs__v"><b>${Math.round(r.c/r.n*100)}%</b><em>${r.n}</em></span></li>`).join('')}</ul>
+    <p class="pg-note">${gap>=6?`You are ${Math.round(gap)} points more accurate ${days?'on '+nm(best)+'s than on '+nm(worst)+'s':'in the '+nm(best)+' than in the '+nm(worst)}. Put the hardest blocks there.`:`Your accuracy holds across ${days?'the week':'the day'} (${Math.round(all)}% overall). Study whenever suits you.`}</p>`;
+}
+/* ============================================================
+   AREAS
+   ============================================================ */
+const PG_AREA=[['system','System'],['subject','Subject'],['archetype','Question type'],['task','Task'],['depth','Cognitive level'],['resource','Format'],['diff','Difficulty'],['source','Source'],['tag','File'],['topic','Topic'],['utag','My labels']];
+/* each question's standing, once per render: new, right or wrong on its
+   last answer, due, and how its first sighting went */
+function pgQState(){
+  if(PG.QS)return PG.QS;const m={};
+  DB.questions.forEach(q=>{const at=attOf(q.id),n=at.length;
+    m[q.id]={st:!n?'new':at[n-1].correct?'right':'wrong',due:!!n&&isDue(q.id),f:n?!!at[0].correct:null,n,c:at.filter(a=>a.correct).length}});
+  return PG.QS=m;
+}
+function pgAreaRows(key){
+  const f=FACET_BY[key],S=pgQState(),m={};
+  DB.questions.forEach(q=>{const s=S[q.id];facetValues(f,q).forEach(k=>{if(!k||k==='—')return;
+    const r=m[k]||(m[k]={k,n:0,right:0,wrong:0,new:0,due:0,fn:0,fc:0,an:0,ac:0});
+    r.n++;r[s.st]++;if(s.due)r.due++;if(s.n){r.fn++;if(s.f)r.fc++;r.an+=s.n;r.ac+=s.c}})});
+  const rows=Object.values(m),done=r=>(r.n-r.new)/r.n,fp=r=>r.fn>=5?r.fc/r.fn:2;
+  if(PG.asort==='least')rows.sort((a,b)=>done(a)-done(b)||b.n-a.n);
+  else if(PG.asort==='weak')rows.sort((a,b)=>fp(a)-fp(b)||b.n-a.n);
+  else rows.sort((a,b)=>b.n-a.n||String(a.k).localeCompare(String(b.k)));
+  return rows;
+}
+const pgStackQ=r=>`<span class="pg-qst"><i class="s-right" style="flex:${r.right}"></i><i class="s-wrong" style="flex:${r.wrong}"></i><i class="s-new" style="flex:${r.new}"></i></span>`;
+function pgAreasHTML(){
+  const tot=DB.questions.length;
+  if(!tot)return pgCard('',pgEmpty('Nothing in the bank yet','Import questions and every area of the bank is measured here.'),{cls:'pg-hero'});
+  const S=pgQState(),b={right:0,wrong:0,new:0,n:tot};Object.values(S).forEach(s=>b[s.st]++);
+  const done=tot-b.new;
+  const sys=pgAreaRows('system').filter(r=>r.k!==UNCLASSIFIED&&r.n>=Math.max(10,tot*.03));
+  const lo=sys.slice().sort((x,y)=>(x.n-x.new)/x.n-(y.n-y.new)/y.n)[0],hi=sys.slice().sort((x,y)=>(y.n-y.new)/y.n-(x.n-x.new)/x.n)[0];
+  const hero=`<span class="pg-over">The bank</span>
+    <div class="pg-hero__top"><div class="pg-disp">${pgN('adone',done/tot*100)}${pgU('%')}</div></div>
+    <p class="pg-hero__say">${done} of ${tot} questions done${done?`, and ${b.right} of them right as things stand`:''}.</p>
+    ${pgStackQ(b)}
+    <div class="pg-qleg"><span><i class="s-right"></i>Right last time <b>${b.right}</b></span><span><i class="s-wrong"></i>Missed last time <b>${b.wrong}</b></span><span><i class="s-new"></i>New <b>${b.new}</b></span></div>
+    ${lo&&hi&&lo!==hi?`<p class="pg-hero__def">Least done of the big systems: <b>${esc(lo.k)}</b>, ${Math.round((lo.n-lo.new)/lo.n*100)}% of ${lo.n}. Most done: ${esc(hi.k)}, ${Math.round((hi.n-hi.new)/hi.n*100)}%.</p>`:''}`;
+  const have=PG_AREA.filter(a=>a[0]===PG.area||DB.questions.some(q=>facetValues(FACET_BY[a[0]],q).some(v=>v&&v!=='—')));
+  const chips=`<div class="pg-chips" role="radiogroup" aria-label="Classify by">${have.map(a=>`<button type="button" class="pg-chip pl-press${a[0]===PG.area?' on':''}" role="radio" aria-checked="${a[0]===PG.area}" data-pgfacet="${a[0]}"><span class="pg-chip__ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" pathLength="1"/></svg></span>${a[1]}</button>`).join('')}</div>`;
+  const tool=pgSeg('asort',[['size','Largest'],['least','Least done'],['weak','Weakest']],PG.asort,'Order');
+  return pgCard('',hero,{cls:'pg-hero'})+pgCard('Every area',`${chips}${tool}<div id="pgAreas">${pgAreaList()}</div>`,
+    {sub:'Each bar is the area’s questions: right last time, missed last time, and new. Tap an area for its detail and to practise it. All time.'});
+}
+function pgAreaList(){
+  const rows=pgAreaRows(PG.area);
+  if(!rows.length)return pgEmpty('Nothing classified this way yet','Questions get these labels on import, or from the bank’s classifier.');
+  const show=PG.aall?rows:rows.slice(0,12);
+  return `<ul class="pg-areas">${show.map((r,i)=>pgAreaRow(r,i)).join('')}</ul>
+    ${rows.length>12?`<div class="pg-weak__f"><span class="pg-note">${rows.length} areas</span><button type="button" class="pg-txt pl-press" data-pgaall>${PG.aall?'Show fewer':'Show all '+rows.length}</button></div>`:''}`;
+}
+function pgAreaRow(r,i){
+  const d=(r.n-r.new)/r.n,open=PG.aopen===r.k,k=esc(r.k);
+  const fp=r.fn>=5?Math.round(r.fc/r.fn*100):null,ev=r.an?Math.round(r.ac/r.an*100):null;
+  return `<li class="pg-area${open?' is-open':''}" style="--i:${Math.min(i,8)}">
+    <button type="button" class="pg-area__h pl-press" data-pgarea="${k}" aria-expanded="${open}">
+      <span class="pg-area__t"><b>${k}</b><span>${r.n-r.new} of ${r.n} done${fp!=null?` · first sighting ${fp}%`:''}</span></span>
+      <span class="pg-area__p">${Math.round(d*100)}<small>%</small></span>
+      <span class="pg-area__bar">${pgStackQ(r)}</span>
+      <svg class="pg-area__chev ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9.5 6 6 6-6"/></svg>
+    </button>
+    <div class="pg-unfold${open?' is-open':''}"><div><div class="pg-area__d">
+      <div class="pg-mini pg-mini--6">
+        <div><b>${r.new}</b><span>new</span></div><div><b>${r.right}</b><span>right last time</span></div><div><b>${r.wrong}</b><span>missed last time</span></div>
+        <div><b>${r.due}</b><span>due for review</span></div><div><b>${fp==null?'—':fp+'%'}</b><span>first sighting</span></div><div><b>${ev==null?'—':ev+'%'}</b><span>every answer</span></div>
+      </div>
+      <div class="pg-area__a">
+        <button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgprac="new" data-k="${k}"${r.new?'':' disabled'}>${sxIc('i-play')}Practise new · ${r.new}</button>
+        <button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgprac="missed" data-k="${k}"${r.wrong?'':' disabled'}>${sxIc('i-review')}Practise missed · ${r.wrong}</button>
+      </div></div></div></div></li>`;
 }
 
 /* ============================================================
@@ -14251,7 +14493,7 @@ function pgMissCard(A){
     ${lureQ.length>=5?`<p class="pg-note">When a question had a lure and you missed it, you chose the lure ${Math.round(lureN/lureQ.length*100)}% of the time (${lureN} of ${lureQ.length})${lureN/lureQ.length>.4?'. Those questions are built for someone who knows most of the topic: you are close, and the last detail is what is missing.':'.'}</p>`:''}`,
     {sub:'Your own tag counts first. An untagged miss is placed by what the record shows: the lure chosen, the right option crossed out, or an answer far faster than your usual.'});
 }
-const PG_GRP=[['system','System',q=>q.system],['subject','Subject',q=>q.subject],['archetype','Question type',q=>q.archetype],['task','Task',q=>q.task]];
+const PG_GRP=[['system','System',q=>q.system],['subject','Subject',q=>q.subject],['archetype','Type',q=>q.archetype],['task','Task',q=>q.task]];
 function pgWeakCard(A){
   const tool=pgSeg('grp',PG_GRP.map(g=>[g[0],g[1]]),PG.grp,'Group by');
   return pgCard('Where the marks are',`${tool}<div id="pgWeak">${pgWeakList(A)}</div>`,{sub:'Ranked by marks at stake: the share you miss times how many of those questions your bank holds. A big area at 60% outranks a small one at 30%.'});
@@ -14299,7 +14541,19 @@ function pgPaceCard(A){
   const lab=s=>Math.round(s);
   return pgCard('Pace',`<div class="pg-ahead"><div><span class="pg-big">${pgN('med',Math.round(med))}${pgU('s')}</span><em>typical answer · exam pace ${PG_PACE}s</em></div><div><span class="pg-big">${pgN('over',over)}${pgU('%')}</span><em>over ${PG_PACE} seconds</em></div></div>
     <div class="pg-calib pg-calib--4">${q.map((x,i)=>`<div><span class="pg-calib__v">${pgN('pq'+i,x.p)}${pgU('%')}</span><span class="pg-col__t"><i style="--s:${(x.p/100).toFixed(4)};--i:${i}"></i></span><b>${['Fastest','Quick','Slower','Slowest'][i]}</b><em>${lab(x.lo)}–${lab(x.hi)}s</em></div>`).join('')}</div>
-    <p class="pg-note">${say}</p>`,{sub:'Answer time, from the question appearing to your answer. Your answers split into four equal groups by speed, with the accuracy of each.'});
+    <p class="pg-note">${say}</p>${pgTimeSplit(A,T)}`,{sub:'Answer time, from the question appearing to your answer. Your answers split into four equal groups by speed, with the accuracy of each.'});
+}
+/* the two clocks: deciding (to the answer) and learning (reading after it) */
+function pgTimeSplit(A,T){
+  let ans=0,rev=0;T.forEach(a=>{ans+=a.ans;rev+=Math.max(0,a.study-a.ans)});
+  const tot=ans+rev;if(!tot)return '';
+  const r=pgMed(T.filter(a=>a.correct).map(a=>a.ans)),w=pgMed(T.filter(a=>!a.correct).map(a=>a.ans));
+  return `<div class="pg-split"><span class="pg-lad__h">Where the time goes</span>
+    <div class="pg-stack"><i class="t-ans" style="flex:${ans}"></i><i class="t-rev" style="flex:${rev};--i:1"></i></div>
+    <ul class="pg-causes pg-causes--mem"><li><span class="pg-key t-ans"></span><div><b>Answering</b><span>to the moment you commit</span></div><strong>${fmtDur(ans)}<small>${Math.round(ans/tot*100)}%</small></strong></li>
+    <li><span class="pg-key t-rev"></span><div><b>Reading after</b><span>the explanation, coming back to it</span></div><strong>${fmtDur(rev)}<small>${Math.round(rev/tot*100)}%</small></strong></li></ul>
+    ${r!=null&&w!=null?`<div class="pg-mini"><div><b>${Math.round(r/1000)}s</b><span>typical when right</span></div><div><b>${Math.round(w/1000)}s</b><span>typical when wrong</span></div><div><b>${A.length?fmtDur(A.reduce((x,a)=>x+a.study,0)):'—'}</b><span>studied in this range</span></div></div>`:''}
+    <p class="pg-note">${rev/tot<.25?'Most of your time goes on answering. A miss is only fixed by the reading after it: give the explanations more of your time.':w&&r&&w>r*1.4?'You spend far longer on the questions you get wrong. If a question has not opened up by about 90 seconds, the extra time is rarely what saves it.':'A healthy split between answering and learning from the answer.'}</p></div>`;
 }
 function pgStaminaCard(A){
   const B=[[0,10,'1–10'],[10,20,'11–20'],[20,30,'21–30'],[30,40,'31–40'],[40,1e4,'41+']];
@@ -14323,7 +14577,12 @@ function pgSessHTML(){
   const last=fin.slice(0,20).reverse();
   const l10=fin.slice(0,10),avg=l10.length?l10.reduce((a,s)=>a+sessScore(s).p,0)/l10.length:null;
   const ms=fin.reduce((a,s)=>a+(s.elapsed||0),0);
-  const tiles=[['sf',fin.length,'','Finished'],['sa',avg,'%','Average, last 10'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started']];
+  const qs=fin.reduce((a,s)=>a+s.order.length,0),blank=fin.reduce((a,s)=>a+s.order.filter(id=>!(s.items[id]||{}).chosen).length,0);
+  const ansL=[];fin.forEach(s=>s.order.forEach(id=>{const it=s.items[id];if(it&&it.chosen&&it.ansMs!=null)ansL.push(it.ansMs)}));
+  const big=fin.filter(s=>s.order.length>=10).map(s=>sessScore(s).p);
+  const tiles=[['sf',fin.length,'','Finished'],['sa',avg,'%','Average, last 10'],['sl',fin.length?ms/fin.length/60000:0,'min','Typical length'],['sr',all.length?fin.length/all.length*100:0,'%','Finished of started'],
+    ['saa',ansL.length?pgMed(ansL)/1000:null,'s','Typical answer'],['sbl',qs?blank/qs*100:null,'%','Left blank'],
+    ['sbe',big.length?Math.max(...big):null,'%','Best set'],['swo',big.length?Math.min(...big):null,'%','Weakest set']];
   const spark=last.length>=3?`<div class="pg-sspark" style="--n:${last.length}">${last.map((s,i)=>{const p=sessScore(s).p;return `<button type="button" class="pl-press" data-open="${s.id}" title="${esc(s.config.label||'Session')} · ${pgDate(s.ts)} · ${p}%" aria-label="${esc(s.config.label||'Session')}, ${p}%"><i style="--s:${(p/100).toFixed(3)};--i:${i}"></i></button>`}).join('')}</div><p class="pg-note">Your last ${last.length} sessions, oldest on the left. Tap one for its report.</p>`:'';
   const row=s=>{const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s),done=st==='done';
     const C=2*Math.PI*16;
@@ -14333,7 +14592,7 @@ function pgSessHTML(){
       ${done?`<span class="pg-srow__m">${sc.c}/${sc.n}</span>`:`<span class="pg-srow__a"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button><button type="button" class="pl-btn pl-btn--text pl-press" data-sessfinish="${s.id}">Finish</button></span>`}
       <button type="button" class="pl-ib pl-press pg-sdel" data-pgdel="${s.id}" aria-label="Delete this session">${sxIc('i-trash')}</button></div>`};
   const shown=fin.slice(0,PG.shown);
-  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
+  return pgCard('',`<div class="pg-tiles">${tiles.map(t=>`<div class="pg-tile"><span class="pg-tile__v">${pgN(t[0],t[1])}${t[1]!=null&&t[2]?pgU(t[2]):''}</span><b>${t[3]}</b></div>`).join('')}</div>${spark}`,{cls:'pg-hero'})
     +(open.length?`<h3 class="pg-h">Still open</h3><div class="pg-grp">${open.map(row).join('')}</div>`:'')
     +`<h3 class="pg-h">Finished</h3><div class="pg-grp">${shown.length?shown.map(row).join(''):'<div class="pg-srow">'+pgEmpty('Nothing finished yet','A finished session lands here with its report.')+'</div>'}</div>`
     +(fin.length>PG.shown?`<div class="pg-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-pgmore>Show ${Math.min(30,fin.length-PG.shown)} more</button></div>`:'');
@@ -14342,7 +14601,7 @@ function pgSessHTML(){
 /* ============================================================
    THE VIEW: switching, building, the data arriving alive
    ============================================================ */
-const PG_BUILD={form:pgFormHTML,habit:pgHabitHTML,gaps:pgGapsHTML,sess:pgSessHTML};
+const PG_BUILD={form:pgFormHTML,habit:pgHabitHTML,areas:pgAreasHTML,gaps:pgGapsHTML,sess:pgSessHTML};
 const pgPane=v=>document.querySelector('#pgStage .pg-pane[data-pg="'+v+'"]');
 function pgBuild(v,pre){
   const p=pgPane(v);if(!p)return;
@@ -14425,11 +14684,14 @@ function pgSegTap(g,b){
     if(id==='trend'){PG.rng.trend=b.dataset.v;pgRe('#pgTrend',pgTrendSVG(),dir)}
     else if(id==='gaps'){PG.rng.gaps=b.dataset.v;PG.all=false;pgRe('#pgGapsBody',pgGapsBody(),dir)}
     else if(id==='grp'){PG.grp=b.dataset.v;PG.all=false;pgRe('#pgWeak',pgWeakList(),dir)}
+    else if(id==='asort'){PG.asort=b.dataset.v;PG.aopen=null;pgRe('#pgAreas',pgAreaList(),dir)}
+    else if(id==='hrs'){PG.hrs=b.dataset.v;pgRe('#pgHrs',pgHrsHTML(),dir)}
+    else if(id==='per'){PG.per=b.dataset.v;const h=g.closest('.pg-card').querySelector('.pg-card__h h3');sxSwap(h,PG.per==='months'?'Month by month':'Week by week');pgRe('#pgPer',pgPerHTML(),dir)}
   },0));
 }
 /* the entry points the rest of the app already calls */
 function renderStats(arrive){
-  PG.E=null;PG.built={};PG.stamp=performance.now();
+  PG.E=null;PG.QS=null;PG.built={};PG.stamp=performance.now();
   if(arrive){PG.prev={};PG.day=null;PG.all=false;PG.shown=30;return}   /* pgShow builds on arrival */
   if(VIEW==='stats')pgBuild(PG.view);
   pgLedger();
@@ -14456,6 +14718,22 @@ $('#pgStage').addEventListener('click',e=>{
     else u.classList.remove('is-open');
     return}
   if(e.target.closest('[data-pgall]')){PG.all=!PG.all;pgRe('#pgWeak',pgWeakList());return}
+  if(e.target.closest('[data-pgaall]')){PG.aall=!PG.aall;pgRe('#pgAreas',pgAreaList());return}
+  const fc=e.target.closest('[data-pgfacet]');
+  if(fc){if(fc.classList.contains('on'))return;
+    const cs=[...fc.parentNode.children],dir=Math.sign(cs.indexOf(fc)-cs.findIndex(x=>x.classList.contains('on')));
+    cs.forEach(x=>{const on=x===fc;x.classList.toggle('on',on);x.setAttribute('aria-checked',String(on))});
+    PG.area=fc.dataset.pgfacet;PG.aopen=null;PG.aall=false;
+    requestAnimationFrame(()=>setTimeout(()=>pgRe('#pgAreas',pgAreaList(),dir),0));return}
+  /* an area opens in place; the one open before it closes */
+  const ar=e.target.closest('[data-pgarea]');
+  if(ar){const k=ar.dataset.pgarea;PG.aopen=PG.aopen===k?null:k;
+    $$('#pgAreas .pg-area').forEach(li=>{const h=li.querySelector('[data-pgarea]'),on=h.dataset.pgarea===PG.aopen;
+      li.classList.toggle('is-open',on);li.querySelector('.pg-unfold').classList.toggle('is-open',on);h.setAttribute('aria-expanded',String(on))});
+    return}
+  const pr=e.target.closest('[data-pgprac]');
+  if(pr){const k=pr.dataset.k,nw=pr.dataset.pgprac==='new';F.pool=nw?'unused':'incorrect';clearFacets();F.sets[PG.area].add(k);
+    startSession((nw?'New · ':'Missed · ')+k);return}
   if(e.target.closest('[data-pgmore]')){PG.shown+=30;pgBuild('sess');return}
   const dr=e.target.closest('[data-pgdrill]');
   if(dr){const k=dr.dataset.pgdrill;F.pool='all';clearFacets();F.sets[PG.grp].add(k);startSession('Weak spot: '+k);return}
@@ -14468,7 +14746,7 @@ $('#pgStage').addEventListener('click',e=>{
     const go=()=>{const at={};$$('#pgStage .pg-srow[data-sid]').forEach(r=>{at[r.dataset.sid]=r.getBoundingClientRect().top});
       const i=DB.sessions.findIndex(x=>x.id===id);if(i<0)return;
       DB.sessions.splice(i,1);save();renderDash();
-      PG.E=null;PG.built={};const keep=PG.prev;pgBuild('sess');PG.prev=keep;pgLedger();toast('Session deleted.');
+      PG.E=null;PG.QS=null;PG.built={};const keep=PG.prev;pgBuild('sess');PG.prev=keep;pgLedger();toast('Session deleted.');
       if(Motion.reduced)return;const sp=PL('spatial');
       $$('#pgStage .pg-srow[data-sid]').forEach(r=>{const y=at[r.dataset.sid];if(y==null)return;const d=y-r.getBoundingClientRect().top;
         if(Math.abs(d)>1)r.animate([{transform:`translateY(${d}px)`},{transform:'none'}],{duration:sp.d,easing:sp.e})})};
