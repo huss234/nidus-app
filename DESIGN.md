@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.15** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.16** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1324,6 +1324,42 @@ The quality bar. A surface is done when it *feels* like §2, and:
     descendant selectors written for the old markup (`.pg-tpair span` shrank
     the Time hero's figures to 13px). After converting, screenshot every
     view and scope such rules to direct children.
+- **Session builder** (`Plume 2.16 · session builder`, v6.76, rebuilt from
+  scratch; markup `#bs`, script `bsRender`/`renderBuild`, `bsPaint`). Reuse:
+  - **Presets that set many controls at once and stay lit while they hold**
+    (`.bs-preb`, `BS_PRE`): a preset is a patch of the setup; it is "on"
+    whenever every key it sets still matches (`bsPresetOn`), so changing any
+    one control after it quietly un-lights it. Applying one moves every
+    control it touches with its own motion (indicators travel, numbers roll,
+    slots unfold); nothing is re-rendered.
+  - **Choice tiles with a drawn check** (`.bs-pool`, `.bs-pool__ck`): a tile on
+    the card's well, the chosen one in `secondary-container`, the check
+    growing in and drawing its stroke. A tile with nothing behind it (count 0)
+    steps back to 60% but stays choosable.
+  - **Rows that unfold their chips** (`.bs-fac`, `bsFacOpen`): a grouped list on
+    the card's well; the row says what is chosen in its second line and a
+    badge; the chevron turns 180° as the slot unfolds (`.bs-unf`, the 2.13
+    collapse rule plus `inert` while closed). Chips are built on first open
+    only. A chip's count is what a tap on it would bring in: the pool and
+    every *other* filter applied (`bsFacCounts`). Long lists scroll inside
+    (`.is-long`) and get a find field.
+  - **Paint in place, never rebuild** (`bsPaint`): one function brings every
+    word, count, indicator, switch and unfold in line with the state; a tap
+    first flips its own element on that frame, then `bsPaint` runs on the
+    next animation frame (≈19ms on a 2,600-question bank, the handler ≤6ms).
+  - **The dock** (`.bs-dock`): what the main action will do, always in reach.
+    Below 1000px a float (`--p-float`, `--p-r-xl`, shadow) sticky above the
+    tab bar, holding the expressive count (it rolls, `bsRollEl`), one line
+    and the 56px filled Begin; from 1000px a card beside the setup with the
+    facts, every active filter as a chip with its own × and Reset filters.
+    Sticky in the flow, so at the end of the page it sits in its own place
+    and covers nothing (§7).
+- **The block clock** (`Plume 2.16 · block clock`, `.sp-timer.low` / `.over`):
+  a timed block counts down in the session bar's clock. Minutes only while
+  ten or more are left, seconds for the last ten (`59m`, `9m 59s`), so it is
+  calm and no wider than the per-question clock; the last five minutes take
+  a warning tint, overtime the error colours and a leading `+`. Neither
+  pulses. The bar's clock is the UI face with tabular figures (§4), not mono.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1349,6 +1385,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| **Session builder (New session), whole screen**: presets, Due review / Weakest jumps, pools, filters, how you are tested (mode, size, timing, order, switches), the dock; and the session bar's block clock | 2.16 | 6.76 | Rebuilt from scratch on the user's request; nothing removed (every pool, every filter group, Select all / Clear, Reset filters, mode, size, seconds per question, order, shuffle, confidence, the summary). New: presets, timed blocks (exam pace or fixed minutes, end and grade or overtime), counts per chip inside the pool, find in long filters, removable filter chips, the setup remembered per device |
 | **Progress: functional interactivity** (every figure opens a peek, every part isolates, every chart point, column, period row, day and forecast day opens its period, names jump to their area; the peek sheet; *Practise these* from any figure that counts questions; Review due in an area) | 2.15 | 6.74 | From the user: the rebuilt Progress was static, like a PDF. Nothing removed; blocks became buttons |
 | **Wells across Plume: `--p-well` is a veil over its holder** (Progress view switcher and period switchers, Settings search, every track, field and tile in Settings and Progress); `--p-card-hi` raised in dark; swatch rings | 2.14 | 6.73 | From the user: the switcher's track and the search bar did not stand out from the page in either theme. Measured ΔL: see §3 |
 | Progress: Time view (time per question for today / this week / this month / all time, trend, period list, spread, session totals); session rows lead with their total time; six tabs | 2.13 | 6.72 | From the user: average time per question is how they monitor themselves |
@@ -1497,3 +1534,9 @@ were built under which version.
   opens its period, a figure owned elsewhere goes there; nothing is made
   tappable with nothing behind it. The peek sheet joins §8. From the user,
   on Progress: an app is not a photo or a PDF.
+- **Plume 2.16** (2026-10-12): the session builder. Presets that set several
+  controls at once and stay lit only while the setup matches them; rows that
+  unfold their chips, each chip counting what a tap on it brings in; a dock
+  that always says what the main action will start, floating above the tab
+  bar on phones and the tablet and sitting beside the setup on wide screens;
+  and the block clock, which drops its seconds until the last ten minutes.

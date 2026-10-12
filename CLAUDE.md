@@ -343,6 +343,26 @@ a recipe.
   counts start from zero) and `showPane('stats', …)` hands over to
   `pgShow`, so the `history` alias still lands on Sessions. Readiness is
   still `readiness()`, shared with Home.
+- **The session builder's setup is a setting** (v6.76): `DB.settings.build`
+  (`bld()` fills it from `BLD_DEF`) holds mode, count (0 = every match),
+  timing (`off` / `q` / `block`), secs, block (`pace` = 90s × questions, or
+  `fixed` minutes in `mins`), onEnd, order, shuffle, conf. It is this
+  device's own (not in `SHARED_SETTINGS`) and syncs in the device file.
+  `startSession()` reads `bld()`, never the screen, so every way in (Due
+  review, Weakest system, `startIds`, Progress's Practise) uses the same
+  block size, timing and order; `pgBlockN()` reads it too. The pool and the
+  filters (`F.pool`, `F.sets`) stay in memory as before.
+- **A timed block** (v6.76): a session's `config.limit` (seconds for the
+  whole block) and `config.onEnd` (`end` | `over`). The bar counts it down
+  from `S.elapsed` plus the current visit (`blockLeft()`), so a pause stops
+  it and another device resumes it where it stood; it replaces the
+  per-question clock for the whole session, explanations included. At zero,
+  `end` runs `blockUp()` (closes the viewer, dialog and menu, then
+  `endSession()`), `over` turns the clock into overtime. Warnings at 5 and 1
+  minutes fire once, only when crossed. Review clones set `limit:0`; a
+  retry from the report never carries it. The report shows the allowance and
+  how it ended (`blockChip`), the companion the time left. Sessions without
+  `limit` behave exactly as before.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget` and
   `nidus_straggler` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
@@ -562,5 +582,15 @@ does) and work in the scratchpad:
   rule (a lone `65m`, `90s` in prose, `0m 45s`, `1h 0m`, `12:34`); a
   duration can also hide in a `pgN` tile with a time unit, an aria-label or
   a hard-coded bucket label (v6.75).
+- **Test the block clock without waiting.** Start a session through
+  `bsSet({...});startSession()`, then `flushTime();qEnter=Date.now();
+  S.elapsed=(limit-301)*1000` and wait ~1.5s for the 5-minute warning, or
+  set it past the limit for the end or the overtime. Read `#pTimer`'s text
+  and class, `S.status`, `#resultsPanel.on` and the report's chips. The
+  clock's text uses a no-break space (`fmtT`), so match `\s`-free patterns.
+- **The bar's counter is already a few pixels tight** with the fallback font
+  in headless Chromium (`.sp-count` 4–8px over at 360/390/430 with the
+  per-question clock, before v6.76 too). Anything added to the bar must not
+  make it worse than that baseline; measure both.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

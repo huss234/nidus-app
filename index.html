@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.75 -->
+<!-- Nidus — Personal Qbank · v6.76 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -4299,6 +4299,14 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
   transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),color var(--m3-dur-medium) var(--m3-ease-standard);
 }
 .sp-timer.warn{background:var(--md-error-container);color:var(--md-on-error-container);animation:spPulse 1s var(--m3-ease-standard) infinite}
+/* Plume 2.16 · block clock: the last five minutes of a timed block take a
+   warning tint, overtime the error colours; neither pulses (nothing loops) */
+.sp-timer.low{background:color-mix(in oklab,var(--md-warning) 24%,var(--p-card));color:var(--md-on-surface)}
+.sp-timer.over{background:var(--md-error-container);color:var(--md-on-error-container)}
+/* a clock is a count, not a code (§4): the UI face with tabular figures,
+   which is also narrower than mono, so the longest block clock fits the bar */
+.sp-timer{font-family:var(--m3-font);font-weight:550;white-space:nowrap}
+@media (max-width:520px){.sp-top .sp-timer.over{padding-left:6px;padding-right:6px}}
 @keyframes spPulse{50%{transform:scale(1.06)}}
 /* Plume 1.4 · focus mode button. One click away in the bar. Its icon is
    never swapped: the expand and shrink glyphs are the same four corner
@@ -6134,6 +6142,220 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   .pg-pane *{animation-name:pgFade!important;animation-duration:150ms!important;animation-delay:0ms!important}
   .pg-bar i,.pg-col__t i{transition:none}
 }
+
+/* ============================================================
+   Plume 2.16 · session builder
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.76). Lit cards on the page: presets that
+   set the whole block in one tap (and light up while the setup still
+   matches them), the pools as tiles with their counts, the filters as
+   rows that unfold their chips (counted inside the pool, so a chip
+   says what a tap on it brings in), and how the block is run and
+   timed. A dock always says what Begin will start: on a phone and the
+   tablet it floats above the tab bar, from 1000px it is a card beside
+   the setup. Nothing is rebuilt under the finger; every change paints
+   in place, numbers roll, words crossfade, slots unfold.
+   ============================================================ */
+.bs{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start;margin-top:4px}
+@media (min-width:1000px){.bs{grid-template-columns:minmax(0,1fr) 340px;gap:24px}}
+.bs-main{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+.bs-card{background:var(--p-card);border-radius:var(--p-r-card);padding:20px;color:var(--md-on-surface);min-width:0}
+@media (min-width:600px){.bs-card{padding:24px}}
+.bs-card__h{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:0 0 16px}
+.bs-card__h h3{margin:0;font:500 18px/24px var(--m3-font);letter-spacing:0}
+.bs-card__h p{margin:4px 0 0;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant);max-width:62ch}
+.bs-note{margin:0;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.bs-u{font:500 15px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);margin-left:6px}
+
+/* a check that draws itself (presets, pools) */
+.bs-pool__ck{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:11px;display:grid;place-items:center;
+  background:var(--md-primary);color:var(--md-on-primary);opacity:0;transform:scale(.5);
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bs-pool__ck svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.bs-pool__ck path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+.on > .bs-pool__ck{opacity:1;transform:none}
+.on > .bs-pool__ck path{stroke-dashoffset:0;transition-delay:80ms}
+
+/* tiles: presets and pools share the touch contract and the chosen fill */
+.bs-preb,.bs-pool{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;min-width:0;
+  padding:14px 40px 14px 16px;border-radius:var(--p-r-l);background:var(--p-well);color:var(--md-on-surface);text-align:left;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),opacity var(--p-effect-d) var(--p-effect);
+}
+.bs-preb::after,.bs-pool::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bs-preb:hover::after,.bs-pool:hover::after{opacity:var(--m3-state-hover)}}
+.bs-preb.is-down,.bs-pool.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.bs-preb.is-down::after,.bs-pool.is-down::after{opacity:var(--m3-state-press)}
+.bs-preb:focus-visible,.bs-pool:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.bs-preb.on,.bs-pool.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+
+.bs-pre{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px}
+.bs-preb__t{font:550 15px/20px var(--m3-font);letter-spacing:.1px}
+.bs-preb__s{font:400 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.bs-preb.on .bs-preb__s{color:inherit}
+.bs-jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.bs-jump:empty{display:none}
+.bs-jump .pl-btn{max-width:100%;padding:0 20px}
+.bs-jump .pl-btn span{overflow:hidden;text-overflow:ellipsis}
+
+.bs-pools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:600px){.bs-pools{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.bs-pools--more{padding-top:8px}
+.bs-pool{gap:2px;padding:12px 40px 14px 16px;min-height:76px}
+.bs-pool__t{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.bs-pool.on .bs-pool__t{color:inherit}
+.bs-pool__n{font:540 26px/1.05 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.bs-pool.is-zero:not(.on){opacity:.6}
+
+/* a text button that opens a fold: its chevron turns with it */
+.bs-more{
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:8px;min-height:48px;margin:8px -8px -8px;padding:0 12px;
+  border-radius:24px;color:var(--md-primary);font:550 14px/20px var(--m3-font);letter-spacing:.1px;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.bs-more::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bs-more:hover::after{opacity:var(--m3-state-hover)}}
+.bs-more.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.bs-more:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.bs-cv{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none;
+  transition:transform var(--p-spatial-d) var(--p-spatial)}
+.is-open > .bs-cv,[aria-expanded="true"] > .bs-cv{transform:rotate(180deg)}
+
+/* a slot that opens and closes collapses to zero (2.13) */
+.bs-unf{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,0fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.bs-unf > div{min-height:0;min-width:0;overflow:hidden;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.bs-unf.is-open{grid-template-rows:minmax(0,1fr)}
+.bs-unf.is-open > div{opacity:1;transition-delay:60ms}
+
+/* the filter rows: a grouped list on the card's well */
+.bs-facs{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+#bsFacAdv > div > .bs-facs{padding-top:2px}
+.bs-fac{background:var(--p-well);border-radius:var(--p-r-xs);transition:border-radius var(--p-effect-d) var(--p-effect)}
+#bsFacs > .bs-fac:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+#bsFacs:not(:has(#bsFacAdv.is-open)) > .bs-fac:nth-last-child(2),
+#bsFacAdv.is-open .bs-fac:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.bs-fac__h{
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:12px;width:100%;min-height:60px;padding:8px 14px 8px 16px;
+  border-radius:inherit;color:var(--md-on-surface);text-align:left;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bs-fac__h::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bs-fac__h:hover::after{opacity:var(--m3-state-hover)}}
+.bs-fac__h.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d)}
+.bs-fac__h.is-down::after{opacity:var(--m3-state-press)}
+.bs-fac__h:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.bs-fac__tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.bs-fac__t{font:500 15px/22px var(--m3-font);letter-spacing:.1px}
+.bs-fac__s{font:400 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bs-fac.has-sel .bs-fac__s{color:var(--md-primary);font-weight:500}
+.bs-fac__b{flex:none;min-width:24px;height:24px;padding:0 7px;border-radius:12px;display:grid;place-items:center;box-sizing:border-box;
+  background:var(--md-primary);color:var(--md-on-primary);font:600 12px/1 var(--m3-font);font-variant-numeric:tabular-nums;
+  opacity:0;transform:scale(.5);transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bs-fac.has-sel .bs-fac__b{opacity:1;transform:none}
+.bs-fac__in{padding:0 16px 16px}
+.bs-fac__acts{display:flex;gap:4px;margin:0 -12px 4px}
+.bs-fac__acts .pl-btn{--h:40px;padding:0 12px}
+.bs-chips{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.bs-tw{display:grid;grid-template-columns:minmax(0,1fr)}
+.bs-chips.is-long{max-height:288px;overflow:auto;overscroll-behavior:contain;padding:2px;margin:-2px}
+.bs-chip{height:36px;padding:0 12px 0 14px;max-width:100%;cursor:pointer;background:var(--p-card)}
+.bs-chip.on{background:var(--md-secondary-container)}
+.bs-chip[hidden]{display:none}
+.bs-chip__t{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.bs-chip__n{margin-left:8px;font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.bs-chip.on .bs-chip__n{color:inherit}
+.bs-chip.is-zero{color:color-mix(in oklab,var(--md-on-surface-variant) 60%,transparent)}
+.bs-find{display:flex;align-items:center;gap:10px;height:44px;margin:0 0 8px;padding:0 14px;border-radius:22px;background:var(--p-card);color:var(--md-on-surface-variant);cursor:text;
+  transition:box-shadow var(--p-effect-d) var(--p-effect)}
+.bs-find:focus-within{box-shadow:inset 0 0 0 2px var(--md-primary)}
+.bs-find .ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;flex:none}
+.bs-find input[type=search]{flex:1;min-width:0;height:100%;padding:0;margin:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;
+  font:400 15px/22px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+.bs-find input[type=search]::placeholder{color:var(--md-on-surface-variant)}
+.bs-clr{--h:40px;flex:none;margin:-8px -12px 0 0;padding:0 12px;opacity:0;transform:scale(.8);pointer-events:none;visibility:hidden;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),visibility 0s linear var(--p-effect-d)}
+.bs-clr.is-on{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition-delay:0s}
+
+/* how: rows of controls, grouped on the card's well */
+.bs-rows{display:grid;grid-template-columns:minmax(0,1fr);gap:2px}
+.bs-row{position:relative;isolation:isolate;display:flex;align-items:center;gap:16px;min-height:64px;padding:12px 16px;border-radius:var(--p-r-xs);background:var(--p-well);color:var(--md-on-surface)}
+.bs-rows > .bs-row:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.bs-rows > .bs-row:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.bs-col{flex-direction:column;align-items:stretch;gap:10px;padding-top:14px;padding-bottom:14px}
+.bs-row__top{display:flex;align-items:center;gap:16px}
+.bs-row .pl-seg{background:var(--p-well)}
+.bs-row .pl-seg button{white-space:nowrap}
+.bs-sub{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding-top:6px}
+@media (max-width:360px){.bs .sx-step .sx-numw{width:52px}.bs-sub > .bs-row,.bs-sub > .bs-row__top{padding-left:12px;padding-right:10px}.bs-row__top{gap:10px}}
+.bs-sub > .bs-row,.bs-sub > .bs-row__top{background:var(--p-card);border-radius:var(--p-r-m);padding:12px 14px;min-height:0}
+.bs-sub > .bs-row__top{display:flex}
+.bs-row--in .pl-seg button{font-size:13px}
+.bs-row .pl-seg button{padding:0 4px;font-size:13.5px}
+.bs-col{padding-left:12px;padding-right:12px}
+.bs-note--in{padding:4px 14px 2px}
+.bs-unf[data-bstime] > div > .bs-note{padding-top:2px}
+.bs-sw{cursor:pointer}
+.bs-sw::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bs-sw:hover::after{opacity:var(--m3-state-hover)}}
+.bs-sw.is-down::after{opacity:var(--m3-state-press)}
+.bs-qk{display:flex;flex-wrap:wrap;gap:8px}
+.bs-qk .pg-chip{cursor:pointer;background:var(--p-card)}
+.bs-qk .pg-chip.on{background:var(--md-secondary-container)}
+.bs .sx-step .sx-numw{width:72px}
+
+/* the dock: what Begin will start */
+.bs-dock{position:sticky;z-index:5;bottom:16px;min-width:0}
+@media (max-width:860px){.bs-dock{bottom:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom) + 12px)}}
+.bs-dock__in{display:flex;align-items:center;gap:12px;padding:10px 10px 10px 20px;border-radius:var(--p-r-xl);background:var(--p-float);color:var(--md-on-surface);box-shadow:var(--p-shadow)}
+.bs-dock__sum{flex:1;min-width:0;display:flex;flex-direction:column}
+.bs-dock__n{display:flex;align-items:baseline;min-width:0}
+.bs-dock__nw{position:relative;display:inline-block;overflow:hidden;font:540 34px/1.05 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bs-dock__nw > span{display:inline-block}
+.bs-ghost{position:absolute;left:0;top:0}
+.bs-dock__l{font:400 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+@media (max-width:999px){.bs-go{padding:0 24px}}
+.bs-facts,.bs-dock__chips,.bs-reset{display:none}
+.bs-go{flex:none}
+.bs-go .ic{fill:currentColor;stroke:none}
+.bs-go:disabled{background:color-mix(in oklab,var(--md-on-surface) 12%,transparent);color:color-mix(in oklab,var(--md-on-surface) 38%,transparent);pointer-events:none}
+.bs-go,.bs-go:disabled{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-slow-d) var(--p-effect-slow),color var(--p-effect-slow-d) var(--p-effect-slow)}
+.bs-go__tri{transform-box:fill-box;transform-origin:center;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bs-go.is-down .bs-go__tri{transform:translateX(2px)}
+@media (max-width:380px){.bs-dock__in{padding-left:16px}.bs-go{padding:0 20px}.bs-dock__nw{font-size:30px}}
+@media (min-width:1000px){
+  .bs-dock{top:24px;bottom:auto;z-index:auto}
+  .bs-dock__in{flex-direction:column;align-items:stretch;gap:16px;padding:24px;border-radius:var(--p-r-card);background:var(--p-card);box-shadow:none}
+  .bs-dock__nw{font-size:56px}
+  .bs-dock__l{white-space:normal}
+  .bs-facts{display:grid;gap:2px;margin:0}
+  .bs-facts > div{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;background:var(--p-well);border-radius:var(--p-r-xs)}
+  .bs-facts > div:first-child{border-top-left-radius:var(--p-r-m);border-top-right-radius:var(--p-r-m)}
+  .bs-facts > div:last-child{border-bottom-left-radius:var(--p-r-m);border-bottom-right-radius:var(--p-r-m)}
+  .bs-facts dt{font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+  .bs-facts dd{margin:0;font:550 14px/20px var(--m3-font);font-variant-numeric:tabular-nums;text-align:right}
+  .bs-dock__chips{display:flex;flex-wrap:wrap;gap:6px}
+  .bs-dock__chips:empty{display:none}
+  .bs-go{width:100%}
+  .bs-reset{display:inline-flex;align-self:center}
+}
+.bs-x{position:relative;isolation:isolate;display:inline-flex;align-items:center;gap:4px;height:32px;max-width:100%;padding:0 6px 0 12px;border-radius:var(--p-r-s);
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);font:550 13px/18px var(--m3-font);cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast);animation:bsPop var(--p-spatial-fast-d) var(--p-spatial-fast) backwards}
+.bs-x span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bs-x .ic{width:18px;height:18px;flex:none}
+.bs-x.is-down{transform:scale(var(--p-press))}
+@keyframes bsPop{from{transform:scale(.6);opacity:0}}
+.bs-card,.bs-dock__in{animation:pgRise var(--p-spatial-d) var(--p-spatial) backwards}
+.bs-main > .bs-card:nth-child(2){animation-delay:30ms}
+.bs-main > .bs-card:nth-child(3){animation-delay:60ms}
+.bs-main > .bs-card:nth-child(4){animation-delay:90ms}
+.bs-dock__in{animation-delay:60ms}
+@media (prefers-reduced-motion:reduce){
+  .bs-card,.bs-dock__in,.bs-x{animation-name:pgFade;animation-duration:150ms}
+  .bs-preb.is-down,.bs-pool.is-down,.bs-fac__h.is-down,.bs-more.is-down,.bs-x.is-down{transform:none}
+  .bs-cv,.bs-unf,.bs-pool__ck,.bs-fac__b{transition-property:opacity}
+  .bs-pool__ck,.bs-fac__b{transform:none}
+}
 </style>
 </head>
 <body>
@@ -6286,53 +6508,53 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
     </section>
 
     <!-- ============ BUILD ============ -->
+    <!-- Plume 2.16 · session builder: presets, where the questions come
+         from, the filters, how the block is run and timed, and a dock that
+         always says what Begin will start. Drawn by bsRender(); every later
+         change paints in place (bsPaint), so no control is rebuilt under
+         the finger. -->
     <section class="view" id="v-build">
-      <p class="eyebrow">Assemble <span class="rule"></span></p>
       <h2 class="vt">New session</h2>
-      <p class="sub">Pick a pool, narrow it down, choose how you want to be tested.</p>
-      <div class="build">
-        <div>
-          <p class="eyebrow">Pool</p>
-          <div class="poolgrid" id="poolGrid"></div>
+      <div class="bs" id="bs">
+        <div class="bs-main">
+          <section class="bs-card" aria-labelledby="bsPreH">
+            <div class="bs-card__h"><h3 id="bsPreH">Start from</h3></div>
+            <div class="bs-pre" id="bsPre" role="group" aria-label="Presets"></div>
+            <div class="bs-jump" id="bsJump"></div>
+          </section>
 
-          <div id="facetWrap"></div>
-          <div class="row" style="margin-top:12px">
-            <button class="btn ghost sm" id="moreFacets">More ways to slice this</button>
-            <span class="tiny muted" id="facetNote"></span>
-          </div>
+          <section class="bs-card" aria-labelledby="bsPoolH">
+            <div class="bs-card__h"><h3 id="bsPoolH">Questions from</h3></div>
+            <div class="bs-pools" id="bsPools" role="radiogroup" aria-labelledby="bsPoolH"></div>
+            <div class="bs-unf" id="bsPoolMoreW"><div><div class="bs-pools bs-pools--more" id="bsPoolsMore" role="radiogroup" aria-label="More pools"></div></div></div>
+            <button type="button" class="bs-more pl-press" id="bsPoolMore" aria-expanded="false" aria-controls="bsPoolMoreW"><span>Housekeeping pools</span><svg class="ic bs-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+          </section>
 
-          <p class="eyebrow" style="margin-top:24px">Mode</p>
-          <div class="row">
-            <div class="seg" id="modeSeg">
-              <button data-mode="tutor" class="on">Tutor</button>
-              <button data-mode="test">Exam</button>
+          <section class="bs-card" aria-labelledby="bsFacH">
+            <div class="bs-card__h"><div><h3 id="bsFacH">Narrow it down</h3><p id="bsFacSub">Every question in the pool. Pick any values to keep only those.</p></div>
+              <button type="button" class="pl-btn pl-btn--text pl-press bs-clr" id="bsClear">Reset</button></div>
+            <div class="bs-facs" id="bsFacs"></div>
+            <button type="button" class="bs-more pl-press" id="bsFacMore" aria-expanded="false"><span>More ways to slice this</span><svg class="ic bs-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>
+          </section>
+
+          <section class="bs-card" aria-labelledby="bsHowH">
+            <div class="bs-card__h"><h3 id="bsHowH">How you are tested</h3></div>
+            <div class="bs-rows" id="bsHow"></div>
+          </section>
+        </div>
+
+        <aside class="bs-dock" id="bsDock" aria-label="Session summary">
+          <div class="bs-dock__in">
+            <div class="bs-dock__sum">
+              <span class="bs-dock__n"><span class="bs-dock__nw"><span id="bsN">0</span></span><span class="bs-u" id="bsNu">questions</span></span>
+              <span class="bs-dock__l" id="bsLine"></span>
             </div>
-            <span class="tiny muted" id="modeHint">Tutor: answer is revealed one question at a time.</span>
+            <dl class="bs-facts" id="bsFacts"></dl>
+            <div class="bs-dock__chips" id="bsChips"></div>
+            <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press bs-go" id="startBtn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="bs-go__tri" d="M8 5.5v13l10.5-6.5z"/></svg><span>Begin</span></button>
+            <button type="button" class="pl-btn pl-btn--text pl-press bs-reset" id="resetFilters">Reset filters</button>
           </div>
-
-          <div class="row" style="margin-top:16px;align-items:flex-end">
-            <label class="fld" style="width:150px"><span>Questions</span><input type="number" id="cfgCount" min="1" value="20"></label>
-            <label class="fld" style="width:150px"><span>Seconds / question</span><input type="number" id="cfgSecs" min="0" value="90"></label>
-            <label class="fld" style="width:170px"><span>Order</span>
-              <select id="cfgOrder"><option value="random">Shuffled</option><option value="bank">Bank order</option><option value="oldest">Least recently seen</option></select>
-            </label>
-          </div>
-          <div class="row">
-            <label class="pill"><input type="checkbox" id="cfgShuffleCh" checked style="width:auto;margin-right:6px"> Shuffle answer choices</label>
-            <label class="pill"><input type="checkbox" id="cfgTimed" checked style="width:auto;margin-right:6px"> Timer on</label>
-            <label class="pill"><input type="checkbox" id="cfgConf" checked style="width:auto;margin-right:6px"> Ask my confidence</label>
-          </div>
-        </div>
-
-        <div class="card summary">
-          <p class="eyebrow">Ready</p>
-          <div class="line"><span>Matching questions</span><span id="sumMatch">0</span></div>
-          <div class="line"><span>Session length</span><span id="sumLen">0</span></div>
-          <div class="line"><span>Est. time</span><span id="sumTime">—</span></div>
-          <div class="line"><span>Mode</span><span id="sumMode">Tutor</span></div>
-          <button class="btn pri" id="startBtn" style="width:100%;margin-top:14px">Begin session</button>
-          <button class="btn ghost sm" id="resetFilters" style="width:100%;margin-top:6px">Reset filters</button>
-        </div>
+        </aside>
       </div>
     </section>
 
@@ -6550,7 +6772,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.75</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.76</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6606,7 +6828,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.75 · sharded store</span>
+        <span class="chip" id="verChip">v6.76 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7723,7 +7945,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.75';
+const APP_VERSION='6.76';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -11284,77 +11506,263 @@ function chipList(el,items,set){
   el.innerHTML=items.map(i=>`<button class="pill${set.has(i.k)?' on':''}" data-k="${esc(i.k)}">${esc(i.k)} <span class="n">${i.n}</span></button>`).join('')||'<span class="tiny muted">Nothing here yet.</span>';
   el.onclick=ev=>{const b=ev.target.closest('.pill');if(!b)return;const k=b.dataset.k;set.has(k)?set.delete(k):set.add(k);b.classList.toggle('on');updateSummary()};
 }
+/* ---------- Plume 2.16 · session builder ----------
+   The setup lives in DB.settings.build: this device's own, like every
+   setting outside SHARED_SETTINGS, so it syncs to this device's file and
+   the builder opens as it was left. startSession reads bld(), never the
+   screen, so every other way in (Due review, Weakest system, Practise these)
+   starts with the same block size, timing and order. */
+const BLD_PACE=90;                            /* Step 1: 40 questions in 60 minutes */
+const BLD_DEF={mode:'tutor',count:20,timing:'q',secs:90,block:'pace',mins:60,onEnd:'end',order:'random',shuffle:true,conf:true};
+function bld(){
+  const s=DB.settings;if(!s.build||typeof s.build!=='object')s.build={};
+  const b=s.build;for(const k in BLD_DEF)if(b[k]===undefined||b[k]===null)b[k]=BLD_DEF[k];
+  F.mode=b.mode;return b;
+}
+/* how many a session takes from m matching questions (count 0 = all of them) */
+function bldLen(m){const b=bld();return Math.max(0,Math.min(b.count>0?b.count:m,m))}
+/* the whole block's allowance in seconds, 0 when the block is not timed */
+function bldLimit(n){const b=bld();if(b.timing!=='block'||!n)return 0;
+  return b.block==='pace'?n*BLD_PACE:Math.max(1,b.mins|0)*60}
+function bldSecs(){const b=bld();return b.timing==='q'?Math.max(0,b.secs|0):0}
+const BS_PRE=[
+  {id:'block',t:'Exam block',s:'40 in 1h \u00b7 exam',set:{mode:'test',count:40,timing:'block',block:'fixed',mins:60,onEnd:'end'}},
+  {id:'half', t:'Half block',s:'20 in 30m \u00b7 exam',set:{mode:'test',count:20,timing:'block',block:'fixed',mins:30,onEnd:'end'}},
+  {id:'tutor',t:'Tutor',     s:'20 \u00b7 1m 30s each',set:{mode:'tutor',count:20,timing:'q',secs:90}},
+  {id:'quick',t:'Quick ten', s:'10 \u00b7 untimed',set:{mode:'tutor',count:10,timing:'off'}}
+];
+const BS_POOLS=[['unused','Unseen'],['incorrect','Incorrect'],['due','Due review'],['flagged','Flagged'],['correct','Correct'],['all','Everything']];
+const BS_POOLS2=[['omitted','Omitted'],['repeat','Seen more than once'],['conflict','Key conflicts'],['unclassified','Needs classifying'],['unverified','Unverified answer'],['dupe','Possible duplicates']];
+const BS_HINT={tutor:'The answer and its explanation show after each question.',test:'No answers until the block ends, as on test day.'};
+const BS={open:{},poolMore:false,built:false};
+const bsNum=n=>Number(n).toLocaleString();
+const bsCk='<span class="pg-chip__ck" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></span>';
+function bsSeg(k,label,opts,v){return sxSegHTML({k:'bs-'+k,label,opts},v)}
+function bsStep(k,label,v,min,step){
+  return '<span class="sx-step"><button type="button" class="sx-stb pl-press" data-bsdn="'+k+'" aria-label="Fewer">'+SX_MINUS+'</button>'+
+    '<span class="sx-numw"><input type="number" inputmode="numeric" class="sx-num" data-bsnum="'+k+'" value="'+v+'" min="'+min+'" step="'+step+'" aria-label="'+esc(label)+'"></span>'+
+    '<button type="button" class="sx-stb pl-press" data-bsup="'+k+'" aria-label="More">'+SX_PLUS+'</button></span>';
+}
+function bsSw(k,t,s,on){
+  return '<label class="bs-row bs-sw pl-press">'+sxTx(esc(t),s?esc(s):'')+
+    '<span class="pl-sw"><input type="checkbox" role="switch" data-bssw="'+k+'"'+(on?' checked':'')+'><span class="pl-sw__t" aria-hidden="true">'+SX_CHECK+'</span></span></label>';
+}
+function bsPoolHTML(p){return '<button type="button" class="bs-pool pl-press" role="radio" aria-checked="false" data-pool="'+p[0]+'">'+
+  '<span class="bs-pool__t">'+esc(p[1])+'</span><span class="bs-pool__n">0</span>'+
+  '<span class="bs-pool__ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'}
+function bsFacHTML(f){
+  return '<div class="bs-fac" data-fk="'+f.key+'"><button type="button" class="bs-fac__h pl-press" aria-expanded="false" aria-controls="bsF-'+f.key+'">'+
+    '<span class="bs-fac__tx"><span class="bs-fac__t">'+esc(f.label)+'</span><span class="bs-fac__s">Any</span></span>'+
+    '<span class="bs-fac__b" aria-hidden="true">0</span>'+
+    '<svg class="ic bs-cv" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></button>'+
+    '<div class="bs-unf" id="bsF-'+f.key+'" inert><div><div class="bs-fac__in"></div></div></div></div>';
+}
+/* the questions in the pool that pass every filter but this one: what a
+   chip's count says is how many a tap on it would bring in */
+function bsFacCounts(f){
+  const m={};
+  DB.questions.forEach(q=>{
+    if(!inPool(q))return;
+    for(let i=0;i<FACETS.length;i++){const g=FACETS[i];if(g===f)continue;const set=F.sets[g.key];if(!set.size)continue;
+      const vals=facetValues(g,q);let hit=false;for(let j=0;j<vals.length;j++)if(set.has(vals[j])){hit=true;break}
+      if(!hit)return}
+    facetValues(f,q).forEach(v=>{m[v]=(m[v]||0)+1});
+  });
+  return m;
+}
+function bsFacBody(f){
+  const items=facetTally(f).filter(i=>i.k!=='—'||F.sets[f.key].has('—'));
+  const set=F.sets[f.key];
+  if(!items.length)return '<p class="bs-note">Nothing here yet.</p>';
+  return (items.length>10?'<label class="bs-find"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></svg><input type="search" data-bsfind="'+f.key+'" placeholder="Find in '+esc(f.label.toLowerCase())+'" autocomplete="off" aria-label="Find in '+esc(f.label)+'"></label>':'')+
+    '<div class="bs-fac__acts"><button type="button" class="pl-btn pl-btn--text pl-press" data-bsall="'+f.key+'">Select all</button>'+
+    '<button type="button" class="pl-btn pl-btn--text pl-press" data-bsnone="'+f.key+'">Clear</button></div>'+
+    '<div class="bs-chips'+(items.length>24?' is-long':'')+'">'+items.map(i=>'<button type="button" class="pg-chip bs-chip pl-press'+(set.has(i.k)?' on':'')+'" aria-pressed="'+set.has(i.k)+'" data-k="'+esc(i.k)+'">'+bsCk+
+      '<span class="bs-chip__t">'+esc(i.k)+'</span><span class="bs-chip__n">'+i.n+'</span></button>').join('')+'</div>';
+}
+function bsHowHTML(){
+  const b=bld();
+  return '<div class="bs-row bs-col"><span class="sx-t">Mode</span>'+bsSeg('mode','Mode',[['tutor','Tutor'],['test','Exam']],b.mode)+
+      '<p class="bs-note" id="bsModeHint">'+BS_HINT[b.mode]+'</p></div>'+
+    '<div class="bs-row bs-col"><div class="bs-row__top">'+sxTx('Questions','<span id="bsCountSub"></span>')+bsStep('count','Questions',b.count||1,1,5)+'</div>'+
+      '<div class="bs-qk" role="group" aria-label="Block size">'+[10,20,40,0].map(n=>'<button type="button" class="pg-chip pl-press" data-bscount="'+n+'" aria-pressed="false">'+bsCk+'<span>'+(n?n:'All')+'</span></button>').join('')+'</div></div>'+
+    '<div class="bs-row bs-col"><span class="sx-t">Timing</span>'+bsSeg('timing','Timing',[['off','Untimed'],['q','Per question'],['block','Block']],b.timing)+
+      '<div class="bs-tw"><div class="bs-unf" data-bstime="off"><div><p class="bs-note">No limit. The clock counts up on each question.</p></div></div>'+
+      '<div class="bs-unf" data-bstime="q"><div><div class="bs-sub">'+
+        '<div class="bs-row__top">'+sxTx('Seconds each')+bsStep('secs','Seconds per question',b.secs,5,5)+'</div><p class="bs-note bs-note--in">Exam pace is 90. When a question runs out, tutor shows its answer and exam moves to the next.</p></div></div></div>'+
+      '<div class="bs-unf" data-bstime="block"><div><div class="bs-sub">'+
+        '<div class="bs-row__top">'+sxTx('Minutes','<span id="bsLimSub"></span>')+bsStep('mins','Minutes for the block',b.mins,1,5)+'</div>'+
+        bsSw('pace','Exam pace','1m 30s a question, as on test day',b.block==='pace')+
+        '<div class="bs-row bs-col bs-row--in"><span class="sx-t">When time runs out</span>'+bsSeg('onEnd','When time runs out',[['end','End and grade'],['over','Keep going']],b.onEnd)+
+        '<p class="bs-note" id="bsEndHint"></p></div>'+
+      '</div></div></div></div></div>'+
+    '<div class="bs-row bs-col"><span class="sx-t">Order</span>'+bsSeg('order','Order',[['random','Shuffled'],['bank','Bank order'],['oldest','Oldest seen']],b.order)+'</div>'+
+    bsSw('shuffle','Shuffle answer choices','A different letter order each time',b.shuffle)+
+    bsSw('conf','Ask my confidence','How sure you are, before each answer',b.conf);
+}
 function renderBuild(){
-  const pc=poolCounts();
-  const pools=[['unused','Unseen',pc.unused],['incorrect','Incorrect',pc.incorrect],['flagged','Flagged',pc.flagged],['due','Due for review',pc.due],['correct','Correct',pc.correct],['omitted','Omitted',pc.omitted],['conflict','Key conflicts',pc.conflict],['unclassified','Needs classifying',pc.unclassified],['unverified','Unverified answer',pc.unverified],['repeat','Seen more than once',pc.repeat],['dupe','Possible duplicates',pc.dupe],['all','Everything',pc.all]];
-  /* Rewriting this grid on every tap threw away the very card the finger was
-     resting on, and with it the ripple and the tonal transition — the selection
-     snapped instead of moving. Same cards in the same order means we can update
-     them in place and let the motion finish. */
-  const pg=$('#poolGrid');
-  const inPlace=pg.children.length===pools.length&&pools.every(function(p,i){return pg.children[i].dataset&&pg.children[i].dataset.pool===p[0]});
-  if(inPlace){
-    pools.forEach(function(p,i){
-      const b=pg.children[i];
-      b.classList.toggle('on',F.pool===p[0]);
-      const n=b.querySelector('.n'),txt=p[2]+' question'+(p[2]===1?'':'s');
-      if(n&&n.textContent!==txt)n.textContent=txt;
-    });
-  }else{
-    pg.innerHTML=pools.map(function(p){return `<button class="pool${F.pool===p[0]?' on':''}" data-pool="${p[0]}"><div class="t">${p[1]}</div><div class="n">${p[2]} question${p[2]===1?'':'s'}</div></button>`}).join('');
+  const root=$('#bs');if(!root)return;
+  bld();
+  if(!BS.built){
+    $('#bsPools').innerHTML=BS_POOLS.map(bsPoolHTML).join('');
+    $('#bsPoolsMore').innerHTML=BS_POOLS2.map(bsPoolHTML).join('');
+    $('#bsHow').innerHTML=bsHowHTML();
+    BS.built=true;
   }
-  $('#poolGrid').onclick=e=>{const b=e.target.closest('[data-pool]');if(!b)return;F.pool=b.dataset.pool;renderBuild()};
-  renderFacets();
-  updateSummary();
+  /* the presets and the jumps say what they would start, so they follow the bank */
+  $('#bsPre').innerHTML=BS_PRE.map(p=>'<button type="button" class="bs-preb pl-press" data-bspre="'+p.id+'" aria-pressed="false">'+
+    '<span class="bs-preb__t">'+esc(p.t)+'</span><span class="bs-preb__s">'+esc(p.s)+'</span>'+
+    '<span class="bs-pool__ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>').join('');
+  const pc=poolCounts(),wk=groupPerf('system').filter(r=>r.n>=3&&r.k!==UNCLASSIFIED);
+  $('#bsJump').innerHTML=(pc.due?'<button type="button" class="pl-btn pl-btn--tonal pl-press" data-bsjump="due">'+sxIc('i-review')+'<span>Review what’s due · '+bsNum(pc.due)+'</span></button>':'')+
+    (wk.length?'<button type="button" class="pl-btn pl-btn--tonal pl-press" data-bsjump="weak">'+sxIc('i-stats')+'<span>Drill weakest · '+esc(wk[0].k)+'</span></button>':'');
+  /* the filter rows: the four everyday ones, then the rest behind More */
+  const shown=FACETS.filter(f=>!f.adv),adv=FACETS.filter(f=>f.adv);
+  $('#bsFacs').innerHTML=shown.map(bsFacHTML).join('')+
+    '<div class="bs-unf" id="bsFacAdv"'+(F.adv?'':' inert')+'><div><div class="bs-facs">'+adv.map(bsFacHTML).join('')+'</div></div></div>';
+  $('#bsFacAdv').classList.toggle('is-open',!!F.adv);
+  Object.keys(BS.open).forEach(k=>{if(BS.open[k])bsFacOpen(k,true,true)});
+  bsPaint(true);
 }
-function renderFacets(){
-  const wrap=$('#facetWrap');if(!wrap)return;
-  const shown=FACETS.filter(f=>!f.adv||F.adv||F.sets[f.key].size);
-  wrap.innerHTML=shown.map(f=>{
-    const items=facetTally(f).filter(i=>i.k!=='—'||F.sets[f.key].has('—'));
-    return `<p class="eyebrow" style="margin-top:20px">${esc(f.label)}${F.sets[f.key].size?` <span class="rule"></span> <span class="tiny">${F.sets[f.key].size} selected</span>`:''}</p>
-    <div class="row" style="margin-bottom:8px">
-      <button class="btn ghost sm" data-all="${f.key}">Select all</button>
-      <button class="btn ghost sm" data-none="${f.key}">Clear</button>
-    </div>
-    <div class="filterbox" data-facet="${f.key}">${items.map(i=>`<button class="pill${F.sets[f.key].has(i.k)?' on':''}" data-k="${esc(i.k)}">${esc(i.k)} <span class="n">${i.n}</span></button>`).join('')||'<span class="tiny muted">Nothing here yet.</span>'}</div>`;
-  }).join('');
-  const hidden=FACETS.length-shown.length;
-  const mf=$('#moreFacets');
-  if(mf)mf.textContent=F.adv?'Fewer filters':(hidden?`More ways to slice this (${hidden})`:'More ways to slice this');
-  const fn=$('#facetNote');
-  if(fn)fn.textContent=activeFacetCount()?`${activeFacetCount()} filter group${activeFacetCount()===1?'':'s'} active`:'';
+function bsFacOpen(k,open,now){
+  const row=$('#bs .bs-fac[data-fk="'+k+'"]');if(!row)return;
+  const h=row.querySelector('.bs-fac__h'),u=row.querySelector('.bs-unf'),inn=row.querySelector('.bs-fac__in');
+  BS.open[k]=open;
+  if(open&&!inn.childElementCount){inn.innerHTML=bsFacBody(FACET_BY[k]);bsFacPaint(row)}
+  if(now)u.style.transition='none';
+  h.setAttribute('aria-expanded',String(open));row.classList.toggle('is-open',open);u.classList.toggle('is-open',open);
+  open?u.removeAttribute('inert'):u.setAttribute('inert','');
+  if(now){u.offsetHeight;u.style.transition=''}
 }
-$('#facetWrap').addEventListener('click',e=>{
-  const box=e.target.closest('[data-facet]');
-  if(box){const b=e.target.closest('.pill');if(!b)return;
-    const set=F.sets[box.dataset.facet],k=b.dataset.k;
-    set.has(k)?set.delete(k):set.add(k);b.classList.toggle('on');updateSummary();return}
-  const a=e.target.closest('[data-all]');
-  if(a){const f=FACET_BY[a.dataset.all];facetTally(f).forEach(i=>F.sets[f.key].add(i.k));renderFacets();updateSummary();return}
-  const n=e.target.closest('[data-none]');
-  if(n){F.sets[n.dataset.none].clear();renderFacets();updateSummary();return}
-});
-$('#moreFacets').onclick=()=>{F.adv=!F.adv;renderFacets()};
-function updateSummary(){
-  const m=matching();
-  const want=clamp(parseInt($('#cfgCount').value||'0',10)||0,1,Math.max(1,m.length));
-  $('#sumMatch').textContent=m.length;
-  $('#sumLen').textContent=Math.min(want,m.length);
-  const secs=parseInt($('#cfgSecs').value||'0',10)||0;
-  $('#sumTime').textContent=secs&&$('#cfgTimed').checked?fmtLong(Math.min(want,m.length)*secs):'untimed';
-  $('#sumMode').textContent=F.mode==='test'?'Exam':'Tutor';
-  $('#startBtn').disabled=m.length===0;
-  const fn=$('#facetNote');
-  if(fn)fn.textContent=activeFacetCount()?`${activeFacetCount()} filter group${activeFacetCount()===1?'':'s'} active`:'';
+/* one filter row's words, badge and chip counts, painted in place */
+function bsFacPaint(row){
+  const f=FACET_BY[row.dataset.fk],set=F.sets[f.key],n=set.size;
+  const sub=!n?'Any':(()=>{const a=[...set];return a.length<=2?a.join(', '):a.slice(0,2).join(', ')+' +'+(a.length-2)})();
+  const s=row.querySelector('.bs-fac__s');if(s.textContent!==sub)sxSwap(s,esc(sub));
+  const bd=row.querySelector('.bs-fac__b');bd.textContent=n;row.classList.toggle('has-sel',n>0);
+  if(!BS.open[f.key]&&!row.querySelector('.bs-chip'))return;
+  const m=bsFacCounts(f);
+  row.querySelectorAll('.bs-chip').forEach(c=>{
+    const on=set.has(c.dataset.k),v=m[c.dataset.k]||0,nn=c.querySelector('.bs-chip__n');
+    c.classList.toggle('on',on);c.setAttribute('aria-pressed',String(on));
+    if(nn.textContent!==String(v))nn.textContent=v;
+    c.classList.toggle('is-zero',!v&&!on);
+  });
 }
-$('#modeSeg').onclick=e=>{const b=e.target.closest('[data-mode]');if(!b)return;F.mode=b.dataset.mode;
-  $$('#modeSeg button').forEach(x=>x.classList.toggle('on',x===b));
-  $('#modeHint').textContent=F.mode==='tutor'?'Tutor: answer is revealed one question at a time.':'Exam: no feedback until you end the session.';
-  updateSummary()};
-['cfgCount','cfgSecs','cfgTimed','cfgOrder'].forEach(id=>$('#'+id).addEventListener('input',updateSummary));
-$('#resetFilters').onclick=()=>{clearFacets();F.pool='unused';renderBuild()};
-$('#startBtn').onclick=()=>startSession();
+function bsPresetOn(p){const b=bld();return Object.keys(p.set).every(k=>b[k]===p.set[k])}
+function bsPaint(all){
+  const root=$('#bs');if(!root||!BS.built)return;
+  const b=bld(),pc=poolCounts(),m=matching(),M=m.length,n=bldLen(M),lim=bldLimit(n);
+  /* presets */
+  root.querySelectorAll('[data-bspre]').forEach(x=>{const on=bsPresetOn(BS_PRE.find(p=>p.id===x.dataset.bspre));
+    x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});
+  /* pools: the chosen pool is always in sight, so a housekeeping pool opens its fold */
+  root.querySelectorAll('[data-pool]').forEach(x=>{const on=F.pool===x.dataset.pool,c=pc[x.dataset.pool]||0,nn=x.querySelector('.bs-pool__n');
+    x.classList.toggle('on',on);x.setAttribute('aria-checked',String(on));x.classList.toggle('is-zero',!c);
+    const t=bsNum(c);if(nn.textContent!==t)nn.textContent=t});
+  if(BS_POOLS2.some(p=>p[0]===F.pool))BS.poolMore=true;
+  bsUnf($('#bsPoolMoreW'),BS.poolMore);
+  const pm=$('#bsPoolMore');pm.setAttribute('aria-expanded',String(BS.poolMore));pm.classList.toggle('is-open',BS.poolMore);
+  /* filters */
+  const act=activeFacetCount(),advAct=FACETS.filter(f=>f.adv&&F.sets[f.key].size).length;
+  root.querySelectorAll('.bs-fac').forEach(bsFacPaint);
+  sxSwap($('#bsFacSub'),act?act+' filter group'+(act===1?'':'s')+' active. A question must match each group, any value within it.':'Every question in the pool. Pick any values to keep only those.');
+  $('#bsClear').classList.toggle('is-on',!!act||F.pool!=='unused');
+  const fm=$('#bsFacMore');fm.setAttribute('aria-expanded',String(!!F.adv));fm.classList.toggle('is-open',!!F.adv);
+  sxSwap(fm.querySelector('span'),F.adv?'Fewer filters':'More ways to slice this'+(advAct?' · '+advAct+' active':' ('+FACETS.filter(f=>f.adv).length+')'));
+  /* how */
+  const seg=(k,v)=>{const g=root.querySelector('[data-seg="bs-'+k+'"]');if(g&&g.querySelector('[aria-checked="true"]')?.dataset.v!==v)sxSegMark(g,v)};
+  seg('mode',b.mode);seg('timing',b.timing);seg('onEnd',b.onEnd);seg('order',b.order);
+  sxSwap($('#bsModeHint'),BS_HINT[b.mode]);
+  root.querySelectorAll('[data-bstime]').forEach(u=>bsUnf(u,u.dataset.bstime===b.timing));
+  const num=(k,v)=>{const i=root.querySelector('[data-bsnum="'+k+'"]');if(i&&document.activeElement!==i&&String(i.value)!==String(v)){const o=i.value;i.value=v;sxRoll(i,o,+v>+o)}};
+  num('count',b.count>0?b.count:Math.max(1,M));num('secs',b.secs);num('mins',b.block==='pace'?Math.max(1,Math.round(lim/60)):b.mins);
+  root.querySelectorAll('[data-bscount]').forEach(x=>{const on=+x.dataset.bscount===b.count;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});
+  sxSwap($('#bsCountSub'),b.count>0?(b.count>M?'Only '+bsNum(M)+' match, so the block takes them all':'of '+bsNum(M)+' matching'):'Every matching question, '+bsNum(M));
+  sxSwap($('#bsLimSub'),b.block==='pace'?fmtT(lim)+' for '+n+' question'+(n===1?'':'s'):(n?fmtT(lim)+', about '+fmtT(Math.round(lim/n))+' a question':fmtT(lim)));
+  root.querySelectorAll('[data-bssw]').forEach(c=>{const v=c.dataset.bssw==='pace'?b.block==='pace':!!b[c.dataset.bssw];if(c.checked!==v)c.checked=v});
+  sxSwap($('#bsEndHint'),b.onEnd==='end'?'The block is graded the moment the clock reaches zero, as on test day.':'The clock turns to overtime and counts on. The report says how far over you went.');
+  /* the dock: what Begin will start */
+  const dn=$('#bsN'),old=dn.textContent;
+  if(old!==bsNum(n)){dn.textContent=bsNum(n);if(!all)bsRollEl(dn,old,n>(+old.replace(/\D/g,'')||0))}
+  sxSwap($('#bsNu'),n===1?'question':'questions');
+  const tm=b.timing==='block'?fmtT(lim)+' block':b.timing==='q'?fmtT(bldSecs())+' each':'untimed';
+  sxSwap($('#bsLine'),M?esc((b.mode==='test'?'Exam':'Tutor')+' · '+tm+' · of '+bsNum(M)+' matching'):'No questions match. Loosen a filter or choose another pool.');
+  const est=b.timing==='block'?fmtT(lim)+' for the block':b.timing==='q'&&bldSecs()?'up to '+fmtT(n*bldSecs()):'Untimed';
+  const facts=[['Matching',bsNum(M)],['Session length',bsNum(n)],['Time',est],['Mode',b.mode==='test'?'Exam':'Tutor']];
+  const fd=$('#bsFacts');
+  if(fd.childElementCount!==facts.length)fd.innerHTML=facts.map(x=>'<div><dt>'+x[0]+'</dt><dd></dd></div>').join('');
+  [...fd.querySelectorAll('dd')].forEach((d,i)=>{if(d.textContent!==facts[i][1])sxSwap(d,esc(facts[i][1]))});
+  /* every active filter value, each with its own × */
+  const chips=[];FACETS.forEach(f=>F.sets[f.key].forEach(v=>chips.push([f.key,v,f.label])));
+  const ch=$('#bsChips'),key=chips.map(c=>c[0]+'\u0001'+c[1]).join('\u0002');
+  if(ch.dataset.key!==key){ch.dataset.key=key;
+    ch.innerHTML=chips.map(c=>'<button type="button" class="bs-x pl-press" data-bsx="'+c[0]+'" data-k="'+esc(c[1])+'" aria-label="Remove '+esc(c[2]+': '+c[1])+'"><span>'+esc(c[1])+'</span>'+sxIc('i-close')+'</button>').join('')}
+  const go=$('#startBtn');go.disabled=!M;go.setAttribute('aria-label',M?'Begin a session of '+n+' question'+(n===1?'':'s'):'Begin: no questions match');
+}
+function bsUnf(u,open){if(!u)return;u.classList.toggle('is-open',open);open?u.removeAttribute('inert'):u.setAttribute('inert','')}
+/* the dock's number rolls the way the count went */
+function bsRollEl(el,old,up){
+  if(Motion.reduced||!el.getClientRects().length)return;
+  const w=el.parentNode,g=document.createElement('span');g.className='bs-ghost';g.textContent=old;g.setAttribute('aria-hidden','true');
+  w.appendChild(g);const d=up?-1:1,sp=PL('spatial-fast');
+  g.animate([{transform:'none',opacity:1},{transform:'translateY('+(d*60)+'%)',opacity:0}],{duration:140,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>g.remove(),()=>g.remove());
+  el.animate([{transform:'translateY('+(-d*60)+'%)',opacity:0},{transform:'none',opacity:1}],{duration:sp.d,easing:sp.e});
+}
+function bsSet(patch){Object.assign(bld(),patch);save();bsPaint()}
+function bsReset(){clearFacets();F.pool='unused';
+  $$('#bs .bs-find input').forEach(i=>{i.value='';bsFind(i)});bsPaint()}
+function bsFind(inp){
+  const q=inp.value.trim().toLowerCase(),box=inp.closest('.bs-fac__in');if(!box)return;
+  box.querySelectorAll('.bs-chip').forEach(c=>{c.hidden=!!q&&c.dataset.k.toLowerCase().indexOf(q)<0});
+}
+(function(){
+  const root=$('#bs');if(!root)return;
+  root.addEventListener('click',e=>{
+    const t=e.target;let x;
+    if((x=t.closest('[data-bspre]'))){const p=BS_PRE.find(p=>p.id===x.dataset.bspre);if(p)bsSet(Object.assign({},p.set));return}
+    if((x=t.closest('[data-bsjump]'))){x.dataset.bsjump==='due'?startDueReview():drillWeakest();return}
+    if((x=t.closest('[data-pool]'))){if(F.pool===x.dataset.pool)return;F.pool=x.dataset.pool;
+      /* the tile answers on this frame; the counts it changes follow */
+      root.querySelectorAll('[data-pool]').forEach(y=>{const on=y===x;y.classList.toggle('on',on);y.setAttribute('aria-checked',String(on))});
+      requestAnimationFrame(()=>bsPaint());return}
+    if(t.closest('#bsPoolMore')){BS.poolMore=!BS.poolMore||BS_POOLS2.some(p=>p[0]===F.pool);bsPaint();return}
+    if(t.closest('#bsFacMore')){F.adv=!F.adv;bsUnf($('#bsFacAdv'),F.adv);bsPaint();return}
+    if((x=t.closest('.bs-fac__h'))){const k=x.closest('.bs-fac').dataset.fk;bsFacOpen(k,!BS.open[k]);return}
+    if((x=t.closest('.bs-chip'))){const k=x.closest('.bs-fac').dataset.fk,set=F.sets[k],v=x.dataset.k;
+      set.has(v)?set.delete(v):set.add(v);x.classList.toggle('on',set.has(v));x.setAttribute('aria-pressed',String(set.has(v)));
+      requestAnimationFrame(()=>bsPaint());return}
+    if((x=t.closest('[data-bsall]'))){const f=FACET_BY[x.dataset.bsall];facetTally(f).forEach(i=>F.sets[f.key].add(i.k));bsPaint();return}
+    if((x=t.closest('[data-bsnone]'))){F.sets[x.dataset.bsnone].clear();bsPaint();return}
+    if((x=t.closest('[data-bsx]'))){F.sets[x.dataset.bsx].delete(x.dataset.k);bsPaint();return}
+    if(t.closest('#bsClear')||t.closest('#resetFilters')){bsReset();return}
+    if((x=t.closest('[data-bscount]'))){bsSet({count:+x.dataset.bscount});return}
+    if((x=t.closest('[data-seg^="bs-"] [data-v]'))){const g=x.closest('[data-seg]'),k=g.dataset.seg.slice(3);
+      if(x.getAttribute('aria-checked')==='true')return;sxSegMark(g,x.dataset.v);bsSet({[k]:x.dataset.v});return}
+    if((x=t.closest('[data-bsup],[data-bsdn]'))){
+      const k=x.dataset.bsup||x.dataset.bsdn,i=root.querySelector('[data-bsnum="'+k+'"]'),b=bld();
+      const st=parseFloat(i.step)||1,mn=parseFloat(i.min)||1,o=parseInt(i.value||'0',10)||0;
+      let nv=x.dataset.bsup?(Math.floor(o/st)+1)*st:(Math.ceil(o/st)-1)*st;nv=Math.max(mn,nv);
+      if(k==='count'&&o<st&&x.dataset.bsup)nv=st;
+      if(nv===o)return;i.value=nv;sxRoll(i,o,nv>o);
+      bsSet(k==='mins'?{mins:nv,block:'fixed'}:{[k]:nv});return}
+    if(t.closest('#startBtn')){startSession();return}
+  });
+  root.addEventListener('input',e=>{
+    const t=e.target;
+    if(t.dataset.bsnum){const v=parseInt(t.value||'0',10);if(!(v>0))return;const k=t.dataset.bsnum;
+      Object.assign(bld(),k==='mins'?{mins:v,block:'fixed'}:{[k]:v});save();bsPaint();return}
+    if(t.dataset.bsfind){bsFind(t);return}
+  });
+  root.addEventListener('change',e=>{
+    const t=e.target;
+    if(t.dataset.bssw){const k=t.dataset.bssw;
+      if(k==='pace'){const b=bld(),lim=bldLimit(bldLen(matching()));bsSet(t.checked?{block:'pace'}:{block:'fixed',mins:Math.max(1,Math.round(lim/60)||b.mins)})}
+      else bsSet({[k]:t.checked});return}
+    if(t.dataset.bsnum){bsPaint();return}
+  });
+})();
+/* the session builder used to read these off its own inputs */
 /* The dashboard and the review queue used to carry these as buttons of their
    own. They are now what the floating button and its menu run, so they live
    here as named functions rather than as handlers bound to markup. */
@@ -11377,17 +11785,19 @@ function startIds(ids,label){
 function startSession(label){
   const m=matching();
   if(!m.length)return toast('No questions match those filters.');
+  const b=bld();
   let list=m.slice();
-  const ord=$('#cfgOrder').value;
-  if(ord==='random')list.sort(()=>Math.random()-.5);
-  else if(ord==='oldest')list.sort((a,b)=>{const la=lastAttempt(a.id),lb=lastAttempt(b.id);return (la?la.ts:0)-(lb?lb.ts:0)});
-  const n=clamp(parseInt($('#cfgCount').value||'20',10)||20,1,list.length);
-  list=list.slice(0,n);
-  const shuffle=$('#cfgShuffleCh').checked;
+  if(b.order==='random')list.sort(()=>Math.random()-.5);
+  else if(b.order==='oldest')list.sort((a,b)=>{const la=lastAttempt(a.id),lb=lastAttempt(b.id);return (la?la.ts:0)-(lb?lb.ts:0)});
+  list=list.slice(0,Math.max(1,bldLen(list.length)));
+  const shuffle=!!b.shuffle,limit=bldLimit(list.length);
+  /* limit: the whole block's allowance in seconds (v6.76). The session bar
+     counts it down from the session's own elapsed time, so a pause stops it
+     and any device picks it up where it stood. */
   const s={
     id:uid(),ts:Date.now(),status:'live',heart:Date.now(),idx:0,elapsed:0,
-    config:{mode:F.mode,secs:$('#cfgTimed').checked?(parseInt($('#cfgSecs').value||'0',10)||0):0,
-      conf:$('#cfgConf').checked,label:label||poolLabel(),pool:F.pool},
+    config:Object.assign({mode:b.mode,secs:bldSecs(),conf:!!b.conf,label:label||poolLabel(),pool:F.pool},
+      limit?{limit:limit,onEnd:b.onEnd==='over'?'over':'end'}:{}),
     order:list.map(q=>q.id),items:{}
   };
   list.forEach(q=>{
@@ -11563,6 +11973,11 @@ function markAns(it){if(!S||S.review||!it)return;it.ansMs=(it.timeMs||0)+(qEnter
 function startTick(){
   clearInterval(tickT);qEnter=Date.now();
   const it0=curIt();
+  /* v6.76 — a timed block: one allowance for the whole session, counted down
+     from its own elapsed time (every question's time, so a pause stops it and
+     another device resumes it where it stood). It replaces the question clock
+     in the bar for the whole session, explanations included. */
+  if(blockLim()){paintBlock();tickT=setInterval(paintBlock,1000);return}
   const secs=(S.review||(S.config.mode==='tutor'&&it0&&it0.submitted))?0:S.config.secs;
   /* v6.2 — the allowance belongs to the question, not to the visit. It used to
      restart in full every time the question was opened, so a tap on the strip,
@@ -11589,6 +12004,41 @@ function timeUp(){
   if(S.config.mode==='tutor'&&!curIt().submitted){submitAnswer(true)}
   else if(cur<S.order.length-1){next()}
   else{toast('Time is up on the last question.')}
+}
+/* ---------- the block clock (v6.76) ----------
+   config.limit is the block's allowance in seconds, config.onEnd what
+   happens at zero: 'end' grades the block there and then, as on test day;
+   'over' keeps going and the clock counts the overtime. */
+function blockLim(){return S&&!S.review&&S.config&&S.config.limit>0?S.config.limit:0}
+function blockLeft(){return blockLim()-((S.elapsed||0)+(qEnter?Date.now()-qEnter:0))/1000}
+let BLOCK_WARNED={};
+function paintBlock(){
+  if(!S||!blockLim())return;
+  const el=$('#pTimer'),left=blockLeft(),over=left<=0;
+  if(over&&S.config.onEnd!=='over'){el.textContent=fmtT(0);blockUp();return}
+  /* minutes only while ten or more are left (or over), seconds for the last
+     ten: calmer to work beside, and short enough for the phone's bar */
+  const sec=over?Math.floor(-left):Math.ceil(left),shown=sec>=600?Math.floor(sec/60)*60:sec;
+  el.textContent=(over?'+':'')+fmtT(shown);
+  el.classList.remove('warn');el.classList.toggle('low',!over&&left<=300);el.classList.toggle('over',over);
+  el.setAttribute('aria-label',over?'Over the block time by '+fmtT(Math.floor(-left)):'Block time left: '+fmtT(Math.ceil(left)));
+  /* the two warnings a proctor would give, once each, only when crossed */
+  const w=BLOCK_WARNED[S.id]||(BLOCK_WARNED[S.id]={});
+  if(w.first===undefined)w.first=left;
+  [[300,'5 minutes left in this block.'],[60,'1 minute left in this block.']].forEach(([t,msg])=>{
+    if(!w[t]&&left<=t&&left>t-3&&w.first>t){w[t]=1;toast(msg)}});
+  if(over&&!w.over&&w.first>0){w.over=1;toast('Time is up. You are in overtime; the report will show by how much.')}
+}
+/* time is up and the block ends: whatever is open over the player closes,
+   and the block is graded as it stands, unanswered questions as omitted */
+function blockUp(){
+  clearInterval(tickT);tickT=null;
+  if(!S||S.review||S.status==='done')return;
+  try{if(!$('#lbx').hidden)figCloseViewer()}catch(e){}
+  try{closeModal()}catch(e){}
+  try{closeTools()}catch(e){}
+  endSession();
+  toast('Time is up. The block is graded as it stood.');
 }
 /* 6.24 — the classification chips moved off the stem into the Tags sheet in
    the session menu: read before answering they can hand the question away, and
@@ -13153,6 +13603,13 @@ function rptRetry(s,ids,label,pool){
   ids.forEach(id=>{ns.items[id]={chosen:null,struck:[],correct:null,timeMs:0,ansMs:null,conf:null,miss:null,order:(Q_BY_ID[id].choices||[]).map(c=>c.label).sort(()=>Math.random()-.5),submitted:false}});
   DB.sessions.push(ns);save();$('#resultsPanel').classList.remove('on');openSession(ns);
 }
+/* a timed block says its allowance and how it ended (v6.76) */
+function blockChip(s){
+  const L=s.config&&s.config.limit;if(!(L>0))return '';
+  /* a block that ended itself at zero ran to time, never "over by 0s" */
+  const d=Math.round(L-(s.elapsed||0)/1000);
+  return `<span class="chip">${fmtT(L)} block</span><span class="chip ${d<0&&s.config.onEnd==='over'?'rose':''}">${d<0&&s.config.onEnd==='over'?'Over by '+fmtT(-d):d<=0?'Ran to time':fmtT(d)+' to spare'}</span>`;
+}
 function showResults(s){
   const ids=s.order.slice(),n=ids.length;
   const IT=id=>s.items[id]||{};
@@ -13342,7 +13799,7 @@ function showResults(s){
   $('#rBody').innerHTML=`
     <div class="rhead">
       <h2 class="vt">${esc(s.config.label||'Session')}</h2>
-      <div class="meta"><span class="chip">${esc(when)}</span><span class="chip ${s.config.mode==='test'?'acc':''}">${s.config.mode==='test'?'Exam':'Tutor'}</span><span class="chip">${n} question${n===1?'':'s'}</span>${secs?`<span class="chip">${fmtT(secs)} per question</span>`:''}</div>
+      <div class="meta"><span class="chip">${esc(when)}</span><span class="chip ${s.config.mode==='test'?'acc':''}">${s.config.mode==='test'?'Exam':'Tutor'}</span><span class="chip">${n} question${n===1?'':'s'}</span>${secs?`<span class="chip">${fmtT(secs)} per question</span>`:''}${blockChip(s)}</div>
     </div>
     ${hero}${fix}${leak}${conf}${history}${every}
     <div class="row rgo" style="margin-top:28px"><button class="btn ghost" id="rClose2">Back to Home</button></div>`;
@@ -13383,7 +13840,7 @@ function reviewSession(s,onlyWrong,startAt){
   const order=onlyWrong?s.order.filter(id=>!s.items[id].correct):s.order.slice();
   if(!order.length)return toast('Nothing to review here.');
   const clone={id:s.id,ts:s.ts,status:'done',idx:0,elapsed:0,review:true,
-    config:Object.assign({},s.config,{mode:'tutor',secs:0,conf:false,label:'Review'}),
+    config:Object.assign({},s.config,{mode:'tutor',secs:0,limit:0,conf:false,label:'Review'}),
     order,items:s.items};
   REVIEW=true;openSession(clone);
   if(startAt>0&&order.indexOf(s.order[startAt])>=0){cur=order.indexOf(s.order[startAt]);renderQ()}
@@ -15091,7 +15548,7 @@ function pgLedger(){
    each part (a legend row can carry both).
    ============================================================ */
 const PG_PK={};
-const pgBlockN=()=>clamp(parseInt(($('#cfgCount')||{}).value||'20',10)||20,1,999);
+const pgBlockN=()=>{const c=bld().count;return c>0?clamp(c,1,999):999};
 const pgQ=id=>{if(!PG.QM)PG.QM=new Map(DB.questions.map(q=>[q.id,q]));return PG.QM.get(id)};
 const pgQids=L=>[...new Set(L.map(a=>a.qid))];
 const pgxFig=(v,cap)=>`<div class="pgx__fig"><span class="pg-big">${v}</span>${cap?`<span class="pgx__cap">${cap}</span>`:''}</div>`;
@@ -16953,7 +17410,7 @@ function compDrawIndex(){
       <h1 class="cp-hero__name" id="cpName">${esc(label)}</h1>
       <div class="cp-count"><b>${ans}</b><span>of ${n} answered</span></div>
       ${compWaveHTML('Questions answered',ans,n)}
-      <dl class="cp-facts"><div><dt>Clock</dt><dd>${compClock(s.elapsed)}</dd></div><div><dt>Mode</dt><dd>${tutor?'Tutor':'Exam'}</dd></div>${tutor?`<div><dt>Correct</dt><dd>${sc.c}</dd></div>`:''}</dl>
+      <dl class="cp-facts"><div><dt>Clock</dt><dd>${compClock(s.elapsed)}</dd></div>${s.config.limit>0?`<div><dt>${s.config.limit*1000<(s.elapsed||0)?'Over by':'Block left'}</dt><dd>${compClock(Math.abs(s.config.limit*1000-(s.elapsed||0)))}</dd></div>`:''}<div><dt>Mode</dt><dd>${tutor?'Tutor':'Exam'}</dd></div>${tutor?`<div><dt>Correct</dt><dd>${sc.c}</dd></div>`:''}</dl>
       <div class="cp-live" id="compLive">${compLiveHTML(s)}</div>
       <button class="pl-btn pl-btn--m pl-btn--filled pl-press cp-follow" id="compFollow" type="button" data-compq="${now}"><svg class="ic"><use href="#i-play"/></svg>Open question ${now+1}</button>
     </section>
