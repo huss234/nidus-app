@@ -251,6 +251,19 @@ a recipe.
     pull is file order. Recent sessions sorts by `finishedAt`.
   The companion's "on question N" line clears when that device's beacon
   stops carrying a session (`COMP.live.dev`).
+- **Only a question that was on screen counts as studied** (v6.79).
+  Finishing a session grades what is left as omitted, but `finishSession`
+  writes an attempt only for an omitted question with time on screen
+  (`it.timeMs`), and none at all when nothing in the session was answered.
+  Until v6.79 it wrote one for every unanswered question: four blocks of 20
+  opened and finished on question 1 turned a day of 20 into "81 studied",
+  emptied Unseen and put never-seen questions on the review schedule.
+  `attGhosts()` names such attempts (nothing chosen, and either
+  `studyMs === 0` or a finished session with no answer whose attempts were
+  all written within 2 s), and `attDropGhosts()` removes them and replays
+  their schedule at start-up and after every pull, because another device's
+  log can carry them back. Any new path that writes attempts follows the
+  same rule.
 - **The sync pointer is written last.** `c.sha` (localStorage, written at
   once) promises "everything up to here is merged on this device". So the
   merged data goes to disk (`doSave()`) before the pointer moves, in every

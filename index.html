@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.78 -->
+<!-- Nidus — Personal Qbank · v6.79 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -7076,7 +7076,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.78</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.79</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7132,7 +7132,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.78 · sharded store</span>
+        <span class="chip" id="verChip">v6.79 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8249,7 +8249,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.78';
+const APP_VERSION='6.79';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -8675,6 +8675,36 @@ function srsReplay(atts){
   });
   r.due=(last||Date.now())+r.int*86400000;
   return r;
+}
+/* ---------- answers nobody gave (v6.79) ----------
+   Finishing grades what is left as omitted, but an omitted question is only
+   studied if it was on screen. Until v6.79 finishSession wrote an attempt for
+   every unanswered question, so a block of 20 opened and finished on question
+   1 logged 20 studied questions, took them out of Unseen and scheduled them
+   for review (a day of 20 read as 81). A ghost is an attempt with nothing
+   chosen that either had no time on screen, or belongs to a finished session
+   with no answer at all (every attempt blank, all written by the finish,
+   within 2 s). attDropGhosts() runs at start-up and after every pull, so a
+   copy that comes back from another device's log goes again. */
+function attGhosts(){
+  const by={};
+  for(const id in DB.stats)((DB.stats[id]||{}).attempts||[]).forEach(a=>{if(!a.sess)return;
+    const g=by[a.sess]||(by[a.sess]={ans:0,lo:Infinity,hi:0});
+    if(a.chosen!=null)g.ans++;g.lo=Math.min(g.lo,a.ts||0);g.hi=Math.max(g.hi,a.ts||0)});
+  const open={};(DB.sessions||[]).forEach(x=>{if(x&&x.status!=='done')open[x.id]=1});
+  if(S&&S.id&&S.status!=='done')open[S.id]=1;
+  const gone={};for(const k in by){const g=by[k];if(!g.ans&&!open[k]&&g.hi-g.lo<=2000)gone[k]=1}
+  return a=>a.chosen==null&&(a.studyMs===0||!!(a.sess&&gone[a.sess]));
+}
+function attDropGhosts(){
+  const ghost=attGhosts();let n=0;
+  for(const id in DB.stats){const s=DB.stats[id],at=(s&&s.attempts)||[];
+    if(!at.some(ghost))continue;
+    s.attempts=at.filter(a=>!ghost(a));n+=at.length-s.attempts.length;
+    const keep=DR_ON?s.attempts.filter(attOK):s.attempts;
+    s.srs=keep.length?srsReplay(keep):null;
+  }
+  return n;
 }
 /* called after any rule change: rebuild every schedule from what now counts */
 function applyDataRules(quiet){
@@ -12426,11 +12456,15 @@ function resumeSession(s,from){
 function finishSession(s){
   if(!s||s.status==='done')return s;
   if(S&&S.id===s.id)flushTime();
+  /* an omitted question is recorded only if it was on screen, and a session
+     finished with nothing answered records nothing (attGhosts, v6.79) */
+  const any=sessAnswered(s)>0;
   s.order.forEach(id=>{
     const it=s.items[id],q=Q_BY_ID[id];if(!it||!q)return;
     if(!it.submitted){
       const c=q.choices.find(x=>x.label===it.chosen);
       it.correct=!!(c&&c.isCorrect);it.submitted=true;
+      if(!any||(!it.chosen&&!it.timeMs))return;
       ST(id).attempts.push({ts:Date.now(),chosen:it.chosen,correct:it.correct,timeMs:it.ansMs!=null?it.ansMs:it.timeMs,studyMs:it.timeMs,conf:it.conf,sess:s.id,miss:null});
       srsUpdate(id,it.correct);
     }
@@ -12442,7 +12476,7 @@ function confirmFinish(id){
   const s=sessFind(id);if(!s||s.status==='done')return;
   const left=s.order.length-sessAnswered(s);
   modal('Finish this session?',
-    `<p class="tiny">${esc(s.config.label||'Session')} — ${s.order.length} question${s.order.length===1?'':'s'}, ${sessAnswered(s)} answered.${left?' The '+left+' left unanswered will be graded as omitted.':''}</p>
+    `<p class="tiny">${esc(s.config.label||'Session')} — ${s.order.length} question${s.order.length===1?'':'s'}, ${sessAnswered(s)} answered.${!sessAnswered(s)?' Nothing is answered yet, so finishing records no questions as studied.':left?' Of the '+left+' left unanswered, the ones you opened count as omitted; the ones you never opened are not recorded.':''}</p>
      <p class="tiny muted" style="margin-top:10px">Finishing is final. The session can be read, reviewed and retried afterwards, but it cannot be re-entered.</p>`,
     '<button class="btn ghost" data-close>Cancel</button><button class="btn pri" id="sessFinishGo">Finish and grade</button>');
   $('#sessFinishGo').onclick=()=>{closeModal();const d=finishSession(s);toast('Session finished.');showResults(d)};
@@ -20282,6 +20316,7 @@ const V3=(function(){
        is sorted once, here, before reindex(). */
     if(dirtyOrder)DB.questions.sort((x,y)=>(x.addedAt||0)-(y.addedAt||0));
     if(touchedQ.size)replayAll(Array.from(touchedQ));
+    if(attDropGhosts())changed=true;   /* v6.79: another device's log can carry them back */
     /* every question must have a stats row, exactly as before */
     (DB.questions||[]).forEach(q=>{if(!DB.stats[q.id])DB.stats[q.id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]}});
     if(changed)reindex();
@@ -21818,6 +21853,7 @@ const BRAND=(function(){
   (DB.sessions||[]).forEach(s=>{if(s&&s.status==='active'){s.status='paused';if(!s.heart)s.heart=s.ts||Date.now()}});
   /* sessions an older build pulled back in after they were deleted (v6.50 and earlier) */
   sessDropPurged();
+  if(attDropGhosts())save();           /* v6.79: omitted questions never opened, abandoned sessions */
   reindex();applySettings();renderPrompt();go('dash');
   requestAnimationFrame(()=>requestAnimationFrame(BRAND.play));
   /* the media engine binds any <img data-media> that appears anywhere, so no
