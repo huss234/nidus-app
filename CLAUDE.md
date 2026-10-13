@@ -249,6 +249,17 @@ a recipe.
   - *Lists of sessions sort by time, never by array position.* The array
     holds sessions in the order they reached this device, which after a
     pull is file order. Recent sessions sorts by `finishedAt`.
+  - *Deleting a session removes everything it wrote* (v6.80). Every delete
+    button goes through `sessDelete(id)` → `purgeData({sessions:[id]})`:
+    its answers (so every count, chart, streak and Unused that reads them),
+    the schedules they moved (replayed from what is left), the session, and
+    the stamped rule. Until v6.80 the Progress list only spliced the session
+    out of `DB.sessions`, so its answers kept counting. A session's rule
+    takes all its answers, even ones written after the delete
+    (`purgedAtt`; ids are never reused). A rule arriving by sync replays every
+    schedule (`replayAll()`) and closes the player if its session is the one
+    deleted (`sessGoneElsewhere`). Notes, flags, highlights and tags are the
+    user's own writing and stay. Never remove a session any other way.
   The companion's "on question N" line clears when that device's beacon
   stops carrying a session (`COMP.live.dev`).
 - **Only a question that was on screen counts as studied** (v6.79).
