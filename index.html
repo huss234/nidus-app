@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.76 -->
+<!-- Nidus — Personal Qbank · v6.77 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -6356,6 +6356,344 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   .bs-cv,.bs-unf,.bs-pool__ck,.bs-fac__b{transition-property:opacity}
   .bs-pool__ck,.bs-fac__b{transform:none}
 }
+/* ============================================================
+   Plume 2.17 · home
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.77). Home is a briefing read top to
+   bottom: now (an open block), today (the goal ring, the week, the
+   streak), up next (one recommended block and its alternatives),
+   the vital signs (form, accuracy, volume, time per question, each
+   with the 14 days behind it), the road to the exam, readiness,
+   where the marks are, the bank as a map, and the last sessions.
+   Large surfaces stay neutral; data is one ink with seed-turned
+   hues only where parts differ in kind. Every figure opens its peek
+   (the Progress sheet, #pgx), every part isolates in place.
+   ============================================================ */
+#v-dash{
+  --pg-k1:var(--md-primary);
+  --pg-k2:oklch(from var(--md-primary) l c calc(h + 75));
+  --pg-k3:oklch(from var(--md-primary) l c calc(h - 105));
+  --pg-k4:oklch(from var(--md-primary) l calc(c * .9) calc(h + 160));
+  --pg-ink2:color-mix(in oklab,var(--md-primary) 45%,var(--p-well));
+  padding-bottom:calc(120px + env(safe-area-inset-bottom));
+}
+/* Home brings its cards in on its own stagger, so the shell's view fade would only add empty frames */
+#v-dash.on{animation:none}
+.hm{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+@media (min-width:720px){.hm{gap:20px}}
+.hm-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:720px){.hm-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+.hm-grid > *{grid-column:1/-1;min-width:0}
+@media (min-width:720px){.hm-grid > .is-half{grid-column:auto}}
+.hm-card{background:var(--p-card);border-radius:var(--p-r-card);padding:20px;color:var(--md-on-surface);min-width:0}
+@media (min-width:600px){.hm-card{padding:24px}}
+.hm-card__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 16px}
+.hm-card__h h3{margin:0;font:500 18px/24px var(--m3-font);letter-spacing:0}
+.hm-card__h p{margin:2px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-foot{display:flex;justify-content:flex-end;margin:12px -12px -8px 0}
+.hm-num{font-family:var(--m3-font);font-variant-numeric:tabular-nums;font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;line-height:1}
+
+/* ---- masthead ---- */
+.hm-mast{padding:4px 2px 4px}
+.hm-mast__top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:36px}
+.hm-date{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.hm-exam{flex:none;display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 6px;border-radius:18px;
+  background:var(--p-card);font:600 13px/20px var(--m3-font);color:var(--md-on-surface)}
+.hm-exam__d{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;
+  background:var(--md-primary);color:var(--md-on-primary);font:600 12px/1 var(--m3-font);font-variant-numeric:tabular-nums}
+.hm-greet{margin:10px 0 0;font:450 34px/40px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.015em;color:var(--md-on-surface)}
+@media (min-width:600px){.hm-greet{font-size:44px;line-height:52px}}
+.hm-say{margin:8px 0 0;max-width:56ch;font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.hm-say b{font-weight:600;color:var(--md-on-surface)}
+
+/* ---- the open block ---- */
+#compCard:empty{display:none}
+.hm-sess{display:flex;flex-direction:column;gap:14px}
+.hm-sess + .hm-sess{margin-top:12px}
+.hm-sess__top{display:flex;align-items:center;gap:8px;min-height:24px;margin:-4px 0 0}
+.hm-state{display:inline-flex;align-items:center;gap:8px;height:28px;padding:0 12px 0 10px;border-radius:14px;
+  background:var(--p-well);font:600 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface)}
+.hm-state i{width:8px;height:8px;border-radius:4px;background:var(--md-on-surface-variant)}
+.hm-sess[data-st="live"] .hm-state i{background:var(--md-success)}
+.hm-sess[data-st="idle"] .hm-state i,.hm-sess[data-st="paused"] .hm-state i{background:var(--md-warning)}
+.hm-sess__top .pl-ib{margin:-8px -4px}
+.hm-sess__ago{margin-left:auto;font:500 13px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.hm-sess__row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.hm-sess__row h3{margin:0;font:500 22px/28px var(--m3-font);overflow-wrap:anywhere}
+.hm-sess__row p{margin:4px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-sess__n{flex:none;font-size:44px;font-weight:540}
+.hm-sess__n small{font-size:.42em;font-weight:500;font-variation-settings:"wdth" 100;letter-spacing:0;color:var(--md-on-surface-variant);margin-left:2px}
+.hm-wave{display:block;width:100%;height:16px;overflow:visible}
+.hm-wave__w{fill:none;stroke:var(--md-primary);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.hm-wave__t{fill:none;stroke:var(--p-well);stroke-width:4;stroke-linecap:round}
+.hm-wave__dot{fill:var(--md-primary)}
+.hm-sess[data-st="paused"] .hm-wave__w,.hm-sess[data-st="idle"] .hm-wave__w{stroke:var(--pg-ink2)}
+.hm-sess__acts{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.hm-sess__acts > .pl-btn{width:100%}
+.hm-sess__sub{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px}
+.hm-sess__sub .pl-btn{padding:0 8px}
+@media (min-width:600px){.hm-sess__acts{grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr);align-items:center}
+  .hm-sess__sub .pl-btn{--h:56px}}
+
+/* ---- today ---- */
+.hm-today{border-radius:var(--p-r-hero);padding:20px 20px 16px}
+@media (min-width:600px){.hm-today{padding:28px 32px 24px}}
+.hm-today__main{display:flex;align-items:center;gap:20px}
+@media (min-width:600px){.hm-today__main{gap:32px}}
+.hm-ring{position:relative;flex:none;width:148px;height:148px;border-radius:50%;display:grid;place-items:center}
+@media (min-width:600px){.hm-ring{width:184px;height:184px}}
+.hm-ring svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.hm-ring__g{transform:rotate(-90deg);transform-origin:100px 100px}
+.hm-ring__t,.hm-ring__w{fill:none;stroke-linecap:round}
+.hm-ring__t{stroke:var(--p-well);stroke-width:12;stroke-dasharray:var(--tl) 2;stroke-dashoffset:var(--to);
+  transition:stroke-dasharray var(--p-spatial-slow-d) var(--p-spatial-slow),stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.hm-ring__w{stroke:var(--md-primary);stroke-width:12;stroke-dasharray:1 2;stroke-dashoffset:var(--wo);
+  transition:stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow),opacity var(--p-effect-d) var(--p-effect)}
+.hm-ring__c{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;z-index:1}
+.hm-ring__c b{font-size:48px;font-weight:540}
+@media (min-width:600px){.hm-ring__c b{font-size:60px}}
+.hm-ring__c span{margin-top:4px;font:500 13px/16px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+/* the goal met: a soft burst in tertiary blooms behind the count, once */
+.hm-burst{position:absolute;inset:22%;background:var(--md-tertiary-container);
+  clip-path:path("M28 0C33 0 35 5 39 7S49 7 51 11S50 21 52 25S56 33 54 37S45 42 43 46S41 56 36 56S30 51 28 51S21 56 16 55S13 46 9 43S1 41 0 36S5 29 4 25S0 15 4 11S13 9 17 6S23 0 28 0Z");
+  transform:scale(var(--k,1));transform-origin:center}
+.hm-today.is-met .hm-ring__c b{color:var(--md-on-tertiary-container)}
+.hm-today.is-met .hm-ring__c span{color:var(--md-on-tertiary-container)}
+.hm-today__tx{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+/* wider: the count, the line and the day's figures sit as one block beside the ring */
+@media (min-width:720px){
+  .hm-today{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:32px;align-items:center}
+  .hm-today__main{display:contents}
+  .hm-ring{grid-row:1/3}
+  .hm-today__tx{align-self:end}
+  .hm-today > .hm-facts{grid-column:2;align-self:start;margin-top:16px}
+  .hm-today > .hm-week{grid-column:1/-1}
+}
+.hm-today__h{margin:2px 0 0;font:500 22px/28px var(--m3-font);letter-spacing:0;max-width:22ch}
+@media (min-width:600px){.hm-today__h{font-size:28px;line-height:36px}}
+.hm-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;width:100%;margin-top:18px;border-radius:var(--p-r-l);overflow:hidden}
+.hm-facts > span{display:flex;flex-direction:column;gap:4px;min-width:0;padding:12px 14px 10px;background:var(--p-well)}
+.hm-facts b{font-size:22px;font-weight:530;white-space:nowrap}
+.hm-facts em{font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);white-space:nowrap}
+@media (max-width:400px){.hm-facts > span{padding:10px 10px 8px}.hm-facts b{font-size:18px}.hm-ring{width:128px;height:128px}.hm-ring__c b{font-size:40px}}
+/* the week: seven pebbles, one per day, each filled to its share of the goal */
+.hm-week{display:flex;align-items:stretch;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
+.hm-days{flex:1;min-width:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.hm-day{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 4px;border-radius:var(--p-r-m);min-width:0}
+.hm-day__p{position:relative;width:min(28px,100%);height:52px;border-radius:14px;background:var(--p-well);overflow:hidden}
+.hm-day__p i{position:absolute;inset:0;background:var(--md-primary);border-radius:inherit;transform-origin:50% 100%;transform:scaleY(var(--s));
+  transition:transform var(--p-spatial-d) var(--p-spatial)}
+.hm-day.is-part .hm-day__p i{background:var(--pg-ink2)}
+.hm-day__p svg{position:absolute;left:50%;bottom:6px;width:16px;height:16px;margin-left:-8px;fill:none;stroke:var(--md-on-primary);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.hm-day__p svg path{stroke-dasharray:1;stroke-dashoffset:0}
+.hm-day.is-future .hm-day__p{background:transparent;box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-on-surface) 14%,transparent)}
+.hm-day.is-today .hm-day__p{box-shadow:0 0 0 2px var(--p-card),0 0 0 4px var(--md-primary)}
+.hm-day__l{font:600 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-day.is-today .hm-day__l{color:var(--md-primary)}
+.hm-day.is-future{pointer-events:none}
+.hm-streak{flex:none;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;padding:8px 14px;min-width:84px;border-radius:var(--p-r-l);background:var(--p-well)}
+.hm-streak b{font-size:34px;font-weight:540}
+.hm-streak span{font:600 12px/16px var(--m3-font);color:var(--md-on-surface)}
+.hm-streak em{font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+
+/* ---- up next ---- */
+.hm-next__lead{display:flex;gap:16px;align-items:flex-start;margin:12px 0 18px}
+.hm-shape{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:16px;background:var(--p-cat-a);color:var(--p-on-cat-a)}
+.hm-shape .ic{width:24px;height:24px}
+.hm-shape.c-b{background:var(--p-cat-b);color:var(--p-on-cat-b)}
+.hm-shape.c-c{background:var(--p-cat-c);color:var(--p-on-cat-c)}
+.hm-next__lead h3{margin:0;font:500 22px/28px var(--m3-font)}
+.hm-next__lead p{margin:4px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant);max-width:60ch}
+.hm-next__meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hm-next__meta span{height:28px;display:inline-flex;align-items:center;padding:0 10px;border-radius:8px;background:var(--p-well);font:500 12px/16px var(--m3-font);color:var(--md-on-surface)}
+.hm-next__go{width:100%}
+.hm-alts{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;margin-top:16px;border-radius:var(--p-r-l);overflow:hidden}
+@media (min-width:720px){.hm-alts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hm-alt{display:grid;grid-template-columns:36px minmax(0,1fr) 20px;align-items:center;gap:12px;padding:12px 14px;background:var(--p-well);min-width:0;text-align:left;border-radius:var(--p-r-xs)}
+.hm-alt .hm-shape{width:36px;height:36px;border-radius:12px}
+.hm-alt .hm-shape .ic{width:20px;height:20px}
+.hm-alt__t{min-width:0}
+.hm-alt b{display:block;font:500 15px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-alt em{display:block;font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-alt__go{width:20px;height:20px;color:var(--md-primary)}
+.hm-alt:disabled{opacity:.38}
+.hm-next .hm-foot{margin-top:8px}
+
+/* ---- vital signs ---- */
+.hm-vit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (min-width:720px){.hm-vit{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}}
+.hm-tile{display:flex;flex-direction:column;gap:6px;padding:16px 16px 12px;border-radius:var(--p-r-card);background:var(--p-card);min-width:0;text-align:left}
+@media (min-width:600px){.hm-tile{padding:20px 20px 14px}}
+.hm-tile__k{font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-tile__v{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hm-tile__v > .hm-num{font-size:36px;font-weight:540}
+@media (min-width:600px){.hm-tile__v > .hm-num{font-size:40px}}
+.hm-tile__v .pg-u{font-size:.5em}
+.hm-dl{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;background:var(--p-well);
+  font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);white-space:nowrap}
+.hm-dl.is-up{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.hm-tile__x{font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-spark{display:block;width:100%;height:36px;margin-top:4px;overflow:visible}
+.hm-spark .sl{fill:none;stroke:var(--md-primary);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.hm-spark .sa{fill:color-mix(in oklab,var(--md-primary) 12%,transparent);stroke:none}
+.hm-spark .sd{fill:var(--md-primary);stroke:var(--p-card);stroke-width:2}
+.hm-spark rect{fill:var(--md-primary);transform-box:fill-box;transform-origin:50% 100%}
+.hm-spark rect.o{fill:var(--pg-ink2)}
+.hm-spark rect.z{fill:var(--p-well)}
+
+/* ---- the road ---- */
+.hm-road__fig{display:flex;align-items:baseline;gap:6px 10px;flex-wrap:wrap}
+.hm-road__fig .hm-num{font-size:56px;font-weight:540}
+.hm-road__fig span{font:500 16px/22px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-track{position:relative;height:72px;margin:18px 6px 6px}
+.hm-track__w{position:absolute;left:0;right:0;top:32px;height:8px;border-radius:4px;background:var(--p-well)}
+.hm-track__f{position:absolute;left:0;right:0;top:32px;height:8px;border-radius:4px;background:var(--md-primary);transform-origin:0 50%;transform:scaleX(var(--s));
+  transition:transform var(--p-spatial-slow-d) var(--p-spatial-slow)}
+/* the stretch past the exam: a quieter fill under the main one, reaching to where the bank runs out */
+.hm-track__f.is-late{background:var(--pg-ink2)}
+.hm-mk{position:absolute;top:0;bottom:0;left:calc(var(--x) * 100%);width:0;transition:left var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.hm-mk i{position:absolute;left:-2px;top:24px;width:4px;height:24px;border-radius:2px;background:var(--md-on-surface)}
+.hm-mk.is-dot i{left:-8px;top:28px;width:16px;height:16px;border-radius:8px;background:var(--md-primary);box-shadow:0 0 0 3px var(--p-card)}
+.hm-mk.is-now i{left:-6px;top:30px;width:12px;height:12px;border-radius:6px;background:var(--md-on-surface-variant);box-shadow:0 0 0 3px var(--p-card)}
+.hm-mk span{position:absolute;white-space:nowrap;font:600 12px/16px var(--m3-font);color:var(--md-on-surface);font-variant-numeric:tabular-nums}
+.hm-mk.is-up span{top:0}
+.hm-mk:not(.is-up) span{bottom:0}
+.hm-mk.a-l span{left:-6px}.hm-mk.a-c span{transform:translateX(-50%)}.hm-mk.a-r span{right:-6px}
+.hm-pace{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px}
+.hm-pace li{display:grid;grid-template-columns:92px minmax(0,1fr) auto;align-items:center;gap:12px}
+.hm-pace b{font:500 14px/20px var(--m3-font)}
+.hm-pace em{font:600 14px/20px var(--m3-font);font-style:normal;font-variant-numeric:tabular-nums;text-align:right}
+.hm-note{margin:14px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-note b{font-weight:600;color:var(--md-on-surface)}
+
+/* ---- readiness ---- */
+.hm-rd{display:flex;align-items:center;gap:20px}
+.hm-rd__ring{position:relative;flex:none;width:128px;height:128px;border-radius:50%;display:grid;place-items:center}
+.hm-rd__ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.hm-rd__ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.hm-rd__ring .t{stroke:var(--p-well)}
+.hm-rd__ring .v{stroke:var(--pg-k1);stroke-dashoffset:var(--o);transition:stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow),opacity var(--p-effect-d) var(--p-effect)}
+.hm-rd__ring .v[data-j="1"]{stroke:var(--pg-k2)}.hm-rd__ring .v[data-j="2"]{stroke:var(--pg-k3)}.hm-rd__ring .v[data-j="3"]{stroke:var(--pg-k4)}
+.hm-rd.is-fg .hm-rd__ring .v:not(.is-on){opacity:.28}
+.hm-rd__c{position:relative;display:flex;flex-direction:column;align-items:center}
+.hm-rd__c b{font-size:40px;font-weight:540}
+.hm-rd__c span{margin-top:2px;font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-rd__l{flex:1;min-width:0;list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.hm-rd__l button{width:100%;display:grid;grid-template-columns:10px minmax(0,1fr) auto;column-gap:10px;align-items:start;padding:6px 10px;margin:0 -10px;width:calc(100% + 20px);border-radius:var(--p-r-m);text-align:left}
+.hm-rd__l .k{width:10px;height:10px;border-radius:3px;margin-top:5px;background:var(--pg-k1)}
+.hm-rd__l [data-pgf="1"] .k{background:var(--pg-k2)}.hm-rd__l [data-pgf="2"] .k{background:var(--pg-k3)}.hm-rd__l [data-pgf="3"] .k{background:var(--pg-k4)}
+.hm-rd__l b{font:500 14px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-rd__l em{font:600 14px/20px var(--m3-font);font-style:normal;font-variant-numeric:tabular-nums}
+.hm-rd__l small{grid-column:2/4;font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.hm-rd.is-fg .hm-rd__l li:not(.is-on){opacity:.5}
+.hm-rd__l li{transition:opacity var(--p-effect-d) var(--p-effect)}
+.hm-rd__w{display:block;margin-top:14px;font:500 16px/22px var(--m3-font)}
+@media (max-width:520px){.hm-rd{flex-direction:column;align-items:stretch;gap:12px}.hm-rd__ring{align-self:center;width:144px;height:144px}}
+@media (min-width:720px) and (max-width:1000px){.hm-rd{flex-direction:column;align-items:stretch;gap:12px}.hm-rd__ring{align-self:center}}
+
+/* ---- where the marks are ---- */
+.hm-lev{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.hm-lev button{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;row-gap:8px;align-items:center;padding:12px 14px;background:var(--p-well);border-radius:var(--p-r-xs);text-align:left}
+.hm-lev li:first-child button{border-radius:var(--p-r-l) var(--p-r-l) var(--p-r-xs) var(--p-r-xs)}
+.hm-lev li:last-child button{border-radius:var(--p-r-xs) var(--p-r-xs) var(--p-r-l) var(--p-r-l)}
+.hm-lev li:only-child button{border-radius:var(--p-r-l)}
+.hm-lev__t{min-width:0}
+.hm-lev__t b{display:block;font:500 15px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-lev__t em{display:block;font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.hm-lev__v{display:flex;flex-direction:column;align-items:flex-end}
+.hm-lev__v b{font-size:24px;font-weight:540}
+.hm-lev__v em{font:500 11px/14px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.hm-lev .pg-bar{grid-column:1/-1;height:6px}
+
+/* ---- the bank ---- */
+.hm-bank__fig{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.hm-bank__fig .hm-num{font-size:44px;font-weight:540}
+.hm-bank__fig span{font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.hm-stk{display:flex;gap:3px;height:14px}
+.hm-stk > span{position:relative;flex:var(--s) 1 0;min-width:4px;border-radius:var(--p-r-xs);background:var(--md-primary);transition:opacity var(--p-effect-d) var(--p-effect)}
+.hm-stk > span:first-child{border-radius:7px var(--p-r-xs) var(--p-r-xs) 7px}
+.hm-stk > span:last-child{border-radius:var(--p-r-xs) 7px 7px var(--p-r-xs)}
+.hm-stk > [data-pgf="wrong"]{background:var(--pg-k2)}
+.hm-stk > [data-pgf="new"]{background:var(--p-well)}
+.hm-leg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 12px;list-style:none;margin:12px 0 0;padding:0}
+.hm-leg button{width:100%;display:grid;grid-template-columns:10px minmax(0,1fr);column-gap:8px;align-items:center;padding:6px 10px;margin:0 -10px;width:calc(100% + 20px);border-radius:var(--p-r-m);text-align:left}
+.hm-leg i{width:10px;height:10px;border-radius:3px;background:var(--md-primary)}
+.hm-leg [data-pgf="wrong"] i{background:var(--pg-k2)}
+.hm-leg [data-pgf="new"] i{background:var(--p-well);box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--md-on-surface) 20%,transparent)}
+.hm-leg [data-pgf="flag"] i{background:transparent;box-shadow:inset 0 0 0 2px var(--md-on-surface)}
+.hm-leg b{font:500 13px/18px var(--m3-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm-leg em{grid-column:2;font:600 14px/18px var(--m3-font);font-style:normal;font-variant-numeric:tabular-nums}
+.hm-plate{display:grid;grid-template-columns:repeat(auto-fill,minmax(10px,1fr));gap:3px;margin-top:16px;max-height:212px;overflow:auto;padding:2px;scrollbar-width:thin}
+.hm-plate i{aspect-ratio:1;border-radius:3px;background:var(--p-well);cursor:pointer;transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.hm-plate i.r{background:var(--md-primary)}
+.hm-plate i.w{background:var(--pg-k2)}
+.hm-plate i.f{box-shadow:inset 0 0 0 2px var(--md-on-surface)}
+.hm-plate i:active{transform:scale(.8)}
+@media (hover:hover){.hm-plate i:hover{transform:scale(1.35)}}
+.hm-bank.is-fg[data-on="right"] .hm-plate i:not(.r),.hm-bank.is-fg[data-on="wrong"] .hm-plate i:not(.w),
+.hm-bank.is-fg[data-on="new"] .hm-plate i:not(.n),.hm-bank.is-fg[data-on="flag"] .hm-plate i:not(.f){opacity:.14}
+.hm-bank.is-fg .hm-stk > [data-pgf]:not(.is-on){opacity:.28}
+.hm-bank.is-fg .hm-leg li:not(.is-on){opacity:.5}
+.hm-leg li{transition:opacity var(--p-effect-d) var(--p-effect)}
+.hm-plate__n{margin:8px 0 0;font:400 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+
+/* ---- recent sessions ---- */
+.hm-ss{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.hm-ss button{width:100%;display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 14px;background:var(--p-well);border-radius:var(--p-r-xs);text-align:left}
+.hm-ss li:first-child button{border-radius:var(--p-r-l) var(--p-r-l) var(--p-r-xs) var(--p-r-xs)}
+.hm-ss li:last-child button{border-radius:var(--p-r-xs) var(--p-r-xs) var(--p-r-l) var(--p-r-l)}
+.hm-ss li:only-child button{border-radius:var(--p-r-l)}
+.hm-sr{position:relative;width:44px;height:44px}
+.hm-sr svg{width:44px;height:44px;transform:rotate(-90deg)}
+.hm-sr circle{fill:none;stroke-width:5}
+.hm-sr .t{stroke:color-mix(in oklab,var(--md-on-surface) 10%,transparent)}
+.hm-sr .v{stroke:var(--md-primary);stroke-linecap:round;stroke-dasharray:1 2;stroke-dashoffset:var(--o);transition:stroke-dashoffset var(--p-spatial-slow-d) var(--p-spatial-slow)}
+.hm-sr__n{position:absolute;inset:0;display:grid;place-items:center;font:600 12px/1 var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.hm-ss__t{min-width:0}
+.hm-ss__t b{display:block;font:500 15px/20px var(--m3-font);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-ss__t em{display:block;font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hm-ss__v{display:flex;flex-direction:column;align-items:flex-end}
+.hm-ss__v b{font-size:24px;font-weight:540}
+.hm-ss__v em{font:500 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+
+/* ---- empty bank ---- */
+.hm-hello{display:flex;flex-direction:column;align-items:flex-start;gap:12px;border-radius:var(--p-r-hero);padding:28px 24px}
+.hm-hello .pg-empty__shape{width:72px;height:72px;margin:0 0 8px;clip-path:none;border-radius:0;background:none;position:relative}
+.hm-hello .pg-empty__shape::before{content:"";position:absolute;inset:0;background:var(--md-tertiary-container);
+  clip-path:path("M36 0C42 0 45 6 50 9S63 9 66 14S64 27 67 32S72 42 69 48S58 54 55 59S53 72 46 72S39 66 36 66S27 72 21 71S17 59 12 55S1 53 0 46S6 37 5 32S0 19 5 14S17 12 22 8S30 0 36 0Z")}
+.hm-hello h3{margin:0;font:500 24px/32px var(--m3-font)}
+.hm-hello p{margin:0;font:400 15px/22px var(--m3-font);color:var(--md-on-surface-variant);max-width:52ch}
+.hm-hello__acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+
+/* ---- tappable: the touch contract in each element's own shape ---- */
+#v-dash .hm-tile.is-down,#v-dash .hm-lev button.is-down,#v-dash .hm-ss button.is-down,#v-dash .hm-alt.is-down{transform:scale(var(--p-press-card))}
+#v-dash .hm-ring.is-down,#v-dash .hm-rd__ring.is-down{transform:scale(.96)}
+
+/* ---- arrival: cards rise in reading order; figures run from zero ---- */
+@media (prefers-reduced-motion:no-preference){
+  .hm.is-arrive .hm-in{animation:hmRise var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(min(var(--i,0),6) * 35ms)}
+  .hm.is-arrive .hm-ring__w{animation:hmWave var(--p-spatial-slow-d) var(--p-spatial-slow) 120ms backwards}
+  .hm.is-arrive .hm-burst{animation:hmBloom 620ms var(--p-spatial-fast) 380ms backwards}
+  .hm.is-arrive .hm-day__p i{animation:hmGrowY var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(140ms + var(--d) * 30ms)}
+  .hm.is-arrive .hm-day__p svg path{animation:hmDraw var(--p-effect-slow-d) var(--p-effect-slow) backwards;animation-delay:calc(360ms + var(--d) * 30ms)}
+  .hm.is-arrive .pg-bar i,.hm.is-arrive .hm-track__f{animation:hmGrowX var(--p-spatial-slow-d) var(--p-spatial-slow) 160ms backwards}
+  .hm.is-arrive .hm-rd__ring .v,.hm.is-arrive .hm-sr .v{animation:hmArc var(--p-spatial-slow-d) var(--p-spatial-slow) 160ms backwards}
+  .hm.is-arrive .hm-stk > span{animation:hmGrowX var(--p-spatial-d) var(--p-spatial) backwards;transform-origin:0 50%;animation-delay:calc(160ms + var(--d,0) * 40ms)}
+  .hm.is-arrive .hm-plate{animation:hmFade var(--p-effect-slow-d) var(--p-effect-slow) 200ms backwards}
+  .hm-spark.is-draw .sl{animation:hmLine 700ms var(--p-spatial-slow) 120ms backwards}
+  .hm-spark.is-draw .sa,.hm-spark.is-draw .sd{animation:hmFade var(--p-effect-slow-d) var(--p-effect-slow) 520ms backwards}
+  .hm-spark.is-draw rect{animation:hmGrowY var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(100ms + var(--d) * 18ms)}
+}
+@media (prefers-reduced-motion:reduce){.hm.is-arrive .hm-in{animation:hmFade 150ms linear backwards}}
+@keyframes hmRise{from{opacity:0;transform:translate3d(0,14px,0)}}
+@keyframes hmFade{from{opacity:0}}
+@keyframes hmGrowY{from{transform:scaleY(0)}}
+@keyframes hmGrowX{from{transform:scaleX(0)}}
+@keyframes hmWave{from{stroke-dashoffset:1}}
+@keyframes hmArc{from{stroke-dashoffset:var(--o0,1)}}
+@keyframes hmBloom{from{transform:scale(0);opacity:0}}
+@keyframes hmDraw{from{stroke-dashoffset:1}}
+@keyframes hmLine{from{stroke-dashoffset:1}}
 </style>
 </head>
 <body>
@@ -6458,53 +6796,15 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       </div>
     </header>
 
-    <!-- ============ DASHBOARD ============ -->
+    <!-- ============ HOME ============ -->
+    <!-- Plume 2.17 · home: drawn by renderDash(); the open block by
+         renderCompCard() between the masthead and the rest. -->
     <section class="view on" id="v-dash">
-      <p class="eyebrow">Bench <span class="rule"></span> <span id="todayStr"></span></p>
-      <h2 class="vt" id="greet">Welcome back</h2>
-      <p class="sub" id="dashSub">Import a batch of questions to begin.</p>
-
-      <div class="hero">
-        <!-- the day's target leads the screen; the running session — offered to
-             whichever device is not carrying it — sits directly under it, in the
-             same column and on the same gap, because it is the same subject -->
-        <div class="herolead">
-          <div class="bigstat today">
-            <div class="ring" id="dashRing"></div>
-            <div class="tdtxt">
-              <div class="lbl" id="dashGoalLbl">Today</div>
-              <div class="tdline" id="dashGoalLine"></div>
-            </div>
-            <div class="row" id="dashDo"></div>
-          </div>
-          <div id="compCard" style="display:none"></div>
-        </div>
-        <div class="grid" style="grid-template-columns:1fr">
-          <div class="statgrid" id="dashPulse"></div>
-          <div class="card" id="dashHorizon"></div>
-        </div>
+      <div class="hm" id="hm">
+        <div id="hmMast"></div>
+        <div id="compCard"></div>
+        <div class="hm" id="hmBody"></div>
       </div>
-
-      <h3 class="sec">Readiness<button class="ib" data-note="readiness" aria-label="How readiness is worked out"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="card" id="dashReady"></div>
-
-      <h3 class="sec">Where the marks are<button class="ib" data-note="leverage" aria-label="How this list is ordered"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="card"><div class="bars" id="dashSystems"></div><p class="tiny muted" id="dashSysNote" style="margin:14px 0 0;line-height:1.7"></p></div>
-
-      <h3 class="sec">The bank</h3>
-      <div class="card">
-        <p class="eyebrow" style="margin-bottom:8px">The plate <span class="rule"></span> <span id="plateNote"></span></p>
-        <div class="plate" id="plate"></div>
-        <div class="legend platekey">
-          <span><b style="background:var(--jade)"></b>Correct</span>
-          <span><b style="background:var(--rose)"></b>Incorrect</span>
-          <span><b style="background:var(--panel3)"></b>Unused</span>
-          <span><b style="background:transparent;box-shadow:inset 0 0 0 2px var(--amber)"></b>Flagged</span>
-        </div>
-      </div>
-
-      <h3 class="sec">Recent sessions</h3>
-      <div id="dashRecent"></div>
     </section>
 
     <!-- ============ BUILD ============ -->
@@ -6772,7 +7072,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.76</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.77</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -6828,7 +7128,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.76 · sharded store</span>
+        <span class="chip" id="verChip">v6.77 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7945,7 +8245,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.76';
+const APP_VERSION='6.77';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10715,7 +11015,7 @@ function go(v){
   /* leaking object URLs on a 4 GB tablet is fatal: each one pins a decoded
      bitmap of several megabytes. Anything no longer on screen is released. */
   try{MEDIA.sweep()}catch(e){}
-  if(v==='dash')renderDash();
+  if(v==='dash')renderDash(true);
   if(v==='build')renderBuild();
   if(v==='review')renderReview();
   if(v==='bank')renderBank(true);
@@ -11317,124 +11617,343 @@ function streak(){
   for(;;){const k=dayKey(d);if(days.has(k)){n++;d.setDate(d.getDate()-1)}else{if(n===0&&k===today()){d.setDate(d.getDate()-1);if(days.has(dayKey(d))){continue}}break}}
   return n;
 }
-/* ---------- Home ----------
-   Home answers one question — what should I do in the next hour — and it
-   answers it above the fold. Everything that only says how things have gone
-   in general belongs on Progress, one tap away. */
-function renderDash(){
-  const t=totals(), A=allAttempts();
-  $('#todayStr').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'});
-  const nm=DB.settings.name?', '+DB.settings.name:'';
-  const hr=new Date().getHours();
-  $('#greet').textContent=(hr<5?'Still up':hr<12?'Good morning':hr<18?'Good afternoon':'Good evening')+nm;
-  $('#brandTag').textContent=DB.settings.brand||'Personal Qbank';
-
-  const goal=DB.settings.goal||0, doneToday=countToday(), ex=examInfo();
-  const w7=paceWindow(A,7,0), p7=paceWindow(A,7,1);
-  const pace=w7.per, left=t.unused;
-
-  $('#dashSub').textContent = t.total===0
-    ? 'Nothing in the bank yet. Grab the extractor prompt, run a PDF through it, then import the JSON.'
-    : ex&&ex.days>=0
-      ? `${ex.days} day${ex.days===1?'':'s'} to the exam · ${left} question${left===1?'':'s'} still unused · ${t.due} due for review.`
-      : `${left} question${left===1?'':'s'} still unused · ${t.due} due for review · ${streak()} day streak.`;
-
-  /* ---- the ring: the only number on this screen you can move today ---- */
-  const pct=goal?clamp(doneToday/goal*100,0,100):(doneToday?100:0);
-  const ink='var(--md-on-primary-container)';
-  $('#dashRing').innerHTML=ringSVG(pct,ink,'color-mix(in oklab,var(--md-on-primary-container) 20%,transparent)')
-    +`<div class="cv"><b>${doneToday}</b><span>${goal?'of '+goal:'today'}</span></div>`;
-  $('#dashGoalLbl').textContent = !goal?'Answered today':doneToday>=goal?'Goal met':'Today';
-  $('#dashGoalLine').textContent = !goal
-      ? 'Set a daily goal in Settings and this becomes the thing that keeps the streak alive.'
-    : doneToday>=goal
-      ? `${doneToday-goal} past the goal. Everything from here is surplus.`
-    : doneToday
-      ? `${goal-doneToday} more to close today out.`
-      : `Nothing yet today. ${goal} closes it.`;
-
-  /* one recommended action, because two is a decision and this screen is
-     supposed to remove one. The FAB still holds every other way in. */
-  const act = t.total===0 ? ['import','Import questions']
-    : t.due>0             ? ['review',`Review ${t.due} due`]
-    : left>0              ? ['build','Build a set']
-                          : ['build','Start a session'];
-  $('#dashDo').innerHTML=`<button class="btn pri" data-go="${act[0]}">${esc(act[1])}</button>`+
-    `<button class="btn ghost" data-go="stats">See progress</button>`;
-
-  /* ---- the pulse: four figures that move week to week ---- */
-  const tile=(v,k,x,d)=>`<div class="stat"><div class="v">${unitize(v)}${d||''}</div><div class="k">${esc(k)}</div>${x?`<div class="x">${esc(x)}</div>`:''}</div>`;
-  const acc7=w7.acc, accP=p7.acc;
-  $('#dashPulse').innerHTML=[
-    tile(streak()+'<small>d</small>','Streak','best '+longestStreak()+'d'),
-    tile(Math.round(pace),'Questions / day','last 7 days',delta(Math.round(pace),Math.round(p7.per))),
-    tile(acc7==null?'—':Math.round(acc7)+'<small>%</small>','Accuracy','last 7 days',
-      (acc7!=null&&accP!=null)?delta(Math.round(acc7),Math.round(accP),'pt'):''),
-    tile(t.due,'Due for review',t.due?'waiting now':'nothing waiting')
-  ].join('');
-
-  /* ---- the horizon: is this pace enough, and enough for what ---- */
-  let hz='';
-  if(!t.total)hz='<p class="tiny muted" style="margin:0">Import a batch and the projection starts here.</p>';
-  else if(!left)hz=`<p class="eyebrow">Whole bank seen <span class="rule"></span></p>
-    <p class="tiny muted" style="margin:0;line-height:1.7">Every question in the bank has been attempted at least once. From here the work is the review queue and the ones you keep missing — not new material.</p>`;
-  else if(ex&&ex.days>0){
-    const need=left/ex.days;
-    const ok=pace>=need;
-    hz=`<p class="eyebrow">${ex.days} day${ex.days===1?'':'s'} to go <span class="rule"></span> ${esc(ex.date.toLocaleDateString(undefined,{day:'numeric',month:'long'}))}</p>
-      <div class="bars">
-        ${barRow('Your pace',clamp(pace/Math.max(pace,need,1)*100,0,100),Math.round(pace)+' / day',ok?'var(--jade)':'var(--amber)')}
-        ${barRow('Needed',clamp(need/Math.max(pace,need,1)*100,0,100),Math.ceil(need)+' / day','var(--md-outline)')}
+/* ---------- Plume 2.17 · home ----------
+   Home is a briefing, read top to bottom: what is open now, today
+   (the goal ring, the week, the streak), what to do next, the vital
+   signs that move week to week, the road to the exam, readiness,
+   where the marks are, the bank as a map, the last sessions. Every
+   figure opens its peek (the Progress sheet); parts isolate in place.
+   renderDash(true) is an arrival: figures run from zero and cards rise
+   in. Any other call repaints what changed: numbers count from where
+   they stood and bars, rings and pebbles glide from their old value.
+   Off screen it only keeps the nav counts and marks itself stale. */
+const HM={stale:true,sz:0};
+const hmN=(k,v,dec)=>pgN('hm'+k,v,dec);
+const hmT=(k,v)=>pgT('hm'+k,v);
+const hmNum=(inner,cls)=>`<span class="hm-num${cls?' '+cls:''}">${inner}</span>`;
+const hmPct=v=>v==null?'—':Math.round(v)+'%';
+function hmDelta(d,unit,dec,lowerIsGood){
+  if(d==null||!isFinite(d))return '';
+  const flat=Math.abs(d)<(dec?0.05:0.5),good=lowerIsGood?d<0:d>0;
+  const v=unit==='t'?(d>0?'+':'−')+pgTtxt(Math.abs(d)):(d>0?'+':'−')+Math.abs(d).toFixed(dec||0)+(unit||'');
+  return `<span class="hm-dl${!flat&&good?' is-up':''}">${flat?'level':v}</span>`;
+}
+/* the 14 days behind a tile: [value or null] oldest first */
+function hm14(E,fn){const t0=sod(Date.now()),out=[];
+  for(let i=13;i>=0;i--){const s=addDays(t0,-i).getTime();out.push(fn(between(E,s,s+DAYMS)))}return out}
+function hmSpark(kind,vals,label,opt){
+  return `<svg class="hm-spark" data-sk="${kind}"${opt||''} data-sv="${esc(JSON.stringify(vals))}" role="img" aria-label="${esc(label)}"></svg>`;
+}
+/* sparks are drawn at their real width, so a line never stretches */
+function hmSparks(draw){
+  $$('#v-dash .hm-spark').forEach(svg=>{
+    const W=Math.round(svg.getBoundingClientRect().width),H=36;if(!W)return;
+    let v;try{v=JSON.parse(svg.dataset.sv)}catch(e){return}
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+    if(svg.dataset.sk==='col'){
+      const n=v.length,g=3,w=(W-g*(n-1))/n,mx=Math.max(1,...v.map(x=>x||0));
+      svg.innerHTML=v.map((x,i)=>{const h=x?Math.max(3,x/mx*(H-2)):3;
+        return `<rect class="${!x?'z':i<n-7?'o':''}" x="${(i*(w+g)).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${Math.min(2,w/2)}" style="--d:${i}"/>`}).join('');
+    }else{
+      const P=v.map((x,i)=>[i,x]).filter(p=>p[1]!=null);
+      if(P.length<2){svg.innerHTML='';return}
+      let lo=Math.min(...P.map(p=>p[1])),hi=Math.max(...P.map(p=>p[1]));
+      if(svg.dataset.z)lo=0;
+      const r=+svg.dataset.r||1e-9;if(hi-lo<r){const m=(hi+lo)/2;lo=m-r/2;hi=m+r/2}
+      const pad=(hi-lo)*.12;lo-=pad;hi+=pad;
+      const X=i=>4+i/(v.length-1)*(W-8),Y=y=>H-3-(y-lo)/(hi-lo)*(H-6);
+      const pts=P.map(p=>[X(p[0]),Y(p[1])]),d=pgSmooth(pts),e=pts[pts.length-1];
+      svg.innerHTML=`<path class="sa" d="${d}L${e[0].toFixed(1)} ${H}L${pts[0][0].toFixed(1)} ${H}Z"/><path class="sl" pathLength="1" style="stroke-dasharray:1 1" d="${d}"/><circle class="sd" cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="3.5"/>`;
+    }
+    svg.classList.toggle('is-draw',!!draw);
+  });
+}
+/* the open block's wave, drawn to the card's width like the companion's */
+function hmWaves(){
+  $$('#compCard .hm-wave').forEach(svg=>{
+    const W=Math.round(svg.getBoundingClientRect().width);if(!W)return;
+    const p=clamp(+svg.dataset.p||0,0,1),x1=2+p*(W-4);
+    svg.setAttribute('viewBox',`0 0 ${W} 16`);
+    let d='';if(p>0){d='M2 8';for(let x=4;x<=x1;x+=2)d+='L'+x+' '+(8+3*Math.sin((x-2)/24*2*Math.PI)).toFixed(2)}
+    const t0=p>0?Math.min(W-2,x1+10):2;
+    svg.innerHTML=(d?`<path class="hm-wave__w" d="${d}"/>`:'')+(t0<W-4?`<path class="hm-wave__t" d="M${t0} 8H${W-2}"/>`:'')+(p<1?`<circle class="hm-wave__dot" cx="${W-2}" cy="8" r="2"/>`:'');
+  });
+}
+/* glide what changed: an element marked data-hk takes its old inline
+   style first, then its new one on the next frame, and its transition
+   carries it across */
+function hmKeep(root){const m={};root.querySelectorAll('[data-hk]').forEach(el=>{m[el.dataset.hk]=el.getAttribute('style')});return m}
+function hmGlide(root,old){
+  if(Motion.reduced)return;const set=[];
+  root.querySelectorAll('[data-hk]').forEach(el=>{const o=old[el.dataset.hk],n=el.getAttribute('style');
+    if(o!=null&&o!==n){el.setAttribute('style',o);set.push([el,n])}});
+  /* a layout read does not restyle an SVG mark that layout never needs, so
+     each one's style is read to make the old value real before the new one */
+  if(!set.length)return;set.forEach(([el])=>getComputedStyle(el).opacity);
+  requestAnimationFrame(()=>set.forEach(([el,n])=>el.setAttribute('style',n)));
+}
+/* the today ring: a wave for what is done, a flat track for what is left */
+function hmRingSVG(p){
+  p=clamp(p,0,1);const g=p>0&&p<1?.035:0,R=84;
+  let d='';for(let i=0;i<=360;i+=2){const a=i*Math.PI/180,r=R+3.2*Math.sin(a*14);d+=(i?'L':'M')+(100+r*Math.cos(a)).toFixed(2)+' '+(100+r*Math.sin(a)).toFixed(2)}
+  const tl=Math.max(0,1-p-2*g);
+  return `<svg viewBox="0 0 200 200" aria-hidden="true"><g class="hm-ring__g">
+    <circle class="hm-ring__t" cx="100" cy="100" r="${R}" pathLength="1" data-hk="rt" style="--tl:${tl.toFixed(4)};--to:${(-(p+g)).toFixed(4)};opacity:${tl>0.001?1:0}"/>
+    <path class="hm-ring__w" d="${d}Z" pathLength="1" data-hk="rw" style="--wo:${(1-p).toFixed(4)};opacity:${p>0?1:0}"/></g></svg>`;
+}
+function hmToday(E,t,goal){
+  const t0=sod(Date.now()).getTime(),T=between(E,t0,Date.now()+1),o=sumOf(T),done=o.n;
+  const met=goal&&done>=goal,p=goal?done/goal:(done?1:0);
+  const head=!goal?(done?`${done} answered today`:'Nothing answered yet today')
+    :met?(done>goal?`Goal met, ${done-goal} past it`:'Goal met for today')
+    :done?`${goal-done} more close today out`:`${goal} close today out`;
+  /* the calendar week, Monday first: days to come are drawn empty, a plan to fill */
+  const map=byDay(E),di=dowIdx(new Date()),w0=addDays(sod(Date.now()),-di),wk=[];
+  for(let i=0;i<7;i++){const d=addDays(w0,i),k=dayKey(d),n=(map[k]||{}).n||0,fut=i>di;
+    const s=goal?clamp(n/goal,0,1):(n?1:0),full=goal?n>=goal:false,lab=pgDate(d,{weekday:'narrow'});
+    wk.push(`<button type="button" class="hm-day pg-tap pl-press${i===di?' is-today':''}${fut?' is-future':''}${n&&!full&&goal?' is-part':''}"${fut?' tabindex="-1" aria-hidden="true"':` data-pk="day:${k}" aria-label="${esc(pgDate(d,{weekday:'long'}))}: ${n} answered"`}>
+      <span class="hm-day__p"><i data-hk="d${i}" style="--s:${s.toFixed(3)};--d:${i}"></i>${full?`<svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg>`:''}</span>
+      <span class="hm-day__l">${esc(lab)}</span></button>`)}
+  const st=streak(),best=longestStreak();
+  return `<section class="hm-card hm-today hm-in${met?' is-met':''}" style="--i:1" aria-label="Today">
+    <div class="hm-today__main">
+      <button type="button" class="hm-ring pg-tap pl-press" data-pk="today" aria-label="Today: ${done}${goal?' of '+goal:''} answered">
+        ${met?'<span class="hm-burst" aria-hidden="true"></span>':''}${hmRingSVG(p)}
+        <span class="hm-ring__c"><b class="hm-num">${hmN('done',done)}</b><span>${goal?'of '+goal:'answered'}</span></span>
+      </button>
+      <div class="hm-today__tx">
+        <span class="pg-over">Today</span>
+        <h3 class="hm-today__h">${esc(head)}</h3>
       </div>
-      <p class="tiny muted" style="margin:14px 0 0;line-height:1.7">${left} question${left===1?'':'s'} unused. ${
-        ok?`At your current pace the bank is finished with about ${Math.max(0,Math.round(ex.days-left/Math.max(pace,.01)))} day${Math.round(ex.days-left/Math.max(pace,.01))===1?'':'s'} to spare.`
-          :`At ${Math.round(pace)} a day you would reach ${Math.round(pace*ex.days)} of them. Closing the gap means <b>${Math.ceil(need)}</b> a day from here.`}</p>`;
-  } else if(pace>0.5){
-    const dleft=Math.ceil(left/pace), fin=new Date(Date.now()+dleft*DAYMS);
-    hz=`<p class="eyebrow">First pass through the bank <span class="rule"></span></p>
-      <p class="tiny muted" style="margin:0;line-height:1.7">${left} unused. At <b>${Math.round(pace)}</b> a day — your last seven days — that is about <b>${dleft} day${dleft===1?'':'s'}</b>, finishing around <b>${fin.toLocaleDateString(undefined,{day:'numeric',month:'long'})}</b>.</p>
-      <p class="tiny muted" style="margin:10px 0 0;line-height:1.7">Set an exam date in Settings and this becomes the pace you actually need instead of the one you happen to have.</p>`;
-  } else {
-    hz=`<p class="eyebrow">First pass through the bank <span class="rule"></span></p>
-      <p class="tiny muted" style="margin:0;line-height:1.7">${left} question${left===1?'':'s'} unused. A week of answers and this turns into a finishing date.</p>`;
-  }
-  $('#dashHorizon').innerHTML=hz;
-
-  /* ---- readiness ---- */
-  const R=readiness();
-  $('#dashReady').innerHTML=`
-    <div class="rdhead">
-      <div class="rdnum">${R.score}<small>/100</small></div>
-      <div class="rdword">${READY_WORD(R.score)}<span>${R.thin?'Too little history to lean on yet — treat it as a direction, not a verdict.':'Weighted from the four measures below. Not a predicted score.'}</span></div>
     </div>
-    <div class="bars" style="margin-top:18px">${R.parts.map(pt=>barRow(pt.k,pt.v==null?0:pt.v,
-        pt.v==null?'—':Math.round(pt.v)+'%',pt.v==null?'var(--panel3)':accCol(pt.v))).join('')}</div>
-    <div class="rdlegend">${R.parts.map(pt=>`<span><b>${esc(pt.k)}</b>${esc(pt.lab)}</span>`).join('')}</div>`;
-
-  /* ---- where the marks are ---- */
-  const lv=leverage(6);
-  $('#dashSystems').innerHTML=lv.length
-    ? lv.map(r=>barRow(r.k,r.p,Math.round(r.p)+'% · '+r.impact+' at stake',accCol(r.p))).join('')
-    : '<span class="tiny muted">Answer a few questions and this fills in.</span>';
-  $('#dashSysNote').textContent = lv.length
-    ? 'Ordered by what each weakness is costing, not by percentage: the share you get wrong multiplied by how much of the bank still sits behind it. The top row is where an hour buys the most.'
-    : '';
-
-  /* ---- the plate and the recent sessions, unchanged in spirit ---- */
-  const cap=800,qs=DB.questions.slice(0,cap);
-  $('#plate').innerHTML=qs.map(q=>{const st=statusOf(q.id),f=(DB.stats[q.id]||{}).flag?' f':'';
-    return `<i class="${st==='correct'?'c':st==='incorrect'?'w':''}${f}" data-q="${q.id}" title="${esc((q.topic||q.system)+' · '+st)}"></i>`}).join('');
-  $('#plateNote').textContent=DB.questions.length>cap?`first ${cap} of ${DB.questions.length}`:`${DB.questions.length} cells · ${t.used} attempted · ${t.flag} flagged`;
+    <button type="button" class="hm-facts pg-tap pl-press" data-pk="day:${today()}" aria-label="Today in detail">
+      <span><b class="hm-num">${o.n?hmT('tms',o.ms/1000):'—'}</b><em>studied</em></span>
+      <span><b class="hm-num">${o.n?hmN('tacc',o.acc)+pgU('%'):'—'}</b><em>right</em></span>
+      <span><b class="hm-num">${o.n?hmT('tper',o.ms/o.n/1000):'—'}</b><em>per question</em></span>
+    </button>
+    <div class="hm-week">
+      <div class="hm-days" role="group" aria-label="This week">${wk.join('')}</div>
+      <button type="button" class="hm-streak pg-tap pl-press" data-pk="streak" aria-label="Streak ${st} days, best ${best}">
+        <b class="hm-num">${hmN('st',st)}</b><span>day streak</span><em>best ${best}</em></button>
+    </div>
+  </section>`;
+}
+/* one recommended block, and the other ways in beside it */
+function hmNext(t,lv){
+  const b=bld(),S=pgQState();let miss=0;DB.questions.forEach(q=>{if(S[q.id].st==='wrong')miss++});
+  const top=lv[0],wk=top?DB.questions.filter(q=>(q.system||UNCLASSIFIED)===top.k&&S[q.id].st!=='right').length:0;
+  const O={
+    due:{t:'Due review',ic:'i-review',c:'c-a',n:t.due,why:`${bsNum(t.due)} question${t.due===1?' is':'s are'} due. The schedule wants them back today, before they fade.`},
+    new:{t:'New questions',ic:'i-new',c:'c-b',n:t.unused,why:`${bsNum(t.unused)} still unseen. First sightings are what your form and the exam are made of.`},
+    miss:{t:'Missed last time',ic:'i-refresh',c:'c-c',n:miss,why:`${bsNum(miss)} question${miss===1?'':'s'} whose last answer was wrong. One right answer moves each across.`},
+    weak:{t:top?top.k:'Weakest area',ic:'i-stats',c:'c-c',n:wk,why:top?`Where the most marks are at stake: ${Math.round(top.p)}% right here, about ${top.impact} likely to drop.`:''}
+  };
+  const blk=bldLen(1e9),mode=b.mode==='test'?'Exam':'Tutor';
+  const timing=b.timing==='q'?pgTtxt(b.secs)+' each':b.timing==='block'?(b.block==='pace'?'exam pace':pgTtxt(b.mins*60)+' block'):'untimed';
+  const lead=t.due>=Math.min(10,blk||10)?'due':t.unused?'new':miss?'miss':t.due?'due':'new';
+  const alts=['due','new','miss','weak'].filter(k=>k!==lead&&!(k==='weak'&&!top)).slice(0,3);
+  const L=O[lead],cnt=n=>n>blk&&blk?`${blk} of ${bsNum(n)}`:bsNum(n);
+  return `<section class="hm-card hm-next hm-in" style="--i:2" aria-labelledby="hmNextH">
+    <span class="pg-over">Up next</span>
+    <div class="hm-next__lead"><span class="hm-shape ${L.c}">${sxIc(L.ic)}</span>
+      <div><h3 id="hmNextH">${esc(L.t)}</h3><p>${L.why}</p>
+        <div class="hm-next__meta"><span>${b.count>0?b.count+' questions':'Every match'}</span><span>${mode}</span><span>${esc(timing)}</span></div></div></div>
+    <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press hm-next__go" data-hmstart="${lead}"${L.n?'':' disabled'}>${sxIc('i-play')}Start · ${cnt(L.n)}</button>
+    <div class="hm-alts" role="group" aria-label="Or start">${alts.map(k=>{const a=O[k];
+      return `<button type="button" class="hm-alt pl-press" data-hmstart="${k}"${a.n?'':' disabled'} aria-label="${esc(a.t)}, ${a.n}">
+        <span class="hm-shape ${a.c}">${sxIc(a.ic)}</span><span class="hm-alt__t"><b>${esc(a.t)}</b><em>${k==='weak'?'Weakest area · ':''}${bsNum(a.n)} ${k==='weak'?'not yet right':k==='due'?'due':k==='new'?'unseen':'to win back'}</em></span>${sxIc('i-play','hm-alt__go')}</button>`}).join('')}</div>
+    <div class="hm-foot"><button type="button" class="pl-btn pl-btn--text pl-press" data-go="build">Build your own</button></div>
+  </section>`;
+}
+function hmStart(k){
+  const S=pgQState();
+  if(k==='weak'){const top=leverage(1)[0];if(!top)return;
+    const ids=DB.questions.filter(q=>(q.system||UNCLASSIFIED)===top.k&&S[q.id].st!=='right').map(q=>q.id);
+    return startIds(ids,'Weak spot: '+top.k)}
+  F.pool={due:'due',new:'unused',miss:'incorrect'}[k];clearFacets();
+  startSession({due:'Due review',new:'New questions',miss:'Missed questions'}[k]);
+}
+/* four signs that move week to week, each with its last 14 days */
+function hmVitals(E){
+  const Fs=E.filter(a=>a.seq===0),now=pgForm(Fs),was=pgForm(Fs,null,PG_FIRST);
+  const fd=was.n>=30&&now.p!=null?now.p-was.p:null;
+  const fsp=[];for(let i=11;i>=0;i--){const f=pgForm(Fs,Date.now()-i*7*DAYMS);fsp.push(f.n>=10?f.p:null)}
+  const a=sumOf(E.filter(x=>x.ts>=pgSince(7))),b=sumOf(between(E,pgSince(14),pgSince(7)));
+  const tq=a.n?a.ms/a.n/1000:null,tp=b.n?b.ms/b.n/1000:null;
+  const tile=(pk,k,v,dl,x,sp,i)=>`<button type="button" class="hm-tile pg-tap pl-press hm-in" style="--i:${i}" data-pk="${pk}">
+    <span class="hm-tile__k">${k}</span><span class="hm-tile__v">${hmNum(v)}${dl}</span><span class="hm-tile__x">${x}</span>${sp}</button>`;
+  return `<div class="hm-vit" role="group" aria-label="Vital signs">
+    ${tile('form','Form',now.n>=10?hmN('form',now.p)+pgU('%'):'—',now.n>=10?hmDelta(fd,'pt'):'',now.n>=10?`last ${now.n} first sightings`:'after ten new questions',hmSpark('line',fsp,'Form, week by week',' data-r="16"'),3)}
+    ${tile('d7','Accuracy',a.n?hmN('acc7',a.acc)+pgU('%'):'—',a.n&&b.n?hmDelta(a.acc-b.acc,'pt'):'','last 7 days, repeats in',hmSpark('col',hm14(E,L=>L.length?L.filter(x=>x.correct).length/L.length*100:0),'Accuracy, day by day'),3)}
+    ${tile('h14:n','Questions a day',hmN('per7',a.n/7),b.n?hmDelta(a.n/7-b.n/7):'','last 7 days',hmSpark('col',hm14(E,L=>L.length),'Questions, day by day'),4)}
+    ${tile('h14:t','Time per question',tq!=null?hmT('tq7',tq):'—',tq!=null&&tp!=null?hmDelta(tq-tp,'t',0,true):'','last 7 days',hmSpark('line',hm14(E,L=>L.length?sumOf(L).ms/L.length/1000:null),'Time per question, day by day',' data-z="1"'),4)}
+  </div>`;
+}
+/* the road: today to the exam, and where the bank runs out at your pace */
+function hmRoadData(E,t){
+  const ex=examInfo(),w7=paceWindow(E,7,0),p7=paceWindow(E,7,1),pace=w7.per,left=t.unused;
+  const fin=pace>0.05?Math.ceil(left/pace):null;
+  return{ex,pace,p7:p7.per,left,fin,need:ex&&ex.days>0?left/ex.days:null};
+}
+function hmRoad(E,t){
+  const R=hmRoadData(E,t),{ex,pace,left,fin,need}=R,fd=n=>pgDate(Date.now()+n*DAYMS,{day:'numeric',month:'short'});
+  let fig,track='',rows='',note='';
+  if(!left){
+    fig=`${hmNum(hmN('cov',100)+pgU('%'))}<span>of the bank seen</span>`;
+    note='Every question has been met at least once. From here the work is the review queue and the questions you keep missing.';
+  }else if(ex&&ex.days>0){
+    const ok=pace>=need,S=Math.max(ex.days,fin&&fin<ex.days*2?fin:ex.days*1.25),xe=ex.days/S,xf=fin!=null?Math.min(1,fin/S):1;
+    const al=x=>x<.12?'a-l':x>.88?'a-r':'a-c';
+    fig=`${hmNum(hmN('exd',ex.days))}<span>day${ex.days===1?'':'s'} to the exam · ${esc(pgDate(ex.date,{weekday:'short',day:'numeric',month:'short'}))}</span>`;
+    track=`<div class="hm-track" aria-hidden="true"><span class="hm-track__w"></span>${fin!=null&&xf>xe?`<span class="hm-track__f is-late" data-hk="trl" style="--s:${xf.toFixed(4)}"></span>`:''}<span class="hm-track__f" data-hk="trf" style="--s:${Math.min(xf,xe).toFixed(4)}"></span>
+      <span class="hm-mk is-now a-l" style="--x:0"><i></i><span>Today</span></span>
+      <span class="hm-mk is-up ${al(xe)}" data-hk="mke" style="--x:${xe.toFixed(4)}"><i></i><span>Exam</span></span>
+      ${fin!=null?`<span class="hm-mk is-dot ${al(xf)}" data-hk="mkf" style="--x:${xf.toFixed(4)}"><i></i><span>Bank done ${fin>S?'after '+fd(S):fd(fin)}</span></span>`:''}</div>`;
+    const mx=Math.max(pace,need,1);
+    rows=`<ul class="hm-pace"><li><b>Your pace</b>${pgBar(pace/mx).replace('<i ','<i data-hk="pc" ')}<em>${Math.round(pace)} / day</em></li>
+      <li><b>Needed</b>${pgBar(need/mx,'is-ref').replace('<i ','<i data-hk="pn" ')}<em>${Math.ceil(need)} / day</em></li></ul>`;
+    note=ok?`${bsNum(left)} unused. At your pace the bank is done with about <b>${Math.max(0,ex.days-fin)} day${ex.days-fin===1?'':'s'}</b> to spare for review.`
+      :`${bsNum(left)} unused. At ${Math.round(pace)} a day you would reach ${bsNum(Math.round(pace*ex.days))} of them; <b>${Math.ceil(need)} a day</b> closes the gap.`;
+  }else if(fin!=null){
+    const al=x=>x>.88?'a-r':'a-c';
+    fig=`${hmNum(hmN('fin',fin))}<span>day${fin===1?'':'s'} to finish the bank at your pace</span>`;
+    track=`<div class="hm-track" aria-hidden="true"><span class="hm-track__w"></span><span class="hm-track__f" data-hk="trf" style="--s:1"></span>
+      <span class="hm-mk is-now a-l" style="--x:0"><i></i><span>Today</span></span>
+      <span class="hm-mk is-dot a-r" style="--x:1"><i></i><span>Bank done ${fd(fin)}</span></span></div>`;
+    note=`${bsNum(left)} unused at ${Math.round(pace)} a day, your last seven days. Set an exam date and this becomes the pace you need.`;
+  }else{
+    fig=`${hmNum(hmN('left',left))}<span>question${left===1?'':'s'} still unseen</span>`;
+    note='A week of answers and this turns into a finishing date.';
+  }
+  const setx=!ex?`<div class="hm-foot"><button type="button" class="pl-btn pl-btn--text pl-press" data-setsec="session">Set an exam date</button></div>`:'';
+  return `<section class="hm-card hm-road is-half hm-in" style="--i:5" aria-labelledby="hmRoadH">
+    <div class="hm-card__h"><h3 id="hmRoadH">The road</h3></div>
+    <button type="button" class="hm-road__fig pg-tap pg-tap--bare pl-press" data-pk="hz">${fig}</button>
+    ${track}${rows}<p class="hm-note">${note}</p>${setx}</section>`;
+}
+function hmReady(){
+  const R=readiness(),gap=3,C=4;let at=0;
+  const arcs=R.parts.map((p,j)=>{const L=(100-gap*C)*p.w,v=p.v==null?0:p.v/100,a=at;at+=L+gap;
+    return `<circle class="t" cx="64" cy="64" r="56" pathLength="100" stroke-dasharray="${L.toFixed(2)} 200" transform="rotate(${(a*3.6).toFixed(2)} 64 64)"/>
+      <circle class="v${p.v==null?'':''}" data-j="${j}" cx="64" cy="64" r="56" pathLength="100" stroke-dasharray="${L.toFixed(2)} 200" transform="rotate(${(a*3.6).toFixed(2)} 64 64)" data-hk="rd${j}" style="--o:${(L*(1-v)).toFixed(2)};--o0:${L.toFixed(2)};opacity:${v>0?1:0}"/>`}).join('');
+  return `<section class="hm-card is-half hm-in" style="--i:5" aria-labelledby="hmRdH">
+    <div class="hm-card__h"><div><h3 id="hmRdH">Readiness</h3><p>Four things you can move this week. Not a predicted score.</p></div></div>
+    <div class="hm-rd" data-pgfg>
+      <button type="button" class="hm-rd__ring pg-tap pl-press" data-pk="rd:all" aria-label="Readiness ${R.score} of 100">
+        <svg viewBox="0 0 128 128" aria-hidden="true">${arcs}</svg>
+        <span class="hm-rd__c"><b class="hm-num">${hmN('rd',R.score)}</b><span>${READY_WORD(R.score)}</span></span></button>
+      <ul class="hm-rd__l">${R.parts.map((p,j)=>`<li data-pgf="${j}"><button type="button" class="pg-tap pl-press" data-pk="rd:${j}" data-pgf="${j}" aria-pressed="false">
+        <span class="k"></span><b>${esc(p.k)}</b><em>${p.v==null?'—':Math.round(p.v)+'%'}</em><small>${esc(p.lab)}</small></button></li>`).join('')}</ul>
+    </div>
+    ${R.thin?'<p class="hm-note">Too little history to lean on yet: treat it as a direction, not a verdict.</p>':''}
+  </section>`;
+}
+function hmLev(lv){
+  const body=lv.length?`<ul class="hm-lev">${lv.map((r,i)=>`<li><button type="button" class="pl-press pg-tap" data-pk="hlev:${esc(r.k)}">
+      <span class="hm-lev__t"><b>${esc(r.k)}</b><em>${Math.round(r.p)}% right · ${bsNum(r.bank)} in the bank</em></span>
+      <span class="hm-lev__v"><b class="hm-num">${hmN('lv'+i,r.impact)}</b><em>at stake</em></span>
+      ${pgBar(r.p/100).replace('<i ',`<i data-hk="lv${i}" `)}</button></li>`).join('')}</ul>`
+    :pgEmpty('Fills in as you answer','Five answers in a system put it on this list.');
+  return `<section class="hm-card is-half hm-in" style="--i:6" aria-labelledby="hmLevH">
+    <div class="hm-card__h"><div><h3 id="hmLevH">Where the marks are</h3><p>Ranked by what each gap costs: the share you miss times the questions behind it.</p></div></div>
+    ${body}<div class="hm-foot"><button type="button" class="pl-btn pl-btn--text pl-press" data-hmpg="areas">All areas</button></div></section>`;
+}
+function hmBank(t){
+  const S=pgQState(),c={right:0,wrong:0,new:0,flag:0};
+  DB.questions.forEach(q=>{c[S[q.id].st]++;if((DB.stats[q.id]||{}).flag)c.flag++});
+  const tot=t.total||1,cap=800,qs=DB.questions.slice(0,cap);
+  const parts=[['right','Right last time'],['wrong','Missed last time'],['new','New'],['flag','Flagged']];
+  return `<section class="hm-card hm-bank is-half hm-in" style="--i:6" data-pgfg aria-labelledby="hmBankH">
+    <div class="hm-card__h"><h3 id="hmBankH">The bank</h3></div>
+    <div class="hm-bank__fig">${hmNum(hmN('seen',t.used/tot*100)+pgU('%'))}<span>seen · ${bsNum(t.used)} of ${bsNum(t.total)}</span></div>
+    <div class="hm-stk" aria-hidden="true">${parts.slice(0,3).filter(p=>c[p[0]]).map((p,i)=>`<span data-pgf="${p[0]}" style="--s:${c[p[0]]};--d:${i}"></span>`).join('')}</div>
+    <ul class="hm-leg">${parts.map(p=>`<li data-pgf="${p[0]}"><button type="button" class="pg-tap pl-press" data-pgf="${p[0]}"${p[0]!=='flag'?` data-pk="bank:${p[0]}"`:''} aria-pressed="false">
+      <i></i><b>${p[1]}</b><em>${hmN('b'+p[0],c[p[0]])}</em></button></li>`).join('')}</ul>
+    <div class="hm-plate" role="group" aria-label="Every question, by its last answer">${qs.map(q=>{const st=S[q.id].st,f=(DB.stats[q.id]||{}).flag?' f':'';
+      return `<i class="${st==='right'?'r':st==='wrong'?'w':'n'}${f}" data-q="${q.id}" title="${esc((q.topic||q.system||'')+' · '+st)}"></i>`}).join('')}</div>
+    <p class="hm-plate__n">${DB.questions.length>cap?`The first ${cap} of ${bsNum(DB.questions.length)} questions. Tap one to open it.`:'Every question, by its last answer. Tap one to open it.'}</p>
+  </section>`;
+}
+function hmSessions(){
+  const rec=sessCounted().filter(s=>s.status==='done')
+    .sort((a,b)=>(b.finishedAt||b.heart||b.ts||0)-(a.finishedAt||a.heart||a.ts||0)).slice(0,5);
+  const body=rec.length?`<ul class="hm-ss">${rec.map((s,i)=>{const sc=sessScore(s);
+    return `<li><button type="button" class="pl-press pg-tap" data-sess="${s.id}">
+      <span class="hm-sr" aria-hidden="true"><svg viewBox="0 0 44 44"><circle class="t" cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="1" data-hk="ss${s.id}" style="--o:${(1-sc.p/100).toFixed(3)}"/></svg><span class="hm-sr__n">${sc.n}</span></span>
+      <span class="hm-ss__t"><b>${esc(s.config.label||'Session')}</b><em>${pgDate(s.finishedAt||s.ts,{day:'numeric',month:'short'})} · ${s.config.mode==='test'?'Exam':'Tutor'} · ${pgTtxt((s.elapsed||0)/1000)}</em></span>
+      <span class="hm-ss__v"><b class="hm-num">${sc.p}${pgU('%')}</b><em>${sc.c} of ${sc.n}</em></span></button></li>`}).join('')}</ul>`
+    :pgEmpty('No sessions yet','Your finished blocks land here, newest first.');
+  return `<section class="hm-card hm-in" style="--i:7" aria-labelledby="hmSsH">
+    <div class="hm-card__h"><h3 id="hmSsH">Recent sessions</h3></div>${body}
+    <div class="hm-foot"><button type="button" class="pl-btn pl-btn--text pl-press" data-go="history">All sessions</button></div></section>`;
+}
+function hmSay(t,E,goal){
+  if(!t.total)return 'Your bank is waiting for its first questions.';
+  const out=[],open=sessUnfinished().filter(s=>s.order&&s.order.length)[0],done=between(E,sod(Date.now()).getTime(),Date.now()+1).length;
+  if(open)out.push(`<b>${esc(open.config.label||'A session')}</b> is open at question ${(open.idx||0)+1} of ${open.order.length}.`);
+  if(goal)out.push(done>=goal?'Today’s goal is met.':done?`<b>${goal-done}</b> more close today out.`:`Nothing yet today. <b>${goal}</b> closes it.`);
+  const Fs=E.filter(a=>a.seq===0),now=pgForm(Fs),was=pgForm(Fs,null,PG_FIRST);
+  if(now.n>=PG_FIRST&&was.n>=30){const d=now.p-was.p;if(d>=2.5)out.push(`Your form is up <b>${Math.round(d)} points</b>.`);else if(d<=-2.5)out.push(`Your form has slipped ${Math.round(-d)} points.`)}
+  if(out.length<2&&t.due)out.push(`<b>${bsNum(t.due)}</b> due for review.`);
+  return out.slice(0,2).join(' ');
+}
+function renderDash(arrive){
+  const t=totals();
+  $('#brandTag').textContent=DB.settings.brand||'Personal Qbank';
   $('#bankCnt').textContent=t.total;$('#dueCnt').textContent=t.due;
   try{galPaintCount()}catch(e){}
   const dm=$('#dueCntM');dm.textContent=t.due>99?'99+':t.due;dm.style.display=t.due?'block':'none';
-  /* newest first by when each one ended: the array's order is whatever order
-     the sessions reached this device in, which after a pull is not time */
-  const rec=sessCounted().filter(s=>s.status==='done')
-    .sort((a,b)=>(b.finishedAt||b.heart||b.ts||0)-(a.finishedAt||a.heart||a.ts||0)).slice(0,5);
-  $('#dashRecent').innerHTML=rec.length?rec.map(sessionRow).join(''):'<div class="empty"><h4>No sessions yet</h4><p class="tiny">Build one from the bank whenever you\'re ready.</p></div>';
-  renderCompCard();
+  if(VIEW!=='dash'&&!arrive){HM.stale=true;return}
+  HM.stale=false;
+  PG.E=null;PG.QS=null;PG.QM=null;
+  const root=$('#hm');if(!root)return;
+  if(arrive)Object.keys(PG.prev).forEach(k=>{if(k.startsWith('hm'))delete PG.prev[k]});
+  const old=arrive?{}:hmKeep(root);
+  const E=pgData(),goal=DB.settings.goal||0,ex=examInfo();
+  const nm=DB.settings.name?', '+DB.settings.name:'',hr=new Date().getHours();
+  const mast=`<header class="hm-mast hm-in" style="--i:0">
+      <div class="hm-mast__top"><span class="hm-date" id="todayStr">${esc(pgDate(Date.now(),{weekday:'long',day:'numeric',month:'long'}))}</span>
+        ${ex&&ex.days>=0?`<button type="button" class="hm-exam pg-tap pl-press" data-pk="hz" aria-label="${ex.days} days to the exam"><span class="hm-exam__d">${ex.days}</span>${ex.days===1?'day':'days'} to the exam</button>`:''}</div>
+      <h2 class="hm-greet" id="greet">${esc((hr<5?'Still up':hr<12?'Good morning':hr<18?'Good afternoon':'Good evening')+nm)}</h2>
+      <p class="hm-say" id="dashSub">${hmSay(t,E,goal)}</p></header>`;
+  let body,rest=null;
+  if(!t.total){
+    body=`<section class="hm-card hm-hello hm-in" style="--i:1"><span class="pg-empty__shape" aria-hidden="true"></span>
+      <h3>Your nest is empty</h3><p>Nidus studies the questions you bring it. Copy the extractor prompt, run an exam paper or a PDF through it, and import the JSON it returns. Everything here fills in from your first answer.</p>
+      <div class="hm-hello__acts"><button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" data-go="import">${sxIc('i-import')}Import questions</button>
+      <button type="button" class="pl-btn pl-btn--m pl-btn--tonal pl-press" data-go="prompt">Extractor prompt</button></div></section>`;
+  }else{
+    const lv=leverage(6);
+    body=hmToday(E,t,goal)+hmNext(t,lv);
+    /* the lower half is built a frame later on arrival, so the tap paints
+       first; its cards rise in on their own stagger slot anyway */
+    rest=()=>hmVitals(E)+`<div class="hm-grid">${hmRoad(E,t)}${hmReady()}${hmLev(lv)}${hmBank(t)}${hmSessions()}</div>`;
+  }
+  root.classList.toggle('is-arrive',!!arrive);
+  const tok=HM.tok=(HM.tok||0)+1;
+  $('#hmMast').innerHTML=mast;
+  /* old values go in before anything reads layout, or the new ones would
+     already be the starting point and nothing would glide */
+  $('#hmBody').innerHTML=body;
+  const later=arrive&&rest;
+  if(rest&&!later)$('#hmBody').insertAdjacentHTML('beforeend',rest());
+  hmGlide(root,old);
+  renderCompCard();sxHydrate(root);pgAlive(root);
+  if(!later){hmSparks(!!arrive);return}
+  requestAnimationFrame(()=>setTimeout(()=>{if(HM.tok!==tok)return;
+    const ins=$('#hmBody');ins.insertAdjacentHTML('beforeend',rest());sxHydrate(ins);pgAlive(ins);hmSparks(true)},0));
 }
+/* a figure on Home opens its peek; a part isolates; a cell opens its question */
+document.addEventListener('click',e=>{
+  const v=e.target.closest&&e.target.closest('#v-dash');if(!v)return;
+  const st=e.target.closest('[data-hmstart]');if(st){if(!st.disabled)hmStart(st.dataset.hmstart);return}
+  const pg=e.target.closest('[data-hmpg]');if(pg){const k=pg.dataset.hmpg;go('stats');pgShow(k);return}
+  const pk=e.target.closest('[data-pk]');if(pk){pgPeek(pk.dataset.pk,pk);return}
+  const pf=e.target.closest('[data-pgf]');if(pf){const g=pf.closest('[data-pgfg]');if(g)pgFocus(g,pf.dataset.pgf);return}
+  const c=e.target.closest('.hm-plate i');if(c&&c.dataset.q)previewQuestion(c.dataset.q);
+});
+addEventListener('resize',()=>{const w=innerWidth;if(w===HM.sz)return;HM.sz=w;if(VIEW==='dash'){hmSparks(false);hmWaves()}},{passive:true});
+
 function countToday(){let n=0;const k=today();DB.questions.forEach(q=>attOf(q.id).forEach(a=>{if(dayKey(a.ts)===k)n++}));return n}
 function sessionRow(s){
   const n=s.order.length,c=s.order.filter(id=>s.items[id]&&s.items[id].correct).length;
@@ -11943,7 +12462,7 @@ function openSession(s,from){
     $('#pMode').textContent=s.config.mode==='test'?'Exam':'Tutor';
     renderQ()};
   /* Plume 1.0 — opened from a card (Resume on Home), the player grows out of it */
-  if(from){plumeOpen($('#player'),from.closest('.oss')||from,show,null,true);return}
+  if(from){plumeOpen($('#player'),from.closest('.hm-sess,.oss')||from,show,null,true);return}
   $('#shell').style.display='none';$('#tabbar').style.display='none';
   show();
 }
@@ -15565,7 +16084,7 @@ function pgxPrac(ids,label,lab,primary){
 }
 const pgxPool=(pool,label,lab,n,primary,facet)=>({l:lab+(n!=null?' · '+(n>pgBlockN()?pgBlockN()+' of '+n:n):''),ic:pool==='due'?'i-review':'i-play',primary,dis:n===0,
   run:()=>{F.pool=pool;clearFacets();if(facet)F.sets[facet[0]].add(facet[1]);startSession(label)}});
-const pgxGo=(v,lab)=>({l:lab,ic:'i-next',run:()=>{pgShow(v,true);window.scrollTo({top:0,behavior:'smooth'})}});
+const pgxGo=(v,lab)=>({l:lab,ic:'i-next',run:()=>{if(VIEW!=='stats'){go('stats');pgShow(v);return}pgShow(v,true);window.scrollTo({top:0,behavior:'smooth'})}});
 const pgxPk=(pk,lab)=>({l:lab,ic:'i-next',pk});
 /* where a set of attempts (or questions) falls, by system */
 function pgxBySys(L,lab){
@@ -15882,6 +16401,50 @@ PG_PK.ss=k=>{
       body:pgxP(open.length?'Sessions left open still hold their answers. Finish one and its questions count in every figure here.':'Every session you started is finished.')
         +(open.length?pgxH('Still open')+`<div class="pg-day__s">${open.slice(0,8).map(s=>`<button type="button" class="pg-chipbtn pl-press" data-sessresume="${s.id}">${esc(s.config.label||'Session')} · ${sessAnswered(s)} of ${s.order.length}</button>`).join('')}</div>`:''),acts:[]}}
   return null;
+};
+
+/* ---------- Home's own peeks ---------- */
+/* the road: how the date, the pace and the bank meet */
+PG_PK.hz=()=>{
+  const E=pgData(),t=totals(),R=hmRoadData(E,t),{ex,pace,left,fin,need}=R;
+  const fd=n=>pgDate(Date.now()+n*DAYMS,{weekday:'short',day:'numeric',month:'short'});
+  const fig=ex&&ex.days>=0?pgxFig(pgN('px',ex.days)+pgU(ex.days===1?'day':'days'),'to the exam, '+pgDate(ex.date,{weekday:'long',day:'numeric',month:'long'}))
+    :pgxFig(fin!=null?pgN('px',fin)+pgU('days'):'—','to finish the bank at your pace');
+  return{o:'The road',t:ex?'To the exam':'Your first pass',fig,
+    body:pgxP(left?`Your pace is how many questions you answered a day over the last seven days: ${Math.round(pace)}, ${pace>=R.p7?'up':'down'} from ${Math.round(R.p7)} the seven days before. At that pace the ${bsNum(left)} questions still unseen run out ${fin!=null?'around '+fd(fin):'never'}.`:'Every question has been seen at least once.')
+      +pgxMini([[Math.round(pace),'a day, last 7 days'],[need!=null?Math.ceil(need):'—','a day needed'],[bsNum(left),'still unseen'],[fin!=null?pgDate(Date.now()+fin*DAYMS,{day:'numeric',month:'short'}):'—','bank done'],[ex&&fin!=null?Math.abs(ex.days-fin):'—',ex&&fin!=null&&fin>ex.days?'days short':'days to spare'],[bsNum(t.due),'due now']])
+      +pgxBySys(DB.questions.filter(q=>!attOf(q.id).length),'Where the unseen are'),
+    acts:[pgxPool('unused','New questions','Practise new',t.unused,true),{l:ex?'Change the exam date':'Set an exam date',ic:'i-settings',run:()=>openSettingsSection('session')}]};
+};
+/* the last 14 days of one sign: n questions a day, or t time per question */
+PG_PK.h14=k=>{
+  const E=pgData(),t0=sod(Date.now()),R=[];let mx=0;
+  for(let i=0;i<14;i++){const s=addDays(t0,-i),o=sumOf(between(E,s.getTime(),addDays(s,1).getTime())),v=k==='t'?(o.n?o.ms/o.n/1000:0):o.n;R.push({s,i,o,v});mx=Math.max(mx,v)}
+  const a=sumOf(E.filter(x=>x.ts>=pgSince(7))),b=sumOf(between(E,pgSince(14),pgSince(7))),best=R.slice().sort((x,y)=>y.o.n-x.o.n)[0];
+  const nm=r=>r.i===0?'Today':r.i===1?'Yesterday':pgDate(r.s,{weekday:'short',day:'numeric'});
+  if(k==='t'){
+    return{o:'Vital signs',t:'Time per question',fig:pgxFig(a.n?pgT('px',a.ms/a.n/1000):'—','everything spent on a question, last 7 days'),
+      body:pgxP('Reading, answering and the explanation, averaged over every question you met in the last seven days. Exam pace is 1m 30s a question.')
+        +pgxMini([[b.n?pgTtxt(b.ms/b.n/1000):'—','the 7 days before'],[a.an?pgTtxt(a.ans/a.an/1000):'—','to answer'],[pgTtxt(PG_PACE),'exam pace']])
+        +pgxH('Day by day')+pgxRows(R.filter(r=>r.o.n).map(r=>[nm(r),'',mx?r.v/mx:0,pgTtxt(r.v),r.o.n+' answered'])),
+      acts:[{l:'Open Time in Progress',ic:'i-next',primary:true,run:()=>{go('stats');pgShow('time')}}]};
+  }
+  return{o:'Vital signs',t:'Questions a day',fig:pgxFig(pgN('px',a.n/7)+pgU('a day'),`${a.n} answered in the last 7 days`),
+    body:pgxP('Every answer counts, first sightings and reviews alike. Volume is what turns a plan into a finished bank.')
+      +pgxMini([[b.n,'the 7 days before'],[best&&best.o.n?best.o.n:'—','best day'],[a.days,'days active']])
+      +pgxH('Day by day')+pgxRows(R.map(r=>[nm(r),'',mx?r.v/mx:0,r.v,r.o.n?Math.round(r.o.acc)+'% right':''])),
+    acts:[pgxPool('unused','New questions','Practise new',totals().unused,true)]};
+};
+/* one system on the leverage list, over everything you have answered */
+PG_PK.hlev=k=>{
+  const E=pgData().filter(a=>(a.q.system||UNCLASSIFIED)===k),S=pgQState(),c=E.filter(a=>a.correct).length,p=E.length?c/E.length:0;
+  const Q=DB.questions.filter(q=>(q.system||UNCLASSIFIED)===k),miss=Q.filter(q=>S[q.id].st==='wrong'),nw=Q.filter(q=>S[q.id].st==='new');
+  const Fs=E.filter(a=>a.seq===0),fc=Fs.filter(a=>a.correct).length;
+  return{o:'Where the marks are',t:esc(k),fig:pgxFig(pgN('px',p*100)+pgU('%'),`${c} of ${E.length} answers right`),
+    body:pgxP(`You miss ${Math.round((1-p)*100)}% here and the bank holds ${bsNum(Q.length)} of these questions, so about ${Math.round((1-p)*Q.length)} are marks you are likely to drop.`)
+      +pgxMini([[Fs.length?Math.round(fc/Fs.length*100)+'%':'—','first sightings right'],[miss.length,'missed last time'],[nw.length,'not seen yet']])
+      +pgxCauseRows(pgCauses(E),()=>true),
+    acts:[pgxPrac(miss.map(q=>q.id),'Missed · '+k,'Practise the missed',true),pgxPool('unused','New · '+k,'Practise new',nw.length,false,['system',k])]};
 };
 
 /* ---------- the peek: one sheet for every figure ---------- */
@@ -17213,38 +17776,35 @@ function activeSession(){
 /* always look the session up again: a sync replaces DB.sessions wholesale */
 function compSession(){return COMP.sid?((DB.sessions||[]).find(s=>s.id===COMP.sid)||null):null}
 
-/* ---------- the way in: a card on Home, shown only while a session is open ---------- */
+/* ---------- the way in: a card on Home, shown only while a session is open ----------
+   Plume 2.17: the card is the block itself, answered of total as an
+   expressive count, a wave drawn to its width, Resume as the one filled
+   action and the rest beside it. Resume and Companion grow out of it
+   (plumeOpen finds it by .hm-sess). */
 function renderCompCard(){
   const el=$('#compCard');if(!el)return;
   const list=sessUnfinished().filter(s=>s.order&&s.order.length);
-  if(!list.length){el.style.display='none';el.innerHTML='';return}
-  el.style.display='';
-  /* the note button labels the whole idea of an open session, so it belongs
-     to the heading when there is one and to the single card when there is not */
-  const info=`<button class="ib" data-note="opensess" aria-label="What these buttons do"><svg class="ic"><use href="#i-info"/></svg></button>`;
-  el.innerHTML=`${list.length===1?'':`<p class="eyebrow" style="margin:0 0 10px">${list.length} sessions open${info}<span class="rule"></span></p>`}
-    ${list.map(s=>{
-      const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s);
-      const here=!!(S&&S.id===s.id);
-      const pct=sc.n?Math.round(ans/sc.n*100):0;
-      return `<div class="oss st-${st}">
-        <div class="osstop">
-          <span class="ossstate"><i></i>${st==='live'&&here?'Live on this device':SESS_LABEL[st]}</span>
-          ${list.length===1?info:''}
-          <span class="ossago">${esc(sessAgo(s.heart||s.ts))}</span>
-        </div>
-        <div class="osstitle">${esc(s.config.label||'Session')}</div>
-        <div class="osswave" style="--p:${pct}%" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="${sc.n}" aria-valuenow="${ans}"><span class="act"><i></i></span><span class="ina"></span></div>
-        <div class="osssub"><span><b>${ans}</b> of ${sc.n} answered</span><span class="ossdot"></span><span>${fmtLong((s.elapsed||0)/1000)} on the clock</span><span class="ossdot"></span><span>${s.config.mode==='test'?'Exam':'Tutor'}</span></div>
-        <div class="ossacts">
-          ${here?'':`<button class="btn pri" data-sessresume="${s.id}">${st==='paused'?'Resume':'Continue'}</button>`}
-          <div class="ossgrp">
-            <button class="btn" data-compopen="${esc(s.id)}">Companion</button>
-            ${st==='paused'||here?'':`<button class="btn" data-sesspause="${s.id}">Pause</button>`}
-            <button class="btn" data-sessfinish="${s.id}">Finish</button>
-          </div>
-        </div></div>`;
-    }).join('')}`;
+  if(!list.length){el.innerHTML='';return}
+  const info=`<button type="button" class="pl-ib pl-press" data-note="opensess" aria-label="What these buttons do">${sxIc('i-info')}</button>`;
+  el.innerHTML=list.map((s,i)=>{
+    const st=sessState(s),sc=sessScore(s),ans=sessAnswered(s),here=!!(S&&S.id===s.id),lim=s.config.limit>0?s.config.limit*1000-(s.elapsed||0):null;
+    const bits=[s.config.mode==='test'?'Exam':'Tutor',fmtLong((s.elapsed||0)/1000)+' on the clock'];
+    if(lim!=null)bits.push(lim>=0?fmtLong(lim/1000)+' left in the block':'over by '+fmtLong(-lim/1000));
+    return `<section class="hm-card hm-sess hm-in" style="--i:1" data-st="${st}" aria-label="Open session">
+      <div class="hm-sess__top"><span class="hm-state"><i></i>${st==='live'&&here?'Live on this device':SESS_LABEL[st]}</span>${i===0?info:''}<span class="hm-sess__ago">${esc(sessAgo(s.heart||s.ts))}</span></div>
+      <div class="hm-sess__row"><div><h3>${esc(s.config.label||'Session')}</h3><p>${esc(bits.join(' · '))}</p></div>
+        <span class="hm-sess__n hm-num" aria-label="${ans} of ${sc.n} answered">${ans}<small>/${sc.n}</small></span></div>
+      <svg class="hm-wave" data-p="${sc.n?(ans/sc.n).toFixed(4):0}" role="progressbar" aria-label="Questions answered" aria-valuemin="0" aria-valuemax="${sc.n}" aria-valuenow="${ans}"></svg>
+      <div class="hm-sess__acts">
+        ${here?'':`<button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" data-sessresume="${s.id}">${sxIc('i-play')}${st==='paused'?'Resume':'Continue'}</button>`}
+        <div class="hm-sess__sub">
+          <button type="button" class="pl-btn pl-btn--tonal pl-press" data-compopen="${esc(s.id)}">Companion</button>
+          ${st==='paused'||here?'':`<button type="button" class="pl-btn pl-btn--tonal pl-press" data-sesspause="${s.id}">Pause</button>`}
+          <button type="button" class="pl-btn pl-btn--tonal pl-press" data-sessfinish="${s.id}">Finish</button>
+        </div></div></section>`;
+  }).join('');
+  sxHydrate(el);
+  if(el.getClientRects().length)hmWaves();
 }
 
 /* ---------- Plume 1.0 · shared motion helpers ---------- */
@@ -17455,7 +18015,7 @@ function compOpen(id,from){
   const cp=$('#companion');cp.__leaving=0;
   /* grown out of its card, the screen is the motion: blocks no longer rise in
      on their own, only the tiles ripple and the figures run */
-  const card=from&&(from.closest('.oss')||from);
+  const card=from&&(from.closest('.hm-sess,.oss')||from);
   COMP.enter=card?'grow':true;
   const synced=!!(window.SYNC&&SYNC.connected&&SYNC.connected());
   /* the snackbar waits until the screen has landed */

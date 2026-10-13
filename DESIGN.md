@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.16** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.17** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -677,6 +677,24 @@ version of each):
   jumps.
 - **Data draws itself.** Numbers count up (tabular figures), rings run,
   bars grow from their base. On a re-render, only the difference animates.
+- **Rule: a re-render glides from the old value, set before anything reads
+  layout (2.17).** When a surface is rebuilt with new data, each mark that
+  carries a value (a bar's `--s`, a ring's dash offset) is keyed
+  (`data-hk`); the new markup first takes each key's *old* inline style,
+  then the new one on the next frame, and its own transition carries it
+  across (`hmKeep` / `hmGlide`). Two traps, both found on Home (v6.77):
+  any layout read between inserting the markup and setting the old style
+  (drawing a wave or a spark to its width) commits the new value as the
+  starting point and nothing moves; and a layout read does not restyle an
+  SVG mark that layout never needs, so the old value is made real by
+  reading each element's computed style, not `getBoundingClientRect()`.
+  Measure it: log the mark's computed value per frame after a live update;
+  it must travel, with the spring's overshoot.
+- **A long screen arrives in two frames (2.17).** On arrival, build what
+  the first screenful needs on the tap frame and the rest one frame later
+  (`requestAnimationFrame` then a task), placed in the stagger slot its
+  cards would have had anyway. Home: 65ms of synchronous build became
+  16–23ms.
 
 ### Gestures
 
@@ -1354,6 +1372,49 @@ The quality bar. A surface is done when it *feels* like §2, and:
     facts, every active filter as a chip with its own × and Reset filters.
     Sticky in the flow, so at the end of the page it sits in its own place
     and covers nothing (§7).
+- **Home** (`Plume 2.17 · home`, v6.77, rebuilt from scratch; markup
+  `#hm` with `#hmMast`, `#compCard`, `#hmBody`; script `renderDash`, the
+  `hm*` builders, `renderCompCard`). A briefing read top to bottom: the
+  masthead (date, exam countdown pill, greeting, a one- or two-sentence
+  status from `hmSay`), the open block, Today, Up next, the vital signs,
+  then a two-column grid from 720px (the road, readiness, where the marks
+  are, the bank) and recent sessions. Reuse:
+  - **The wavy goal ring** (`hmRingSVG`): what is done is a wave (radius
+    84 + 3.2·sin 14θ, `pathLength=1`, revealed by its dash offset), what is
+    left a flat well track starting a small gap after it. When the goal is
+    met a `tertiary-container` soft burst blooms behind the count, once
+    (the §10 milestone).
+  - **The week as pebbles** (`.hm-day`): Monday to Sunday, each a 28×52
+    capsule on the well filled from the bottom to its share of the goal
+    (`primary` when met, with a check that draws; the quieter ink when
+    partway), today ringed, days to come drawn as empty outlines (a plan to
+    fill). Each day opens its period; the streak sits at the end as a tile.
+  - **Up next** (`hmNext`): one recommended block (due review when enough is
+    due, else new, else missed), said in one sentence with the builder's own
+    block, mode and timing as tags and a 56px filled Start that names how
+    many it takes; the alternatives as rows in a grouped well (three across
+    from 720px), each starting its block on a tap (`hmStart`).
+  - **Vital tiles with their 14 days** (`.hm-tile`, `hmSpark`, `hmSparks`):
+    figure, delta pill (primary container when it is the good direction,
+    the well otherwise; for time, lower is good), a line or a column spark
+    drawn at its real width after layout (columns: the last 7 days in
+    `primary`, the 7 before in the quieter ink).
+  - **The road** (`hmRoad`): a track from today to the exam with the exam
+    as a tick and the bank's finishing day as a dot; the stretch past the
+    exam is a quieter fill under the main one (two transforms, never a
+    width).
+  - **A ring of weighted parts** (`hmReady`): one arc per part, its length
+    the part's weight, its fill the part's value, in the category hues; the
+    rows beside it isolate their arc and open its peek.
+  - **The bank as a map** (`hmBank`): a stacked bar and a legend whose rows
+    isolate their cells in the plate (`[data-on] .hm-plate i:not(.x)`), and
+    the plate itself, a cell per question that opens it.
+  - **Glide on re-render** (`hmKeep`, `hmGlide`, §6 rule above) and the
+    two-frame arrival (`HM.tok`).
+  - Home's own peeks (`hz` the road, `h14:n|t` a vital sign's 14 days,
+    `hlev:<system>` one row of the leverage list) are defined after
+    `PG_PK` in the FUNCTIONAL INTERACTIVITY block; every other figure
+    opens a Progress peek as it is.
 - **The block clock** (`Plume 2.16 · block clock`, `.sp-timer.low` / `.over`):
   a timed block counts down in the session bar's clock. Minutes only while
   ten or more are left, seconds for the last ten (`59m`, `9m 59s`), so it is
@@ -1385,6 +1446,7 @@ A surface that is not listed here is legacy.
 | Figure viewer: full-screen stage, unfilled top bar, the picture's sheet (title and Copy ID at rest, the rest lifted) | 2.8 | 6.64 | Replaces 2.7's info card, which left a zoomed picture only the top of the screen. Built for the tablet in portrait first |
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
+| **Home, whole screen**: masthead, open block card, Today (wavy goal ring, week pebbles, streak, the day's figures), Up next, vital signs with 14-day sparks, the road, readiness ring, where the marks are, the bank map, recent sessions; every figure opens a peek | 2.17 | 6.77 | Rebuilt from scratch on the user's request. Kept: greeting, date, status line, the goal ring and line, the recommended action, streak and best, questions a day and accuracy over 7 days with their change, due count, the horizon (pace vs needed, finishing date), readiness with its four parts, the six leverage rows, the plate with its legend, five recent sessions, the open-session card and all its buttons. New: form and time per question on Home, the week, the alternatives, sparks, the road track, counts in the bank legend. Dropped: the hero's "See progress" button (Progress is a tab, and every figure now leads there) and the (i) notes for readiness and leverage (their peeks explain them) |
 | **Session builder (New session), whole screen**: presets, Due review / Weakest jumps, pools, filters, how you are tested (mode, size, timing, order, switches), the dock; and the session bar's block clock | 2.16 | 6.76 | Rebuilt from scratch on the user's request; nothing removed (every pool, every filter group, Select all / Clear, Reset filters, mode, size, seconds per question, order, shuffle, confidence, the summary). New: presets, timed blocks (exam pace or fixed minutes, end and grade or overtime), counts per chip inside the pool, find in long filters, removable filter chips, the setup remembered per device |
 | **Progress: functional interactivity** (every figure opens a peek, every part isolates, every chart point, column, period row, day and forecast day opens its period, names jump to their area; the peek sheet; *Practise these* from any figure that counts questions; Review due in an area) | 2.15 | 6.74 | From the user: the rebuilt Progress was static, like a PDF. Nothing removed; blocks became buttons |
 | **Wells across Plume: `--p-well` is a veil over its holder** (Progress view switcher and period switchers, Settings search, every track, field and tile in Settings and Progress); `--p-card-hi` raised in dark; swatch rings | 2.14 | 6.73 | From the user: the switcher's track and the search bar did not stand out from the page in either theme. Measured ΔL: see §3 |
@@ -1540,3 +1602,11 @@ were built under which version.
   that always says what the main action will start, floating above the tab
   bar on phones and the tablet and sitting beside the setup on wide screens;
   and the block clock, which drops its seconds until the last ten minutes.
+- **Plume 2.17** (2026-10-13): Home. A screen with no single task is a
+  briefing in reading order: now, today, next, how you are doing, where
+  the marks are, the record. A re-render glides from the old value, set
+  before anything reads layout; a long screen arrives in two frames. New
+  parts: the wavy goal ring with a milestone burst, the week as pebbles
+  with days to come drawn as a plan, the recommended block with its
+  alternatives, vital tiles with 14-day sparks, the road track, a ring of
+  weighted parts.

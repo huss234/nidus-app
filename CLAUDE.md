@@ -343,6 +343,20 @@ a recipe.
   counts start from zero) and `showPane('stats', …)` hands over to
   `pgShow`, so the `history` alias still lands on Sessions. Readiness is
   still `readiness()`, shared with Home.
+- **Home** (v6.77, the HOME section of the script, `DESIGN.md` §14):
+  `renderDash(true)` is an arrival (figures from zero, cards rise in, the
+  lower half one frame later); `renderDash()` is a live update and repaints
+  in place, gliding keyed marks (`data-hk`) from their old value. Off Home it
+  only refreshes the nav counts (Home rebuilds on `go('dash')`), so the many
+  callers after imports and syncs stay cheap. It reads the Progress record
+  (`pgData`, `pgQState`, `pgForm`) and clears `PG.E`/`PG.QS`/`PG.QM` first,
+  so the two screens can never disagree. Every figure opens a peek through
+  `pgPeek`; Home's own builders (`hz`, `h14`, `hlev`) live after `PG_PK` is
+  declared (assigning to it earlier throws at start-up). `pgxGo` leaves for
+  Progress when a peek's act is pressed elsewhere. The open-session card
+  keeps `data-sessresume` / `data-compopen` / `data-sesspause` /
+  `data-sessfinish`, and `plumeOpen` grows the player and the companion
+  out of `.hm-sess`.
 - **The session builder's setup is a setting** (v6.76): `DB.settings.build`
   (`bld()` fills it from `BLD_DEF`) holds mode, count (0 = every match),
   timing (`off` / `q` / `block`), secs, block (`pace` = 90s × questions, or
@@ -592,5 +606,16 @@ does) and work in the scratchpad:
   in headless Chromium (`.sp-count` 4–8px over at 360/390/430 with the
   per-question clock, before v6.76 too). Anything added to the bar must not
   make it worse than that baseline; measure both.
+- **Test a live update on Home, not just the arrival.** Push a few
+  attempts for today into `DB.stats`, call `renderDash()` and log, per
+  animation frame, the ring's computed `strokeDashoffset`, today's pebble
+  `DOMMatrix.d` and the count's text: all three must travel. A value that
+  sits at its final number from the first frame means a layout read ran
+  before the old style was set (DESIGN.md §6, 2.17).
+- **Profile a screen's build per builder**, best of five (`hmToday`,
+  `hmVitals`, … for Home), then time the whole `go()` to the next
+  `requestAnimationFrame`. The builders summed to 28ms while the render
+  took 65ms: the rest was parsing and layout, fixed by building the lower
+  half a frame later, not by tuning the maths.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
