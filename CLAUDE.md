@@ -401,8 +401,20 @@ a recipe.
   retry from the report never carries it. The report shows the allowance and
   how it ended (`blockChip`), the companion the time left. Sessions without
   `limit` behave exactly as before.
-- **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget` and
-  `nidus_straggler` are live keys. Never rename one without migrating the
+- **Images (the gallery)** (v6.81, THE GALLERY section): a derived index,
+  rebuilt by `renderGallery(reset, arrive)` (`go('gallery')` passes
+  `arrive`); taps change their own control at once and redraw a frame later
+  through `galSoon`. `galIndex()` is shared with the gallery picker; keep its
+  shape. Filters live in `GAL.sets` (`fmt`, with `__other` for none of the
+  five formats; `slot`; `st`; `need` is the Waiting mode) and are tested in
+  one place, `galTest(e, term, skipGroup)`, which the chip counts reuse.
+  The viewer steps through `GAL.view` (the entries in drawn order, groups
+  included), and `lbxSource` finds a tile by `#galBody [data-galidx]`.
+  Gallery peeks are `PG_PK.gal` (installed by `galPkInstall()` on the first
+  render, since `PG_PK` is declared later in the file). Group, layout and
+  size are this device's own, in `localStorage.nidus_gal_view`.
+- **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget`,
+  `nidus_straggler` and `nidus_gal_view` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
   and import/export working.
 - Ship with `ship ~/projects/nidus-app "<message>"` (from the global
@@ -641,5 +653,11 @@ does) and work in the scratchpad:
   `requestAnimationFrame`. The builders summed to 28ms while the render
   took 65ms: the rest was parsing and layout, fixed by building the lower
   half a frame later, not by tuning the maths.
+- **Seeding the gallery:** `figTake` re-runs the classifier on the
+  question (`figTouch`), so set `q.resources` *after* attaching pictures, and
+  spread formats across the questions that actually got one, or a format
+  filter reads 0 and looks broken. Drive the screen with real taps: chips,
+  the three switches, Select then two tiles, Waiting, every `[data-pk]`
+  (each must open with acts), a tile into the viewer and `page.goBack()`.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

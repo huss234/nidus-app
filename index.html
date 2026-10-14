@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.80 -->
+<!-- Nidus — Personal Qbank · v6.81 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2947,130 +2947,268 @@ body.hasmig{padding-bottom:64px}
   color:var(--md-primary);margin:0 0 10px;text-transform:none;
 }
 
-/* ---------- the gallery ----------
-   A picture is looked for with the eyes, so the tile is almost entirely
-   photograph and the labels sit under it rather than over it. The grid is
-   auto-fit rather than a fixed column count: the same rule gives three
-   columns on a phone and seven on the tablet without a media query. */
-.galchips{
-  display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;
-  padding:2px 0 10px;margin:0 0 4px;
-  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+/* ============================================================
+   Plume 2.19 · gallery
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.81). A light table: the pictures are
+   the content, everything else is quiet. Masthead, then the
+   collection as a hero (how many, what they show as a ribbon of
+   formats, the figures behind it, each opening its peek), the
+   Pictures / Waiting switch, search, how to group and lay the
+   pictures out, filter chips that count what a tap brings in,
+   and the grid. The grid can show squares with captions or every
+   picture at its own shape (justified rows in pure CSS: each
+   tile grows by its aspect ratio, so a row shares one height),
+   in three sizes that a pinch also changes. Whatever moves when
+   the set changes glides from where it was (FLIP); what leaves
+   fades where it stood. Long-press selects.
+   ============================================================ */
+#v-gallery{
+  --gl-c1:var(--md-primary);
+  --gl-c2:oklch(from var(--md-primary) l c calc(h + 72));
+  --gl-c3:oklch(from var(--md-primary) l c calc(h + 144));
+  --gl-c4:oklch(from var(--md-primary) l c calc(h + 216));
+  --gl-c5:oklch(from var(--md-primary) l c calc(h + 288));
+  --gl-c6:color-mix(in oklab,var(--md-primary) 45%,var(--p-well));
+  --gl-min:108px;--gl-rowh:132px;--gl-gap:6px;--gl-r:var(--p-r-l);
+  padding-bottom:calc(120px + env(safe-area-inset-bottom));
 }
-.galchips::-webkit-scrollbar{display:none}
-.galchips .pill{flex:0 0 auto}
-.galchips .galsep{
-  flex:0 0 auto;width:1px;align-self:stretch;margin:4px 4px;
-  background:var(--md-outline-variant);
+#v-gallery[data-size="s"]{--gl-min:76px;--gl-rowh:92px;--gl-gap:4px;--gl-r:var(--p-r-m)}
+#v-gallery[data-size="l"]{--gl-min:164px;--gl-rowh:210px;--gl-gap:8px}
+@media (min-width:600px){
+  #v-gallery{--gl-min:132px;--gl-rowh:164px;--gl-gap:8px}
+  #v-gallery[data-size="s"]{--gl-min:92px;--gl-rowh:112px;--gl-gap:6px}
+  #v-gallery[data-size="l"]{--gl-min:204px;--gl-rowh:260px;--gl-gap:10px}
 }
-.galbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 16px}
-.galbar .seg{flex:0 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none}
-.galbar .seg::-webkit-scrollbar{display:none}
-.galbar .seg button{flex:0 0 auto;white-space:nowrap}
-.galgrid{
-  display:grid;gap:10px;
-  grid-template-columns:repeat(auto-fill,minmax(128px,1fr));
+/* the screen brings its own parts in on a stagger; the shell's fade would add empty frames */
+#v-gallery.on{animation:none}
+.gl{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto;transition:padding-bottom var(--p-spatial-d) var(--p-spatial)}
+.gl.is-sel{padding-bottom:88px}
+.gl.is-arrive > *{animation:glRise var(--p-spatial-d) var(--p-spatial) both;animation-delay:calc(var(--gi,0) * 32ms)}
+@keyframes glRise{from{opacity:0;transform:translateY(12px)}}
+@keyframes glFade{from{opacity:0}}
+
+/* ---- masthead ---- */
+.gl-mast{padding:4px 2px 0}
+.gl-title{margin:0;font:450 34px/40px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.015em;color:var(--md-on-surface)}
+@media (min-width:600px){.gl-title{font-size:44px;line-height:52px}}
+.gl-say{margin:8px 0 0;max-width:56ch;font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.gl-say b{font-weight:600;color:var(--md-on-surface);font-variant-numeric:tabular-nums}
+.gl-link{display:inline;padding:0;margin:0;background:none;border:0;font:inherit;color:var(--md-primary);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.gl-link:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;border-radius:4px}
+
+/* ---- the collection ---- */
+.gl-hero{display:grid;gap:20px;padding:20px;border-radius:var(--p-r-hero);background:var(--p-card);color:var(--md-on-surface);min-width:0}
+.gl-hero:empty{display:none}
+@media (min-width:600px){.gl-hero{padding:28px 32px}}
+@media (min-width:980px){.gl-hero{grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:36px;align-items:start}}
+.gl-hero__a{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+/* the tablet in portrait: the three figures sit beside the count, not under it */
+@media (min-width:600px) and (max-width:979px){.gl-hero__a{flex-direction:row;align-items:center;gap:32px}.gl-hero__a .gl-mini{margin-top:0;flex:1}}
+.gl-count{display:flex;flex-direction:column;align-items:flex-start;text-align:left;color:var(--md-on-surface)}
+.gl-big{font-size:64px;font-weight:540;line-height:1.02}
+@media (min-width:600px){.gl-big{font-size:76px}}
+.gl-count > span:last-child{margin-top:4px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.gl-mini{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;width:100%;margin-top:20px;border-radius:var(--p-r-l);overflow:hidden}
+.gl-mini > button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:76px;padding:12px 14px;text-align:left;background:var(--p-well);color:var(--md-on-surface);border-radius:0}
+.gl-mini b{font-size:26px;font-weight:540;line-height:1.1}
+.gl-mini span{font:500 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant)}
+.gl-hero__b{min-width:0}
+.gl-hero__h{margin:0 0 12px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+@media (min-width:980px){.gl-hero__h{margin-top:6px}}
+/* the ribbon: one segment per format, its length its share of the pictures */
+.gl-rib{display:flex;gap:3px;height:28px}
+.gl-rib > span{position:relative;flex:var(--n) 1 0;min-width:8px;border-radius:var(--p-r-xs);background:var(--c);cursor:pointer;transform-origin:0 50%;
+  animation:glGrow var(--p-spatial-slow-d) var(--p-spatial-slow) both;animation-delay:calc(120ms + var(--i,0) * 40ms);
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+.gl-rib > span::before{content:"";position:absolute;inset:-10px 0}
+.gl-rib > span:first-child{border-radius:14px var(--p-r-xs) var(--p-r-xs) 14px}
+.gl-rib > span:last-child{border-radius:var(--p-r-xs) 14px 14px var(--p-r-xs)}
+.gl-rib > span:only-child{border-radius:14px}
+@keyframes glGrow{from{transform:scaleX(0)}}
+.gl-leg{list-style:none;margin:12px -10px 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:2px 8px}
+.gl-leg button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:6px 10px;border-radius:var(--p-r-m);text-align:left;
+  font:500 14px/20px var(--m3-font);color:var(--md-on-surface);transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.gl-leg i{flex:none;width:12px;height:12px;border-radius:4px;background:var(--c)}
+.gl-leg span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gl-leg b{font-weight:600;font-variant-numeric:tabular-nums}
+.gl-leg em{font-style:normal;min-width:3.2ch;text-align:right;font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+[data-pgfg].is-fg .gl-rib > span:not(.is-on){opacity:.28}
+[data-pgfg].is-fg .gl-leg button:not(.is-on){opacity:.5}
+
+/* ---- Pictures / Waiting ---- */
+.gl-mode{width:100%}
+.gl-mode__n{margin-left:6px;font-weight:600;font-variant-numeric:tabular-nums;opacity:.78}
+
+/* ---- search ---- */
+.gl-search{margin:0}
+.gl-hint{display:grid;grid-template-rows:minmax(0,0fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.gl-hint > div{overflow:hidden;min-height:0}
+.gl-hint p{margin:0;padding:8px 18px 0;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.gl-hint p code{font:500 12px/16px var(--m3-mono);color:var(--md-on-surface)}
+.gl-hint.on{grid-template-rows:minmax(0,1fr)}
+.gl-hint.on p{opacity:1;transition-delay:60ms}
+
+/* ---- grouping and layout ---- */
+.gl-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.gl-group{flex:1 1 400px;min-width:0}
+.gl-view{flex:none;display:flex;gap:8px;margin-left:auto}
+.gl-lay{width:112px}
+.gl-size{width:156px}
+.gl-view .pl-seg button{display:grid;place-items:center;padding:0}
+.gl-view .pl-seg button .ic{width:20px;height:20px}
+.gl-view .pl-seg button rect{fill:transparent;transition:fill var(--p-effect-d) var(--p-effect)}
+.gl-view .pl-seg button[aria-checked="true"] rect{fill:currentColor;transition-delay:var(--lag,0ms)}
+.gl-view .pl-seg button[aria-checked="true"] path{stroke:var(--md-primary)}
+.pl-seg.is-off{opacity:.38;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+.gl-tools .pl-seg{transition:opacity var(--p-effect-d) var(--p-effect)}
+
+/* ---- filters ---- */
+.gl-chips{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px}
+.gl-chips::-webkit-scrollbar{display:none}
+.gl-chips__g{flex:none;display:flex;align-items:center;gap:8px}
+.gl-chips__h{flex:none;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant);padding-right:2px}
+@media (min-width:600px){
+  .gl-chips{flex-direction:column;gap:10px;overflow:visible;margin:0;padding:0}
+  .gl-chips__g{flex-wrap:wrap}
+  .gl-chips__h{width:92px}
 }
-.galsec{margin:0 0 26px}
-.galsec .galh{
-  position:relative;overflow:hidden;
-  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
-  background:none;border:none;padding:8px 0;margin:0 0 10px;
-  border-radius:var(--m3-corner-s);
-  color:var(--md-on-surface);
-  font-size:16px;line-height:24px;font-weight:600;letter-spacing:.15px;
+.gl-chip{cursor:pointer;background:none}
+.gl-chip__n{font-style:normal;margin-left:6px;font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.gl-chip.on .gl-chip__n{color:inherit}
+.gl-chip.is-nil:not(.on){opacity:.55}
+@media (hover:hover){.gl-chip:not(.on):hover{background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}}
+
+/* ---- the line over the grid ---- */
+.gl-meta{display:flex;align-items:center;gap:4px;min-height:40px;margin:-4px 0}
+.gl-meta__t{flex:1;min-width:0;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.gl-meta .pl-btn{padding:0 12px}
+.gl-meta .pl-btn[hidden]{display:none}
+.gl-meta .pl-btn .ic{margin-left:0}
+.gl-clear{opacity:0;transform:scale(.8);visibility:hidden;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),visibility 0s linear var(--p-effect-d)}
+.gl-clear.on{opacity:1;transform:none;visibility:visible;transition-delay:0s}
+
+/* ---- jump to a group ---- */
+.gl-index{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:-4px -16px 0;padding:2px 16px}
+.gl-index::-webkit-scrollbar{display:none}
+.gl-index:empty{display:none}
+.gl-index > button{animation:glFade var(--p-effect-d) var(--p-effect) both;background:var(--p-card);box-shadow:none;cursor:pointer}
+@media (min-width:600px){.gl-index{flex-wrap:wrap;overflow:visible;margin:-4px 0 0;padding:0}}
+
+/* ---- groups ---- */
+.gl-body{touch-action:pan-x pan-y;min-height:120px}
+.gl-sec{scroll-margin-top:80px}
+.gl-sec + .gl-sec{margin-top:16px}
+.gl-sec__h{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.gl-sec__fold{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:48px;padding:0 12px 0 6px;border-radius:var(--p-r-m);text-align:left;
+  font:500 18px/24px var(--m3-font);color:var(--md-on-surface)}
+.gl-sec__fold > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gl-sec__chev{flex:none;width:22px;height:22px;color:var(--md-on-surface-variant);transition:transform var(--p-spatial-d) var(--p-spatial)}
+.gl-sec.shut .gl-sec__chev{transform:rotate(-90deg)}
+.gl-sec__n{flex:none;min-width:48px;height:36px;padding:0 12px;border-radius:18px;background:var(--p-well);color:var(--md-on-surface);
+  font:600 13px/1 var(--m3-font);font-variant-numeric:tabular-nums;position:relative;isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+.gl-sec__n::before{content:"";position:absolute;inset:-6px 0}
+.gl-sec__n.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.gl-sec__n.is-src{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.gl-sec__n:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.gl-sec__b{display:grid;grid-template-rows:minmax(0,1fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.gl-sec__b > div{overflow:hidden;min-height:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.gl-sec.shut .gl-sec__b{grid-template-rows:minmax(0,0fr)}
+.gl-sec.shut .gl-sec__b > div{opacity:0}
+.gl-sec.is-flash .gl-sec__fold::after{opacity:var(--m3-state-press)}
+
+/* ---- the grid ---- */
+.gl-grid{display:grid;gap:var(--gl-gap);grid-template-columns:repeat(auto-fill,minmax(min(var(--gl-min),100%),1fr));padding:3px}
+.gl-sec .gl-grid{padding-bottom:6px}
+/* every picture at its own shape: a tile's width grows in proportion to its
+   aspect ratio, so the tiles of a row share one height; the filler keeps the
+   last row from stretching */
+.gl-grid.is-true{display:flex;flex-wrap:wrap}
+.gl-grid.is-true::after{content:"";flex:10000 1 0}
+.gl-grid.is-true > .gl-tile{flex:var(--ar) 1 calc(var(--ar) * var(--gl-rowh));max-width:100%}
+.gl-grid.is-need{--gl-min:156px}
+.gl-tile{position:relative;display:flex;flex-direction:column;min-width:0;padding:0;text-align:left;color:var(--md-on-surface);
+  border-radius:var(--gl-r);-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.gl-ph{position:relative;display:block;width:100%;aspect-ratio:1;border-radius:var(--gl-r);overflow:hidden;isolation:isolate;background:var(--p-well);
+  transition:border-radius var(--p-effect-d) var(--p-effect),scale var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.gl-grid.is-true .gl-ph{aspect-ratio:var(--ar)}
+.gl-ph img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none}
+.gl-ph img:not([src]){visibility:hidden}
+.gl-ph img.mediain{animation:glFade var(--p-effect-slow-d) var(--p-effect-slow)}
+.gl-ph img.mediamiss{visibility:hidden}
+.gl-ph::after{content:"";position:absolute;inset:0;z-index:2;background:var(--md-on-surface);opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.gl-tile:hover .gl-ph::after{opacity:var(--m3-state-hover)}}
+.gl-tile.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.gl-tile.is-down .gl-ph{border-radius:calc(var(--gl-r) - 4px);transition-duration:var(--p-effect-fast-d)}
+.gl-tile.is-down .gl-ph::after{opacity:var(--m3-state-press)}
+.gl-tile:focus-visible{outline:none}
+.gl-tile:focus-visible .gl-ph{outline:3px solid var(--md-primary);outline-offset:2px}
+/* marks over the photograph sit on the inverse surface, which is the opposite
+   end of the palette from the page in either theme, so they read on any picture */
+.gl-b{position:absolute;z-index:3;display:inline-flex;align-items:center;justify-content:center;gap:4px;height:22px;padding:0 8px;border-radius:11px;
+  background:color-mix(in oklab,var(--md-inverse-surface) 80%,transparent);color:var(--md-inverse-on-surface);
+  font:600 11px/16px var(--m3-font);letter-spacing:.2px;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none}
+.gl-b .ic{width:14px;height:14px}
+.gl-b--n{top:6px;right:6px}
+.gl-b--slot{left:6px;bottom:6px;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis}
+.gl-b--flag{right:6px;bottom:6px;width:22px;padding:0}
+#v-gallery[data-size="s"] .gl-b--slot{display:none}
+#v-gallery[data-size="s"] .gl-b{top:4px;right:4px;height:20px;padding:0 6px}
+#v-gallery[data-size="s"] .gl-b--flag{top:auto;bottom:4px;width:20px;padding:0}
+.gl-cap{display:flex;flex-direction:column;gap:2px;min-width:0;padding:8px 4px 6px}
+.gl-cap b{font:500 13px/18px var(--m3-font);letter-spacing:.1px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.gl-cap em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gl-cap em:empty{display:none}
+.gl-grid.is-true .gl-cap,#v-gallery[data-size="s"] .gl-grid:not(.is-need) .gl-cap{display:none}
+/* selecting: an empty ring on every picture, filled and checked on the chosen;
+   the chosen photo draws back inside its tile */
+.gl-ck{position:absolute;z-index:4;top:6px;left:6px;width:24px;height:24px;border-radius:12px;display:grid;place-items:center;
+  background:color-mix(in oklab,var(--md-inverse-surface) 35%,transparent);box-shadow:inset 0 0 0 2px var(--md-inverse-on-surface);
+  opacity:0;transform:scale(.6);pointer-events:none;
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),background-color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect)}
+.gl-ck svg{width:16px;height:16px;fill:none;stroke:var(--md-on-primary);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.gl-ck path{stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+.gl.is-sel .gl-ck{opacity:1;transform:none}
+.gl.is-sel .gl-b--n{opacity:0}
+.gl-tile.is-sel .gl-ck{background:var(--md-primary);box-shadow:0 0 0 2px var(--md-on-primary)}
+.gl-tile.is-sel .gl-ck path{stroke-dashoffset:0;transition-delay:60ms}
+.gl-tile.is-sel .gl-ph{scale:.88;border-radius:var(--p-r-lx)}
+.gl-tile.is-sel .gl-ph img{outline:none}
+/* a question that asked for a figure and has none: the same attach target the
+   question carries, at tile size, with its three ways in */
+.gl-need{display:flex;flex-direction:column;min-width:0;border-radius:var(--gl-r)}
+.gl-ph--need{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--md-on-surface-variant);
+  transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect)}
+.gl-ph--need .ic{width:28px;height:28px}
+.gl-ph--need small{font:500 12px/16px var(--m3-font)}
+.gl-need.over .gl-ph--need{background:var(--md-secondary-container);color:var(--md-on-secondary-container);box-shadow:inset 0 0 0 2px var(--md-primary)}
+.gl-need__acts{display:flex;margin:-2px -4px 0}
+.gl-need .figpad{margin:4px 0 0}
+.gl-empty{grid-column:1/-1;padding:40px 16px}
+.gl-empty .pl-btn{margin-top:12px}
+.gl-more{display:flex;justify-content:center}
+.gl-more:has(> [hidden]){display:none}
+/* what leaves the grid fades where it stood, on a layer of its own */
+.gl-ghost{position:fixed;z-index:3;margin:0;pointer-events:none}
+
+/* ---- selection bar ---- */
+.gl-selbar{position:fixed;z-index:40;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));width:min(640px,calc(100% - 32px));
+  display:flex;align-items:center;gap:4px;padding:8px 8px 8px 4px;border-radius:var(--p-r-xl);background:var(--p-float);color:var(--md-on-surface);box-shadow:var(--p-shadow);
+  transform:translate(-50%,0);transition:transform var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect)}
+@media (max-width:860px){.gl-selbar{bottom:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom) + 12px)}}
+.gl-selbar:not(.is-open){opacity:0;transform:translate(-50%,calc(100% + 24px));pointer-events:none}
+.gl-selbar__n{flex:1;min-width:0;padding-left:4px;font:540 20px/24px var(--m3-font);font-variation-settings:"wdth" 112,"ROND" 100;letter-spacing:-.01em;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gl-selbar .pl-btn{padding:0 18px}
+.gl-selbar .pl-btn:disabled{opacity:.38}
+
+@media (prefers-reduced-motion:reduce){
+  .gl.is-arrive > *{animation-name:glFade;animation-duration:150ms}
+  .gl-rib > span{animation:glFade 150ms both}
+  .gl-tile.is-sel .gl-ph{scale:none}
 }
-@media (hover:hover){.galsec .galh:hover{background-image:var(--m3-wash-hover)}}
-.galsec .galh:active{background-image:var(--m3-wash-press)}
-.galsec .galh .cnt{
-  font-family:var(--m3-mono);font-size:12px;line-height:16px;font-weight:500;
-  padding:2px 8px;border-radius:var(--m3-corner-full);
-  background:var(--md-surface-container-highest);color:var(--md-on-surface-variant);
-}
-.galsec .galh .ic{
-  width:20px;height:20px;margin-left:auto;color:var(--md-on-surface-variant);
-  transition:transform var(--m3-spatial) var(--m3-spring-expressive);
-}
-.galsec.shut .galh .ic{transform:rotate(-90deg)}
-.galsec.shut .galgrid{display:none}
-/* the tile — a Material container that happens to be mostly image */
-.galtile{
-  position:relative;display:block;width:100%;padding:0;text-align:left;
-  background:none;border:none;color:inherit;
-  border-radius:var(--m3-corner-m);
-  transition:transform var(--m3-spatial) var(--m3-spring-expressive);
-  /* Both badges below sit on a scrim over the photograph, never on a surface,
-     so their text has to come from whichever end of the neutral palette is
-     LIGHT in the current theme. In dark that is --md-on-surface; in light it
-     is --md-inverse-on-surface. Reading one of the two unconditionally is
-     what left the slot label dark-on-dark at night. This is the pairing the
-     figure viewer already uses for its own chrome, one level down. */
-  --tile-on:var(--md-on-surface);
-}
-[data-theme="light"] .galtile{--tile-on:var(--md-inverse-on-surface)}
-.galtile:active{transform:scale(.96)}
-.galtile .gph{
-  position:relative;display:block;width:100%;aspect-ratio:1/1;
-  border-radius:var(--m3-corner-m);overflow:hidden;
-  background:var(--md-surface-container-high);
-  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease);
-}
-/* Material's state layer, laid OVER the photograph rather than under it — a
-   wash on the tile's own background is hidden by an opaque image, which is
-   why the tile had nothing but a scale with which to answer the finger. The
-   ripple spawns inside this same box; see RIPPLE_SEL. */
-.galtile .gph::after{
-  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:currentColor;opacity:0;
-  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard);
-}
-@media (hover:hover){.galtile:hover .gph::after{opacity:var(--m3-state-hover)}}
-.galtile:active .gph::after{opacity:var(--m3-state-press)}
-.galtile:active .gph{border-radius:var(--m3-corner-xs);transition-duration:var(--m3-shape-in)}
-.galtile .gph img{
-  display:block;width:100%;height:100%;object-fit:cover;
-  border-radius:inherit;
-}
-.galtile .gph img.mediain{animation:mediaIn var(--m3-dur-medium) var(--m3-ease-standard)}
-.galtile .gph img.mediamiss{
-  min-height:0;border:1.5px dashed var(--md-outline);background:transparent;
-}
-/* a figure carried by more than one question says so, the way the bank
-   marks a question it has seen more than once */
-.galtile .gdup{
-  position:absolute;top:6px;right:6px;z-index:2;
-  font-family:var(--m3-mono);font-size:11px;line-height:16px;font-weight:500;
-  padding:1px 7px;border-radius:var(--m3-corner-full);
-  background:var(--md-primary-container);color:var(--md-on-primary-container);
-  box-shadow:var(--m3-elev-1);
-}
-.galtile .gslot{
-  position:absolute;bottom:6px;left:6px;z-index:2;
-  font-size:11px;line-height:16px;font-weight:500;letter-spacing:.4px;
-  padding:1px 8px;border-radius:var(--m3-corner-full);
-  background:color-mix(in oklab,var(--md-scrim) 66%,transparent);
-  color:var(--tile-on);
-}
-.galtile .gcap{
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
-  font-size:13px;line-height:18px;letter-spacing:.2px;
-  color:var(--md-on-surface);margin:8px 2px 2px;
-}
-.galtile .gsys{
-  display:block;font-size:11px;line-height:16px;letter-spacing:.4px;
-  color:var(--md-on-surface-variant);margin:0 2px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-/* an empty slot in the grid: the same attach target the question carries,
-   at tile size, so the gallery is also where a missing photo gets finished */
-.galtile.need .gph{
-  background:var(--md-surface-container-low);
-  border:1px solid var(--md-outline-variant);
-  display:flex;align-items:center;justify-content:center;
-}
-.galtile.need .gph .ic{width:28px;height:28px;color:var(--md-on-surface-variant)}
-.galtile.need.over .gph{border-color:var(--md-primary);background:var(--md-primary-container)}
-.galtile.need.over .gph .ic{color:var(--md-on-primary-container)}
 
 /* ---------- the figure viewer ----------
    Plume 1.10 · figure viewer. Rebuilt in v6.57: the legacy bar held six
@@ -6888,34 +7026,76 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="row" style="justify-content:center;margin-top:14px"><button class="btn ghost" id="bankMore" style="display:none">Show more</button></div>
     </section>
 
-    <!-- ============ GALLERY ============
+    <!-- ============ IMAGES (Plume 2.19 · gallery) ============
          Every picture in the bank, seen as pictures rather than as questions.
          The screen owns no data of its own: it is rebuilt on entry by walking
-         the questions, harvesting their filled figure slots and deduplicating
-         by content hash, so a photo attached to four items is one tile that
-         knows about all four. Each tile inherits its parent question's
-         classification, which is why the grouping switch below needs nothing
-         typed in by hand — system, subject, topic and format were resolved by
-         the taxonomy engine the moment the question was imported. -->
-    <section class="view" id="v-gallery">
-      <p class="eyebrow">Archive <span class="rule"></span> <span id="galEyebrow"></span></p>
-      <h2 class="vt">Images</h2>
-      <div class="row" style="margin-bottom:12px">
-        <input type="search" id="galSearch" placeholder="Search captions, topics, stems, or an image ID…" style="flex:1 1 220px;min-width:0">
-      </div>
-      <div class="galchips" id="galChips"></div>
-      <div class="galbar">
-        <div class="seg" id="galGroup">
-          <button data-grp="recent" class="on">Recent</button>
-          <button data-grp="system">System</button>
-          <button data-grp="subject">Subject</button>
-          <button data-grp="topic">Topic</button>
-          <button data-grp="resource">Format</button>
+         the questions, harvesting their figure slots and deduplicating by
+         content hash, so a photo attached to four items is one tile that
+         knows about all four, and each tile inherits its question's
+         classification. Masthead, the collection (count, what the pictures
+         show, the figures behind it), Pictures / Waiting, search, how to
+         group and lay them out, filters that count what they bring in, then
+         the light table itself. Long-press a picture to select several. -->
+    <section class="view" id="v-gallery" data-size="m">
+      <div class="gl" id="gl">
+        <header class="gl-mast">
+          <h2 class="gl-title">Images</h2>
+          <p class="gl-say" id="glSay"></p>
+        </header>
+        <div class="gl-hero" id="glHero"></div>
+        <div class="gl-mode pl-seg" id="glMode" role="radiogroup" aria-label="What to show" style="--n:2;--i:0">
+          <span class="pl-seg__ind" aria-hidden="true"></span>
+          <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="have">Pictures<span class="gl-mode__n" id="glModeHave"></span></button>
+          <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="need">Waiting for a photo<span class="gl-mode__n" id="glModeNeed"></span></button>
         </div>
-        <span class="tiny muted" id="galMeta"></span>
+        <div class="gl-find">
+          <label class="sx-search gl-search" id="glSearchBox">
+            <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
+            <input type="search" id="galSearch" placeholder="Captions, topics, stems or an image ID" aria-label="Search pictures" autocomplete="off">
+            <button type="button" class="sx-search__x pl-press" id="galSearchX" aria-label="Clear search" tabindex="-1"><svg class="ic" data-ic="i-close"></svg></button>
+          </label>
+          <div class="gl-hint" id="glHint" aria-live="polite"><div><p id="glHintT"></p></div></div>
+        </div>
+        <div class="gl-tools">
+          <div class="pl-seg gl-group" id="galGroup" role="radiogroup" aria-label="Group pictures by" style="--n:5;--i:0">
+            <span class="pl-seg__ind" aria-hidden="true"></span>
+            <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="recent">Recent</button>
+            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="system">System</button>
+            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="subject">Subject</button>
+            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="topic">Topic</button>
+            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="resource">Format</button>
+          </div>
+          <div class="gl-view">
+            <div class="pl-seg gl-lay" id="glLay" role="radiogroup" aria-label="Picture shape" style="--n:2;--i:0">
+              <span class="pl-seg__ind" aria-hidden="true"></span>
+              <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="sq" aria-label="Squares, with captions" title="Squares, with captions"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></button>
+              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="true" aria-label="Each picture at its own shape" title="Each picture at its own shape"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="6" rx="1.8"/><rect x="16" y="5" width="5" height="6" rx="1.8"/><rect x="3" y="13" width="6" height="6" rx="1.8"/><rect x="11" y="13" width="10" height="6" rx="1.8"/></svg></button>
+            </div>
+            <div class="pl-seg gl-size" id="glSize" role="radiogroup" aria-label="Tile size" style="--n:3;--i:1">
+              <span class="pl-seg__ind" aria-hidden="true"></span>
+              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="s" aria-label="Small tiles" title="Small tiles (pinch the pictures in)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="4" height="4" rx="1.2"/><rect x="10" y="4" width="4" height="4" rx="1.2"/><rect x="16" y="4" width="4" height="4" rx="1.2"/><rect x="4" y="10" width="4" height="4" rx="1.2"/><rect x="10" y="10" width="4" height="4" rx="1.2"/><rect x="16" y="10" width="4" height="4" rx="1.2"/><rect x="4" y="16" width="4" height="4" rx="1.2"/><rect x="10" y="16" width="4" height="4" rx="1.2"/><rect x="16" y="16" width="4" height="4" rx="1.2"/></svg></button>
+              <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="m" aria-label="Medium tiles" title="Medium tiles"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="6" height="6" rx="1.6"/><rect x="13" y="5" width="6" height="6" rx="1.6"/><rect x="5" y="13" width="6" height="6" rx="1.6"/><rect x="13" y="13" width="6" height="6" rx="1.6"/></svg></button>
+              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="l" aria-label="Large tiles" title="Large tiles (pinch the pictures out)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="gl-chips" id="galChips"></div>
+        <div class="gl-meta">
+          <span class="gl-meta__t" id="galMeta"></span>
+          <button type="button" class="pl-btn pl-btn--text pl-press gl-clear" id="glClear">Clear filters</button>
+          <button type="button" class="pl-btn pl-btn--text pl-press" id="glSelBtn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.2 2.8 2.8 5.4-5.6"/></svg>Select</button>
+        </div>
+        <nav class="gl-index" id="glIndex" aria-label="Jump to a group"></nav>
+        <div class="gl-body" id="galBody"></div>
+        <div class="gl-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" id="galMore" hidden>Show more</button></div>
       </div>
-      <div id="galBody"></div>
-      <div class="row" style="justify-content:center;margin-top:16px"><button class="btn ghost" id="galMore" style="display:none">Show more</button></div>
+      <div class="gl-selbar" id="glSel" role="toolbar" aria-label="Selected pictures" inert>
+        <button type="button" class="pl-ib pl-press" id="glSelX" aria-label="Stop selecting"><svg class="ic" data-ic="i-close"></svg></button>
+        <span class="gl-selbar__n" id="glSelN" aria-live="polite">0 selected</span>
+        <button type="button" class="pl-ib pl-press" id="glSelAll" aria-label="Select every picture shown" title="Select every picture shown"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.2 2.8 2.8 5.4-5.6"/></svg></button>
+        <button type="button" class="pl-ib pl-press" id="glSelCopy" aria-label="Copy their image IDs" title="Copy their image IDs"><svg class="ic" data-ic="i-copy"></svg></button>
+        <button type="button" class="pl-btn pl-btn--filled pl-press" id="glSelGo" disabled><svg class="ic" data-ic="i-play"></svg><span id="glSelGoT">Practise</span></button>
+      </div>
     </section>
 
     <!-- ============ PROGRESS (Plume 2.11) ============ -->
@@ -7076,7 +7256,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.80</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.81</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7132,7 +7312,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.80 · sharded store</span>
+        <span class="chip" id="verChip">v6.81 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8110,9 +8290,6 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
        state layer in the shape of its indicator (see the .tabbar rules). */
     '.subtabs button,' +
     '.nav button,.navstrip button,.qrow,.pool,.ch,.fab,.fabitem,' +
-    /* .galtile .gph, not .galtile: the photo box is the part that already
-       clips and is positioned, so the ripple lands inside the picture */
-    '.galtile .gph,.galsec .galh,' +
     '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button,' +
     /* the study session (6.15) */
     '.sp-opt,.sp-go,.sp-ib,.sp-count,.sp-cbg button,.sp-chip,.sp-grid button,.sp-jump';
@@ -8249,7 +8426,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.80';
+const APP_VERSION='6.81';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10333,7 +10510,7 @@ function lbxSource(){
   const f=figViewList()[FIG.view.i];if(!f)return null;
   let el=null;
   if(FIG.view.gal){
-    el=document.querySelector(`.galtile[data-galidx="${FIG.view.i}"] img`);
+    el=document.querySelector(`#galBody [data-galidx="${FIG.view.i}"] img`);
     if(el&&f.media&&el.getAttribute('data-media')!==f.media)el=null;
   }else{
     const all=$$('.figs').filter(w=>w.dataset.figq===FIG.view.qid)
@@ -11067,7 +11244,7 @@ function go(v){
   if(v==='build')renderBuild();
   if(v==='review')renderReview();
   if(v==='bank')renderBank(true);
-  if(v==='gallery')renderGallery(true);
+  if(v==='gallery')renderGallery(true,true);
   if(v==='stats')renderStats(true);
   if(v==='settings')renderSettings();
   if(v==='import')renderPrompt();
@@ -14776,7 +14953,7 @@ document.addEventListener('click',e=>{const p=e.target.closest('[data-preview]')
   if(p&&!e.target.closest('[data-editq]'))previewQuestion(p.dataset.preview)});
 
 /* ============================================================
-   THE GALLERY
+   THE GALLERY  (Plume 2.19 · gallery, rebuilt in v6.81)
    ------------------------------------------------------------
    A picture in Nidus is not an object. It is a slot on a
    question: q.images[] holds the caption, the alt note and a
@@ -14788,75 +14965,87 @@ document.addEventListener('click',e=>{const p=e.target.closest('[data-preview]')
    deduplicates by hash — one photo attached to four questions
    is one tile that remembers all four — and lets each tile
    inherit the classification its parent question already
-   carries. That inheritance is the whole trick: the taxonomy
-   engine resolved system, subject, topic and format the moment
-   the question was imported, so the figure of an antiarrhythmic
-   ECG is already filed under Cardiovascular · Pharmacology ·
-   ECG without anyone typing a word.
+   carries, so the figure of an antiarrhythmic ECG is already
+   filed under Cardiovascular · Pharmacology · ECG without
+   anyone typing a word. Nothing is written, so nothing can be
+   corrupted; deleting a question removes its pictures on the
+   next render; the search reaches the parent question's stem.
 
-   Consequences worth stating, because they are why it is built
-   this way and not another:
-     · nothing is written, so nothing can be corrupted, and no
-       migration is needed for a bank that already exists
-     · deleting a question removes its pictures from here on the
-       next render, with no bookkeeping
-     · the search box can reach the parent question's stem, which
-       is what makes a half-remembered topic findable when the
-       caption says only "ECG tracing"
+   The one real cost is pixels. A 320px thumbnail is a ~400 KB
+   bitmap, so a few hundred alive at once is a dead tab on a
+   4 GB tablet. The grid pages at GAL_PAGE tiles (the next page
+   loads as Show more comes into view) and releases what has
+   left the screen on every redraw.
 
-   The one real cost is pixels. A 320px thumbnail is a small
-   file and a ~400 KB bitmap, so a few hundred of them alive at
-   once is a dead tab on a 4 GB tablet. The grid therefore pages
-   at GAL_PAGE tiles the way the bank does, and releases what
-   has left the screen on every redraw.
+   What the screen is made of: the collection (galHero, its
+   figures open peeks through PG_PK.gal), Pictures / Waiting
+   (GAL.sets.need), search, grouping, the layout (squares or
+   each picture at its own shape) and its size (also a pinch on
+   the grid), filter chips that count what a tap brings in, the
+   jump strip, folding groups, selection (long-press) and the
+   FLIP that lets every change glide (galSnap / galFlip).
    ============================================================ */
 const GAL_PAGE=60;
 /* the formats a picture can actually be, in the order a tile is filed under
    when its question carries more than one of them */
 const GAL_FORMATS=['ECG','Histology','Radiology','Gross specimen','Graph or table'];
+const GAL_OTHER='Other images';
+const GAL_HUE={'ECG':1,'Histology':2,'Radiology':3,'Gross specimen':4,'Graph or table':5,'Other images':6};
 const GAL_CHIPS=[
-  {g:'fmt',k:'ECG',            label:'ECG'},
-  {g:'fmt',k:'Histology',      label:'Histology'},
-  {g:'fmt',k:'Radiology',      label:'Radiology'},
-  {g:'fmt',k:'Gross specimen', label:'Gross specimen'},
-  {g:'fmt',k:'Graph or table', label:'Graph or table'},
-  {sep:true},
-  {g:'slot',k:'stem',label:'With the question'},
+  {g:'fmt',h:'Format',k:'ECG',label:'ECG'},
+  {g:'fmt',k:'Histology',label:'Histology'},
+  {g:'fmt',k:'Radiology',label:'Radiology'},
+  {g:'fmt',k:'Gross specimen',label:'Gross specimen'},
+  {g:'fmt',k:'Graph or table',label:'Graph or table'},
+  {g:'fmt',k:'__other',label:'Other'},
+  {g:'slot',h:'Where',k:'stem',label:'With the question'},
   {g:'slot',k:'expl',label:'With the explanation'},
   {g:'slot',k:'choice',label:'As an answer option'},
-  {sep:true},
-  {g:'st',k:'flag',     label:'Flagged'},
+  {g:'st',h:'Your record',k:'flag',label:'Flagged'},
   {g:'st',k:'incorrect',label:'I got it wrong'},
-  {g:'st',k:'unused',   label:'Unseen'},
-  {sep:true},
-  /* not a filter but a mode: the missing slots are the opposite of the
-     gallery's contents, so asking for them swaps what the grid is showing */
-  {g:'need',k:'need',label:'Missing photo'}
+  {g:'st',k:'unused',label:'Unseen'}
 ];
+const GAL_GROUPS=['recent','system','subject','topic','resource'];
+const GAL_GROUP_NAME={recent:'Recent',system:'System',subject:'Subject',topic:'Topic',resource:'Format'};
+const GAL_SIZES=['s','m','l'];
 const GAL={
   shown:GAL_PAGE,
   group:'recent',
+  lay:'sq',         /* sq: squares with captions · true: each picture at its own shape */
+  size:'m',
+  /* need is not a filter but a mode: the missing slots are the opposite of
+     the gallery's contents, so asking for them swaps what the grid shows */
   sets:{fmt:new Set(),slot:new Set(),st:new Set(),need:new Set()},
   shut:new Set(),
-  list:[],          /* the filtered, flattened entries the viewer steps through */
+  all:[],           /* every entry, from the last galIndex() */
+  list:[],          /* the filtered entries, newest first */
+  view:[],          /* the entries on screen in the order they are drawn: what the viewer steps through */
   hay:Object.create(null), /* question id -> {v, t}: the search text, memoised */
   frame:0,          /* a queued redraw, so a burst of taps costs one repaint */
   reset:false,
-  typeT:0
+  flip:false,       /* the next redraw glides from the grid as it stands */
+  typeT:0,
+  sel:null,         /* the keys selected, or null outside selection */
+  swallow:0
 };
+/* the shape of the grid is this device's own choice, kept across visits */
+(function(){
+  try{
+    const v=JSON.parse(localStorage.getItem('nidus_gal_view')||'{}');
+    if(GAL_GROUPS.indexOf(v.group)>=0)GAL.group=v.group;
+    if(v.lay==='true')GAL.lay='true';
+    if(GAL_SIZES.indexOf(v.size)>=0)GAL.size=v.size;
+  }catch(e){}
+})();
+function galSave(){try{localStorage.setItem('nidus_gal_view',JSON.stringify({group:GAL.group,lay:GAL.lay,size:GAL.size}))}catch(e){}}
 /* ------------------------------------------------------------
-   Answering a tap in the frame it lands in.
-   A redraw of this grid is a screenful of markup plus a media
-   bind, and doing that synchronously inside the click handler
-   steals exactly the frames the press animation needed — which
-   is what made every chip and every group switch feel like it
-   was being held back. The class flip that shows the selection
-   happens immediately, on the element the finger is on; the
-   grid follows on the next frame. This is the same split the
-   secondary tabs use, and the reason showPane takes a `defer`.
+   Answering a tap in the frame it lands in. The control the
+   finger is on changes at once (its indicator travels, its chip
+   fills); the grid follows on the next frame.
    ------------------------------------------------------------ */
 function galSoon(reset){
   if(reset)GAL.reset=true;
+  GAL.flip=true;
   if(GAL.frame)return;
   GAL.frame=requestAnimationFrame(()=>{
     const r=GAL.reset;GAL.frame=0;GAL.reset=false;
@@ -14884,9 +15073,10 @@ function galHay(q){
 function galFormatOf(q){
   const r=q.resources||[];
   for(let i=0;i<GAL_FORMATS.length;i++)if(r.indexOf(GAL_FORMATS[i])>=0)return GAL_FORMATS[i];
-  return 'Other images';
+  return GAL_OTHER;
 }
-/* one pass over the bank: every slot, filled or waiting, as a flat list */
+/* one pass over the bank: every slot, filled or waiting, as a flat list
+   (the gallery picker reads it too) */
 function galIndex(){
   const by=Object.create(null),out=[];
   DB.questions.forEach(q=>{
@@ -14914,24 +15104,29 @@ function galIndex(){
   });
   return out;
 }
-function galFilter(all){
-  const raw=($('#galSearch')||{}).value||'',term=norm(raw),id=figIdTerm(raw);
-  const S=GAL.sets,wantNeed=S.need.size>0;
-  return all.filter(e=>{
-    if(!!e.need!==wantNeed)return false;
-    if(S.slot.size&&!S.slot.has(figIsCh(e.f.slot)?'choice':e.f.slot))return false;
-    if(S.fmt.size&&!e.qs.some(q=>(q.resources||[]).some(r=>S.fmt.has(r))))return false;
-    if(S.st.size&&!e.qs.some(q=>{
-      if(S.st.has('flag')&&(DB.stats[q.id]||{}).flag)return true;
-      if(S.st.has('incorrect')&&statusOf(q.id)==='incorrect')return true;
-      if(S.st.has('unused')&&statusOf(q.id)==='unused')return true;
-      return false;
-    }))return false;
-    if(!term)return true;
-    /* an image ID copied from the viewer finds its picture here too */
-    return (id&&e.f.media&&e.f.media.indexOf(id)===0)||e.qs.some(q=>galHay(q).includes(term));
-  });
+const galSlot=f=>figIsCh(f.slot)?'choice':f.slot==='expl'?'expl':'stem';
+const galSlotWord=f=>f.slot==='expl'?'Explanation':figIsCh(f.slot)?'Option '+figChLab(f.slot):'Question';
+function galTerm(){const raw=($('#galSearch')||{}).value||'';return{raw,term:norm(raw),id:figIdTerm(raw)}}
+function galHasFmt(q,S){return (q.resources||[]).some(r=>S.has(r))||(S.has('__other')&&galFormatOf(q)===GAL_OTHER)}
+function galHasSt(q,S){
+  if(S.has('flag')&&(DB.stats[q.id]||{}).flag)return true;
+  if(S.has('incorrect')&&statusOf(q.id)==='incorrect')return true;
+  if(S.has('unused')&&statusOf(q.id)==='unused')return true;
+  return false;
 }
+/* does an entry pass the mode, every filter group but `skip`, and the search */
+function galTest(e,T,skip){
+  const S=GAL.sets;
+  if(!!e.need!==(S.need.size>0))return false;
+  if(skip!=='slot'&&S.slot.size&&!S.slot.has(galSlot(e.f)))return false;
+  if(skip!=='fmt'&&S.fmt.size&&!e.qs.some(q=>galHasFmt(q,S.fmt)))return false;
+  if(skip!=='st'&&S.st.size&&!e.qs.some(q=>galHasSt(q,S.st)))return false;
+  if(!T.term)return true;
+  /* an image ID copied from the viewer finds its picture here too */
+  return (T.id&&e.f.media&&e.f.media.indexOf(T.id)===0)||e.qs.some(q=>galHay(q).includes(T.term));
+}
+function galFilter(all){const T=galTerm();return all.filter(e=>galTest(e,T))}
+function galFiltered(){return GAL.sets.fmt.size+GAL.sets.slot.size+GAL.sets.st.size>0||!!galTerm().term}
 /* Which heading a tile files itself under. Format resolves to one bucket
    rather than several, so a count means what it says and no picture is
    counted twice on the same screen. */
@@ -14945,30 +15140,69 @@ function galBucket(e){
     default:        return '';
   }
 }
+function galName(e){
+  const p=figCapPair(e.f),cap=p.cap||e.q.topic||'';
+  const c=figCapSplit(cap);
+  return c.name||c.line||'';
+}
 function galTileHTML(e,idx){
-  const f=e.f,q=e.q;
-  const p=figCapPair(f);
-  const cap=p.cap||q.topic||q.system||'';
+  const f=e.f,q=e.q,name=galName(e);
   if(e.need){
-    return `<button class="galtile need" data-galneed="${esc(q.id)}|${esc(f.fid)}|${esc(f.slot)}" title="Attach a photo to this question">
-      <span class="gph"><svg class="ic"><use href="#i-imageadd"/></svg></span>
-      <span class="gcap">${esc(cap||'This question has a figure — attach the photo')}</span>
-      <span class="gsys">${esc(q.system||'')}</span>
-    </button>`;
+    const k=`${esc(q.id)}|${esc(f.fid)}|${esc(f.slot)}`;
+    return `<div class="gl-need" data-gk="${esc(e.key)}" data-galdrop="${k}">
+      <button type="button" class="gl-tile pl-press" data-galneed="${k}" aria-label="Attach a photo: ${esc(name||'question figure')}">
+        <span class="gl-ph gl-ph--need">${sxIc('i-imageadd')}<small>Choose a file</small></span>
+        <span class="gl-cap"><b>${esc(name||'This question has a figure. Attach the photo')}</b><em>${esc(q.system||'')}</em></span>
+      </button>
+      <div class="gl-need__acts">
+        <button type="button" class="pl-ib pl-press" data-galpaste="${k}" aria-label="Paste a copied picture" title="Paste">${sxIc('i-paste')}</button>
+        <button type="button" class="pl-ib pl-press" data-galfpk="${k}" aria-label="Reuse a picture from the gallery" title="From gallery">${sxIc('i-gallery')}</button>
+        <button type="button" class="pl-ib pl-press" data-preview="${esc(q.id)}" aria-label="Open the question" title="Open the question">${sxIc('i-bank')}</button>
+      </div>
+    </div>`;
   }
+  const ar=f.w&&f.h?clamp(f.w/f.h,.5,2.6):1;
   const img=f.media
-    ? `<img data-media="${esc(f.media)}" data-mkind="thumb" alt="${esc(cap)}">`
-    : `<img src="${esc(f.src)}" alt="${esc(cap)}" loading="lazy">`;
-  return `<button class="galtile" data-galidx="${idx}">
-    <span class="gph">${img}${e.qids.length>1?`<span class="gdup" title="On ${e.qids.length} questions">×${e.qids.length}</span>`:''}<span class="gslot">${f.slot==='expl'?'explanation':figIsCh(f.slot)?'option':'question'}</span></span>
-    <span class="gcap">${esc(cap)}</span>
-    <span class="gsys">${esc(q.system||'')}</span>
+    ? `<img data-media="${esc(f.media)}" data-mkind="thumb" alt="" draggable="false">`
+    : `<img src="${esc(f.src)}" alt="" loading="lazy" draggable="false">`;
+  const flag=e.qs.some(x=>(DB.stats[x.id]||{}).flag);
+  const sel=!!(GAL.sel&&GAL.sel.has(e.key));
+  const lab=(name||figKind(f))+(q.system?', '+q.system:'')+(e.qids.length>1?', on '+e.qids.length+' questions':'');
+  return `<button type="button" class="gl-tile pl-press${sel?' is-sel':''}" data-gk="${esc(e.key)}" data-galidx="${idx}" style="--ar:${ar.toFixed(3)}" aria-label="${esc(lab)}"${GAL.sel?` aria-pressed="${sel}"`:''}>
+    <span class="gl-ph">${img}${e.qids.length>1?`<span class="gl-b gl-b--n">×${e.qids.length}</span>`:''}<span class="gl-b gl-b--slot">${galSlotWord(f)}</span>${flag?`<span class="gl-b gl-b--flag">${sxIc('i-flag')}</span>`:''}<span class="gl-ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="m6.5 12.4 3.7 3.7 7.3-7.6"/></svg></span></span>
+    <span class="gl-cap"><b>${esc(name||figKind(f))}</b><em>${esc(q.system||'')}</em></span>
   </button>`;
+}
+/* ---------- the chips: drawn once, then painted in place ---------- */
+function galChipsHTML(){
+  let h='',g0='';
+  GAL_CHIPS.forEach(c=>{
+    if(c.g!==g0){if(g0)h+='</div>';g0=c.g;h+=`<div class="gl-chips__g" role="group" aria-label="${esc(c.h)}"><span class="gl-chips__h">${esc(c.h)}</span>`}
+    const on=GAL.sets[c.g].has(c.k);
+    h+=`<button type="button" class="pg-chip gl-chip pl-press${on?' on':''}" aria-pressed="${on}" data-galchip="${c.g}|${esc(c.k)}"><span class="pg-chip__ck"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></span>${esc(c.label)}<em class="gl-chip__n"></em></button>`;
+  });
+  return h+'</div>';
 }
 function galPaintChips(){
   const el=$('#galChips');if(!el)return;
-  el.innerHTML=GAL_CHIPS.map(c=>c.sep?'<span class="galsep"></span>'
-    :`<button class="pill${GAL.sets[c.g].has(c.k)?' on':''}" aria-pressed="${GAL.sets[c.g].has(c.k)?'true':'false'}" data-galchip="${c.g}|${esc(c.k)}">${esc(c.label)}</button>`).join('');
+  if(!el.children.length)el.innerHTML=galChipsHTML();
+  el.querySelectorAll('[data-galchip]').forEach(b=>{
+    const p=b.dataset.galchip.split('|'),on=GAL.sets[p[0]].has(p[1]);
+    b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));
+  });
+}
+/* a chip's count is what a tap on it would bring in: the mode, the search
+   and every other group's filters applied, and this chip's value */
+function galChipCounts(all,T){
+  const el=$('#galChips');if(!el)return;
+  const pass={};['fmt','slot','st'].forEach(g=>pass[g]=all.filter(e=>galTest(e,T,g)));
+  el.querySelectorAll('[data-galchip]').forEach(b=>{
+    const p=b.dataset.galchip.split('|'),g=p[0],k=p[1],one=new Set([k]);
+    const n=pass[g].filter(e=>g==='slot'?galSlot(e.f)===k:g==='fmt'?e.qs.some(q=>galHasFmt(q,one)):e.qs.some(q=>galHasSt(q,one))).length;
+    const em=b.querySelector('.gl-chip__n');
+    if(em.textContent!==String(n)){if(em.textContent)sxSwap(em,String(n));else em.textContent=n}
+    b.classList.toggle('is-nil',!n);
+  });
 }
 function galPaintCount(){
   const el=$('#galCnt');if(!el)return;
@@ -14976,112 +15210,447 @@ function galPaintCount(){
   try{DB.questions.forEach(q=>figList(q).forEach(f=>{if(figFilled(f))n++}))}catch(e){}
   el.textContent=n;
 }
-function renderGallery(reset){
+/* ---------- the masthead's sentence and the collection ---------- */
+function galMast(have,need){
+  const qn=new Set();have.forEach(e=>e.qids.forEach(id=>qn.add(id)));
+  const nq=new Set(need.map(e=>e.qid)).size;
+  const s=(!have.length&&!need.length)
+    ? 'Attach a photo to a question, from the player with G or from its Edit panel, and it appears here.'
+    : (have.length?`<b>${have.length}</b> ${have.length===1?'picture':'pictures'} on <b>${qn.size}</b> ${qn.size===1?'question':'questions'}. `:'No pictures attached yet. ')
+      +(nq?`<button type="button" class="gl-link" data-galmode="need">${nq} ${nq===1?'question is':'questions are'} waiting for a photo</button>.`
+          :'Every question that asked for a figure has one.');
+  const el=$('#glSay');
+  if(el.innerHTML)sxSwap(el,s);else el.innerHTML=s;
+}
+function galHero(have,need,arrive){
+  const el=$('#glHero');
+  const B={};have.forEach(e=>{const k=galFormatOf(e.q);B[k]=(B[k]||0)+1});
+  const keys=[...GAL_FORMATS,GAL_OTHER].filter(k=>B[k]);
+  const shared=have.filter(e=>e.qids.length>1).length;
+  const miss=have.filter(e=>e.qs.some(q=>statusOf(q.id)==='incorrect')).length;
+  const sig=JSON.stringify([have.length,keys.map(k=>B[k]),shared,miss,need.length]);
+  if(!arrive&&el.__sig===sig)return;
+  el.__sig=sig;
+  if(arrive)['gall','gsh','gms','gnd'].forEach(k=>delete PG.prev[k]);
+  if(!have.length&&!need.length){el.innerHTML='';return}
+  const n=have.length||1;
+  el.innerHTML=`<div class="gl-hero__a">
+      <button type="button" class="gl-count pg-tap pg-tap--bare pl-press" data-pk="gal:all"><span class="gl-big hm-num">${pgN('gall',have.length)}</span><span>${have.length===1?'picture in the bank':'pictures in the bank'}</span></button>
+      <div class="gl-mini">
+        <button type="button" class="pg-tap pl-press" data-pk="gal:shared"><b class="hm-num">${pgN('gsh',shared)}</b><span>shared by questions</span></button>
+        <button type="button" class="pg-tap pl-press" data-pk="gal:miss"><b class="hm-num">${pgN('gms',miss)}</b><span>on questions you missed</span></button>
+        <button type="button" class="pg-tap pl-press" data-galmode="need"><b class="hm-num">${pgN('gnd',need.length)}</b><span>waiting for a photo</span></button>
+      </div>
+    </div>
+    ${keys.length?`<div class="gl-hero__b" data-pgfg>
+      <p class="gl-hero__h">What they show</p>
+      <div class="gl-rib" aria-hidden="true">${keys.map((k,i)=>`<span data-pgf="${esc(k)}" style="--n:${B[k]};--c:var(--gl-c${GAL_HUE[k]});--i:${i}"></span>`).join('')}</div>
+      <ul class="gl-leg">${keys.map(k=>`<li><button type="button" class="pg-tap pl-press" data-pgf="${esc(k)}" data-pk="gal:fmt:${esc(k)}" style="--c:var(--gl-c${GAL_HUE[k]})"><i></i><span>${esc(k)}</span><b>${B[k]}</b><em>${Math.round(B[k]/n*100)}%</em></button></li>`).join('')}</ul>
+    </div>`:''}`;
+  pgAlive(el);
+}
+function galSegs(wantNeed,have,need){
+  sxSegMark($('#glMode'),wantNeed?'need':'have');
+  const a=$('#glModeHave'),b=$('#glModeNeed');
+  if(a.textContent!==String(have))a.textContent=have;
+  if(b.textContent!==String(need))b.textContent=need;
+  sxSegMark($('#galGroup'),GAL.group);
+  sxSegMark($('#glLay'),GAL.lay);
+  sxSegMark($('#glSize'),GAL.size);
+  /* the waiting slots are always squares with their captions, never grouped */
+  ['#galGroup','#glLay','#glSize'].forEach(s=>{const g=$(s);g.classList.toggle('is-off',wantNeed);g.inert=wantNeed});
+}
+function galGridCls(wantNeed){return 'gl-grid'+(wantNeed?' is-need':GAL.lay==='true'?' is-true':'')}
+function renderGallery(reset,arrive){
+  galPkInstall();
   if(reset)GAL.shown=GAL_PAGE;
-  if(!$('#galChips').children.length)galPaintChips();
-  const all=galIndex();
-  const list=galFilter(all);
+  const v=$('#v-gallery');if(!v)return;
+  v.dataset.size=GAL.size;
+  galPaintChips();
+  const all=galIndex(),T=galTerm();
+  GAL.all=all;
+  const wantNeed=GAL.sets.need.size>0;
+  const list=all.filter(e=>galTest(e,T));
   /* newest first everywhere: inside a heading it is still the most recently
      touched question that is most likely the one being looked for */
   list.sort((a,b)=>b.at-a.at);
   GAL.list=list;
+  const have=all.filter(e=>!e.need),need=all.filter(e=>e.need);
   const slice=list.slice(0,GAL.shown);
-  const body=$('#galBody');
-  const wantNeed=GAL.sets.need.size>0;
-
+  const old=(!arrive&&GAL.flip)?galSnap():null;GAL.flip=false;
+  galMast(have,need);galHero(have,need,arrive);galSegs(wantNeed,have.length,need.length);galChipCounts(all,T);
+  const body=$('#galBody'),idx=$('#glIndex'),grouped=GAL.group!=='recent'&&!wantNeed,filtered=galFiltered();
+  let html='',jump='';
   if(!slice.length){
-    body.innerHTML=`<div class="empty"><h4>${all.length?'Nothing matches':(wantNeed?'Nothing is waiting for a photo':'No pictures yet')}</h4>
-      <p class="tiny">${all.length?'Try a different chip, or clear the search.'
-        :(wantNeed?'Every question that asked for a figure has one.'
-                 :'Attach a photo to a question — from the player with G, or from the Edit panel — and it appears here.')}</p></div>`;
-  }else if(GAL.group==='recent'||wantNeed){
-    body.innerHTML=`<div class="galgrid">${slice.map((e,i)=>galTileHTML(e,i)).join('')}</div>`;
+    GAL.view=[];
+    const t=all.some(e=>!!e.need===wantNeed)?'Nothing matches':(wantNeed?'Nothing is waiting for a photo':'No pictures yet');
+    const l=all.some(e=>!!e.need===wantNeed)?'Try another filter, or clear the search.'
+      :(wantNeed?'Every question that asked for a figure has one.'
+               :'Attach a photo to a question, from the player with G or from its Edit panel, and it appears here.');
+    html=`<div class="pg-empty gl-empty"><span class="pg-empty__shape" aria-hidden="true"></span><b>${t}</b><span>${l}</span>${filtered?'<button type="button" class="pl-btn pl-btn--tonal pl-press" data-galclear>Clear filters</button>':''}</div>`;
+  }else if(!grouped){
+    GAL.view=slice;
+    html=`<div class="${galGridCls(wantNeed)}">${slice.map((e,i)=>galTileHTML(e,i)).join('')}</div>`;
   }else{
     /* group the page that is actually being drawn, not the whole list, so
        paging stays honest: a heading only claims what is under it */
     const order=[],bucket=Object.create(null);
-    slice.forEach((e,i)=>{
+    slice.forEach(e=>{
       const k=galBucket(e);
       if(!bucket[k]){bucket[k]=[];order.push(k)}
-      bucket[k].push(i);
+      bucket[k].push(e);
     });
     order.sort((a,b)=>bucket[b].length-bucket[a].length||a.localeCompare(b));
-    body.innerHTML=order.map(k=>{
-      const shut=GAL.shut.has(GAL.group+'|'+k);
-      return `<section class="galsec${shut?' shut':''}" data-galsec="${esc(GAL.group+'|'+k)}">
-        <button class="galh" data-galfold="${esc(GAL.group+'|'+k)}" aria-expanded="${shut?'false':'true'}">
-          ${esc(k)}<span class="cnt">${bucket[k].length}</span><svg class="ic"><use href="#i-chev"/></svg>
-        </button>
-        <div class="galgrid">${bucket[k].map(i=>galTileHTML(slice[i],i)).join('')}</div>
+    /* the viewer steps through the pictures in the order the eye meets them */
+    GAL.view=[];
+    html=order.map(k=>{
+      const K=GAL.group+'|'+k,shut=GAL.shut.has(K),n=bucket[k].length;
+      const tiles=bucket[k].map(e=>{const i=GAL.view.length;GAL.view.push(e);return galTileHTML(e,i)}).join('');
+      return `<section class="gl-sec${shut?' shut':''}" data-galsec="${esc(K)}">
+        <div class="gl-sec__h">
+          <button type="button" class="gl-sec__fold pg-tap pl-press" data-galfold="${esc(K)}" aria-expanded="${!shut}">${sxIc('i-chev','gl-sec__chev')}<span>${esc(k)}</span></button>
+          <button type="button" class="gl-sec__n pl-press" data-pk="gal:grp:${esc(k)}" aria-label="${n} ${n===1?'picture':'pictures'}: what they are">${n}</button>
+        </div>
+        <div class="gl-sec__b"><div${shut?' inert':''}><div class="${galGridCls(false)}">${tiles}</div></div></div>
       </section>`;
     }).join('');
+    if(order.length>1)jump=order.map(k=>`<button type="button" class="pg-chip gl-ix pl-press" data-galjump="${esc(GAL.group+'|'+k)}">${esc(k)}<em class="gl-chip__n">${bucket[k].length}</em></button>`).join('');
   }
+  body.innerHTML=html;
+  if(idx.innerHTML!==jump)idx.innerHTML=jump;
 
-  const shownN=slice.length;
-  $('#galMeta').textContent=list.length
-    ? (shownN<list.length?`${shownN} of ${list.length} shown`:`${list.length} ${wantNeed?(list.length===1?'slot waiting':'slots waiting'):(list.length===1?'picture':'pictures')}`)
-    : '';
-  $('#galEyebrow').textContent=wantNeed?'waiting for a photo':'every picture in the bank';
-  $('#galMore').style.display=list.length>GAL.shown?'inline-flex':'none';
+  const base=wantNeed?need.length:have.length;
+  const word=wantNeed?(base===1?'slot waiting':'slots waiting'):(base===1?'picture':'pictures');
+  let meta=list.length===base?`${base} ${word}`:`${list.length} of ${base} ${word}`;
+  if(slice.length<list.length)meta+=` · ${slice.length} shown`;
+  const m=$('#galMeta');if(m.textContent!==meta){if(m.textContent)sxSwap(m,esc(meta));else m.textContent=meta}
+  $('#glClear').classList.toggle('on',filtered);
+  $('#glSelBtn').hidden=wantNeed||!slice.length;
+  $('#galMore').hidden=list.length<=GAL.shown;
+  galSearchPaint();
+  if(GAL.sel){
+    /* a selection keeps only what is still drawn */
+    const keep=new Set(GAL.view.map(e=>e.key));
+    GAL.sel.forEach(k=>{if(!keep.has(k))GAL.sel.delete(k)});
+    if(wantNeed)galSelOff();else galSelPaint();
+  }
+  if(arrive)galArrive();else galFlip(old);
   /* whatever scrolled out of the grid is holding a decoded bitmap it no
      longer needs — the same discipline the router applies on every hop */
   try{MEDIA.sweep()}catch(e){}
 }
-
+/* ---------- motion: arrival, and every change gliding from where it was ---------- */
+function galArrive(){
+  const g=$('#gl');
+  [...g.children].forEach((c,i)=>c.style.setProperty('--gi',Math.min(i,6)));
+  g.classList.remove('is-arrive');void g.offsetWidth;g.classList.add('is-arrive');
+  if(Motion.reduced)return;
+  const sp=PL('spatial');
+  $$('#galBody .gl-tile,#galBody .gl-need').slice(0,14).forEach((t,i)=>
+    t.animate([{opacity:0,transform:'translateY(16px) scale(.96)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:180+i*25,fill:'backwards'}));
+}
+const galNear=r=>r.bottom>-160&&r.top<innerHeight+160&&r.width>0;
+function galSnap(){
+  const m=new Map();
+  $$('#galBody [data-gk]').forEach(el=>{const r=el.getBoundingClientRect();if(galNear(r))m.set(el.dataset.gk,{r,el})});
+  return m;
+}
+function galFlip(old){
+  if(!old||Motion.reduced)return;
+  const sp=PL('spatial'),seen=new Set();let n=0;
+  $$('#galBody [data-gk]').forEach(el=>{
+    const k=el.dataset.gk,o=old.get(k);
+    if(o)seen.add(k);
+    const r=el.getBoundingClientRect();if(!galNear(r))return;
+    if(o){
+      const dx=o.r.left-r.left,dy=o.r.top-r.top,sx=o.r.width/r.width,sy=o.r.height/r.height;
+      if(Math.abs(dx)<1&&Math.abs(dy)<1&&Math.abs(sx-1)<.01&&Math.abs(sy-1)<.01)return;
+      el.animate([{transformOrigin:'0 0',transform:`translate(${dx}px,${dy}px) scale(${sx},${sy})`},{transformOrigin:'0 0',transform:'none'}],{duration:sp.d,easing:sp.e});
+    }else if(n<16){
+      el.animate([{opacity:0,transform:'scale(.9)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:60+n++*22,fill:'backwards'});
+    }
+  });
+  /* what left fades and shrinks where it stood, on its own layer, and is
+     removed once that has finished */
+  let g=0;
+  old.forEach((o,k)=>{
+    if(seen.has(k)||g++>24||!o.el)return;
+    const c=o.el.cloneNode(true);
+    c.classList.add('gl-ghost');c.classList.remove('is-down');c.removeAttribute('data-gk');c.removeAttribute('data-galidx');c.setAttribute('aria-hidden','true');c.inert=true;
+    Object.assign(c.style,{left:o.r.left+'px',top:o.r.top+'px',width:o.r.width+'px',height:o.r.height+'px'});
+    document.body.appendChild(c);
+    const a=c.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.86)'}],{duration:Math.round(PL('spatial').d*.5),easing:PL_EXIT,fill:'forwards'});
+    a.finished.then(()=>c.remove(),()=>c.remove());
+  });
+}
+/* the size and the shape change the grid without rebuilding it: the tiles
+   are already there, they only travel to their new places */
+function galRelayout(fn){
+  const old=galSnap();fn();
+  $('#v-gallery').dataset.size=GAL.size;
+  $$('#galBody .gl-grid:not(.is-need)').forEach(g=>g.classList.toggle('is-true',GAL.lay==='true'));
+  galSave();galFlip(old);
+  requestAnimationFrame(()=>{try{MEDIA.sweep()}catch(e){}});
+}
+function galSetSize(s){
+  if(s===GAL.size||GAL_SIZES.indexOf(s)<0)return;
+  sxSegMark($('#glSize'),s);
+  galRelayout(()=>{GAL.size=s});
+}
+/* ---------- search ---------- */
+function galSearchPaint(){
+  const T=galTerm(),box=$('#glSearchBox');
+  box.classList.toggle('has-q',!!T.raw);
+  const h=$('#glHint'),on=!!T.id&&/^\s*img/i.test(T.raw);
+  if(on){$('#glHintT').innerHTML=`Looking for the picture whose ID starts <code>img-${esc(T.id.slice(0,8))}</code>, and for these words in captions and stems.`}
+  h.classList.toggle('on',on);
+}
 /* Typing is the one input that arrives faster than the grid can be rebuilt,
-   so it gets a short rest before the redraw. Short enough that a finished
-   word still feels instant, long enough that mid-word keystrokes cost one
-   repaint between them instead of one each. */
+   so it gets a short rest before the redraw. */
 $('#galSearch').addEventListener('input',()=>{
+  galSearchPaint();
   clearTimeout(GAL.typeT);
   GAL.typeT=setTimeout(()=>galSoon(true),140);
 });
+$('#galSearch').addEventListener('focus',()=>{const b=$('#glSearchBox');if(Motion.reduced)return;b.classList.remove('is-scan');void b.offsetWidth;b.classList.add('is-scan')});
+$('#glSearchBox').addEventListener('animationend',()=>$('#glSearchBox').classList.remove('is-scan'));
+$('#galSearchX').addEventListener('click',e=>{e.preventDefault();const q=$('#galSearch');q.value='';q.focus();galSearchPaint();galSoon(true)});
+/* the static icons of the screen (search, selection bar) are inline copies of the sprite */
+sxHydrate($('#v-gallery'));
 $('#galMore').onclick=()=>{GAL.shown+=GAL_PAGE;galSoon(false)};
+/* the next page loads as Show more comes into view */
+try{new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&VIEW==='gallery'&&!e.target.hidden)e.target.click()})},{rootMargin:'0px 0px 400px 0px'}).observe($('#galMore'))}catch(e){}
+/* ---------- the switches ---------- */
+function galMode(v){
+  const need=v==='need';
+  if(need===(GAL.sets.need.size>0))return;
+  if(need)GAL.sets.need.add('need');else GAL.sets.need.clear();
+  sxSegMark($('#glMode'),need?'need':'have');
+  if(GAL.sel)galSelOff();
+  galSoon(true);
+}
+$('#glMode').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)galMode(b.dataset.v)});
 $('#galGroup').addEventListener('click',e=>{
-  const b=e.target.closest('button[data-grp]');if(!b)return;
-  if(b.classList.contains('on'))return;   /* already here: do no work at all */
-  $$('#galGroup button').forEach(x=>{
-    const on=x===b;
-    x.classList.toggle('on',on);
-    x.setAttribute('aria-selected',on?'true':'false');
-  });
-  GAL.group=b.dataset.grp;
+  const b=e.target.closest('[data-v]');if(!b||b.dataset.v===GAL.group)return;
+  sxSegMark($('#galGroup'),b.dataset.v);
+  GAL.group=b.dataset.v;galSave();
   galSoon(true);
 });
-document.addEventListener('click',e=>{
-  const c=e.target.closest('[data-galchip]');
+$('#glLay').addEventListener('click',e=>{
+  const b=e.target.closest('[data-v]');if(!b||b.dataset.v===GAL.lay)return;
+  sxSegMark($('#glLay'),b.dataset.v);
+  galRelayout(()=>{GAL.lay=b.dataset.v});
+});
+$('#glSize').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)galSetSize(b.dataset.v)});
+function galClear(){
+  GAL.sets.fmt.clear();GAL.sets.slot.clear();GAL.sets.st.clear();
+  $('#galSearch').value='';
+  galPaintChips();galSoon(true);
+}
+$('#glClear').addEventListener('click',galClear);
+/* a peek's "Show only these": its filter replaces the group's, and the grid comes into view */
+function galOnly(g,k){
+  ['fmt','slot','st'].forEach(x=>GAL.sets[x].clear());
+  GAL.sets.need.clear();$('#galSearch').value='';
+  GAL.sets[g].add(k);
+  galPaintChips();galSoon(true);
+  requestAnimationFrame(()=>{const c=$('#galChips');if(c)c.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'start'})});
+}
+/* ---------- selection ---------- */
+function galSelOn(key){
+  GAL.sel=new Set(key?[key]:[]);
+  $('#gl').classList.add('is-sel');
+  $$('#galBody .gl-tile[data-galidx]').forEach(t=>{const on=GAL.sel.has(t.dataset.gk);t.classList.toggle('is-sel',on);t.setAttribute('aria-pressed',String(on))});
+  const bar=$('#glSel');bar.inert=false;bar.classList.add('is-open');
+  galSelPaint();
+}
+function galSelOff(){
+  if(!GAL.sel)return;
+  GAL.sel=null;
+  $('#gl').classList.remove('is-sel');
+  $$('#galBody .gl-tile.is-sel').forEach(t=>t.classList.remove('is-sel'));
+  $$('#galBody .gl-tile[aria-pressed]').forEach(t=>t.removeAttribute('aria-pressed'));
+  const bar=$('#glSel');bar.classList.remove('is-open');bar.inert=true;
+}
+function galSelEntries(){return GAL.sel?GAL.view.filter(e=>GAL.sel.has(e.key)):[]}
+function galSelPaint(){
+  const E=galSelEntries(),qn=new Set();E.forEach(e=>e.qids.forEach(id=>qn.add(id)));
+  const t=E.length?`${E.length} selected`:'Choose pictures';
+  const n=$('#glSelN');if(n.textContent!==t)sxSwap(n,t);
+  const go=$('#glSelGo'),gt=$('#glSelGoT'),l=qn.size?`Practise ${qn.size}`:'Practise';
+  go.disabled=!qn.size;if(gt.textContent!==l)sxSwap(gt,l);
+  go.setAttribute('aria-label',qn.size?`Practise the ${qn.size} ${qn.size===1?'question':'questions'} they belong to`:'Practise');
+  $('#glSelCopy').disabled=!E.some(e=>e.f.media);
+  const all=GAL.view.length&&E.length===GAL.view.length;
+  $('#glSelAll').setAttribute('aria-label',all?'Clear the selection':'Select every picture shown');
+  $('#glSelAll').title=$('#glSelAll').getAttribute('aria-label');
+}
+function galSelToggle(t){
+  const k=t.dataset.gk,on=!GAL.sel.has(k);
+  if(on)GAL.sel.add(k);else GAL.sel.delete(k);
+  t.classList.toggle('is-sel',on);t.setAttribute('aria-pressed',String(on));
+  galSelPaint();
+}
+$('#glSelBtn').addEventListener('click',()=>{if(GAL.sel)galSelOff();else galSelOn(null)});
+$('#glSelX').addEventListener('click',galSelOff);
+$('#glSelAll').addEventListener('click',()=>{
+  if(!GAL.sel)return;
+  const all=GAL.view.length&&GAL.sel.size===GAL.view.length;
+  GAL.sel=new Set(all?[]:GAL.view.map(e=>e.key));
+  $$('#galBody .gl-tile[data-galidx]').forEach(t=>{const on=GAL.sel.has(t.dataset.gk);t.classList.toggle('is-sel',on);t.setAttribute('aria-pressed',String(on))});
+  galSelPaint();
+});
+$('#glSelCopy').addEventListener('click',()=>{
+  const ids=galSelEntries().filter(e=>e.f.media).map(e=>figImgId(e.f.media));
+  if(ids.length)copy(ids.join('\n'),ids.length===1?'Image ID copied.':ids.length+' image IDs copied, one per line.');
+});
+$('#glSelGo').addEventListener('click',()=>{
+  const E=galSelEntries(),ids=[...new Set(E.flatMap(e=>e.qids))];
+  if(!ids.length)return;
+  galSelOff();
+  startIds(ids,E.length===1?'Picture · '+(galName(E[0])||'one picture'):'Pictures · '+E.length+' chosen');
+});
+/* long-press a picture to start selecting; the click that follows is swallowed */
+(function(){
+  const body=$('#galBody');let lp=null;
+  body.addEventListener('pointerdown',e=>{
+    if(e.button>0||GAL.sel)return;
+    const t=e.target.closest('.gl-tile[data-galidx]');if(!t)return;
+    const x=e.clientX,y=e.clientY;
+    lp={x,y,id:setTimeout(()=>{lp=null;GAL.swallow=performance.now();t.classList.remove('is-down');galSelOn(t.dataset.gk)},480)};
+  },{passive:true});
+  body.addEventListener('pointermove',e=>{if(lp&&Math.hypot(e.clientX-lp.x,e.clientY-lp.y)>10){clearTimeout(lp.id);lp=null}},{passive:true});
+  ['pointerup','pointercancel'].forEach(k=>body.addEventListener(k,()=>{if(lp){clearTimeout(lp.id);lp=null}},{passive:true}));
+  body.addEventListener('contextmenu',e=>{if(e.target.closest('.gl-tile'))e.preventDefault()});
+  /* two fingers on the grid change the tile size, a step at a time */
+  let pz=null;
+  const dist=T=>Math.hypot(T[0].clientX-T[1].clientX,T[0].clientY-T[1].clientY);
+  body.addEventListener('touchstart',e=>{if(e.touches.length===2){pz={d:dist(e.touches)};if(lp){clearTimeout(lp.id);lp=null}}},{passive:true});
+  body.addEventListener('touchmove',e=>{
+    if(!pz||e.touches.length!==2||GAL.sets.need.size)return;
+    const r=dist(e.touches)/pz.d,i=GAL_SIZES.indexOf(GAL.size);
+    if(r>1.25&&i<2){galSetSize(GAL_SIZES[i+1]);pz.d=dist(e.touches)}
+    else if(r<.8&&i>0){galSetSize(GAL_SIZES[i-1]);pz.d=dist(e.touches)}
+  },{passive:true});
+  body.addEventListener('touchend',e=>{if(e.touches.length<2)pz=null},{passive:true});
+})();
+/* Escape leaves selection, only when nothing sits above the screen */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape'||!GAL.sel||VIEW!=='gallery')return;
+  if($('#mask.on')||!$('#lbx').hidden||(typeof pgxIsOpen==='function'&&pgxIsOpen())||(typeof fpkIsOpen==='function'&&fpkIsOpen()))return;
+  e.preventDefault();e.stopPropagation();galSelOff();
+},true);
+/* ---------- drop a file straight onto a waiting slot ---------- */
+document.addEventListener('dragover',e=>{const z=e.target.closest&&e.target.closest('[data-galdrop]');if(!z)return;e.preventDefault();z.classList.add('over')});
+document.addEventListener('dragleave',e=>{const z=e.target.closest&&e.target.closest('[data-galdrop]');if(z&&!z.contains(e.relatedTarget))z.classList.remove('over')});
+document.addEventListener('drop',e=>{
+  const z=e.target.closest&&e.target.closest('[data-galdrop]');if(!z)return;
+  e.preventDefault();z.classList.remove('over');
+  const files=Array.from((e.dataTransfer&&e.dataTransfer.files)||[]).filter(f=>/^image\//i.test(f.type||''));
+  if(!files.length)return;
+  const p=z.dataset.galdrop.split('|');figTake(p[0],p[1],p[2],files);
+});
+/* ---------- every tap on the screen ---------- */
+$('#v-gallery').addEventListener('click',e=>{
+  const T=e.target;
+  if(T.closest('.gl-tile')&&performance.now()-GAL.swallow<700){GAL.swallow=0;e.preventDefault();return}
+  const md=T.closest('[data-galmode]');if(md){galMode(md.dataset.galmode);window.scrollTo({top:0,behavior:Motion.reduced?'auto':'smooth'});return}
+  const pk=T.closest('[data-pk]');if(pk){pgPeek(pk.dataset.pk,pk);return}
+  const pf=T.closest('[data-pgf]');if(pf){const g=pf.closest('[data-pgfg]');if(g)pgFocus(g,pf.dataset.pgf);return}
+  if(T.closest('[data-galclear]')){galClear();return}
+  const c=T.closest('[data-galchip]');
   if(c){
-    const parts=c.dataset.galchip.split('|'),s=GAL.sets[parts[0]];
-    const on=!s.has(parts[1]);
-    if(on)s.add(parts[1]);else s.delete(parts[1]);
-    /* the chip row used to be rebuilt wholesale here, which destroyed the very
-       button the finger was resting on and took its half-played ripple with
-       it. Flipping the one class leaves the element — and its ripple — alone. */
-    c.classList.toggle('on',on);
-    c.setAttribute('aria-pressed',on?'true':'false');
+    const p=c.dataset.galchip.split('|'),s=GAL.sets[p[0]],on=!s.has(p[1]);
+    if(on)s.add(p[1]);else s.delete(p[1]);
+    /* only the chip under the finger changes on this frame */
+    c.classList.toggle('on',on);c.setAttribute('aria-pressed',String(on));
     galSoon(true);return;
   }
-  const fold=e.target.closest('[data-galfold]');
+  const fold=T.closest('[data-galfold]');
   if(fold){
-    const k=fold.dataset.galfold;
-    if(GAL.shut.has(k))GAL.shut.delete(k);else GAL.shut.add(k);
-    const sec=fold.closest('.galsec');
-    if(sec){sec.classList.toggle('shut',GAL.shut.has(k));fold.setAttribute('aria-expanded',GAL.shut.has(k)?'false':'true')}
+    const k=fold.dataset.galfold,shut=!GAL.shut.has(k);
+    if(shut)GAL.shut.add(k);else GAL.shut.delete(k);
+    const sec=fold.closest('.gl-sec');
+    if(sec){sec.classList.toggle('shut',shut);fold.setAttribute('aria-expanded',String(!shut));sec.querySelector('.gl-sec__b > div').inert=shut}
     requestAnimationFrame(()=>{try{MEDIA.sweep()}catch(err){}});
     return;
   }
-  const need=e.target.closest('[data-galneed]');
+  const jump=T.closest('[data-galjump]');
+  if(jump){
+    const k=jump.dataset.galjump,sec=$$('#galBody .gl-sec').find(s=>s.dataset.galsec===k);if(!sec)return;
+    if(sec.classList.contains('shut')){GAL.shut.delete(k);sec.classList.remove('shut');sec.querySelector('.gl-sec__fold').setAttribute('aria-expanded','true');sec.querySelector('.gl-sec__b > div').inert=false}
+    sec.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'start'});
+    sec.classList.remove('is-flash');void sec.offsetWidth;sec.classList.add('is-flash');setTimeout(()=>sec.classList.remove('is-flash'),900);
+    return;
+  }
+  const need=T.closest('[data-galneed]');
   if(need){const p=need.dataset.galneed.split('|');figPick(p[0],p[1],p[2]);return}
-  const t=e.target.closest('[data-galidx]');
+  const paste=T.closest('[data-galpaste]');
+  if(paste){const p=paste.dataset.galpaste.split('|');figPaste(p[0],p[1],p[2],paste.closest('.gl-need'));return}
+  const fpk=T.closest('[data-galfpk]');
+  if(fpk){const p=fpk.dataset.galfpk.split('|');fpkOpen(p[0],p[1],p[2],fpk);return}
+  const t=T.closest('[data-galidx]');
   if(t){
+    if(GAL.sel){galSelToggle(t);return}
     const i=parseInt(t.dataset.galidx,10)||0;
     /* one frame for the tile to finish going down under the thumb, then the
-       viewer. It walks the page that is on screen, which is the set the eye
-       was already scanning — not the whole bank, and not one question. */
-    const page=GAL.list.slice(0,GAL.shown);
+       viewer. It walks the pictures on screen in the order they are drawn,
+       which is the set the eye was already scanning. */
+    const page=GAL.view.slice();
     requestAnimationFrame(()=>figOpenGallery(page,i));
   }
 });
+/* ---------- the peeks behind the collection's figures ---------- */
+function galPeekSet(E,o,t,p,label,show,extra){
+  const have=E.filter(e=>!e.need);
+  const qids=[...new Set(have.flatMap(e=>e.qids))],qs=qids.map(id=>Q_BY_ID[id]).filter(Boolean);
+  const miss=qs.filter(q=>statusOf(q.id)==='incorrect'),unseen=qs.filter(q=>statusOf(q.id)==='unused');
+  const n=have.length||1,slot={stem:0,expl:0,choice:0},B={};
+  have.forEach(e=>{slot[galSlot(e.f)]++;const k=galFormatOf(e.q);B[k]=(B[k]||0)+1});
+  const rf=Object.entries(B).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[esc(k),'',v/n,v,Math.round(v/n*100)+'%']);
+  const rs=[['With the question',slot.stem],['With the explanation',slot.expl],['As an answer option',slot.choice]].filter(r=>r[1]).map(r=>[r[0],'',r[1]/n,r[1],Math.round(r[1]/n*100)+'%']);
+  return{o,t,fig:pgxFig(pgN('px',have.length)+pgU(have.length===1?'picture':'pictures'),`on ${qs.length} ${qs.length===1?'question':'questions'}`),
+    body:pgxP(p)+pgxMini([[qs.length,'questions'],[miss.length,'missed last time'],[unseen.length,'not seen yet']])
+      +(extra||'')
+      +(rf.length>1?pgxH('What they show')+pgxRows(rf):'')
+      +(rs.length?pgxH('Where they sit')+pgxRows(rs):'')
+      +pgxBySys(qs,'Where the questions are'),
+    acts:[pgxPrac(qids,label,'Practise these questions',true),
+      miss.length?pgxPrac(miss.map(q=>q.id),label+' · missed','Practise the missed'):null,
+      show?{l:'Show only these',ic:'i-gallery',run:show}:null]};
+}
+function galPkInstall(){
+  if(PG_PK.gal)return;
+  PG_PK.gal=arg=>{
+    const all=GAL.all.length?GAL.all:galIndex(),have=all.filter(e=>!e.need);
+    if(arg==='all')return galPeekSet(have,'Images','Every picture in the bank',
+      'A picture used by several questions is stored once and counted once. Practising starts a block of the questions these pictures belong to, at your usual size and timing.','Pictures · all');
+    if(arg==='shared'){
+      const E=have.filter(e=>e.qids.length>1).sort((a,b)=>b.qids.length-a.qids.length),mx=E.length?E[0].qids.length:1;
+      const top=E.slice(0,6).map(e=>[esc(galName(e)||figKind(e.f)),esc(e.q.system||''),e.qids.length/mx,'×'+e.qids.length,null]);
+      return galPeekSet(E,'Images','Shared pictures','One picture, stored once, that more than one question points at. Reusing a picture from the gallery in another question makes it shared.',
+        'Pictures · shared',null,top.length?pgxH(E.length>6?'Most shared · 6 of '+E.length:'Most shared')+pgxRows(top):'');
+    }
+    if(arg==='miss'){
+      const E=have.filter(e=>e.qs.some(q=>statusOf(q.id)==='incorrect'));
+      return galPeekSet(E,'Images','On questions you missed','Pictures whose question you got wrong the last time you answered it. Seeing the picture again is often what fixes the miss.',
+        'Pictures · missed',()=>galOnly('st','incorrect'));
+    }
+    if(arg.startsWith('fmt:')){
+      const k=arg.slice(4),E=have.filter(e=>galFormatOf(e.q)===k);
+      return galPeekSet(E,'What they show',esc(k),k===GAL_OTHER?'Pictures whose question names none of the five formats: diagrams, photographs of patients, anything else.'
+        :`Pictures filed as ${esc(k)}, from the classification of the question they belong to. A question with several formats is filed under the first of ECG, histology, radiology, gross specimen, graph or table.`,
+        'Pictures · '+k,()=>galOnly('fmt',k===GAL_OTHER?'__other':k));
+    }
+    if(arg.startsWith('grp:')){
+      const k=arg.slice(4),E=GAL.list.filter(e=>!e.need&&galBucket(e)===k),on=GAL.view.filter(e=>galBucket(e)===k).length;
+      return galPeekSet(E,'Grouped by '+GAL_GROUP_NAME[GAL.group].toLowerCase(),esc(k),
+        (on<E.length?`${on} of these ${E.length} are on screen; the rest come with Show more. `:'')+(galFiltered()?'Only the pictures that pass your filters and search are counted.':'Every picture filed here.'),
+        'Pictures · '+k);
+    }
+    return null;
+  };
+}
 
 /* ============================================================
    REVIEW QUEUE

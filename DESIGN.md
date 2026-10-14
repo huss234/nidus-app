@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.18** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.19** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1435,6 +1435,48 @@ The quality bar. A surface is done when it *feels* like §2, and:
     `hlev:<system>` one row of the leverage list) are defined after
     `PG_PK` in the FUNCTIONAL INTERACTIVITY block; every other figure
     opens a Progress peek as it is.
+- **Images, the gallery** (`Plume 2.19 · gallery`, v6.81, rebuilt from
+  scratch; markup `#v-gallery` / `#gl`, script THE GALLERY: `renderGallery`,
+  `galHero`, `galTileHTML`, `galSnap` / `galFlip`, `PG_PK.gal`). A light
+  table: masthead and sentence, the collection as a hero, Pictures / Waiting,
+  search, grouping, layout and size, counted filter chips, the grid. Reuse:
+  - **A ribbon of categories** (`.gl-rib` + `.gl-leg`): one segment per
+    category, `flex-grow` its count, the category hues `--gl-c1…c5` turned
+    72° apart from the seed and the remainder in the quieter ink; segments
+    and legend rows are one part (`data-pgf` in a `data-pgfg`), a legend row
+    opens its peek, whose act can filter the screen ("Show only these").
+  - **Justified rows in pure CSS** (`.gl-grid.is-true`): each tile is
+    `flex: var(--ar) 1 calc(var(--ar) * var(--gl-rowh))` with the picture at
+    `aspect-ratio: var(--ar)`, so the tiles of a row share one height with
+    no script; a trailing `::after{flex:10000 1 0}` keeps the last row from
+    stretching. The ratio comes from `f.w / f.h`, clamped 0.5–2.6.
+  - **A grid that glides when its set changes** (`galSnap` before the
+    redraw, `galFlip` after): tiles are keyed (`data-gk`); a kept tile
+    animates from its old box (translate + scale from its top-left corner),
+    a new one scales in on a short stagger, a gone one is cloned onto a
+    fixed layer at its old place (`.gl-ghost`) and fades out on the exit
+    curve, removed on `finished`. Only tiles within 160px of the viewport
+    take part. A change of size or shape never rebuilds: it flips a class
+    or `data-size` between the snapshot and the flip (`galRelayout`).
+  - **Size by pinch** on the grid (`touch-action: pan-x pan-y` on
+    `.gl-body` so the page does not zoom; one step per 1.25× / 0.8×), the
+    same three steps as the size group, remembered per device.
+  - **Long-press to select** (480ms, cancelled by 10px of travel, the click
+    after it swallowed, `contextmenu` blocked on tiles): an empty ring on
+    every tile, the chosen photo drawing back to 0.88 with its check drawn;
+    a floating bar (`.gl-selbar`, `--p-float`, above the tab bar) with ×,
+    the count, select all, copy IDs and Practise (the questions they belong
+    to, through `startIds`). Escape leaves it.
+  - **Chips that count what they bring in** (`galChipCounts`): every other
+    filter group, the mode and the search applied, plus this chip.
+  - **Groups that fold to zero** (`.gl-sec__b`, the 2.13 collapse with
+    `inert`) and a jump strip (`.gl-index`) that opens and scrolls to one;
+    a group's count is a button that opens its peek.
+- **Rule: a stagger variable never borrows a component's own variable
+  (2.19).** The arrival stagger set `--i` on every child of the screen, and
+  the Pictures / Waiting switch, a `.pl-seg`, reads `--i` as its position:
+  its indicator sat two segments over, off the track. Stagger with a name
+  of its own (`--gi`).
 - **The block clock** (`Plume 2.16 · block clock`, `.sp-timer.low` / `.over`):
   a timed block counts down in the session bar's clock. Minutes only while
   ten or more are left, seconds for the last ten (`59m`, `9m 59s`), so it is
@@ -1467,6 +1509,7 @@ A surface that is not listed here is legacy.
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
 | Expressive shapes: generated seals as shape tokens; the goal-met seal behind Home's count, every empty-state shape on Progress and Home | 2.18 | 6.78 | From the user: the hand-drawn burst looked like a child drew it, and it was clipped off centre in the ring |
+| **Images (the gallery), whole screen**: masthead, the collection (count, shared, on missed questions, waiting, the ribbon of formats), Pictures / Waiting, search with the image-ID hint, grouping, squares or each picture at its own shape, three sizes and pinch, counted filters, jump strip, folding groups, tiles, waiting slots with Choose / Paste / From gallery / drop / Open the question, selection | 2.19 | 6.81 | Rebuilt from scratch on the user's request; nothing removed (search over captions, stems and image IDs, every format / where / record filter, Missing photo as the Waiting mode, Recent / System / Subject / Topic / Format with folding groups and counts, paging with Show more, ×N shared, the slot label, caption and system, the viewer with Used in). New: the collection and its peeks, true-shape layout, sizes and pinch, chip counts, an Other format filter, Clear filters, the jump strip, Paste / From gallery / drop / Open on waiting slots, long-press selection to practise or copy IDs, auto-loading pages, the viewer stepping in the order the grid is drawn. At the small size the slot label and captions step aside (the filters and the viewer still carry them) |
 | **Home, whole screen**: masthead, open block card, Today (wavy goal ring, week pebbles, streak, the day's figures), Up next, vital signs with 14-day sparks, the road, readiness ring, where the marks are, the bank map, recent sessions; every figure opens a peek | 2.17 | 6.77 | Rebuilt from scratch on the user's request. Kept: greeting, date, status line, the goal ring and line, the recommended action, streak and best, questions a day and accuracy over 7 days with their change, due count, the horizon (pace vs needed, finishing date), readiness with its four parts, the six leverage rows, the plate with its legend, five recent sessions, the open-session card and all its buttons. New: form and time per question on Home, the week, the alternatives, sparks, the road track, counts in the bank legend. Dropped: the hero's "See progress" button (Progress is a tab, and every figure now leads there) and the (i) notes for readiness and leverage (their peeks explain them) |
 | **Session builder (New session), whole screen**: presets, Due review / Weakest jumps, pools, filters, how you are tested (mode, size, timing, order, switches), the dock; and the session bar's block clock | 2.16 | 6.76 | Rebuilt from scratch on the user's request; nothing removed (every pool, every filter group, Select all / Clear, Reset filters, mode, size, seconds per question, order, shuffle, confidence, the summary). New: presets, timed blocks (exam pace or fixed minutes, end and grade or overtime), counts per chip inside the pool, find in long filters, removable filter chips, the setup remembered per device |
 | **Progress: functional interactivity** (every figure opens a peek, every part isolates, every chart point, column, period row, day and forecast day opens its period, names jump to their area; the peek sheet; *Practise these* from any figure that counts questions; Review due in an area) | 2.15 | 6.74 | From the user: the rebuilt Progress was static, like a PDF. Nothing removed; blocks became buttons |
@@ -1575,6 +1618,13 @@ A surface that is not listed here is legacy.
   precomputed spring keyframes, never a spring stepped per frame. From the
   user: the Settings slide was glitchy on the tablet in portrait and fine
   on the phone.
+
+- **Plume 2.19** (2026-10-14): Images. A light table whose grid glides
+  when its set, size or shape changes (kept tiles travel, new ones scale
+  in, gone ones fade where they stood); justified rows in pure CSS; a
+  ribbon of categories whose legend opens peeks that can filter the
+  screen; long-press selection with a floating bar; a stagger variable
+  never borrows a component's own.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
