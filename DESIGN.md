@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.19** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.20** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1438,8 +1438,21 @@ The quality bar. A surface is done when it *feels* like §2, and:
 - **Images, the gallery** (`Plume 2.19 · gallery`, v6.81, rebuilt from
   scratch; markup `#v-gallery` / `#gl`, script THE GALLERY: `renderGallery`,
   `galHero`, `galTileHTML`, `galSnap` / `galFlip`, `PG_PK.gal`). A light
-  table: masthead and sentence, the collection as a hero, Pictures / Waiting,
-  search, grouping, layout and size, counted filter chips, the grid. Reuse:
+  table that opens on its pictures (2.20): a short masthead and sentence,
+  the search with two buttons beside it, then the grid. **Arrange and
+  filter** (the tune icon) unfolds Pictures / Waiting, grouping, layout,
+  size and the counted filter chips; **About your pictures** (the bars icon)
+  unfolds the collection. Reuse:
+  - **Panels behind a button beside the search** (`.gl-tg` + `.gl-fold`,
+    `galPanel`): the button is a 52px well circle that turns squircle in
+    `secondary-container` while its panel is open (`aria-expanded`); the
+    panel folds to zero (2.13) with the gap before it inside the fold
+    (`margin-top:-16px` on the fold, `16px` on the panel), so a shut panel
+    leaves no space. Open state is remembered per device. While shut, a
+    badge on the button counts the filters that are on (`galBadge`). The
+    tune icon's knobs slide along their tracks and stay while open; the bars
+    icon grows its bars from the baseline as the collection opens, and the
+    collection's figures count up then.
   - **A ribbon of categories** (`.gl-rib` + `.gl-leg`): one segment per
     category, `flex-grow` its count, the category hues `--gl-c1…c5` turned
     72° apart from the seed and the remainder in the quieter ink; segments
@@ -1472,6 +1485,13 @@ The quality bar. A surface is done when it *feels* like §2, and:
   - **Groups that fold to zero** (`.gl-sec__b`, the 2.13 collapse with
     `inert`) and a jump strip (`.gl-index`) that opens and scrolls to one;
     a group's count is a button that opens its peek.
+- **Rule: a screen of things opens on the things (2.20).** A gallery, a
+  list or a library shows its content in the first screenful. Statistics
+  and controls fold behind a button beside the search, unfolding in place,
+  and an active filter shows as a badge on that button and in the count
+  line over the content. (Images v6.81 put the collection's figures and
+  every control above the grid; on the user's phone the first picture was
+  more than a screen down, and they found it intimidating.)
 - **Rule: a stagger variable never borrows a component's own variable
   (2.19).** The arrival stagger set `--i` on every child of the screen, and
   the Pictures / Waiting switch, a `.pl-seg`, reads `--i` as its position:
@@ -1509,6 +1529,7 @@ A surface that is not listed here is legacy.
 | Settings phone layer: the slide over the list runs on the compositor | 2.9 | 6.66 | Same spring, corners, scrim and drag-back as 2.5; only the engine changed. The corner morph near landing still paints on the main thread |
 | Option tables and picture options (player, verdict line, "Choice by choice", bank preview, companion, editor, figure manager) | 2.10 | 6.68 | New parts only: the heading row, the cells, the stacked pairs, the picture plate and tiles, the full-screen button. The option cards around them keep their legacy look; the editor's inputs are legacy |
 | Expressive shapes: generated seals as shape tokens; the goal-met seal behind Home's count, every empty-state shape on Progress and Home | 2.18 | 6.78 | From the user: the hand-drawn burst looked like a child drew it, and it was clipped off centre in the ring |
+| Images: pictures first; the collection and every control fold behind two buttons beside the search | 2.20 | 6.82 | From the user: the gallery opened on statistics and options, and the photos needed a scroll. Nothing removed, only moved |
 | **Images (the gallery), whole screen**: masthead, the collection (count, shared, on missed questions, waiting, the ribbon of formats), Pictures / Waiting, search with the image-ID hint, grouping, squares or each picture at its own shape, three sizes and pinch, counted filters, jump strip, folding groups, tiles, waiting slots with Choose / Paste / From gallery / drop / Open the question, selection | 2.19 | 6.81 | Rebuilt from scratch on the user's request; nothing removed (search over captions, stems and image IDs, every format / where / record filter, Missing photo as the Waiting mode, Recent / System / Subject / Topic / Format with folding groups and counts, paging with Show more, ×N shared, the slot label, caption and system, the viewer with Used in). New: the collection and its peeks, true-shape layout, sizes and pinch, chip counts, an Other format filter, Clear filters, the jump strip, Paste / From gallery / drop / Open on waiting slots, long-press selection to practise or copy IDs, auto-loading pages, the viewer stepping in the order the grid is drawn. At the small size the slot label and captions step aside (the filters and the viewer still carry them) |
 | **Home, whole screen**: masthead, open block card, Today (wavy goal ring, week pebbles, streak, the day's figures), Up next, vital signs with 14-day sparks, the road, readiness ring, where the marks are, the bank map, recent sessions; every figure opens a peek | 2.17 | 6.77 | Rebuilt from scratch on the user's request. Kept: greeting, date, status line, the goal ring and line, the recommended action, streak and best, questions a day and accuracy over 7 days with their change, due count, the horizon (pace vs needed, finishing date), readiness with its four parts, the six leverage rows, the plate with its legend, five recent sessions, the open-session card and all its buttons. New: form and time per question on Home, the week, the alternatives, sparks, the road track, counts in the bank legend. Dropped: the hero's "See progress" button (Progress is a tab, and every figure now leads there) and the (i) notes for readiness and leverage (their peeks explain them) |
 | **Session builder (New session), whole screen**: presets, Due review / Weakest jumps, pools, filters, how you are tested (mode, size, timing, order, switches), the dock; and the session bar's block clock | 2.16 | 6.76 | Rebuilt from scratch on the user's request; nothing removed (every pool, every filter group, Select all / Clear, Reset filters, mode, size, seconds per question, order, shuffle, confidence, the summary). New: presets, timed blocks (exam pace or fixed minutes, end and grade or overtime), counts per chip inside the pool, find in long filters, removable filter chips, the setup remembered per device |
@@ -1625,6 +1646,10 @@ A surface that is not listed here is legacy.
   ribbon of categories whose legend opens peeks that can filter the
   screen; long-press selection with a floating bar; a stagger variable
   never borrows a component's own.
+
+- **Plume 2.20** (2026-10-15): a screen of things opens on the things.
+  Statistics and controls fold behind buttons beside the search, with a
+  badge for active filters. From the user, on Images.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

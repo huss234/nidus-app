@@ -412,7 +412,11 @@ a recipe.
   included), and `lbxSource` finds a tile by `#galBody [data-galidx]`.
   Gallery peeks are `PG_PK.gal` (installed by `galPkInstall()` on the first
   render, since `PG_PK` is declared later in the file). Group, layout and
-  size are this device's own, in `localStorage.nidus_gal_view`.
+  size, and which of the two panels (Arrange and filter, About your
+  pictures; `galPanel`) are open, are this device's own, in
+  `localStorage.nidus_gal_view`. The pictures come first (v6.82, the
+  user's correction): never put statistics or controls back above the
+  grid; add them to a panel.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget`,
   `nidus_straggler` and `nidus_gal_view` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)

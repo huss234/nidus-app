@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.81 -->
+<!-- Nidus — Personal Qbank · v6.82 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2990,9 +2990,9 @@ body.hasmig{padding-bottom:64px}
 
 /* ---- masthead ---- */
 .gl-mast{padding:4px 2px 0}
-.gl-title{margin:0;font:450 34px/40px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.015em;color:var(--md-on-surface)}
-@media (min-width:600px){.gl-title{font-size:44px;line-height:52px}}
-.gl-say{margin:8px 0 0;max-width:56ch;font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.gl-title{margin:0;font:450 28px/36px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.01em;color:var(--md-on-surface)}
+@media (min-width:600px){.gl-title{font-size:32px;line-height:40px}}
+.gl-say{margin:2px 0 0;max-width:60ch;font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
 .gl-say b{font-weight:600;color:var(--md-on-surface);font-variant-numeric:tabular-nums}
 .gl-link{display:inline;padding:0;margin:0;background:none;border:0;font:inherit;color:var(--md-primary);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .gl-link:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;border-radius:4px}
@@ -3040,9 +3040,55 @@ body.hasmig{padding-bottom:64px}
 .gl-mode{width:100%}
 .gl-mode__n{margin-left:6px;font-weight:600;font-variant-numeric:tabular-nums;opacity:.78}
 
-/* ---- search ---- */
-.gl-search{margin:0}
-.gl-hint{display:grid;grid-template-rows:minmax(0,0fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+/* ---- search, and the two buttons that unfold the rest ----
+   The pictures come first (the user, v6.82): the counts and every control
+   wait behind two buttons beside the search, each unfolding its panel in
+   place above the grid. */
+.gl-bar{display:flex;align-items:center;gap:8px}
+.gl-search{margin:0;flex:1;min-width:0;height:52px}
+.gl-tg{position:relative;isolation:isolate;flex:none;width:52px;height:52px;display:grid;place-items:center;border-radius:26px;
+  background:var(--p-well);color:var(--md-on-surface-variant);cursor:pointer;
+  transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.gl-tg::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.gl-tg:hover::after{opacity:var(--m3-state-hover)}}
+.gl-tg.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.gl-tg.is-down::after{opacity:var(--m3-state-press)}
+/* open: round turns squircle and takes the selected tone */
+.gl-tg[aria-expanded="true"]{border-radius:var(--p-r-l);background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.gl-tg:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.gl-tg__n{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;display:grid;place-items:center;box-sizing:border-box;
+  background:var(--md-primary);color:var(--md-on-primary);font:600 11px/1 var(--m3-font);font-variant-numeric:tabular-nums;
+  transform:scale(0);transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.gl-tg__n.on{transform:none}
+/* the tune icon: each knob slides along its own track, in opposite directions, and stays while open */
+.gl-tune__t{opacity:.5}
+.gl-tune__k{transition:transform var(--p-spatial-d) var(--p-spatial)}
+.gl-tg[aria-expanded="true"] .gl-tune__k1{transform:translateX(-7px)}
+.gl-tg[aria-expanded="true"] .gl-tune__k2{transform:translateX(6px)}
+.gl-tg[aria-expanded="true"] .gl-tune__k3{transform:translateX(-4px)}
+/* the bars icon: opening grows the bars from their baseline, one after another */
+.gl-bars rect{transform-box:fill-box;transform-origin:50% 100%}
+.gl-bars.is-play rect{animation:glBar var(--p-spatial-d) var(--p-spatial) both}
+.gl-bars.is-play rect:nth-child(2){animation-delay:50ms}
+.gl-bars.is-play rect:nth-child(3){animation-delay:100ms}
+@keyframes glBar{from{transform:scaleY(.25)}}
+/* a panel folds to zero; the gap before it lives inside, so a closed one leaves none */
+.gl-fold{display:grid;grid-template-rows:minmax(0,0fr);margin-top:-16px;transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.gl-fold > div{overflow:hidden;min-height:0}
+.gl-fold.on{grid-template-rows:minmax(0,1fr)}
+.gl-panel{display:flex;flex-direction:column;gap:16px;margin-top:16px;padding:16px;border-radius:var(--p-r-card);background:var(--p-card);
+  opacity:0;transform:translateY(-8px);transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-d) var(--p-spatial)}
+@media (min-width:600px){.gl-panel{padding:20px 24px}}
+.gl-fold.on .gl-panel{opacity:1;transform:none}
+.gl-panel--sum{padding:0;background:none}
+.gl-panel .gl-chips{flex-direction:column;gap:10px;overflow:visible;margin:0 -16px;padding:0}
+/* in the panel, each group is its own row; on a phone a row scrolls sideways */
+.gl-panel .gl-chips__g{overflow-x:auto;scrollbar-width:none;padding:2px 16px}
+.gl-panel .gl-chips__g::-webkit-scrollbar{display:none}
+@media (min-width:600px){.gl-panel .gl-chips{margin:0}.gl-panel .gl-chips__g{overflow:visible;padding:0}}
+.gl-panel .gl-view{margin-left:0}
+@media (max-width:440px){.gl-panel .gl-group button{padding:0 2px;font-size:13px}}
+.gl-hint{margin-top:-16px;display:grid;grid-template-rows:minmax(0,0fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
 .gl-hint > div{overflow:hidden;min-height:0}
 .gl-hint p{margin:0;padding:8px 18px 0;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
 .gl-hint p code{font:500 12px/16px var(--m3-mono);color:var(--md-on-surface)}
@@ -7032,54 +7078,63 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
          the questions, harvesting their figure slots and deduplicating by
          content hash, so a photo attached to four items is one tile that
          knows about all four, and each tile inherits its question's
-         classification. Masthead, the collection (count, what the pictures
-         show, the figures behind it), Pictures / Waiting, search, how to
-         group and lay them out, filters that count what they bring in, then
-         the light table itself. Long-press a picture to select several. -->
+         classification. Pictures first: a short masthead, the search with
+         two buttons beside it, then the grid. "Arrange and filter" unfolds
+         Pictures / Waiting, grouping, layout, size and the filters; "About
+         your pictures" unfolds the collection (counts, what the pictures
+         show, each opening its peek). Long-press a picture to select several. -->
     <section class="view" id="v-gallery" data-size="m">
       <div class="gl" id="gl">
         <header class="gl-mast">
           <h2 class="gl-title">Images</h2>
           <p class="gl-say" id="glSay"></p>
         </header>
-        <div class="gl-hero" id="glHero"></div>
-        <div class="gl-mode pl-seg" id="glMode" role="radiogroup" aria-label="What to show" style="--n:2;--i:0">
-          <span class="pl-seg__ind" aria-hidden="true"></span>
-          <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="have">Pictures<span class="gl-mode__n" id="glModeHave"></span></button>
-          <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="need">Waiting for a photo<span class="gl-mode__n" id="glModeNeed"></span></button>
+        <div class="gl-bar">
+            <label class="sx-search gl-search" id="glSearchBox">
+              <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
+              <input type="search" id="galSearch" placeholder="Search pictures" aria-label="Search pictures" autocomplete="off">
+              <button type="button" class="sx-search__x pl-press" id="galSearchX" aria-label="Clear search" tabindex="-1"><svg class="ic" data-ic="i-close"></svg></button>
+            </label>
+          <button type="button" class="gl-tg pl-press" id="glArrBtn" aria-expanded="false" aria-controls="glArr" aria-label="Arrange and filter" title="Arrange and filter"><svg class="ic gl-tune" viewBox="0 0 24 24" aria-hidden="true"><path class="gl-tune__t" d="M3.8 6.4h16.4M3.8 12h16.4M3.8 17.6h16.4"/><path class="gl-tune__k gl-tune__k1" d="M16 4v4.8"/><path class="gl-tune__k gl-tune__k2" d="M8.2 9.6v4.8"/><path class="gl-tune__k gl-tune__k3" d="M12.2 15.2V20"/></svg><span class="gl-tg__n" id="glArrN" aria-hidden="true"></span></button>
+          <button type="button" class="gl-tg pl-press" id="glSumBtn" aria-expanded="false" aria-controls="glSum" aria-label="About your pictures" title="About your pictures"><svg class="ic gl-bars" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/><rect x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/><rect x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/></svg></button>
         </div>
-        <div class="gl-find">
-          <label class="sx-search gl-search" id="glSearchBox">
-            <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
-            <input type="search" id="galSearch" placeholder="Captions, topics, stems or an image ID" aria-label="Search pictures" autocomplete="off">
-            <button type="button" class="sx-search__x pl-press" id="galSearchX" aria-label="Clear search" tabindex="-1"><svg class="ic" data-ic="i-close"></svg></button>
-          </label>
           <div class="gl-hint" id="glHint" aria-live="polite"><div><p id="glHintT"></p></div></div>
-        </div>
-        <div class="gl-tools">
-          <div class="pl-seg gl-group" id="galGroup" role="radiogroup" aria-label="Group pictures by" style="--n:5;--i:0">
-            <span class="pl-seg__ind" aria-hidden="true"></span>
-            <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="recent">Recent</button>
-            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="system">System</button>
-            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="subject">Subject</button>
-            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="topic">Topic</button>
-            <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="resource">Format</button>
-          </div>
-          <div class="gl-view">
-            <div class="pl-seg gl-lay" id="glLay" role="radiogroup" aria-label="Picture shape" style="--n:2;--i:0">
+        <!-- arrange and filter: folded away until asked for, so the pictures come first -->
+        <div class="gl-fold" id="glArr" inert><div><div class="gl-panel">
+            <div class="gl-mode pl-seg" id="glMode" role="radiogroup" aria-label="What to show" style="--n:2;--i:0">
               <span class="pl-seg__ind" aria-hidden="true"></span>
-              <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="sq" aria-label="Squares, with captions" title="Squares, with captions"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></button>
-              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="true" aria-label="Each picture at its own shape" title="Each picture at its own shape"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="6" rx="1.8"/><rect x="16" y="5" width="5" height="6" rx="1.8"/><rect x="3" y="13" width="6" height="6" rx="1.8"/><rect x="11" y="13" width="10" height="6" rx="1.8"/></svg></button>
+              <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="have">Pictures<span class="gl-mode__n" id="glModeHave"></span></button>
+              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="need">Waiting for a photo<span class="gl-mode__n" id="glModeNeed"></span></button>
             </div>
-            <div class="pl-seg gl-size" id="glSize" role="radiogroup" aria-label="Tile size" style="--n:3;--i:1">
-              <span class="pl-seg__ind" aria-hidden="true"></span>
-              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="s" aria-label="Small tiles" title="Small tiles (pinch the pictures in)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="4" height="4" rx="1.2"/><rect x="10" y="4" width="4" height="4" rx="1.2"/><rect x="16" y="4" width="4" height="4" rx="1.2"/><rect x="4" y="10" width="4" height="4" rx="1.2"/><rect x="10" y="10" width="4" height="4" rx="1.2"/><rect x="16" y="10" width="4" height="4" rx="1.2"/><rect x="4" y="16" width="4" height="4" rx="1.2"/><rect x="10" y="16" width="4" height="4" rx="1.2"/><rect x="16" y="16" width="4" height="4" rx="1.2"/></svg></button>
-              <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="m" aria-label="Medium tiles" title="Medium tiles"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="6" height="6" rx="1.6"/><rect x="13" y="5" width="6" height="6" rx="1.6"/><rect x="5" y="13" width="6" height="6" rx="1.6"/><rect x="13" y="13" width="6" height="6" rx="1.6"/></svg></button>
-              <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="l" aria-label="Large tiles" title="Large tiles (pinch the pictures out)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg></button>
+            <div class="gl-tools">
+              <div class="pl-seg gl-group" id="galGroup" role="radiogroup" aria-label="Group pictures by" style="--n:5;--i:0">
+                <span class="pl-seg__ind" aria-hidden="true"></span>
+                <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="recent">Recent</button>
+                <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="system">System</button>
+                <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="subject">Subject</button>
+                <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="topic">Topic</button>
+                <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="resource">Format</button>
+              </div>
+              <div class="gl-view">
+                <div class="pl-seg gl-lay" id="glLay" role="radiogroup" aria-label="Picture shape" style="--n:2;--i:0">
+                  <span class="pl-seg__ind" aria-hidden="true"></span>
+                  <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="sq" aria-label="Squares, with captions" title="Squares, with captions"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></button>
+                  <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="true" aria-label="Each picture at its own shape" title="Each picture at its own shape"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="11" height="6" rx="1.8"/><rect x="16" y="5" width="5" height="6" rx="1.8"/><rect x="3" y="13" width="6" height="6" rx="1.8"/><rect x="11" y="13" width="10" height="6" rx="1.8"/></svg></button>
+                </div>
+                <div class="pl-seg gl-size" id="glSize" role="radiogroup" aria-label="Tile size" style="--n:3;--i:1">
+                  <span class="pl-seg__ind" aria-hidden="true"></span>
+                  <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="s" aria-label="Small tiles" title="Small tiles (pinch the pictures in)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="4" height="4" rx="1.2"/><rect x="10" y="4" width="4" height="4" rx="1.2"/><rect x="16" y="4" width="4" height="4" rx="1.2"/><rect x="4" y="10" width="4" height="4" rx="1.2"/><rect x="10" y="10" width="4" height="4" rx="1.2"/><rect x="16" y="10" width="4" height="4" rx="1.2"/><rect x="4" y="16" width="4" height="4" rx="1.2"/><rect x="10" y="16" width="4" height="4" rx="1.2"/><rect x="16" y="16" width="4" height="4" rx="1.2"/></svg></button>
+                  <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="m" aria-label="Medium tiles" title="Medium tiles"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="6" height="6" rx="1.6"/><rect x="13" y="5" width="6" height="6" rx="1.6"/><rect x="5" y="13" width="6" height="6" rx="1.6"/><rect x="13" y="13" width="6" height="6" rx="1.6"/></svg></button>
+                  <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="l" aria-label="Large tiles" title="Large tiles (pinch the pictures out)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3"/></svg></button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="gl-chips" id="galChips"></div>
+            <div class="gl-chips" id="galChips"></div>
+        </div></div></div>
+        <!-- the collection: counts, what the pictures show, each opening its peek -->
+        <div class="gl-fold" id="glSum" inert><div><div class="gl-panel gl-panel--sum">
+            <div class="gl-hero" id="glHero"></div>
+        </div></div></div>
         <div class="gl-meta">
           <span class="gl-meta__t" id="galMeta"></span>
           <button type="button" class="pl-btn pl-btn--text pl-press gl-clear" id="glClear">Clear filters</button>
@@ -7256,7 +7311,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.81</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.82</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7312,7 +7367,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.81 · sharded store</span>
+        <span class="chip" id="verChip">v6.82 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8426,7 +8481,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.81';
+const APP_VERSION='6.82';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -15026,6 +15081,8 @@ const GAL={
   flip:false,       /* the next redraw glides from the grid as it stands */
   typeT:0,
   sel:null,         /* the keys selected, or null outside selection */
+  arr:false,        /* the Arrange and filter panel is open */
+  sum:false,        /* the collection panel is open */
   swallow:0
 };
 /* the shape of the grid is this device's own choice, kept across visits */
@@ -15035,9 +15092,10 @@ const GAL={
     if(GAL_GROUPS.indexOf(v.group)>=0)GAL.group=v.group;
     if(v.lay==='true')GAL.lay='true';
     if(GAL_SIZES.indexOf(v.size)>=0)GAL.size=v.size;
+    GAL.arr=!!v.arr;GAL.sum=!!v.sum;
   }catch(e){}
 })();
-function galSave(){try{localStorage.setItem('nidus_gal_view',JSON.stringify({group:GAL.group,lay:GAL.lay,size:GAL.size}))}catch(e){}}
+function galSave(){try{localStorage.setItem('nidus_gal_view',JSON.stringify({group:GAL.group,lay:GAL.lay,size:GAL.size,arr:GAL.arr,sum:GAL.sum}))}catch(e){}}
 /* ------------------------------------------------------------
    Answering a tap in the frame it lands in. The control the
    finger is on changes at once (its indicator travels, its chip
@@ -15214,6 +15272,12 @@ function galPaintCount(){
 function galMast(have,need){
   const qn=new Set();have.forEach(e=>e.qids.forEach(id=>qn.add(id)));
   const nq=new Set(need.map(e=>e.qid)).size;
+  if(GAL.sets.need.size){
+    const t=need.length?`<b>${need.length}</b> ${need.length===1?'slot is':'slots are'} waiting for a photo. `:'Nothing is waiting for a photo. ';
+    const h=t+`<button type="button" class="gl-link" data-galmode="have">Show the pictures</button>.`;
+    const el=$('#glSay');if(el.innerHTML)sxSwap(el,h);else el.innerHTML=h;
+    return;
+  }
   const s=(!have.length&&!need.length)
     ? 'Attach a photo to a question, from the player with G or from its Edit panel, and it appears here.'
     : (have.length?`<b>${have.length}</b> ${have.length===1?'picture':'pictures'} on <b>${qn.size}</b> ${qn.size===1?'question':'questions'}. `:'No pictures attached yet. ')
@@ -15325,6 +15389,7 @@ function renderGallery(reset,arrive){
   if(slice.length<list.length)meta+=` · ${slice.length} shown`;
   const m=$('#galMeta');if(m.textContent!==meta){if(m.textContent)sxSwap(m,esc(meta));else m.textContent=meta}
   $('#glClear').classList.toggle('on',filtered);
+  galBadge();
   $('#glSelBtn').hidden=wantNeed||!slice.length;
   $('#galMore').hidden=list.length<=GAL.shown;
   galSearchPaint();
@@ -15454,8 +15519,32 @@ function galOnly(g,k){
   GAL.sets.need.clear();$('#galSearch').value='';
   GAL.sets[g].add(k);
   galPaintChips();galSoon(true);
-  requestAnimationFrame(()=>{const c=$('#galChips');if(c)c.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'start'})});
+  requestAnimationFrame(()=>{const c=$('#galMeta');if(c)c.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'center'})});
 }
+/* ---------- the two panels ---------- */
+/* how many filters are on, shown on the Arrange button while its panel is shut */
+function galBadge(){
+  const n=GAL.sets.fmt.size+GAL.sets.slot.size+GAL.sets.st.size+(GAL.sets.need.size?1:0),b=$('#glArrN');
+  if(n)b.textContent=n;
+  b.classList.toggle('on',!!n);
+  $('#glArrBtn').setAttribute('aria-label',n?`Arrange and filter, ${n} on`:'Arrange and filter');
+}
+function galPanel(which,open,quiet){
+  const f=$(which==='arr'?'#glArr':'#glSum'),b=$(which==='arr'?'#glArrBtn':'#glSumBtn');
+  GAL[which]=open;
+  f.classList.toggle('on',open);f.inert=!open;b.setAttribute('aria-expanded',String(open));
+  if(quiet)return;
+  galSave();
+  if(which==='sum'&&open){
+    /* the figures count up and the ribbon grows as the panel opens */
+    const all=GAL.all;galHero(all.filter(e=>!e.need),all.filter(e=>e.need),true);
+    const ic=b.querySelector('.gl-bars');if(ic&&!Motion.reduced){ic.classList.remove('is-play');void ic.getBoundingClientRect();ic.classList.add('is-play')}
+  }
+}
+galPanel('arr',GAL.arr,true);galPanel('sum',GAL.sum,true);
+$('#glArrBtn').addEventListener('click',()=>galPanel('arr',!GAL.arr));
+$('#glSumBtn').addEventListener('click',()=>galPanel('sum',!GAL.sum));
+$('#glSumBtn').addEventListener('animationend',e=>{if(e.target.matches('rect:last-child'))e.currentTarget.querySelector('.gl-bars').classList.remove('is-play')});
 /* ---------- selection ---------- */
 function galSelOn(key){
   GAL.sel=new Set(key?[key]:[]);
