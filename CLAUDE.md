@@ -771,5 +771,21 @@ does) and work in the scratchpad:
   builds, `getComputedStyle` per frame shows the pill frozen; the screencast
   shows it moving. Film the bar strip (`montage -crop`) of a tab switch at
   800×1220 with 4× CPU, and a thumb swipe with CDP `touchMove`s 25ms apart.
+- **Test the shared chrome through real taps** (the scratch `motion.js`,
+  v6.88): with `hasTouch`/`isMobile`, tap the dock and log per frame the
+  title slot (each name's opacity, visibility, `m41`), the FAB's computed
+  `clip-path`, `--fab-w` and wrapper opacity, the dock's top, `innerHeight`
+  and `scrollWidth - clientWidth`, through Home → Bank (morph), Bank →
+  Review (leave), Review → Home (enter) and a folded FAB → Home. Then film the
+  FAB strip: the morph's first build moved the icon with the clip but not the
+  label, and only the film showed them colliding. Tap a clipped button by
+  the coordinates of its visible part (`touchscreen.tap`); Playwright's
+  `page.tap` aims at the laid-out box's centre, which a clip may hide.
+- **Fake a connected sync without the network:** after load, replace
+  `SYNC.connected`, `SYNC.cfg` and `SYNC.now` on the object, write
+  `nidus_sync_log`, and drive states with `SYNC.state(phase, short, msg)`
+  and `SYNC.log(text)`; `SYNCUI.expand()` shows the details chevron. Seeding
+  `nidus_sync_cfg` before load instead starts a real pass and shows the
+  storage-upgrade banner.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

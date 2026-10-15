@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.25** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.26** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1677,6 +1677,66 @@ The quality bar. A surface is done when it *feels* like §2, and:
   objects you start and cancel those. Likewise, read the springs a tap needs
   (`PL`) once at idle: their first read is a computed-style read of the root
   and forced a full recalc on the tap frame (113ms).
+- **The shared chrome** (`Plume 2.26 · top bar`, `· overflow menu`, `· FAB`,
+  `· sync peek`, v6.88; markup `.mobhead` › `.mh-ttl` + `.spacer` ›
+  `#overflowBtn.mh-more`, `#fabDock` › `.fab-w` › `#fabMain`; script
+  `mhTitle` (beside the `go` wrapper that sets the bar's title),
+  `buildOverflow` / `openOverflow` / `closeOverflow`, the FAB module's
+  `enter` / `leave` / `morph`, SYNCUI's `peek` / `drawSheet` and
+  `PG_PK.sync`). Reuse:
+  - **A bar every tab shares changes only its words.** The wordmark and the
+    title share one grid slot; the one not on show is `visibility:hidden`.
+    A change slides the new name 16px in from the side the dock's pill went
+    (`TB.dir`, set by `tbSwap`) after 60ms while the old one (a copy, so the
+    real `#barTitle` takes its words at once) leaves 10px the other way on
+    the exit curve; a change from anywhere else rises 6px. The bar is flat
+    on `--p-page` and rises to `--p-bar` when the screen scrolls under it
+    (the browser chrome colour follows), with `contain:strict`.
+  - **An icon button that anchors an open layer** (`.mh-more`): while
+    `aria-expanded` is true it holds a `secondary-container` fill squared to
+    `--p-r-m` (its own `::after`, under the state layer). The ⋮ glyph is
+    inline: its outer dots part 1.6px along their column as the menu unfolds
+    and gather as it folds.
+  - **A grouped menu** (`.ovm`, `.ovm__g`, `.ovm__it`): groups are separate
+    `--p-float` surfaces 2px apart (no divider lines), outer corners
+    `--p-r-lx`, the joints `--p-r-xs`, rows `--p-r-l` at the group ends inside
+    4px. Hung under its anchor (measured), its transform origin on the
+    anchor's centre; opens with scale .85 and a fade on `--p-spatial`, rows
+    following 25ms apart from 30ms; folds all at once in ~170ms on the exit
+    curve and is hidden on `Animation.finished`. Arrow keys, Home and End walk
+    the rows; Escape closes it alone and gives focus back to the anchor. A
+    setting row carries `.pl-sw` (inert input) and keeps the menu open; the
+    switch keeps moving through `Motion.morph` (`html.m-snap .pl-sw__t`).
+  - **A size change by clip, not width** (the FAB): lay the element out at
+    its widest, show part of it with `clip-path: inset(0 0 0 var(--cut) round
+    var(--r))` and move what is inside with the edge (`translateX(var(--cut))`).
+    Corners ride inside the clip, so the edge uses `--p-spatial-c` (380 / 1.0,
+    the critically damped twin of `--p-spatial`, in the tokens block). The
+    shadow is a `drop-shadow` filter on a wrapper so it follows the clip; the
+    wrapper takes no pointer events and the clipped button does (clip-path
+    clips hit-testing), so the hidden part never blocks content. Going from
+    one width to another (`morph`): lay out at the wider of the two, animate
+    the clip **and every child that sits after the edge** (icon and label)
+    from the old cut to the new, then set the real width on `finished`.
+    (v6.88, filmed: with only the icon riding, the label stayed where the
+    wider layout put it and ran into the icon for a quarter of a second.)
+  - **The FAB menu** (`.fabitem`): `primary-container` pills, 56px, resting
+    at their real 28px radius; they unfold upward, the nearest first, 30ms
+    apart (≤6 steps), scale .85 + 14px + fade on `--p-spatial`, and fold back
+    together a third quicker. The FAB becomes the close: `primary`, a circle,
+    its ring draws off (`stroke-dashoffset`) while the plus turns 135° into
+    the cross. Delays are dropped and the folded pills emptied on
+    `transitionend`, never a timer. The scrim is `--md-scrim` 32% / 50% dark.
+    Through a screen change the FAB stays put (2.25): another action morphs
+    it, no action shrinks it away into itself.
+  - **A live peek** (the sync details): a peek whose figure changes while it
+    is up keeps stable ids on every value and patches them with `sxSwap`;
+    a new log line is inserted at the top and rises in, a repeated line only
+    rolls its time; an act with `keep:true` runs without closing the sheet
+    (Sync now). The headline says where the device stands (Up to date,
+    Syncing now, Needs your attention, Changes waiting) and the message line
+    shows only what neither the headline nor the control already says (the
+    first build said "Synced" three times).
 
 ## 15. Ledger: surfaces rebuilt under Plume
 
@@ -1714,7 +1774,8 @@ A surface that is not listed here is legacy.
 | **Bank, whole screen; the question page; the editor** (search with the passage that matched, sort, chips in seven counted groups, the count line with Practise, About your bank with its peeks and Keep it tidy, rows, long-press selection with flag / label / verify / copy / delete / practise; the page layer; the question page with stepping, flag, labels, record, note, ⋮; the editor with sections, the jump strip, Write / Preview, the letter as the answer, lure switches, move / remove / add, table columns, the dock) | 2.22 | 6.84 | Rebuilt from scratch on the user's request; nothing removed. Every legacy filter is a chip (plus Left blank, Due, Has a lure, system, subject, difficulty, your labels); the duplicate scan moved into About your bank. The preview dialog became a page that every screen opens (Home's plate, Images, Review, the duplicates list). New in the editor: things to remember and references are editable, options reorder, topic and source suggest from the bank, unsaved changes are guarded, Ctrl+S saves. The duplicates dialog, the figure blocks (`figHTML`) and the referenced-file buttons inside the pages are still legacy components |
 | **Review, whole screen**: what is due today and Start review, the ladder (how the schedule works, with the user's questions on its steps), the next two weeks, the queue (due now, coming up, keeps slipping) | 2.23 | 6.85 | Rebuilt from scratch on the user's request ("I don't know how to use this tab"). Nothing removed: the due count and line, the leeches (now Keeps slipping, with the read-don't-drill advice and the Memory peek), the upcoming list with due, lapses and accuracy (as pips), every row opening the question. New: Start review and Missed ones first on the screen itself (the old screen had no way to start), the time it will take, the split of what is due, the ladder and its peeks, the forecast, paging. The (i) note's text now lives in the ladder's rules. The screen's FAB is gone (the hero holds the action) |
 | Dock fix: stays still through every tab switch (the content column clips the sideways entrance) | 2.25 | 6.87 | From the user: the dock disappeared and reappeared on each switch. Measured static at 360 / 412 / 800px |
-| **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px), the top app bar and the FAB are still legacy |
+| **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px) is still legacy; the top app bar and the FAB followed in 2.26 |
+| **The shared chrome: top bar, its ⋮ menu, the FAB and FAB menu, the sync details** | 2.26 | 6.88 | Rebuilt on the user's request ("the remaining legacy elements"). Kept: every overflow row (Import, Settings, Dark theme, Keyboard shortcuts), the FAB on Home (menu: Drill weakest, Review what's due, Resume, Start a session), Bank (Write a question) and Import's prompt tab (Copy prompt), the collapse on scroll, the snackbar lift, every sync detail (device, last sync, files and photos waiting, peers, requests left, repositories, layout, last pass, the log) and Sync now / Repair / Sync settings. The sync control itself (`.sync-split`: colours, width morph, loading indicator) is untouched at the user's word. The details moved from a dialog into the peek sheet. The rail (≥861px) is still legacy |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -1915,3 +1976,10 @@ were built under which version.
   geometry, kept as shape tokens and applied as masks, never typed by hand
   or clipped in pixels; a shape nested in another shares its wave count and
   phase. From the user, on the burst behind Home's goal count.
+- **Plume 2.26** (2026-10-15): the shared chrome. A bar every tab shares
+  changes only its words, which follow the pill; a size change is a clip and
+  everything after its edge moves with it; a menu is groups of float
+  surfaces, never lines; a peek can stay live. New token `--p-spatial-c`.
+  From the user: the top bar, the ⋮ menu, the FAB and the sync details were
+  the last legacy pieces on every screen, and the sync control's look and
+  motion were to stay exactly as they are.

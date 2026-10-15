@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.87 -->
+<!-- Nidus — Personal Qbank · v6.88 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -659,21 +659,38 @@ button.syncbtn:active{border-radius:var(--m3-corner-press);transform:scale(.97);
 .synckey{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .synckey .syncbtn{height:32px;padding:0 12px 0 10px;font-weight:500}
 .synckey .syncbtn .sic,.synckey .syncbtn .ic,.synckey .sync-ld,.synckey .sync-ld svg{width:18px;height:18px}
-/* the details sheet: settings rows, set tighter, value on the same line */
-.syncsheet-top{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin:0 0 14px}
-.syncinfo .setrow{padding:12px 0;flex-wrap:nowrap;align-items:center}
-.syncinfo .setrow > .lb{font-size:14px;line-height:20px;letter-spacing:.25px;flex:1 1 auto}
-.syncinfo .setrow > .lb small{font-size:12px;line-height:16px;letter-spacing:.4px}
-.syncinfo .setrow .ctl{width:auto;margin-left:auto;justify-content:flex-end;flex:0 1 auto;min-width:0}
-.syncinfo .sv{font-size:14px;line-height:20px;color:var(--md-on-surface);text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.syncinfo .sv.ok{color:var(--md-success)}
-.syncinfo .sv.bad{color:var(--md-error)}
-.synclog{display:flex;flex-direction:column}
-.synclog > div{padding:10px 0;border-bottom:1px solid var(--md-outline-variant);display:flex;flex-direction:column;gap:2px}
-.synclog > div:last-child{border-bottom:none}
-.synclog time{font-size:12px;line-height:16px;letter-spacing:.4px;color:var(--md-on-surface-variant)}
-.synclog span{font-size:14px;line-height:20px;color:var(--md-on-surface)}
-.synclog .none{font-size:14px;line-height:20px;color:var(--md-on-surface-variant)}
+/* ============================================================
+   Plume 2.26 · sync peek
+   ------------------------------------------------------------
+   What used to be the "Sync" dialog of settings rows and divider
+   lines is the sync control's peek (#pgx): its status at the head
+   (the control itself, live), the time since the last sync as the
+   figure, three tiles of what is waiting, then the devices, where
+   the data is kept and the recent activity as grouped rows on the
+   well, never lines. Acts: Sync now (stays up to watch it run),
+   Repair sync, Sync settings.
+   ============================================================ */
+.sy-st{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin:0 0 20px}
+.sy-msg{flex:1 1 160px;min-width:0;font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.sy-fig .pg-big{font-variant-numeric:tabular-nums}
+.sy-list,.sy-log{list-style:none;margin:0;padding:0;display:grid;gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.sy-row{display:flex;align-items:center;gap:12px;min-height:56px;padding:10px 16px;background:var(--p-well)}
+.sy-row__t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sy-row__t b{font:500 15px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);overflow-wrap:anywhere}
+.sy-row__t em,.sy-row__v em{font:400 13px/18px var(--m3-font);font-style:normal;letter-spacing:.2px;color:var(--md-on-surface-variant);overflow-wrap:anywhere}
+.sy-row__v{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.sy-row__v b{font:520 20px/24px var(--m3-font);font-variation-settings:"wdth" 112;font-variant-numeric:tabular-nums;color:var(--md-on-surface)}
+.sy-id{font-family:var(--m3-mono);font-size:12px;letter-spacing:0}
+.sy-ok{display:inline-flex;align-items:center;gap:4px;color:var(--md-success)}
+.sy-ok .ic{width:14px;height:14px}
+.sy-row.is-good .sy-row__t em{color:var(--md-success)}
+.sy-row.is-bad .sy-row__t em{color:var(--md-error)}
+.sy-log > li{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:baseline;gap:14px;padding:12px 16px;background:var(--p-well)}
+.sy-log time{font:500 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sy-log span{font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);overflow-wrap:anywhere}
+.sy-log > li.sy-log__none{grid-template-columns:1fr}
+.sy-log > li.sy-log__none span{color:var(--md-on-surface-variant)}
+.sy-more{margin:8px 0 0 -4px}
 
 .modal .nav{overflow:visible;flex:none;padding:0}
 .railfoot{display:flex;gap:8px;align-items:center;padding:8px 8px 0}
@@ -705,173 +722,219 @@ body:not(:has(#v-dash.on)) .mobhead .syncbtn .sl{display:none}
   height:calc(var(--m3-appbar-h) + env(safe-area-inset-top));
   padding:env(safe-area-inset-top) 4px 0 16px;
   position:sticky;top:0;z-index:20;
-  background:var(--md-surface);
-  transition:background-color var(--m3-dur-medium2) var(--m3-ease-standard);
 }
-body.scrolled .mobhead{background:var(--md-surface-container)}
+
+/* ============================================================
+   Plume 2.26 · top bar
+   ------------------------------------------------------------
+   The one bar every tab shares, so it stays perfectly still (2.25):
+   only what it says changes. Flat on the page at rest; once the
+   screen scrolls under it, it rises one level to --p-bar, by tone
+   on the slow effects spring, never by a line or a shadow. Its
+   name sits in one slot with the wordmark: Home shows the
+   wordmark, every other screen its title, and a change of screen
+   slides the new name in from the side the dock's pill went
+   (mhTitle). The ⋮ is a Plume icon button that stays lit while
+   its menu is out, and its three dots part as the menu unfolds
+   below it. The sync control in between is its own component
+   (SYNCUI) and is deliberately left exactly as it was.
+   ============================================================ */
+.mobhead{
+  background:var(--p-page);contain:strict;
+  transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+}
+body.scrolled .mobhead{background:var(--p-bar)}
+.mh-ttl{flex:1 1 auto;min-width:0;display:grid;align-items:center;justify-items:start;margin-right:4px}
+.mh-ttl > *{grid-area:1/1;min-width:0;max-width:100%}
 .mobhead h1{
-  font-size:22px;line-height:28px;font-weight:500;margin:0;letter-spacing:0;
+  font:500 22px/28px var(--m3-font);margin:0;letter-spacing:0;
   color:var(--md-on-surface);
 }
-/* Home has no screen title worth writing, so the bar carries the app's
-   wordmark instead — the drawn logotype, never the mark. */
-.mobhead .wordmark{display:none}
-body:has(#v-dash.on) .mobhead .wordmark{display:block;height:26px;flex:none}
-body:has(#v-dash.on) .mobhead h1{display:none}
-.mobhead .spacer{margin-left:auto;display:flex;gap:0}
+.mobhead .wordmark{display:block;height:26px;flex:none}
+/* the name not on show keeps its place in the slot but is not seen or read */
+.mobhead.is-home h1,.mobhead:not(.is-home) .wordmark{visibility:hidden}
+.mh-ghost{pointer-events:none}
+.mobhead .spacer{margin-left:auto;display:flex;align-items:center;gap:0}
+/* the ⋮: a 40px state layer in a 48px target; while its menu is out it
+   holds a tonal fill, squared to a squircle, so the anchor of the open
+   layer reads even under the finger */
+.mh-more{color:var(--md-on-surface-variant)}
+.mh-more::after{
+  content:"";position:absolute;inset:4px;z-index:-2;border-radius:20px;
+  background:var(--md-secondary-container);opacity:0;transform:scale(.6);
+  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.mh-more[aria-expanded="true"]{color:var(--md-on-secondary-container)}
+.mh-more[aria-expanded="true"]::after{opacity:1;transform:none;border-radius:var(--p-r-m)}
+.mh-more[aria-expanded="true"]::before{border-radius:var(--p-r-m)}
+/* the dots are the menu folded up: they part along their column as its
+   rows unfold, and gather again as it folds */
+.mh-dots circle{fill:currentColor;stroke:none;transition:transform var(--p-spatial-d) var(--p-spatial)}
+.mh-more[aria-expanded="true"] .mh-d1{transform:translateY(-1.6px)}
+.mh-more[aria-expanded="true"] .mh-d3{transform:translateY(1.6px)}
 
 /* ---------- navigation bar (phones) ---------- */
 .tabbar{display:none}
 
-/* ---------- FAB and FAB menu ----------
-   A FAB names the primary action of the screen it is on, and nothing else.
-   Where that action has close relatives — as on Home, where there are four
-   ways to begin studying — Android 16 opens them as a menu that springs out
-   of the button rather than scattering them down the page.
-   The dock is a single fixed element that lives inside #shell, so the player
-   and the session report hide it for free; the router at the foot of the
-   file fills it with whatever the current screen's action is, and sets
-   body[data-fab] to that screen (or to "none" for the screens that carry
-   their primary action as an in-flow button already). */
+/* ============================================================
+   Plume 2.26 · FAB
+   ------------------------------------------------------------
+   The screen's one floating action (Home: the ways to begin, as a
+   FAB menu; Bank: Write a question; Import's prompt tab: Copy
+   prompt). The router at the foot of the file fills it and sets
+   body[data-fab]. Mechanics:
+   · Its size never animates. The button is laid out at its full
+     extended width (--fab-w, measured from the label) and shows
+     only part of itself through clip-path: collapsing to the icon
+     (on scroll, or when the menu is out) moves the clip's left edge
+     (--cut) while the icon travels with it, both on --p-spatial-c,
+     the critically damped twin of --p-spatial, because the clip
+     also carries the radius, which must never overshoot.
+   · The shadow is a drop-shadow on its wrapper, so it follows the
+     clipped shape instead of the laid-out box.
+   · Rests at --p-r-l, squares to --p-r-m under the finger, and
+     rounds into a circle when it becomes the menu's close: the
+     ring around the plus draws off and the plus turns into the
+     cross (one sentence: the same two strokes, given a twist).
+   · Items are primary-container pills that unfold upward out of
+     it, the nearest first; they fold back together, faster.
+   · It stays still through a screen change (2.25): moving to a
+     screen with another action, the clip glides to the new width
+     while the icon and label cross-fade; only a screen with no
+     action lets it shrink away.
+   ============================================================ */
 .fabdock{
   position:fixed;right:24px;bottom:28px;z-index:70;
   display:none;flex-direction:column;align-items:flex-end;
-  transition:transform var(--m3-dur-medium2) var(--m3-ease-emphasized);
+  transition:transform var(--p-spatial-d) var(--p-spatial);
 }
-body[data-fab]:not([data-fab="none"]) .fabdock{display:flex}
-/* the screen being left has no button: the old one stays on screen just long
-   enough to shrink away, instead of vanishing on the tap frame */
-.fabdock.leaving{display:flex;pointer-events:none}
+body[data-fab]:not([data-fab="none"]) .fabdock,.fabdock.is-leaving{display:flex}
+.fabdock.is-leaving{pointer-events:none}
 body:has(#mask.on) .fabdock{display:none}
 
-/* The scrim the menu dims the screen with — the same flat 32% wash the
-   dialogs use. It lives beside the dock, not inside it: when a snackbar
-   lifts the dock with a transform, a fixed child inside it would shrink to
-   the dock's own box instead of covering the screen. */
+/* the scrim lives beside the dock, not inside it: a snackbar lifts the
+   dock with a transform, and a fixed child of a transformed parent would
+   cover only the parent */
 .fabscrim{
   position:fixed;inset:0;z-index:69;
   background:color-mix(in oklab,var(--md-scrim) 32%,transparent);
   opacity:0;visibility:hidden;pointer-events:none;
-  transition:opacity var(--m3-dur-medium) var(--m3-ease-standard),
-             visibility 0s linear var(--m3-dur-medium);
+  transition:opacity calc(var(--p-effect-slow-d) * .7) var(--p-exit),
+             visibility 0s linear calc(var(--p-effect-slow-d) * .7);
 }
+[data-theme="dark"] .fabscrim{background:color-mix(in oklab,var(--md-scrim) 50%,transparent)}
 .fabscrim.on{
   opacity:1;visibility:visible;pointer-events:auto;touch-action:none;
-  transition:opacity var(--m3-dur-medium) var(--m3-ease-standard),visibility 0s;
+  transition:opacity var(--p-effect-slow-d) var(--p-effect-slow),visibility 0s;
 }
 body:has(#mask.on) .fabscrim{display:none}
 
-/* ---- the button ----
-   The width is an exact number, not "whatever the label needs". JS measures
-   the label once per screen and writes it to --fab-lw, so extending and
-   collapsing is one plain width change with no guessing. The label itself
-   never changes size: it is clipped by the button and fades. */
+/* the wrapper is the button's full laid-out width; only what the clip
+   shows takes a touch (clip-path clips hit-testing too), so the hidden part
+   of a folded FAB never blocks the content under it */
+.fab-w{
+  display:flex;justify-content:flex-end;pointer-events:none;
+  filter:drop-shadow(0 1px 1px color-mix(in oklab,var(--md-shadow) 20%,transparent))
+         drop-shadow(0 5px 10px color-mix(in oklab,var(--md-primary) 18%,color-mix(in oklab,var(--md-shadow) 22%,transparent)));
+}
+[data-theme="dark"] .fab-w{
+  filter:drop-shadow(0 1px 1px color-mix(in oklab,var(--md-shadow) 40%,transparent))
+         drop-shadow(0 6px 12px color-mix(in oklab,var(--md-shadow) 55%,transparent));
+}
 .fab{
-  --fab-pad:26px;        /* side padding, extended */
-  --fab-pad-mini:19px;   /* side padding, icon only: 19+26+19 = 64, a square */
-  --fab-ic:26px;
-  --fab-gap:12px;
-  --fab-lw:124px;        /* replaced by the measured label width */
-  --fab-size-dur:340ms;
-  --fab-shape-dur:var(--m3-shape-out);
-  --fab-move-dur:380ms;
-  position:relative;overflow:hidden;/* clips its own ripple and the label */
-  display:inline-flex;align-items:center;justify-content:flex-start;
-  height:64px;
-  padding:0 0 0 var(--fab-pad);
-  width:calc(var(--fab-pad) * 2 + var(--fab-ic) + var(--fab-gap) + var(--fab-lw));
-  border-radius:var(--m3-corner-l);
-  background:var(--md-primary-container);
-  color:var(--md-on-primary-container);
-  font-size:16px;line-height:24px;font-weight:600;letter-spacing:.15px;
-  box-shadow:var(--m3-elev-3);
-  contain:layout style;
-  transition:width var(--fab-size-dur) var(--m3-ease-emphasized),
-             padding var(--fab-size-dur) var(--m3-ease-emphasized),
-             border-radius var(--fab-shape-dur) var(--m3-shape-ease),
-             box-shadow var(--m3-dur-medium) var(--m3-ease-standard),
-             opacity var(--m3-dur-short2) var(--m3-ease-standard),
-             transform var(--fab-move-dur) var(--m3-spring-expressive);
+  --fab-h:56px;--fab-w:184px;--cut:0px;--r:var(--p-r-l);
+  position:relative;isolation:isolate;flex:none;pointer-events:auto;
+  display:flex;align-items:center;gap:12px;
+  height:var(--fab-h);width:var(--fab-w);padding:0 20px 0 16px;border:0;margin:0;
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  font:550 16px/24px var(--m3-font);letter-spacing:.15px;white-space:nowrap;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  clip-path:inset(0 0 0 var(--cut) round var(--r));
+  transform-origin:calc(var(--cut) + (var(--fab-w) - var(--cut)) / 2) 50%;
+  transition:clip-path var(--p-spatial-c-d) var(--p-spatial-c),
+             transform var(--p-spatial-fast-d) var(--p-spatial-fast),
+             background-color var(--p-effect-d) var(--p-effect),
+             color var(--p-effect-d) var(--p-effect);
 }
-.fab .ic{width:26px;height:26px;stroke-width:2.2}
-/* the icon well holds both faces of the button: the screen's action, and
-   the close that action turns into once the menu is out */
-.fab .fabic{position:relative;width:var(--fab-ic);height:var(--fab-ic);flex:0 0 var(--fab-ic)}
-.fab .fabic .ic{
-  position:absolute;inset:0;
-  transition:transform 380ms var(--m3-spring-expressive),
-             opacity var(--m3-dur-short2) var(--m3-ease-standard);
+/* the state layer, clipped with the button */
+.fab::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.fab:hover::after{opacity:var(--m3-state-hover)}}
+/* an outline would be cut by the clip, so focus is a ring drawn inside the
+   visible part */
+.fab:focus-visible{outline:none}
+.fab::before{content:"";position:absolute;top:0;bottom:0;right:0;left:var(--cut);border-radius:var(--r);
+  box-shadow:inset 0 0 0 3px var(--md-primary);opacity:0;pointer-events:none}
+.fab:focus-visible::before{opacity:1}
+.fab:focus-visible::after{opacity:var(--m3-state-focus)}
+.fab.is-down{
+  --r:var(--p-r-m);transform:scale(var(--p-press));
+  transition:clip-path var(--p-effect-fast-d) var(--p-effect-fast),
+             transform var(--p-effect-fast-d) var(--p-effect-fast),
+             background-color var(--p-effect-d) var(--p-effect),
+             color var(--p-effect-d) var(--p-effect);
 }
-.fab .fabic .i2{opacity:0;transform:rotate(-90deg) scale(.55)}
-/* the label keeps its natural width at all times, so the text is never
-   re-wrapped or re-measured while the button moves. Coming back it waits a
-   beat for the button to open up before fading in; going away it fades at once. */
-.fab .fabtxt{
-  display:block;flex:0 0 auto;white-space:nowrap;
-  margin-left:var(--fab-gap);opacity:1;
-  transition:opacity 180ms var(--m3-ease-standard) 90ms;
-}
-.fab.mini,.fabdock.open .fab{
-  padding-left:var(--fab-pad-mini);
-  width:calc(var(--fab-pad-mini) * 2 + var(--fab-ic));
-}
-.fab.mini .fabtxt,.fabdock.open .fab .fabtxt{opacity:0;transition:opacity 90ms linear 0ms}
-.fab:hover{box-shadow:var(--m3-elev-4)}
-/* a press only speeds up the squeeze and the corner — the width keeps its
-   own timing, so a tap never cuts an extend or collapse short */
-.fab:active{border-radius:var(--m3-corner-m);transform:scale(.96);--fab-shape-dur:var(--m3-shape-in);--fab-move-dur:140ms}
-/* changing screen: the button is taken away with the old screen and placed
-   again with the new one. While it is away its size snaps, so the new label
-   never stretches the button in front of you. */
-.fab.swap{
-  transform:scale(.6);opacity:0;box-shadow:var(--m3-elev-0);pointer-events:none;
-  transition:opacity 110ms linear,
-             transform 160ms var(--m3-ease-emphasized-accel),
-             box-shadow 110ms linear;
-}
+.fab.is-down::after{opacity:var(--m3-state-press)}
+.fab .fabic{flex:none;width:24px;height:24px;display:grid;place-items:center;
+  transform:translateX(var(--cut));transition:transform var(--p-spatial-c-d) var(--p-spatial-c)}
+.fab .fabic > *{grid-area:1/1}
+.fab .fabic .ic{width:24px;height:24px}
+.fab .fabtxt{display:block;flex:none;opacity:1;
+  transition:opacity var(--p-effect-d) var(--p-effect) 110ms}
+/* folded to its icon: on scroll down a list, or as the menu's close */
+.fab.mini,.fabdock.open .fab{--cut:calc(var(--fab-w) - var(--fab-h))}
+.fab.mini .fabtxt,.fabdock.open .fab .fabtxt{opacity:0;transition:opacity var(--p-effect-fast-d) var(--p-effect-fast)}
+.fabdock.open .fab{--r:calc(var(--fab-h) / 2);background:var(--md-primary);color:var(--md-on-primary)}
+.fabdock.open .fab.is-down{--r:var(--p-r-m)}
+/* the plus in its ring (Home's face): the ring draws off and the plus
+   turns three eighths into the cross */
+.fab-g .fab-ring{stroke-dasharray:1 1;stroke-dashoffset:0;
+  transition:stroke-dashoffset var(--p-effect-slow-d) var(--p-effect-slow),opacity var(--p-effect-d) var(--p-effect)}
+.fab-g .fab-plus{transform-box:view-box;transform-origin:12px 12px;transition:transform var(--p-spatial-d) var(--p-spatial)}
+.fabdock.open .fab-g .fab-ring{stroke-dashoffset:-1;opacity:0}
+.fabdock.open .fab-g .fab-plus{transform:rotate(135deg) scale(1.6)}
 
 /* ---- the menu ---- */
-.fabmenu{display:flex;flex-direction:column;align-items:flex-end;gap:10px;margin-bottom:14px;pointer-events:none}
+.fabmenu{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-bottom:12px;pointer-events:none}
 .fabmenu:empty{display:none}
-/* closed is the resting state, so these are the timings of folding away:
-   quick and accelerating, the top item first and the nearest one last */
+/* closed is the resting state, so these are the timings of folding: all
+   together, about a third quicker than the way out, back toward the FAB */
 .fabitem{
-  position:relative;overflow:hidden;
+  position:relative;isolation:isolate;overflow:hidden;
   display:inline-flex;align-items:center;gap:12px;
-  height:56px;padding:0 22px;
-  border-radius:var(--m3-corner-l);
-  background:var(--md-surface-container-high);
-  color:var(--md-on-surface);
-  font-size:15px;line-height:20px;font-weight:600;letter-spacing:.1px;
-  white-space:nowrap;box-shadow:var(--m3-elev-2);
-  opacity:0;transform:translateY(16px) scale(.8);transform-origin:100% 100%;
-  transition-property:opacity,transform,border-radius,box-shadow;
-  transition-duration:120ms,200ms,var(--m3-shape-out),var(--m3-dur-medium);
-  transition-timing-function:linear,var(--m3-ease-emphasized-accel),var(--m3-shape-ease),var(--m3-ease-standard);
-  transition-delay:var(--dc,0ms);
+  height:56px;padding:0 24px 0 20px;border:0;margin:0;
+  border-radius:28px;
+  background:var(--md-primary-container);color:var(--md-on-primary-container);
+  font:550 16px/24px var(--m3-font);letter-spacing:.15px;white-space:nowrap;cursor:pointer;
+  box-shadow:var(--p-shadow);-webkit-tap-highlight-color:transparent;
+  opacity:0;transform:translateY(14px) scale(.85);transform-origin:100% 100%;
+  transition:opacity calc(var(--p-effect-d) * .7) var(--p-exit),
+             transform calc(var(--p-spatial-d) * .7) var(--p-exit),
+             border-radius var(--p-effect-d) var(--p-effect);
 }
-.fabitem .ic{width:22px;height:22px;color:var(--md-primary)}
+.fabitem::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+.fabitem .ic{width:24px;height:24px;flex:none}
+.fabitem:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+@media (hover:hover){.fabitem:hover::after{opacity:var(--m3-state-hover)}}
 .fabdock.open .fabmenu{pointer-events:auto}
-/* opening: each item springs out of the button, the nearest one first */
+/* opening: each pill springs out of the button, the nearest first */
 .fabdock.open .fabitem{
   opacity:1;transform:none;
-  transition-duration:160ms,420ms,var(--m3-shape-out),var(--m3-dur-medium);
-  transition-timing-function:var(--m3-ease-standard),var(--m3-spring-expressive),var(--m3-shape-ease),var(--m3-ease-standard);
-  transition-delay:var(--d,0ms);
+  transition:opacity var(--p-effect-d) var(--p-effect) var(--d,0ms),
+             transform var(--p-spatial-d) var(--p-spatial) var(--d,0ms),
+             border-radius var(--p-effect-d) var(--p-effect);
 }
-/* once the stagger has played out the delays are dropped, or the press
-   would answer the finger a tenth of a second late */
+/* once the stagger has played the delays go, or a press would answer late */
 .fabdock.open.settled .fabitem{transition-delay:0ms}
-.fabdock.open .fabitem:hover{box-shadow:var(--m3-elev-3)}
-.fabdock.open .fabitem:active{border-radius:var(--m3-corner-m);transform:scale(.95);transition-duration:120ms,140ms,var(--m3-shape-in),var(--m3-dur-medium);transition-delay:0ms}
-/* with the menu out, the FAB itself becomes the close: it sheds its label
-   and rounds all the way off */
-.fabdock.open .fab{border-radius:32px}
-.fabdock.open .fab:active{border-radius:var(--m3-corner-xl)}
-.fabdock.open .fab .fabic .i1{opacity:0;transform:rotate(90deg) scale(.55)}
-.fabdock.open .fab .fabic .i2{opacity:1;transform:none}
+.fabdock.open .fabitem.is-down{
+  transform:scale(var(--p-press));border-radius:var(--p-r-m);
+  transition:transform var(--p-effect-fast-d) var(--p-effect-fast),border-radius var(--p-effect-fast-d) var(--p-effect-fast);
+}
+.fabdock.open .fabitem.is-down::after{opacity:var(--m3-state-press)}
 @media (prefers-reduced-motion:reduce){
-  .fab .fabtxt,.fabitem,.fabdock.open .fabitem{transition-delay:0ms!important}
+  .fabitem,.fabdock.open .fabitem{transform:none!important;transition-delay:0ms!important}
+  .fab .fabic,.fab-g .fab-plus{transition-duration:0ms}
 }
 
 /* ============================================================
@@ -902,8 +965,6 @@ body:has(#mask.on) .fabscrim{display:none}
      the button are not the same action: the bar goes to the session builder,
      the button opens the ways to begin. */
   .fabdock{right:16px;bottom:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom) + 16px)}
-  .fab{height:60px;--fab-pad:22px;--fab-pad-mini:17px;font-size:15px}
-  .fabitem{height:52px;padding:0 20px;font-size:14px}
   /* the list has to be able to scroll clear of the button */
   body[data-fab]:not([data-fab="none"]) .view{padding-bottom:184px}
   /* a snackbar lifts the button instead of landing on top of it */
@@ -4037,7 +4098,7 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
 @media (hover:hover){
   .btn:hover,.tool:hover,button.pill:hover,.seg button:hover,.conf button:hover,
   .calcpad button:hover,.nav button:hover,.navstrip button:hover,
-  .qrow:hover,.pool:hover,.ch:hover,.fab:hover,.fabitem:hover,
+  .qrow:hover,.pool:hover,.ch:hover,
   .cday:hover,
   .esec > .eh:hover,.figplate:hover,button.syncbtn:hover,.sync-more:hover,.figbar button:hover,.ch .x:hover{
     background-image:var(--m3-wash-hover);
@@ -4045,7 +4106,7 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
 }
 .btn:active,.tool:active,button.pill:active,.seg button:active,.conf button:active,
 .calcpad button:active,.nav button:active,.navstrip button:active,
-.qrow:active,.pool:active,.ch:active,.fab:active,.fabitem:active,
+.qrow:active,.pool:active,.ch:active,
 .cday:active,
 .esec > .eh:active,.figplate:active,button.syncbtn:active,.sync-more:active,.figbar button:active,.ch .x:active{
   background-image:var(--m3-wash-press);
@@ -4274,83 +4335,64 @@ input[data-rng="hue"]::-moz-range-progress{background:transparent}
 @keyframes m3PaneIn{from{opacity:0}to{opacity:1}}
 .pane.on{display:block;animation:m3PaneIn var(--m3-dur-medium) var(--m3-ease-emphasized-decel)}
 
-/* ---- top app bar overflow menu ---- */
+/* ============================================================
+   Plume 2.26 · overflow menu
+   ------------------------------------------------------------
+   The top bar's ⋮. A Plume menu: --p-float, grown out of the button
+   (scale .85 and a fade, its origin on the button) on --p-spatial,
+   its rows following on a 25ms beat; folding back is a third quicker,
+   all at once, toward the button. Groups are separate float
+   surfaces 2px apart, never divider lines: outer corners --p-r-lx,
+   the joint between two groups --p-r-xs, rows --p-r-l inside 4px, so
+   every curve runs parallel. A row with a setting carries the Plume
+   switch, and pressing it keeps the menu open so the thumb is seen
+   sliding. The scrim is clear: a menu does not dim the screen.
+   ============================================================ */
 .ovscrim{position:fixed;inset:0;z-index:79;background:transparent;display:none}
 .ovscrim.on{display:block}
-.ovmenu{
-  position:fixed;z-index:80;top:calc(env(safe-area-inset-top) + 60px);right:8px;
-  min-width:248px;max-width:min(340px,calc(100vw - 24px));padding:8px;
-  background:var(--md-surface-container-high);
-  border-radius:var(--m3-corner-l);
-  box-shadow:var(--m3-elev-2);
-  display:none;transform-origin:top right;
+.ovm{
+  position:fixed;z-index:80;top:0;right:8px;
+  width:max-content;min-width:232px;max-width:min(320px,calc(100vw - 24px));
+  display:flex;flex-direction:column;gap:2px;
+  transform-origin:var(--ox,100%) 0;
 }
-.ovmenu.on{
-  display:block;
-  animation:ovOpen var(--m3-spatial-fast) var(--m3-spring-expressive);
+.ovm[hidden]{display:none}
+.ovm__g{
+  display:flex;flex-direction:column;gap:2px;padding:4px;
+  background:var(--p-float);color:var(--md-on-surface);
+  border-radius:var(--p-r-xs);box-shadow:var(--p-shadow);
 }
-/* leaving is Material's accelerate: shorter than the entrance, and it
-   collapses back toward the button it grew out of */
-.ovmenu.out{
-  display:block;pointer-events:none;
-  animation:ovClose var(--m3-dur-short2) var(--m3-ease-emphasized-accel) both;
+.ovm__g:first-child{border-top-left-radius:var(--p-r-lx);border-top-right-radius:var(--p-r-lx)}
+.ovm__g:last-child{border-bottom-left-radius:var(--p-r-lx);border-bottom-right-radius:var(--p-r-lx)}
+.ovm__it{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;align-items:center;gap:14px;width:100%;min-height:48px;padding:0 12px 0 14px;
+  border:0;margin:0;background:none;color:inherit;text-align:left;cursor:pointer;
+  font:500 15px/20px var(--m3-font);letter-spacing:.1px;
+  border-radius:var(--p-r-xs);-webkit-tap-highlight-color:transparent;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
 }
-@keyframes ovOpen{
-  from{opacity:0;transform:scale(.85);clip-path:inset(0 0 60% 0 round 16px)}
-  to{opacity:1;transform:scale(1);clip-path:inset(0 0 0 0 round 16px)}
-}
-@keyframes ovClose{
-  from{opacity:1;transform:scale(1)}
-  to{opacity:0;transform:scale(.92)}
-}
-/* the rows arrive after the container, on a 25ms beat. v4.2 tightened this:
-   the old 30ms beat over a 250ms row put the last row down at 440ms, which
-   read as lag rather than as motion. Same easing, same shape, less waiting. */
-@keyframes ovItem{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
-.ovmenu.on:not(.settled):not(.out) > *{animation:ovItem var(--m3-dur-short2) var(--m3-ease-emphasized-decel) both}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(1){animation-delay:.02s}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(2){animation-delay:.045s}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(3){animation-delay:.07s}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(4){animation-delay:.095s}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(5){animation-delay:.12s}
-.ovmenu.on:not(.settled):not(.out) > *:nth-child(n+6){animation-delay:.145s}
-.ovmenu button{
-  position:relative;width:100%;display:flex;align-items:center;gap:14px;
-  padding:0 14px;height:52px;background:none;border:none;cursor:pointer;
-  overflow:hidden;text-align:left;font-family:inherit;
-  font-size:15px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  color:var(--md-on-surface);border-radius:var(--m3-corner-full);
-  transition:border-radius var(--m3-shape-out) var(--m3-shape-ease),
-             background-color var(--m3-dur-medium) var(--m3-ease-standard);
-}
-/* the corner morphs under the finger, as every other pressable surface here does */
-.ovmenu button:active{border-radius:var(--m3-corner-s);transition-duration:var(--m3-shape-in)}
-.ovmenu button:focus-visible{outline:none;background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-.ovmenu button .ic{
-  width:24px;height:24px;flex:0 0 24px;color:var(--md-on-surface-variant);
-  transition:color var(--m3-dur-medium) var(--m3-ease-standard);
-}
-.ovmenu button:focus-visible .ic{color:var(--md-on-secondary-container)}
-.ovmenu button .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ovmenu button .val{
-  flex:0 0 auto;display:inline-flex;align-items:center;height:26px;padding:0 10px;
-  border-radius:var(--m3-corner-s);background:var(--md-surface-container-highest);
-  font-size:12px;font-weight:500;letter-spacing:.4px;color:var(--md-on-surface-variant);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:104px;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard);
-}
-/* a row that carries a switch uses the app's own M3 switch, not a copy of it.
-   The input is inert — the whole row is the target — so one press moves the
-   thumb and lights the state layer together. */
-.ovmenu button .ovtog{pointer-events:none;margin:0 -2px 0 4px}
-.ovmenu button::after{
-  content:'';position:absolute;inset:0;background:currentColor;opacity:0;
-  transition:opacity var(--m3-dur-short2) var(--m3-ease-standard);
-}
-.ovmenu button:active::after{opacity:var(--m3-state-press)}
-@media (hover:hover){.ovmenu button:hover::after{opacity:var(--m3-state-hover)}}
-.ovmenu hr{border:none;border-top:1px solid var(--md-outline-variant);margin:8px 10px}
+.ovm__g > .ovm__it:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.ovm__g > .ovm__it:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.ovm__g:not(:first-child) > .ovm__it:first-child{border-top-left-radius:var(--p-r-xs);border-top-right-radius:var(--p-r-xs)}
+.ovm__g:not(:last-child) > .ovm__it:last-child{border-bottom-left-radius:var(--p-r-xs);border-bottom-right-radius:var(--p-r-xs)}
+.ovm__it::before{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.ovm__it:hover::before{opacity:var(--m3-state-hover)}}
+.ovm__it:focus-visible{outline:none}
+.ovm__it:focus-visible::before{opacity:var(--m3-state-focus)}
+.ovm__it.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);
+  transition:transform var(--p-effect-fast-d) var(--p-effect-fast),border-radius var(--p-effect-fast-d) var(--p-effect-fast)}
+.ovm__it.is-down::before{opacity:var(--m3-state-press)}
+.ovm__it > .ic{width:22px;height:22px;flex:none;color:var(--md-on-surface-variant)}
+.ovm__l{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ovm__it .pl-sw{margin-left:8px}
+.ovm__it .pl-sw input{pointer-events:none}
+/* flipping Dark theme here runs the whole-screen change (Motion.morph),
+   which stills every transition; the Plume switch is the answer to the
+   tap, so its thumb, check and track keep moving through it */
+html.m-snap .pl-sw__t{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),background-color var(--p-effect-d) var(--p-effect)!important}
+html.m-snap .pl-sw__t path{transition:stroke-dashoffset var(--p-effect-d) var(--p-effect) 60ms!important}
 
 /* ============================================================
    Plume 2.2 · settings
@@ -5648,6 +5690,11 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
   --p-spatial-fast-d:330ms; /* overshoot 9.5% */
   --p-spatial:linear(0,0.0155 2.5%,0.0562 5%,0.1144 7.5%,0.1839 10%,0.2597 12.5%,0.338 15%,0.4158 17.5%,0.4909 20%,0.5618 22.5%,0.6276 25%,0.6874 27.5%,0.7412 30%,0.7889 32.5%,0.8306 35%,0.8666 37.5%,0.8973 40%,0.9232 42.5%,0.9447 45%,0.9623 47.5%,0.9766 50%,0.9878 52.5%,0.9966 55%,1.0032 57.5%,1.008 60%,1.0113 62.5%,1.0135 65%,1.0147 67.5%,1.0151 70%,1.015 72.5%,1.0145 75%,1.0137 77.5%,1.0127 80%,1.0115 82.5%,1.0104 85%,1.0092 87.5%,1.008 90%,1.0069 92.5%,1.0059 95%,1.005 97.5%,1);
   --p-spatial-d:380ms; /* overshoot 1.5% */
+  /* 380/1.0, the critically damped twin of --p-spatial (2.26): for an edge that
+     carries a radius (the FAB's clip), which must travel like --p-spatial but
+     never overshoot */
+  --p-spatial-c:linear(0,0.0153 2.5%,0.0542 5%,0.1082 7.5%,0.1711 10%,0.2384 12.5%,0.3066 15%,0.3737 17.5%,0.4379 20%,0.4984 22.5%,0.5545 25%,0.6061 27.5%,0.6529 30%,0.6952 32.5%,0.7332 35%,0.767 37.5%,0.797 40%,0.8236 42.5%,0.847 45%,0.8675 47.5%,0.8855 50%,0.9012 52.5%,0.9148 55%,0.9267 57.5%,0.937 60%,0.9459 62.5%,0.9536 65%,0.9602 67.5%,0.966 70%,0.9709 72.5%,0.9751 75%,0.9788 77.5%,0.9819 80%,0.9846 82.5%,0.9868 85%,0.9888 87.5%,0.9905 90%,0.9919 92.5%,0.9931 95%,0.9941 97.5%,1);
+  --p-spatial-c-d:380ms; /* overshoot 0 */
   --p-spatial-slow:linear(0,0.0148 2.5%,0.0536 5%,0.1093 7.5%,0.1762 10%,0.2495 12.5%,0.3256 15%,0.4016 17.5%,0.4754 20%,0.5455 22.5%,0.6108 25%,0.6707 27.5%,0.7249 30%,0.7732 32.5%,0.8159 35%,0.853 37.5%,0.8849 40%,0.9121 42.5%,0.935 45%,0.9539 47.5%,0.9695 50%,0.9819 52.5%,0.9918 55%,0.9994 57.5%,1.0051 60%,1.0093 62.5%,1.0121 65%,1.0139 67.5%,1.0149 70%,1.0152 72.5%,1.015 75%,1.0144 77.5%,1.0135 80%,1.0125 82.5%,1.0114 85%,1.0103 87.5%,1.0091 90%,1.008 92.5%,1.0069 95%,1.0059 97.5%,1);
   --p-spatial-slow-d:510ms; /* overshoot 1.5% */
   --p-effect-fast:linear(0,0.0448 4.2%,0.1447 8.3%,0.2649 12.5%,0.3857 16.7%,0.4972 20.8%,0.5949 25%,0.6777 29.2%,0.7461 33.3%,0.8016 37.5%,0.8461 41.7%,0.8813 45.8%,0.9089 50%,0.9304 54.2%,0.9471 58.3%,0.9599 62.5%,0.9697 66.7%,0.9771 70.8%,0.9828 75%,0.9871 79.2%,0.9903 83.3%,0.9928 87.5%,0.9946 91.7%,0.996 95.8%,1);
@@ -7618,13 +7665,14 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   <div class="main">
 
     <!-- ============ TOP APP BAR (phones) ============ -->
-    <header class="mobhead">
-      <svg class="nx-wm wordmark nx-play nx-hold" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-      <h1 id="barTitle">Home</h1>
+    <!-- Plume 2.26 · top bar: the wordmark and the title share one slot (mhTitle) -->
+    <header class="mobhead is-home">
+      <div class="mh-ttl" id="mhTtl"><svg class="nx-wm wordmark nx-play nx-hold" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
+      <h1 id="barTitle">Home</h1></div>
       <div class="spacer">
         <button id="themeBtnM" hidden aria-hidden="true" tabindex="-1"></button>
         <div class="sync-split st-off" data-sync="bar" title="Not connected"><button class="syncbtn" type="button" data-sync-tap aria-label="Sync off. Tap to set up"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Sync off</span></button></div>
-        <button class="tool" id="overflowBtn" title="More options" aria-label="More options" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
+        <button type="button" class="pl-ib pl-press mh-more" id="overflowBtn" title="More options" aria-label="More options" aria-haspopup="menu" aria-expanded="false"><svg class="ic mh-dots" viewBox="0 0 24 24" aria-hidden="true"><circle class="mh-d1" cx="12" cy="5.2" r="1.85"/><circle class="mh-d2" cx="12" cy="12" r="1.85"/><circle class="mh-d3" cx="12" cy="18.8" r="1.85"/></svg></button>
       </div>
     </header>
 
@@ -7978,7 +8026,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.87</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.88</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8034,7 +8082,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.87 · sharded store</span>
+        <span class="chip" id="verChip">v6.88 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8052,17 +8100,19 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 
   </div>
 
-  <!-- The primary action of whichever screen you are on, as a Material FAB.
+  <!-- Plume 2.26 · FAB. The primary action of whichever screen you are on.
        On Home it opens a FAB menu, because the ways to begin studying are a
        family of actions rather than one. Filled by the router at the foot
        of the file; empty and hidden until then, so nothing flashes. -->
   <div class="fabdock" id="fabDock">
     <div class="fabscrim" id="fabScrim"></div>
     <div class="fabmenu" id="fabMenu" role="menu" aria-labelledby="fabMain"></div>
-    <button class="fab" id="fabMain" aria-label="Start a new session">
-      <span class="fabic" aria-hidden="true"><svg class="ic i1"><use href="#i-new"/></svg><svg class="ic i2"><use href="#i-close"/></svg></span>
-      <span class="fabtxt">Start studying</span>
-    </button>
+    <div class="fab-w">
+      <button type="button" class="fab pl-press" id="fabMain" aria-label="Start a new session">
+        <span class="fabic" aria-hidden="true"></span>
+        <span class="fabtxt">Start studying</span>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -9062,7 +9112,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
     /* the dock's items are deliberately absent: each draws its own state
        layer in the shape of the indicator (Plume 2.24 · dock). */
     '.subtabs button,' +
-    '.nav button,.navstrip button,.qrow,.pool,.ch,.fab,.fabitem,' +
+    '.nav button,.navstrip button,.qrow,.pool,.ch,' +
     '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button,' +
     /* the study session (6.15) */
     '.sp-opt,.sp-go,.sp-ib,.sp-count,.sp-cbg button,.sp-chip,.sp-grid button,.sp-jump';
@@ -9199,7 +9249,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.87';
+const APP_VERSION='6.88';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -12125,6 +12175,8 @@ function tbSwap(v,dir){
   /* the class stays while the screen is open (taking it off would start
      the legacy entrance again); go() clears it from every other screen */
   if(nv){nv.style.setProperty('--tb-dx',(dir*24)+'px');nv.classList.add('tb-in')}
+  /* the top bar's name follows the pill too (mhTitle) */
+  TB.dir=dir;
   go(v);
 }
 function tbGo(i,o){
@@ -19239,6 +19291,8 @@ document.addEventListener('click',e=>{
   const a=e.target.closest('[data-pxa]');
   if(a&&!a.disabled){const x=PG.pxa[+a.dataset.pxa];if(!x)return;
     if(x.pk){const i=x.pk.indexOf(':'),fn=PG_PK[i<0?x.pk:x.pk.slice(0,i)],r=fn&&fn(i<0?'':x.pk.slice(i+1));if(r)pgxDraw(r,1);return}
+    /* an act that is watched happening (Sync now) keeps the sheet up */
+    if(x.keep){x.run(a);return}
     pgxClose(x.run);return}
   /* a report, a session or a settings page opened from a peek takes its place */
   if(e.target.closest('[data-open],[data-sessresume],[data-setsec]'))pgxClose();
@@ -23870,7 +23924,7 @@ const SYNCUI=(function(){
     else if(!prev||prev.phase!=='ok')arm();
     const v=view(st);
     document.querySelectorAll('.sync-split[data-sync]').forEach(el=>morph(el,v));
-    if(document.getElementById('syncSheet')){
+    if(sheetOpen()){
       if(prev&&prev.phase==='busy'&&st&&st.phase!=='busy')refreshCounts();
       else drawSheet();
     }
@@ -23898,53 +23952,107 @@ const SYNCUI=(function(){
     if(s<86400)return fmtT(s)+' ago';
     return when(t);
   }
-  function infoRows(){
-    const c=SYNC.cfg()||{},mode=(window.V3&&V3.mode)?V3.mode():'legacy';
-    const row=(k,val,sub,cls)=>'<div class="setrow"><div class="lb">'+k+(sub?'<small>'+sub+'</small>':'')+
-      '</div><div class="ctl"><span class="sv'+(cls?' '+cls:'')+'">'+val+'</span></div></div>';
-    const n=(DB.questions||[]).length,out=[];
-    out.push(row('This device',esc(c.label||'device'),'id '+esc(String(c.deviceId||'').slice(0,8))));
-    out.push(row('Last sync',c.lastAt?esc(when(c.lastAt)):'Not yet'));
-    if(mode==='v3')out.push(row('Waiting to upload',counts.pending==null?'…':counts.pending?nfiles(counts.pending):'Nothing',
-      'Files this device has changed since its last push'));
-    out.push(row('Photos waiting to upload',counts.photos==null?'…':counts.photos?fmt(counts.photos):'None'));
-    out.push(row('Questions on this device',fmt(n)));
+  /* Plume 2.26 · sync peek: the details are the sync button's peek (#pgx,
+     the app's one sheet for what is behind a figure). It stays live while
+     open: every value that changes cross-fades in place (sxSwap), new log
+     lines rise in at the top, and the time since the last sync moves on by
+     itself. The status control at its head is SYNCUI's own, untouched. */
+  /* the headline says where this device stands; the control under it keeps
+     its own short word, and the message line shows only what neither says */
+  const SAY={ok:'Up to date',busy:'Syncing now',err:'Needs your attention',idle:'Changes waiting',off:'Not connected'};
+  const msgOf=v=>{const m=v.msg||'';return m&&m!==v.label&&m!==SAY[v.ph]&&m!=='Synced'?m:''};
+  let tick=0,logTop=null,logAll=false;
+  const sheetOpen=()=>!!document.getElementById('syncSheet')&&typeof pgxIsOpen==='function'&&pgxIsOpen();
+  function agoFig(c){
+    if(!c.lastAt)return{v:'—',cap:'Not synced on this device yet'};
+    const s=Math.max(0,(Date.now()-c.lastAt)/1000);
+    if(s>=86400)return{v:esc(new Date(c.lastAt).toLocaleDateString([],{day:'numeric',month:'short'})),cap:'Last sync, '+esc(when(c.lastAt))};
+    return{v:pgTfmt(s<60?s:Math.floor(s/60)*60)+'\u00a0'+pgU('ago'),cap:'Last sync, '+esc(when(c.lastAt))};
+  }
+  function tiles(){
+    const mode=(window.V3&&V3.mode)?V3.mode():'legacy',lim=NET.limits?NET.limits():null,T=[];
+    if(mode==='v3')T.push(['pend',counts.pending==null?'…':fmt(counts.pending),counts.pending===1?'file to upload':'files to upload']);
+    else T.push(['qn',fmt((DB.questions||[]).length),'questions here']);
+    T.push(['ph',counts.photos==null?'…':fmt(counts.photos),counts.photos===1?'photo to upload':'photos to upload']);
+    T.push(['rq',lim&&lim.remaining!=null?fmt(lim.remaining):'—',lim&&lim.reset?'requests left, resets '+esc(new Date(lim.reset).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})):'requests left this hour']);
+    return T;
+  }
+  const row=(t,sub,v,vsub,cls)=>'<li class="sy-row'+(cls?' '+cls:'')+'"><span class="sy-row__t"><b>'+t+'</b>'+(sub?'<em>'+sub+'</em>':'')+'</span>'+
+    (v!=null?'<span class="sy-row__v"><b>'+v+'</b>'+(vsub?'<em>'+vsub+'</em>':'')+'</span>':'')+'</li>';
+  function devRows(){
+    const c=SYNC.cfg()||{},n=(DB.questions||[]).length,out=[];
+    out.push(row(esc(c.label||'This device'),'This device · <span class="sy-id">'+esc(String(c.deviceId||'').slice(0,8))+'</span>',fmt(n),n===1?'question':'questions'));
     /* the other devices, as their own beacons last reported them */
     const P=(window.V3&&V3.peers)?V3.peers():{};
     Object.keys(P).map(k=>P[k]).sort((a,b)=>b.ts-a.ts).forEach(p=>{
       const same=p.bank===n;
-      out.push(row(esc(p.label),fmt(p.bank)+(same?' ✓':''),
-        'Questions on that device · heard from '+esc(ago(p.ts))+(same?'':' · it may still be syncing'),same?'ok':''));
+      out.push(row(esc(p.label),'Heard from '+esc(ago(p.ts))+(same?', the same bank as here':', it may still be syncing'),
+        fmt(p.bank),same?'<span class="sy-ok">'+sxIc('i-check')+'in step</span>':'questions',same?'is-same':''));
     });
-    const h=(window.V3&&V3.health)?V3.health():null;
-    if(mode==='v3'&&h&&h.at)out.push(row('Last pass',h.failed?nfiles(h.failed)+' did not arrive':'Every file arrived','',h.failed?'bad':'ok'));
-    const lim=NET.limits?NET.limits():null;
-    out.push(row('GitHub requests left',lim&&lim.remaining!=null?fmt(lim.remaining):'—',
-      lim&&lim.reset?'This hour · resets '+esc(new Date(lim.reset).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})):'This hour'));
-    out.push(row('Questions and results',esc((c.owner||'')+'/'+(c.repo||'')),'Branch '+esc(c.branch||'main')));
-    out.push(row('Photos',esc((c.owner||'')+'/'+(c.mrepo||'nidus-media'))));
-    out.push(row('Storage layout',mode==='v3'?'Sharded store':mode==='locked'?'Old format, read only':'Two files'));
     return out.join('');
   }
-  function logHtml(){
-    const L=SYNC.logList();
-    return L.length?L.map(r=>'<div><time>'+esc(when(r.at))+'</time><span>'+esc(r.text)+'</span></div>').join('')
-      :'<div class="none">Nothing yet.</div>';
+  function whereRows(){
+    const c=SYNC.cfg()||{},mode=(window.V3&&V3.mode)?V3.mode():'legacy',out=[];
+    out.push(row('Questions and results','<span class="sy-id">'+esc((c.owner||'')+'/'+(c.repo||''))+'</span> · branch '+esc(c.branch||'main')));
+    out.push(row('Photos','<span class="sy-id">'+esc((c.owner||'')+'/'+(c.mrepo||'nidus-media'))+'</span>'));
+    out.push(row('Storage layout',mode==='v3'?'Sharded store, one file per part of the bank':mode==='locked'?'Old format, read only until it is upgraded':'Two files'));
+    const h=(window.V3&&V3.health)?V3.health():null;
+    if(mode==='v3'&&h&&h.at)out.push(row('Last full pass',h.failed?nfiles(h.failed)+' did not arrive':'Every file arrived',null,null,h.failed?'is-bad':'is-good'));
+    return out.join('');
   }
+  const LOGN=6;
+  const logRow=(r,i)=>'<li style="--i:'+Math.min(i||0,6)+'"><time>'+esc(when(r.at))+'</time><span>'+esc(r.text)+'</span></li>';
+  function logList(){
+    const L=SYNC.logList();
+    if(!L.length)return'<li class="sy-log__none"><span>Nothing yet. Each pass writes a line here.</span></li>';
+    return L.slice(0,logAll?L.length:LOGN).map((r,i)=>logRow(r,0)).join('');
+  }
+  function logMore(){
+    const L=SYNC.logList();
+    return !logAll&&L.length>LOGN?'<button type="button" class="pl-btn pl-btn--text pl-press sy-more" data-symore>Show all '+L.length+'</button>':'';
+  }
+  function peek(){
+    const st=SYNC.status()||{},v=view(st),c=SYNC.cfg()||{},f=agoFig(c);
+    logAll=false;const L=SYNC.logList();logTop=L[0]?L[0].at+'|'+L[0].text:null;
+    return{o:'Sync',t:esc(SAY[v.ph]||v.label),
+      fig:'<div id="syncSheet" class="sy"><div class="sy-st">'+html('sheet',v)+'<span class="sy-msg" id="syMsg">'+esc(msgOf(v))+'</span></div>'+
+        '<div class="pgx__fig sy-fig"><span class="pg-big" id="syAgo">'+f.v+'</span><span class="pgx__cap" id="syAgoC">'+f.cap+'</span></div>',
+      body:'<div class="pg-mini" id="syMini">'+tiles().map(t=>'<div><b data-sy="'+t[0]+'">'+t[1]+'</b><span data-syl="'+t[0]+'">'+t[2]+'</span></div>').join('')+'</div>'+
+        pgxH('Devices')+'<ul class="sy-list" id="syDev">'+devRows()+'</ul>'+
+        pgxH('Where it is kept')+'<ul class="sy-list" id="syWhere">'+whereRows()+'</ul>'+
+        pgxH('Recent activity')+'<ol class="sy-log" id="syLog">'+logList()+'</ol><div id="syMoreW">'+logMore()+'</div></div>',
+      acts:[{l:'Sync now',ic:'i-refresh',primary:true,keep:true,run:()=>SYNC.now()},
+        {l:'Repair sync',ic:'i-review',run:()=>{const r=document.getElementById('ghRepair');if(r)r.click()}},
+        {l:'Sync settings',ic:'i-settings',run:()=>window.openSettingsSection('sync')}]};
+  }
+  if(typeof PG_PK==='object')PG_PK.sync=peek;
+  const $id=k=>document.getElementById(k);
   function drawSheet(){
-    const sh=document.getElementById('syncSheet');if(!sh)return;
-    const st=SYNC.status()||{};
-    if(!sh.firstElementChild){
-      sh.innerHTML='<div class="syncsheet-top">'+html('sheet',view(st))+'<div class="tiny muted" id="syncSheetMsg"></div></div>'+
-        '<div class="setsheet syncinfo" id="syncSheetInfo"></div>'+
-        '<div class="row" style="margin-top:16px;gap:8px">'+
-          '<button class="btn sm" type="button" id="syncSheetRepair">Repair sync</button>'+
-          '<button class="btn ghost sm" type="button" id="syncSheetSet">Sync settings</button></div>'+
-        '<p class="figsub" style="margin-top:24px">Sync log</p><div class="synclog" id="syncSheetLog"></div>';
+    if(!sheetOpen())return;
+    const st=SYNC.status()||{},v=view(st),c=SYNC.cfg()||{},f=agoFig(c);
+    const T=$id('pgxT');if(T)sxSwap(T,esc(SAY[v.ph]||v.label));
+    sxSwap($id('syMsg'),esc(msgOf(v)));
+    sxSwap($id('syAgo'),f.v);sxSwap($id('syAgoC'),f.cap);
+    tiles().forEach(t=>{const b=document.querySelector('[data-sy="'+t[0]+'"]'),l=document.querySelector('[data-syl="'+t[0]+'"]');sxSwap(b,t[1]);sxSwap(l,t[2])});
+    sxSwap($id('syDev'),devRows());sxSwap($id('syWhere'),whereRows());
+    /* the log: a new line rises in at the top; the same line repeated only
+       moves its time on */
+    const L=SYNC.logList(),top=L[0]?L[0].at+'|'+L[0].text:null,ol=$id('syLog');
+    if(ol&&top!==logTop){
+      const first=ol.querySelector('li:not(.sy-log__none)'),same=first&&L[0]&&first.lastElementChild.textContent===L[0].text;
+      if(same)sxSwap(first.firstElementChild,esc(when(L[0].at)));
+      else if(!first||Motion.reduced)sxSwap(ol,logList());
+      else{
+        const old=logTop?L.findIndex(r=>r.at+'|'+r.text===logTop):-1,fresh=(old<0?L.slice(0,1):L.slice(0,old)).slice(0,LOGN);
+        const box=document.createElement('ol');box.innerHTML=fresh.map(r=>logRow(r,0)).join('');
+        const rows=Array.from(box.children);rows.slice().reverse().forEach(li=>ol.insertBefore(li,ol.firstChild));
+        const sp=PL('spatial');
+        rows.forEach((li,i)=>li.animate([{opacity:0,transform:'translate3d(0,-8px,0)'},{opacity:1,transform:'none'}],{duration:sp.d,delay:i*30,easing:sp.e,fill:'backwards'}));
+        if(!logAll)while(ol.children.length>LOGN)ol.lastElementChild.remove();
+      }
+      logTop=top;
     }
-    const m=document.getElementById('syncSheetMsg');if(m&&m.textContent!==(st.msg||''))m.textContent=st.msg||'';
-    const i=document.getElementById('syncSheetInfo'),li=infoRows();if(i&&i.innerHTML!==li)i.innerHTML=li;
-    const g=document.getElementById('syncSheetLog'),lg=logHtml();if(g&&g.innerHTML!==lg)g.innerHTML=lg;
+    const mw=$id('syMoreW');if(mw)sxSwap(mw,logMore());
   }
   async function refreshCounts(){
     const my=++countSeq;
@@ -23954,13 +24062,26 @@ const SYNCUI=(function(){
     if(my!==countSeq)return;
     counts={pending:pending,photos:photos};drawSheet();
   }
-  function details(){
+  function details(from){
     if(!SYNC.connected()){window.openSettingsSection('sync');return}
     counts={pending:null,photos:null};
-    modal('Sync','<div id="syncSheet"></div>',
-      '<button class="btn" data-close>Close</button><button class="btn pri" type="button" id="syncSheetNow">Sync now</button>');
-    drawSheet();refreshCounts();
+    if(typeof pgPeek!=='function')return;
+    pgPeek('sync',from&&from.nodeType===1?from:null);
+    refreshCounts();
+    /* the time since the last sync moves on while the sheet is up */
+    clearInterval(tick);
+    tick=setInterval(()=>{if(!sheetOpen()){clearInterval(tick);return}drawSheet()},20000);
   }
+  document.addEventListener('click',e=>{
+    const m=e.target.closest&&e.target.closest('[data-symore]');if(!m)return;
+    logAll=true;const ol=$id('syLog');if(!ol)return;
+    const L=SYNC.logList(),have=ol.children.length,box=document.createElement('ol');
+    box.innerHTML=L.slice(have).map((r,i)=>logRow(r,i)).join('');
+    const rows=Array.from(box.children);rows.forEach(li=>ol.appendChild(li));
+    if(!Motion.reduced){const sp=PL('spatial');rows.forEach((li,i)=>li.animate([{opacity:0,transform:'translate3d(0,8px,0)'},{opacity:1,transform:'none'}],
+      {duration:sp.d,delay:Math.min(i,6)*30,easing:sp.e,fill:'backwards'}))}
+    sxSwap($id('syMoreW'),'');
+  });
 
   /* ---------- input ---------- */
   let held=false,holdT=0,hx=0,hy=0;
@@ -23969,7 +24090,7 @@ const SYNCUI=(function(){
     const b=e.target.closest&&e.target.closest('[data-sync-tap]');if(!b)return;
     if(e.pointerType==='mouse'&&e.button!==0)return;
     held=false;hx=e.clientX;hy=e.clientY;cancel();
-    holdT=setTimeout(()=>{holdT=0;held=true;details()},HOLD);
+    holdT=setTimeout(()=>{holdT=0;held=true;details(b)},HOLD);
   });
   document.addEventListener('pointerup',cancel);
   document.addEventListener('pointercancel',cancel);
@@ -23978,19 +24099,13 @@ const SYNCUI=(function(){
   document.addEventListener('click',e=>{
     const t=e.target.closest&&e.target.closest('[data-sync-tap],[data-sync-more]');if(!t)return;
     if(held){held=false;e.preventDefault();e.stopPropagation();return}
-    if(t.hasAttribute('data-sync-more')){arm();details();return}
+    if(t.hasAttribute('data-sync-more')){arm();details(t);return}
     if(!SYNC.connected()){window.openSettingsSection('sync');return}
     const host=t.closest('[data-sync]');
     if(host&&host.dataset.sync!=='sheet')expand();
     SYNC.now();
   },true);
   document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('[data-sync-tap]'))e.preventDefault()});
-  document.addEventListener('click',e=>{
-    const t=e.target.closest&&e.target.closest('#syncSheetNow,#syncSheetRepair,#syncSheetSet');if(!t)return;
-    if(t.id==='syncSheetNow')SYNC.now();
-    else if(t.id==='syncSheetRepair'){const r=document.getElementById('ghRepair');if(r)r.click()}
-    else{closeModal();window.openSettingsSection('sync')}
-  });
   window.addEventListener('online',()=>update(SYNC.status()));
   window.addEventListener('offline',()=>update(SYNC.status()));
 
@@ -24856,7 +24971,7 @@ const BRAND=(function(){
     try {
       var scrolled = document.body && document.body.classList.contains('scrolled');
       var cs = getComputedStyle(document.documentElement);
-      var hex = oklchHex(cs.getPropertyValue(scrolled ? '--md-surface-container' : '--p-page'));
+      var hex = oklchHex(cs.getPropertyValue(scrolled ? '--p-bar' : '--p-page'));
       if (!hex && document.body) hex = oklchHex(getComputedStyle(document.body).backgroundColor);
       if (!hex) return;
       var meta = document.querySelector('meta[name="theme-color"]');
@@ -24933,11 +25048,54 @@ const BRAND=(function(){
     var _go = go;
     go = function (v) {
       _go.apply(this, arguments);
-      var t = document.getElementById('barTitle');
-      if (t) t.textContent = TITLES[v] || 'Nidus';
+      mhTitle(v);
       document.body.classList.remove('scrolled');
       paintBrowserChrome();
     };
+  }
+
+  /* Plume 2.26 · top bar: the bar never moves, only its name does. The
+     wordmark (Home) and the title share one slot; a new name slides in from
+     the side the dock's pill went (TB.dir, set by tbSwap) while the old one
+     steps out the other way, and a change from anywhere else rises in. */
+  var MH = { v: null, a: [] };
+  function mhTitle(v) {
+    var bar = document.querySelector('.mobhead'), h = document.getElementById('barTitle');
+    if (!bar || !h) return;
+    var wm = bar.querySelector('.wordmark'), home = v === 'dash', text = TITLES[v] || 'Nidus';
+    var dir = 0;
+    try { if (typeof TB === 'object' && TB) { dir = TB.dir || 0; TB.dir = 0; } } catch (e) {}
+    var first = MH.v === null, wasHome = bar.classList.contains('is-home');
+    MH.v = v;
+    if (home === wasHome && (home || h.textContent === text)) return;
+    var live = !first && !(window.Motion && Motion.reduced) && bar.getClientRects().length > 0;
+    MH.a.forEach(function (a) { a.cancel(); });
+    MH.a = [];
+    Array.prototype.forEach.call(bar.querySelectorAll('.mh-ghost'), function (g) { g.remove(); });
+    var out = null;
+    if (live) {
+      if (wasHome) out = wm;
+      else {
+        /* the old title leaves as a copy, so the real one can take its new words now */
+        out = h.cloneNode(true);
+        out.removeAttribute('id');
+        out.classList.add('mh-ghost');
+        out.setAttribute('aria-hidden', 'true');
+        h.parentNode.appendChild(out);
+      }
+    }
+    h.textContent = text;
+    bar.classList.toggle('is-home', home);
+    if (!live) return;
+    var inn = home ? wm : h, sp = PL('spatial');
+    var from = dir ? 'translate3d(' + (dir * 16) + 'px,0,0)' : 'translate3d(0,6px,0)';
+    var to = dir ? 'translate3d(' + (-dir * 10) + 'px,0,0)' : 'translate3d(0,-6px,0)';
+    var a1 = out.animate([{ opacity: 1, transform: 'none', visibility: 'visible' }, { opacity: 0, transform: to, visibility: 'visible' }],
+      { duration: 150, easing: PL_EXIT, fill: 'forwards' });
+    var a2 = inn.animate([{ opacity: 0, transform: from }, { opacity: 1, transform: 'none' }],
+      { duration: sp.d, delay: 60, easing: sp.e, fill: 'backwards' });
+    MH.a = [a1, a2];
+    a1.finished.then(function () { if (out.classList.contains('mh-ghost')) out.remove(); else a1.cancel(); }, function () {});
   }
 
   /* ---------- 5. scroll gives the app bar its container colour ---------- */
@@ -25152,16 +25310,18 @@ const BRAND=(function(){
   var dock = document.getElementById('fabDock');
   if (!dock) return;
   var fab   = document.getElementById('fabMain'),
+      wrap  = fab.parentNode,
       menu  = document.getElementById('fabMenu'),
       scrim = document.getElementById('fabScrim'),
       txt   = fab.querySelector('.fabtxt'),
-      face  = fab.querySelector('.fabic .i1 use');
+      ic    = fab.querySelector('.fabic');
 
   function el(id) { return document.getElementById(id); }
   function nav(v) { if (typeof window.go === 'function') window.go(v); }
   /* the app's own state, read defensively — a screen with no button is a far
      better failure than a screen that throws on the way to drawing one */
   function db() { try { return DB; } catch (e) { return null; } }
+  function reduced() { return !!(window.Motion && Motion.reduced); }
 
   /* Each screen resolves to the button it should be showing, or to null for
      no button at all. Resolved on every route change, so the button reflects
@@ -25234,96 +25394,113 @@ const BRAND=(function(){
      parent stops covering the screen and covers only the parent. */
   if (scrim.parentNode === dock) dock.parentNode.insertBefore(scrim, dock);
 
-  var cur = null, acts = null, settleT = 0, emptyT = 0, menuKey = '';
-  var lastY = 0, travel = 0, openY = 0, swapT = 0, lastKey = '';
+  var cur = null, acts = null, menuKey = '', lastKey = '';
+  var lastY = 0, travel = 0, openY = 0;
+  /* handles to the FAB's own animations (2.24: never getAnimations()) */
+  var A = { wrap: null, swap: [] };
 
   function isOpen() { return dock.classList.contains('open'); }
   function visible() { return dock.getClientRects().length > 0; }
 
-  /* ---------- the label is measured, not guessed ----------
-     The button's width is set from the real width of its label, so
-     extending and collapsing is one exact width change. The measuring is
-     done on a hidden copy that always has layout, so it still works while
-     the dock itself is hidden. */
+  /* Home's face: the plus in its ring, drawn inline so its two parts can
+     move (the ring draws off, the plus turns into the cross) */
+  var PLUS = '<svg class="ic fab-g" viewBox="0 0 24 24" aria-hidden="true"><circle class="fab-ring" cx="12" cy="12" r="8.5" pathLength="1"/>' +
+             '<path class="fab-plus" d="M12 8.2v7.6M8.2 12h7.6"/></svg>';
+  function faceOf(s) { return s.menu ? PLUS : sxIc(s.icon); }
+
+  /* ---------- the width is measured, never animated ----------
+     The button is laid out at its full extended width; the clip shows part
+     of it. The label is measured on a hidden copy that always has layout. */
   var meas = document.createElement('span');
   meas.setAttribute('aria-hidden', 'true');
   meas.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;white-space:nowrap;' +
                        'pointer-events:none;contain:layout style';
   document.body.appendChild(meas);
-
-  function fit() {
+  function widthFor(label) {
     try {
       var cs = getComputedStyle(fab);
-      meas.style.fontFamily    = cs.fontFamily;
-      meas.style.fontSize      = cs.fontSize;
-      meas.style.fontWeight    = cs.fontWeight;
-      meas.style.fontStyle     = cs.fontStyle;
+      meas.style.font = cs.font;
       meas.style.letterSpacing = cs.letterSpacing;
-      meas.textContent = txt.textContent;
+      meas.style.fontVariationSettings = cs.fontVariationSettings;
+      meas.textContent = label;
       var w = meas.getBoundingClientRect().width;
-      if (w > 0) fab.style.setProperty('--fab-lw', (Math.ceil(w) + 1) + 'px');
+      /* 16 lead + 24 icon + 12 gap + label + 20 tail */
+      if (w > 0) return Math.ceil(16 + 24 + 12 + w + 20);
     } catch (e) {}
+    return 184;
   }
-  /* a web font arriving late, or the phone layout's smaller type, changes
-     the label's width, so both re-measure */
+  function curW() { return parseFloat(fab.style.getPropertyValue('--fab-w')) || 184; }
+  function setW(w) { fab.style.setProperty('--fab-w', w + 'px'); }
+  function fit() { if (cur && !A.swap.length) setW(widthFor(txt.textContent)); }
+  /* a web font arriving late changes the label's width */
   try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); } catch (e) {}
-  try {
-    var mqPhone = window.matchMedia('(max-width:860px)');
-    if (mqPhone.addEventListener) mqPhone.addEventListener('change', fit);
-    else if (mqPhone.addListener) mqPhone.addListener(fit);
-  } catch (e) {}
 
   function setMini(on) {
     if (fab.classList.contains('mini') !== on) fab.classList.toggle('mini', on);
   }
 
   /* ---------- the menu ---------- */
+  /* waits for one transition of one element, or gives up if it never runs */
+  function after(node, prop, cb) {
+    var done = false;
+    function fin(e) {
+      if (e && (e.target !== node || e.propertyName !== prop)) return;
+      if (done) return;
+      done = true;
+      node.removeEventListener('transitionend', fin);
+      node.removeEventListener('transitioncancel', fin);
+      cb();
+    }
+    node.addEventListener('transitionend', fin);
+    node.addEventListener('transitioncancel', fin);
+    return fin;
+  }
   function close() {
     if (!isOpen()) return;
-    clearTimeout(settleT);
     dock.classList.remove('open', 'settled');
     scrim.classList.remove('on');
     fab.setAttribute('aria-expanded', 'false');
-    /* the folded items are cleared once their exit has played out — left in
-       place they would go on reserving the height they occupied */
-    clearTimeout(emptyT);
-    emptyT = setTimeout(function () {
+    /* the folded pills are cleared once their fade has played out — left in
+       place they would go on reserving the height they took */
+    var last = menu.lastElementChild;
+    if (!last || !visible()) { menu.innerHTML = ''; menuKey = ''; return; }
+    after(last, 'opacity', function () {
       if (!isOpen()) { menu.innerHTML = ''; menuKey = ''; }
-    }, 380);
+    });
   }
 
   function open() {
     var s = cur;
     if (!s || !s.menu || isOpen()) return;
-    clearTimeout(emptyT);
     var items = s.menu(), n = items.length, html = '', i;
     acts = items.map(function (it) { return it[2]; });
     for (i = 0; i < n; i++) {
-      html += '<button class="fabitem" role="menuitem" data-fi="' + i + '"'
-            + ' style="--d:' + ((n - 1 - i) * 40) + 'ms;--dc:' + (i * 24) + 'ms">'
-            + '<svg class="ic"><use href="#' + items[i][0] + '"/></svg>'
-            + items[i][1] + '</button>';
+      /* the list stacks upward: the nearest pill (the last) leaves first */
+      html += '<button type="button" class="fabitem pl-press" role="menuitem" data-fi="' + i + '"'
+            + ' style="--d:' + (Math.min(n - 1 - i, 5) * 30) + 'ms">'
+            + sxIc(items[i][0]) + '<span>' + items[i][1] + '</span></button>';
     }
-    /* Opened again while the last close is still folding: the same items
-       are still on screen, so they turn around from where they are. Building
-       them again would throw them back to the start and make them blink. */
+    /* Opened again while the last close is still folding: the same pills are
+       still on screen, so they turn around from where they are. Building
+       them again would throw them back to the start. */
     if (html !== menuKey || !menu.firstChild) {
       menu.innerHTML = html;
       menuKey = html;
-      /* the items have to be seen at their start position for one frame, or
-         the browser has nothing to spring them out from */
+      /* the pills have to be seen at their start for one frame, or there is
+         nothing to spring them out from */
       void menu.offsetWidth;
     }
     openY = window.scrollY || 0;
     dock.classList.add('open');
     scrim.classList.add('on');
     fab.setAttribute('aria-expanded', 'true');
-    clearTimeout(settleT);
-    settleT = setTimeout(function () { dock.classList.add('settled'); }, 560);
+    /* the farthest pill lands last; then the delays go */
+    var far = menu.firstElementChild;
+    if (far) after(far, 'transform', function () { if (isOpen()) dock.classList.add('settled'); });
   }
 
   fab.addEventListener('click', function () {
-    if (!cur || fab.classList.contains('swap')) return;
+    if (!cur || dock.classList.contains('is-leaving')) return;
     if (cur.menu) { isOpen() ? close() : open(); }
     else cur.run();
   });
@@ -25333,19 +25510,17 @@ const BRAND=(function(){
     if (!b || !isOpen()) return;
     var f = acts && acts[+b.dataset.fi];
     close();
-    /* let the menu fold before the screen underneath changes */
-    if (f) setTimeout(f, 160);
+    /* the fold paints first; the screen it opens builds a frame later */
+    if (f) requestAnimationFrame(function () { f(); });
   });
 
   scrim.addEventListener('click', close);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen()) { e.stopPropagation(); close(); }
+    if (e.key === 'Escape' && isOpen()) { e.stopPropagation(); close(); fab.focus({ preventScroll: true }); }
   }, true);
 
   /* ---------- the button follows the route ---------- */
-  function dress(s) {
-    if (face) face.setAttribute('href', '#' + s.icon);
-    txt.textContent = s.label;
+  function aria(s) {
     fab.setAttribute('aria-label', s.aria);
     if (s.menu) {
       fab.setAttribute('aria-haspopup', 'menu');
@@ -25354,57 +25529,113 @@ const BRAND=(function(){
       fab.removeAttribute('aria-haspopup');
       fab.removeAttribute('aria-expanded');
     }
+  }
+  function dress(s) {
+    A.swap.forEach(function (a) { a.cancel(); });
+    A.swap = [];
+    ic.innerHTML = faceOf(s);
+    txt.textContent = s.label;
+    aria(s);
     fab.classList.remove('mini');
-    fit();
+    setW(widthFor(s.label));
   }
 
-  /* Puts the new button in place. It is dressed while it is still shrunk and
-     invisible, the style is flushed, and only then is it let go — so the
-     only thing you see is it growing in, never a label or width changing. */
-  function enter(v, s) {
-    dock.classList.remove('leaving');
-    document.body.dataset.fab = v;
-    fab.classList.add('swap');
+  /* From a screen with no action: the button grows in where it stands */
+  function enter(s) {
+    if (A.wrap) { A.wrap.cancel(); A.wrap = null; }
+    dock.classList.remove('is-leaving');
     dress(s);
-    void fab.offsetWidth;
-    fab.classList.remove('swap');
+    if (reduced()) return;
+    var sp = PL('spatial');
+    A.wrap = wrap.animate([{ opacity: 0, transform: 'scale(.85)' }, { opacity: 1, transform: 'none' }],
+      { duration: sp.d, easing: sp.e });
+    wrap.style.transformOrigin = '100% 50%';
+  }
+  /* To a screen with no action: it shrinks away into itself, then hides */
+  function leave() {
+    if (A.wrap) { A.wrap.cancel(); A.wrap = null; }
+    dock.classList.add('is-leaving');
+    var a = A.wrap = wrap.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: reduced() ? 'none' : 'scale(.85)' }],
+      { duration: reduced() ? 120 : 170, easing: PL_EXIT, fill: 'forwards' });
+    a.finished.then(function () {
+      if (A.wrap !== a) return;
+      dock.classList.remove('is-leaving');
+      a.cancel(); A.wrap = null;
+    }, function () {});
+  }
+  /* From one action to another: the button stays where it is. The clip
+     glides from the old width to the new one while the face and the label
+     cross-fade, so nothing jumps and the bar of chrome never leaves. */
+  function morph(s) {
+    if (A.wrap) { A.wrap.cancel(); A.wrap = null; }
+    dock.classList.remove('is-leaving');
+    var mini = fab.classList.contains('mini');
+    var w0 = mini ? 56 : curW(), w1 = widthFor(s.label);
+    A.swap.forEach(function (a) { a.cancel(); });
+    A.swap = [];
+    aria(s);
+    fab.classList.remove('mini');
+    if (reduced()) { dress(s); return; }
+    /* laid out at the wider of the two; the clip shows each in turn */
+    /* the menu is shut by now, so the corners are at rest: --p-r-l */
+    var W = Math.max(w0, w1), r = '16px';
+    setW(W);
+    var sc = PL('spatial-c'), ex = 110;
+    var clip = fab.animate([{ clipPath: 'inset(0 0 0 ' + (W - w0) + 'px round ' + r + ')' },
+                            { clipPath: 'inset(0 0 0 ' + (W - w1) + 'px round ' + r + ')' }],
+      { duration: sc.d, easing: sc.e, fill: 'forwards' });
+    /* the icon and the label ride with the clip's edge, or the label would
+       stay where the wider layout put it and run into the icon */
+    var mk = [{ transform: 'translateX(' + (W - w0) + 'px)' }, { transform: 'translateX(' + (W - w1) + 'px)' }];
+    var move = ic.animate(mk, { duration: sc.d, easing: sc.e, fill: 'forwards' });
+    var moveT = txt.animate(mk, { duration: sc.d, easing: sc.e, fill: 'forwards' });
+    var outT = txt.animate([{ opacity: mini ? 0 : 1 }, { opacity: 0 }], { duration: ex, easing: PL_EXIT, fill: 'forwards' });
+    var outI = ic.firstElementChild ? ic.firstElementChild.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.6)' }],
+      { duration: ex, easing: PL_EXIT, fill: 'forwards' }) : null;
+    A.swap = [clip, move, moveT, outT].concat(outI ? [outI] : []);
+    outT.finished.then(function () {
+      if (A.swap.indexOf(outT) < 0) return;
+      txt.textContent = s.label;
+      ic.innerHTML = faceOf(s);
+      outT.cancel();
+      var ef = PL('effect');
+      var inT = txt.animate([{ opacity: 0 }, { opacity: 1 }], { duration: ef.d, easing: ef.e, fill: 'backwards' });
+      var inI = ic.firstElementChild.animate([{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }],
+        { duration: PL('spatial-fast').d, easing: PL('spatial-fast').e, fill: 'backwards' });
+      A.swap.push(inT, inI);
+    }, function () {});
+    /* once the clip has landed the button takes its new width for real;
+       the visible part is already exactly that, so nothing moves */
+    clip.finished.then(function () {
+      if (A.swap.indexOf(clip) < 0) return;
+      setW(w1);
+      A.swap.forEach(function (a) { a.cancel(); });
+      A.swap = [];
+    }, function () {});
   }
 
   function sync() {
     var v = 'dash';
     try { if (typeof VIEW === 'string') v = VIEW; } catch (err) {}
     var s = resolve(v);
-    var key = s ? v + '/' + s.label : 'none', was = lastKey;
+    var key = s ? v + '/' + s.label + (s.menu ? '/m' : '') : 'none', was = lastKey;
     close();
     lastY = window.scrollY || 0;
     travel = 0;
     cur = s;
     if (key === was) return;
     lastKey = key;
-    clearTimeout(swapT);
-    var shown = visible() && !dock.classList.contains('leaving');
+    var shown = visible() && !dock.classList.contains('is-leaving');
 
     if (!s) {
-      /* the page's own spacing changes now; the old button shrinks away
-         over it and is then hidden */
+      /* the page's own spacing changes now; the button shrinks away over it */
       document.body.dataset.fab = 'none';
-      if (shown) {
-        dock.classList.add('leaving');
-        fab.classList.add('swap');
-        swapT = setTimeout(function () { dock.classList.remove('leaving'); }, 170);
-      } else {
-        dock.classList.remove('leaving');
-      }
+      if (shown) leave();
       return;
     }
-
-    if (shown && was && was !== 'none') {
-      fab.classList.add('swap');
-      swapT = setTimeout(function () { enter(v, s); }, 150);
-      document.body.dataset.fab = v;
-    } else {
-      enter(v, s);
-    }
+    document.body.dataset.fab = v;
+    if (shown && was && was !== 'none') morph(s);
+    else enter(s);
   }
 
   if (typeof window.go === 'function') {
@@ -25424,8 +25655,7 @@ const BRAND=(function(){
      Reading down a long list, the extended button folds to its icon so it
      stops sitting on the content; coming back up hands the label back.
      The distance is added up in one direction, and a change of direction
-     starts the count again. A finger that wobbles a few pixels up and down
-     therefore does nothing, instead of flicking the label in and out. */
+     starts the count again, so a finger that wobbles does nothing. */
   var ticking = false;
   window.addEventListener('scroll', function () {
     if (ticking) return;
@@ -25437,6 +25667,7 @@ const BRAND=(function(){
       /* a page still gliding when the menu opened would shut it at once;
          only a real scroll closes it */
       if (isOpen()) { if (Math.abs(y - openY) > 40) close(); return; }
+      if (A.swap.length) return;
       if (y < 48) { travel = 0; setMini(false); return; }
       if (dy === 0) return;
       if ((dy > 0) !== (travel > 0)) travel = 0;
@@ -25446,6 +25677,10 @@ const BRAND=(function(){
     });
   }, { passive: true });
 
+  /* the springs a screen change needs are read while the app is idle (2.24) */
+  (window.requestIdleCallback || setTimeout)(function () {
+    ['spatial', 'spatial-c', 'spatial-fast', 'effect'].forEach(function (n) { PL(n); });
+  });
   sync();
 })();
 </script>
@@ -25584,96 +25819,137 @@ const BRAND=(function(){
     return true;
   }
 
-  var ovMenu, ovScrim;
+  /* Plume 2.26 · overflow menu: a Plume menu grown out of the ⋮, in
+     groups (the separators of OVERFLOW) instead of divider lines */
+  var ovMenu, ovScrim, ovA = [], ovIsOpen = false;
   function buildOverflow() {
     ovScrim = document.createElement('div');
     ovScrim.className = 'ovscrim';
     ovMenu = document.createElement('div');
-    ovMenu.className = 'ovmenu';
+    ovMenu.className = 'ovm';
+    ovMenu.id = 'ovMenu';
+    ovMenu.hidden = true;
+    ovMenu.inert = true;
     ovMenu.setAttribute('role', 'menu');
+    ovMenu.setAttribute('aria-label', 'More options');
     document.body.appendChild(ovScrim);
     document.body.appendChild(ovMenu);
-    ovScrim.addEventListener('click', closeOverflow);
+    ovScrim.addEventListener('click', function () { closeOverflow(); });
     ovMenu.addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('button[data-ov]');
-      if (!b) return;
+      if (!b || !ovIsOpen) return;
       var it = OVERFLOW.filter(function (x) { return x.id === b.dataset.ov; })[0];
       if (!it) return;
       if (it.keepOpen) {
-        /* run it now, then move the switch on the row that is already there.
-           Repainting would replace the input mid-press and the thumb would
-           jump instead of sliding. */
-        /* the switch is flipped INSIDE the theme change: the old snapshot
-           keeps the old position, and the thumb slides in the new theme
-           while the circle grows out of it */
-        var sw = b.querySelector('.ovtog');
-        /* the switch gets its own layer for the change (see the
-           nidus-switch rules), and gives it back once the fade is over */
+        /* run it now and move the switch on the row that is already there:
+           repainting would replace it mid-press and the thumb would jump.
+           The switch is flipped INSIDE the theme change, and has its own
+           layer for it (the nidus-switch rules), so the thumb slides in the
+           new theme while the old screen fades */
+        var sw = b.querySelector('.pl-sw'), inp = sw && sw.querySelector('input');
         if (sw) sw.style.viewTransitionName = 'nidus-switch';
         var done = it.run(sw || b, function () {
           if (!it.toggle) return;
           var on = it.toggle();
-          if (sw) sw.checked = on;
+          if (inp) inp.checked = on;
           b.setAttribute('aria-checked', on ? 'true' : 'false');
         });
         var free = function () { if (sw) sw.style.viewTransitionName = ''; };
         if (done && done.then) done.then(free, free); else free();
         return;
       }
-      closeOverflow();
-      setTimeout(it.run, 110);
+      closeOverflow(true);
+      /* the fold paints first; the screen it opens builds a frame later */
+      requestAnimationFrame(function () { it.run(); });
+    });
+    /* arrow keys walk the rows, Home and End jump to the ends */
+    ovMenu.addEventListener('keydown', function (e) {
+      var k = e.key;
+      if (k !== 'ArrowDown' && k !== 'ArrowUp' && k !== 'Home' && k !== 'End') return;
+      var rows = Array.prototype.slice.call(ovMenu.querySelectorAll('.ovm__it'));
+      if (!rows.length) return;
+      e.preventDefault();
+      var i = rows.indexOf(document.activeElement);
+      i = k === 'Home' ? 0 : k === 'End' ? rows.length - 1
+        : (i + (k === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length;
+      rows[i].focus();
     });
   }
   function paintOverflow() {
     if (!ovMenu) return;
     var here = '';
     try { here = VIEW; } catch (e) {}
-    ovMenu.innerHTML = OVERFLOW.map(function (it) {
-      if (it.sep) return '<hr>';
-      /* offering "Settings" while you are standing in Settings is the same
-         redundancy as the old More tab, one size down */
-      if (it.id === here) return '';
-      var v = it.value ? it.value() : '';
-      var on = it.toggle ? it.toggle() : false;
-      return '<button role="' + (it.toggle ? 'menuitemcheckbox' : 'menuitem') + '" data-ov="' + it.id + '"' +
-             (it.toggle ? ' aria-checked="' + (on ? 'true' : 'false') + '"' : '') + '>' +
-             '<svg class="ic"><use href="#' + it.icon + '"/></svg>' +
-             '<span class="lbl">' + esc2(it.label) + '</span>' +
-             (it.toggle ? '<input type="checkbox" class="ovtog" tabindex="-1" aria-hidden="true"' +
-                          (on ? ' checked' : '') + '>' : '') +
-             (v ? '<span class="val">' + esc2(v) + '</span>' : '') +
-             '</button>';
+    var groups = [[]];
+    OVERFLOW.forEach(function (it) {
+      if (it.sep) { groups.push([]); return; }
+      /* offering Settings while you are standing in Settings is a dead row */
+      if (it.id === here) return;
+      groups[groups.length - 1].push(it);
+    });
+    ovMenu.innerHTML = groups.filter(function (g) { return g.length; }).map(function (g) {
+      return '<div class="ovm__g" role="group">' + g.map(function (it) {
+        var on = it.toggle ? it.toggle() : false;
+        return '<button type="button" class="ovm__it pl-press" role="' + (it.toggle ? 'menuitemcheckbox' : 'menuitem') + '" data-ov="' + it.id + '"' +
+               (it.toggle ? ' aria-checked="' + (on ? 'true' : 'false') + '"' : '') + '>' +
+               sxIc(it.icon) + '<span class="ovm__l">' + esc2(it.label) + '</span>' +
+               (it.toggle ? '<span class="pl-sw" aria-hidden="true"><input type="checkbox" tabindex="-1"' + (on ? ' checked' : '') +
+                            '><span class="pl-sw__t">' + SX_CHECK + '</span></span>' : '') +
+               '</button>';
+      }).join('') + '</div>';
     }).join('');
   }
-  var ovT = null, ovSettleT = null;
-  function ovOpenNow() { return !!(ovMenu && ovMenu.classList.contains('on') && !ovMenu.classList.contains('out')); }
+  function ovStop() { ovA.forEach(function (a) { a.cancel(); }); ovA = []; }
+  function ovOpenNow() { return ovIsOpen; }
   function openOverflow() {
-    if (!ovMenu) return;
-    clearTimeout(ovT); clearTimeout(ovSettleT); Motion.cancel(ovMenu);
-    paintOverflow();
-    ovMenu.classList.remove('out', 'settled');
-    ovMenu.classList.add('on');
-    ovScrim.classList.add('on');
-    /* once the rows have landed the stagger is switched off, so repainting
-       while the menu is open — flipping Theme — just updates the row */
-    ovSettleT = setTimeout(function () { ovMenu.classList.add('settled'); }, 300);
+    if (!ovMenu || ovIsOpen) return;
     var btn = el('overflowBtn');
+    ovStop();
+    paintOverflow();
+    /* hung under the button, its corner on the button's centre line */
+    var r = btn ? btn.getBoundingClientRect() : { bottom: 56, right: innerWidth - 4, width: 48 };
+    ovMenu.style.top = Math.round(r.bottom + 2) + 'px';
+    ovMenu.style.right = Math.max(8, Math.round(innerWidth - r.right + 4)) + 'px';
+    ovMenu.hidden = false;
+    ovMenu.inert = false;
+    ovIsOpen = true;
+    ovScrim.classList.add('on');
     if (btn) btn.setAttribute('aria-expanded', 'true');
-    var f = ovMenu.querySelector('button');
-    if (f) f.focus();
+    /* its corner grows out of the button */
+    var mr = ovMenu.getBoundingClientRect();
+    ovMenu.style.setProperty('--ox', Math.round((r.right - r.width / 2) - mr.left) + 'px');
+    if (!(window.Motion && Motion.reduced)) {
+      var sp = PL('spatial');
+      ovA.push(ovMenu.animate([{ opacity: 0, transform: 'scale(.85)' }, { opacity: 1, transform: 'none' }],
+        { duration: sp.d, easing: sp.e }));
+      Array.prototype.slice.call(ovMenu.querySelectorAll('.ovm__it')).forEach(function (row, i) {
+        ovA.push(row.animate([{ opacity: 0, transform: 'translate3d(0,-6px,0)' }, { opacity: 1, transform: 'none' }],
+          { duration: sp.d, delay: 30 + Math.min(i, 5) * 25, easing: sp.e, fill: 'backwards' }));
+      });
+    } else {
+      ovA.push(ovMenu.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 150, easing: 'ease-out' }));
+    }
+    var f = ovMenu.querySelector('.ovm__it');
+    if (f) f.focus({ preventScroll: true });
   }
-  function closeOverflow() {
-    if (!ovMenu || !ovMenu.classList.contains('on') || Motion.leaving(ovMenu)) return;
-    clearTimeout(ovT); clearTimeout(ovSettleT);
-    Motion.leave(ovMenu, { drop: ['on', 'out', 'settled'] });
+  function closeOverflow(acting) {
+    if (!ovMenu || !ovIsOpen) return;
+    ovIsOpen = false;
+    ovStop();
+    ovMenu.inert = true;
     ovScrim.classList.remove('on');
     var btn = el('overflowBtn');
-    if (btn) { btn.setAttribute('aria-expanded', 'false'); }
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    /* focus goes back to the button, unless a row is taking you elsewhere */
+    if (!acting && btn && ovMenu.contains(document.activeElement)) btn.focus({ preventScroll: true });
+    var a = ovMenu.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'scale(.9)' }],
+      { duration: (window.Motion && Motion.reduced) ? 120 : Math.round(PL('spatial').d * .45), easing: PL_EXIT, fill: 'forwards' });
+    ovA.push(a);
+    a.finished.then(function () { if (!ovIsOpen) { ovMenu.hidden = true; ovStop(); } }, function () {});
   }
+  /* Escape closes the menu and only the menu */
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && ovMenu && ovMenu.classList.contains('on')) {
-      e.stopPropagation(); closeOverflow();
-      var b = el('overflowBtn'); if (b) b.focus();
+    if (e.key === 'Escape' && ovIsOpen) {
+      e.stopPropagation(); e.preventDefault(); closeOverflow();
     }
   }, true);
 
