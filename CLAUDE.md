@@ -663,5 +663,16 @@ does) and work in the scratchpad:
   filter reads 0 and looks broken. Drive the screen with real taps: chips,
   the three switches, Select then two tiles, Waiting, every `[data-pk]`
   (each must open with acts), a tile into the viewer and `page.goBack()`.
+- **Audit a surface's alignment by script, every state.** The scratch
+  `m.js` (Images, v6.83) walks twelve states (first, filters open, filtered,
+  summary, grouped, true shape, three sizes, waiting, selecting, search) at
+  360 / 412 / 800px and prints, against the content box: the left and right
+  edge of each row *by its drawn text or glyph* (Range rects, an icon's
+  `svg` box), the vertical centre of every item in a row, the first chip of
+  each chip row, anything past the viewport not inside a scroller, and text
+  collisions clipped to overflow boxes, skipping rects of the same text node
+  (an ellipsised line returns two). Every edge must read 0 (or the intended
+  inset); one screenshot hid a 10px search offset, a 6px header indent and a
+  3px grid inset.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

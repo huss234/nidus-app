@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.82 -->
+<!-- Nidus — Personal Qbank · v6.83 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2989,11 +2989,8 @@ body.hasmig{padding-bottom:64px}
 @keyframes glFade{from{opacity:0}}
 
 /* ---- masthead ---- */
-.gl-mast{padding:4px 2px 0}
-.gl-title{margin:0;font:450 28px/36px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.01em;color:var(--md-on-surface)}
-@media (min-width:600px){.gl-title{font-size:32px;line-height:40px}}
-.gl-say{margin:2px 0 0;max-width:60ch;font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
-.gl-say b{font-weight:600;color:var(--md-on-surface);font-variant-numeric:tabular-nums}
+.gl-title{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+#v-gallery{padding-top:16px}
 .gl-link{display:inline;padding:0;margin:0;background:none;border:0;font:inherit;color:var(--md-primary);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .gl-link:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;border-radius:4px}
 
@@ -3045,7 +3042,7 @@ body.hasmig{padding-bottom:64px}
    wait behind two buttons beside the search, each unfolding its panel in
    place above the grid. */
 .gl-bar{display:flex;align-items:center;gap:8px}
-.gl-search{margin:0;flex:1;min-width:0;height:52px}
+.gl-bar .gl-search{margin:0;flex:1;min-width:0;height:52px}
 .gl-tg{position:relative;isolation:isolate;flex:none;width:52px;height:52px;display:grid;place-items:center;border-radius:26px;
   background:var(--p-well);color:var(--md-on-surface-variant);cursor:pointer;
   transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
@@ -3113,11 +3110,10 @@ body.hasmig{padding-bottom:64px}
 .gl-chips{display:flex;gap:16px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px}
 .gl-chips::-webkit-scrollbar{display:none}
 .gl-chips__g{flex:none;display:flex;align-items:center;gap:8px}
-.gl-chips__h{flex:none;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant);padding-right:2px}
+.gl-chips__h{flex:none;width:84px;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
 @media (min-width:600px){
   .gl-chips{flex-direction:column;gap:10px;overflow:visible;margin:0;padding:0}
   .gl-chips__g{flex-wrap:wrap}
-  .gl-chips__h{width:92px}
 }
 .gl-chip{cursor:pointer;background:none}
 .gl-chip__n{font-style:normal;margin-left:6px;font:600 12px/16px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
@@ -3130,10 +3126,12 @@ body.hasmig{padding-bottom:64px}
 .gl-meta__t{flex:1;min-width:0;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
 .gl-meta .pl-btn{padding:0 12px}
 .gl-meta .pl-btn[hidden]{display:none}
+/* a text button's label, not its padding, lines up with the edge above it */
+.gl-meta > .pl-btn:last-child,.gl-meta > .pl-btn:has(+ .pl-btn[hidden]){margin-right:-12px}
+.gl-meta__t .gl-link{font-weight:600}
+/* the line breaks between its parts, never inside one */
+.gl-meta__t > span{white-space:nowrap}
 .gl-meta .pl-btn .ic{margin-left:0}
-.gl-clear{opacity:0;transform:scale(.8);visibility:hidden;
-  transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast),visibility 0s linear var(--p-effect-d)}
-.gl-clear.on{opacity:1;transform:none;visibility:visible;transition-delay:0s}
 
 /* ---- jump to a group ---- */
 .gl-index{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:-4px -16px 0;padding:2px 16px}
@@ -3147,9 +3145,10 @@ body.hasmig{padding-bottom:64px}
 .gl-sec{scroll-margin-top:80px}
 .gl-sec + .gl-sec{margin-top:16px}
 .gl-sec__h{display:flex;align-items:center;gap:8px;margin:0 0 8px}
-.gl-sec__fold{flex:1;min-width:0;display:flex;align-items:center;gap:10px;min-height:48px;padding:0 12px 0 6px;border-radius:var(--p-r-m);text-align:left;
+.gl-sec__fold{flex:1;min-width:0;display:flex;align-items:center;gap:8px;min-height:48px;margin-left:-12px;padding:0 12px;border-radius:var(--p-r-m);text-align:left;
   font:500 18px/24px var(--m3-font);color:var(--md-on-surface)}
 .gl-sec__fold > span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gl-sec__fold .gl-sec__chev{margin-left:auto}
 .gl-sec__chev{flex:none;width:22px;height:22px;color:var(--md-on-surface-variant);transition:transform var(--p-spatial-d) var(--p-spatial)}
 .gl-sec.shut .gl-sec__chev{transform:rotate(-90deg)}
 .gl-sec__n{flex:none;min-width:48px;height:36px;padding:0 12px;border-radius:18px;background:var(--p-well);color:var(--md-on-surface);
@@ -3166,8 +3165,9 @@ body.hasmig{padding-bottom:64px}
 .gl-sec.is-flash .gl-sec__fold::after{opacity:var(--m3-state-press)}
 
 /* ---- the grid ---- */
-.gl-grid{display:grid;gap:var(--gl-gap);grid-template-columns:repeat(auto-fill,minmax(min(var(--gl-min),100%),1fr));padding:3px}
-.gl-sec .gl-grid{padding-bottom:6px}
+.gl-grid{display:grid;gap:var(--gl-gap);grid-template-columns:repeat(auto-fill,minmax(min(var(--gl-min),100%),1fr))}
+/* a folding group clips, so its grid keeps room for the focus ring without moving off the column */
+.gl-sec__b > div > .gl-grid{padding:5px;margin:-5px}
 /* every picture at its own shape: a tile's width grows in proportion to its
    aspect ratio, so the tiles of a row share one height; the filler keeps the
    last row from stretching */
@@ -3205,7 +3205,7 @@ body.hasmig{padding-bottom:64px}
 #v-gallery[data-size="s"] .gl-b{top:4px;right:4px;height:20px;padding:0 6px}
 #v-gallery[data-size="s"] .gl-b--flag{top:auto;bottom:4px;width:20px;padding:0}
 .gl-cap{display:flex;flex-direction:column;gap:2px;min-width:0;padding:8px 4px 6px}
-.gl-cap b{font:500 13px/18px var(--m3-font);letter-spacing:.1px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.gl-cap b{font:500 13px/18px var(--m3-font);letter-spacing:.1px;overflow-wrap:anywhere;hyphens:auto;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .gl-cap em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gl-cap em:empty{display:none}
 .gl-grid.is-true .gl-cap,#v-gallery[data-size="s"] .gl-grid:not(.is-need) .gl-cap{display:none}
@@ -3231,7 +3231,7 @@ body.hasmig{padding-bottom:64px}
 .gl-ph--need .ic{width:28px;height:28px}
 .gl-ph--need small{font:500 12px/16px var(--m3-font)}
 .gl-need.over .gl-ph--need{background:var(--md-secondary-container);color:var(--md-on-secondary-container);box-shadow:inset 0 0 0 2px var(--md-primary)}
-.gl-need__acts{display:flex;margin:-2px -4px 0}
+.gl-need__acts{display:flex;margin:-2px -12px 0}
 .gl-need .figpad{margin:4px 0 0}
 .gl-empty{grid-column:1/-1;padding:40px 16px}
 .gl-empty .pl-btn{margin-top:12px}
@@ -7085,10 +7085,8 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
          show, each opening its peek). Long-press a picture to select several. -->
     <section class="view" id="v-gallery" data-size="m">
       <div class="gl" id="gl">
-        <header class="gl-mast">
-          <h2 class="gl-title">Images</h2>
-          <p class="gl-say" id="glSay"></p>
-        </header>
+        <!-- the top app bar already names the screen; the heading is for screen readers -->
+        <h2 class="gl-title">Images</h2>
         <div class="gl-bar">
             <label class="sx-search gl-search" id="glSearchBox">
               <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
@@ -7137,7 +7135,6 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div></div></div>
         <div class="gl-meta">
           <span class="gl-meta__t" id="galMeta"></span>
-          <button type="button" class="pl-btn pl-btn--text pl-press gl-clear" id="glClear">Clear filters</button>
           <button type="button" class="pl-btn pl-btn--text pl-press" id="glSelBtn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.2 2.8 2.8 5.4-5.6"/></svg>Select</button>
         </div>
         <nav class="gl-index" id="glIndex" aria-label="Jump to a group"></nav>
@@ -7311,7 +7308,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.82</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.83</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7367,7 +7364,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.82 · sharded store</span>
+        <span class="chip" id="verChip">v6.83 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8481,7 +8478,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.82';
+const APP_VERSION='6.83';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -15227,7 +15224,7 @@ function galTileHTML(e,idx){
   const sel=!!(GAL.sel&&GAL.sel.has(e.key));
   const lab=(name||figKind(f))+(q.system?', '+q.system:'')+(e.qids.length>1?', on '+e.qids.length+' questions':'');
   return `<button type="button" class="gl-tile pl-press${sel?' is-sel':''}" data-gk="${esc(e.key)}" data-galidx="${idx}" style="--ar:${ar.toFixed(3)}" aria-label="${esc(lab)}"${GAL.sel?` aria-pressed="${sel}"`:''}>
-    <span class="gl-ph">${img}${e.qids.length>1?`<span class="gl-b gl-b--n">×${e.qids.length}</span>`:''}<span class="gl-b gl-b--slot">${galSlotWord(f)}</span>${flag?`<span class="gl-b gl-b--flag">${sxIc('i-flag')}</span>`:''}<span class="gl-ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="m6.5 12.4 3.7 3.7 7.3-7.6"/></svg></span></span>
+    <span class="gl-ph">${img}${e.qids.length>1?`<span class="gl-b gl-b--n">×${e.qids.length}</span>`:''}${f.slot==='stem'?'':`<span class="gl-b gl-b--slot">${galSlotWord(f)}</span>`}${flag?`<span class="gl-b gl-b--flag">${sxIc('i-flag')}</span>`:''}<span class="gl-ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="m6.5 12.4 3.7 3.7 7.3-7.6"/></svg></span></span>
     <span class="gl-cap"><b>${esc(name||figKind(f))}</b><em>${esc(q.system||'')}</em></span>
   </button>`;
 }
@@ -15269,23 +15266,6 @@ function galPaintCount(){
   el.textContent=n;
 }
 /* ---------- the masthead's sentence and the collection ---------- */
-function galMast(have,need){
-  const qn=new Set();have.forEach(e=>e.qids.forEach(id=>qn.add(id)));
-  const nq=new Set(need.map(e=>e.qid)).size;
-  if(GAL.sets.need.size){
-    const t=need.length?`<b>${need.length}</b> ${need.length===1?'slot is':'slots are'} waiting for a photo. `:'Nothing is waiting for a photo. ';
-    const h=t+`<button type="button" class="gl-link" data-galmode="have">Show the pictures</button>.`;
-    const el=$('#glSay');if(el.innerHTML)sxSwap(el,h);else el.innerHTML=h;
-    return;
-  }
-  const s=(!have.length&&!need.length)
-    ? 'Attach a photo to a question, from the player with G or from its Edit panel, and it appears here.'
-    : (have.length?`<b>${have.length}</b> ${have.length===1?'picture':'pictures'} on <b>${qn.size}</b> ${qn.size===1?'question':'questions'}. `:'No pictures attached yet. ')
-      +(nq?`<button type="button" class="gl-link" data-galmode="need">${nq} ${nq===1?'question is':'questions are'} waiting for a photo</button>.`
-          :'Every question that asked for a figure has one.');
-  const el=$('#glSay');
-  if(el.innerHTML)sxSwap(el,s);else el.innerHTML=s;
-}
 function galHero(have,need,arrive){
   const el=$('#glHero');
   const B={};have.forEach(e=>{const k=galFormatOf(e.q);B[k]=(B[k]||0)+1});
@@ -15342,7 +15322,7 @@ function renderGallery(reset,arrive){
   const have=all.filter(e=>!e.need),need=all.filter(e=>e.need);
   const slice=list.slice(0,GAL.shown);
   const old=(!arrive&&GAL.flip)?galSnap():null;GAL.flip=false;
-  galMast(have,need);galHero(have,need,arrive);galSegs(wantNeed,have.length,need.length);galChipCounts(all,T);
+  galHero(have,need,arrive);galSegs(wantNeed,have.length,need.length);galChipCounts(all,T);
   const body=$('#galBody'),idx=$('#glIndex'),grouped=GAL.group!=='recent'&&!wantNeed,filtered=galFiltered();
   let html='',jump='';
   if(!slice.length){
@@ -15372,7 +15352,7 @@ function renderGallery(reset,arrive){
       const tiles=bucket[k].map(e=>{const i=GAL.view.length;GAL.view.push(e);return galTileHTML(e,i)}).join('');
       return `<section class="gl-sec${shut?' shut':''}" data-galsec="${esc(K)}">
         <div class="gl-sec__h">
-          <button type="button" class="gl-sec__fold pg-tap pl-press" data-galfold="${esc(K)}" aria-expanded="${!shut}">${sxIc('i-chev','gl-sec__chev')}<span>${esc(k)}</span></button>
+          <button type="button" class="gl-sec__fold pg-tap pl-press" data-galfold="${esc(K)}" aria-expanded="${!shut}"><span>${esc(k)}</span>${sxIc('i-chev','gl-sec__chev')}</button>
           <button type="button" class="gl-sec__n pl-press" data-pk="gal:grp:${esc(k)}" aria-label="${n} ${n===1?'picture':'pictures'}: what they are">${n}</button>
         </div>
         <div class="gl-sec__b"><div${shut?' inert':''}><div class="${galGridCls(false)}">${tiles}</div></div></div>
@@ -15385,10 +15365,14 @@ function renderGallery(reset,arrive){
 
   const base=wantNeed?need.length:have.length;
   const word=wantNeed?(base===1?'slot waiting':'slots waiting'):(base===1?'picture':'pictures');
-  let meta=list.length===base?`${base} ${word}`:`${list.length} of ${base} ${word}`;
-  if(slice.length<list.length)meta+=` · ${slice.length} shown`;
-  const m=$('#galMeta');if(m.textContent!==meta){if(m.textContent)sxSwap(m,esc(meta));else m.textContent=meta}
-  $('#glClear').classList.toggle('on',filtered);
+  const part=h=>`<span>${h}</span>`;
+  let meta=part(esc(list.length===base?`${base} ${word}`:`${list.length} of ${base} ${word}`));
+  if(filtered)meta+=' '+part(`· <button type="button" class="gl-link" data-galclear>Clear filters</button>`);
+  /* what is waiting is said only when something is, and leads there; in
+     Waiting, the way back to the pictures */
+  if(wantNeed)meta+=' '+part(`· <button type="button" class="gl-link" data-galmode="have">Show the pictures</button>`);
+  else if(need.length&&!filtered)meta+=' '+part(`· <button type="button" class="gl-link" data-galmode="need">${need.length} waiting for a photo</button>`);
+  const m=$('#galMeta');if(m.innerHTML!==meta){if(m.innerHTML)sxSwap(m,meta);else m.innerHTML=meta}
   galBadge();
   $('#glSelBtn').hidden=wantNeed||!slice.length;
   $('#galMore').hidden=list.length<=GAL.shown;
@@ -15512,7 +15496,6 @@ function galClear(){
   $('#galSearch').value='';
   galPaintChips();galSoon(true);
 }
-$('#glClear').addEventListener('click',galClear);
 /* a peek's "Show only these": its filter replaces the group's, and the grid comes into view */
 function galOnly(g,k){
   ['fmt','slot','st'].forEach(x=>GAL.sets[x].clear());
