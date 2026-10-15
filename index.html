@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.88 -->
+<!-- Nidus — Personal Qbank · v6.89 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -7428,6 +7428,245 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 @keyframes rvGrow{from{transform:scaleY(0)}}
 
 /* ============================================================
+   Plume 2.27 · import
+   Bringing a batch in. The hero is a drop well (files, a tap, or a
+   paste); every file becomes a row of the run that says where it is
+   (reading, storing pictures, reading questions, adding to the bank)
+   on a bar that fills as it goes, then opens into what it brought.
+   The run's head counts the whole import as it lands. Backup and
+   export are grouped rows; the prompt is the group's second view.
+   Script: IMPORT / EXPORT (imQueue, imRun, imJobHTML, imSumPaint).
+   ============================================================ */
+.im{position:relative;display:flex;flex-direction:column;gap:16px;max-width:760px;margin:0 auto}
+.im-tabs{max-width:420px;width:100%}
+#v-import .pane.on{animation:none}
+#v-import .pane{flex-direction:column;gap:16px}
+#v-import .pane.on{display:flex}
+#v-import .pane.im-out{display:flex;position:absolute;left:0;right:0;pointer-events:none}
+/* ---- the hero: a drop well, two ways in, the update switch ---- */
+.im-hero{position:relative;padding:12px;border-radius:var(--p-r-hero);background:var(--p-card);color:var(--md-on-surface)}
+.im-well{
+  position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-height:216px;padding:28px 20px 24px;border-radius:var(--p-r-lx);text-align:center;cursor:pointer;
+  background:var(--p-well);border:1.5px dashed color-mix(in oklab,var(--md-outline) 75%,transparent);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),background-color var(--p-effect-d) var(--p-effect),
+             border-color var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect);
+}
+.im-well::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.im-well:hover::after{opacity:var(--m3-state-hover)}}
+.im-well.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-l);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.im-well.is-down::after{opacity:var(--m3-state-press)}
+.im-well:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+/* a file held over the screen: the well opens toward it */
+.im-well.is-over{background:color-mix(in oklab,var(--md-primary) 14%,var(--p-card));border-color:var(--md-primary);border-style:solid;transform:scale(1.015)}
+.im-tray{
+  display:grid;place-items:center;width:88px;height:88px;margin-bottom:12px;color:var(--md-on-primary-container);
+  background:var(--md-primary-container);-webkit-mask:var(--p-shape-seal12) center/100% 100% no-repeat;mask:var(--p-shape-seal12) center/100% 100% no-repeat;
+  transition:transform var(--p-spatial-d) var(--p-spatial);
+}
+.im-tray svg{width:42px;height:42px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.im-tray__a,.im-tray__t{transform-box:fill-box}
+.im-tray__a{transition:transform var(--p-spatial-d) var(--p-spatial)}
+.im-tray__t{transform-origin:50% 100%;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.im-well.is-over .im-tray{transform:scale(1.08)}
+.im-well.is-over .im-tray__a{transform:translateY(2.4px)}
+.im-well.is-over .im-tray__t{transform:scaleX(1.08)}
+.im-well__t{font:500 22px/28px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+.im-well__s{font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.im-info{position:absolute;top:16px;right:16px;z-index:1}
+.im-acts{display:flex;flex-wrap:wrap;gap:12px;padding:12px 0 0}
+.im-acts .pl-btn{flex:1 1 180px;padding:0 20px}
+.im-acts .pl-btn[aria-expanded="true"]{background:var(--md-secondary);color:var(--md-on-secondary)}
+.im-upd{
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:16px;min-height:64px;margin-top:8px;padding:10px 12px 10px 16px;
+  border-radius:var(--p-r-l);cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.im-upd::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.im-upd:hover::after{opacity:var(--m3-state-hover)}}
+.im-upd.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.im-upd.is-down::after{opacity:var(--m3-state-press)}
+.im-upd__tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
+.im-upd__t{font:450 16px/24px var(--m3-font);letter-spacing:.1px}
+.im-upd__s{font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+/* ---- the paste box: unfolds under the hero (2.13) ---- */
+.im-fold{display:grid;grid-template-rows:minmax(0,0fr);margin-top:-16px;transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.im-fold.is-open{grid-template-rows:minmax(0,1fr)}
+.im-fold__in{min-height:0;overflow:hidden;padding-top:16px;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.im-fold.is-open .im-fold__in{opacity:1;transition-delay:60ms}
+.im-paste{padding:12px;border-radius:var(--p-r-card);background:var(--p-card)}
+.im-paste textarea,.im-paste textarea:focus{
+  display:block;width:100%;min-height:200px;margin:0;padding:14px 16px;resize:vertical;border:0;border-radius:var(--p-r-m);
+  background:var(--p-well);color:var(--md-on-surface);box-shadow:none;
+  font:400 13px/20px var(--m3-mono);outline:2px solid transparent;outline-offset:-2px;
+  transition:outline-color var(--p-effect-d) var(--p-effect);
+}
+.im-paste textarea:focus{outline-color:var(--md-primary)}
+.im-sniff{min-height:20px;padding:10px 4px 0;font:400 13px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-sniff:empty{padding-top:0;min-height:0}
+.im-sniff b{font-weight:600;color:var(--md-on-surface)}
+.im-sniff.is-bad{color:var(--md-error)}
+.im-sniff.is-bad b{color:var(--md-error)}
+.im-pacts{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:4px 8px;padding-top:8px}
+.im-pacts .pl-btn--filled{padding:0 24px}
+.im-pacts .pl-btn:first-child{margin-right:auto}
+.im .pl-btn:disabled{opacity:.38;pointer-events:none}
+/* ---- the run: a head and one row per file, a grouped list ---- */
+.im-run{display:flex;flex-direction:column;gap:2px}
+.im-run:empty{display:none}
+.im-sum,.im-job{background:var(--p-card);border-radius:var(--p-r-xs);color:var(--md-on-surface)}
+.im-run > :first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.im-run > :last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+.im-sum{padding:20px 20px 18px}
+.im-sum__o{margin:0;font:600 12px/16px var(--m3-font);letter-spacing:.08em;text-transform:uppercase;color:var(--md-on-surface-variant)}
+.im-sum__row{display:flex;align-items:center;gap:16px;margin-top:6px}
+.im-sum__fig{flex:0 1 auto;min-width:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin-right:auto;text-align:left;color:inherit}
+.im-sum__fig:disabled{cursor:default;pointer-events:none}
+.im-sum__fig .pg-n,.im-sum__fig b{font:520 56px/1.02 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--md-on-surface)}
+.im-sum__cap{font:500 18px/24px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-sum__line{margin:4px 0 0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-sum__line b{font-weight:600;color:var(--md-on-surface)}
+.im-seal{position:relative;flex:none;width:56px;height:56px;display:grid;place-items:center}
+.im-seal::before{content:"";position:absolute;inset:0;background:var(--md-primary-container);
+  -webkit-mask:var(--p-shape-seal12) center/100% 100% no-repeat;mask:var(--p-shape-seal12) center/100% 100% no-repeat;
+  transform:scale(.4);opacity:0;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),opacity var(--p-effect-d) var(--p-effect)}
+.im-seal svg{position:relative;width:28px;height:28px;fill:none;stroke:var(--md-on-primary-container);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.im-seal path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-slow-d) var(--p-effect-slow) 140ms}
+.im-sum.is-done .im-seal::before{transform:none;opacity:1}
+.im-sum.is-done .im-seal path{stroke-dashoffset:0}
+.im-sum.is-bad .im-seal::before{background:var(--md-error-container)}
+.im-sum.is-bad .im-seal svg{stroke:var(--md-on-error-container)}
+/* the loading indicator while the run works: three dots of the seal's colour breathing in turn */
+.im-busy{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity var(--p-effect-d) var(--p-effect)}
+.im-busy i{width:8px;height:8px;border-radius:50%;background:var(--md-primary);animation:imBreath 1.05s cubic-bezier(.45,0,.55,1) infinite}
+.im-busy i:nth-child(2){animation-delay:.15s}.im-busy i:nth-child(3){animation-delay:.3s}
+.im-sum.is-done .im-busy{opacity:0}
+@keyframes imBreath{0%,100%{transform:scale(.55);opacity:.45}45%{transform:scale(1);opacity:1}}
+.im-track{position:relative;height:6px;margin-top:16px;border-radius:3px;background:var(--p-well);overflow:hidden;
+  transition:opacity var(--p-effect-slow-d) var(--p-effect-slow)}
+.im-track i{position:absolute;inset:0;border-radius:inherit;background:var(--md-primary);transform-origin:0 50%;transform:scaleX(var(--p,0));
+  transition:transform 420ms var(--p-spatial-c)}
+.im-sum.is-done .im-track{opacity:0}
+.im-sum__acts{display:grid;grid-template-rows:minmax(0,0fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.im-sum.is-done .im-sum__acts{grid-template-rows:minmax(0,1fr)}
+.im-sum__acts > div{min-height:0;overflow:hidden;display:flex;flex-wrap:wrap;gap:8px 12px;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.im-sum.is-done .im-sum__acts > div{opacity:1;transition-delay:120ms}
+.im-sum__acts .pl-btn{margin-top:16px}
+.im-sum__acts .pl-btn--filled{flex:1 1 240px}
+/* a file in the run */
+.im-job{display:grid;grid-template-columns:40px minmax(0,1fr) auto;column-gap:16px;align-items:center;padding:14px 20px 14px 16px}
+.im-job__ic{position:relative;width:40px;height:40px;display:grid;place-items:center;border-radius:20px;background:var(--p-well);color:var(--md-on-surface-variant);
+  transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect)}
+.im-job__ic svg{position:absolute;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.im-doc{transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.im-doc__l{stroke-dasharray:1;stroke-dashoffset:0}
+.im-mark{opacity:0}
+.im-mark path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-slow-d) var(--p-effect-slow) 90ms}
+.im-job:not([data-st="wait"]):not([data-st="done"]):not([data-st="fail"]) .im-job__ic{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+/* reading: the lines of the page are written in, one after another, while it works */
+.im-job:not([data-st="wait"]):not([data-st="done"]):not([data-st="fail"]) .im-doc__l{animation-name:imWrite;animation-duration:1.2s;animation-timing-function:var(--p-effect-slow);animation-iteration-count:infinite;animation-fill-mode:backwards}
+@keyframes imWrite{0%{stroke-dashoffset:1}45%,100%{stroke-dashoffset:0}}
+.im-job[data-st="done"] .im-job__ic,.im-job[data-st="fail"] .im-job__ic{border-radius:var(--p-r-m)}
+.im-job[data-st="done"] .im-job__ic{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.im-job[data-st="fail"] .im-job__ic{background:var(--md-error-container);color:var(--md-on-error-container)}
+.im-job[data-st="done"] .im-doc,.im-job[data-st="fail"] .im-doc{opacity:0;transform:scale(.6)}
+.im-job[data-st="done"] .im-mark--ok,.im-job[data-st="fail"] .im-mark--bad{opacity:1}
+.im-job[data-st="done"] .im-mark--ok path,.im-job[data-st="fail"] .im-mark--bad path{stroke-dashoffset:0}
+.im-job__tx{min-width:0;display:flex;flex-direction:column}
+.im-job__n{font:500 15px/20px var(--m3-font);letter-spacing:.1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.im-job__s{font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.im-job[data-st="fail"] .im-job__s{color:var(--md-error)}
+.im-job__v{font:600 13px/18px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant);white-space:nowrap}
+.im-job__v b{font:520 22px/26px var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.02em;color:var(--md-on-surface)}
+.im-job__bar{grid-column:2/-1;position:relative;height:4px;margin-top:10px;border-radius:2px;background:var(--p-well);overflow:hidden;
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+.im-job__bar i{position:absolute;inset:0;border-radius:inherit;background:var(--md-primary);transform-origin:0 50%;transform:scaleX(var(--p,0));
+  transition:transform 360ms var(--p-spatial-c)}
+/* a step whose length is unknown (reading the file): a short stretch travels the track */
+.im-job__bar.is-ind i{right:auto;width:32%;transform:none;animation:imTravel 1.1s cubic-bezier(.45,0,.4,1) infinite}
+@keyframes imTravel{from{transform:translateX(-100%)}to{transform:translateX(320%)}}
+.im-job[data-st="done"] .im-job__bar,.im-job[data-st="fail"] .im-job__bar{opacity:0}
+.im-job__res{grid-column:1/-1;display:grid;grid-template-rows:minmax(0,0fr);margin-top:-14px;transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.im-job.is-open .im-job__res{grid-template-rows:minmax(0,1fr)}
+.im-job__res > div{min-height:0;overflow:hidden;padding-top:14px;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.im-job.is-open .im-job__res > div{opacity:1;transition-delay:80ms}
+.im-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.im-tile{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;padding:12px 14px;background:var(--p-well);text-align:left;color:var(--md-on-surface)}
+.im-tile b,.im-tile .pg-n{font:520 24px/1.1 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.im-tile span{font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-tile.is-nil b{color:var(--md-on-surface-variant)}
+button.im-tile{cursor:pointer;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+button.im-tile::after{content:"";position:absolute;inset:0;z-index:-1;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){button.im-tile:hover::after{opacity:var(--m3-state-hover)}}
+button.im-tile.is-down{transform:scale(var(--p-press));transition-duration:var(--p-effect-fast-d)}
+button.im-tile.is-down::after,button.im-tile.is-src::after{opacity:var(--m3-state-press)}
+button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.im-notes{display:flex;flex-direction:column;gap:6px;margin:12px 0 0;padding:0 2px}
+.im-notes p{margin:0;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-notes p b{font-weight:600;color:var(--md-on-surface)}
+.im-notes .is-bad{color:var(--md-error)}
+.im-link{display:inline;padding:0;font:inherit;font-weight:600;color:var(--md-primary);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+/* ---- backup and export: grouped rows ---- */
+.im-sec{display:flex;flex-direction:column;padding-top:8px}
+.im-sh{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin:8px 0 4px;padding-left:4px;
+  font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.im-sh .pl-ib{margin-right:-4px}
+.im-grp{display:flex;flex-direction:column;gap:2px;margin-bottom:16px}
+.im-row{
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:16px;width:100%;min-height:72px;padding:12px 20px 12px 16px;
+  border-radius:var(--p-r-xs);background:var(--p-card);color:var(--md-on-surface);text-align:left;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect);
+}
+.im-grp > .im-row:first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.im-grp > .im-row:last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+.im-row::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.im-row:hover::after{opacity:var(--m3-state-hover)}}
+.im-row.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-card)!important;transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.im-row.is-down::after{opacity:var(--m3-state-press)}
+.im-row:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px;z-index:1}
+.im-row:disabled{opacity:.38;pointer-events:none}
+.im-lead{flex:none;width:40px;height:40px;display:grid;place-items:center;border-radius:20px;background:var(--p-cat-a);color:var(--p-on-cat-a);
+  transition:border-radius var(--p-effect-d) var(--p-effect)}
+.im-lead.k-b{background:var(--p-cat-b);color:var(--p-on-cat-b)}
+.im-lead.k-c{background:var(--p-cat-c);color:var(--p-on-cat-c)}
+.im-lead.k-n{background:var(--p-well);color:var(--md-on-surface-variant)}
+.im-lead .ic{width:22px;height:22px}
+.im-row.is-down .im-lead,.im-row.is-busy .im-lead{border-radius:var(--p-r-m)}
+.im-row__tx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
+.im-row__t{font:450 16px/24px var(--m3-font);letter-spacing:.1px}
+.im-row__s{font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+/* ---- the prompt view ---- */
+.im-pr{padding:20px 20px 16px;border-radius:var(--p-r-card);background:var(--p-card);color:var(--md-on-surface)}
+.im-pr__h{display:flex;align-items:flex-start;gap:8px}
+.im-pr__tx{flex:1 1 auto;min-width:0}
+.im-pr__h .pl-ib{margin:-8px -8px 0 0}
+.im-h{margin:0;font:500 22px/28px var(--m3-font);color:var(--md-on-surface)}
+.im-say{margin:4px 0 0;font:400 14px/20px var(--m3-font);letter-spacing:.15px;color:var(--md-on-surface-variant)}
+.im-pr__acts{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}
+.im-pr__save{margin-top:0}
+.im-pr__save .pl-btn--filled{flex:1 1 220px}
+.im-stale{display:flex;gap:14px;padding:16px 20px;border-radius:var(--p-r-card);background:var(--p-card);
+  box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-warning) 55%,transparent);font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.im-stale > div{min-width:0}
+.im-stale b{display:block;margin-bottom:6px;font:500 16px/24px var(--m3-font);color:var(--md-on-surface)}
+.im-stale__ic{flex:none;width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:var(--md-warning-container);color:var(--md-on-warning-container)}
+.im-stale__ic .ic{width:20px;height:20px}
+.im-code{margin:0;padding:18px 20px;border-radius:var(--p-r-card);background:var(--p-card);color:var(--md-on-surface);
+  font:400 14px/22px var(--m3-font);letter-spacing:.1px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;border:0;box-shadow:none}
+.im-code--ed,.im-code--ed:focus{width:100%;min-height:60vh;resize:vertical;outline:2px solid transparent;outline-offset:-2px;transition:outline-color var(--p-effect-d) var(--p-effect)}
+.im-code--ed:focus{outline-color:var(--md-primary)}
+@media (max-width:600px){
+  .im-well{min-height:196px;padding:24px 16px 20px}
+  .im-sum__fig .pg-n,.im-sum__fig b{font-size:48px}
+  .im-job{padding:14px 16px 14px 14px;column-gap:14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .im-job__bar.is-ind i{animation:imFadeInd 1.2s ease-in-out infinite alternate;width:100%}
+  .im-busy i,.im-doc__l{animation:none!important}
+}
+@keyframes imFadeInd{from{opacity:.3}to{opacity:.8}}
+
+/* ============================================================
    Plume 2.24 · dock
    The navigation bar on phones and the tablet (≤860px). One indicator
    travels between the five destinations on --p-spatial, stretching while
@@ -7900,62 +8139,108 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       </div>
     </section>
 
-    <!-- ============ IMPORT ============ -->
+    <!-- ============ IMPORT (Plume 2.27 · import) ============
+         Bring a batch in: the drop well takes files (or a paste), every
+         file becomes a row in the run that shows where it is (reading,
+         storing pictures, reading questions, adding to the bank) and opens
+         into what it brought; the run's head counts the whole import.
+         Backup and export are grouped rows under it; the extractor prompt
+         is the second view of the same group. -->
     <section class="view" id="v-import">
-      <p class="eyebrow">Intake <span class="rule"></span></p>
-      <h2 class="vt">Import questions</h2>
-      <p class="sub">A model turns your PDF into JSON; this screen reads it back.<button class="ib" data-note="importloop" aria-label="The extraction loop"><svg class="ic"><use href="#i-info"/></svg></button></p>
+      <div class="im" id="im">
+        <h2 class="gl-title">Import</h2>
+        <div class="pl-seg im-tabs" id="impTabs" role="radiogroup" aria-label="Import or the extractor prompt" style="--n:2;--i:0">
+          <span class="pl-seg__ind" aria-hidden="true"></span>
+          <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="paste" data-pane="paste">Import</button>
+          <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="prompt" data-pane="prompt">Extractor prompt</button>
+        </div>
 
-      <div class="subtabs" id="impTabs" role="tablist">
-        <button role="tab" data-pane="paste" class="on" aria-selected="true">Import</button>
-        <button role="tab" data-pane="prompt" aria-selected="false">Extractor prompt</button>
-      </div>
+        <div class="pane on" data-pane="paste">
+          <div class="im-hero">
+            <div class="im-well pl-press" id="imDrop" role="button" tabindex="0" aria-label="Choose JSON files to import, or drop them here">
+              <span class="im-tray" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><defs><clipPath id="imTrayClip"><rect x="0" y="-12" width="24" height="31"/></clipPath></defs>
+                  <g clip-path="url(#imTrayClip)"><g class="im-tray__a"><path d="M12 3.5v11.2"/><path d="m7.6 10.4 4.4 4.4 4.4-4.4"/></g></g>
+                  <path class="im-tray__t" d="M4.3 16.5v2.3a1.8 1.8 0 0 0 1.8 1.8h11.8a1.8 1.8 0 0 0 1.8-1.8v-2.3"/></svg>
+              </span>
+              <span class="im-well__t" id="imDropT">Drop JSON files here</span>
+              <span class="im-well__s">or tap to choose them · several at once is fine</span>
+            </div>
+            <button class="pl-ib pl-press im-info" data-note="importloop" aria-label="The extraction loop"><svg class="ic" data-ic="i-info"></svg></button>
+            <div class="im-acts">
+              <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" id="pickFile"><svg class="ic" data-ic="i-import"></svg>Choose files</button>
+              <button type="button" class="pl-btn pl-btn--m pl-btn--tonal pl-press" id="imPasteGo" aria-expanded="false" aria-controls="imPasteF"><svg class="ic" data-ic="i-paste"></svg>Paste JSON</button>
+            </div>
+            <input type="file" id="fileInput" accept=".json,.txt,application/json" multiple hidden>
+            <label class="im-upd pl-press">
+              <span class="im-upd__tx"><span class="im-upd__t">Update questions that already exist</span><span class="im-upd__s" id="imUpdS">A question you already have takes the file's version, keeping its record</span></span>
+              <span class="pl-sw"><input type="checkbox" role="switch" id="impUpdate" checked><span class="pl-sw__t" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg></span></span>
+            </label>
+          </div>
 
-      <div class="pane on" data-pane="paste">
-      <div class="row" style="margin-bottom:12px">
-        <button class="btn" id="pickFile">Choose .json file(s)</button>
-        <input type="file" id="fileInput" accept=".json,.txt,application/json" multiple hidden>
-      </div>
-      <textarea id="importBox" rows="12" placeholder='{ "questions": [ { "stem": "...", "choices": [...] } ] }'></textarea>
-      <div class="row" style="margin-top:10px">
-        <button class="btn pri" id="importBtn">Import batch</button>
-        <label class="pill"><input type="checkbox" id="impUpdate" checked style="width:auto;margin-right:6px"> Update questions that already exist</label>
-        <button class="btn ghost sm" id="clearImport">Clear</button>
-      </div>
-      <div id="importReport" style="margin-top:16px"></div>
-      <hr class="sep">
-      <h3 class="sec">Backup<button class="ib" data-note="backup" aria-label="What a backup carries"><svg class="ic"><use href="#i-info"/></svg></button></h3>
-      <div class="row">
-        <button class="btn" id="exportAll">Export full backup</button>
-        <button class="btn ghost" id="exportLight">Full backup, without photos</button>
-        <button class="btn" id="exportQs">Export questions only</button>
-        <button class="btn" id="exportRerun">Export for re-run</button>
-        <button class="btn" id="exportFigs">Export missing figures</button>
-        <button class="btn" id="exportMissed">Export missed as study sheet</button>
-        <button class="btn" id="restoreBtn">Restore from backup</button>
-        <input type="file" id="restoreInput" accept=".json" hidden>
-      </div>
-      </div><!-- /pane paste -->
+          <div class="im-fold" id="imPasteF" inert>
+            <div class="im-fold__in">
+              <div class="im-paste">
+                <textarea id="importBox" rows="9" spellcheck="false" placeholder='{ "questions": [ { "stem": "...", "choices": [...] } ] }' aria-label="JSON to import"></textarea>
+                <div class="im-sniff" id="imSniff" aria-live="polite"></div>
+                <div class="im-pacts">
+                  <button type="button" class="pl-btn pl-btn--text pl-press" id="imClip"><svg class="ic" data-ic="i-paste"></svg>From clipboard</button>
+                  <button type="button" class="pl-btn pl-btn--text pl-press" id="clearImport">Clear</button>
+                  <button type="button" class="pl-btn pl-btn--filled pl-press" id="importBtn" disabled><svg class="ic" data-ic="i-import"></svg>Import</button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-      <!-- ---- the extractor prompt, now the upstream half of Import ---- -->
-      <div class="pane" data-pane="prompt">
-      <p class="tiny muted" style="margin:0 0 14px">Your edited copy is saved on this device.<button class="ib" data-note="prompt" aria-label="About this prompt"><svg class="ic"><use href="#i-info"/></svg></button></p>
-      <div class="row" style="margin-bottom:12px">
-        <button class="btn" id="editPrompt">Edit</button>
-        <button class="btn ghost sm" id="restorePrompt">Restore default</button>
-        <button class="btn ghost sm" id="copySchema">Copy schema only</button>
+          <div class="im-run" id="importReport"></div>
+
+          <div class="im-sec">
+            <h3 class="im-sh">Back up<button class="pl-ib pl-press" data-note="backup" aria-label="What a backup carries"><svg class="ic" data-ic="i-info"></svg></button></h3>
+            <div class="im-grp">
+              <button type="button" class="im-row pl-press" id="exportAll"><span class="im-lead"><svg class="ic" data-ic="i-import"></svg></span><span class="im-row__tx"><span class="im-row__t">Full backup</span><span class="im-row__s">Everything, with the photos inside the file</span></span></button>
+              <button type="button" class="im-row pl-press" id="exportLight"><span class="im-lead"><svg class="ic" data-ic="i-import"></svg></span><span class="im-row__tx"><span class="im-row__t">Full backup, without photos</span><span class="im-row__s">Smaller; photos are referenced, not included</span></span></button>
+              <button type="button" class="im-row pl-press" id="restoreBtn"><span class="im-lead k-b"><svg class="ic" data-ic="i-history"></svg></span><span class="im-row__tx"><span class="im-row__t">Restore from backup</span><span class="im-row__s">Replaces everything on this device; asks first</span></span></button>
+            </div>
+            <input type="file" id="restoreInput" accept=".json" hidden>
+            <h3 class="im-sh">Send back through the prompt</h3>
+            <div class="im-grp">
+              <button type="button" class="im-row pl-press" id="exportRerun"><span class="im-lead k-c"><svg class="ic" data-ic="i-refresh"></svg></span><span class="im-row__tx"><span class="im-row__t">Export for re-run</span><span class="im-row__s">Questions to rebuild with the current prompt, ids kept</span></span></button>
+              <button type="button" class="im-row pl-press" id="exportFigs"><span class="im-lead k-c"><svg class="ic" data-ic="i-imageadd"></svg></span><span class="im-row__tx"><span class="im-row__t">Export missing figures</span><span class="im-row__s">Questions still waiting for a picture, to send with the PDFs</span></span></button>
+            </div>
+            <h3 class="im-sh">Share and study</h3>
+            <div class="im-grp">
+              <button type="button" class="im-row pl-press" id="exportQs"><span class="im-lead k-n"><svg class="ic" data-ic="i-bank"></svg></span><span class="im-row__tx"><span class="im-row__t">Questions only</span><span class="im-row__s">The bank without your results: the file to share</span></span></button>
+              <button type="button" class="im-row pl-press" id="exportMissed"><span class="im-lead k-n"><svg class="ic" data-ic="i-note"></svg></span><span class="im-row__tx"><span class="im-row__t">Missed as a study sheet</span><span class="im-row__s">Every question you got wrong, as Markdown</span></span></button>
+            </div>
+          </div>
+        </div><!-- /pane paste -->
+
+        <!-- ---- the extractor prompt, the upstream half of Import ---- -->
+        <div class="pane" data-pane="prompt">
+          <div class="im-pr">
+            <div class="im-pr__h">
+              <div class="im-pr__tx"><h3 class="im-h">Extractor prompt</h3>
+                <p class="im-say">Give it to a model with your PDF; it answers in JSON this screen reads. Your edited copy is saved on this device.</p></div>
+              <button class="pl-ib pl-press" data-note="prompt" aria-label="About this prompt"><svg class="ic" data-ic="i-info"></svg></button>
+            </div>
+            <div class="im-pr__acts">
+              <button type="button" class="pl-btn pl-btn--tonal pl-press" id="editPrompt"><svg class="ic" data-ic="i-note"></svg>Edit</button>
+              <button type="button" class="pl-btn pl-btn--text pl-press" id="copySchema"><svg class="ic" data-ic="i-copy"></svg>Copy schema only</button>
+              <button type="button" class="pl-btn pl-btn--text pl-press" id="restorePrompt"><svg class="ic" data-ic="i-history"></svg>Restore default</button>
+            </div>
+          </div>
+          <div class="im-stale" id="promptStale" style="display:none">
+            <span class="im-stale__ic"><svg class="ic" data-ic="i-alert"></svg></span>
+            <div><b id="promptStaleTitle">Your saved prompt is behind the app</b><div id="promptStaleBody"></div></div>
+          </div>
+          <pre class="im-code" id="promptView"></pre>
+          <textarea class="im-code im-code--ed" id="promptEdit" rows="26" spellcheck="false" style="display:none" aria-label="Edit the extractor prompt"></textarea>
+          <div class="im-pr__acts im-pr__save" id="promptEditActions" style="display:none">
+            <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" id="savePrompt">Save prompt</button>
+            <button type="button" class="pl-btn pl-btn--m pl-btn--text pl-press" id="cancelPrompt">Cancel</button>
+          </div>
+        </div><!-- /pane prompt -->
       </div>
-      <div class="card tiny" id="promptStale" style="display:none;border-color:var(--amber);margin-bottom:12px">
-        <b style="color:var(--amber)" id="promptStaleTitle">Your saved prompt is behind the app</b>
-        <div class="tiny muted" style="margin-top:6px" id="promptStaleBody"></div>
-      </div>
-      <pre class="code" id="promptView"></pre>
-      <textarea id="promptEdit" rows="26" style="display:none"></textarea>
-      <div class="row" id="promptEditActions" style="display:none;margin-top:10px">
-        <button class="btn pri" id="savePrompt">Save prompt</button>
-        <button class="btn ghost" id="cancelPrompt">Cancel</button>
-      </div>
-      </div><!-- /pane prompt -->
     </section>
 
     <!-- ============ SETTINGS (Plume 2.2) ============ -->
@@ -8026,7 +8311,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.88</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.89</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8082,7 +8367,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.88 · sharded store</span>
+        <span class="chip" id="verChip">v6.89 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -9249,7 +9534,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.88';
+const APP_VERSION='6.89';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -19466,35 +19751,42 @@ function findExisting(raw,q,byFp,byNk){
 }
 /* schema 2 is the current prompt's format; anything older is waiting for a re-run */
 const isOldFormat=q=>(q.schema||1)<2;
+/* One item read into the bank's shape. Pure (normalizeQ writes nothing), so
+   importText can read a long batch in slices with the screen painting between
+   them; every write to the bank then happens in one pass, impMerge. */
+function impPrep(raw,meta,sv){const q=normalizeQ(raw,meta);if(q)q.schema=sv>=2?2:1;return q}
 function doImport(text,update){
-  const{meta,arr,sv}=parseBatch(text);
-  if(String(meta.kind||'')==='figures')return figFillImport(arr,meta);
-  if(String(meta.kind||'')==='tags')return tagFixImport(arr,meta);
-  const touched=[];
+  const b=parseBatch(text);
+  if(String(b.meta.kind||'')==='figures')return figFillImport(b.arr,b.meta);
+  if(String(b.meta.kind||'')==='tags')return tagFixImport(b.arr,b.meta);
+  return impMerge(b,b.arr.map(raw=>impPrep(raw,b.meta,b.sv)),update);
+}
+function impMerge(b,qs,update){
+  const{meta,arr}=b;
+  const touched=[],ids={added:[],updated:[],known:[]};
   let added=0,updated=0,skipped=0,bad=0,repeats=0;const badList=[];
   const byFp={},byNk={};
   DB.questions.forEach(x=>{if(x.fp)byFp[x.fp]=x;if(x.nkey)(byNk[x.nkey]=byNk[x.nkey]||[]).push(x)});
   arr.forEach((raw,i)=>{
-    const q=normalizeQ(raw,meta);
+    const q=qs[i];
     if(!q){bad++;badList.push(i+1);return}
-    q.schema=sv>=2?2:1;
     const ex=findExisting(raw,q,byFp,byNk);
     if(ex){
       /* the same item arriving again is a fact worth keeping, not a no-op */
-      noteOccurrence(ex,meta);repeats++;
+      noteOccurrence(ex,meta);repeats++;ids.known.push(ex.id);
       if(update){
         const keep={id:ex.id,pubId:ex.pubId||pubIdOf(ex.id),addedAt:ex.addedAt,occurrences:ex.occurrences,seenCount:ex.seenCount,
           mergedFrom:ex.mergedFrom||[],classLocked:ex.classLocked,verified:ex.verified,dupCandidate:ex.dupCandidate,
           images:figMerge(ex,q)};
         if(ex.classLocked){keep.system=ex.system;keep.subject=ex.subject;keep.topic=ex.topic;keep.task=ex.task;keep.archetype=ex.archetype;keep.depth=ex.depth;keep.difficulty=ex.difficulty}
         Object.assign(ex,q,keep,{updatedAt:Date.now()});
-        ex.trust=trustOf(ex);updated++;touched.push(ex);
+        ex.trust=trustOf(ex);updated++;touched.push(ex);ids.updated.push(ex.id);
       }else skipped++;
     }
-    else{noteOccurrence(q,meta);DB.questions.push(q);added++;byFp[q.fp]=q;touched.push(q)}
+    else{noteOccurrence(q,meta);DB.questions.push(q);added++;byFp[q.fp]=q;touched.push(q);ids.added.push(q.id)}
   });
   reindex();save();
-  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta,touched,old:DB.questions.filter(isOldFormat).length};
+  return{added,updated,skipped,bad,badList,repeats,total:arr.length,meta,touched,ids,old:DB.questions.filter(isOldFormat).length};
 }
 /* ---------- pictures that arrive inside the JSON (v6.53) ----------
    ARCHIVIST 3.2 crops each figure out of the source PDF and carries it in src
@@ -19513,20 +19805,29 @@ async function figAbsorb(text){
   text=String(text||'');
   if(text.indexOf('data:image/')<0||!IDB.v2)return{text,hashes:[],failed:0};
   const{meta,arr,sv}=parseBatch(text);
-  const seen=new Map(),hashes=[];let failed=0;
+  const a=await figAbsorbArr(arr);
+  return{text:JSON.stringify({schemaVersion:sv,meta,questions:arr}),hashes:a.hashes,failed:a.failed};
+}
+/* the pictures of a parsed batch, stored in place; onPic(done,total) after each */
+async function figAbsorbArr(arr,onPic){
+  const seen=new Map(),hashes=[],todo=[];let failed=0;
   for(const raw of arr){
     chHoist(raw);   /* a picture hung on the option itself is that option's slot, stored like the rest */
     for(const im of (raw&&Array.isArray(raw.images))?raw.images:[]){
       const src=(im&&typeof im==='object'&&typeof im.src==='string')?im.src.trim():'';
-      if(!/^data:image\//i.test(src))continue;
-      try{
-        let m=seen.get(src);
-        if(!m){const b=figUriBlob(src);m=await MEDIA.ingest(new File([b],'figure',{type:b.type}));seen.set(src,m);hashes.push(m.hash)}
-        Object.assign(im,{src:null,media:m.hash,mime:m.mime,w:m.w,h:m.h});
-      }catch(e){failed++;im.src=null}
+      if(/^data:image\//i.test(src))todo.push([im,src]);
     }
   }
-  return{text:JSON.stringify({schemaVersion:sv,meta,questions:arr}),hashes,failed};
+  const n=new Set(todo.map(x=>x[1])).size;
+  if(onPic)onPic(0,n);
+  for(const[im,src]of todo){
+    try{
+      let m=seen.get(src);
+      if(!m){const b=figUriBlob(src);m=await MEDIA.ingest(new File([b],'figure',{type:b.type}));seen.set(src,m);hashes.push(m.hash);if(onPic)onPic(seen.size,n)}
+      Object.assign(im,{src:null,media:m.hash,mime:m.mime,w:m.w,h:m.h});
+    }catch(e){failed++;im.src=null}
+  }
+  return{hashes,failed};
 }
 /* the bytes go up the way a hand-picked photo's do: queued, then committed
    with the question's reference by V3.photoAttached, never after it */
@@ -19592,62 +19893,382 @@ function tagFixImport(arr,meta){
   reindex();save();
   return r;
 }
-function tagFixReport(r){
-  return `<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">Tags fixed on ${r.fixed} question${r.fixed===1?'':'s'}</b><div class="tiny muted" style="margin-top:8px">${r.same} already right · ${r.lost} not found · ${r.total} seen</div></div>`;
-}
-async function importText(text,update){
-  const a=await figAbsorb(text);
-  const r=doImport(a.text,update);
+/* The whole import, in steps. prog(step, done, total) reports where it is:
+   'read' (parsing), 'pics' (storing the pictures inside the file, one by one),
+   'qs' (reading the questions, in slices of ~12ms), 'merge' (the one pass that
+   writes to the bank). It yields between steps and slices, so the screen keeps
+   painting and the run's bar moves (prog may return a promise to hold the
+   step until the screen has painted it, as the run does before 'merge'); until v6.89 the screen froze for the whole
+   batch and then showed everything at once. */
+const impYield=()=>new Promise(r=>setTimeout(r,0));
+async function importText(text,update,prog){
+  const P=prog||(()=>{});
+  text=String(text||'');
+  P('read',0,1);await impYield();
+  const b=parseBatch(text);
+  let a={hashes:[],failed:0};
+  if(text.indexOf('data:image/')>=0&&IDB.v2)a=await figAbsorbArr(b.arr,(d,n)=>P('pics',d,n));
+  const kind=String(b.meta.kind||'');
+  let r;
+  if(kind==='figures'||kind==='tags'){await (P('merge',0,1)||impYield());r=kind==='figures'?figFillImport(b.arr,b.meta):tagFixImport(b.arr,b.meta)}
+  else{
+    const n=b.arr.length,qs=new Array(n);let t0=performance.now();
+    P('qs',0,n);
+    for(let i=0;i<n;i++){
+      qs[i]=impPrep(b.arr[i],b.meta,b.sv);
+      if(performance.now()-t0>12){P('qs',i+1,n);await impYield();t0=performance.now()}
+    }
+    P('qs',n,n);await (P('merge',0,1)||impYield());
+    r=impMerge(b,qs,update);
+  }
   r.figs=a.hashes.length;r.figFailed=a.failed;
   figAnnounce(a.hashes,r.touched);
   return r;
 }
-function figFillReport(r){
-  return `<div class="card" style="border-color:var(--jade)">
-    <b style="color:var(--jade)">Filled ${r.filled} picture${r.filled===1?'':'s'}</b>
-    <div class="tiny muted" style="margin-top:8px">${r.had} already had a photo${r.dup?` · ${r.dup} duplicate placeholder${r.dup===1?'':'s'} removed`:''} · ${r.none} not found in the PDFs · ${r.lost} question${r.lost===1?'':'s'} no longer in the bank · ${r.total} seen</div>
-    ${r.meta&&r.meta.notes?`<div class="tiny" style="margin-top:8px">${esc(String(r.meta.notes))}</div>`:''}
-    ${r.figFailed?`<div class="tiny" style="margin-top:8px">${r.figFailed} picture${r.figFailed===1?'':'s'} could not be read and stayed empty.</div>`:''}</div>`;
+/* ---------- the Import screen (Plume 2.27 · import) ----------
+   A run is a queue of jobs (each file chosen or dropped, or the paste box),
+   read one after another through importText. Each job is a row that says
+   which step it is on and how far it has got, then opens into what it
+   brought; the head of the run counts the whole import as each job lands.
+   Choosing more while a run works adds to the same run. */
+const IM={jobs:[],busy:false,seq:0,ta:[]};
+const imKB=n=>n<1024?n+' B':n<1048576?Math.round(n/1024)+' KB':(n/1048576).toFixed(n<10485760?1:0)+' MB';
+const imS=(n,one,many)=>n+' '+(n===1?one:(many||one+'s'));
+const IM_DOC='<svg class="im-doc" viewBox="0 0 24 24"><path d="M6.8 3.4h6.9l4.9 4.9v10.6a1.7 1.7 0 0 1-1.7 1.7H6.8a1.7 1.7 0 0 1-1.7-1.7V5.1a1.7 1.7 0 0 1 1.7-1.7z"/><path d="M13.4 3.6v4.9h4.9"/>'+
+  '<path class="im-doc__l" pathLength="1" d="M8.4 12.2h7.2"/><path class="im-doc__l" pathLength="1" style="animation-delay:.14s" d="M8.4 15h7.2"/><path class="im-doc__l" pathLength="1" style="animation-delay:.28s" d="M8.4 17.8h4.2"/></svg>';
+const IM_OK='<svg class="im-mark im-mark--ok" viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg>';
+const IM_BAD='<svg class="im-mark im-mark--bad" viewBox="0 0 24 24"><path pathLength="1" d="M12 6.8v6.6"/><path pathLength="1" d="M12 17.1v.1"/></svg>';
+function imJobHTML(j){
+  return `<div class="im-job" data-st="wait" data-job="${j.id}">
+    <span class="im-job__ic" aria-hidden="true">${IM_DOC}${IM_OK}${IM_BAD}</span>
+    <span class="im-job__tx"><span class="im-job__n">${esc(j.name)}</span><span class="im-job__s">Waiting · ${imKB(j.size)}</span></span>
+    <span class="im-job__v"></span>
+    <span class="im-job__bar"><i></i></span>
+    <div class="im-job__res"><div></div></div></div>`;
 }
-$('#importBtn').onclick=async()=>{
-  let r;const btn=$('#importBtn'),was=btn.textContent;
-  if(btn.disabled)return;
-  btn.disabled=true;if($('#importBox').value.indexOf('data:image/')>=0)btn.textContent='Storing pictures…';
-  try{r=await importText($('#importBox').value,$('#impUpdate').checked)}
-  catch(err){btn.disabled=false;btn.textContent=was;$('#importReport').innerHTML=`<div class="card" style="border-color:var(--rose)"><b style="color:var(--rose)">Import failed</b><div class="tiny" style="margin-top:6px">${esc(err.message)}</div><div class="tiny muted" style="margin-top:8px">Common fix: the model wrapped the JSON in prose. Keep only the part from the first { to the last }.</div></div>`;return}
-  btn.disabled=false;btn.textContent=was;
-  if(r.tagfix){$('#importReport').innerHTML=tagFixReport(r);$('#importBox').value='';renderDash();toast(`Tags fixed on ${r.fixed}.`);return}
-  if(r.fill){$('#importReport').innerHTML=figFillReport(r);$('#importBox').value='';renderDash();toast(`${r.filled} picture${r.filled===1?'':'s'} filled.`);return}
-  const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
-  $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)">
-    <b style="color:var(--jade)">Imported ${r.added} new question${r.added===1?'':'s'}</b>
-    <div class="tiny muted" style="margin-top:8px">${r.updated} updated · ${r.repeats} already known (logged as a repeat sighting) · ${r.skipped} left untouched · ${r.bad} unreadable${r.bad?' (item '+r.badList.slice(0,10).join(', ')+')':''} · ${r.total} seen</div>
-    ${r.figs?`<div class="tiny" style="margin-top:8px">${r.figs} picture${r.figs===1?'':'s'} came inside the file and ${r.figs===1?'is':'are'} attached.</div>`:''}
-    ${r.figFailed?`<div class="tiny" style="margin-top:8px">${r.figFailed} picture${r.figFailed===1?'':'s'} could not be read; ${r.figFailed===1?'its slot':'their slots'} stayed empty.</div>`:''}
-    ${r.old?`<div class="tiny" style="margin-top:8px">${r.old} question${r.old===1?' is':'s are'} still in the old format. <b>Export for re-run</b> below gives you the file to send back through the prompt.</div>`:''}
-    ${un?`<div class="tiny" style="margin-top:8px">${un} question${un===1?' in the bank still needs':'s in the bank still need'} a system or subject. Build a session from the <b>Needs classifying</b> pool to fix them, or run <b>Reclassify the bank</b> in Settings.</div>`:'<div class="tiny muted" style="margin-top:8px">Every question in the bank now carries a system, a subject and a question type.</div>'}
-    ${r.bad?'<div class="tiny" style="margin-top:8px">Unreadable items are usually missing a correct answer or have fewer than two options. Fix them in the JSON and import again — duplicates will not double up.</div>':''}</div>`;
-  $('#importBox').value='';renderDash();toast(`${r.added} added, ${r.updated} updated.`);
-};
-$('#clearImport').onclick=()=>{$('#importBox').value='';$('#importReport').innerHTML=''};
-$('#pickFile').onclick=()=>$('#fileInput').click();
-/* files are read one after another: each may carry pictures to store first */
-$('#fileInput').onchange=async e=>{
-  const files=Array.from(e.target.files||[]);e.target.value='';if(!files.length)return;
-  const tot={added:0,updated:0,bad:0,figs:0,filled:0};let fill=null,tagr=null;
-  for(const f of files){
+function imSumHTML(){
+  return `<div class="im-sum" id="imSum">
+    <p class="im-sum__o" id="imSumO">Importing</p>
+    <div class="im-sum__row">
+      <button type="button" class="im-sum__fig pg-tap pg-tap--bare pl-press" id="imSumF" data-pk="imp:all:a" disabled><b id="imSumN">0</b><span class="im-sum__cap" id="imSumC">new questions</span></button>
+      <span class="im-seal" aria-hidden="true"><span class="im-busy"><i></i><i></i><i></i></span><svg viewBox="0 0 24 24"><path pathLength="1" id="imSumMk" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg></span>
+    </div>
+    <p class="im-sum__line" id="imSumL" aria-live="polite">Getting ready</p>
+    <div class="im-track"><i id="imSumP"></i></div>
+    <div class="im-sum__acts"><div id="imSumA"></div></div></div>`;
+}
+/* a number that counts from where it stands to its new value */
+function imCount(el,to){
+  if(!el)return;const from=el.__v||0;el.__v=to;
+  if(Motion.reduced||from===to||!el.getClientRects().length){el.textContent=to;return}
+  const t0=performance.now(),D=PL('spatial-slow').d+200,tok=el.__ct=(el.__ct||0)+1;
+  const step=t=>{if(el.__ct!==tok)return;const q=Math.min(1,(t-t0)/D),e=1-Math.pow(1-q,3);el.textContent=Math.round(from+(to-from)*e);if(q<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);
+}
+/* the tray's own motion: the arrow drops into the tray, the tray dips under
+   it and recovers, and a fresh arrow slides in from above */
+function imTrayDrop(){
+  const a=$('#imDrop .im-tray__a'),t=$('#imDrop .im-tray__t');
+  if(!a||Motion.reduced||!a.getClientRects().length)return;
+  IM.ta.forEach(x=>x.cancel());
+  const sp=PL('spatial'),sf=PL('spatial-fast');
+  const drop=a.animate([{transform:'none',opacity:1},{transform:'translateY(10px)',opacity:1,offset:.6},{transform:'translateY(12px)',opacity:0}],{duration:240,easing:PL_EXIT,fill:'forwards'});
+  const dip=t.animate([{transform:'none'},{transform:'scale(1.06,.78)'}],{duration:110,delay:150,easing:PL_EXIT,fill:'forwards'});
+  IM.ta=[drop,dip];
+  dip.finished.then(()=>{const b=t.animate([{transform:'scale(1.06,.78)'},{transform:'none'}],{duration:sf.d,easing:sf.e});dip.cancel();IM.ta.push(b)},()=>{});
+  drop.finished.then(()=>{const b=a.animate([{transform:'translateY(-13px)',opacity:1},{transform:'none',opacity:1}],{duration:sp.d,easing:sp.e});drop.cancel();IM.ta.push(b)},()=>{});
+}
+/* jobs in: a new run replaces a finished one; a working run takes them on */
+function imQueue(items){
+  if(!items.length)return;
+  const box=$('#importReport');
+  imTrayDrop();
+  const fresh=!IM.busy;
+  const add=()=>{
+    if(fresh){IM.jobs=[];box.innerHTML=imSumHTML()}
+    const at=box.children.length,made=[];
+    items.forEach(it=>{const j=Object.assign({id:'j'+(++IM.seq),st:'wait',r:null,err:null},it);IM.jobs.push(j);box.insertAdjacentHTML('beforeend',imJobHTML(j));made.push(box.lastElementChild)});
+    if(!Motion.reduced){
+      const sp=PL('spatial');
+      [...box.children].slice(fresh?0:at).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(-14px) scale(.98)'},{opacity:1,transform:'none'}],
+        {duration:sp.d,easing:sp.e,delay:Math.min(i,6)*30,fill:'backwards'}));
+    }
+    imSumPaint();
+    if(fresh){const r=box.getBoundingClientRect();if(r.top>innerHeight-160)box.scrollIntoView({block:'nearest',behavior:Motion.reduced?'auto':'smooth'})}
+    if(!IM.busy)imRun();
+  };
+  /* a finished run steps out before the new one comes in */
+  if(fresh&&box.children.length&&!Motion.reduced){
+    const old=[...box.children];
+    Promise.all(old.map(el=>el.animate([{opacity:1},{opacity:0,transform:'translateY(6px)'}],{duration:150,easing:PL_EXIT,fill:'forwards'}).finished)).then(add,add);
+  }else add();
+}
+async function imRun(){
+  IM.busy=true;
+  let j;
+  while((j=IM.jobs.find(x=>x.st==='wait'))){
+    const el=$(`#importReport [data-job="${j.id}"]`);
+    const S=el&&el.querySelector('.im-job__s'),V=el&&el.querySelector('.im-job__v'),B=el&&el.querySelector('.im-job__bar');
+    /* the step's name crossfades when the step changes; its count only
+       changes its digits (a crossfade restarted every 12ms never lands) */
+    let lastSay='';
+    if(S)S.innerHTML='<span></span><span></span>';
+    const SL=S&&S.firstChild,SC=S&&S.lastChild;
+    const say=(st,txt,val,p,ind)=>{
+      j.st=st;j.p=p;if(!el)return;
+      el.dataset.st=st;
+      const i=txt.indexOf(' · '),name=i<0?txt:txt.slice(0,i);
+      if(name!==lastSay){lastSay=name;SL.textContent=name;
+        /* steps can follow each other within a frame: the new name arrives at once and fades in (opacity, so it keeps going through a busy step) */
+        if(!Motion.reduced){SL.getAnimations().forEach(a=>a.cancel());SL.animate([{opacity:0},{opacity:1}],{duration:PL('effect').d,easing:PL('effect').e})}}
+      SC.textContent=i<0?'':txt.slice(i);
+      V.textContent=val||'';
+      B.classList.toggle('is-ind',!!ind);
+      if(p!=null)B.style.setProperty('--p',p.toFixed(3));
+      imSumPaint();
+    };
+    say('read','Reading the file','',0,true);
+    let text='';
+    try{text=await j.read()}
+    catch(err){j.err='The file could not be read. '+((err&&err.message)||'');imJobEnd(j,el);continue}
+    const pics=text.indexOf('data:image/')>=0&&IDB.v2;
+    /* where each step sits on the bar: pictures take most of it when there are any */
+    const span={pics:[.08,.7],qs:pics?[.7,.95]:[.08,.95]};
     try{
-      const r=await importText(await f.text(),$('#impUpdate').checked);
-      if(r.tagfix){tot.tagfix=(tot.tagfix||0)+r.fixed;tagr=r}
-      else if(r.fill){fill=r;tot.filled+=r.filled}
-      else{tot.added+=r.added;tot.updated+=r.updated;tot.bad+=r.bad;tot.figs+=r.figs}
-    }catch(err){toast(f.name+': '+err.message)}
+      j.r=await importText(text,$('#impUpdate').checked,(step,d,n)=>{
+        const f=n?d/n:1,at=k=>span[k][0]+(span[k][1]-span[k][0])*f;
+        if(step==='read')say('read','Reading the file','',0,true);
+        else if(step==='pics')say('pics',n?`Storing pictures · ${d} of ${n}`:'Storing pictures',Math.round(at('pics')*100)+'%',at('pics'));
+        else if(step==='qs')say('qs',`Reading questions · ${d} of ${n}`,Math.round(at('qs')*100)+'%',at('qs'));
+        else if(step==='merge'){say('merge','Adding to your bank','',.97,true);
+          /* one synchronous pass follows: let the step's name and the travelling
+             stretch reach the screen first, then they run on the compositor through it */
+          return imPainted()}
+      });
+    }catch(err){j.err=(err&&err.message)||'Something went wrong.'}
+    text='';
+    imJobEnd(j,el);
+    if(!j.err&&j.paste){$('#importBox').value='';imSniff();imPasteOpen(false)}
+    await impYield();
   }
-  if(files.length===1&&fill){$('#importReport').innerHTML=figFillReport(fill);renderDash();return}
-  if(files.length===1&&tagr){$('#importReport').innerHTML=tagFixReport(tagr);renderDash();return}
-  const old=DB.questions.filter(isOldFormat).length;
-  $('#importReport').innerHTML=`<div class="card" style="border-color:var(--jade)"><b style="color:var(--jade)">${files.length} file(s) read</b><div class="tiny muted" style="margin-top:6px">${tot.added} added · ${tot.updated} updated · ${tot.bad} unreadable${tot.figs?' · '+tot.figs+' pictures attached':''}${tot.filled?' · '+tot.filled+' pictures filled':''}${tot.tagfix!=null?' · tags fixed on '+tot.tagfix:''}</div>${old?`<div class="tiny" style="margin-top:8px">${old} question${old===1?' is':'s are'} still in the old format.</div>`:''}</div>`;renderDash();
+  IM.busy=false;
+  imSumPaint(true);
+  renderDash();
+}
+/* a job lands: its icon turns, its bar steps aside and its row opens into
+   what it brought, the counts rising from zero */
+function imJobEnd(j,el){
+  j.st=j.err?'fail':'done';j.p=1;
+  if(!el){imSumPaint();return}
+  const S=el.querySelector('.im-job__s'),V=el.querySelector('.im-job__v'),B=el.querySelector('.im-job__bar');
+  B.classList.remove('is-ind');B.style.setProperty('--p','1');
+  el.dataset.st=j.st;
+  const r=j.r;
+  sxSwap(S,j.err?'Not imported':esc(imJobSay(r)));
+  V.textContent='';
+  const box=el.querySelector('.im-job__res > div');
+  box.innerHTML=imResHTML(j);sxHydrate(box);
+  requestAnimationFrame(()=>{el.classList.add('is-open');box.querySelectorAll('[data-to]').forEach(b=>imCount(b,+b.dataset.to))});
+  imSumPaint();
+}
+function imJobSay(r){
+  if(r.tagfix)return `Tags fixed on ${imS(r.fixed,'question')}`;
+  if(r.fill)return `${imS(r.filled,'picture')} filled`;
+  const p=[imS(r.added,'new question')];if(r.updated)p.push(r.updated+' updated');if(r.skipped)p.push(r.skipped+' left as they were');
+  return p.join(' · ');
+}
+/* a figure with something behind it opens its peek; a zero is only a number */
+function imTile(j,key,n,label){
+  const b=`<b data-to="${n}">0</b><span>${label}</span>`;
+  return n?`<button type="button" class="im-tile pl-press" data-pk="imp:${j.id}:${key}">${b}</button>`:`<div class="im-tile is-nil">${b}</div>`;
+}
+function imResHTML(j){
+  const r=j.r;
+  if(j.err)return `<div class="im-notes"><p class="is-bad">${esc(j.err)}</p><p>Common fix: the model wrapped the JSON in prose. Keep only the part from the first { to the last }, then try again.</p></div>`;
+  let tiles='',notes=[];
+  if(r.tagfix){
+    tiles=`<div class="im-tile"><b data-to="${r.fixed}">0</b><span>Tags fixed</span></div>`+
+      `<div class="im-tile${r.same?'':' is-nil'}"><b data-to="${r.same}">0</b><span>Already right</span></div>`+
+      `<div class="im-tile${r.lost?'':' is-nil'}"><b data-to="${r.lost}">0</b><span>Not found</span></div>`;
+    notes.push(`${imS(r.total,'item')} seen. Only the tags of the questions it named changed.`);
+  }else if(r.fill){
+    tiles=`<div class="im-tile${r.filled?'':' is-nil'}"><b data-to="${r.filled}">0</b><span>Pictures filled</span></div>`+
+      `<div class="im-tile${r.had?'':' is-nil'}"><b data-to="${r.had}">0</b><span>Already had a photo</span></div>`+
+      (r.dup?`<div class="im-tile"><b data-to="${r.dup}">0</b><span>Duplicate placeholders removed</span></div>`:'')+
+      `<div class="im-tile${r.none?'':' is-nil'}"><b data-to="${r.none}">0</b><span>Not found in the PDFs</span></div>`+
+      (r.lost?`<div class="im-tile"><b data-to="${r.lost}">0</b><span>No longer in the bank</span></div>`:'');
+    notes.push(`${imS(r.total,'question')} seen. Only empty slots are filled; a photo already there is never replaced.`);
+    if(r.meta&&r.meta.notes)notes.push(esc(String(r.meta.notes)));
+    if(r.figFailed)notes.push(`<span class="is-bad">${imS(r.figFailed,'picture')} could not be read and stayed empty.</span>`);
+  }else{
+    tiles=imTile(j,'a',r.added,'New')+imTile(j,'u',r.updated,'Updated')+
+      (r.skipped?imTile(j,'s',r.skipped,'Left as they were'):'')+(r.bad?imTile(j,'b',r.bad,'Unreadable'):'')+(r.figs?imTile(j,'f',r.figs,'Pictures'):'');
+    const head=[imS(r.total,'item')+' seen'];
+    if(r.repeats)head.push(`${r.repeats} ${r.repeats===1?'was':'were'} already in your bank, each logged as a repeat sighting`);
+    notes.push(head.join('. ')+'.');
+    if(r.figs)notes.push(`${imS(r.figs,'picture')} came inside the file and ${r.figs===1?'is':'are'} attached.`);
+    if(r.figFailed)notes.push(`<span class="is-bad">${imS(r.figFailed,'picture')} could not be read; ${r.figFailed===1?'its slot':'their slots'} stayed empty.</span>`);
+    if(r.bad)notes.push(`Unreadable: item ${r.badList.slice(0,10).join(', ')}${r.badList.length>10?'…':''}. Usually a missing correct answer or fewer than two options; fix them in the JSON and import again. Duplicates will not double up.`);
+    if(r.old)notes.push(`${imS(r.old,'question')} ${r.old===1?'is':'are'} still in the old format. <button type="button" class="im-link" data-imrerun>Export for re-run</button> gives you the file to send back through the prompt.`);
+    const un=DB.questions.filter(q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED).length;
+    if(un)notes.push(`${imS(un,'question')} in the bank still ${un===1?'needs':'need'} a system or subject. Build a session from the <b>Needs classifying</b> pool to fix them, or run <b>Reclassify the bank</b> in Settings.`);
+  }
+  return `<div class="im-tiles">${tiles}</div><div class="im-notes">${notes.map(n=>`<p>${n}</p>`).join('')}</div>`;
+}
+/* resolves once the screen has painted twice (a hidden tab paints nothing: the timer wins) */
+const imPainted=()=>new Promise(r=>{let done=false;const go=()=>{if(!done){done=true;r()}};requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(go,0)));setTimeout(go,250)});
+/* a line that is repainted often crossfades only when its words change */
+function imSwap(el,h){if(!el||el.__to===h)return;el.__to=h;sxSwap(el,h)}
+/* the head: one figure for the whole run, a line of where it stands, a bar */
+function imSumPaint(end){
+  const s=$('#imSum');if(!s)return;
+  const J=IM.jobs,done=J.filter(j=>j.st==='done'||j.st==='fail'),ok=J.filter(j=>j.r),bad=J.filter(j=>j.err);
+  const T={a:0,u:0,s:0,k:0,f:0,fill:0,tag:0,b:0};
+  ok.forEach(j=>{const r=j.r;if(r.tagfix)T.tag+=r.fixed;else if(r.fill)T.fill+=r.filled;else{T.a+=r.added;T.u+=r.updated;T.s+=r.skipped;T.k+=r.repeats;T.b+=r.bad;T.f+=r.figs}});
+  const anyQ=ok.some(j=>!j.r.tagfix&&!j.r.fill);
+  const lead=anyQ&&!T.a&&T.u?['u',T.u,T.u===1?'question updated':'questions updated']:anyQ||(!T.fill&&!T.tag)?['a',T.a,T.a===1?'new question':'new questions']:T.fill?['fill',T.fill,T.fill===1?'picture filled':'pictures filled']:['tag',T.tag,T.tag===1?'question retagged':'questions retagged'];
+  imCount($('#imSumN'),lead[1]);
+  imSwap($('#imSumC'),lead[2]);
+  const f=$('#imSumF');f.dataset.pk='imp:all:'+lead[0];f.disabled=!(end&&lead[1]&&(lead[0]==='a'||lead[0]==='u'));
+  const p=J.length?J.reduce((t,j)=>t+(j.st==='wait'?0:(j.p||0)),0)/J.length:0;
+  $('#imSumP').style.setProperty('--p',p.toFixed(3));
+  const finished=!IM.busy&&done.length===J.length&&J.length>0;
+  s.classList.toggle('is-done',finished);
+  s.classList.toggle('is-bad',finished&&!ok.length);
+  const mk=$('#imSumMk');if(mk)mk.setAttribute('d',finished&&!ok.length?'M12 6.8v6.6M12 17.1v.1':'M6.5 12.5l3.6 3.6 7.4-8');
+  const n=J.length,cur=Math.min(n,done.length+1);
+  const O=finished?(ok.length?(bad.length?'Imported, with a problem':'Imported'):'Nothing imported'):'Importing';
+  imSwap($('#imSumO'),O);
+  let L;
+  if(!finished)L=n>1?`File ${cur} of ${n}`:'Working on it';
+  else{
+    const parts=[];
+    if(n>1)parts.push('from '+imS(ok.length,'file'));
+    if(lead[0]!=='a'&&T.a)parts.push(T.a+' new');
+    if(lead[0]!=='u'&&T.u)parts.push(T.u+' updated');if(T.s)parts.push(T.s+' left as they were');
+    if(lead[0]!=='fill'&&T.fill)parts.push(imS(T.fill,'picture')+' filled');
+    if(lead[0]!=='tag'&&T.tag)parts.push('tags fixed on '+T.tag);
+    if(T.f)parts.push(imS(T.f,'picture')+' attached');
+    if(T.b)parts.push(T.b+' unreadable');
+    if(bad.length)parts.push(imS(bad.length,'file')+' not read');
+    L=parts.map(x=>`<span style="white-space:nowrap">${x}</span>`).join(' · ')||'Nothing in the file was new';
+  }
+  imSwap($('#imSumL'),L);
+  if(end&&finished){
+    const ids=[...new Set(ok.flatMap(j=>(j.r.ids&&j.r.ids.added)||[]))];
+    $('#imSumA').innerHTML=(ids.length?`<button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" data-imprac>${sxIc('i-play')}${esc(pgxPrac(ids,'').l.replace('Practise these','Practise the new ones'))}</button>`:'')+
+      `<button type="button" class="pl-btn pl-btn--m pl-btn--text pl-press" data-imdone>Done</button>`;
+    IM.newIds=ids;
+  }
+}
+/* the peeks behind a run's figures (Plume 2.15) */
+PG_PK.imp=arg=>{
+  const[jid,k]=arg.split(':'),J=jid==='all'?IM.jobs.filter(j=>j.r):IM.jobs.filter(j=>j.id===jid&&j.r);if(!J.length)return null;
+  const name=jid==='all'?(J.length>1?imS(J.length,'file'):J[0].name):J[0].name;
+  const pick=key=>[...new Set(J.flatMap(j=>(j.r.ids&&j.r.ids[key])||[]))].map(id=>Q_BY_ID[id]).filter(Boolean);
+  const o='This import · '+name;
+  if(k==='a'){const L=pick('added');
+    return{o,t:'New questions',fig:pgxFig(pgN('px',L.length),'added to your bank'),body:pgxP('Questions the bank did not have before this import.')+pgxBySys(L,'By system'),
+      acts:[pgxPrac(L.map(q=>q.id),'New · '+name,'Practise these',true)]}}
+  if(k==='u'||k==='s'){const r=J[0].r,known=pick('known'),upd=new Set(r.ids.updated),L=k==='u'?pick('updated'):known.filter(q=>!upd.has(q.id));
+    return{o,t:k==='u'?'Updated':'Left as they were',fig:pgxFig(pgN('px',L.length),k==='u'?'took the file’s version':'kept the version you had'),
+      body:pgxP(k==='u'?'Already in your bank. Each took this file’s wording and explanation, and kept its id, answers, notes and schedule.':'Already in your bank. Update was off, so each kept the version you had; the sighting was still logged.')+pgxBySys(L,'By system'),
+      acts:[pgxPrac(L.map(q=>q.id),(k==='u'?'Updated · ':'Seen again · ')+name,'Practise these',true)]}}
+  if(k==='b'){const r=J[0].r;
+    return{o,t:'Unreadable items',fig:pgxFig(pgN('px',r.bad),'of '+imS(r.total,'item')),
+      body:pgxP(`Item ${r.badList.join(', ')}. An item is skipped when it has no stem, fewer than two options or no correct answer. Fix those items in the JSON and import the file again: the questions already in will not double up.`)}}
+  if(k==='f'){const r=J[0].r,qs=(r.touched||[]).filter(q=>figList(q).some(f=>figFilled(f)));
+    return{o,t:'Pictures in the file',fig:pgxFig(pgN('px',r.figs),'stored and attached'),
+      body:pgxP('Cropped from the PDF by the extractor and carried inside the JSON. Each is stored once by its content, so the same picture twice takes no extra room, and it syncs like a photo you attached by hand.')+(r.figFailed?pgxP(imS(r.figFailed,'picture')+' could not be read; their slots stayed empty.'):''),
+      acts:[{l:'Open Images',ic:'i-gallery',run:()=>go('gallery')},qs.length?pgxPrac(qs.map(q=>q.id),'Pictures · '+name,'Practise these'):null]}}
+  return null;
 };
+$('#importReport').addEventListener('click',e=>{
+  const pk=e.target.closest('[data-pk]');if(pk&&!pk.disabled){pgPeek(pk.dataset.pk,pk);return}
+  if(e.target.closest('[data-imrerun]')){$('#exportRerun').click();return}
+  if(e.target.closest('[data-imprac]')){startIds(IM.newIds||[],'New questions');return}
+  if(e.target.closest('[data-imdone]')){
+    const box=$('#importReport'),kids=[...box.children];
+    const clear=()=>{if(IM.busy)return;box.innerHTML='';IM.jobs=[]};
+    if(Motion.reduced||!kids.length)return clear();
+    Promise.all(kids.map((el,i)=>el.animate([{opacity:1},{opacity:0,transform:'translateY(-8px) scale(.98)'}],{duration:170,easing:PL_EXIT,fill:'forwards'}).finished)).then(clear,clear);
+  }
+});
+/* files in: chosen, or dropped anywhere on the screen */
+function imFiles(files){
+  const ok=files.filter(f=>/\.(json|txt)$/i.test(f.name)||/json|text/.test(f.type||''));
+  if(ok.length<files.length)toast(ok.length?'Only the JSON files were taken.':'Only JSON files can be imported here.');
+  imQueue(ok.map(f=>({name:f.name,size:f.size,read:()=>f.text()})));
+}
+$('#pickFile').onclick=()=>$('#fileInput').click();
+$('#imDrop').addEventListener('click',()=>$('#fileInput').click());
+$('#imDrop').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#fileInput').click()}});
+$('#fileInput').onchange=e=>{const files=Array.from(e.target.files||[]);e.target.value='';if(files.length)imFiles(files)};
+(function(){
+  const w=$('#imDrop');let n=0;
+  const has=e=>VIEW==='import'&&e.dataTransfer&&[...e.dataTransfer.types].includes('Files');
+  document.addEventListener('dragenter',e=>{if(!has(e))return;n++;w.classList.add('is-over');$('#imDropT').textContent='Let go to import'});
+  const off=()=>{n=0;w.classList.remove('is-over');$('#imDropT').textContent='Drop JSON files here'};
+  document.addEventListener('dragleave',e=>{if(!has(e))return;n=Math.max(0,n-1);if(!n)off()});
+  document.addEventListener('dragover',e=>{if(!has(e))return;e.preventDefault();e.dataTransfer.dropEffect='copy'});
+  document.addEventListener('drop',e=>{if(!has(e))return;e.preventDefault();off();
+    if(!$('#v-import .pane[data-pane="paste"]').classList.contains('on'))imPane('paste');
+    imFiles([...e.dataTransfer.files])});
+})();
+/* the paste box: unfolds under the hero and says what it would import */
+function imPasteOpen(on){
+  const f=$('#imPasteF'),b=$('#imPasteGo');if(f.classList.contains('is-open')===on)return;
+  f.classList.toggle('is-open',on);f.inert=!on;b.setAttribute('aria-expanded',String(on));
+  if(on)setTimeout(()=>$('#importBox').focus({preventScroll:true}),PL('spatial').d*.6);
+}
+$('#imPasteGo').onclick=()=>imPasteOpen(!$('#imPasteF').classList.contains('is-open'));
+let imSniffT=0;
+function imSniff(){
+  const v=$('#importBox').value,el=$('#imSniff');
+  $('#importBtn').disabled=!v.trim();
+  if(!v.trim()){el.classList.remove('is-bad');sxSwap(el,'');return}
+  let h;
+  try{
+    const b=parseBatch(v),k=String(b.meta.kind||''),pics=(v.match(/data:image\//g)||[]).length;
+    const what=k==='figures'?`Picture fill for <b>${imS(b.arr.length,'question')}</b>`:k==='tags'?`Tag fix for <b>${imS(b.arr.length,'question')}</b>`:`<b>${imS(b.arr.length,'question')}</b> ready`;
+    h=what+(pics?` · ${imS(pics,'picture')} inside`:'')+(b.meta.source?` · ${esc(String(b.meta.source))}`:'');
+    el.classList.remove('is-bad');
+  }catch(err){h='Not readable yet: '+esc(err.message);el.classList.add('is-bad')}
+  sxSwap(el,h);
+}
+$('#importBox').addEventListener('input',()=>{clearTimeout(imSniffT);imSniffT=setTimeout(imSniff,220)});
+$('#importBtn').onclick=()=>{
+  const v=$('#importBox').value;if(!v.trim())return;
+  imQueue([{name:'Pasted JSON',size:v.length,paste:true,read:()=>Promise.resolve(v)}]);
+};
+$('#clearImport').onclick=()=>{$('#importBox').value='';imSniff();$('#importBox').focus({preventScroll:true})};
+$('#imClip').onclick=async()=>{
+  try{const t=await navigator.clipboard.readText();if(!t)return toast('The clipboard is empty.');$('#importBox').value=t;imSniff()}
+  catch(e){toast('The browser would not share the clipboard. Long-press the box and paste.')}
+};
+$('#impUpdate').addEventListener('change',e=>sxSwap($('#imUpdS'),e.target.checked?'A question you already have takes the file’s version, keeping its record':'A question you already have stays as it is and is logged as seen again'));
+/* the two views: the indicator moves on the tap, the view follows its direction */
+function imPane(v,tap){
+  const sec=$('#v-import'),old=sec.querySelector('.pane.on'),nw=sec.querySelector(`.pane[data-pane="${v}"]`);
+  if(!nw||old===nw)return;
+  const g=$('#impTabs'),i0=parseFloat(g.style.getPropertyValue('--i'))||0;
+  sxSegMark(g,v);
+  const dir=(parseFloat(g.style.getPropertyValue('--i'))||0)>i0?1:-1;
+  const swap=()=>{
+    const top=old?old.offsetTop:0;
+    showPane('import',v);
+    if(Motion.reduced||!old||!tap)return;
+    old.classList.add('im-out');old.style.top=top+'px';
+    const sp=PL('spatial');
+    old.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*12}px)`}],{duration:110,easing:PL_EXIT,fill:'forwards'}).finished
+      .then(()=>{old.classList.remove('im-out');old.style.top='';old.getAnimations().forEach(a=>a.cancel())},()=>{});
+    nw.animate([{opacity:0,transform:`translateX(${dir*24}px)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:60,fill:'backwards'});
+  };
+  if(tap)requestAnimationFrame(()=>setTimeout(swap,0));else swap();
+}
+$('#impTabs').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(!b||b.classList.contains('on'))return;imPane(b.dataset.v,true)});
+/* the screen's icons are inline copies, so no generic press motion reaches them */
+sxHydrate($('#v-import'));
 function download(name,text,type){
   const b=new Blob([text],{type:type||'application/json'});const u=URL.createObjectURL(b);
   const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();
@@ -19659,10 +20280,11 @@ const stamp=()=>new Date().toISOString().slice(0,10);
    is the only kind worth having on the day the repository is the problem.
    Light is offered for the case where the file has to be small. */
 $('#exportAll').onclick=async()=>{
-  const b=$('#exportAll');b.disabled=true;const was=b.textContent;b.textContent='Preparing…';
+  const b=$('#exportAll'),s=b.querySelector('.im-row__s'),was=s.textContent;
+  b.disabled=true;b.classList.add('is-busy');sxSwap(s,'Packing the photos into the file…');
   try{download(`nidus-backup-${stamp()}.json`,await MIG.portableExport());toast('Backup downloaded — photos included.')}
   catch(e){toast('The backup failed: '+((e&&e.message)||''))}
-  b.disabled=false;b.textContent=was;
+  b.disabled=false;b.classList.remove('is-busy');sxSwap(s,was);
 };
 if($('#exportLight'))$('#exportLight').onclick=async()=>{
   download(`nidus-backup-light-${stamp()}.json`,await MIG.lightExport());
@@ -19798,14 +20420,20 @@ function copy(text,msg){
   function fallback(){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
     document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(msg)}catch(e){toast('Copy failed — select the text manually.')}ta.remove()}
 }
-$('#editPrompt').onclick=()=>{
-  $('#promptEdit').value=DB.prompt||defaultPromptText();
-  $('#promptEdit').style.display='block';$('#promptView').style.display='none';$('#promptEditActions').style.display='flex';
-};
-$('#savePrompt').onclick=()=>{DB.prompt=$('#promptEdit').value;save();
-  $('#promptEdit').style.display='none';$('#promptView').style.display='block';$('#promptEditActions').style.display='none';
-  renderPrompt();toast('Prompt saved.')};
-$('#cancelPrompt').onclick=()=>{$('#promptEdit').style.display='none';$('#promptView').style.display='block';$('#promptEditActions').style.display='none'};
+/* reading and editing swap in place: the one leaving is gone at once, the one
+   arriving rises in, and the FAB (Copy prompt) only shows while reading */
+function imPromptMode(edit){
+  const ed=$('#promptEdit'),vw=$('#promptView'),ac=$('#promptEditActions');
+  ed.style.display=edit?'block':'none';vw.style.display=edit?'none':'block';ac.style.display=edit?'flex':'none';
+  $('#editPrompt').disabled=edit;
+  if(window.__fabSync)window.__fabSync();
+  if(Motion.reduced)return;
+  const sp=PL('spatial');
+  (edit?[ed,ac]:[vw]).forEach((el,i)=>el.animate([{opacity:0,transform:'translateY(10px)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:i*30,fill:'backwards'}));
+}
+$('#editPrompt').onclick=()=>{$('#promptEdit').value=DB.prompt||defaultPromptText();imPromptMode(true);$('#promptEdit').focus({preventScroll:true})};
+$('#savePrompt').onclick=()=>{DB.prompt=$('#promptEdit').value;save();imPromptMode(false);renderPrompt();toast('Prompt saved.')};
+$('#cancelPrompt').onclick=()=>imPromptMode(false);
 $('#restorePrompt').onclick=()=>{DB.prompt=null;save();renderPrompt();toast('Default prompt restored.')};
 
 /* ============================================================
@@ -25739,6 +26367,9 @@ const BRAND=(function(){
       b.classList.toggle('on', on);
       b.setAttribute('aria-selected', on ? 'true' : 'false');
     });
+    /* Import has a Plume button group (2.27): its indicator travels instead */
+    var seg = sec.querySelector('.pl-seg [data-pane]');
+    if (seg && window.sxSegMark) sxSegMark(seg.parentNode, pane);
     var swap = function () {
       $a('.pane', sec).forEach(function (p) { p.classList.toggle('on', p.dataset.pane === pane); });
       if (window.__fabSync) window.__fabSync();

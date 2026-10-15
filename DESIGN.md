@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.26** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.27** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1738,6 +1738,57 @@ The quality bar. A surface is done when it *feels* like §2, and:
     shows only what neither the headline nor the control already says (the
     first build said "Synced" three times).
 
+- **Import** (`Plume 2.27 · import`, v6.89, rebuilt from scratch; markup
+  `#v-import` › `#im` with `#impTabs`, `#imDrop`, `#imPasteF`, the run
+  `#importReport`; script IMPORT / EXPORT: `imQueue`, `imRun`, `imJobEnd`,
+  `imSumPaint`, `imPane`, `PG_PK.imp`). A screen whose job is a process says
+  where the process is at every moment. Reuse:
+  - **A drop well** (`.im-well`): the hero's own well (concentric, 20px in a
+    32px card at 12px inset) with a dashed edge, the whole well a tap target
+    that opens the file picker; a file held anywhere over the screen opens it
+    toward the finger (`.is-over`: primary tint, solid edge, scale 1.015, the
+    arrow lowers and the tray widens). The tray icon acts out its logic on
+    every intake (`imTrayDrop`): the arrow drops into the tray (clipped at
+    the tray's lip), the tray dips under it and recovers on
+    `--p-spatial-fast`, a fresh arrow slides in from above.
+  - **A run of jobs** (`.im-run`): a grouped list whose first item is the
+    head (`.im-sum`) and whose rows are the jobs (`.im-job`). Rows rise in
+    from above on a 30ms stagger; a finished run steps out before a new one
+    comes in; more jobs while one works join the same run.
+  - **A job row says its step and how far** (`data-st`: wait, read, pics,
+    qs, merge, done, fail): the step's name changes once per step and fades
+    in; its count (`· 3 of 12`) changes only its digits; a 4px bar fills by
+    `scaleX` on the critically damped spring. A step whose length is unknown
+    (reading the file, the one write to the bank) shows a stretch that
+    travels the track instead, a transform animation, so it keeps moving on
+    the compositor while the main thread is busy. While working, the page
+    icon's lines write themselves in turn (the one loop, only while it
+    loads); on landing the icon's shape squares into `primary-container` and
+    a check draws (`error-container` and "!" for a failure), the bar fades and
+    the row unfolds (2.13) into tiles whose counts rise from zero.
+  - **The head of a run** (`.im-sum`): one expressive figure for the whole
+    import (new questions; updated, pictures filled or tags fixed when that
+    is all it did) that counts as each job lands, a line of where it stands,
+    an overall bar, and a seal that blooms with a drawn check when the run is
+    done; then its acts unfold (Practise the new ones, Done).
+  - **Paste as a fold** (`.im-fold`): the box unfolds under the hero and says
+    what it would import as you type (`imSniff`: count, kind, pictures,
+    source; or why it is not readable yet). From clipboard reads
+    `navigator.clipboard`, since a phone cannot paste into a closed field.
+  - **Rule: a line repainted many times a second never restarts a
+    crossfade (2.27).** `sxSwap` cancels and restarts its fade on every call
+    with new words, so a status repainted every slice (12ms) never landed:
+    the head said "File 1 of 3" through all three files and each row's step
+    went blank. Split the stable words from the changing count, crossfade
+    only when the words change (`imSwap` remembers its target), and let a
+    count change its digits directly.
+  - **Rule: show a step before a blocking pass starts (2.27).** A synchronous
+    pass (writing a batch into the bank) freezes whatever was not on screen
+    before it began; a fixed timer is not enough under load, so the run waits
+    for two painted frames (`imPainted`, with a timeout for a hidden tab),
+    and the name of the step arrives at once with an opacity fade, which the
+    compositor carries through the freeze.
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1776,6 +1827,7 @@ A surface that is not listed here is legacy.
 | Dock fix: stays still through every tab switch (the content column clips the sideways entrance) | 2.25 | 6.87 | From the user: the dock disappeared and reappeared on each switch. Measured static at 360 / 412 / 800px |
 | **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px) is still legacy; the top app bar and the FAB followed in 2.26 |
 | **The shared chrome: top bar, its ⋮ menu, the FAB and FAB menu, the sync details** | 2.26 | 6.88 | Rebuilt on the user's request ("the remaining legacy elements"). Kept: every overflow row (Import, Settings, Dark theme, Keyboard shortcuts), the FAB on Home (menu: Drill weakest, Review what's due, Resume, Start a session), Bank (Write a question) and Import's prompt tab (Copy prompt), the collapse on scroll, the snackbar lift, every sync detail (device, last sync, files and photos waiting, peers, requests left, repositories, layout, last pass, the log) and Sync now / Repair / Sync settings. The sync control itself (`.sync-split`: colours, width morph, loading indicator) is untouched at the user's word. The details moved from a dialog into the peek sheet. The rail (≥861px) is still legacy |
+| **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -1916,6 +1968,14 @@ A surface that is not listed here is legacy.
   details are cuts in the pill's colour; a tab's screen enters from the side
   the pill went. A fixed bar is its own layout root, and a control keeps
   handles to its own animations instead of asking the document.
+
+- **Plume 2.27** (2026-10-15): Import. A screen whose job is a process
+  shows where it is at every moment: a run of jobs, each saying its step and
+  how far on a bar, opening into what it brought, under a head that counts
+  the whole. A line repainted often crossfades only when its words change;
+  a step is painted before a blocking pass starts, and what must keep moving
+  through it moves on the compositor. From the user: importing froze, then
+  everything appeared at once.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

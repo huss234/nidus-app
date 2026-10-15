@@ -134,6 +134,17 @@ a recipe.
   calls `V3.photoAttached` for each touched question, like a hand-picked
   photo. A question must never keep megabytes of base64 in the data repo;
   only a browser without IndexedDB keeps the data URI, as `figTake` does.
+- **An import reports its steps** (v6.89). `importText(text, update, prog)`
+  parses once, stores the pictures (`figAbsorbArr`, one by one), reads the
+  questions with `impPrep` (pure) in ~12ms slices, then writes everything in
+  one synchronous pass (`impMerge`), so no sync pass can land half way
+  through a batch. `prog(step, done, total)` hears `read`, `pics`, `qs` and
+  `merge`; if it returns a promise for `merge`, the write waits for it (the
+  Import screen waits for the step to be painted). `doImport(text,update)`
+  and `figAbsorb(text)` keep their old shape for tests and call the same
+  parts. A merge result carries `ids` (`added`, `updated`, `known`) so a
+  surface can act on exactly what came in. Before v6.89 the whole batch ran
+  in one go and the screen froze until it ended.
 - **Figure fill** (ARCHIVIST section 12): **Export missing figures** writes
   `kind: "figures"` with each question's id, source, tags, wording and its
   empty, non-optional slots (fid, slot, caption). The reply carries only id
@@ -551,6 +562,20 @@ does) and work in the scratchpad:
   `window.download` to catch the export, and import a reply that also
   targets the filled slot, an unknown id and a null src: only the empty slot
   fills. `setInputFiles('#fileInput', …)` drives the real file path.
+- **Test the Import screen's run** (the scratch `run.js`, `func.js`): make a
+  300-question file with nine JPEG data URIs (one repeated), a small file
+  with two broken items and a file that is not JSON; `setInputFiles` all
+  three and log per 100ms each job's `st`/`p`, the head's line and every
+  row's `.im-job__s` text, then film it at 800×1220 with
+  `setCPUThrottlingRate` 4. Every step's name and count must appear in the
+  log in order, the head must say File 2 and File 3 while they run, and no
+  frame may show a row with no words. Then drive paste, re-import with
+  update (Updated tiles and their peeks, Back closes them), a `figures` and a
+  `tags` file, Done, a drop (dispatch `dragenter` and `drop` `DragEvent`s
+  carrying a `DataTransfer` file), the prompt view (FAB present, gone while
+  editing) and `go('prompt')`. A screencast shows no new frames while the
+  main thread is blocked even though compositor animations run; check those
+  by sampling the computed `transform` instead.
 - **Seed a lure** with `lure:true` on a wrong choice (seeded questions skip
   `normalizeQ`, so a stray `lure:true` on the key is drawn as nothing,
   not as a tag). To test the import rules, call `doImport(json, true)`
