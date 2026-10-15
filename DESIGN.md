@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.21** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.22** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1532,6 +1532,56 @@ The quality bar. A surface is done when it *feels* like §2, and:
   calm and no wider than the per-question clock; the last five minutes take
   a warning tint, overtime the error colours and a leading `+`. Neither
   pulses. The bar's clock is the UI face with tabular figures (§4), not mono.
+- **The bank, the question page and the editor** (`Plume 2.22 · bank`,
+  `· page layer`, `· question page`, `· editor`, v6.84, rebuilt from scratch;
+  markup `#v-bank` / `#bk`, `#qp`, `#qe`, `#bkSel`; script BANK, THE PAGE
+  LAYER, THE QUESTION PAGE, THE EDITOR). Reuse:
+  - **A page layer** (`plyOpen` / `plyClose` / `plyMove` / `plyDrag`,
+    `.ply`, `.ply-bar`, `.ply-scroll`, `.ply-body`, `.ply-card`): the
+    Settings phone layer's engine made general, for any full page that slides
+    over what opened it, at every width. Its own scrim (`#<id>Scrim`), its
+    own history key (the element id), drag back from anywhere but a field or
+    a sideways strip (`[data-nodrag]` opts out), Escape closes the top one.
+    It drifts only `.mobhead`, the open `.view`, `#tabbar` and `.rail`:
+    never `#shell`, whose fixed children (the FAB) would re-anchor to it. A
+    second layer drifts the first. Layers are z 91–94, under dialogs (100),
+    peeks and the picker (110) and the viewer (120), so a confirm opened
+    from a page sits above it. A menu inside a page grows from its anchor
+    (`plyMenu`).
+  - **A large title that hands over to the bar** (`.qp-h` → `.is-titled`):
+    the bar's title is invisible while the page's own title is on screen and
+    rises in once it scrolls under, so the name is never shown twice.
+  - **Rows that are a whole tap target with a button above them**
+    (`.bk-hit` covers the card; `.bk-row > :not(.bk-hit)` takes no pointer
+    events except its own buttons): no button nested in a button, and the
+    card presses through `:has(> .bk-hit.is-down)`.
+  - **A status shape that becomes a checkbox** (`.bk-st`): the leading shape
+    says what happened last time (verdict tints, squircle when answered); in
+    selection it empties to a ring and fills with a drawn check.
+  - **A list that glides** (`bkSnap` / `bkFlip`, as the gallery's FLIP):
+    kept rows travel, new ones rise in on a short stagger, gone ones fade
+    where they stood on a fixed layer.
+  - **The search passage** (`bkExcerpt`): while searching, a row shows where
+    the words matched ("Why C", "Your note") and the passage with the match
+    marked, instead of the stem's opening.
+  - **Chips in groups that count** (the gallery's, extended): within a group
+    any chip passes, across groups all must; the facet groups (system,
+    subject, difficulty, your labels) come from the bank itself.
+  - **The answer is a letter you tap** (`.qe-k`): the badge is a radio; the
+    chosen one squares and fills `success` with one small pulse, the old one
+    rounds back. Its card's lines change by crossfade (`sxSwap`), never by
+    redrawing the list.
+  - **Cards tied to their objects** (`QE.card`, a WeakMap from choice to
+    card): moving, adding and removing options move the real cards (FLIP)
+    and relabel them in place, the option's pictures with them.
+  - **Two-tap removal on an icon button** (`[data-arm="1"]`: fills `error`,
+    a second tap acts, disarms after 3 s) and on a menu row (`.is-armed`).
+  - **A dock that says what saving would do** (`.qe-dock`, `qeStat`): the
+    first problem that stops a save, or Unsaved changes / No changes yet,
+    beside a 56px Save. Save on a problem scrolls to it and flashes it.
+  - **A section strip that follows the scroll** (`.qe-jump`, `qeSpyMark`).
+  - **The flag runs up its pole** (`.qp-flag`): the cloth rises and fills
+    when flagged, and drops and empties when not.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1568,6 +1618,7 @@ A surface that is not listed here is legacy.
 | Progress: Time view (time per question for today / this week / this month / all time, trend, period list, spread, session totals); session rows lead with their total time; six tabs | 2.13 | 6.72 | From the user: average time per question is how they monitor themselves |
 | Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
+| **Bank, whole screen; the question page; the editor** (search with the passage that matched, sort, chips in seven counted groups, the count line with Practise, About your bank with its peeks and Keep it tidy, rows, long-press selection with flag / label / verify / copy / delete / practise; the page layer; the question page with stepping, flag, labels, record, note, ⋮; the editor with sections, the jump strip, Write / Preview, the letter as the answer, lure switches, move / remove / add, table columns, the dock) | 2.22 | 6.84 | Rebuilt from scratch on the user's request; nothing removed. Every legacy filter is a chip (plus Left blank, Due, Has a lure, system, subject, difficulty, your labels); the duplicate scan moved into About your bank. The preview dialog became a page that every screen opens (Home's plate, Images, Review, the duplicates list). New in the editor: things to remember and references are editable, options reorder, topic and source suggest from the bank, unsaved changes are guarded, Ctrl+S saves. The duplicates dialog, the figure blocks (`figHTML`) and the referenced-file buttons inside the pages are still legacy components |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -1685,6 +1736,13 @@ A surface that is not listed here is legacy.
   a screen never repeats its name or states non-news; a shared component's
   later rule is scoped away; a hidden control keeps no width; a line of
   parts breaks between parts. From the user, on Images.
+
+- **Plume 2.22** (2026-10-15): the bank, the question page and the editor.
+  A full page that slides over what opened it is one engine at every width
+  (the page layer), drifting only what may move; a large title hands over to
+  the bar; a row is one tap target with its buttons above it; a list glides;
+  the answer is chosen by its letter; cards are tied to the objects they
+  edit, so moves never redraw; a dock says what saving would do.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

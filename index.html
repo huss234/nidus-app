@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.83 -->
+<!-- Nidus — Personal Qbank · v6.84 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -3255,6 +3255,466 @@ body.hasmig{padding-bottom:64px}
   .gl-rib > span{animation:glFade 150ms both}
   .gl-tile.is-sel .gl-ph{scale:none}
 }
+
+/* ============================================================
+   Plume 2.22 · bank
+   ------------------------------------------------------------
+   Rebuilt from scratch (v6.84). A shelf of questions that opens
+   on the questions (2.20): the search with two buttons beside it
+   (Sort and filter; About your bank), one count line that names
+   every filter that is on and can practise what it counts, then
+   the list. The panels, chips and search are the gallery's own
+   components (.gl-bar, .gl-tg, .gl-fold, .gl-panel, .pg-chip), so
+   the two screens behave as one. Each row is a card in a grouped
+   list: a status shape (what happened last time), the system and
+   subject, the topic, two lines of the stem (or, while searching,
+   the passage that matched and where), the marks that apply, the
+   attempt pips and Edit. Long-press selects several; the list
+   glides whenever its set or order changes.
+   ============================================================ */
+#v-bank{padding-top:16px;padding-bottom:calc(152px + env(safe-area-inset-bottom))}
+#v-bank.on{animation:none}
+.bk{display:flex;flex-direction:column;gap:16px;max-width:880px;margin:0 auto;transition:padding-bottom var(--p-spatial-d) var(--p-spatial)}
+.bk.is-sel{padding-bottom:88px}
+.bk.is-arrive > *{animation:glRise var(--p-spatial-d) var(--p-spatial) both;animation-delay:calc(var(--bi,0) * 32ms)}
+.bk-title{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+/* sort: one choice from a row of chips, each with the drawn check */
+.bk-sort{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px}
+.bk-sort::-webkit-scrollbar{display:none}
+@media (min-width:600px){.bk-sort{flex-wrap:wrap;overflow:visible;margin:0;padding:0}}
+.bk-sort .pg-chip{background:none}
+.bk-panel__h{margin:0;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.bk-panel__row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.bk-panel__row .bk-panel__h{flex:none;width:84px}
+@media (max-width:599px){.bk-panel__row{flex-direction:column;align-items:stretch;gap:8px}.bk-panel__row .bk-panel__h{width:auto}}
+.bk-panel .gl-chips{flex-direction:column;gap:10px;overflow:visible;margin:0 -16px;padding:0}
+.bk-panel .gl-chips__g{overflow-x:auto;scrollbar-width:none;padding:2px 16px}
+.bk-panel .gl-chips__g::-webkit-scrollbar{display:none}
+@media (min-width:600px){.bk-panel .gl-chips{margin:0}.bk-panel .gl-chips__g{overflow:visible;padding:0;flex-wrap:wrap}}
+.bk-panel .gl-chips__g:empty{display:none}
+
+/* ---- About your bank ---- */
+.bk-hero{display:grid;gap:20px;padding:20px;border-radius:var(--p-r-hero);background:var(--p-card);color:var(--md-on-surface);min-width:0}
+@media (min-width:600px){.bk-hero{padding:28px 32px}}
+.bk-hero__top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+/* the bank's state: right last time, missed last time, not seen, as one bar */
+.bk-state{display:flex;gap:3px;height:28px}
+.bk-state > span{position:relative;flex:var(--n) 1 0;min-width:8px;border-radius:var(--p-r-xs);background:var(--c);cursor:pointer;transform-origin:0 50%;
+  animation:glGrow var(--p-spatial-slow-d) var(--p-spatial-slow) both;animation-delay:calc(120ms + var(--i,0) * 40ms);transition:opacity var(--p-effect-d) var(--p-effect)}
+.bk-state > span::before{content:"";position:absolute;inset:-10px 0}
+.bk-state > span:first-child{border-radius:14px var(--p-r-xs) var(--p-r-xs) 14px}
+.bk-state > span:last-child{border-radius:var(--p-r-xs) 14px 14px var(--p-r-xs)}
+.bk-state > span:only-child{border-radius:14px}
+[data-pgfg].is-fg .bk-state > span:not(.is-on){opacity:.28}
+[data-pgfg].is-fg .gl-leg button:not(.is-on){opacity:.5}
+.bk-hero .gl-leg{margin-top:12px}
+.bk-hero .gl-mini{margin-top:0}
+.bk-tidy{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none;border-radius:var(--p-r-l);overflow:hidden}
+.bk-tidy button{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 16px;border-radius:var(--p-r-xs);text-align:left;background:var(--p-well);color:var(--md-on-surface);
+  font:500 15px/20px var(--m3-font);position:relative;isolation:isolate;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bk-tidy button::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bk-tidy button:hover::after{opacity:var(--m3-state-hover)}}
+.bk-tidy button.is-down{transform:scale(var(--p-press-card));transition-duration:var(--p-effect-fast-d)}
+.bk-tidy button.is-down::after{opacity:var(--m3-state-press)}
+.bk-tidy button.is-src{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.bk-tidy button:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.bk-tidy span{flex:1;min-width:0}
+.bk-tidy small{display:block;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.bk-tidy b{font:540 20px/24px var(--m3-font);font-variation-settings:"wdth" 112,"ROND" 100;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.bk-tidy b.is-zero{color:var(--md-on-surface-variant);font-weight:450}
+.bk-tidy .ic{flex:none;width:20px;height:20px;color:var(--md-on-surface-variant)}
+
+/* ---- the line over the list ---- */
+.bk-meta{display:flex;align-items:center;gap:4px;min-height:48px;margin:-4px 0}
+.bk-meta__t{flex:1;min-width:0;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.bk-meta__t > span{white-space:nowrap}
+.bk-meta__t b{font-weight:600;color:var(--md-on-surface)}
+.bk-meta__t .gl-link{font-weight:600}
+.bk-meta__t .bk-fx{color:var(--md-on-surface)}
+.bk-meta .pl-btn{--h:40px;padding:0 16px}
+.bk-meta .pl-btn[hidden]{display:none}
+.bk-meta .pl-ib:last-child{margin-right:-12px}
+
+/* ---- the list: a grouped list of cards ---- */
+.bk-list{display:flex;flex-direction:column;gap:2px;min-height:120px}
+.bk-row{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr) auto;column-gap:14px;align-items:start;
+  padding:16px 8px 16px 16px;border-radius:var(--p-r-xs);background:var(--p-card);color:var(--md-on-surface);isolation:isolate;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+.bk-row:first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.bk-row:last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+@media (min-width:600px){.bk-row{padding:18px 12px 18px 20px;column-gap:16px}}
+/* the whole card is the open target; Edit sits above it */
+.bk-hit{position:absolute;inset:0;z-index:0;border-radius:inherit;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+.bk-hit::after{content:"";position:absolute;inset:0;border-radius:inherit;background:var(--md-on-surface);opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.bk-hit:hover::after{opacity:var(--m3-state-hover)}}
+.bk-hit:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.bk-row:has(> .bk-hit.is-down){transform:scale(var(--p-press-card));border-radius:var(--p-r-l);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.bk-row > .bk-hit.is-down::after{opacity:var(--m3-state-press)}
+.bk-row.is-src{background:var(--p-card-hi)}
+.bk-row.is-src > .bk-hit::after{opacity:var(--m3-state-focus)}
+.bk-row > :not(.bk-hit){position:relative;z-index:1;pointer-events:none}
+.bk-row .bk-side .pl-ib{pointer-events:auto}
+/* the status shape: what happened the last time it was answered */
+.bk-st{width:40px;height:40px;margin-top:2px;display:grid;place-items:center;border-radius:20px;background:var(--p-well);color:var(--md-on-surface-variant);
+  transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.bk-st svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.bk-st[data-st="correct"]{border-radius:var(--p-r-m);background:color-mix(in oklab,var(--md-success) 18%,var(--p-card));color:var(--md-success)}
+.bk-st[data-st="incorrect"]{border-radius:var(--p-r-m);background:color-mix(in oklab,var(--md-error) 16%,var(--p-card));color:var(--md-error)}
+.bk-st[data-st="omitted"]{background:color-mix(in oklab,var(--md-warning) 16%,var(--p-card));color:var(--md-warning)}
+.bk-st__ck{position:absolute;inset:0;display:grid;place-items:center;border-radius:inherit;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.bk-st{position:relative}
+.bk-st__ck path{stroke:var(--md-on-primary);stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+/* selecting: every status shape becomes an empty ring, the chosen ones fill and draw their check */
+.bk.is-sel .bk-st{border-radius:20px;background:transparent;color:transparent;box-shadow:inset 0 0 0 2px var(--md-outline)}
+.bk.is-sel .bk-st > svg:first-child{opacity:0}
+.bk.is-sel .bk-row.is-sel .bk-st{background:var(--md-primary);box-shadow:none;border-radius:var(--p-r-m)}
+.bk.is-sel .bk-row.is-sel .bk-st__ck{opacity:1}
+.bk.is-sel .bk-row.is-sel .bk-st__ck path{stroke-dashoffset:0;transition-delay:60ms}
+.bk.is-sel .bk-row.is-sel{background:color-mix(in oklab,var(--md-primary) 7%,var(--p-card))}
+.bk.is-sel .bk-side .pl-ib{opacity:0;pointer-events:none}
+.bk-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.bk-over{display:flex;column-gap:8px;min-width:0;font:500 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant)}
+.bk-over > span{white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto}
+.bk-over > span + span{flex:0 0 auto;max-width:50%}
+.bk-mk.is-id{font:500 11.5px/16px var(--m3-mono);letter-spacing:0;background:none;box-shadow:inset 0 0 0 1px var(--md-outline-variant)}
+.bk-over > span + span::before{content:"·";margin-right:8px;color:color-mix(in oklab,currentColor 55%,transparent)}
+.bk-over .is-uncl{color:var(--md-warning)}
+.bk-t{font:500 16px/22px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);overflow-wrap:anywhere}
+.bk-stem{font:400 14px/20px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}
+.bk-hitline{font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;overflow-wrap:anywhere}
+.bk-hitline em{font-style:normal;font-weight:600;color:var(--md-on-surface)}
+.bk-hitline mark{background:color-mix(in oklab,var(--md-primary) 22%,transparent);color:var(--md-on-surface);border-radius:4px;padding:0 2px;margin:0 -2px}
+/* the marks: only those that apply, small, coloured by what they mean */
+.bk-marks{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.bk-marks:empty{display:none}
+.bk-mk{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 8px;border-radius:12px;background:var(--p-well);color:var(--md-on-surface-variant);
+  font:550 12px/16px var(--m3-font);letter-spacing:.2px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.bk-mk svg{flex:none;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bk-mk.is-warn{background:color-mix(in oklab,var(--md-warning) 16%,var(--p-card));color:var(--md-on-surface)}
+.bk-mk.is-warn svg{color:var(--md-warning)}
+.bk-mk.is-err{background:color-mix(in oklab,var(--md-error) 14%,var(--p-card));color:var(--md-on-surface)}
+.bk-mk.is-err svg{color:var(--md-error)}
+.bk-mk.is-ok svg{color:var(--md-success)}
+.bk-mk.is-lab{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.bk-mk.is-due{background:color-mix(in oklab,var(--md-primary) 14%,var(--p-card));color:var(--md-on-surface)}
+.bk-mk.is-due svg{color:var(--md-primary)}
+.bk-side{display:flex;flex-direction:column;align-items:center;gap:6px;margin:-4px 0}
+.bk-side .pl-ib{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),opacity var(--p-effect-d) var(--p-effect)}
+.bk-side .pl-ib svg{width:22px;height:22px}
+/* the attempts, oldest to newest, as pips */
+.bk-pips{display:flex;align-items:center;gap:3px;min-height:16px;font:600 11px/16px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.bk-pips i{width:7px;height:7px;border-radius:50%;background:transparent;box-shadow:inset 0 0 0 1.5px var(--md-outline)}
+.bk-pips i.y{background:var(--md-success);box-shadow:none}
+.bk-pips i.n{background:var(--md-error);box-shadow:none}
+.bk-pips b{margin-left:3px;font-weight:600}
+.bk-empty{padding:40px 16px;border-radius:var(--p-r-card);background:var(--p-card)}
+.bk-empty .pl-btn{margin-top:12px}
+.bk-more{display:flex;justify-content:center}
+.bk-more:has(> [hidden]){display:none}
+.bk-ghost{position:fixed;z-index:3;margin:0;pointer-events:none}
+/* selection bar: the gallery's floating bar */
+/* the screen's Write a question button steps aside while the selection bar is up */
+body[data-fab="bank"] .fabdock{transition:transform var(--m3-dur-medium2) var(--m3-ease-emphasized),opacity var(--p-effect-d) var(--p-effect)}
+body.bk-selecting .fabdock{opacity:0;pointer-events:none}
+#bkSel .pl-ib[data-arm="1"]{color:var(--md-on-error)}
+#bkSel .pl-ib[data-arm="1"]::before{opacity:1;background:var(--md-error);border-radius:var(--p-r-m)}
+.bk-selmenu{min-width:260px}
+.bk-selmenu .pl-menu__item.is-armed{background:var(--md-error);color:var(--md-on-error)}
+.bk-selmenu .pl-menu__item.is-armed .ic,.bk-selmenu .pl-menu__item.is-armed small{color:inherit}
+.bk-lab{display:flex;gap:8px;padding:8px 8px 8px 14px;align-items:center}
+.bk-lab input{flex:1;min-width:0;height:40px;padding:0 12px;border:0;border-radius:var(--p-r-m);background:var(--p-well);color:var(--md-on-surface);font:400 15px/20px var(--m3-font);outline:none;box-shadow:none}
+.bk-lab input:focus{box-shadow:inset 0 0 0 2px var(--md-primary)}
+@media (prefers-reduced-motion:reduce){
+  .bk.is-arrive > *{animation-name:glFade;animation-duration:150ms}
+  .bk-state > span{animation:glFade 150ms both}
+}
+
+/* ============================================================
+   Plume 2.22 · page layer
+   ------------------------------------------------------------
+   A page that slides over what opened it (§6 Hierarchy): the
+   question page over the bank (or Home, Images, Review), the
+   editor over the question page or the player. One spring, worked
+   out in advance and played on the compositor, drives the page,
+   its leading corners, what lies under it (drifting a fifth of
+   the way left) and the scrim. A finger drags it back. Each layer
+   has its own history key, so Back closes the top one only.
+   ============================================================ */
+.ply{position:fixed;inset:0;z-index:92;display:flex;flex-direction:column;background:var(--p-page);color:var(--md-on-surface);
+  overflow:hidden;touch-action:pan-y;outline:none;box-shadow:-8px 0 24px -12px color-mix(in oklab,var(--md-shadow) 40%,transparent)}
+.ply[hidden]{display:none}
+.ply.qe{z-index:94}
+.ply-scrim{position:fixed;inset:0;z-index:91;background:color-mix(in oklab,var(--md-scrim) 32%,transparent);opacity:0;pointer-events:none}
+[data-theme="dark"] .ply-scrim{background:color-mix(in oklab,var(--md-scrim) 50%,transparent)}
+.ply-scrim.qe-scrim{z-index:93}
+.ply-bar{position:relative;z-index:3;flex:none;display:flex;align-items:center;gap:4px;height:calc(64px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 4px 0;
+  background:var(--p-page);transition:background-color var(--p-effect-slow-d) var(--p-effect-slow)}
+.ply.is-scrolled .ply-bar{background:var(--p-bar)}
+.ply-bar__t{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:0 4px}
+.ply-bar__t > span{font:500 18px/24px var(--m3-font);letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--md-on-surface)}
+.ply-bar__t > small{font:500 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.ply-bar__t > small:empty{display:none}
+/* the bar's title collapses in once the page's own large title has scrolled under it */
+.qp .ply-bar__t > span{opacity:0;transform:translateY(6px);transition:opacity var(--p-effect-d) var(--p-effect),transform var(--p-spatial-d) var(--p-spatial)}
+.qp.is-titled .ply-bar__t > span{opacity:1;transform:none}
+.ply-scroll{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+.ply-body{max-width:760px;margin:0 auto;padding:8px 16px calc(120px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px}
+@media (min-width:600px){.ply-body{padding:16px 24px calc(128px + env(safe-area-inset-bottom))}}
+.ply-card{padding:20px;border-radius:var(--p-r-card);background:var(--p-card);color:var(--md-on-surface);min-width:0}
+@media (min-width:600px){.ply-card{padding:24px}}
+.ply-h{margin:0 0 12px;font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.ply-menu{position:absolute;top:calc(56px + env(safe-area-inset-top));right:8px;z-index:6;transform-origin:calc(100% - 24px) 0}
+.ply-menu .pl-menu__item.is-armed{background:var(--md-error);color:var(--md-on-error)}
+.ply-menu .pl-menu__item.is-armed .ic,.ply-menu .pl-menu__item.is-armed small{color:inherit}
+@media (prefers-reduced-motion:reduce){.ply{box-shadow:none}}
+
+/* ============================================================
+   Plume 2.22 · question page
+   ------------------------------------------------------------
+   What a tap on a question opens, from any screen. It follows
+   the question spine: identity (the large title, chips, the ID
+   that copies itself, your labels), the ask (stem, its figures,
+   lead-in, options with the key, the lures and the reason for
+   every option), the verdict (the answer, then your record:
+   every attempt with what you chose, how sure you were and how
+   long it took), the teaching, and the margin (your note, saved
+   as you type, and the referenced files). Flag, Edit and a ⋮
+   menu sit in the bar; opened from a list, a floating toolbar
+   steps to the previous and next question in that list.
+   ============================================================ */
+.qp-hero{padding:8px 4px 0}
+.qp-over{margin:0 0 6px;font:500 13px/18px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant)}
+.qp-over span{white-space:nowrap}
+.qp-over .is-uncl{color:var(--md-warning)}
+.qp-h{margin:0;font:450 28px/36px var(--m3-font);letter-spacing:-.01em;color:var(--md-on-surface);overflow-wrap:anywhere}
+@media (min-width:600px){.qp-h{font-size:32px;line-height:40px}}
+.qp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.qp-chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:var(--p-r-s);background:var(--p-well);color:var(--md-on-surface);
+  font:500 12.5px/16px var(--m3-font);letter-spacing:.1px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.qp-chip i{flex:none;width:8px;height:8px;border-radius:50%;background:currentColor}
+.qp-chip.is-easy i{background:var(--md-success)}
+.qp-chip.is-medium i{background:var(--md-warning)}
+.qp-chip.is-hard i{background:var(--md-error)}
+.qp-chip.is-warn{background:color-mix(in oklab,var(--md-warning) 16%,var(--p-page))}
+.qp-chip.is-ok{background:color-mix(in oklab,var(--md-success) 16%,var(--p-page))}
+.qp-chip.is-tag{background:none;box-shadow:inset 0 0 0 1px var(--md-outline-variant);color:var(--md-on-surface-variant)}
+/* the ID is a code: mono, and a tap copies it */
+.qp-id{position:relative;isolation:isolate;cursor:pointer;font:500 12px/16px var(--m3-mono);letter-spacing:0;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+.qp-id svg{width:14px;height:14px}
+.qp-id::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.qp-id:hover::after{opacity:var(--m3-state-hover)}}
+.qp-id.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.qp-id.is-down::after{opacity:var(--m3-state-press)}
+.qp-id:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+/* your labels: chips you remove with their ×, and one that becomes a field */
+.qp-labs{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:12px}
+.qp-lab{display:inline-flex;align-items:center;height:32px;padding:0 4px 0 12px;border-radius:var(--p-r-s);background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  font:550 13px/18px var(--m3-font);max-width:100%;animation:qpIn var(--p-spatial-fast-d) var(--p-spatial-fast) both}
+.qp-lab > span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qp-lab button{position:relative;width:28px;height:28px;margin-left:2px;display:grid;place-items:center;border-radius:14px;color:inherit;transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.qp-lab button::before{content:"";position:absolute;inset:-6px -4px}
+.qp-lab button .ic{width:16px;height:16px}
+.qp-lab button.is-down{transform:scale(var(--p-press-sm))}
+.qp-lab.is-out{animation:qpOut 160ms var(--p-exit) both}
+@keyframes qpIn{from{opacity:0;transform:scale(.6)}}
+@keyframes qpOut{to{opacity:0;transform:scale(.6)}}
+.qp-labadd{display:inline-grid;grid-template-columns:auto minmax(0,0fr);align-items:center;height:32px;border-radius:var(--p-r-s);box-shadow:inset 0 0 0 1px var(--md-outline-variant);
+  color:var(--md-on-surface-variant);transition:grid-template-columns var(--p-spatial-d) var(--p-spatial),box-shadow var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+.qp-labadd > button{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px 0 8px;font:550 13px/18px var(--m3-font);color:inherit;border-radius:inherit}
+.qp-labadd > button .ic{width:18px;height:18px}
+.qp-labadd > span{overflow:hidden;min-width:0}
+.qp-labadd input{width:180px;height:32px;padding:0 12px 0 0;border:0;background:none;box-shadow:none;outline:none;color:var(--md-on-surface);font:400 14px/20px var(--m3-font)}
+.qp-labadd.is-open{grid-template-columns:auto minmax(0,1fr);background:var(--p-card);box-shadow:inset 0 0 0 2px var(--md-primary)}
+/* the ask */
+.qp-stem{font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh);letter-spacing:.15px;color:var(--md-on-surface);white-space:pre-wrap;overflow-wrap:break-word;max-width:var(--measure)}
+.qp-lead{margin:14px 0 0;font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh);font-weight:600;color:var(--md-on-surface);max-width:var(--measure)}
+.qp-ask .figs{margin-top:12px}
+.qp-opts{display:flex;flex-direction:column;gap:2px;margin-top:16px}
+.qp-opt{display:grid;grid-template-columns:32px minmax(0,1fr);column-gap:14px;align-items:start;padding:14px 16px 14px 12px;border-radius:var(--p-r-xs);background:var(--p-well);color:var(--md-on-surface);
+  font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh)}
+.qp-opt:first-child,.qp-opt.chx-th + .qp-opt{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+.qp-opt:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+.qp-opt.is-key{background:color-mix(in oklab,var(--md-success) 12%,var(--p-card));box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-success) 42%,transparent)}
+.qp-k{width:32px;height:32px;display:grid;place-items:center;border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--md-outline);
+  font:600 14px/1 var(--m3-font);color:var(--md-on-surface-variant);margin-top:calc((var(--qlh) * 1em - 32px) / 2)}
+.qp-opt.is-key .qp-k{border-radius:var(--p-r-m);background:var(--md-success);color:var(--md-on-success);box-shadow:none}
+.qp-t{min-width:0;overflow-wrap:break-word}
+.qp-tags{display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle}
+.qp-key{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;background:var(--md-success);color:var(--md-on-success);font:600 11px/16px var(--m3-font);letter-spacing:.2px}
+.qp-why{grid-column:2;margin-top:8px;font-size:var(--efont);line-height:var(--qlh);color:var(--md-on-surface-variant)}
+.qp-why .ebody{color:inherit;font-size:inherit}
+.qp-opt.chx-th{padding-block:0 4px;background:transparent;box-shadow:none;align-items:end}
+.qp-opt.chx-th .qp-k{visibility:hidden;height:0;box-shadow:none;margin:0}
+/* the verdict and the record */
+.qp-ans{display:flex;align-items:center;gap:14px}
+.qp-ans .qp-k{flex:none;margin:0;border-radius:var(--p-r-m);background:var(--md-success);color:var(--md-on-success);box-shadow:none;width:40px;height:40px;font-size:16px}
+.qp-ans__t{min-width:0;font:400 15px/22px var(--m3-font);color:var(--md-on-surface)}
+.qp-ans__t small{display:block;font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.qp-rec{margin-top:20px;padding-top:20px;border-top:1px solid color-mix(in oklab,var(--md-on-surface) 10%,transparent)}
+.qp-rec__top{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.qp-rec__fig{display:flex;align-items:baseline;gap:6px}
+.qp-rec__fig .pg-big{font-size:44px}
+.qp-rec__fig span{font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.qp-rec__say{flex:1;min-width:160px;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.qp-att{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:2px;border-radius:var(--p-r-l);overflow:hidden}
+.qp-att li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;column-gap:12px;align-items:center;min-height:52px;padding:8px 14px 8px 12px;background:var(--p-well);
+  animation:qpIn var(--p-spatial-d) var(--p-spatial) both;animation-delay:calc(var(--i,0) * 30ms)}
+.qp-att .qp-k{width:28px;height:28px;margin:0;font-size:12px;border-radius:14px}
+.qp-att li.y .qp-k{background:var(--md-success);color:var(--md-on-success);box-shadow:none;border-radius:var(--p-r-s)}
+.qp-att li.n .qp-k{background:var(--md-error);color:var(--md-on-error);box-shadow:none;border-radius:var(--p-r-s)}
+.qp-att b{display:block;font:500 14px/20px var(--m3-font);color:var(--md-on-surface)}
+.qp-att small{display:block;font:400 12.5px/17px var(--m3-font);color:var(--md-on-surface-variant)}
+.qp-att em{font:500 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums;white-space:nowrap}
+.qp-att small .ic{display:inline-block;width:14px;height:14px;margin:0 2px 0 0;vertical-align:-2px}
+.qp-rec .pl-btn{margin-top:16px}
+.qp-disp{box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-error) 42%,transparent);background:color-mix(in oklab,var(--md-error) 7%,var(--p-card))}
+.qp-disp .ply-h{color:var(--md-error)}
+.qp-disp p{margin:0;font:400 14px/21px var(--m3-font)}
+.qp-disp p + p{margin-top:6px}
+.qp-teach > * + *{margin-top:20px}
+.qp-teach .ply-h{margin-bottom:8px}
+.qp-call{padding:16px 18px;border-radius:var(--p-r-l);background:var(--p-well)}
+.qp-call .ply-h{margin-bottom:6px}
+.qp-call .ebody{font-size:calc(var(--efont) - .5px)}
+.qp-refs{margin:0;padding-left:1.2em;font:400 13px/19px var(--m3-font);color:var(--md-on-surface-variant)}
+/* the note: a filled field on the card's well that saves itself */
+.qp-note{display:flex;flex-direction:column;gap:2px;padding:10px 16px 12px;border-radius:var(--p-r-l);background:var(--p-well);cursor:text;transition:box-shadow var(--p-effect-d) var(--p-effect)}
+.qp-note:focus-within{box-shadow:inset 0 0 0 2px var(--md-primary)}
+.qp-note > span{display:flex;justify-content:space-between;gap:12px;font:500 12px/16px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface-variant)}
+.qp-note:focus-within > span > b{color:var(--md-primary)}
+.qp-note > span > b{font-weight:500;transition:color var(--p-effect-d) var(--p-effect)}
+.qp-note textarea{width:100%;min-height:72px;padding:0;margin:4px 0 0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;resize:none;field-sizing:content;
+  font:400 16px/24px var(--m3-font);color:var(--md-on-surface)}
+.qp-mine .row{margin-top:12px}
+/* stepping through the list: a floating toolbar that tucks away while reading down */
+.qp-step{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));z-index:4;display:flex;align-items:center;gap:2px;height:64px;padding:8px;
+  border-radius:32px;background:var(--p-float);color:var(--md-on-surface);box-shadow:var(--p-shadow);transform:translateX(-50%);
+  transition:transform var(--p-spatial-d) var(--p-spatial),opacity var(--p-effect-d) var(--p-effect)}
+.qp-step[hidden]{display:none}
+.qp-step.is-tuck{transform:translate(-50%,calc(100% + 24px));opacity:0}
+.qp-step__n{min-width:96px;padding:0 6px;text-align:center;font:540 16px/20px var(--m3-font);font-variation-settings:"wdth" 110,"ROND" 100;font-variant-numeric:tabular-nums;color:var(--md-on-surface)}
+.qp-step__n small{display:block;font:500 11px/14px var(--m3-font);color:var(--md-on-surface-variant);font-variation-settings:normal}
+/* the flag runs up its pole: the cloth rises and fills when on */
+.qp-flag svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.qp-flag .qp-flag__c{transform-box:fill-box;transform-origin:0 0;transform:translateY(3px) scaleY(.82);fill:transparent;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),fill var(--p-effect-d) var(--p-effect)}
+.qp-flag[aria-pressed="true"]{color:var(--md-warning)}
+.qp-flag[aria-pressed="true"] .qp-flag__c{transform:none;fill:currentColor}
+.qp-swap{animation:qpSwap var(--p-spatial-d) var(--p-spatial) both}
+@keyframes qpSwap{from{opacity:0;transform:translateX(calc(var(--dir,1) * 24px))}}
+@media (prefers-reduced-motion:reduce){.qp-swap{animation:glFade 150ms both}.qp-att li,.qp-lab{animation:glFade 150ms both}}
+
+/* ============================================================
+   Plume 2.22 · editor
+   ------------------------------------------------------------
+   Writing a question is a page, not a dialog: the sections the
+   question is made of (the ask, its options, the teaching, the
+   figures, the details, the files), a strip that jumps between
+   them and follows the scroll, and a dock that says what saving
+   would do and holds Save. A tap on an option's letter makes it
+   the answer (the badge squares and fills); the lure is a switch
+   beside it; options move up and down and leave with two taps,
+   their pictures moving with their letters. Preview draws the
+   question exactly as the question page will.
+   ============================================================ */
+.qe-mode{width:176px;flex:none;margin-right:4px}
+@media (max-width:380px){.qe-mode{width:150px}.qe-mode button{font-size:13px}}
+.qe-jump{position:relative;z-index:2;flex:none;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 16px 12px;background:inherit;
+  transition:background-color var(--p-effect-slow-d) var(--p-effect-slow)}
+.qe-jump::-webkit-scrollbar{display:none}
+.ply.is-scrolled .qe-jump{background:var(--p-bar)}
+@media (min-width:792px){.qe-jump{justify-content:center}}
+.qe-jump .pg-chip{background:none}
+.qe-fold{display:grid;grid-template-rows:minmax(0,1fr);transition:grid-template-rows var(--p-spatial-d) var(--p-spatial)}
+.qe-fold > div{overflow:hidden;min-height:0}
+.qe.is-prev .qe-fold{grid-template-rows:minmax(0,0fr)}
+.qe-body .ply-body,.qe-prev .ply-body{padding-bottom:calc(136px + env(safe-area-inset-bottom))}
+.qe-sec{display:flex;flex-direction:column;gap:12px;scroll-margin-top:12px}
+.qe-sec > h3{display:flex;align-items:center;gap:8px;margin:12px 4px 0;font:500 22px/28px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+.qe-sec > h3 small{margin-left:auto;font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.qe-card{display:flex;flex-direction:column;gap:12px}
+.qe-card .figsub{margin:4px 0 0}
+/* a filled field: label over the value, on the card's well */
+.qe-f{position:relative;display:flex;flex-direction:column;gap:2px;padding:10px 16px 12px;border-radius:var(--p-r-l);background:var(--p-well);cursor:text;min-width:0;
+  transition:box-shadow var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+.qe-f:focus-within{box-shadow:inset 0 0 0 2px var(--md-primary)}
+.qe-f.is-bad{box-shadow:inset 0 0 0 2px var(--md-error)}
+.qe-f > span{display:flex;justify-content:space-between;gap:12px;font:500 12px/16px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.qe-f:focus-within > span{color:var(--md-primary)}
+.qe-f > span em{font-style:normal;font-weight:400;color:var(--md-on-surface-variant)}
+.qe-f textarea,.qe-f input,.qe-f select{width:100%;min-width:0;margin:2px 0 0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;outline:none;color:var(--md-on-surface);
+  font:400 16px/24px var(--m3-font);letter-spacing:.15px}
+.qe-f textarea{resize:none;field-sizing:content;min-height:48px}
+.qe-f textarea.is-tall{min-height:120px}
+.qe-f input,.qe-f select{height:28px}
+.qe-f select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:28px;text-overflow:ellipsis}
+.qe-f select option{background:var(--p-float);color:var(--md-on-surface)}
+.qe-f:has(select)::after{content:"";position:absolute;right:16px;bottom:20px;width:8px;height:8px;border-right:2px solid var(--md-on-surface-variant);border-bottom:2px solid var(--md-on-surface-variant);transform:rotate(45deg);pointer-events:none}
+.qe-f:has(select){cursor:pointer}
+.qe-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:520px){.qe-grid{grid-template-columns:minmax(0,1fr)}}
+.qe-grid .is-wide{grid-column:1/-1}
+.qe-help{margin:-4px 4px 0;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.qe-help code{font:500 12px/16px var(--m3-mono);color:var(--md-on-surface)}
+.qe-segrow{display:flex;flex-direction:column;gap:8px}
+.qe-segrow > span{font:500 12px/16px var(--m3-font);letter-spacing:.3px;color:var(--md-on-surface-variant);padding-left:4px}
+/* a switch row on the card */
+.qe-sw{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 4px;cursor:pointer;position:relative}
+.qe-sw > span:first-child{flex:1;min-width:0}
+.qe-sw b{display:block;font:500 15px/20px var(--m3-font);color:var(--md-on-surface)}
+.qe-sw small{display:block;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+/* an option: its letter is the answer button */
+.qe-opts{display:flex;flex-direction:column;gap:12px}
+.qe-opt{display:flex;flex-direction:column;gap:12px;transition:box-shadow var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+.qe-opt.is-key{box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-success) 50%,transparent)}
+.qe-opt.is-in{animation:qpIn var(--p-spatial-d) var(--p-spatial) both}
+.qe-opt.is-out{animation:qeOut 180ms var(--p-exit) both}
+@keyframes qeOut{to{opacity:0;transform:scale(.96)}}
+.qe-oh{display:flex;align-items:center;gap:8px;margin:-6px -8px -2px -6px}
+.qe-k{position:relative;flex:none;width:48px;height:48px;display:grid;place-items:center;border-radius:24px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.qe-k > span{width:40px;height:40px;display:grid;place-items:center;border-radius:20px;box-shadow:inset 0 0 0 2px var(--md-outline);color:var(--md-on-surface);font:600 16px/1 var(--m3-font);
+  transition:border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),box-shadow var(--p-effect-d) var(--p-effect),transform var(--p-spatial-fast-d) var(--p-spatial-fast)}
+@media (hover:hover){.qe-k:hover > span{box-shadow:inset 0 0 0 2px var(--md-primary)}}
+.qe-k.is-down > span{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.qe-k[aria-checked="true"] > span{border-radius:var(--p-r-m);background:var(--md-success);color:var(--md-on-success);box-shadow:none;transform:scale(1)}
+.qe-k[aria-checked="true"].is-pop > span{animation:qeBadge var(--p-spatial-fast-d) var(--p-spatial-fast)}
+@keyframes qeBadge{40%{transform:scale(1.08)}}
+.qe-k:focus-visible{outline:none}
+.qe-k:focus-visible > span{outline:3px solid var(--md-primary);outline-offset:2px}
+.qe-oh__t{flex:1;min-width:0;font:500 15px/20px var(--m3-font);color:var(--md-on-surface)}
+.qe-oh__t small{display:block;font:400 12.5px/17px var(--m3-font);color:var(--md-on-surface-variant);transition:color var(--p-effect-d) var(--p-effect)}
+.qe-opt.is-key .qe-oh__t small{color:var(--md-success)}
+.qe-oh .pl-ib{width:44px;height:44px}
+.qe-oh .pl-ib svg{width:22px;height:22px}
+.qe-oh .pl-ib[data-arm="1"]{color:var(--md-on-error)}
+.qe-oh .pl-ib[data-arm="1"]::before{opacity:1;background:var(--md-error);border-radius:var(--p-r-m)}
+.qe-cells{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:8px}
+@media (max-width:520px){.qe-cells{grid-template-columns:minmax(0,1fr)}}
+.qe-cols{display:flex;flex-direction:column;gap:10px}
+.qe-col{display:flex;align-items:center;gap:4px}
+.qe-col .qe-f{flex:1}
+.qe-lure{display:flex;align-items:center;gap:12px;min-height:48px;margin-top:-4px;padding:0 4px;cursor:pointer}
+.qe-lure > span:first-child{flex:1;display:flex;align-items:center;gap:8px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface)}
+.qe-lure > span:first-child svg{width:18px;height:18px;color:var(--md-warning)}
+.qe-lure.is-off{opacity:.38;pointer-events:none}
+.qe-add{align-self:flex-start}
+.qe-add .ic{width:20px;height:20px}
+.qe-meta{display:flex;flex-wrap:wrap;gap:6px}
+.qe-meta:empty{display:none}
+/* the dock: what saving would do, and Save, always in reach */
+.qe-dock{position:absolute;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));z-index:4;width:min(640px,calc(100% - 32px));display:flex;align-items:center;gap:12px;
+  padding:8px 8px 8px 20px;border-radius:var(--p-r-xl);background:var(--p-float);color:var(--md-on-surface);box-shadow:var(--p-shadow);transform:translateX(-50%)}
+.qe-dock__s{flex:1;min-width:0;display:flex;align-items:center;gap:8px;font:500 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.qe-dock__s svg{flex:none;width:18px;height:18px}
+.qe-dock__s.is-bad{color:var(--md-on-surface)}
+.qe-dock__s.is-bad svg{color:var(--md-error)}
+.qe-dock__s.is-ok svg{color:var(--md-success)}
+.qe-dock__s > span{min-width:0;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.qe-dock .pl-btn{flex:none;padding:0 24px}
+.qe-flash{animation:qeFlash 900ms var(--p-effect) 1}
+@keyframes qeFlash{0%,100%{box-shadow:inset 0 0 0 0 transparent}25%{box-shadow:inset 0 0 0 3px var(--md-error)}}
+.qe-prev[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.qe-opt.is-in{animation:glFade 150ms both}.qe-k[aria-checked="true"].is-pop > span{animation:none}}
 
 /* ---------- the figure viewer ----------
    Plume 1.10 · figure viewer. Rebuilt in v6.57: the legacy bar held six
@@ -7058,18 +7518,43 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div id="dueList"></div>
     </section>
 
-    <!-- ============ BANK ============ -->
+    <!-- ============ QUESTION BANK (Plume 2.22 · bank) ============
+         Opens on the questions: the search with two buttons beside it
+         (Sort and filter; About your bank), the count line, then the
+         list. Every filter is a chip that counts what a tap brings in;
+         the count line names what is on and practises it. A row opens
+         the question page (which slides over the list); its pencil
+         opens the editor. Long-press a row to select several. -->
     <section class="view" id="v-bank">
-      <p class="eyebrow">Archive <span class="rule"></span></p>
-      <h2 class="vt">Question bank</h2>
-      <div class="row" style="margin-bottom:14px">
-        <input type="search" id="bankSearch" placeholder="Search stems, choices, explanations, tags…" style="flex:1 1 220px;min-width:0">
-        <select id="bankFilter" style="width:auto;max-width:100%;min-width:0"><option value="all">All</option><option value="flagged">Flagged</option><option value="wrong">Incorrect</option><option value="right">Correct</option><option value="unused">Unseen</option><option value="conflict">Key conflicts</option><option value="notes">Has notes</option><option value="fignew">Figure not attached yet</option><option value="fighas">Has a photo</option><option value="unclassified">Needs classifying</option><option value="dupe">Possible duplicates</option><option value="repeat">Seen more than once</option><option value="unverified">Unverified answer</option><option value="verified">Verified by me</option><option value="locked">Hand-classified</option></select>
-        <button class="btn ghost sm" id="dupScan" title="Find questions that are the same item in different wording">Scan duplicates</button>
+      <div class="bk" id="bk">
+        <h2 class="bk-title">Question bank</h2>
+        <div class="gl-bar" style="--bi:0">
+          <label class="sx-search gl-search" id="bkSearchBox">
+            <svg class="ic sx-search__ic" viewBox="0 0 24 24" aria-hidden="true"><g class="sx-lens"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.9-3.9"/></g></svg>
+            <input type="search" id="bankSearch" placeholder="Search the bank" aria-label="Search stems, options, explanations, tags, IDs and your notes" autocomplete="off">
+            <button type="button" class="sx-search__x pl-press" id="bkSearchX" aria-label="Clear search" tabindex="-1"><svg class="ic" data-ic="i-close"></svg></button>
+          </label>
+          <button type="button" class="gl-tg pl-press" id="bkArrBtn" aria-expanded="false" aria-controls="bkArr" aria-label="Sort and filter" title="Sort and filter"><svg class="ic gl-tune" viewBox="0 0 24 24" aria-hidden="true"><path class="gl-tune__t" d="M3.8 6.4h16.4M3.8 12h16.4M3.8 17.6h16.4"/><path class="gl-tune__k gl-tune__k1" d="M16 4v4.8"/><path class="gl-tune__k gl-tune__k2" d="M8.2 9.6v4.8"/><path class="gl-tune__k gl-tune__k3" d="M12.2 15.2V20"/></svg><span class="gl-tg__n" id="bkArrN" aria-hidden="true"></span></button>
+          <button type="button" class="gl-tg pl-press" id="bkSumBtn" aria-expanded="false" aria-controls="bkSum" aria-label="About your bank" title="About your bank"><svg class="ic gl-bars" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/><rect x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/><rect x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/></svg></button>
+        </div>
+        <div class="gl-hint" id="bkHint" aria-live="polite"><div><p>Searching stems, options and their reasons, explanations, topics, tags, IDs, your notes and your labels.</p></div></div>
+        <!-- sort and filter: folded away until asked for, so the questions come first -->
+        <div class="gl-fold" id="bkArr" inert><div><div class="gl-panel bk-panel">
+          <div class="bk-panel__row"><p class="bk-panel__h">Sort by</p><div class="bk-sort" id="bkSort" role="radiogroup" aria-label="Sort by"></div></div>
+          <div class="gl-chips" id="bkChips"></div>
+        </div></div></div>
+        <!-- about your bank: what it holds, and what needs tidying, each opening its peek -->
+        <div class="gl-fold" id="bkSum" inert><div><div class="gl-panel gl-panel--sum">
+          <div class="bk-hero" id="bkHero"></div>
+        </div></div></div>
+        <div class="bk-meta" style="--bi:1">
+          <span class="bk-meta__t" id="bankMeta" aria-live="polite"></span>
+          <button type="button" class="pl-btn pl-btn--tonal pl-press" id="bkPrac"><svg class="ic" data-ic="i-play"></svg>Practise</button>
+          <button type="button" class="pl-ib pl-press" id="bkSelBtn" aria-label="Select questions" title="Select questions"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.2 2.8 2.8 5.4-5.6"/></svg></button>
+        </div>
+        <div class="bk-list" id="bankList" style="--bi:2"></div>
+        <div class="bk-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" id="bankMore" hidden>Show more</button></div>
       </div>
-      <div class="tiny muted" id="bankMeta" style="margin-bottom:10px"></div>
-      <div id="bankList"></div>
-      <div class="row" style="justify-content:center;margin-top:14px"><button class="btn ghost" id="bankMore" style="display:none">Show more</button></div>
     </section>
 
     <!-- ============ IMAGES (Plume 2.19 · gallery) ============
@@ -7308,7 +7793,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.83</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.84</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7364,7 +7849,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.83 · sharded store</span>
+        <span class="chip" id="verChip">v6.84 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -7478,6 +7963,54 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 
 <!-- ============ DIALOG / BOTTOM SHEET ============ -->
 <div class="mask" id="mask"><div class="modal" id="modal" role="dialog" aria-modal="true"><div class="mh"><h3 id="mTitle">—</h3><button class="tool" style="margin-left:auto" id="mClose" title="Close"><svg class="ic"><use href="#i-close"/></svg></button></div><div class="mb" id="mBody"></div><div class="mf" id="mFoot"></div></div></div>
+<!-- Plume 2.22 · bank selection bar: long-press a row, or Select, to act on several questions -->
+<div class="gl-selbar" id="bkSel" role="toolbar" aria-label="Selected questions" inert>
+  <button type="button" class="pl-ib pl-press" id="bkSelX" aria-label="Stop selecting"><svg class="ic" data-ic="i-close"></svg></button>
+  <span class="gl-selbar__n" id="bkSelN" aria-live="polite">0 selected</span>
+  <button type="button" class="pl-ib pl-press" id="bkSelAll" aria-label="Select every question shown" title="Select every question shown"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="m8 12.2 2.8 2.8 5.4-5.6"/></svg></button>
+  <button type="button" class="pl-ib pl-press" id="bkSelMore" aria-label="More for the selected questions" aria-haspopup="menu" aria-expanded="false"><svg class="ic" data-ic="i-morev"></svg></button>
+  <button type="button" class="pl-btn pl-btn--filled pl-press" id="bkSelGo" disabled><svg class="ic" data-ic="i-play"></svg><span>Practise</span></button>
+</div>
+<div class="pl-menu bk-selmenu" id="bkSelMenu" role="menu" hidden></div>
+
+<!-- Plume 2.22 · question page: slides over whatever opened it -->
+<div class="ply-scrim" id="qpScrim" aria-hidden="true"></div>
+<div class="ply qp" id="qp" role="dialog" aria-modal="true" aria-labelledby="qpBarT" tabindex="-1" hidden inert>
+  <header class="ply-bar">
+    <button type="button" class="pl-ib pl-press" id="qpX" aria-label="Back" title="Back"><svg class="ic" data-ic="i-back"></svg></button>
+    <div class="ply-bar__t"><span id="qpBarT">Question</span><small id="qpBarS"></small></div>
+    <button type="button" class="pl-ib pl-press qp-flag" id="qpFlag" aria-pressed="false" aria-label="Flag this question" title="Flag"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V3.6"/><path class="qp-flag__c" d="M5.5 4.2c2.4-1.3 4.6-1.1 6.7-.1 2 1 4.1 1.2 6.3.2v8.6c-2.2 1-4.3.8-6.3-.2-2.1-1-4.3-1.2-6.7.1z"/></svg></button>
+    <button type="button" class="pl-ib pl-press" id="qpEdit" aria-label="Edit this question" title="Edit"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round"><path d="M4 20h4.2L19.3 8.9a2.1 2.1 0 0 0 0-3L18.1 4.7a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="m13.6 6.2 4.2 4.2"/></svg></button>
+    <button type="button" class="pl-ib pl-press" id="qpMore" aria-label="More" title="More" aria-haspopup="menu" aria-expanded="false"><svg class="ic" data-ic="i-morev"></svg></button>
+  </header>
+  <div class="pl-menu ply-menu" id="qpMenu" role="menu" hidden></div>
+  <div class="ply-scroll" id="qpScroll"><div class="ply-body" id="qpBody"></div></div>
+  <nav class="qp-step" id="qpStep" aria-label="Step through the list" hidden>
+    <button type="button" class="pl-ib pl-press" id="qpPrev" aria-label="Previous question"><svg class="ic" data-ic="i-prev"></svg></button>
+    <span class="qp-step__n" id="qpStepN" aria-live="polite"></span>
+    <button type="button" class="pl-ib pl-press" id="qpNext" aria-label="Next question"><svg class="ic" data-ic="i-next"></svg></button>
+  </nav>
+</div>
+
+<!-- Plume 2.22 · editor: slides over the question page, the player or the bank -->
+<div class="ply-scrim qe-scrim" id="qeScrim" aria-hidden="true"></div>
+<div class="ply qe" id="qe" role="dialog" aria-modal="true" aria-labelledby="qeT" tabindex="-1" hidden inert>
+  <header class="ply-bar">
+    <button type="button" class="pl-ib pl-press" id="qeX" aria-label="Close the editor" title="Close"><svg class="ic" data-ic="i-close"></svg></button>
+    <div class="ply-bar__t"><span id="qeT">Edit question</span><small id="qeS"></small></div>
+    <div class="pl-seg qe-mode" id="qeMode" role="radiogroup" aria-label="Write or preview" style="--n:2;--i:0">
+      <span class="pl-seg__ind" aria-hidden="true"></span>
+      <button type="button" class="pl-press on" role="radio" aria-checked="true" data-v="edit">Write</button>
+      <button type="button" class="pl-press" role="radio" aria-checked="false" data-v="prev">Preview</button>
+    </div>
+  </header>
+  <div class="qe-fold" id="qeJumpF"><div><nav class="qe-jump" id="qeJump" aria-label="Jump to a part of the question"></nav></div></div>
+  <div class="ply-scroll" id="qeScroll"><div class="qe-body" id="qeBody"></div><div class="qe-prev" id="qePrev" hidden></div></div>
+  <div class="qe-dock">
+    <span class="qe-dock__s" id="qeStat" aria-live="polite"></span>
+    <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press" id="qeSave">Save</button>
+  </div>
+</div>
 
 <!-- ============ SNACKBAR ============ -->
 <div id="toast" role="status" aria-live="polite"></div>
@@ -8478,7 +9011,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.83';
+const APP_VERSION='6.84';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -11295,7 +11828,8 @@ function go(v){
   if(v==='dash')renderDash(true);
   if(v==='build')renderBuild();
   if(v==='review')renderReview();
-  if(v==='bank')renderBank(true);
+  if(v==='bank')renderBank(true,true);
+  else if(typeof BK!=='undefined'&&BK.sel)bkSelEnd();
   if(v==='gallery')renderGallery(true,true);
   if(v==='stats')renderStats(true);
   if(v==='settings')renderSettings();
@@ -14660,319 +15194,661 @@ exitPlayer=function(){REVIEW=false;_exit()};
 /* ============================================================
    QUESTION PREVIEW + EDITOR
    ============================================================ */
-function previewQuestion(id){
-  const q=Q_BY_ID[id];if(!q)return;const s=ST(id);
-  const chips=[
-    `<span class="chip mono">${esc(q.pubId||pubIdOf(q.id))}</span>`,
-    `<span class="chip ${q.system===UNCLASSIFIED?'amber':''}">${esc(q.system||'')}</span>`,
-    `<span class="chip ${q.subject===UNCLASSIFIED?'amber':''}">${esc(q.subject||'')}</span>`,
-    q.topic?`<span class="chip">${esc(q.topic)}</span>`:'',
-    q.archetype?`<span class="chip acc">${esc(q.archetype)}</span>`:'',
-    q.task?`<span class="chip">${esc(q.task)}</span>`:'',
-    q.depth?`<span class="chip">${esc(q.depth)}</span>`:'',
-    `<span class="chip ${q.difficulty==='hard'?'rose':q.difficulty==='easy'?'jade':''}">${esc(q.difficulty||'medium')}</span>`,
-    `<span class="chip ${(q.trust||0)>=3?'jade':(q.trust||0)<=1?'amber':''}">${esc(TRUST_LABELS[q.trust||0])}</span>`,
-    (q.seenCount||0)>1?`<span class="chip acc">seen ×${q.seenCount}</span>`:'',
-    q.dupCandidate?'<span class="chip amber">possible duplicate</span>':'',
-    q.classLocked?'<span class="chip">classification locked</span>':'',
-    (q.resources||[]).map(r=>`<span class="chip">${esc(r)}</span>`).join(''),
-    (q.tags||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join('')
-  ].join('');
-  /* blocks 6 and 7 — the key and what this device has recorded about my attempts.
-     In the bank there is no live attempt, so this is the standing history
-     rather than one submission, and it keeps the spine's seat right under
-     the options instead of the footnote it used to be. */
-  const att=attOf(q.id),last=att[att.length-1];
-  const keyB=(q.correctAnswer||(q.correctAnswers||[]).join(', '))||'—';
-  const mineRows=[
-    att.length?`${att.filter(a=>a.correct).length}/${att.length} correct across ${att.length} attempt${att.length>1?'s':''}`:'never attempted',
-    att.length?statusOf(id)+' last time':'',
-    (last&&last.miss)?((MISS.find(x=>x[0]===last.miss)||[])[1]||''):'',
-    s.flag?'flagged':'',
-    s.srs?'next due '+new Date(s.srs.due).toLocaleDateString():''
-  ].filter(Boolean).join(' · ');
-  const body=`<div class="row" style="margin-bottom:12px">${chips}</div>
-  <label class="fld" style="margin-bottom:12px"><span>My labels — comma separated, use them to pull a custom set into a session</span><input type="text" id="pvUtags" value="${esc(((s.utags)||[]).join(', '))}" placeholder="e.g. must memorise, sketchy pharm, first aid p302"></label>
-  <div style="white-space:pre-wrap;line-height:1.65">${qFmt(q.stem)}</div>
-  ${figHTML(id,'stem',{add:true})}
-  <div style="font-weight:600;margin-top:10px">${esc(q.leadIn||'')}</div>
-  <div class="choices${chCols(q)?' chx-host':''}" style="margin-top:14px" data-cols="${(chCols(q)||[]).length||''}">${chHeadRow(q,row=>`<div class="ch chx-th" aria-hidden="true"><span class="k"></span><span class="t">${row}</span></div>`)}${q.choices.map(c=>`<div class="ch ${c.isCorrect?'correct':''}"><span class="k">${esc(c.label)}</span><span class="t">${chLine(q,c)}${chPicHTML(q,c,{cap:true,add:true})}${c.isCorrect?'<span class="tag">correct</span>':''}${isLure(c)?lureTag():''}</span>${c.explanation?`<span class="why">${mdFmt(c.explanation)}</span>`:''}</div>`).join('')}</div>
-  <p class="figsub" style="margin-top:18px">Answer</p>
-  <div class="ebody" style="font-size:14px"><p><b>${esc(keyB)}</b></p></div>
-  <p class="figsub" style="margin-top:16px">My history</p>
-  <div class="tiny muted">${esc(mineRows)}</div>
-  ${(q.keyConflict||q.needsReview)?`<div class="ttr" style="border-color:var(--rose);background:var(--rose-soft);margin-top:16px"><p class="figsub" style="color:var(--rose);margin:0 0 6px">Disputed item</p>${q.paperAnswer?`<div class="tiny">The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</div>`:''}${q.conflictNote?`<div class="tiny" style="margin-top:6px">${aFmt(q.conflictNote)}</div>`:''}</div>`:''}
-  ${figHTML(id,'expl',{add:true})}
-  ${q.explanation?`<p class="figsub" style="margin-top:16px">Explanation</p><div class="ebody" style="font-size:14px">${mdFmt(q.explanation)}</div>`:''}
-  ${q.educationalObjective?`<div class="ttr"><p class="figsub" style="color:inherit;margin:0 0 6px">Objective</p><div class="ebody" style="font-size:13px">${mdFmt(q.educationalObjective)}</div></div>`:''}
-  ${(q.thingsToRemember&&q.thingsToRemember.length)?`<div class="ttr" style="margin-top:14px"><p class="figsub" style="color:inherit;margin:0 0 6px">Things to remember</p><div class="ebody" style="font-size:13px"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`:''}
-  ${(q.references&&q.references.length)?`<p class="figsub" style="margin-top:16px">References</p><div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`:''}
-  <label class="fld" style="margin-top:16px"><span>My note — saved as you type, kept with this question everywhere</span><textarea id="pvNote" rows="4" placeholder="Anything you want beside this question the next time it comes up.">${esc(s.note||'')}</textarea></label>
-  ${linksHTML(q)}`;
-  modal(q.topic||'Question',body,
-    `<button class="btn ghost sm" data-copyq="${id}" data-copyscope="ask"><svg class="ic"><use href="#i-copy"/></svg>Question only</button><button class="btn ghost sm" data-copyq="${id}"><svg class="ic"><use href="#i-copy"/></svg>Copy everything</button><button class="btn ghost sm" data-editq="${id}">Edit</button><button class="btn ghost sm" data-flagq="${id}">${s.flag?'Unflag':'Flag'}</button><button class="btn ghost sm" data-verq="${id}">${q.verified?'Un-verify':'Mark verified'}</button><button class="btn danger sm" data-delq="${id}">Delete</button><button class="btn" data-close>Close</button>`);
-  const ut=$('#pvUtags');
-  if(ut)ut.addEventListener('change',()=>{
-    s.utags=ut.value.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean);
-    save();toast('Labels saved.');if(VIEW==='bank')renderBank(true);if(VIEW==='build')renderBuild();
-  });
-  const nb=$('#pvNote');
-  if(nb)nb.addEventListener('input',()=>{
-    s.note=nb.value;clearTimeout(pvNoteT);
-    pvNoteT=setTimeout(()=>{save();if(VIEW==='bank')renderBank()},500);
-  });
+/* ============================================================
+   THE PAGE LAYER  (Plume 2.22 · page layer)
+   ------------------------------------------------------------
+   A page that slides over what opened it: the question page (qp)
+   and the editor (qe). It is the Settings phone layer's engine
+   (sxMove) made general: one value p, 0 (away) to 1 (on screen),
+   on a spring worked out in advance and handed to the compositor
+   as keyframes, painting the page, its leading corners, the scrim
+   and whatever lies under it (drifting a fifth of the way left).
+   Taken over mid-flight from the samples; dragged back with a
+   finger. Each layer pushes its own history key, so Back closes
+   the top one and never the app (DESIGN.md §6 Layers and keys).
+   Things fixed to the screen inside #shell (the FAB) are never
+   moved: a transform on their ancestor would re-anchor them.
+   ============================================================ */
+const PLY={};
+const PLY_R=120;
+function plyGet(id){return PLY[id]||(PLY[id]={id,el:$('#'+id),scrim:$('#'+id+'Scrim'),p:0,v:0,run:null,done:null,under:[]})}
+function plyOpenNow(id){const L=PLY[id];return !!L&&L.el.classList.contains('is-open')&&!L.el.classList.contains('is-closing')}
+function plyUnder(id){
+  if(id==='qe'&&plyOpenNow('qp'))return [$('#qp')];
+  return $$('.mobhead,.main > .view.on,#tabbar,.rail').filter(e=>e.getClientRects().length);
 }
-let pvNoteT;
-document.addEventListener('click',e=>{
-  const v=e.target.closest('[data-verq]');if(!v)return;
-  const q=Q_BY_ID[v.dataset.verq];if(!q)return;
-  q.verified=!q.verified;q.trust=trustOf(q);save();closeModal();
-  toast(q.verified?'Marked as verified.':'Verification removed.');
-  if(VIEW==='bank')renderBank(true);
-});
-document.addEventListener('click',e=>{
-  const f=e.target.closest('[data-flagq]');if(f){const s=ST(f.dataset.flagq);s.flag=!s.flag;save();closeModal();toast(s.flag?'Flagged.':'Unflagged.');if(VIEW==='bank')renderBank(true);return}
-  const d=e.target.closest('[data-delq]');if(d){
-    const i=DB.questions.findIndex(q=>q.id===d.dataset.delq);
-    if(i>=0){DB.questions.splice(i,1);delete DB.stats[d.dataset.delq];
-      if(!DB.tombstones)DB.tombstones={};DB.tombstones[d.dataset.delq]=Date.now();
-      reindex();save();closeModal();toast('Question deleted.');renderBank(true)}return}
-  const cp=e.target.closest('[data-copyq]');if(cp){
-    const q=Q_BY_ID[cp.dataset.copyq];
-    const ask=cp.dataset.copyscope==='ask';
-    if(q)copy(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),
-      ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.');
-    return}
-  const ed=e.target.closest('[data-editq]');if(ed){editQuestion(ed.dataset.editq);return}
-});
-let EDIT=null,EDIT_ID=null;
-function blankQ(){return{id:null,stem:'',leadIn:'',choices:[{label:'A',text:'',isCorrect:true,explanation:''},{label:'B',text:'',isCorrect:false,explanation:''},{label:'C',text:'',isCorrect:false,explanation:''},{label:'D',text:'',isCorrect:false,explanation:''}],explanation:'',educationalObjective:'',thingsToRemember:[],system:UNCLASSIFIED,subject:UNCLASSIFIED,topic:'',task:'Foundational Concepts',archetype:'Other lead-in',depth:'Fact recall',resources:[],difficulty:'medium',tags:[],verified:false,trust:0,classLocked:false,dupCandidate:false,mergedFrom:[],occurrences:[],seenCount:0,source:{exam:'',number:null},images:[],references:[],links:[]}}
-function optList(list,cur,extra){
-  const all=(extra&&list.indexOf(extra)<0&&extra?[extra]:[]).concat(list);
-  return all.map(s=>`<option ${s===cur?'selected':''}>${esc(s)}</option>`).join('');
+function plyLook(p){
+  const W=innerWidth,q=Math.max(0,Math.min(1,p)),r=Math.min(1,(1-q)*6)*28;
+  return {l:'translate3d('+(Math.max(0,1-p)*W).toFixed(2)+'px,0,0)',r:r>.5?r.toFixed(1)+'px 0px 0px '+r.toFixed(1)+'px':'0px',
+    u:'translate3d('+(-.2*W*q).toFixed(2)+'px,0,0)',s:+q.toFixed(3)};
 }
-function editQuestion(id){EDIT_ID=id||null;const q=id?Q_BY_ID[id]:null;EDIT=q?JSON.parse(JSON.stringify(q)):blankQ();drawEditor()}
-function syncEditor(){
-  if(!$('#eStem'))return;
-  EDIT.stem=$('#eStem').value;EDIT.leadIn=$('#eLead').value;EDIT.explanation=$('#eExpl').value;
-  EDIT.educationalObjective=$('#eObj').value;EDIT.system=$('#eSys').value;EDIT.subject=$('#eSub').value;
-  EDIT.topic=$('#eTop').value;EDIT.difficulty=$('#eDiff').value;
-  EDIT.archetype=$('#eArch').value;EDIT.task=$('#eTask').value;EDIT.depth=$('#eDepth').value;
-  EDIT.verified=$('#eVerified').checked;EDIT.classLocked=$('#eLock').checked;
-  EDIT.source=Object.assign({},EDIT.source||{},{exam:$('#eSrc').value});
-  EDIT.tags=$('#eTags').value.split(',').map(t=>t.trim().toLowerCase()).filter(Boolean);
-  if($('#eLinks'))EDIT.links=parseLinks($('#eLinks').value);
-  /* an option table: the headings, and on each option one cell per heading;
-     the option's text is its cells joined, as the importer writes it */
-  if($('#eCols'))EDIT.choiceColumns=$$('#eCols [data-col]').map(x=>x.value.trim());
-  const cols=chCols(EDIT),old=EDIT.choices||[];
-  EDIT.choices=$$('#eChoices [data-chi]').map((card,i)=>{
-    const o={label:(old[i]&&old[i].label)||LETTERS[i],text:'',
-      isCorrect:!!($$('#eChoices input[name=corr]')[i]||{}).checked,
-      explanation:(card.querySelector('[data-chx]')||{value:''}).value,
-      lure:!!(card.querySelector('[data-chl]')||{}).checked};
-    if(cols){
-      const v=[...card.querySelectorAll('[data-cell]')].map(x=>x.value.trim());
-      o.cells=cols.map((_,k)=>v[k]||'');
-      o.text=o.cells.filter(Boolean).join(' \u00b7 ');
-    }else o.text=(card.querySelector('[data-ch]')||{value:''}).value;
-    return o;
-  });
-  edRelabel();
+function plyPaint(L,p){
+  const q=Math.max(0,Math.min(1,p));
+  if(Motion.reduced){L.el.style.opacity=q;L.scrim.style.opacity=0;return}
+  const k=plyLook(p);
+  L.el.style.transform=k.l;L.el.style.borderRadius=k.r==='0px'?'':k.r;
+  L.under.forEach(e=>{e.style.transform=q>0?k.u:''});
+  L.scrim.style.opacity=k.s;
 }
-/* Options are lettered by position, and an option's picture lives in the
-   slot named by its letter, so whenever the letters move the pictures move
-   with them, in one pass (never a chain of renames that could collide). */
-function edRelabel(){
-  const map={};
-  EDIT.choices.forEach((c,i)=>{map[c.label]=LETTERS[i];c.label=LETTERS[i]});
-  figList(EDIT).forEach(f=>{
-    if(!figIsCh(f.slot))return;
-    const to=map[figChLab(f.slot)];
-    if(to)f.slot=figChSlot(to);
-  });
+function plyStop(L){
+  const R=L.run;if(!R)return;L.run=null;
+  const t=Math.max(0,R.anims[0].currentTime||0)*PLY_R/1000,i=Math.min(R.ps.length-1,Math.floor(t)),j=Math.min(R.ps.length-1,i+1),f=t-i;
+  L.p=R.ps[i]+(R.ps[j]-R.ps[i])*f;L.v=R.vs[i]+(R.vs[j]-R.vs[i])*f;
+  R.anims.forEach(a=>a.cancel());plyPaint(L,L.p);
 }
-function drawEditor(){
-  const w=EDIT;
-  const cols=chCols(w);
-  const chRows=w.choices.map((c,i)=>`<div class="card" data-chi="${i}" style="padding:10px;margin-bottom:8px">
-    <div class="row"><label class="pill"><input type="radio" name="corr" value="${i}" ${c.isCorrect?'checked':''} style="width:auto;margin-right:6px">Correct</label>
-    <span class="chip">${LETTERS[i]}</span><button class="btn ghost sm" data-rmch="${i}" style="margin-left:auto">Remove</button></div>
-    ${cols?`<div class="ed-cells" style="--cols:${cols.length}">${chCells(w,c).map((v,k)=>`<input type="text" data-cell="${k}" value="${esc(v)}" placeholder="${esc(cols[k]||'Column '+(k+1))}" aria-label="${esc(cols[k]||'Column '+(k+1))}">`).join('')}</div>`
-      :`<textarea data-ch="${i}" rows="2" placeholder="Option text${chPics(w,c.label).length?' (may be empty: the picture is the option)':''}" style="margin-top:8px">${esc(c.text)}</textarea>`}
-    ${figHTML('@edit',figChSlot(c.label),{ch:true,cap:true,add:true,adds:true})}
-    <textarea data-chx="${i}" rows="2" placeholder="Why this option is right / wrong">${esc(c.explanation)}</textarea>
-    <label class="pill" title="${LURE_SAY}" style="margin-top:8px"><input type="checkbox" data-chl="${i}" ${c.lure?'checked':''} style="width:auto;margin-right:6px">This is the lure</label></div>`).join('');
-  modal(EDIT_ID?'Edit question':'New question',`
-    <label class="fld"><span>Stem</span><textarea id="eStem" rows="5">${esc(w.stem)}</textarea></label>
-    <label class="fld"><span>Lead-in</span><input type="text" id="eLead" value="${esc(w.leadIn)}"></label>
-    <p class="eyebrow">Choices</p>
-    <label class="pill" style="margin-bottom:10px" title="For a paper that prints its options as the rows of a table, with headings across the top"><input type="checkbox" id="eTbl" ${cols?'checked':''} style="width:auto;margin-right:6px">The options are rows of a table</label>
-    ${cols?`<div id="eCols" class="ed-cols"><span class="tiny muted">Column headings, left to right (leave one blank if the paper has none)</span>
-      <div class="ed-cells" style="--cols:${cols.length}">${cols.map((h,k)=>`<span class="ed-col"><input type="text" data-col="${k}" value="${esc(h)}" placeholder="Heading ${k+1}"><button class="btn ghost sm" data-rmcol="${k}" title="Remove this column" aria-label="Remove column ${k+1}"><svg class="ic"><use href="#i-close"/></svg></button></span>`).join('')}</div>
-      <button class="btn ghost sm" id="addCol" style="margin-top:8px">Add a column</button></div>`:''}
-    <div id="eChoices">${chRows}</div>
-    <button class="btn ghost sm" id="addCh">Add a choice</button>
-    <label class="fld" style="margin-top:16px"><span>Explanation</span><textarea id="eExpl" rows="5">${esc(w.explanation)}</textarea></label>
-    <label class="fld"><span>Educational objective</span><textarea id="eObj" rows="2">${esc(w.educationalObjective)}</textarea></label>
-    <p class="eyebrow" style="margin-top:16px">Figures <span class="rule"></span></p>
-    <p class="figsub">With the question</p>
-    ${figHTML('@edit','stem',{add:true})}
-    <p class="figsub" style="margin-top:14px">With the explanation</p>
-    ${figHTML('@edit','expl',{add:true})}
-    <p class="eyebrow" style="margin-top:16px">Classification${EDIT_ID?` <span class="rule"></span> <span class="tiny mono">${esc(w.pubId||pubIdOf(EDIT_ID))}</span>`:''}</p>
-    <div class="row">
-      <label class="fld" style="flex:1;min-width:200px"><span>System</span><select id="eSys">${optList([UNCLASSIFIED].concat(SYSTEMS),w.system,w.system)}</select></label>
-      <label class="fld" style="flex:1;min-width:180px"><span>Subject</span><select id="eSub">${optList([UNCLASSIFIED].concat(SUBJECTS),w.subject,w.subject)}</select></label>
-    </div>
-    <div class="row">
-      <label class="fld" style="flex:1;min-width:200px"><span>Question type</span><select id="eArch">${optList(ARCHETYPES,w.archetype,w.archetype)}</select></label>
-      <label class="fld" style="flex:1;min-width:180px"><span>Physician task</span><select id="eTask">${optList(TASKS,w.task,w.task)}</select></label>
-    </div>
-    <div class="row">
-      <label class="fld" style="flex:1;min-width:150px"><span>Topic</span><input type="text" id="eTop" value="${esc(w.topic)}"></label>
-      <label class="fld" style="width:150px"><span>Cognitive level</span><select id="eDepth">${optList(DEPTHS,w.depth,w.depth)}</select></label>
-      <label class="fld" style="width:130px"><span>Difficulty</span><select id="eDiff">${optList(DIFFS,w.difficulty,w.difficulty)}</select></label>
-    </div>
-    <div class="row">
-      <label class="fld" style="flex:1;min-width:150px"><span>Source / exam</span><input type="text" id="eSrc" value="${esc((w.source||{}).exam||'')}"></label>
-      <label class="fld" style="flex:1;min-width:150px"><span>Tags</span><input type="text" id="eTags" value="${esc((w.tags||[]).join(', '))}"></label>
-    </div>
-    <div class="row">
-      <label class="pill"><input type="checkbox" id="eVerified" ${w.verified?'checked':''} style="width:auto;margin-right:6px"> I have checked this answer key myself</label>
-      <label class="pill"><input type="checkbox" id="eLock" ${w.classLocked?'checked':''} style="width:auto;margin-right:6px"> Lock this classification</label>
-    </div>
-    <p class="tiny muted" style="margin:6px 0 0">A locked classification survives every re-run of the automatic classifier.</p>
-    ${(w.resources||[]).length?`<div class="row" style="margin-top:10px">${w.resources.map(r=>`<span class="chip">${esc(r)}</span>`).join('')}</div>`:''}
-    ${(w.occurrences||[]).length>1?`<p class="tiny muted" style="margin:10px 0 0">Turned up ${w.occurrences.length} times in imports — most recently from ${esc(w.occurrences[w.occurrences.length-1].src||'an unlabelled batch')}.</p>`:''}
-    <p class="eyebrow" style="margin-top:16px">Referenced files <span class="rule"></span></p>
-    <p class="tiny muted" style="margin:0 0 10px">One address per line, or <span class="mono">Lecture 12 | https://t.me/c/1234567890/56</span> to name it. Each becomes a button at the foot of the question.</p>
-    <label class="fld"><span>Addresses</span><textarea id="eLinks" rows="3" placeholder="https://t.me/mychannel/482">${esc(linksToText(w.links))}</textarea></label>
-    <div id="eLinkPrev">${linksHTML(w,'How they will look')}</div>`,
-    `<button class="btn ghost" data-close>Cancel</button><button class="btn pri" id="eSave">Save question</button>`);
-  $('#addCh').onclick=()=>{syncEditor();if(EDIT.choices.length>=10)return toast('Ten options is the ceiling.');
-    const nu={label:LETTERS[EDIT.choices.length],text:'',isCorrect:false,explanation:''};
-    if(chCols(EDIT))nu.cells=chCols(EDIT).map(()=>'');
-    EDIT.choices.push(nu);drawEditor()};
-  /* turning the table on keeps each option's words as its first cell; turning
-     it off keeps the cells, joined, as the option's text */
-  $('#eTbl').onchange=e=>{syncEditor();
-    if(e.target.checked){EDIT.choiceColumns=['',''];EDIT.choices.forEach(c=>{c.cells=[c.text||'','']})}
-    else{EDIT.choiceColumns=null;EDIT.choices.forEach(c=>{delete c.cells})}
-    drawEditor()};
-  if($('#addCol'))$('#addCol').onclick=()=>{syncEditor();const cols=chCols(EDIT);
-    if(cols.length>=CH_MAXCOLS)return toast(CH_MAXCOLS+' columns is the ceiling.');
-    cols.push('');EDIT.choices.forEach(c=>{c.cells=chCells(EDIT,c)});drawEditor()};
-  $$('#eCols [data-rmcol]').forEach(b=>b.onclick=()=>{syncEditor();const cols=chCols(EDIT),k=+b.dataset.rmcol;
-    if(cols.length<=1)return toast('Turn the table off instead.');
-    EDIT.choices.forEach(c=>{const v=chCells(EDIT,c);v.splice(k,1);c.cells=v});cols.splice(k,1);drawEditor()});
-  const lk=$('#eLinks');
-  if(lk)lk.addEventListener('input',()=>{EDIT.links=parseLinks(lk.value);
-    const pv=$('#eLinkPrev');if(pv)pv.innerHTML=linksHTML(EDIT,'How they will look')});
-  $$('#eChoices [data-rmch]').forEach(b=>b.onclick=()=>{syncEditor();if(EDIT.choices.length<=2)return toast('A question needs at least two options.');
-    /* the option's own pictures go with it; the ones after it take their new letters */
-    const k=+b.dataset.rmch,slot=figChSlot(EDIT.choices[k].label);
-    figList(EDIT).filter(f=>f.slot===slot).forEach(f=>figBury(EDIT,f));
-    EDIT.images=figList(EDIT).filter(f=>f.slot!==slot);
-    EDIT.choices.splice(k,1);edRelabel();drawEditor()});
-  $('#eSave').onclick=()=>{
-    syncEditor();const o=EDIT;
-    if(!o.stem.trim())return toast('The stem cannot be empty.');
-    if(o.choices.some(c=>!c.text.trim()&&!chPics(o,c.label).length))return toast(chCols(o)?'Every option needs at least one cell filled, or a picture.':'Every option needs text or a picture.');
-    if(!o.choices.some(c=>c.isCorrect))return toast('Mark which option is correct.');
-    if(o.choices.some(c=>c.lure&&c.isCorrect))return toast('The correct option cannot be the lure.');
-    if(o.choices.filter(c=>c.lure).length>2)return toast('Mark two lures at most.');
-    lureTidy(o.choices);
-    o.correctAnswer=(o.choices.find(c=>c.isCorrect)||{}).label;o.type='single';
-    o.classLocked=!!o.classLocked;o.updatedAt=Date.now();
-    o.hasImage=figsIn(o,'stem').length>0;
-    o.resources=detectResources(o,classifyText(o));o.trust=trustOf(o);
-    if(EDIT_ID&&Q_BY_ID[EDIT_ID]){
-      /* the editor holds a copy taken when it opened; a photo removed or a
-         placeholder deleted on another device since then must not be undone
-         by saving it, so the figures go through the same merge as a sync */
-      try{const live=Q_BY_ID[EDIT_ID],gone=SYNC.M.figGoneOf(o,live);
-        o.images=SYNC.M.mergeImages(o,live);if(Object.keys(gone).length)o.figGone=gone;
-        o.hasImage=figsIn(o,'stem').length>0}catch(e){}
-      /* the ID is permanent: attempts, schedule and notes are keyed to it */
-      Object.assign(Q_BY_ID[EDIT_ID],o,{id:EDIT_ID,pubId:Q_BY_ID[EDIT_ID].pubId||pubIdOf(EDIT_ID)});
-      Q_BY_ID[EDIT_ID].nkey=nearKeyOf(Q_BY_ID[EDIT_ID]);
+function plyMove(L,to,v0,done){
+  plyStop(L);
+  L.done=done||null;if(v0!==undefined)L.v=v0;
+  if(Motion.reduced){L.p=to;L.v=0;
+    L.el.animate([{opacity:to?0:1},{opacity:to?1:0}],{duration:150,easing:'ease-out'}).finished.then(()=>{plyPaint(L,to);const d=L.done;L.done=null;if(d)d()},()=>{});return}
+  /* going: 340 / 0.9; coming back about a third quicker: 520 / 1 (as Settings) */
+  const K=to?340:520,C=2*(to?.9:1)*Math.sqrt(K),h=1/(PLY_R*4);
+  let p=L.p,v=L.v;const ps=[p],vs=[v];
+  while(ps.length<PLY_R*3){
+    for(let i=0;i<4;i++){const a=-K*(p-to)-C*v;v+=a*h;p+=v*h}
+    if(Math.abs(p-to)<.0006&&Math.abs(v)<.02){ps.push(to);vs.push(0);break}
+    ps.push(p);vs.push(v);
+  }
+  if(ps.length<2){ps.push(to);vs.push(0)}
+  const ks=ps.map(plyLook),o={duration:(ps.length-1)*1000/PLY_R,easing:'linear'};
+  plyPaint(L,to);
+  L.el.style.willChange='transform';L.under.forEach(e=>{e.style.willChange='transform'});
+  const anims=[L.el.animate(ks.map(k=>({transform:k.l})),o),L.el.animate(ks.map(k=>({borderRadius:k.r})),o),
+    L.scrim.animate(ks.map(k=>({opacity:k.s})),o)].concat(L.under.map(e=>e.animate(ks.map(k=>({transform:k.u})),o)));
+  const R=L.run={anims,ps,vs};
+  anims[0].finished.then(()=>{
+    if(L.run!==R)return;
+    L.run=null;L.p=to;L.v=0;anims.forEach(a=>a.cancel());
+    L.el.style.willChange='';L.under.forEach(e=>{e.style.willChange=''});
+    const d=L.done;L.done=null;if(d)d();
+  },()=>{});
+}
+function plyOpen(id){
+  const L=plyGet(id);
+  if(plyOpenNow(id))return;
+  const fresh=!L.el.classList.contains('is-open');
+  if(fresh){L.under=plyUnder(id);L.p=0;L.v=0}
+  L.el.classList.remove('is-closing');L.el.hidden=false;L.el.inert=false;
+  if(fresh)plyPaint(L,0);
+  L.el.classList.add('is-open');
+  try{if(!(history.state&&history.state[id]))history.pushState(Object.assign({},history.state||{},{[id]:1}),'')}catch(e){}
+  L.el.focus({preventScroll:true});
+  plyMove(L,1);
+}
+function plyHide(L){
+  if(L.run){L.run.anims.forEach(a=>a.cancel());L.run=null}L.p=0;L.v=0;L.done=null;
+  L.el.classList.remove('is-open','is-closing');L.el.hidden=true;L.el.inert=true;
+  L.el.style.transform='';L.el.style.borderRadius='';L.el.style.opacity='';L.el.style.willChange='';
+  L.under.forEach(e=>{e.style.transform='';e.style.willChange=''});L.under=[];
+  L.scrim.style.opacity='0';
+}
+function plyClose(id,o){
+  o=o||{};const L=plyGet(id);if(!L.el.classList.contains('is-open'))return;
+  if(!o.fromPop)try{if(history.state&&history.state[id])history.back()}catch(e){}
+  if(o.instant){plyHide(L);if(o.after)o.after();return}
+  if(L.el.classList.contains('is-closing'))return;
+  L.el.classList.add('is-closing');L.el.inert=true;
+  plyMove(L,0,o.v0,()=>{if(L.el.classList.contains('is-closing')){plyHide(L);if(o.after)o.after()}});
+}
+/* drag a page back to the right with a finger, anywhere but a field or a
+   strip that scrolls sideways; short springs home, far or a flick closes */
+function plyDrag(id,close){
+  const L=plyGet(id);let d=null,swallow=false;
+  L.el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'||!plyOpenNow(id)||e.target.closest('input,textarea,select,.qe-jump,.qp-chips,.gl-chips__g,.figs,.chx-pic,[data-nodrag]'))return;
+    d={id:e.pointerId,x0:e.clientX,y0:e.clientY,go:false,p0:L.p,pts:[[e.clientX,e.timeStamp]]};
+  },{passive:true});
+  L.el.addEventListener('pointermove',e=>{
+    if(!d||e.pointerId!==d.id)return;
+    const dx=e.clientX-d.x0,dy=e.clientY-d.y0;
+    if(!d.go){
+      if(Math.abs(dy)>10&&Math.abs(dy)>Math.abs(dx)){d=null;return}
+      if(dx<12||dx<Math.abs(dy)*1.4)return;
+      d.go=true;plyStop(L);d.x0=e.clientX;d.p0=L.p;
+      try{L.el.setPointerCapture(e.pointerId)}catch(err){}
+      L.el.querySelectorAll('.is-down').forEach(x=>x.classList.remove('is-down'));
+      L.el.style.willChange='transform';
     }
-    else{o.fp=fingerprint(o.stem,o.choices.map(c=>({text:chFpText(c,o.images)})));o.id='q'+o.fp;o.pubId=pubIdOf(o.id);
-      if(Q_BY_ID[o.id])return toast('That exact question is already in the bank.');
-      o.nkey=nearKeyOf(o);o.occurrences=[{ts:Date.now(),src:'written by me',batch:null}];o.seenCount=1;
-      o.addedAt=Date.now();DB.questions.push(o);reindex()}
-    save();closeModal();toast('Saved.');if(VIEW==='bank')renderBank(true);if(S)renderQ();
-    /* an edit begun from the companion hands the panel back where it left off */
-    const cp=$('#companion');
-    if(cp&&cp.classList.contains('on')&&COMP.sid){compDrawIndex();compQuestion(COMP.i)}
+    L.p=Math.max(0,Math.min(1,d.p0-(e.clientX-d.x0)/innerWidth));plyPaint(L,L.p);
+    d.pts.push([e.clientX,e.timeStamp]);if(d.pts.length>6)d.pts.shift();
+  },{passive:true});
+  const end=e=>{
+    if(!d||e.pointerId!==d.id)return;
+    const g=d;d=null;if(!g.go)return;
+    swallow=true;setTimeout(()=>{swallow=false},0);
+    const a=g.pts[0],b=g.pts[g.pts.length-1],vx=(b[0]-a[0])/Math.max(1,b[1]-a[1]),v=-vx*1000/innerWidth;
+    if(e.type!=='pointercancel'&&(L.p<.62||vx>.45))close(v);
+    else plyMove(L,1,v);
   };
+  L.el.addEventListener('pointerup',end);L.el.addEventListener('pointercancel',end);
+  L.el.addEventListener('click',e=>{if(swallow){e.preventDefault();e.stopPropagation();swallow=false}},true);
+  /* the app's own shortcuts never fire under a page: its keys stay in it */
+  L.el.addEventListener('keydown',e=>e.stopPropagation());
+}
+/* a menu that grows from its anchor and shrinks back into it */
+function plyMenu(m,open,btn){
+  if(!m)return;
+  if(btn)btn.setAttribute('aria-expanded',String(!!open));
+  m.getAnimations().forEach(a=>a.cancel());
+  if(open){m.hidden=false;
+    if(!Motion.reduced)m.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:PL('spatial').d,easing:PL('spatial').e});
+    const f=m.querySelector('button:not([disabled])');if(f)f.focus({preventScroll:true});
+    return}
+  if(m.hidden)return;
+  m.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.9)'}],{duration:Motion.reduced?120:150,easing:PL_EXIT,fill:'forwards'})
+    .finished.then(()=>{if(btn&&btn.getAttribute('aria-expanded')==='true')return;m.hidden=true;m.getAnimations().forEach(a=>a.cancel())},()=>{});
+}
+/* a stale key from a reload while a page was open */
+try{const st=history.state;if(st&&(st.qp||st.qe)){const n=Object.assign({},st);delete n.qp;delete n.qe;history.replaceState(n,'')}}catch(e){}
+addEventListener('popstate',e=>{
+  const st=e.state||{};
+  if(plyOpenNow('qe')&&!st.qe){qeClose({fromPop:true});return}
+  if(plyOpenNow('qp')&&!st.qp)qpClose({fromPop:true});
+});
+/* Escape closes the top page only, and never while a dialog, the viewer, a
+   peek or the gallery picker is above it (each closes itself first) */
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Escape')return;
+  const lb=$('#lbx'),fp=$('#fpk');
+  if($('#mask').classList.contains('on')||(lb&&!lb.hidden)||pgxIsOpen()||(fp&&fp.classList.contains('is-open')))return;
+  const top=plyOpenNow('qe')?'qe':plyOpenNow('qp')?'qp':null;if(!top)return;
+  e.preventDefault();e.stopPropagation();
+  const m=$('#'+top+' .ply-menu:not([hidden])');
+  if(m){plyMenu(m,false,$('#qpMore'));return}
+  if(top==='qe')qeClose();else qpClose();
+},true);
+/* a text field that grows with what is typed, where the browser cannot do it itself */
+const PLY_GROW=!(window.CSS&&CSS.supports&&CSS.supports('field-sizing','content'));
+function plyGrow(root){
+  if(!PLY_GROW)return;
+  root.querySelectorAll('textarea').forEach(t=>{const f=()=>{t.style.height='auto';t.style.height=t.scrollHeight+'px'};f();if(!t.__grow){t.__grow=1;t.addEventListener('input',f)}});
 }
 
 /* ============================================================
-   BANK
+   BANK  (Plume 2.22 · bank, rebuilt in v6.84)
+   ------------------------------------------------------------
+   The list is a view over DB.questions: search, filters in
+   groups (within a group any chip passes, across groups every
+   group must), and a sort. Nothing here is stored but the sort
+   and which panels are open (nidus_bank_view, this device's
+   own). A tap flips its own control on that frame; the list
+   follows a frame later (bkSoon), gliding from where it stood.
    ============================================================ */
-let bankShown=60;
-function renderBank(reset){
-  if(reset)bankShown=60;
-  const term=norm($('#bankSearch').value);
-  const f=$('#bankFilter').value;
-  let list=DB.questions.filter(q=>{
-    const s=DB.stats[q.id]||{};
-    if(f==='flagged'&&!s.flag)return false;
-    if(f==='wrong'&&statusOf(q.id)!=='incorrect')return false;
-    if(f==='right'&&statusOf(q.id)!=='correct')return false;
-    if(f==='unused'&&statusOf(q.id)!=='unused')return false;
-    if(f==='conflict'&&!q.keyConflict)return false;
-    if(f==='notes'&&!(s.note||'').trim())return false;
-    if(f==='fignew'&&!figNeeds(q))return false;
-    if(f==='fighas'&&!figHas(q))return false;
-    if(f==='unclassified'&&q.system!==UNCLASSIFIED&&q.subject!==UNCLASSIFIED)return false;
-    if(f==='dupe'&&!q.dupCandidate)return false;
-    if(f==='repeat'&&(q.seenCount||0)<2)return false;
-    if(f==='unverified'&&(q.trust||0)>1)return false;
-    if(f==='verified'&&!q.verified)return false;
-    if(f==='locked'&&!q.classLocked)return false;
-    if(!term)return true;
-    return norm([q.stem,q.leadIn,q.topic,q.system,q.subject,q.task,q.archetype,q.depth,q.pubId,(q.resources||[]).join(' '),(q.tags||[]).join(' '),(s.utags||[]).join(' '),q.explanation,q.choices.map(c=>c.text+' '+c.explanation).join(' ')].join(' ')).includes(term);
-  });
-  $('#bankMeta').textContent=`${list.length} of ${DB.questions.length} questions`;
-  const slice=list.slice(0,bankShown);
-  $('#bankList').innerHTML=slice.length?slice.map(q=>{
-    const s=DB.stats[q.id]||{},st=statusOf(q.id),a=attOf(q.id).length;
-    return `<div class="qrow" data-preview="${q.id}" style="cursor:pointer">
-      <div><div class="stem">${esc((q.stem||'').slice(0,220))}</div>
-      <div class="meta">
-        <span class="chip mono" title="Permanent question ID">${esc(q.pubId||pubIdOf(q.id))}</span>
-        <span class="chip ${st==='correct'?'jade':st==='incorrect'?'rose':''}">${st==='unused'?'unseen':st}</span>
-        <span class="chip ${q.system===UNCLASSIFIED?'amber':''}">${esc(q.system||'')}</span><span class="chip ${q.subject===UNCLASSIFIED?'amber':''}">${esc(q.subject||'')}</span>
-        ${q.archetype&&q.archetype!=='Other lead-in'?`<span class="chip acc">${esc(q.archetype)}</span>`:''}
-        ${q.topic?`<span class="chip">${esc(q.topic)}</span>`:''}
-        ${(q.seenCount||0)>1?`<span class="chip acc" title="Times this question has turned up in an import">seen ×${q.seenCount}</span>`:''}
-        ${q.dupCandidate?'<span class="chip amber">possible duplicate</span>':''}
-        ${q.verified?'<span class="chip jade">verified</span>':((q.trust||0)<=1?'<span class="chip amber">unverified</span>':'')}
-        ${s.flag?'<span class="chip amber">flagged</span>':''}
-        ${q.keyConflict?'<span class="chip amber">key conflict</span>':''}
-        ${(s.note||'').trim()?'<span class="chip acc">note</span>':''}
-        ${figNeeds(q)?'<span class="chip amber">photo needed</span>':(figHas(q)?'<span class="chip jade">figure</span>':'')}
-        ${(s.utags||[]).map(t=>`<span class="chip acc">${esc(t)}</span>`).join('')}
-        ${a?`<span class="chip">${a} attempt${a>1?'s':''}</span>`:''}
-      </div></div>
-      <div class="acts"><button class="btn ghost sm" data-editq="${q.id}">Edit</button></div></div>`}).join('')
-    :`<div class="empty"><h4>${DB.questions.length?'Nothing matches':'The bank is empty'}</h4><p class="tiny">${DB.questions.length?'Try a different filter or search term.':'Run a paper through the extractor prompt, then import the JSON.'}</p></div>`;
-  $('#bankMore').style.display=list.length>bankShown?'inline-flex':'none';
+const BK_PAGE=60;
+const BK_T={
+  incorrect:q=>statusOf(q.id)==='incorrect',
+  correct:q=>statusOf(q.id)==='correct',
+  unused:q=>statusOf(q.id)==='unused',
+  omitted:q=>statusOf(q.id)==='omitted',
+  due:q=>isDue(q.id),
+  flagged:q=>!!(DB.stats[q.id]||{}).flag,
+  notes:q=>!!((DB.stats[q.id]||{}).note||'').trim(),
+  unverified:q=>(q.trust||0)<=1,
+  verified:q=>!!q.verified,
+  conflict:q=>!!q.keyConflict,
+  lure:q=>(q.choices||[]).some(isLure),
+  unclassified:q=>q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED,
+  locked:q=>!!q.classLocked,
+  dupe:q=>!!q.dupCandidate,
+  repeat:q=>(q.seenCount||0)>=2,
+  fignew:q=>figNeeds(q),
+  fighas:q=>figHas(q)
+};
+const BK_CHIPS=[
+  {g:'rec',h:'Your record',k:'incorrect',label:'Incorrect'},{g:'rec',k:'correct',label:'Correct'},{g:'rec',k:'unused',label:'Unseen'},
+  {g:'rec',k:'omitted',label:'Left blank'},{g:'rec',k:'due',label:'Due for review'},{g:'rec',k:'flagged',label:'Flagged'},{g:'rec',k:'notes',label:'Has notes'},
+  {g:'key',h:'Answer key',k:'unverified',label:'Unverified answer'},{g:'key',k:'verified',label:'Verified by me'},{g:'key',k:'conflict',label:'Key conflicts'},{g:'key',k:'lure',label:'Has a lure'},
+  {g:'lib',h:'Library',k:'unclassified',label:'Needs classifying'},{g:'lib',k:'locked',label:'Hand-classified'},{g:'lib',k:'dupe',label:'Possible duplicates'},
+  {g:'lib',k:'repeat',label:'Turned up in several imports'},{g:'lib',k:'fignew',label:'Figure not attached yet'},{g:'lib',k:'fighas',label:'Has a photo'}
+];
+const BK_FACETS=[['sys','System'],['sub','Subject'],['dif','Difficulty'],['lab','Your labels']];
+const BK_SORTS=[['bank','As imported'],['new','Newest'],['edit','Recently edited'],['miss','Most missed'],['due','Due soonest'],['id','ID']];
+const BK_SORT_SAY={new:'newest first',edit:'recently edited first',miss:'most missed first',due:'due soonest first',id:'by ID'};
+const BK={
+  sets:{rec:new Set(),key:new Set(),lib:new Set(),sys:new Set(),sub:new Set(),dif:new Set(),lab:new Set()},
+  sort:'bank',shown:BK_PAGE,list:[],hay:Object.create(null),frame:0,reset:false,flip:false,typeT:0,
+  sel:null,arr:false,sum:false,swallow:false,dirty:false,io:null
+};
+(function(){
+  try{const v=JSON.parse(localStorage.getItem('nidus_bank_view')||'{}');
+    if(BK_SORTS.some(s=>s[0]===v.sort))BK.sort=v.sort;BK.arr=!!v.arr;BK.sum=!!v.sum}catch(e){}
+})();
+function bkSave(){try{localStorage.setItem('nidus_bank_view',JSON.stringify({sort:BK.sort,arr:BK.arr,sum:BK.sum}))}catch(e){}}
+function bkSoon(reset){
+  if(reset)BK.reset=true;BK.flip=true;
+  if(BK.frame)return;
+  BK.frame=requestAnimationFrame(()=>{const r=BK.reset;BK.frame=0;BK.reset=false;renderBank(r)});
 }
-/* a full-text filter over a large bank is a few milliseconds per question set;
-   one per keystroke made typing stutter. Small banks still filter on the very
-   next frame; large ones wait for a short pause in the typing. */
-let bankTypeT=0;
-$('#bankSearch').addEventListener('input',()=>{
-  clearTimeout(bankTypeT);
-  const run=()=>Motion.frame('bank',()=>renderBank(true));
-  if(DB.questions.length>400)bankTypeT=setTimeout(run,120);else run();
-});
-$('#bankFilter').addEventListener('change',()=>renderBank(true));
-$('#bankMore').onclick=()=>{bankShown+=60;renderBank(false)};
+/* the search text of a question, rebuilt only when the question has moved on */
+function bkHay(q){
+  const c=BK.hay[q.id],stamp=q.updatedAt||q.addedAt||0;
+  if(c&&c.t===stamp)return c.v;
+  const v=norm([q.stem,q.leadIn,q.topic,q.system,q.subject,q.task,q.archetype,q.depth,q.pubId||pubIdOf(q.id),(q.resources||[]).join(' '),(q.tags||[]).join(' '),
+    q.explanation,q.educationalObjective,(q.thingsToRemember||[]).join(' '),(q.choices||[]).map(c=>c.text+' '+(c.explanation||'')).join(' ')].join(' '));
+  BK.hay[q.id]={v,t:stamp};return v;
+}
+/* what is mine changes without the question changing, so it is read fresh */
+function bkMine(q){const s=DB.stats[q.id];if(!s)return '';const u=s.utags||[];return (s.note||u.length)?norm((s.note||'')+' '+u.join(' ')):''}
+function bkTerm(){const raw=($('#bankSearch')||{}).value||'';return{raw,term:norm(raw)}}
+function bkPass(q,g,S){
+  if(g==='sys')return S.has(q.system||UNCLASSIFIED);
+  if(g==='sub')return S.has(q.subject||UNCLASSIFIED);
+  if(g==='dif')return S.has(q.difficulty||'medium');
+  if(g==='lab')return ((DB.stats[q.id]||{}).utags||[]).some(t=>S.has(t));
+  for(const k of S)if(BK_T[k]&&BK_T[k](q))return true;
+  return false;
+}
+function bkTest(q,T,skip){
+  for(const g in BK.sets){if(g===skip)continue;const S=BK.sets[g];if(S.size&&!bkPass(q,g,S))return false}
+  if(!T.term)return true;
+  return bkHay(q).includes(T.term)||bkMine(q).includes(T.term);
+}
+function bkFiltered(){return Object.values(BK.sets).some(S=>S.size>0)}
+function bkSorted(L){
+  const k=BK.sort;if(k==='bank')return L;
+  const a=L.slice(),att=q=>attOf(q.id);
+  if(k==='new')a.sort((x,y)=>(y.addedAt||0)-(x.addedAt||0));
+  else if(k==='edit')a.sort((x,y)=>(y.updatedAt||y.addedAt||0)-(x.updatedAt||x.addedAt||0));
+  else if(k==='id')a.sort((x,y)=>String(x.pubId||pubIdOf(x.id)).localeCompare(String(y.pubId||pubIdOf(y.id))));
+  else if(k==='due'){const d=q=>{const s=DB.stats[q.id];return s&&s.srs?s.srs.due:Infinity};a.sort((x,y)=>d(x)-d(y))}
+  else if(k==='miss'){
+    const m=new Map(a.map(q=>{const t=att(q);const w=t.filter(x=>!x.correct).length;return[q.id,[w,t.length?w/t.length:0]]}));
+    a.sort((x,y)=>{const p=m.get(x.id),r=m.get(y.id);return r[0]-p[0]||r[1]-p[1]});
+  }
+  return a;
+}
+/* the chips the bank itself suggests: its systems, subjects, levels and your labels */
+function bkFacetVals(g){
+  const m=new Map();
+  DB.questions.forEach(q=>{
+    if(g==='lab'){((DB.stats[q.id]||{}).utags||[]).forEach(t=>m.set(t,(m.get(t)||0)+1));return}
+    const v=g==='sys'?(q.system||UNCLASSIFIED):g==='sub'?(q.subject||UNCLASSIFIED):(q.difficulty||'medium');
+    m.set(v,(m.get(v)||0)+1);
+  });
+  if(g==='dif')return DIFFS.filter(d=>m.has(d));
+  return [...m.entries()].sort((a,b)=>b[1]-a[1]||String(a[0]).localeCompare(String(b[0]))).map(x=>x[0]);
+}
+const BK_CK='<span class="pg-chip__ck"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></span>';
+const bkCap=s=>String(s).charAt(0).toUpperCase()+String(s).slice(1);
+function bkChipsHTML(){
+  let h='',g0='';
+  BK_CHIPS.forEach(c=>{
+    if(c.g!==g0){if(g0)h+='</div>';g0=c.g;h+=`<div class="gl-chips__g" role="group" aria-label="${esc(c.h)}"><span class="gl-chips__h">${esc(c.h)}</span>`}
+    h+=`<button type="button" class="pg-chip gl-chip pl-press" aria-pressed="false" data-bkchip="${c.g}|${c.k}">${BK_CK}${esc(c.label)}<em class="gl-chip__n"></em></button>`;
+  });
+  h+='</div>';
+  BK_FACETS.forEach(([g,name])=>{
+    const vals=bkFacetVals(g);if(!vals.length)return;
+    h+=`<div class="gl-chips__g" role="group" aria-label="${esc(name)}"><span class="gl-chips__h">${esc(name)}</span>${vals.map(v=>
+      `<button type="button" class="pg-chip gl-chip pl-press" aria-pressed="false" data-bkchip="${g}|${esc(v)}">${BK_CK}${esc(g==='dif'?bkCap(v):v)}<em class="gl-chip__n"></em></button>`).join('')}</div>`;
+  });
+  return h;
+}
+function bkPaintChips(){
+  const el=$('#bkChips');if(!el)return;
+  /* the facets come from the bank, so the chips are rebuilt when it changes shape */
+  const sig=BK_FACETS.map(f=>bkFacetVals(f[0]).join('\u0001')).join('\u0002');
+  if(el.__sig!==sig){el.__sig=sig;el.innerHTML=bkChipsHTML()}
+  el.querySelectorAll('[data-bkchip]').forEach(b=>{
+    const i=b.dataset.bkchip.indexOf('|'),g=b.dataset.bkchip.slice(0,i),k=b.dataset.bkchip.slice(i+1),on=BK.sets[g].has(k);
+    b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));
+  });
+  const so=$('#bkSort');
+  if(!so.children.length)so.innerHTML=BK_SORTS.map(([k,l])=>`<button type="button" class="pg-chip pl-press" role="radio" aria-checked="false" data-bksort="${k}">${BK_CK}${esc(l)}</button>`).join('');
+  so.querySelectorAll('[data-bksort]').forEach(b=>{const on=b.dataset.bksort===BK.sort;b.classList.toggle('on',on);b.setAttribute('aria-checked',String(on))});
+  const n=Object.values(BK.sets).reduce((s,S)=>s+S.size,0)+(BK.sort!=='bank'?1:0),bd=$('#bkArrN');
+  bd.textContent=n||'';bd.classList.toggle('on',!!n&&!BK.arr);
+}
+/* a chip's count is what a tap on it would bring in: the search and every
+   other group applied, plus this chip */
+function bkChipCounts(T){
+  const el=$('#bkChips');if(!el||!BK.arr)return;
+  const pass={};Object.keys(BK.sets).forEach(g=>pass[g]=DB.questions.filter(q=>bkTest(q,T,g)));
+  el.querySelectorAll('[data-bkchip]').forEach(b=>{
+    const i=b.dataset.bkchip.indexOf('|'),g=b.dataset.bkchip.slice(0,i),k=b.dataset.bkchip.slice(i+1),one=new Set([k]);
+    const n=pass[g].filter(q=>bkPass(q,g,one)).length,em=b.querySelector('.gl-chip__n');
+    if(em.textContent!==String(n)){if(em.textContent)sxSwap(em,String(n));else em.textContent=n}
+    b.classList.toggle('is-nil',!n);
+  });
+}
+/* the words of every chip that is on, for the count line and a session's name */
+function bkOnWords(){
+  const w=[];
+  BK_CHIPS.forEach(c=>{if(BK.sets[c.g].has(c.k))w.push(c.label)});
+  BK_FACETS.forEach(([g])=>BK.sets[g].forEach(v=>w.push(g==='dif'?bkCap(v):v)));
+  return w;
+}
+function bkMeta(T){
+  const n=BK.list.length,all=DB.questions.length,on=bkOnWords(),f=on.length||!!T.term;
+  const parts=[`<span><b>${bsNum(n)}</b>${f?' of '+bsNum(all):(n===1?' question':' questions')}</span>`];
+  if(T.term)parts.push(`<span class="bk-fx">“${esc(T.raw.trim().slice(0,28))}”</span>`);
+  if(on.length)parts.push(`<span class="bk-fx">${esc(on.length>2?on.slice(0,2).join(', ')+' +'+(on.length-2):on.join(', '))}</span>`);
+  if(BK.sort!=='bank')parts.push(`<span>${esc(BK_SORT_SAY[BK.sort])}</span>`);
+  if(f)parts.push(`<span><button type="button" class="gl-link" data-bkclear>Clear</button></span>`);
+  const html=parts.join(' · ').replace(/ · (<span><button)/,' $1');
+  const el=$('#bankMeta');if(el.innerHTML!==html)el.innerHTML=html;
+  const p=$('#bkPrac'),b=pgBlockN();
+  p.hidden=!n||!!BK.sel;
+  p.setAttribute('aria-label',`Practise these ${n} question${n===1?'':'s'}`+(n>b?`, a block of ${b}`:''));
+}
+function bkLabel(){const T=bkTerm(),on=bkOnWords();return 'Bank · '+(on.length?on.slice(0,3).join(' · '):T.term?'“'+T.raw.trim().slice(0,24)+'”':'all')}
+
+/* ---- rows ---- */
+const BK_IC={
+  correct:'<path d="M5.5 12.5l4.2 4.2L18.5 7.8"/>',incorrect:'<path d="M7.5 7.5l9 9M16.5 7.5l-9 9"/>',omitted:'<path d="M7.5 12h9"/>',unused:'<circle cx="12" cy="12" r="3.2"/>',
+  flag:'<path d="M5.5 21V3.6"/><path d="M5.5 4.2c2.4-1.3 4.6-1.1 6.7-.1 2 1 4.1 1.2 6.3.2v8.6c-2.2 1-4.3.8-6.3-.2-2.1-1-4.3-1.2-6.7.1z"/>',
+  note:'<path d="M5 4.5h14v15H5z"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4"/>',
+  img:'<rect x="3.5" y="5" width="17" height="14" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="m4.5 17 4.5-4.5 3 3 3-3 4.5 4.5"/>',
+  warn:'<path d="M12 4 21 19.5H3z"/><path d="M12 10v4.2M12 17h.01"/>',
+  ok:'<path d="M12 3.5 19 6v5.6c0 4-2.9 7.2-7 8.9-4.1-1.7-7-4.9-7-8.9V6z"/><path d="m8.8 12.2 2.2 2.2 4.3-4.4"/>',
+  dupe:'<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>',
+  due:'<circle cx="12" cy="12.5" r="8"/><path d="M12 8.5v4.2l2.8 1.8"/>',
+  tag:'<path d="M3.8 12.2V4.5a.7.7 0 0 1 .7-.7h7.7l8 8a1.5 1.5 0 0 1 0 2.1l-5.6 5.6a1.5 1.5 0 0 1-2.1 0z"/><circle cx="8.3" cy="8.3" r="1.3"/>',
+  pen:'<path d="M4 20h4.2L19.3 8.9a2.1 2.1 0 0 0 0-3L18.1 4.7a2.1 2.1 0 0 0-3 0L4 15.8z"/><path d="m13.6 6.2 4.2 4.2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',up:'<path d="M12 19V5M6 11l6-6 6 6"/>',dn:'<path d="M12 5v14M6 13l6 6 6-6"/>'
+};
+const bkSvg=(k,cls)=>`<svg viewBox="0 0 24 24" aria-hidden="true"${cls?` class="${cls}"`:''} style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${BK_IC[k]}</svg>`;
+const BK_STW={correct:'Right last time',incorrect:'Missed last time',omitted:'Left blank last time',unused:'Not seen yet'};
+function bkMk(cls,ic,txt,title){return `<span class="bk-mk${cls?' '+cls:''}"${title?` title="${esc(title)}"`:''}>${ic?bkSvg(ic):''}${esc(txt)}</span>`}
+function bkMarks(q,s){
+  const m=[];
+  if(isDue(q.id))m.push(bkMk('is-due','due','Due'));
+  if(s.flag)m.push(bkMk('is-warn','flag','Flagged'));
+  if((s.note||'').trim())m.push(bkMk('','note','Note'));
+  (s.utags||[]).forEach(t=>m.push(bkMk('is-lab','tag',t)));
+  if(figNeeds(q))m.push(bkMk('is-warn','img','Photo needed'));else if(figHas(q))m.push(bkMk('','img','Figure'));
+  if(q.verified)m.push(bkMk('is-ok','ok','Verified'));else if((q.trust||0)<=1)m.push(bkMk('is-warn','warn','Unverified',TRUST_LABELS[q.trust||0]+' answer key'));
+  if(q.keyConflict)m.push(bkMk('is-err','warn','Key conflict'));
+  if(q.dupCandidate)m.push(bkMk('is-warn','dupe','Possible duplicate'));
+  if((q.seenCount||0)>1)m.push(bkMk('','dupe','Imported ×'+q.seenCount,'Times this question has turned up in an import'));
+  return m.join('');
+}
+/* while searching, the passage that matched and where it was found */
+function bkReWords(raw){
+  const w=String(raw||'').trim().split(/\s+/).map(x=>x.replace(/[^\p{L}\p{N}]/gu,'')).filter(Boolean);
+  if(!w.length)return null;
+  try{return new RegExp(w.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('[^\\p{L}\\p{N}]+'),'iu')}catch(e){return null}
+}
+function bkExcerpt(q,re){
+  if(!re)return '';
+  const s=DB.stats[q.id]||{};
+  const F=[['',q.stem],['Lead-in',q.leadIn]].concat((q.choices||[]).map(c=>['Option '+c.label,c.text]),(q.choices||[]).map(c=>['Why '+c.label,c.explanation]),
+    [['Explanation',q.explanation],['Objective',q.educationalObjective],['Things to remember',(q.thingsToRemember||[]).join(' · ')],['Your note',s.note],['Topic',q.topic]]);
+  for(const [where,t] of F){
+    const txt=String(t||'').replace(/\s+/g,' ');const m=re.exec(txt);if(!m)continue;
+    const a=Math.max(0,m.index-(where?48:72)),b=Math.min(txt.length,m.index+m[0].length+140);
+    let pre=txt.slice(a,m.index),post=txt.slice(m.index+m[0].length,b);
+    if(a>0)pre='…'+pre.replace(/^\S*\s/,'');if(b<txt.length)post=post.replace(/\s\S*$/,'')+'…';
+    return `<span class="bk-hitline">${where?`<em>${esc(where)}</em> · `:''}${esc(pre.replace(/[*_`#>]/g,''))}<mark>${esc(m[0])}</mark>${esc(post.replace(/[*_`#>]/g,''))}</span>`;
+  }
+  return '';
+}
+function bkRowHTML(q,re){
+  const s=DB.stats[q.id]||{},st=statusOf(q.id),att=attOf(q.id),pub=q.pubId||pubIdOf(q.id);
+  const unc=v=>v===UNCLASSIFIED?' class="is-uncl"':'';
+  const over=`${q.system?`<span${unc(q.system)}>${esc(q.system)}</span>`:''}${q.subject?`<span${unc(q.subject)}>${esc(q.subject)}</span>`:''}`;
+  const title=q.topic||q.leadIn||'Untitled question';
+  const hit=bkExcerpt(q,re);
+  const pips=att.slice(-5).map(a=>`<i class="${a.chosen==null?'':a.correct?'y':'n'}"></i>`).join('');
+  const sel=BK.sel&&BK.sel.has(q.id);
+  return `<article class="bk-row${sel?' is-sel':''}" data-bk="${esc(q.id)}">
+    <button type="button" class="bk-hit pl-press" data-bkopen="${esc(q.id)}" aria-label="${esc(pub+': '+title)}"${BK.sel?` aria-pressed="${!!sel}"`:''}></button>
+    <span class="bk-st" data-st="${st}" title="${BK_STW[st]||''}">${bkSvg(st)}<span class="bk-st__ck"><svg viewBox="0 0 24 24" aria-hidden="true" style="fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg></span></span>
+    <span class="bk-main"><span class="bk-over">${over}</span><b class="bk-t">${esc(title)}</b>${hit||`<span class="bk-stem">${esc((q.stem||'').slice(0,320))}</span>`}<span class="bk-marks"><span class="bk-mk is-id">${esc(pub)}</span>${bkMarks(q,s)}${q.archetype&&q.archetype!=='Other lead-in'?bkMk('','',q.archetype):''}</span></span>
+    <span class="bk-side"><button type="button" class="pl-ib pl-press" data-bkedit="${esc(q.id)}" aria-label="Edit ${esc(pub)}" title="Edit">${bkSvg('pen')}</button>${att.length?`<span class="bk-pips" title="${att.length} attempt${att.length>1?'s':''}, newest last">${pips}<b>${att.length}</b></span>`:''}</span>
+  </article>`;
+}
+/* ---- glide: kept rows travel from where they were, new ones rise in, gone ones fade where they stood ---- */
+function bkSnap(){
+  const m=new Map(),vh=innerHeight;
+  $$('#bankList .bk-row').forEach(r=>{const b=r.getBoundingClientRect();if(b.bottom<-160||b.top>vh+160)return;m.set(r.dataset.bk,{b,el:r})});
+  return m;
+}
+function bkFlip(snap){
+  if(!snap||Motion.reduced||!$('#v-bank').classList.contains('on'))return;
+  const sp=PL('spatial'),seen=new Set(),vh=innerHeight;let n=0;
+  $$('#bankList .bk-row').forEach(r=>{
+    const k=r.dataset.bk;seen.add(k);
+    const b=r.getBoundingClientRect();if(b.bottom<-160||b.top>vh+160)return;
+    const o=snap.get(k);
+    if(o){const dy=o.b.top-b.top;if(Math.abs(dy)>.5)r.animate([{transform:`translateY(${dy.toFixed(1)}px)`},{transform:'none'}],{duration:sp.d,easing:sp.e})}
+    else r.animate([{opacity:0,transform:'translateY(14px) scale(.98)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:Math.min(n++,6)*30,fill:'backwards'});
+  });
+  snap.forEach((o,k)=>{
+    if(seen.has(k))return;
+    const g=o.el;g.classList.add('bk-ghost');g.inert=true;g.setAttribute('aria-hidden','true');
+    Object.assign(g.style,{left:o.b.left+'px',top:o.b.top+'px',width:o.b.width+'px',height:o.b.height+'px'});
+    document.body.appendChild(g);
+    g.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.96)'}],{duration:200,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>g.remove(),()=>g.remove());
+  });
+}
+function bkEmptyHTML(){
+  const none=!DB.questions.length;
+  return `<div class="bk-empty pg-empty"><span class="pg-empty__shape" aria-hidden="true"></span><h4>${none?'The bank is empty':'Nothing matches'}</h4>
+    <p class="tiny">${none?'Run a paper through the extractor prompt, then import the JSON.':'Try a different search, or fewer filters.'}</p>
+    ${none?`<button type="button" class="pl-btn pl-btn--tonal pl-press" data-go="import">Import questions</button>`:`<button type="button" class="pl-btn pl-btn--tonal pl-press" data-bkclear>Clear search and filters</button>`}</div>`;
+}
+function renderBank(reset,arrive){
+  bkPkInstall();
+  if(reset)BK.shown=BK_PAGE;
+  const T=bkTerm();
+  BK.list=bkSorted(DB.questions.filter(q=>bkTest(q,T)));
+  if(BK.sel)BK.sel.forEach(id=>{if(!Q_BY_ID[id])BK.sel.delete(id)});
+  bkPaintChips();bkChipCounts(T);bkMeta(T);
+  if(BK.sum)bkHero(arrive);
+  const snap=BK.flip&&!arrive?bkSnap():null;BK.flip=false;
+  const re=T.term?bkReWords(T.raw):null;
+  const slice=BK.list.slice(0,BK.shown);
+  $('#bankList').innerHTML=slice.length?slice.map(q=>bkRowHTML(q,re)).join(''):bkEmptyHTML();
+  $('#bankMore').hidden=BK.list.length<=BK.shown;
+  if(snap)bkFlip(snap);
+  if(arrive&&!Motion.reduced){const b=$('#bk');b.classList.remove('is-arrive');void b.offsetWidth;b.classList.add('is-arrive');
+    b.addEventListener('animationend',function f(e){if(e.target.parentNode===b&&e.target.classList.contains('bk-list')){b.classList.remove('is-arrive');b.removeEventListener('animationend',f)}})}
+  if(BK.sel)bkSelPaint();
+  if(plyOpenNow('qp'))qpRefresh();
+  BK.dirty=false;
+}
+/* ---- the panels beside the search ---- */
+function bkPanel(which,open){
+  const k=which==='arr'?'arr':'sum',btn=$(which==='arr'?'#bkArrBtn':'#bkSumBtn'),fold=$(which==='arr'?'#bkArr':'#bkSum');
+  BK[k]=open;bkSave();
+  btn.setAttribute('aria-expanded',String(open));fold.classList.toggle('on',open);fold.inert=!open;
+  if(which==='sum'&&open){const b=btn.querySelector('.gl-bars');b.classList.remove('is-play');void b.getBoundingClientRect();b.classList.add('is-play');bkHero(true)}
+  if(which==='arr'){bkPaintChips();if(open)requestAnimationFrame(()=>bkChipCounts(bkTerm()))}
+}
+function bkHero(arrive){
+  const el=$('#bkHero');if(!el)return;
+  const Q=DB.questions,n=Q.length;let c=0,w=0,u=0;
+  Q.forEach(q=>{const x=statusOf(q.id);if(x==='correct')c++;else if(x==='unused')u++;else w++});
+  const cnt=k=>Q.filter(BK_T[k]).length;
+  const T={due:cnt('due'),flagged:cnt('flagged'),notes:cnt('notes'),unclassified:cnt('unclassified'),unverified:cnt('unverified'),conflict:cnt('conflict'),fignew:cnt('fignew'),dupe:cnt('dupe')};
+  const sig=JSON.stringify([n,c,w,u,T]);
+  if(!arrive&&el.__sig===sig)return;el.__sig=sig;
+  if(arrive)['bkn','bkd','bkf','bkno'].forEach(k=>delete PG.prev[k]);
+  if(!n){el.innerHTML=`<p class="bk-panel__h">Nothing here yet. Import a batch and its questions land in the bank.</p>`;return}
+  const S=[['c','Right last time',c,'var(--md-primary)'],['w','Missed or left blank',w,'oklch(from var(--md-primary) l c calc(h + 75))'],['u','Not seen yet',u,'color-mix(in oklab,var(--md-primary) 26%,var(--p-well))']].filter(x=>x[2]);
+  const tidy=[['unclassified','Needs classifying','The classifier could not place its system or subject'],['unverified','Unverified answer key','Weak or unverified keys; check them against a source'],
+    ['conflict','Key conflicts',"The paper's key and the extractor disagree"],['fignew','Waiting for a photo','A figure the paper printed is not attached yet'],['dupe','Possible duplicates','The same item in different wording']];
+  el.innerHTML=`<div class="bk-hero__top">
+      <button type="button" class="gl-count pg-tap pg-tap--bare pl-press" data-pk="bnk:all"><span class="gl-big hm-num">${pgN('bkn',n)}</span><span>${n===1?'question in your bank':'questions in your bank'}</span></button>
+    </div>
+    <div data-pgfg>
+      <div class="bk-state" aria-hidden="true">${S.map((x,i)=>`<span data-pgf="${x[0]}" style="--n:${x[2]};--c:${x[3]};--i:${i}"></span>`).join('')}</div>
+      <ul class="gl-leg">${S.map(x=>`<li><button type="button" class="pg-tap pl-press" data-pgf="${x[0]}" data-pk="bnk:st:${x[0]}" style="--c:${x[3]}"><i></i><span>${x[1]}</span><b>${bsNum(x[2])}</b><em>${Math.round(x[2]/n*100)}%</em></button></li>`).join('')}</ul>
+    </div>
+    <div class="gl-mini">
+      <button type="button" class="pg-tap pl-press" data-pk="bnk:due"><b class="hm-num">${pgN('bkd',T.due)}</b><span>due for review</span></button>
+      <button type="button" class="pg-tap pl-press" data-pk="bnk:flagged"><b class="hm-num">${pgN('bkf',T.flagged)}</b><span>flagged</span></button>
+      <button type="button" class="pg-tap pl-press" data-pk="bnk:notes"><b class="hm-num">${pgN('bkno',T.notes)}</b><span>with your note</span></button>
+    </div>
+    <div><p class="bk-panel__h" style="margin-bottom:8px">Keep it tidy</p><ul class="bk-tidy">
+      ${tidy.map(([k,l,sub])=>`<li><button type="button" class="pl-press" data-pk="bnk:${k}"><span>${l}<small>${sub}</small></span><b class="${T[k]?'':'is-zero'}">${bsNum(T[k])}</b></button></li>`).join('')}
+      <li><button type="button" class="pl-press" id="bkScan"><span>Scan for duplicates<small>Find questions that are the same item in different wording</small></span>${sxIc('i-refresh')}</button></li>
+    </ul></div>`;
+  pgAlive(el);
+}
+/* show exactly one chip's questions: every other filter and the search cleared */
+function bkOnly(g,k){
+  Object.values(BK.sets).forEach(S=>S.clear());
+  if(g)BK.sets[g].add(k);
+  const s=$('#bankSearch');if(s.value){s.value='';$('#bkSearchBox').classList.remove('has-q')}
+  bkPaintChips();bkSoon(true);
+  requestAnimationFrame(()=>{const m=$('.bk-meta');if(m&&m.getBoundingClientRect().top<0)m.scrollIntoView({block:'start',behavior:Motion.reduced?'auto':'smooth'})});
+}
+function bkPeekSet(Q,o,t,say,label,only,extra){
+  const ids=Q.map(q=>q.id);let c=0,w=0,u=0;
+  Q.forEach(q=>{const x=statusOf(q.id);if(x==='correct')c++;else if(x==='unused')u++;else w++});
+  return {o,t,fig:pgxFig(pgN('px',Q.length),Q.length===1?'question':'questions'),
+    body:pgxP(say)+(Q.length?pgxMini([[c,'right last time'],[w,'missed or blank'],[u,'not seen yet']]):'')+(extra||'')+pgxBySys(Q,'Where they fall'),
+    acts:[only?{l:'Show only these',ic:'i-tune',primary:true,dis:!Q.length,run:only}:null,pgxPrac(ids,label,'Practise these',!only)]};
+}
+function bkPkInstall(){
+  if(PG_PK.bnk)return;
+  PG_PK.bnk=arg=>{
+    const Q=DB.questions;
+    if(arg==='all')return bkPeekSet(Q,'Your bank','Every question','Everything you have imported or written. Practising starts a block from the whole bank, at your usual size and timing.','Bank · all');
+    if(arg.startsWith('st:')){
+      const k=arg.slice(3),E=Q.filter(q=>{const x=statusOf(q.id);return k==='c'?x==='correct':k==='u'?x==='unused':(x==='incorrect'||x==='omitted')});
+      const L={c:['Right last time','Questions whose most recent answer was right.','correct'],w:['Missed or left blank','Questions whose most recent answer was wrong or left blank. These are the marks still on the table.','incorrect'],u:['Not seen yet','Questions you have never answered in a session.','unused']}[k];
+      return bkPeekSet(E,'Your bank',L[0],L[1],'Bank · '+L[0],()=>{if(k==='w'){Object.values(BK.sets).forEach(S=>S.clear());BK.sets.rec.add('incorrect');BK.sets.rec.add('omitted');const s=$('#bankSearch');s.value='';bkPaintChips();bkSoon(true)}else bkOnly('rec',L[2])});
+    }
+    const W={due:['rec','Due for review','Questions the review schedule says are ready to come back today.'],flagged:['rec','Flagged','Questions you flagged in a session or here.'],
+      notes:['rec','With your note','Questions you wrote a note beside.'],unclassified:['lib','Needs classifying','Questions whose system or subject the classifier could not place. Editing one and choosing them by hand fixes it, and locking keeps your choice.'],
+      unverified:['key','Unverified answer key','Questions whose key is weak or unverified. Check each against a source, then mark it verified in its ⋮ menu or the editor.'],
+      conflict:['key','Key conflicts',"Questions where the paper's printed key and the extractor's answer disagree."],
+      fignew:['lib','Waiting for a photo','Questions whose paper printed a figure that is not attached yet. Images, Waiting, shows them as empty slots you can fill.'],
+      dupe:['lib','Possible duplicates','Questions the duplicate scan found to be the same item in different wording. Merging keeps one and moves the other’s attempts, notes and schedule onto it.']};
+    const x=W[arg];if(!x)return null;
+    const E=Q.filter(BK_T[arg]),r=bkPeekSet(E,'Your bank',x[1],x[2],'Bank · '+x[1],()=>bkOnly(x[0],arg));
+    if(arg==='dupe')r.acts.push({l:'Review the pairs',ic:'i-next',run:()=>showDuplicates(DB.dupPairs||[])});
+    return r;
+  };
+}
+/* ---- selecting several ---- */
+function bkSelStart(id){
+  if(!BK.sel)BK.sel=new Set();if(id)BK.sel.add(id);
+  $('#bk').classList.add('is-sel');document.body.classList.add('bk-selecting');
+  const bar=$('#bkSel');bar.inert=false;bar.classList.add('is-open');
+  $$('#bankList .bk-hit').forEach(b=>b.setAttribute('aria-pressed',String(BK.sel.has(b.dataset.bkopen))));
+  bkSelPaint();bkMeta(bkTerm());
+}
+function bkSelEnd(){
+  if(!BK.sel)return;BK.sel=null;
+  $('#bk').classList.remove('is-sel');document.body.classList.remove('bk-selecting');
+  const bar=$('#bkSel');bar.classList.remove('is-open');bar.inert=true;bkSelMenu(false);
+  $$('#bankList .bk-row.is-sel').forEach(r=>r.classList.remove('is-sel'));
+  $$('#bankList .bk-hit').forEach(b=>b.removeAttribute('aria-pressed'));
+  bkMeta(bkTerm());
+}
+function bkSelPaint(){
+  if(!BK.sel)return;
+  const n=BK.sel.size,t=n+' selected',el=$('#bkSelN');
+  if(el.textContent!==t){if(el.textContent&&el.textContent!=='0 selected')sxSwap(el,t);else el.textContent=t}
+  $('#bkSelGo').disabled=!n;$('#bkSelMore').disabled=!n;
+  $$('#bankList .bk-row').forEach(r=>{const on=BK.sel.has(r.dataset.bk);r.classList.toggle('is-sel',on);const h=r.querySelector('.bk-hit');if(h)h.setAttribute('aria-pressed',String(on))});
+}
+function bkSelToggle(id){if(!BK.sel)return;if(BK.sel.has(id))BK.sel.delete(id);else BK.sel.add(id);bkSelPaint()}
+function bkSelMenuHTML(){
+  const ids=[...BK.sel],n=ids.length,allF=ids.every(id=>(DB.stats[id]||{}).flag),allV=ids.every(id=>(Q_BY_ID[id]||{}).verified);
+  const it=(a,ic,b,s)=>`<button type="button" class="pl-menu__item pl-press" role="menuitem" data-bksa="${a}">${ic}<span><b>${b}</b>${s?`<small>${s}</small>`:''}</span></button>`;
+  return it(allF?'unflag':'flag',bkSvg('flag','ic'),allF?'Remove the flags':'Flag them')+
+    `<div class="bk-lab-wrap">${it('label',bkSvg('tag','ic'),'Add a label','Pulls them into a session later')}</div>`+
+    it(allV?'unverify':'verify',bkSvg('ok','ic'),allV?'Remove verification':'Mark the keys verified')+
+    it('copy',sxIc('i-copy'),'Copy as Markdown','Each with its answer and explanations')+
+    it('del',sxIc('i-trash'),`Delete ${n} question${n===1?'':'s'}`,'Their answers and schedules go too');
+}
+function bkSelMenu(open){
+  const m=$('#bkSelMenu'),b=$('#bkSelMore');
+  if(open){m.innerHTML=bkSelMenuHTML();const r=b.getBoundingClientRect();
+    Object.assign(m.style,{left:'auto',top:'auto',right:Math.max(8,innerWidth-r.right)+'px',bottom:(innerHeight-r.top+8)+'px',transformOrigin:'calc(100% - 24px) 100%'})}
+  plyMenu(m,open,b);
+}
+function bkDelete(ids){
+  if(!DB.tombstones)DB.tombstones={};
+  const kill=new Set(ids);
+  DB.questions=DB.questions.filter(q=>!kill.has(q.id));
+  ids.forEach(id=>{delete DB.stats[id];DB.tombstones[id]=Date.now()});
+  reindex();save();
+}
+function bkSelAct(a,btn){
+  const ids=[...BK.sel].filter(id=>Q_BY_ID[id]),n=ids.length,w=n===1?'question':'questions';
+  if(!n)return;
+  if(a==='del'){
+    if(!btn.classList.contains('is-armed')){btn.classList.add('is-armed');btn.querySelector('b').textContent='Tap again to delete '+n;clearTimeout(btn.__t);
+      btn.__t=setTimeout(()=>{if(btn.isConnected){btn.classList.remove('is-armed');btn.querySelector('b').textContent=`Delete ${n} ${w}`}},3200);return}
+    bkSelMenu(false);bkDelete(ids);bkSelEnd();toast(`Deleted ${n} ${w}.`);bkSoon();return;
+  }
+  if(a==='label'){
+    const wrap=btn.parentNode;if(wrap.querySelector('.bk-lab'))return;
+    const used=[...new Set(DB.questions.flatMap(q=>(DB.stats[q.id]||{}).utags||[]))].sort();
+    wrap.insertAdjacentHTML('beforeend',`<div class="bk-lab"><input type="text" id="bkLabIn" list="bkLabList" placeholder="must memorise" aria-label="Label to add" autocomplete="off"><datalist id="bkLabList">${used.map(t=>`<option value="${esc(t)}">`).join('')}</datalist><button type="button" class="pl-btn pl-btn--filled pl-press" id="bkLabGo">Add</button></div>`);
+    const go=()=>{const t=$('#bkLabIn').value.trim().toLowerCase();if(!t)return;
+      ids.forEach(id=>{const s=ST(id);if(s.utags.indexOf(t)<0)s.utags.push(t)});save();bkSelMenu(false);toast(`Labelled ${n} ${w} “${t}”.`);bkSoon()};
+    $('#bkLabGo').onclick=go;$('#bkLabIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}});$('#bkLabIn').focus();return;
+  }
+  bkSelMenu(false);
+  if(a==='flag'||a==='unflag'){ids.forEach(id=>{ST(id).flag=a==='flag'});save();toast(a==='flag'?`Flagged ${n} ${w}.`:`Flags removed from ${n} ${w}.`)}
+  else if(a==='verify'||a==='unverify'){ids.forEach(id=>{const q=Q_BY_ID[id];q.verified=a==='verify';q.trust=trustOf(q)});save();toast(a==='verify'?`Marked ${n} ${w} verified.`:`Verification removed from ${n} ${w}.`)}
+  else if(a==='copy'){copy(ids.map(id=>qToMarkdown(Q_BY_ID[id],null,Object.assign({},DB.settings.copyOpts,{scope:'full'}))).join('\n\n---\n\n'),`${n} ${w} copied with their answers and explanations.`);return}
+  bkSoon();
+}
+/* ---- wiring ---- */
+(function(){
+  const box=$('#bkSearchBox'),inp=$('#bankSearch');
+  inp.addEventListener('input',()=>{
+    box.classList.toggle('has-q',!!inp.value);$('#bkHint').classList.toggle('on',!inp.value&&document.activeElement===inp);
+    clearTimeout(BK.typeT);
+    if(DB.questions.length>400)BK.typeT=setTimeout(()=>bkSoon(true),120);else bkSoon(true);
+  });
+  inp.addEventListener('focus',()=>{box.classList.remove('is-scan');void box.offsetWidth;box.classList.add('is-scan');$('#bkHint').classList.toggle('on',!inp.value)});
+  inp.addEventListener('blur',()=>$('#bkHint').classList.remove('on'));
+  box.addEventListener('animationend',()=>box.classList.remove('is-scan'));
+  $('#bkSearchX').onclick=()=>{inp.value='';box.classList.remove('has-q');inp.focus();bkSoon(true)};
+  $('#bkArrBtn').onclick=()=>bkPanel('arr',!BK.arr);
+  $('#bkSumBtn').onclick=()=>bkPanel('sum',!BK.sum);
+  $('#bankMore').onclick=()=>{BK.shown+=BK_PAGE;BK.flip=true;renderBank(false)};
+  $('#bkPrac').onclick=()=>startIds(BK.list.map(q=>q.id),bkLabel());
+  $('#bkSelBtn').onclick=()=>BK.sel?bkSelEnd():bkSelStart();
+  $('#bkSelX').onclick=bkSelEnd;
+  $('#bkSelAll').onclick=()=>{if(!BK.sel)return;const all=BK.list.every(q=>BK.sel.has(q.id));BK.list.forEach(q=>all?BK.sel.delete(q.id):BK.sel.add(q.id));bkSelPaint()};
+  $('#bkSelGo').onclick=()=>{const ids=[...BK.sel];if(!ids.length)return;bkSelEnd();startIds(ids,'Bank · '+ids.length+' chosen')};
+  $('#bkSelMore').onclick=()=>bkSelMenu($('#bkSelMenu').hidden);
+  $('#bkSelMenu').addEventListener('click',e=>{const b=e.target.closest('[data-bksa]');if(b)bkSelAct(b.dataset.bksa,b)});
+  document.addEventListener('click',e=>{const m=$('#bkSelMenu');if(!m.hidden&&!e.target.closest('#bkSelMenu,#bkSelMore'))bkSelMenu(false)});
+  if('IntersectionObserver' in window){BK.io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&!$('#bankMore').hidden&&VIEW==='bank')$('#bankMore').click()})},{rootMargin:'0px 0px 600px 0px'});BK.io.observe($('#bankMore'))}
+  const V=$('#v-bank');
+  V.addEventListener('click',e=>{
+    const t=e.target;let x;
+    if((x=t.closest('[data-pk]'))){pgPeek(x.dataset.pk,x);return}
+    if((x=t.closest('[data-pgf]'))){const g=x.closest('[data-pgfg]');if(g)pgFocus(g,x.dataset.pgf);return}
+    if((x=t.closest('[data-bkchip]'))){
+      const i=x.dataset.bkchip.indexOf('|'),g=x.dataset.bkchip.slice(0,i),k=x.dataset.bkchip.slice(i+1),S=BK.sets[g];
+      if(S.has(k))S.delete(k);else S.add(k);
+      x.classList.toggle('on',S.has(k));x.setAttribute('aria-pressed',String(S.has(k)));bkSoon(true);return}
+    if((x=t.closest('[data-bksort]'))){BK.sort=x.dataset.bksort;bkSave();bkPaintChips();bkSoon(true);return}
+    if((x=t.closest('[data-bkclear]'))){bkOnly(null);return}
+    if(t.closest('#bkScan')){const p=scanDuplicates();renderBank(true);showDuplicates(p);return}
+    if((x=t.closest('[data-bkedit]'))){editQuestion(x.dataset.bkedit);return}
+    if((x=t.closest('[data-bkopen]'))){
+      if(BK.swallow){BK.swallow=false;return}
+      const id=x.dataset.bkopen;
+      if(BK.sel){bkSelToggle(id);return}
+      previewQuestion(id,BK.list.map(q=>q.id));return}
+  });
+  /* long-press selects (480 ms, cancelled by 10px of travel; the click after it is swallowed) */
+  let lp=null;
+  V.addEventListener('pointerdown',e=>{
+    const h=e.target.closest('.bk-hit');if(!h||e.button>0)return;
+    lp={x:e.clientX,y:e.clientY,t:setTimeout(()=>{lp=null;BK.swallow=true;h.classList.remove('is-down');
+      if(!BK.sel)bkSelStart(h.dataset.bkopen);else bkSelToggle(h.dataset.bkopen);try{navigator.vibrate&&navigator.vibrate(8)}catch(_){}},480)};
+  },{passive:true});
+  const cancel=e=>{if(!lp)return;if(e.type==='pointermove'&&Math.hypot(e.clientX-lp.x,e.clientY-lp.y)<10)return;clearTimeout(lp.t);lp=null};
+  ['pointermove','pointerup','pointercancel'].forEach(k=>V.addEventListener(k,cancel,{passive:true}));
+  V.addEventListener('contextmenu',e=>{if(e.target.closest('.bk-hit'))e.preventDefault()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&BK.sel&&VIEW==='bank'&&!plyOpenNow('qp')&&!$('#mask').classList.contains('on')){if(!$('#bkSelMenu').hidden)bkSelMenu(false);else bkSelEnd()}});
+  sxHydrate(V);sxHydrate($('#bkSel'));
+  BK.arr&&bkPanel('arr',true);BK.sum&&(()=>{$('#bkSumBtn').setAttribute('aria-expanded','true');$('#bkSum').classList.add('on');$('#bkSum').inert=false})();
+})();
 function dupPairRow(p){
   const a=Q_BY_ID[p.a],b=Q_BY_ID[p.b];if(!a||!b)return '';
   const line=q=>`<div class="tiny" style="margin-bottom:4px"><span class="chip mono">${esc(q.pubId||pubIdOf(q.id))}</span> ${esc((q.stem||'').slice(0,150))}…</div>`;
@@ -14992,7 +15868,6 @@ function showDuplicates(pairs){
       :'<p class="tiny muted">Nothing overlapping enough to call a duplicate. Every question in the bank is currently its own item.</p>',
     '<button class="btn" data-close>Close</button>');
 }
-$('#dupScan').onclick=()=>{const p=scanDuplicates();renderBank(true);showDuplicates(p)};
 document.addEventListener('click',e=>{
   const m=e.target.closest('[data-merge]');if(!m)return;
   const parts=m.dataset.merge.split('|');
@@ -15003,6 +15878,607 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('click',e=>{const p=e.target.closest('[data-preview]');
   if(p&&!e.target.closest('[data-editq]'))previewQuestion(p.dataset.preview)});
+
+/* ============================================================
+   THE QUESTION PAGE  (Plume 2.22 · question page)
+   ------------------------------------------------------------
+   previewQuestion(id, seq) is how every screen opens a question
+   (the bank, Home's plate, Images, Review, the duplicates list).
+   seq, when given, is the list it was opened from: the floating
+   toolbar steps through it. qpHTML() draws a question in spine
+   order and is shared with the editor's Preview, so what you
+   preview is what the page shows.
+   ============================================================ */
+const QP={id:null,seq:null,i:-1,noteT:0,tok:0,lastY:0,sig:'',closing:false};
+const QP_DATE=new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short'}),QP_DATEY=new Intl.DateTimeFormat(undefined,{day:'numeric',month:'short',year:'numeric'});
+const qpDate=ts=>{const d=new Date(ts);return (d.getFullYear()===new Date().getFullYear()?QP_DATE:QP_DATEY).format(d)};
+function qpHTML(q,o){
+  const qid=o.qid,page=o.mode==='page',s=page?(DB.stats[q.id]||{}):{},cols=chCols(q);
+  const unc=v=>v===UNCLASSIFIED?' class="is-uncl"':'';
+  const pub=q.pubId||(q.id?pubIdOf(q.id):'');
+  const dif=q.difficulty||'medium',tr=q.trust||0,ch=(t,c)=>`<span class="qp-chip${c?' '+c:''}">${t}</span>`;
+  const chips=[
+    pub?`<button type="button" class="qp-chip qp-id pl-press" data-qpid="${esc(pub)}" title="Copy the question ID">${esc(pub)}${sxIc('i-copy')}</button>`:'',
+    q.archetype&&q.archetype!=='Other lead-in'?ch(esc(q.archetype)):'',q.task?ch(esc(q.task)):'',q.depth?ch(esc(q.depth)):'',
+    ch(`<i></i>${esc(bkCap(dif))}`,'is-'+dif),
+    ch(esc(TRUST_LABELS[tr]||''),tr>=3?'is-ok':tr<=1?'is-warn':''),
+    (q.source&&q.source.exam)?ch(esc(q.source.exam)):'',
+    (q.seenCount||0)>1?ch('Imported ×'+q.seenCount):'',q.dupCandidate?ch('Possible duplicate','is-warn'):'',q.classLocked?ch('Classification locked'):'',
+    (q.resources||[]).map(r=>ch(esc(r),'is-tag')).join(''),(q.tags||[]).map(t=>ch(esc(t),'is-tag')).join('')
+  ].join('');
+  const labs=page?`<div class="qp-labs" id="qpLabs">${(s.utags||[]).map(qpLabHTML).join('')}<span class="qp-labadd" id="qpLabAdd"><button type="button" class="pl-press" id="qpLabBtn" title="Your labels pull a custom set into a session">${bkSvg('plus','ic')}Label</button><span><input type="text" id="qpLabIn" list="qpLabList" placeholder="must memorise" aria-label="New label" autocomplete="off" tabindex="-1"></span></span><datalist id="qpLabList"></datalist></div>`:'';
+  const head=`<header class="qp-hero"><p class="qp-over">${[q.system,q.subject].filter(Boolean).map(v=>`<span${unc(v)}>${esc(v)}</span>`).join(' · ')}</p>
+    <h2 class="qp-h" id="qpH">${esc(q.topic||'Question')}</h2><div class="qp-chips">${chips}</div>${labs}</header>`;
+  const pic=c=>page?chPicHTML(q,c,{cap:true,add:true}):(chPics(q,c.label).length?figHTML(qid,figChSlot(c.label),{ch:true,cap:true}):'');
+  const opts=(q.choices||[]).map(c=>`<div class="qp-opt${c.isCorrect?' is-key':''}"><span class="qp-k">${esc(c.label)}</span><span class="qp-t">${chLine(q,c)}${pic(c)}${c.isCorrect||isLure(c)?` <span class="qp-tags">${c.isCorrect?'<span class="pl-inl"><span class="qp-key">Correct</span></span>':''}${isLure(c)?lureTag():''}</span>`:''}</span>${c.explanation?`<div class="qp-why"><div class="ebody">${mdFmt(c.explanation)}</div></div>`:''}</div>`).join('');
+  const ask=`<section class="ply-card qp-ask"><div class="qp-stem">${qFmt(q.stem||'')}</div>${figHTML(qid,'stem',{add:page})}${q.leadIn?`<p class="qp-lead">${esc(q.leadIn)}</p>`:''}
+    <div class="qp-opts${cols?' chx-host':''}" data-cols="${cols?cols.length:''}">${chHeadRow(q,row=>`<div class="qp-opt chx-th" aria-hidden="true"><span class="qp-k"></span><span class="qp-t">${row}</span></div>`)}${opts}</div></section>`;
+  const keys=(q.choices||[]).filter(c=>c.isCorrect),keyL=(q.correctAnswer||(q.correctAnswers||[]).join(', '))||keys.map(c=>c.label).join(', ')||'—';
+  const verdict=`<section class="ply-card qp-verdict"><h3 class="ply-h">Answer</h3><div class="qp-ans"><span class="qp-k">${esc(keyL)}</span><div class="qp-ans__t">${keys.map(c=>esc(chPlain(q,c))).join('<br>')||'No option is marked correct yet.'}</div></div>${page?qpRecHTML(q,s):''}</section>`;
+  const disp=(q.keyConflict||q.needsReview)?`<section class="ply-card qp-disp"><h3 class="ply-h">Disputed item</h3>${q.paperAnswer?`<p>The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</p>`:''}${q.conflictNote?`<p>${aFmt(q.conflictNote)}</p>`:''}</section>`:'';
+  const ttr=(q.thingsToRemember||[]).filter(Boolean),refs=(q.references||[]).filter(Boolean);
+  const teach=[figHTML(qid,'expl',{add:page}),
+    q.explanation?`<div><h3 class="ply-h">Explanation</h3><div class="ebody">${mdFmt(q.explanation)}</div></div>`:'',
+    q.educationalObjective?`<div class="qp-call"><h3 class="ply-h">Objective</h3><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`:'',
+    ttr.length?`<div class="qp-call"><h3 class="ply-h">Things to remember</h3><div class="ebody"><ul>${ttr.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`:'',
+    refs.length?`<div><h3 class="ply-h">References</h3><ul class="qp-refs">${refs.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`:''
+  ].filter(x=>x&&(x.replace(/<[^>]+>/g,'').trim()||/<img|data-figadd|data-figpaste/.test(x))).join('');
+  const mine=page?`<section class="ply-card qp-mine"><label class="qp-note"><span><b>Your note</b><em id="qpNoteS">Kept with this question everywhere</em></span><textarea id="pvNote" rows="3" placeholder="Anything you want beside this question the next time it comes up.">${esc(s.note||'')}</textarea></label>${linksHTML(q)}</section>`
+    :(linksOf(q).length?`<section class="ply-card">${linksHTML(q)}</section>`:'');
+  return head+ask+verdict+disp+(teach?`<section class="ply-card qp-teach">${teach}</section>`:'')+mine;
+}
+function qpLabHTML(t){return `<span class="qp-lab" data-lab="${esc(t)}"><span>${esc(t)}</span><button type="button" class="pl-press" data-labx="${esc(t)}" aria-label="Remove the label ${esc(t)}">${sxIc('i-close')}</button></span>`}
+/* block 7: the standing record, every attempt with what it chose, how sure, how long */
+function qpRecHTML(q,s){
+  const att=attOf(q.id),last=att[att.length-1];
+  if(!att.length)return `<div class="qp-rec"><p class="qp-rec__say">Never attempted.${s.flag?' Flagged.':''}</p><button type="button" class="pl-btn pl-btn--tonal pl-press" data-qpprac>${sxIc('i-play')}Practise this question</button></div>`;
+  const right=att.filter(a=>a.correct).length,st=statusOf(q.id);
+  const say=[BK_STW[st]||'',(last&&last.miss)?((MISS.find(x=>x[0]===last.miss)||[])[1]||''):'',s.srs?'next due '+qpDate(s.srs.due):'',s.flag?'flagged':''].filter(Boolean).join(' · ');
+  const rows=att.slice().reverse().slice(0,12).map((a,i)=>{
+    const r=a.chosen==null?'Left blank':a.correct?'Right':'Wrong',ms=ansOf(a);
+    const conf=a.conf&&CONF_SAY[a.conf]?`<svg class="ic" aria-hidden="true"><use href="#i-${CONF_IC[a.conf]}"/></svg>${esc(bkCap(CONF_SAY[a.conf].replace(/^You (were )?/,'')))}`:'';
+    const miss=a.miss?' · '+esc((MISS.find(x=>x[0]===a.miss)||[])[1]||''):'';
+    return `<li class="${a.chosen==null?'':a.correct?'y':'n'}" style="--i:${Math.min(i,8)}"><span class="qp-k">${esc(a.chosen||'–')}</span><span><b>${r} · ${qpDate(a.ts)}</b><small>${conf||(a.chosen?'Chose '+esc(a.chosen):'Nothing chosen')}${miss}</small></span><em>${ms!=null?fmtT(ms/1000):''}</em></li>`;
+  }).join('');
+  return `<div class="qp-rec"><div class="qp-rec__top"><div class="qp-rec__fig"><span class="pg-big hm-num">${pgN('qpr',right)}</span><span>of ${att.length} right</span></div><p class="qp-rec__say">${esc(say)}</p></div>
+    <ul class="qp-att">${rows}</ul>${att.length>12?`<p class="qp-rec__say" style="margin-top:8px">The ${att.length-12} before these are counted above.</p>`:''}</div>`;
+}
+function qpPaintBar(){
+  const q=Q_BY_ID[QP.id];if(!q)return;const s=DB.stats[q.id]||{};
+  const f=$('#qpFlag'),on=!!s.flag;
+  f.setAttribute('aria-pressed',String(on));f.setAttribute('aria-label',on?'Remove the flag':'Flag this question');
+  $('#qpBarT').textContent=q.topic||'Question';
+  const n=QP.seq?QP.seq.length:0;
+  $('#qpBarS').textContent=n>1?`${QP.i+1} of ${bsNum(n)}`:(q.pubId||pubIdOf(q.id));
+  const st=$('#qpStep');st.hidden=!(n>1);
+  if(n>1){$('#qpStepN').innerHTML=`${bsNum(QP.i+1)}<small>of ${bsNum(n)}</small>`;$('#qpPrev').disabled=QP.i<=0;$('#qpNext').disabled=QP.i>=n-1}
+}
+function qpRender(dir){
+  const q=Q_BY_ID[QP.id];if(!q)return;
+  const body=$('#qpBody'),sc=$('#qpScroll'),tok=++QP.tok;
+  const draw=()=>{
+    if(tok!==QP.tok)return;
+    delete PG.prev.qpr;
+    body.innerHTML=qpHTML(q,{qid:q.id,mode:'page'});QP.sig=qpSig(q);
+    sxHydrate(body);pgAlive(body);plyGrow(body);qpWire();
+    sc.scrollTop=0;$('#qp').classList.remove('is-scrolled','is-titled');$('#qpStep').classList.remove('is-tuck');
+    if(dir&&!Motion.reduced){body.getAnimations().forEach(a=>a.cancel());body.style.setProperty('--dir',dir);body.classList.remove('qp-swap');void body.offsetWidth;body.classList.add('qp-swap')}
+  };
+  qpPaintBar();
+  if(dir&&!Motion.reduced&&body.children.length){
+    body.getAnimations().forEach(a=>a.cancel());body.classList.remove('qp-swap');
+    body.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*12}px)`}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(draw,draw);
+  }else draw();
+}
+function qpSig(q){const s=DB.stats[q.id]||{};return [q.updatedAt||0,(q.images||[]).length,attOf(q.id).length,(s.utags||[]).join(','),!!s.flag,!!q.verified,s.srs?s.srs.due:0].join('|')}
+/* data changed while the page is open (a sync, an edit saved): redraw it in place unless a field is being typed in */
+function qpRefresh(){
+  if(QP.closing)return;
+  const q=Q_BY_ID[QP.id];
+  if(!q){qpClose();return}
+  qpPaintBar();
+  if(qpSig(q)===QP.sig||$('#qp').contains(document.activeElement)&&document.activeElement.matches('textarea,input'))return;
+  const sc=$('#qpScroll'),y=sc.scrollTop,body=$('#qpBody');
+  body.innerHTML=qpHTML(q,{qid:q.id,mode:'page'});QP.sig=qpSig(q);sxHydrate(body);pgAlive(body);plyGrow(body);qpWire();sc.scrollTop=y;
+}
+function qpWire(){
+  const q=Q_BY_ID[QP.id],id=QP.id,s=ST(id);
+  const nb=$('#pvNote');
+  if(nb)nb.addEventListener('input',()=>{
+    s.note=nb.value;clearTimeout(QP.noteT);
+    QP.noteT=setTimeout(()=>{save();BK.dirty=true;sxSwap($('#qpNoteS'),'Saved')},500);
+  });
+  const add=$('#qpLabAdd'),inp=$('#qpLabIn');
+  if(add){
+    const open=on=>{add.classList.toggle('is-open',on);inp.tabIndex=on?0:-1;if(on){
+      const dl=$('#qpLabList');if(dl&&!dl.children.length)dl.innerHTML=[...new Set(DB.questions.flatMap(x=>(DB.stats[x.id]||{}).utags||[]))].sort().map(t=>`<option value="${esc(t)}">`).join('');
+      inp.focus()}};
+    $('#qpLabBtn').onclick=()=>{if(add.classList.contains('is-open')&&inp.value.trim())commit();else open(!add.classList.contains('is-open'))};
+    const commit=()=>{const t=inp.value.trim().toLowerCase();inp.value='';if(!t)return open(false);
+      if(s.utags.indexOf(t)<0){s.utags.push(t);save();BK.dirty=true;add.insertAdjacentHTML('beforebegin',qpLabHTML(t));QP.sig=qpSig(q)}};
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===','){e.preventDefault();commit()}else if(e.key==='Escape'){e.stopPropagation();inp.value='';open(false)}});
+    inp.addEventListener('blur',()=>{setTimeout(()=>{if(document.activeElement!==inp){if(inp.value.trim())commit();open(false)}},120)});
+  }
+}
+function previewQuestion(id,seq){
+  const q=Q_BY_ID[id];if(!q)return;
+  if($('#mask').classList.contains('on'))closeModal();
+  QP.id=id;QP.seq=Array.isArray(seq)&&seq.length>1?seq:null;QP.i=QP.seq?QP.seq.indexOf(id):-1;
+  if(QP.seq&&QP.i<0){QP.seq=null}
+  qpMenu(false);QP.closing=false;
+  const was=plyOpenNow('qp');
+  qpRender(was?1:0);
+  $$('.bk-row.is-src').forEach(r=>r.classList.remove('is-src'));
+  const row=$('#bankList .bk-row[data-bk="'+CSS.escape(id)+'"]');if(row)row.classList.add('is-src');
+  if(!was)plyOpen('qp');
+}
+function qpStep(d){
+  if(!QP.seq)return;const j=QP.i+d;if(j<0||j>=QP.seq.length)return;
+  const id=QP.seq[j];if(!Q_BY_ID[id])return;
+  QP.i=j;QP.id=id;qpMenu(false);qpRender(d);
+}
+function qpClose(o){
+  o=o||{};if(!plyOpenNow('qp')||QP.closing)return;
+  QP.closing=true;
+  qpMenu(false);clearTimeout(QP.noteT);
+  const nb=$('#pvNote');if(nb){ST(QP.id).note=nb.value;save()}
+  /* back where you were: the list holds the question you stepped to */
+  if(VIEW==='bank'){
+    const k=BK.list.findIndex(q=>q.id===QP.id);
+    if(k>=BK.shown){BK.shown=Math.ceil((k+1)/BK_PAGE)*BK_PAGE;BK.dirty=true}
+    if(BK.dirty)renderBank(false);
+    $$('.bk-row.is-src').forEach(r=>r.classList.remove('is-src'));
+    const row=$('#bankList .bk-row[data-bk="'+CSS.escape(QP.id)+'"]');
+    if(row){row.classList.add('is-src');const b=row.getBoundingClientRect();if(b.top<64||b.bottom>innerHeight-80)row.scrollIntoView({block:'center'})}
+  }else if(VIEW==='dash'&&BK.dirty){BK.dirty=false;renderDash()}
+  plyClose('qp',Object.assign({},o,{after:()=>{QP.closing=false;$$('.bk-row.is-src').forEach(r=>r.classList.remove('is-src'));const r=$('#bankList .bk-row[data-bk="'+CSS.escape(QP.id||'')+'"] .bk-hit');if(r&&!o.fromPop)r.focus({preventScroll:true})}}));
+}
+function qpMenuHTML(){
+  const q=Q_BY_ID[QP.id];if(!q)return '';
+  const it=(a,ic,b,s)=>`<button type="button" class="pl-menu__item pl-press" role="menuitem" data-qpa="${a}">${ic}<span><b>${b}</b>${s?`<small>${s}</small>`:''}</span></button>`;
+  return it('ask',sxIc('i-copy'),'Copy the question only','Stem and options; nothing that answers it')+
+    it('all',sxIc('i-copy'),'Copy everything','With the answer, explanations and your note')+
+    it('ver',bkSvg('ok','ic'),q.verified?'Remove verification':'Mark the key verified',q.verified?'Back to the extractor’s trust':'You checked it against a source')+
+    it('prac',sxIc('i-play'),'Practise this question','A block of one, at your usual timing')+
+    it('del',sxIc('i-trash'),'Delete this question','Its answers and schedule go too');
+}
+function qpMenu(open){const m=$('#qpMenu');if(open)m.innerHTML=qpMenuHTML();plyMenu(m,open,$('#qpMore'))}
+function qpAct(a,btn){
+  const id=QP.id,q=Q_BY_ID[id];if(!q)return;
+  if(a==='del'){
+    if(!btn.classList.contains('is-armed')){btn.classList.add('is-armed');btn.querySelector('b').textContent='Tap again to delete';clearTimeout(btn.__t);
+      btn.__t=setTimeout(()=>{if(btn.isConnected){btn.classList.remove('is-armed');btn.querySelector('b').textContent='Delete this question'}},3200);return}
+    qpMenu(false);
+    if(QP.seq){QP.seq=QP.seq.filter(x=>x!==id)}
+    bkDelete([id]);toast('Question deleted.');BK.dirty=true;
+    if(QP.seq&&QP.seq.length){QP.i=Math.min(QP.i,QP.seq.length-1);QP.id=QP.seq[QP.i];if(QP.seq.length<2)QP.seq=null;qpRender(1);if(VIEW==='bank')renderBank(false);return}
+    qpClose();return;
+  }
+  qpMenu(false);
+  if(a==='ask'||a==='all'){const ask=a==='ask';copy(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.');return}
+  if(a==='ver'){q.verified=!q.verified;q.trust=trustOf(q);save();BK.dirty=true;toast(q.verified?'Marked as verified.':'Verification removed.');qpRefresh();return}
+  if(a==='prac'){plyClose('qp',{instant:true});startIds([id],'Bank · '+(q.pubId||pubIdOf(id)));return}
+}
+(function(){
+  plyDrag('qp',v=>qpClose({v0:v}));
+  const L=$('#qp');sxHydrate(L);
+  $('#qpX').onclick=()=>qpClose();
+  $('#qpPrev').onclick=()=>qpStep(-1);$('#qpNext').onclick=()=>qpStep(1);
+  $('#qpEdit').onclick=()=>editQuestion(QP.id);
+  $('#qpMore').onclick=()=>qpMenu($('#qpMenu').hidden);
+  $('#qpFlag').onclick=()=>{const s=ST(QP.id);s.flag=!s.flag;save();BK.dirty=true;qpPaintBar();QP.sig=qpSig(Q_BY_ID[QP.id]);toast(s.flag?'Flagged.':'Flag removed.')};
+  $('#qpMenu').addEventListener('click',e=>{const b=e.target.closest('[data-qpa]');if(b)qpAct(b.dataset.qpa,b)});
+  L.addEventListener('click',e=>{
+    if(!$('#qpMenu').hidden&&!e.target.closest('#qpMenu,#qpMore'))qpMenu(false);
+    let x;
+    if((x=e.target.closest('[data-qpid]'))){copy(x.dataset.qpid,'Question ID copied. Search the bank with it to find this question again.');return}
+    if((x=e.target.closest('[data-labx]'))){const t=x.dataset.labx,s=ST(QP.id),chip=x.closest('.qp-lab');
+      s.utags=s.utags.filter(u=>u!==t);save();BK.dirty=true;QP.sig=qpSig(Q_BY_ID[QP.id]);
+      if(Motion.reduced)chip.remove();else{chip.classList.add('is-out');chip.addEventListener('animationend',()=>chip.remove(),{once:true})}return}
+    if(e.target.closest('[data-qpprac]')){const id=QP.id;plyClose('qp',{instant:true});startIds([id],'Bank · '+(Q_BY_ID[id].pubId||pubIdOf(id)));return}
+  });
+  const sc=$('#qpScroll');
+  sc.addEventListener('scroll',()=>{
+    const y=sc.scrollTop;L.classList.toggle('is-scrolled',y>4);
+    const h=$('#qpH');if(h)L.classList.toggle('is-titled',h.getBoundingClientRect().bottom<sc.getBoundingClientRect().top+8);
+    const st=$('#qpStep'),dy=y-QP.lastY;if(Math.abs(dy)>8){st.classList.toggle('is-tuck',dy>0&&y>120);QP.lastY=y}
+  },{passive:true});
+  L.addEventListener('keydown',e=>{
+    if(e.target.closest('input,textarea,select')||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(e.key==='ArrowLeft'){e.preventDefault();qpStep(-1)}else if(e.key==='ArrowRight'){e.preventDefault();qpStep(1)}
+    else if(e.key==='e'){e.preventDefault();editQuestion(QP.id)}else if(e.key==='f'){e.preventDefault();$('#qpFlag').click()}
+  },true);
+})();
+/* the legacy dialog buttons, kept for any surface that still carries them */
+document.addEventListener('click',e=>{
+  const v=e.target.closest('[data-verq]');if(!v)return;
+  const q=Q_BY_ID[v.dataset.verq];if(!q)return;
+  q.verified=!q.verified;q.trust=trustOf(q);save();closeModal();
+  toast(q.verified?'Marked as verified.':'Verification removed.');
+  if(VIEW==='bank')renderBank(true);
+});
+document.addEventListener('click',e=>{
+  const f=e.target.closest('[data-flagq]');if(f){const s=ST(f.dataset.flagq);s.flag=!s.flag;save();closeModal();toast(s.flag?'Flagged.':'Unflagged.');if(VIEW==='bank')renderBank(true);return}
+  const d=e.target.closest('[data-delq]');if(d){bkDelete([d.dataset.delq]);closeModal();toast('Question deleted.');renderBank(true);return}
+  const cp=e.target.closest('[data-copyq]');if(cp){
+    const q=Q_BY_ID[cp.dataset.copyq];
+    const ask=cp.dataset.copyscope==='ask';
+    if(q)copy(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),
+      ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.');
+    return}
+  const ed=e.target.closest('[data-editq]');if(ed){editQuestion(ed.dataset.editq);return}
+});
+
+/* ============================================================
+   THE EDITOR  (Plume 2.22 · editor)
+   ------------------------------------------------------------
+   EDIT is a copy of the question taken when the editor opens
+   ('@edit' to the figure code, so pictures attach to the copy).
+   Each option card is tied to its choice object (QE.card), so
+   reordering, removing and relabelling move the cards and their
+   pictures in place instead of redrawing the list. Saving runs
+   the same checks and merge as before; the dock says, as you
+   type, what saving would do or what stops it.
+   ============================================================ */
+let EDIT=null,EDIT_ID=null;
+function blankQ(){return{id:null,stem:'',leadIn:'',choices:[{label:'A',text:'',isCorrect:true,explanation:''},{label:'B',text:'',isCorrect:false,explanation:''},{label:'C',text:'',isCorrect:false,explanation:''},{label:'D',text:'',isCorrect:false,explanation:''}],explanation:'',educationalObjective:'',thingsToRemember:[],system:UNCLASSIFIED,subject:UNCLASSIFIED,topic:'',task:'Foundational Concepts',archetype:'Other lead-in',depth:'Fact recall',resources:[],difficulty:'medium',tags:[],verified:false,trust:0,classLocked:false,dupCandidate:false,mergedFrom:[],occurrences:[],seenCount:0,source:{exam:'',number:null},images:[],references:[],links:[]}}
+function optList(list,cur,extra){
+  const all=(extra&&list.indexOf(extra)<0&&extra?[extra]:[]).concat(list);
+  return all.map(s=>`<option ${s===cur?'selected':''}>${esc(s)}</option>`).join('');
+}
+const QE={snap:'',mode:'edit',card:new WeakMap(),spyT:0,statT:0,editY:0,fresh:false};
+const QE_SECS=[['ask','Question'],['opts','Options'],['teach','Teaching'],['figs','Figures'],['meta','Details'],['files','Files']];
+function editQuestion(id){
+  EDIT_ID=id||null;const q=id?Q_BY_ID[id]:null;
+  EDIT=q?JSON.parse(JSON.stringify(q)):blankQ();
+  if($('#mask').classList.contains('on'))closeModal();
+  if(plyOpenNow('qe')){toast('Finish or close the question you are editing first.');return}
+  QE.fresh=!q;
+  qeDraw();qeSync();QE.snap=JSON.stringify(EDIT);
+  qeMode('edit',true);qeStat();
+  $('#qeT').textContent=q?'Edit question':'New question';
+  $('#qeS').textContent=q?(q.pubId||pubIdOf(q.id)):'Written by you';
+  plyOpen('qe');
+  if(!q)requestAnimationFrame(()=>{const s=$('#eStem');if(s)s.focus({preventScroll:true})});
+}
+function qeSegHTML(k,label,opts,v){
+  const i=Math.max(0,opts.findIndex(o=>o===v));
+  return `<div class="qe-segrow"><span>${esc(label)}</span><div class="pl-seg" data-qeseg="${k}" role="radiogroup" aria-label="${esc(label)}" style="--n:${opts.length};--i:${i}"><span class="pl-seg__ind" aria-hidden="true"></span>${opts.map(o=>`<button type="button" class="pl-press${o===v?' on':''}" role="radio" aria-checked="${o===v}" data-v="${esc(o)}">${esc(bkCap(o))}</button>`).join('')}</div></div>`;
+}
+function qeSw(id,label,sub,on,attrs){return `<label class="qe-sw pl-press"><span><b>${label}</b>${sub?`<small>${sub}</small>`:''}</span><span class="pl-sw"><input type="checkbox" role="switch" id="${id}"${on?' checked':''}${attrs||''}><span class="pl-sw__t" aria-hidden="true">${SX_CHECK}</span></span></label>`}
+function qeOptHTML(c,i,n,cols,w){
+  const L=LETTERS[i],key=!!c.isCorrect,pics=chPics(w,c.label).length;
+  const body=cols?`<div class="qe-cells" style="--cols:${cols.length}">${chCells(w,c).map((v,k)=>`<label class="qe-f"><span>${esc(cols[k]||'Column '+(k+1))}</span><input type="text" data-cell="${k}" value="${esc(v)}"></label>`).join('')}</div>`
+    :`<label class="qe-f"><span>Option text<em data-qepic>${pics?'may be empty: the picture is the option':''}</em></span><textarea data-ch rows="1">${esc(c.text)}</textarea></label>`;
+  return `<div class="ply-card qe-opt${key?' is-key':''}">
+    <div class="qe-oh">
+      <button type="button" class="qe-k pl-press" role="radio" aria-checked="${key}" data-qekey aria-label="Make ${L} the answer"><span>${L}</span></button>
+      <span class="qe-oh__t"><span data-qel>Option ${L}</span><small data-qesay>${key?'The answer':'Wrong option'}</small></span>
+      <button type="button" class="pl-ib pl-press" data-qemv="-1" aria-label="Move up"${i===0?' disabled':''}>${bkSvg('up')}</button>
+      <button type="button" class="pl-ib pl-press" data-qemv="1" aria-label="Move down"${i===n-1?' disabled':''}>${bkSvg('dn')}</button>
+      <button type="button" class="pl-ib pl-press" data-qerm aria-label="Remove this option"${n<=2?' disabled':''}>${sxIc('i-trash')}</button>
+    </div>
+    ${body}
+    ${figHTML('@edit',figChSlot(c.label),{ch:true,cap:true,add:true,adds:true})}
+    <label class="qe-f"><span data-qewhy>Why it is ${key?'right':'wrong'}</span><textarea data-chx rows="1">${esc(c.explanation||'')}</textarea></label>
+    <label class="qe-lure pl-press${key?' is-off':''}" title="${LURE_SAY}"><span><svg class="ic" aria-hidden="true"><use href="#i-lure"/></svg>This is the lure</span><span class="pl-sw"><input type="checkbox" role="switch" data-chl${c.lure&&!key?' checked':''}${key?' disabled':''}><span class="pl-sw__t" aria-hidden="true">${SX_CHECK}</span></span></label>
+  </div>`;
+}
+function qeColsHTML(cols){
+  return cols?`<div class="qe-cols" id="eCols"><p class="qe-help">Column headings, left to right. Leave one blank if the paper has none.</p>
+    ${cols.map((h,k)=>`<div class="qe-col"><label class="qe-f"><span>Heading ${k+1}</span><input type="text" data-col="${k}" value="${esc(h)}"></label><button type="button" class="pl-ib pl-press" data-rmcol="${k}" aria-label="Remove column ${k+1}"${cols.length<=1?' disabled':''}>${sxIc('i-close')}</button></div>`).join('')}
+    <button type="button" class="pl-btn pl-btn--text pl-press qe-add" id="addCol">${bkSvg('plus','ic')}Add a column</button></div>`:'';
+}
+function qeDrawOpts(){
+  const w=EDIT,cols=chCols(w),el=$('#eChoices');
+  QE.card=new WeakMap();
+  el.innerHTML=w.choices.map((c,i)=>qeOptHTML(c,i,w.choices.length,cols,w)).join('');
+  [...el.children].forEach((card,i)=>QE.card.set(w.choices[i],card));
+  $('#eColsW').innerHTML=qeColsHTML(cols);
+  sxHydrate(el);plyGrow(el);qeOptN();
+}
+function qeDraw(){
+  const w=EDIT,used=(f,cap)=>{const m=new Map();DB.questions.forEach(q=>{const v=(f(q)||'').trim();if(v)m.set(v,(m.get(v)||0)+1)});return [...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,cap).map(x=>`<option value="${esc(x[0])}">`).join('')};
+  const tlines=a=>(a||[]).join('\n');
+  $('#qeBody').innerHTML=`<div class="ply-body">
+  <section class="qe-sec" id="qe-ask"><h3>Question</h3><div class="ply-card qe-card">
+    <label class="qe-f"><span>Stem</span><textarea id="eStem" class="is-tall" rows="5" placeholder="The vignette, as the paper prints it">${esc(w.stem)}</textarea></label>
+    <label class="qe-f"><span>Lead-in</span><input type="text" id="eLead" value="${esc(w.leadIn||'')}" placeholder="Which of the following is the most likely diagnosis?"></label>
+  </div></section>
+  <section class="qe-sec" id="qe-opts"><h3>Options<small id="qeOptN"></small></h3>
+    <div class="ply-card qe-card">${qeSw('eTbl','The options are rows of a table','For a paper that prints its options as rows, with headings across the top',!!chCols(w))}<div id="eColsW"></div></div>
+    <p class="qe-help">Tap an option's letter to make it the answer.</p><div class="qe-opts" id="eChoices"></div>
+    <button type="button" class="pl-btn pl-btn--tonal pl-press qe-add" id="addCh">${bkSvg('plus','ic')}Add an option</button>
+  </section>
+  <section class="qe-sec" id="qe-teach"><h3>Teaching</h3><div class="ply-card qe-card">
+    <label class="qe-f"><span>Explanation</span><textarea id="eExpl" class="is-tall" rows="6">${esc(w.explanation||'')}</textarea></label>
+    <p class="qe-help">Markdown works here and in every field below: <code>**bold**</code>, <code>*italic*</code>, lists that start with <code>-</code>.</p>
+    <label class="qe-f"><span>Educational objective</span><textarea id="eObj" rows="2">${esc(w.educationalObjective||'')}</textarea></label>
+    <label class="qe-f"><span>Things to remember<em>one per line</em></span><textarea id="eTtr" rows="2">${esc(tlines(w.thingsToRemember))}</textarea></label>
+    <label class="qe-f"><span>References<em>one per line</em></span><textarea id="eRefs" rows="1">${esc(tlines(w.references))}</textarea></label>
+  </div></section>
+  <section class="qe-sec" id="qe-figs"><h3>Figures</h3><div class="ply-card qe-card">
+    <p class="figsub">With the question</p>${figHTML('@edit','stem',{add:true})}
+    <p class="figsub" style="margin-top:12px">With the explanation</p>${figHTML('@edit','expl',{add:true})}
+  </div></section>
+  <section class="qe-sec" id="qe-meta"><h3>Details${EDIT_ID?`<small class="mono">${esc(w.pubId||pubIdOf(EDIT_ID))}</small>`:''}</h3><div class="ply-card qe-card">
+    <div class="qe-grid">
+      <label class="qe-f"><span>System</span><select id="eSys">${optList([UNCLASSIFIED].concat(SYSTEMS),w.system,w.system)}</select></label>
+      <label class="qe-f"><span>Subject</span><select id="eSub">${optList([UNCLASSIFIED].concat(SUBJECTS),w.subject,w.subject)}</select></label>
+      <label class="qe-f"><span>Question type</span><select id="eArch">${optList(ARCHETYPES,w.archetype,w.archetype)}</select></label>
+      <label class="qe-f"><span>Physician task</span><select id="eTask">${optList(TASKS,w.task,w.task)}</select></label>
+      <label class="qe-f"><span>Topic</span><input type="text" id="eTop" list="eTopL" value="${esc(w.topic||'')}" autocomplete="off"><datalist id="eTopL">${used(q=>q.topic,300)}</datalist></label>
+      <label class="qe-f"><span>Source / exam</span><input type="text" id="eSrc" list="eSrcL" value="${esc((w.source||{}).exam||'')}" autocomplete="off"><datalist id="eSrcL">${used(q=>(q.source||{}).exam,60)}</datalist></label>
+      <div class="is-wide">${qeSegHTML('depth','Cognitive level',DEPTHS,w.depth)}</div>
+      <div class="is-wide">${qeSegHTML('difficulty','Difficulty',DIFFS,w.difficulty||'medium')}</div>
+      <label class="qe-f is-wide"><span>Tags<em>comma separated</em></span><input type="text" id="eTags" value="${esc((w.tags||[]).join(', '))}"></label>
+    </div>
+    ${qeSw('eVerified','I have checked this answer key myself','Marks the key verified everywhere it shows',!!w.verified)}
+    ${qeSw('eLock','Lock this classification','A locked classification survives every re-run of the automatic classifier',!!w.classLocked)}
+    <div class="qe-meta">${(w.resources||[]).map(r=>`<span class="qp-chip is-tag">${esc(r)}</span>`).join('')}</div>
+    ${(w.occurrences||[]).length>1?`<p class="qe-help">Turned up ${w.occurrences.length} times in imports, most recently from ${esc(w.occurrences[w.occurrences.length-1].src||'an unlabelled batch')}.</p>`:''}
+  </div></section>
+  <section class="qe-sec" id="qe-files"><h3>Referenced files</h3><div class="ply-card qe-card">
+    <label class="qe-f"><span>Addresses<em>one per line</em></span><textarea id="eLinks" rows="2" placeholder="https://t.me/mychannel/482">${esc(linksToText(w.links))}</textarea></label>
+    <p class="qe-help">Or <code>Lecture 12 | https://t.me/c/1234567890/56</code> to name one. Each becomes a button at the foot of the question.</p>
+    <div id="eLinkPrev">${linksHTML(w,'How they will look')}</div>
+  </div></section></div>`;
+  qeDrawOpts();
+  $('#qeJump').innerHTML=QE_SECS.map(([k,l],i)=>`<button type="button" class="pg-chip pl-press${i?'':' on'}" data-qejump="${k}">${esc(l)}</button>`).join('');
+  sxHydrate($('#qeBody'));plyGrow($('#qeBody'));
+  $('#qeScroll').scrollTop=0;$('#qe').classList.remove('is-scrolled');
+}
+function qeOptN(){const n=EDIT.choices.length,t=n+' option'+(n===1?'':'s'),el=$('#qeOptN');if(el&&el.textContent!==t){if(el.textContent)sxSwap(el,t);else el.textContent=t}}
+const qeLines=sel=>($(sel)?$(sel).value.split('\n').map(t=>t.trim()).filter(Boolean):[]);
+/* read every field back into EDIT; each option card writes into its own choice */
+function qeSync(){
+  if(!$('#eStem'))return;
+  const v=s=>($(s)||{value:''}).value;
+  EDIT.stem=v('#eStem');EDIT.leadIn=v('#eLead');EDIT.explanation=v('#eExpl');EDIT.educationalObjective=v('#eObj');
+  EDIT.thingsToRemember=qeLines('#eTtr');EDIT.references=qeLines('#eRefs');
+  EDIT.system=v('#eSys');EDIT.subject=v('#eSub');EDIT.topic=v('#eTop');EDIT.archetype=v('#eArch');EDIT.task=v('#eTask');
+  EDIT.verified=$('#eVerified').checked;EDIT.classLocked=$('#eLock').checked;
+  EDIT.source=Object.assign({},EDIT.source||{},{exam:v('#eSrc')});
+  EDIT.tags=v('#eTags').split(',').map(t=>t.trim().toLowerCase()).filter(Boolean);
+  EDIT.links=parseLinks(v('#eLinks'));
+  if($('#eCols'))EDIT.choiceColumns=$$('#eCols [data-col]').map(x=>x.value.trim());
+  const cols=chCols(EDIT);
+  EDIT.choices.forEach(c=>{
+    const card=QE.card.get(c);if(!card)return;
+    c.isCorrect=card.querySelector('[data-qekey]').getAttribute('aria-checked')==='true';
+    c.explanation=card.querySelector('[data-chx]').value;
+    const l=card.querySelector('[data-chl]');c.lure=!!(l&&l.checked&&!c.isCorrect);
+    if(cols){const cv=[...card.querySelectorAll('[data-cell]')].map(x=>x.value.trim());c.cells=cols.map((_,k)=>cv[k]||'');c.text=c.cells.filter(Boolean).join(' · ')}
+    else c.text=card.querySelector('[data-ch]').value;
+  });
+}
+/* Options are lettered by position, and an option's picture lives in the
+   slot named by its letter, so whenever the letters move the pictures move
+   with them, in one pass (never a chain of renames that could collide). */
+function edRelabel(){
+  const map={};
+  EDIT.choices.forEach((c,i)=>{map[c.label]=LETTERS[i];c.label=LETTERS[i]});
+  figList(EDIT).forEach(f=>{
+    if(!figIsCh(f.slot))return;
+    const to=map[figChLab(f.slot)];
+    if(to)f.slot=figChSlot(to);
+  });
+}
+/* bring every option card in line with EDIT.choices: order, letters, their
+   pictures' blocks and the buttons that depend on position. Cards that move
+   glide from where they were. */
+function qePaintOpts(gone){
+  const el=$('#eChoices'),cs=EDIT.choices,n=cs.length,snap=new Map();
+  [...el.children].forEach(c=>snap.set(c,c.getBoundingClientRect()));
+  cs.forEach((c,i)=>{
+    let card=QE.card.get(c);
+    const L=LETTERS[i];
+    if(!card)return;
+    el.appendChild(card);
+    card.querySelector('.qe-k > span').textContent=L;
+    card.querySelector('[data-qekey]').setAttribute('aria-label','Make '+L+' the answer');
+    const t=card.querySelector('[data-qel]');if(t.textContent!=='Option '+L)t.textContent='Option '+L;
+    card.querySelector('[data-qemv="-1"]').disabled=i===0;card.querySelector('[data-qemv="1"]').disabled=i===n-1;
+    card.querySelector('[data-qerm]').disabled=n<=2;
+    const f=card.querySelector(':scope > .figs');
+    if(f&&f.dataset.figslot!==figChSlot(L)){const tmp=document.createElement('div');tmp.innerHTML=figHTML('@edit',figChSlot(L),{ch:true,cap:true,add:true,adds:true});f.replaceWith(tmp.firstElementChild)}
+    const pe=card.querySelector('[data-qepic]');if(pe)pe.textContent=chPics(EDIT,L).length?'may be empty: the picture is the option':'';
+  });
+  if(gone)gone.forEach(g=>g.remove());
+  if(!Motion.reduced){const sp=PL('spatial');[...el.children].forEach(c=>{const o=snap.get(c);if(!o)return;const b=c.getBoundingClientRect(),dy=o.top-b.top;if(Math.abs(dy)>.5)c.animate([{transform:`translateY(${dy}px)`},{transform:'none'}],{duration:sp.d,easing:sp.e})})}
+  qeOptN();qeStatSoon();
+}
+/* the answer moves: the old badge rounds back, the new one squares and fills */
+function qeSetKey(card){
+  qeSync();
+  EDIT.choices.forEach(c=>{
+    const cd=QE.card.get(c);if(!cd)return;const on=cd===card;
+    c.isCorrect=on;if(on)c.lure=false;
+    const k=cd.querySelector('[data-qekey]');
+    if(k.getAttribute('aria-checked')!==String(on)){k.setAttribute('aria-checked',String(on));if(on){k.classList.remove('is-pop');void k.offsetWidth;k.classList.add('is-pop')}}
+    cd.classList.toggle('is-key',on);
+    sxSwap(cd.querySelector('[data-qesay]'),on?'The answer':'Wrong option');
+    sxSwap(cd.querySelector('[data-qewhy]'),'Why it is '+(on?'right':'wrong'));
+    const lr=cd.querySelector('.qe-lure'),li=lr.querySelector('input');lr.classList.toggle('is-off',on);li.disabled=on;if(on)li.checked=false;
+  });
+  try{navigator.vibrate&&navigator.vibrate(6)}catch(_){}
+  qeStatSoon();
+}
+function qeMove(card,d){
+  qeSync();const cs=EDIT.choices,i=cs.findIndex(c=>QE.card.get(c)===card),j=i+d;
+  if(i<0||j<0||j>=cs.length)return;
+  const t=cs[i];cs[i]=cs[j];cs[j]=t;edRelabel();qePaintOpts();
+  const b=card.querySelector(`[data-qemv="${d}"]`);if(b&&b.disabled)card.querySelector(`[data-qemv="${-d}"]`).focus({preventScroll:true});
+}
+function qeRemove(card,btn){
+  if(EDIT.choices.length<=2)return toast('A question needs at least two options.');
+  if(btn.dataset.arm!=='1'){btn.dataset.arm='1';btn.setAttribute('aria-label','Tap again to remove this option');clearTimeout(btn.__t);
+    btn.__t=setTimeout(()=>{btn.dataset.arm='';btn.setAttribute('aria-label','Remove this option')},3200);return}
+  qeSync();
+  const k=EDIT.choices.findIndex(c=>QE.card.get(c)===card);if(k<0)return;
+  /* the option's own pictures go with it; the ones after it take their new letters */
+  const slot=figChSlot(EDIT.choices[k].label);
+  figList(EDIT).filter(f=>f.slot===slot).forEach(f=>figBury(EDIT,f));
+  EDIT.images=figList(EDIT).filter(f=>f.slot!==slot);
+  EDIT.choices.splice(k,1);edRelabel();
+  const fin=()=>qePaintOpts([card]);
+  if(Motion.reduced)fin();else{card.classList.add('is-out');card.addEventListener('animationend',fin,{once:true})}
+}
+function qeAdd(){
+  qeSync();if(EDIT.choices.length>=10)return toast('Ten options is the ceiling.');
+  const nu={label:LETTERS[EDIT.choices.length],text:'',isCorrect:false,explanation:''};
+  if(chCols(EDIT))nu.cells=chCols(EDIT).map(()=>'');
+  EDIT.choices.push(nu);
+  const tmp=document.createElement('div');tmp.innerHTML=qeOptHTML(nu,EDIT.choices.length-1,EDIT.choices.length,chCols(EDIT),EDIT);
+  const card=tmp.firstElementChild;$('#eChoices').appendChild(card);QE.card.set(nu,card);sxHydrate(card);plyGrow(card);
+  card.classList.add('is-in');card.addEventListener('animationend',()=>card.classList.remove('is-in'),{once:true});
+  qePaintOpts();
+  const f=card.querySelector('[data-ch],[data-cell]');
+  card.scrollIntoView({block:'nearest',behavior:Motion.reduced?'auto':'smooth'});if(f)f.focus({preventScroll:true});
+}
+/* what stops a save, with the field to show for it */
+function qeCheck(){
+  const o=EDIT;
+  if(!(o.stem||'').trim())return{m:'The stem cannot be empty.',el:$('#eStem')};
+  const bad=o.choices.findIndex(c=>!(c.text||'').trim()&&!chPics(o,c.label).length);
+  if(bad>=0){const cd=QE.card.get(o.choices[bad]);return{m:chCols(o)?`Option ${LETTERS[bad]} needs a cell filled, or a picture.`:`Option ${LETTERS[bad]} needs text or a picture.`,el:cd}}
+  if(!o.choices.some(c=>c.isCorrect))return{m:'Mark which option is correct: tap its letter.',el:$('#eChoices')};
+  if(o.choices.some(c=>c.lure&&c.isCorrect))return{m:'The correct option cannot be the lure.',el:$('#eChoices')};
+  if(o.choices.filter(c=>c.lure).length>2)return{m:'Mark two lures at most.',el:$('#eChoices')};
+  return null;
+}
+function qeDirty(){qeSync();return JSON.stringify(EDIT)!==QE.snap}
+function qeStat(){
+  if(!EDIT)return;qeSync();
+  const bad=qeCheck(),dirty=JSON.stringify(EDIT)!==QE.snap,el=$('#qeStat');
+  const ic=bad?sxIc('i-alert'):dirty?bkSvg('pen'):bkSvg('correct');
+  const t=bad?bad.m:QE.fresh?'Ready to save':dirty?'Unsaved changes':'No changes yet';
+  const html=ic+'<span>'+esc(t)+'</span>';
+  el.classList.toggle('is-bad',!!bad);el.classList.toggle('is-ok',!bad&&!dirty&&!QE.fresh);
+  if(el.__t!==t){el.__t=t;if(el.innerHTML)sxSwap(el,html);else el.innerHTML=html}
+}
+function qeStatSoon(){cancelAnimationFrame(QE.statT);QE.statT=requestAnimationFrame(qeStat)}
+function qeMode(m,instant){
+  const g=$('#qeMode');sxSegMark(g,m==='prev'?'prev':'edit');
+  if(QE.mode===m&&!instant)return;
+  const was=QE.mode;QE.mode=m;
+  const sc=$('#qeScroll'),A=$('#qeBody'),B=$('#qePrev'),L=$('#qe');
+  if(m==='prev'){qeSync();QE.editY=sc.scrollTop;B.innerHTML=`<div class="ply-body">${qpHTML(EDIT,{qid:'@edit',mode:'prev'})}</div>`;sxHydrate(B)}
+  L.classList.toggle('is-prev',m==='prev');$('#qeJumpF').inert=m==='prev';
+  const show=m==='prev'?B:A,hide=m==='prev'?A:B;
+  if(instant||Motion.reduced||was===m){hide.hidden=true;show.hidden=false;sc.scrollTop=m==='prev'?0:QE.editY;return}
+  const dir=m==='prev'?1:-1,sp=PL('spatial');
+  hide.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*12}px)`}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>{
+    if(QE.mode!==m)return;hide.getAnimations().forEach(a=>a.cancel());hide.hidden=true;show.hidden=false;sc.scrollTop=m==='prev'?0:QE.editY;
+    show.animate([{opacity:0,transform:`translateX(${dir*24}px)`},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e});
+  },()=>{});
+}
+function qeClose(o){
+  o=o||{};if(!plyOpenNow('qe'))return;
+  if(!o.force&&qeDirty()){
+    if(o.fromPop)try{history.pushState(Object.assign({},history.state||{},{qe:1}),'')}catch(e){}
+    const L=plyGet('qe');if(L.p<1||L.run)plyMove(L,1,o.v0);
+    modal('Discard your changes?','<p class="tiny">What you changed in this question since the editor opened is not saved yet.</p>',
+      '<button class="btn" data-close>Keep editing</button><button class="btn danger" id="qeDiscard">Discard</button>');
+    $('#qeDiscard').onclick=()=>{closeModal();qeClose({force:true})};
+    return;
+  }
+  plyClose('qe',Object.assign({},o,{after:()=>{$('#qeBody').innerHTML='';$('#qePrev').innerHTML='';if(plyOpenNow('qp'))$('#qp').focus({preventScroll:true})}}));
+}
+function qeSave(){
+  qeSync();const o=EDIT;
+  const bad=qeCheck();
+  if(bad){toast(bad.m);
+    if(QE.mode!=='edit')qeMode('edit');
+    const t=bad.el;if(t){t.scrollIntoView({block:'center',behavior:Motion.reduced?'auto':'smooth'});const f=t.matches('textarea,input')?t.closest('.qe-f'):t;f.classList.remove('qe-flash');void f.offsetWidth;f.classList.add('qe-flash');if(t.matches('textarea,input'))t.focus({preventScroll:true})}
+    return}
+  lureTidy(o.choices);
+  o.correctAnswer=(o.choices.find(c=>c.isCorrect)||{}).label;o.type='single';
+  o.classLocked=!!o.classLocked;o.updatedAt=Date.now();
+  o.hasImage=figsIn(o,'stem').length>0;
+  o.resources=detectResources(o,classifyText(o));o.trust=trustOf(o);
+  if(EDIT_ID&&Q_BY_ID[EDIT_ID]){
+    /* the editor holds a copy taken when it opened; a photo removed or a
+       placeholder deleted on another device since then must not be undone
+       by saving it, so the figures go through the same merge as a sync */
+    try{const live=Q_BY_ID[EDIT_ID],gone=SYNC.M.figGoneOf(o,live);
+      o.images=SYNC.M.mergeImages(o,live);if(Object.keys(gone).length)o.figGone=gone;
+      o.hasImage=figsIn(o,'stem').length>0}catch(e){}
+    /* the ID is permanent: attempts, schedule and notes are keyed to it */
+    Object.assign(Q_BY_ID[EDIT_ID],o,{id:EDIT_ID,pubId:Q_BY_ID[EDIT_ID].pubId||pubIdOf(EDIT_ID)});
+    Q_BY_ID[EDIT_ID].nkey=nearKeyOf(Q_BY_ID[EDIT_ID]);
+  }
+  else{o.fp=fingerprint(o.stem,o.choices.map(c=>({text:chFpText(c,o.images)})));o.id='q'+o.fp;o.pubId=pubIdOf(o.id);
+    if(Q_BY_ID[o.id])return toast('That exact question is already in the bank.');
+    o.nkey=nearKeyOf(o);o.occurrences=[{ts:Date.now(),src:'written by me',batch:null}];o.seenCount=1;
+    o.addedAt=Date.now();DB.questions.push(o);reindex()}
+  save();QE.snap=JSON.stringify(EDIT);
+  qeClose({force:true});toast('Saved.');
+  BK.flip=true;if(VIEW==='bank')renderBank(false);
+  if(plyOpenNow('qp'))qpRefresh();
+  if(S)renderQ();
+  /* an edit begun from the companion hands the panel back where it left off */
+  const cp=$('#companion');
+  if(cp&&cp.classList.contains('on')&&COMP.sid){compDrawIndex();compQuestion(COMP.i)}
+}
+(function(){
+  const L=$('#qe');sxHydrate(L);
+  plyDrag('qe',v=>qeClose({v0:v}));
+  $('#qeX').onclick=()=>qeClose();
+  $('#qeSave').onclick=qeSave;
+  $('#qeMode').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b)qeMode(b.dataset.v)});
+  /* Ctrl+S saves wherever focus is (a dialog that just closed leaves it on the page) */
+  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S')&&plyOpenNow('qe')&&!$('#mask').classList.contains('on')){e.preventDefault();e.stopPropagation();qeSave()}},true);
+  L.addEventListener('input',e=>{
+    if(e.target.id==='eLinks'){EDIT.links=parseLinks(e.target.value);const pv=$('#eLinkPrev');if(pv)pv.innerHTML=linksHTML(EDIT,'How they will look')}
+    qeStatSoon();
+  });
+  L.addEventListener('change',e=>{
+    const t=e.target;
+    if(t.id==='eTbl'){qeSync();
+      /* turning the table on keeps each option's words as its first cell; turning it off keeps the cells, joined, as its text */
+      if(t.checked){EDIT.choiceColumns=['',''];EDIT.choices.forEach(c=>{c.cells=[c.text||'','']})}
+      else{EDIT.choiceColumns=null;EDIT.choices.forEach(c=>{delete c.cells})}
+      qeDrawOpts();qeStatSoon();return}
+    if(t.matches('[data-chl]')&&t.checked){
+      const card=t.closest('.qe-opt');
+      const others=EDIT.choices.filter(c=>{const cd=QE.card.get(c);return cd&&cd!==card&&cd.querySelector('[data-chl]').checked}).length;
+      if(others>=2){t.checked=false;toast('Two lures at most: the item is built around one, two at the outside.')}
+    }
+    qeStatSoon();
+  });
+  L.addEventListener('click',e=>{
+    const t=e.target;let x;
+    if((x=t.closest('[data-qekey]'))){qeSetKey(x.closest('.qe-opt'));return}
+    if((x=t.closest('[data-qemv]'))){qeMove(x.closest('.qe-opt'),+x.dataset.qemv);return}
+    if((x=t.closest('[data-qerm]'))){qeRemove(x.closest('.qe-opt'),x);return}
+    if(t.closest('#addCh')){qeAdd();return}
+    if(t.closest('#addCol')){qeSync();const cols=chCols(EDIT);if(cols.length>=CH_MAXCOLS)return toast(CH_MAXCOLS+' columns is the ceiling.');
+      cols.push('');EDIT.choices.forEach(c=>{c.cells=chCells(EDIT,c)});qeDrawOpts();return}
+    if((x=t.closest('[data-rmcol]'))){qeSync();const cols=chCols(EDIT),k=+x.dataset.rmcol;
+      if(cols.length<=1)return toast('Turn the table off instead.');
+      EDIT.choices.forEach(c=>{const v=chCells(EDIT,c);v.splice(k,1);c.cells=v});cols.splice(k,1);qeDrawOpts();return}
+    if((x=t.closest('[data-qeseg] [data-v]'))){const g=x.closest('[data-qeseg]');sxSegMark(g,x.dataset.v);EDIT[g.dataset.qeseg]=x.dataset.v;qeStatSoon();return}
+    if((x=t.closest('[data-qejump]'))){const s=$('#qe-'+x.dataset.qejump),sc=$('#qeScroll');if(!s)return;
+      sc.scrollTo({top:s.offsetTop-8,behavior:Motion.reduced?'auto':'smooth'});qeSpyMark(x.dataset.qejump);return}
+  });
+  const sc=$('#qeScroll');
+  sc.addEventListener('scroll',()=>{
+    L.classList.toggle('is-scrolled',sc.scrollTop>4);
+    if(QE.mode!=='edit')return;
+    cancelAnimationFrame(QE.spyT);QE.spyT=requestAnimationFrame(()=>{
+      const y=sc.scrollTop+120;let cur=QE_SECS[0][0];
+      if(sc.scrollTop+sc.clientHeight>=sc.scrollHeight-4)cur=QE_SECS[QE_SECS.length-1][0];
+      else QE_SECS.forEach(([k])=>{const s=$('#qe-'+k);if(s&&s.offsetTop<=y)cur=k});
+      qeSpyMark(cur);
+    });
+  },{passive:true});
+})();
+function qeSpyMark(k){
+  const j=$('#qeJump');if(!j)return;
+  j.querySelectorAll('[data-qejump]').forEach(b=>{const on=b.dataset.qejump===k;if(b.classList.contains('on')!==on){b.classList.toggle('on',on);
+    if(on){const r=b.offsetLeft-(j.clientWidth-b.offsetWidth)/2;j.scrollTo({left:r,behavior:Motion.reduced?'auto':'smooth'})}}});
+}
 
 /* ============================================================
    THE GALLERY  (Plume 2.19 · gallery, rebuilt in v6.81)

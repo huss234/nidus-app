@@ -417,8 +417,37 @@ a recipe.
   `localStorage.nidus_gal_view`. The pictures come first (v6.82, the
   user's correction): never put statistics or controls back above the
   grid; add them to a panel.
+- **The bank, the question page and the editor** (v6.84, the BANK, THE
+  PAGE LAYER, THE QUESTION PAGE and THE EDITOR sections, `DESIGN.md` §14):
+  - `renderBank(reset, arrive)`; `go('bank')` passes `arrive`. Taps flip their
+    own control and redraw a frame later through `bkSoon`, gliding
+    (`bkSnap`/`bkFlip`). Filters live in `BK.sets` (rec, key, lib: keys of
+    `BK_T`; sys, sub, dif, lab: values) and are tested in one place,
+    `bkTest(q, T, skipGroup)`, which the chip counts reuse. A new filter is a
+    predicate in `BK_T` plus a row in `BK_CHIPS`. The sort and which panels
+    are open are this device's own (`nidus_bank_view`).
+  - `previewQuestion(id, seq)` opens the question page from anywhere; `seq`
+    (the ids of the list it came from) turns on stepping. It closes an open
+    dialog first, since the page sits under `#mask`. `qpHTML(q, {qid, mode})`
+    draws a question in spine order and is shared with the editor's Preview
+    (`qid:'@edit'`); change the page there, never twice.
+  - `editQuestion(id|null)` opens the editor. Its option cards are tied to
+    their choice objects (`QE.card`) and `qeSync()` writes each card into its
+    own choice, keeping any other field the choice carries. Anything that
+    moves options calls `edRelabel()` then `qePaintOpts()`. `qeCheck()` is
+    the one list of what stops a save; the save path itself is unchanged
+    (figure merge, permanent ID, fingerprint for a new question).
+  - **Peek kinds share one namespace.** `PG_PK.bank` already belonged to
+    Progress's Areas, so the bank's own lazy install found it taken and
+    skipped itself, and every bank figure opened nothing (caught by the
+    functional test). The bank's kind is `bnk`. Before adding a kind, grep
+    `PG_PK.<name>`.
+  - **A dialog that closes leaves focus on `body`.** A key handler bound to a
+    page's own element then never hears the key (Ctrl+S after "Keep
+    editing"). Shortcuts for a page go on `document` in the capture phase,
+    guarded by `plyOpenNow(id)` and `#mask.on`.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget`,
-  `nidus_straggler` and `nidus_gal_view` are live keys. Never rename one without migrating the
+  `nidus_straggler`, `nidus_gal_view` and `nidus_bank_view` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
   and import/export working.
 - Ship with `ship ~/projects/nidus-app "<message>"` (from the global
@@ -674,5 +703,19 @@ does) and work in the scratchpad:
   (an ellipsised line returns two). Every edge must read 0 (or the intended
   inset); one screenshot hid a 10px search offset, a 6px header indent and a
   3px grid inset.
+- **Drive the bank, the page and the editor end to end** (the scratch
+  `func.js`, `func2.js`): chips (a group ORs, groups AND, the chip's count
+  equals the list it brings in), each sort's order, search reaching labels
+  and notes with the passage shown, every About peek opening with acts and
+  Show only these filtering, long-press (480 ms with the mouse held) selecting
+  without opening, each bulk act, the armed delete leaving tombstones, the
+  page stepping, flagging, labelling and saving its note, Escape closing only
+  the menu, the editor's key / lure ceiling / move (key and pictures follow) /
+  two-tap remove / add / blocked save / preview, Back with changes asking
+  first, Ctrl+S, a new question, the editor over the player, and
+  `history.state` after each close. Wait out a dialog's exit (about 1 s)
+  before the next key: while `#mask.on` the page ignores shortcuts on
+  purpose. Attach a real picture to an option with
+  `figTake('@edit', null, 'choice:B', [file])` before moving it.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
