@@ -446,6 +446,19 @@ a recipe.
     page's own element then never hears the key (Ctrl+S after "Keep
     editing"). Shortcuts for a page go on `document` in the capture phase,
     guarded by `plyOpenNow(id)` and `#mask.on`.
+- **Review** (v6.85, the REVIEW section, `DESIGN.md` §14): `renderReview()`
+  rebuilds the screen from `rvData()` (due, missed-and-due, waiting 3+ days,
+  upcoming, leeches at 3+ lapses, the ladder rungs by `srs.int` through
+  `RV_RUNG`, the 14-day forecast), read straight from `DB.stats[id].srs`; it
+  writes nothing. Start review is still `startDueReview()` (pool `due`), so
+  its count always matches the builder's Due review; Missed ones first and
+  review-ahead go through `startIds`. Its peeks are `rvd` and `rvr`, installed
+  by `rvPkInstall()` on first render; the forecast columns reuse Progress's
+  `due:<day>` peek and the leech note reuses `mem:leech`. **Peek arguments
+  must not collide with each other either:** `due:7` meant both "the next 7
+  days" and "the column 7 days out", so that column opened the wrong peek on
+  Progress since v6.74; the week is now `due:week`. Give a special argument a
+  word, never a number a series also uses.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget`,
   `nidus_straggler`, `nidus_gal_view` and `nidus_bank_view` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
@@ -717,5 +730,12 @@ does) and work in the scratchpad:
   before the next key: while `#mask.on` the page ignores shortcuts on
   purpose. Attach a real picture to an option with
   `figTake('@edit', null, 'choice:B', [file])` before moving it.
+- **Drive the Review screen** (the scratch `t.js`, `e.js`): seed ~2,500
+  questions with 60 days of answers scheduled by the app's own rule (the
+  seed replays `srsUpdate`'s maths per answer so `srs` matches the
+  attempts), click every `[data-pk]` (each must open with acts), each queue
+  tab, Show more and a row (the page opens with the list as its steps); then
+  push every `srs.due` into the future for the caught-up hero and clear
+  `DB.stats` for the empty one.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.

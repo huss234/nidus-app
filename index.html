@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.84 -->
+<!-- Nidus — Personal Qbank · v6.85 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -6165,7 +6165,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
    count to their value; bars, columns and rings grow from their
    base when they are inserted, lines draw along their length.
    ============================================================ */
-#v-stats,.pgx{
+#v-stats,#v-review,.pgx{
   --pg-k1:var(--md-primary);
   --pg-k2:oklch(from var(--md-primary) l c calc(h + 75));
   --pg-k3:oklch(from var(--md-primary) l c calc(h - 105));
@@ -7342,6 +7342,110 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 @keyframes hmBloom{from{transform:scale(0);opacity:0}}
 @keyframes hmDraw{from{stroke-dashoffset:1}}
 @keyframes hmLine{from{stroke-dashoffset:1}}
+
+/* ============================================================
+   Plume 2.23 · review
+   The schedule made visible: the masthead says what today holds,
+   the hero carries the one main action, the ladder explains the
+   schedule with the user's own questions on its steps, the next
+   two weeks as columns, and the queue as the bank's grouped rows.
+   ============================================================ */
+.rv{display:flex;flex-direction:column;gap:16px;max-width:1080px;margin:0 auto}
+.rv-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+@media (min-width:720px){.rv-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}}
+.rv-grid > *{grid-column:1/-1;min-width:0}
+@media (min-width:720px){.rv-grid > .is-half{grid-column:auto}}
+.rv-grid:empty{display:none}
+.rv-mast{padding:4px 2px 4px}
+.rv-over{margin:0;font:600 12px/16px var(--m3-font);letter-spacing:.08em;text-transform:uppercase;color:var(--md-on-surface-variant)}
+.rv-h{margin:6px 0 0;font:450 34px/40px var(--m3-font);font-variation-settings:"wdth" 106,"ROND" 60;letter-spacing:-.015em;color:var(--md-on-surface)}
+@media (min-width:600px){.rv-h{font-size:44px;line-height:52px}}
+.rv-say{margin:0;max-width:60ch;font:400 18px/26px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.rv-say b{font-weight:600;color:var(--md-on-surface)}
+#rvTop{display:flex;flex-direction:column;gap:16px}
+/* ---- today's review: the hero ---- */
+.rv-hero{background:var(--p-card);border-radius:var(--p-r-hero);padding:24px;color:var(--md-on-surface)}
+@media (min-width:600px){.rv-hero{padding:28px 32px}}
+.rv-hero__top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px}
+.rv-hero__fig{display:flex;align-items:baseline;gap:10px;text-align:left}
+.rv-hero__cap{font:500 18px/24px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-hero__est{display:flex;flex-direction:column;gap:2px;min-width:0}
+.rv-hero__est span{font:500 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-hero__est b{font:520 28px/32px var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.02em}
+.rv-hero__est em{font:400 12px/16px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant)}
+.rv-trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;margin:22px 0 0;border-radius:var(--p-r-l);overflow:hidden}
+.rv-trio > *{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:14px 14px 12px;background:var(--p-well);min-width:0;text-align:left}
+.rv-trio b{font:520 26px/1.1 var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.rv-trio span{font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.rv-acts .pl-btn{flex:1 1 220px}
+.rv-go{width:100%}
+.rv-acts .rv-go{width:auto;flex:2 1 260px}
+.rv-hero > .rv-go{margin-top:8px}
+.rv-fine{margin:12px 0 0;font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-clear{display:flex;align-items:center;gap:16px;margin-bottom:8px}
+.rv-clear .pg-empty__shape{flex:none;width:56px;height:56px;margin:0;background:var(--md-tertiary-container)}
+.rv-clear div{display:flex;flex-direction:column;gap:2px}
+.rv-clear b{font:500 22px/28px var(--m3-font)}
+.rv-clear span:not(.pg-empty__shape){font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-hero .pg-empty{padding-top:4px}
+/* ---- the ladder ---- */
+.rv-lad{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;align-items:end;height:188px}
+.rv-step{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%;gap:6px;border-radius:var(--p-r-m);padding:0 0 2px;min-width:0;text-align:center}
+.rv-step__n{font:520 22px/26px var(--m3-font);font-variation-settings:"wdth" 116,"ROND" 100;letter-spacing:-.02em;font-variant-numeric:tabular-nums;align-self:end}
+.rv-step__b{position:relative;align-self:end;height:calc(var(--h) * 100%);min-height:28px;border-radius:var(--p-r-m) var(--p-r-m) var(--p-r-xs) var(--p-r-xs);
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;transform-origin:50% 100%;
+  background:color-mix(in oklab,var(--md-primary) calc(22% + var(--i) * 19%),var(--p-well));
+  transition:opacity var(--p-effect-d) var(--p-effect)}
+.rv-step__b em{font:600 11px/16px var(--m3-font);font-style:normal;padding:0 6px;border-radius:8px;background:var(--p-card);color:var(--md-on-surface);white-space:nowrap}
+.rv-step__l{font:500 12px/16px var(--m3-font);color:var(--md-on-surface-variant);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rv-lad.is-fg .rv-step:not(.is-on) .rv-step__b{opacity:.3}
+.rv-rules{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:14px}
+.rv-rules li{display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;align-items:start}
+.rv-rule{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;background:var(--p-well);color:var(--md-on-surface-variant)}
+.rv-rule svg{width:20px;height:20px}
+.rv-rule.is-up{background:var(--md-primary-container);color:var(--md-on-primary-container)}
+.rv-rule.is-down{background:var(--p-cat-b);color:var(--p-on-cat-b)}
+.rv-rules li > div{display:flex;flex-direction:column;gap:2px;min-width:0;padding-top:1px}
+.rv-rules b{font:500 15px/20px var(--m3-font)}
+.rv-rules span:not(.rv-rule){font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant)}
+/* ---- the next two weeks ---- */
+.rv-fc{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:3px;height:150px}
+@media (min-width:720px){.rv-fc{height:200px}}
+.rv-fc__d{display:grid;grid-template-rows:16px minmax(0,1fr) 16px 14px;justify-items:center;gap:3px;min-width:0;border-radius:var(--p-r-s);padding:0}
+.rv-fc__n{font:600 11px/16px var(--m3-font);white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.rv-fc__t{position:relative;width:100%;height:100%;border-radius:6px;background:var(--p-well);overflow:hidden}
+.rv-fc__t i{position:absolute;inset:0;border-radius:6px;background:var(--pg-ink2);transform-origin:50% 100%;transform:scaleY(max(var(--s),.03));transition:transform var(--p-spatial-d) var(--p-spatial)}
+.rv-fc__d.is-now .rv-fc__t i{background:var(--md-primary)}
+.rv-fc__l{font:600 11px/16px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-fc__d.is-now .rv-fc__l{color:var(--md-primary)}
+.rv-fc__dd{font:400 10px/14px var(--m3-font);color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.rv-fcw{container-type:inline-size}
+.rv-fc__d.is-now .rv-fc__dd{color:var(--md-primary);font-weight:600}
+@container (max-width:559px){.rv-fc__d{grid-template-rows:0 minmax(0,1fr) 16px 14px}.rv-fc__n{visibility:hidden}}
+/* ---- the queue ---- */
+.rv-queue{display:flex;flex-direction:column;gap:12px}
+.rv-queue__h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 16px;padding:8px 2px 0}
+.rv-queue__h h3{margin:0;font:500 22px/28px var(--m3-font)}
+.rv-seg{flex:1 1 340px;max-width:460px}
+.rv-seg button{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+@media (max-width:480px){.rv-seg button{font-size:13px;padding:0 4px}.rv-seg .pg-cnt{display:none}}
+.rv-leech{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;padding:16px 20px;border-radius:var(--p-r-card);background:var(--p-card)}
+.rv-leech p{flex:1 1 280px;margin:0;font:400 14px/20px var(--m3-font);color:var(--md-on-surface-variant)}
+.rv-leech .pl-btn{--h:40px}
+.rv-list .bk-row{grid-template-columns:40px minmax(0,1fr) auto}
+#rvList .bk-empty{padding:24px 16px}
+#rvList{display:flex;flex-direction:column;gap:12px}
+/* ---- arrival: cards rise in, the steps and columns grow from their base ---- */
+@media (prefers-reduced-motion:no-preference){
+  .rv.is-arrive .rv-in{animation:hmRise var(--p-spatial-slow-d) var(--p-spatial-slow) backwards;animation-delay:calc(var(--i,0) * 40ms)}
+  .rv.is-arrive .rv-grid > .rv-in:nth-child(1){--i:1}
+  .rv.is-arrive .rv-grid > .rv-in:nth-child(2){--i:2}
+  .rv.is-arrive .rv-step__b{animation:hmGrowY var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(120ms + var(--i) * 40ms)}
+  .rv.is-arrive .rv-fc__t i{animation:rvGrow var(--p-spatial-d) var(--p-spatial) backwards;animation-delay:calc(160ms + var(--i) * 18ms)}
+}
+@media (prefers-reduced-motion:reduce){.rv.is-arrive .rv-in{animation:hmFade 150ms linear backwards}}
+@keyframes rvGrow{from{transform:scaleY(0)}}
 </style>
 </head>
 <body>
@@ -7507,15 +7611,16 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
     </section>
 
     <!-- ============ REVIEW QUEUE ============ -->
+    <!-- Plume 2.23 · review: what the spacing schedule wants back today and
+         one button to clear it, how the schedule works drawn as a ladder of
+         the user's own questions, the next two weeks, and the queue itself
+         (due now, coming up, keeps slipping). Drawn by renderReview(). -->
     <section class="view" id="v-review">
-      <p class="eyebrow">Spaced repetition <span class="rule"></span></p>
-      <h2 class="vt">Review queue</h2>
-      <p class="sub">Every question you've missed comes back on a schedule.<button class="ib" data-note="srs" aria-label="How the queue decides"><svg class="ic"><use href="#i-info"/></svg></button></p>
-      <p class="tiny muted" id="dueNote" style="margin:0 0 16px"></p>
-      <h3 class="sec">Leeches — missed 3+ times</h3>
-      <div id="leechList"></div>
-      <h3 class="sec">Coming up</h3>
-      <div id="dueList"></div>
+      <div class="rv" id="rv">
+        <h2 class="gl-title">Review</h2>
+        <div id="rvTop"></div>
+        <div class="rv-grid" id="rvBody"></div>
+      </div>
     </section>
 
     <!-- ============ QUESTION BANK (Plume 2.22 · bank) ============
@@ -7793,7 +7898,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.84</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.85</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7849,7 +7954,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.84 · sharded store</span>
+        <span class="chip" id="verChip">v6.85 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -9011,7 +9116,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.84';
+const APP_VERSION='6.85';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -17201,23 +17306,205 @@ function galPkInstall(){
 }
 
 /* ============================================================
-   REVIEW QUEUE
+   REVIEW  (Plume 2.23 · review, rebuilt in v6.85)
+   ------------------------------------------------------------
+   The spacing schedule made visible. Every answer moves a question
+   on the schedule (srsUpdate): right sends it further out, a miss
+   brings it back tomorrow and starts the climb again. This screen
+   says what that means today: what is due and one button to clear
+   it, how the schedule works drawn as a ladder of the user's own
+   questions, the next two weeks, and the queue itself. Nothing new
+   is recorded; it reads DB.stats[id].srs like everything else.
    ============================================================ */
-function renderReview(){
-  const due=DB.questions.filter(q=>isDue(q.id));
-  const upcoming=DB.questions.filter(q=>{const s=DB.stats[q.id];return s&&s.srs&&s.srs.due>Date.now()})
-    .sort((a,b)=>DB.stats[a.id].srs.due-DB.stats[b.id].srs.due).slice(0,25);
-  const leech=DB.questions.filter(q=>{const s=DB.stats[q.id];return s&&s.srs&&s.srs.lapses>=3});
-  $('#dueNote').textContent=due.length?`${due.length} question${due.length===1?'':'s'} ready now.`:'Nothing due. Come back tomorrow, or drill unused questions instead.';
-  const row=q=>{const s=DB.stats[q.id];
-    return `<div class="qrow" data-preview="${q.id}" style="cursor:pointer"><div><div class="stem">${esc((q.stem||'').slice(0,180))}</div>
-    <div class="meta"><span class="chip">${esc(q.system||'')}</span>
-    <span class="chip ${s.srs&&s.srs.due<=Date.now()?'amber':''}">${s.srs?(s.srs.due<=Date.now()?'due now':'in '+Math.ceil((s.srs.due-Date.now())/86400000)+'d'):''}</span>
-    <span class="chip ${s.srs&&s.srs.lapses>=3?'rose':''}">${(s.srs||{}).lapses||0} lapses</span></div></div>
-    <div class="mono tiny muted">${Math.round((accOf(q.id)||0)*100)}%</div></div>`};
-  $('#leechList').innerHTML=leech.length?leech.slice(0,20).map(row).join(''):'<div class="tiny muted">No leeches — nothing has beaten you three times yet.</div>';
-  $('#dueList').innerHTML=(due.concat(upcoming)).length?(due.concat(upcoming)).slice(0,40).map(row).join(''):'<div class="empty"><h4>The queue is empty</h4><p class="tiny">Questions enter the schedule the first time you answer them.</p></div>';
+/* the rungs of the ladder, by the interval a question has reached. The
+   schedule's own steps are 1 day, 3 days, then the last interval times its
+   ease (about 2.3), so these are where questions actually sit */
+const RV_RUNG=[[1,'1 day','Just missed, or right once'],[3,'3 days','Right twice in a row'],[10,'1 week','Holding for days'],
+  [24,'3 weeks','Settling in'],[Infinity,'Month+','Yours']];
+const RV={tab:'due',more:30,tok:0};
+function rvRungOf(int){int=int||0;for(let i=0;i<RV_RUNG.length;i++)if(int<=RV_RUNG[i][0])return i;return RV_RUNG.length-1}
+function rvData(){
+  const now=Date.now(),t0=sod(now).getTime();
+  const R={due:[],miss:[],over:[],up:[],leech:[],rung:RV_RUNG.map(()=>[]),on:0,fc:new Array(14).fill(0),lapses:0};
+  DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs)return;const r=st.srs;
+    if(!attOf(q.id).length&&!(r.due<=now))return;
+    R.on++;R.rung[rvRungOf(r.int)].push(q);R.lapses+=r.lapses||0;
+    if((r.lapses||0)>=3)R.leech.push(q);
+    if(r.due<=now){R.due.push(q);if(statusOf(q.id)!=='correct')R.miss.push(q);if(now-r.due>=3*DAYMS)R.over.push(q)}
+    else{R.up.push(q);const d=Math.floor((r.due-t0)/DAYMS);if(d<14)R.fc[Math.max(0,d)]++}});
+  const due=q=>DB.stats[q.id].srs.due;
+  R.due.sort((a,b)=>due(a)-due(b));R.up.sort((a,b)=>due(a)-due(b));
+  R.leech.sort((a,b)=>(DB.stats[b.id].srs.lapses||0)-(DB.stats[a.id].srs.lapses||0)||due(a)-due(b));
+  return R;
 }
+/* the user's own time per question (the last 200 answers), for "about 25m" */
+function rvPace(){
+  const A=[];DB.questions.forEach(q=>attOf(q.id).forEach(a=>A.push(a)));
+  A.sort((x,y)=>y.ts-x.ts);const L=A.slice(0,200).map(studyOf).filter(x=>x>0);
+  return L.length>=10?L.reduce((s,x)=>s+x,0)/L.length/1000:PG_PACE;
+}
+function rvWhen(q){
+  const r=DB.stats[q.id].srs,now=Date.now(),t0=sod(now).getTime();
+  if(r.due<=now){const d=Math.floor((t0-sod(r.due).getTime())/DAYMS);return{c:'is-due',t:d>=1?'Overdue '+d+'d':'Due now'}}
+  const d=Math.round((sod(r.due).getTime()-t0)/DAYMS);
+  return{c:'',t:d<=0?'Later today':d===1?'Tomorrow':'In '+d+'d'};
+}
+function rvRowHTML(q){
+  const s=DB.stats[q.id]||{},r=s.srs||{},st=statusOf(q.id),att=attOf(q.id),pub=q.pubId||pubIdOf(q.id),w=rvWhen(q);
+  const title=q.topic||q.leadIn||'Untitled question',lap=r.lapses||0;
+  const pips=att.slice(-5).map(a=>`<i class="${a.chosen==null?'':a.correct?'y':'n'}"></i>`).join('');
+  return `<article class="bk-row" data-rv="${esc(q.id)}">
+    <button type="button" class="bk-hit pl-press" data-rvopen="${esc(q.id)}" aria-label="${esc(pub+': '+title+', '+w.t)}"></button>
+    <span class="bk-st" data-st="${st}" title="${BK_STW[st]||''}">${bkSvg(st)}</span>
+    <span class="bk-main"><span class="bk-over">${q.system?`<span>${esc(q.system)}</span>`:''}${q.subject?`<span>${esc(q.subject)}</span>`:''}</span>
+      <b class="bk-t">${esc(title)}</b><span class="bk-stem">${esc((q.stem||'').slice(0,240))}</span>
+      <span class="bk-marks">${bkMk(w.c||'','due',w.t)}${bkMk('','',RV_RUNG[rvRungOf(r.int)][1]+' step')}${lap>=3?bkMk('is-warn','warn','Slipped '+lap+'×'):lap?bkMk('','','Slipped '+lap+'×'):''}</span></span>
+    <span class="bk-side">${att.length?`<span class="bk-pips" title="${att.length} attempt${att.length>1?'s':''}, newest last">${pips}<b>${att.length}</b></span>`:''}</span>
+  </article>`;
+}
+/* ---------- the masthead and today's review ---------- */
+function rvTopHTML(R){
+  const n=R.due.length,b=pgBlockN(),take=Math.min(n,b),pace=rvPace();
+  let say;
+  if(!R.on)say='Questions you answer come back here just before you would forget them. Nothing has been answered yet.';
+  else if(!n){const nx=R.fc.findIndex(x=>x>0);
+    say=nx<0?'Nothing due in the next two weeks. The schedule is holding everything you have answered.'
+      :`You are clear. Next: <b>${R.fc[nx]}</b> ${nx===0?'later today':nx===1?'tomorrow':pgDate(sod(Date.now()).getTime()+nx*DAYMS,{weekday:'long'})}.`}
+  else say=`<b>${n}</b> question${n===1?'':'s'} the schedule wants back today${R.over.length?`, ${R.over.length} of them waiting three days or more`:''}. Clearing them daily is what keeps the bank learned, not just seen.`;
+  const mast=`<header class="rv-mast"><p class="rv-say">${say}</p></header>`;
+  if(!R.on)return mast+`<section class="rv-hero rv-in" style="--i:0">${pgEmpty('Nothing to review yet','A question joins the schedule the first time you answer it. There is nothing to add by hand.')}
+    <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press rv-go" data-rvact="new">${sxIc('i-play')}Practise new questions</button></section>`;
+  if(!n){const ahead=R.up.filter(q=>DB.stats[q.id].srs.due<sod(Date.now()).getTime()+2*DAYMS);
+    return mast+`<section class="rv-hero rv-in" style="--i:0"><div class="rv-clear"><span class="pg-empty__shape" aria-hidden="true"></span><div><b>All caught up</b><span>Every question on the schedule is resting until its day.</span></div></div>
+      ${ahead.length?`<button type="button" class="pl-btn pl-btn--m pl-btn--tonal pl-press rv-go" data-rvact="ahead">${sxIc('i-review')}Review tomorrow’s early · ${ahead.length>b?b+' of '+ahead.length:ahead.length}</button>`:''}</section>`}
+  const secs=Math.round(take*pace);
+  return mast+`<section class="rv-hero rv-in" style="--i:0">
+    <div class="rv-hero__top">
+      <button type="button" class="rv-hero__fig pg-tap pg-tap--bare pl-press" data-pk="due:now"><span class="pg-disp">${pgN('rv_due',n)}</span><span class="rv-hero__cap">due now</span></button>
+      <div class="rv-hero__est"><span>${take<n?`First block of ${take}`:'The whole review'}</span><b>${pgT('rv_est',secs)}</b><em>at your pace of ${pgTtxt(Math.round(pace))} a question</em></div>
+    </div>
+    <div class="rv-trio">
+      <button type="button" class="pg-tap pl-press" data-pk="rvd:miss"><b>${pgN('rv_miss',R.miss.length)}</b><span>missed last time</span></button>
+      <button type="button" class="pg-tap pl-press" data-pk="rvd:held"><b>${pgN('rv_held',n-R.miss.length)}</b><span>checking they held</span></button>
+      <button type="button" class="pg-tap pl-press" data-pk="rvd:over"><b>${pgN('rv_over',R.over.length)}</b><span>waiting 3+ days</span></button>
+    </div>
+    <div class="rv-acts">
+      <button type="button" class="pl-btn pl-btn--m pl-btn--filled pl-press rv-go" data-rvact="due">${sxIc('i-review')}Start review · ${take<n?take+' of '+n:n}</button>
+      ${R.miss.length&&R.miss.length<n?`<button type="button" class="pl-btn pl-btn--m pl-btn--tonal pl-press" data-rvact="miss">${sxIc('i-play')}Missed ones first · ${Math.min(R.miss.length,b)}</button>`:''}
+    </div>
+    <p class="rv-fine">Uses your usual block size, mode and timing from New session.</p>
+  </section>`;
+}
+/* ---------- how it works: the ladder, with the user's questions on it ---------- */
+function rvLadderHTML(R){
+  return pgCard('How review works',`<div class="rv-lad" data-pgfg="rvlad">${RV_RUNG.map((g,i)=>{const L=R.rung[i],d=L.filter(q=>isDue(q.id)).length;
+      return `<button type="button" class="rv-step pg-tap pl-press" data-pk="rvr:${i}" data-pgf="r${i}" style="--h:${((i+1)/RV_RUNG.length).toFixed(3)};--i:${i}" aria-label="${g[1]} step: ${L.length} questions, ${d} due">
+        <span class="rv-step__n">${pgN('rv_r'+i,L.length)}</span>
+        <span class="rv-step__b">${d?`<em>${d} due</em>`:''}</span>
+        <span class="rv-step__l">${g[1]}</span></button>`}).join('')}</div>
+    <ul class="rv-rules">
+      <li><span class="rv-rule is-up">${bkSvg('up')}</span><div><b>Right: up one step</b><span>It waits longer before it comes back: 1 day, 3 days, then about twice as long each time.</span></div></li>
+      <li><span class="rv-rule is-down">${bkSvg('dn')}</span><div><b>Missed: back to the first step</b><span>It returns tomorrow and climbs again. Three slips and it is listed under Keeps slipping.</span></div></li>
+      <li><span class="rv-rule">${bkSvg('plus')}</span><div><b>Nothing to add by hand</b><span>Any question you answer, in any session, joins the ladder.</span></div></li>
+    </ul>`,{sub:`Where your ${R.on} answered question${R.on===1?' sits':'s sit'}. The higher the step, the longer you have held it.`,cls:'is-half rv-in'});
+}
+/* ---------- the next two weeks ---------- */
+function rvAheadHTML(R){
+  const t0=sod(Date.now()).getTime(),mx=Math.max(1,...R.fc),w7=R.fc.slice(0,7).reduce((a,b)=>a+b,0);
+  let bi=0;R.fc.forEach((n,i)=>{if(n>R.fc[bi])bi=i});
+  const note=!R.fc.some(Boolean)?'Nothing scheduled for the next two weeks.'
+    :`${w7} in the next 7 days. The busiest day is ${bi===0?'later today':bi===1?'tomorrow':pgDate(t0+bi*DAYMS,{weekday:'long',day:'numeric'})}, with ${R.fc[bi]}${R.fc[bi]>pgBlockN()?', more than one block: reviewing a few early evens it out':''}.`;
+  return pgCard('The next two weeks',`<div class="rv-fcw"><div class="rv-fc">${R.fc.map((n,i)=>{const d=new Date(t0+i*DAYMS);
+      return `<button type="button" class="rv-fc__d pg-tap pl-press${i===0?' is-now':''}" data-pk="due:${i}" aria-label="${i?pgDate(d,{weekday:'long',day:'numeric'}):'Later today'}: ${n} due">
+        <span class="rv-fc__n">${n||''}</span><span class="rv-fc__t"><i style="--s:${(n/mx).toFixed(4)};--i:${i}"></i></span>
+        <span class="rv-fc__l">${pgDate(d,{weekday:'narrow'})}</span><span class="rv-fc__dd">${d.getDate()}</span></button>`}).join('')}</div></div>
+    <p class="pg-note">${note}</p>`,{sub:'How many come back each day if you clear what is due.',cls:'is-half rv-in'});
+}
+/* ---------- the queue ---------- */
+function rvListOf(R,t){return t==='due'?R.due:t==='up'?R.up:R.leech}
+function rvListHTML(R){
+  const L=rvListOf(R,RV.tab),more=L.length>RV.more;
+  const E={due:['Nothing due','Every question is resting until its day. The next ones are under Coming up.'],
+    up:['Nothing coming up','Answer questions in any session and they join the schedule.'],
+    leech:['Nothing keeps slipping','No question has been missed three times on the schedule.']}[RV.tab];
+  const head=RV.tab==='leech'&&L.length?`<div class="rv-leech"><p>A question missed three times is usually a misunderstanding, not a memory problem. Open it and read the explanation properly, or write yourself a note on it, before drilling it again.</p>
+      <button type="button" class="pl-btn pl-btn--tonal pl-press" data-pk="mem:leech">About these</button></div>`:'';
+  return head+(L.length?`<div class="bk-list rv-list">${L.slice(0,RV.more).map(rvRowHTML).join('')}</div>`
+      :`<div class="bk-empty">${pgEmpty(E[0],E[1])}</div>`)
+    +(more?`<div class="bk-more"><button type="button" class="pl-btn pl-btn--tonal pl-press" data-rvmore>Show more · ${L.length-RV.more} left</button></div>`:'');
+}
+function rvQueueHTML(R){
+  const T=[['due','Due now',R.due.length],['up','Coming up',R.up.length],['leech','Keeps slipping',R.leech.length]];
+  const i=Math.max(0,T.findIndex(t=>t[0]===RV.tab));
+  return `<section class="rv-queue rv-in" style="--i:3"><div class="rv-queue__h"><h3>The queue</h3>
+      <div class="pl-seg rv-seg" id="rvSeg" role="radiogroup" aria-label="Which questions" style="--n:3;--i:${i}"><span class="pl-seg__ind" aria-hidden="true"></span>
+      ${T.map(t=>`<button type="button" class="pl-press${t[0]===RV.tab?' on':''}" role="radio" aria-checked="${t[0]===RV.tab}" data-v="${t[0]}">${t[1]}<span class="pg-cnt">${t[2]}</span></button>`).join('')}</div></div>
+    <div id="rvList">${rvListHTML(R)}</div></section>`;
+}
+function rvPkInstall(){
+  if(PG_PK.rvd)return;
+  PG_PK.rvd=k=>{
+    const R=rvData(),L=k==='miss'?R.miss:k==='over'?R.over:R.due.filter(q=>statusOf(q.id)==='correct'),ids=L.map(q=>q.id);
+    const D={miss:['Missed last time','Due today and wrong (or left blank) the last time you met them. These are the ones the schedule brought back after a slip.'],
+      held:['Checking they held','Due today and right last time. The schedule is testing whether they stuck; a right answer sends each one a step higher.'],
+      over:['Waiting three days or more','Due for at least three days and not yet reviewed. The longer they wait, the more of them slip; clear these first.']}[k];
+    return{o:'Today’s review',t:D[0],fig:pgxFig(pgN('px',L.length),`of ${R.due.length} due now`),
+      body:pgxP(D[1])+pgxBySys(L,'By system'),acts:[pgxPrac(ids,'Review · '+D[0].toLowerCase(),'Review these',true)]};
+  };
+  PG_PK.rvr=i=>{
+    const R=rvData(),g=RV_RUNG[+i];if(!g)return null;const L=R.rung[+i],ids=L.map(q=>q.id),due=L.filter(q=>isDue(q.id));
+    const say=['These come back tomorrow: either just missed, or right once. One right answer sends each to 3 days.',
+      'Right twice in a row. Next time right, the wait grows to about a week.',
+      'Between four and ten days apart. Right again and they go two to three weeks out.',
+      'Eleven days to three weeks between meetings. One more right answer and they are a month or more away.',
+      'A month or more between meetings. These are the ones you own; a miss still drops one back to the first step.'][+i];
+    return{o:'How review works',t:g[1]+' step',fig:pgxFig(pgN('px',L.length),`of ${R.on} on the schedule`),
+      body:pgxP(say)+pgxMini([[due.length,'due now'],[L.length-due.length,'resting'],[L.filter(q=>(DB.stats[q.id].srs.lapses||0)>0).length,'slipped before']])+pgxBySys(L,'By system'),
+      acts:[due.length?pgxPrac(due.map(q=>q.id),'Review · '+g[1]+' step','Review the due ones',true):null,pgxPrac(ids,'Early review · '+g[1]+' step',due.length?'Review all of them':'Review these early',!due.length)]};
+  };
+}
+/* ---------- render ---------- */
+function renderReview(){
+  rvPkInstall();
+  const R=rvData();RV.R=R;RV.more=30;RV.tok++;
+  if(RV.tab==='leech'&&!R.leech.length)RV.tab='due';
+  if(RV.tab==='due'&&!R.due.length&&R.up.length)RV.tab='up';
+  const top=$('#rvTop'),body=$('#rvBody');
+  top.innerHTML=rvTopHTML(R);
+  body.innerHTML=R.on?rvLadderHTML(R)+rvAheadHTML(R)+rvQueueHTML(R):'';
+  const rv=$('#rv');sxHydrate(rv);
+  rv.classList.remove('is-arrive');void rv.offsetWidth;if(!Motion.reduced)rv.classList.add('is-arrive');
+  pgAlive(rv);
+}
+function rvPaintList(){
+  const el=$('#rvList');if(!el)return;const R=RV.R||rvData();
+  const html=rvListHTML(R);
+  if(Motion.reduced){el.innerHTML=html;return}
+  const tok=++RV.tok;
+  el.animate([{opacity:1},{opacity:0,transform:'translateY(6px)'}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(()=>{
+    if(tok!==RV.tok)return;el.getAnimations().forEach(a=>a.cancel());el.innerHTML=html;sxHydrate(el);
+    const sp=PL('spatial');el.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e})}).catch(()=>{});
+}
+$('#v-review').addEventListener('click',e=>{
+  const T=e.target;let x;
+  if((x=T.closest('#rvSeg [data-v]'))){const v=x.dataset.v;if(v===RV.tab)return;RV.tab=v;RV.more=30;sxSegMark($('#rvSeg'),v);
+    requestAnimationFrame(()=>setTimeout(rvPaintList,0));return}
+  if((x=T.closest('[data-pk]'))){pgPeek(x.dataset.pk,x);return}
+  if((x=T.closest('[data-rvopen]'))){const L=rvListOf(RV.R||rvData(),RV.tab);
+    $$('#rvList .bk-row.is-src').forEach(r=>r.classList.remove('is-src'));x.closest('.bk-row').classList.add('is-src');
+    previewQuestion(x.dataset.rvopen,L.map(q=>q.id));return}
+  if(T.closest('[data-rvmore]')){const el=$('#rvList .rv-list'),L=rvListOf(RV.R,RV.tab),a=RV.more;RV.more+=30;
+    if(!el){rvPaintList();return}
+    el.insertAdjacentHTML('beforeend',L.slice(a,RV.more).map(rvRowHTML).join(''));
+    if(!Motion.reduced){const sp=PL('spatial');[...el.children].slice(a).forEach((r,i)=>r.animate([{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e,delay:Math.min(i,8)*24,fill:'backwards'}))}
+    const m=T.closest('.bk-more'),left=L.length-RV.more;if(left>0)m.querySelector('button').textContent='Show more · '+left+' left';else m.remove();return}
+  if((x=T.closest('[data-rvact]'))){const a=x.dataset.rvact,R=RV.R||rvData();
+    if(a==='due')startDueReview();
+    else if(a==='miss')startIds(R.miss.map(q=>q.id),'Review · missed first');
+    else if(a==='ahead')startIds(R.up.filter(q=>DB.stats[q.id].srs.due<sod(Date.now()).getTime()+2*DAYMS).map(q=>q.id),'Early review');
+    else if(a==='new'){F.pool='unused';clearFacets();startSession('New questions')}
+    return}
+});
 
 /* ============================================================
    STATS
@@ -17862,7 +18149,7 @@ function pgAheadCard(){
     hz=`<div class="pg-pace"><div><span>Your pace</span>${pgBar(pace/m)}<b>${Math.round(pace)} a day</b></div><div><span>Needed</span>${pgBar(need/m,'is-ref')}<b>${Math.ceil(need)} a day</b></div></div>
     <p class="pg-note">${t.unused} new questions and ${ex.days} days to the exam. ${pace>=need?'Your last seven days are enough to finish the bank.':`To finish the bank, ${Math.ceil(need-pace)} more a day than your last seven days.`}</p>`}
   else if(t.unused&&pace>.5)hz=`<p class="pg-note">${t.unused} new questions left. At your last seven days' pace of ${Math.round(pace)} a day, about ${Math.ceil(t.unused/pace)} days. Set an exam date in Settings to see the pace you need.</p>`;
-  return pgCard('What is coming',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:now"><span class="pg-big">${pgN('due',over)}</span><em>due now</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:7"><span class="pg-big">${pgN('due7',arr.slice(0,7).reduce((a,b)=>a+b,0))}</span><em>due in 7 days</em></button></div>
+  return pgCard('What is coming',`<div class="pg-ahead"><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:now"><span class="pg-big">${pgN('due',over)}</span><em>due now</em></button><button type="button" class="pg-tap pg-tap--bare pl-press" data-pk="due:week"><span class="pg-big">${pgN('due7',arr.slice(0,7).reduce((a,b)=>a+b,0))}</span><em>due in 7 days</em></button></div>
     ${fc}${hz}`,{sub:'The review schedule for the next two weeks.',cls:'is-half'});
 }
 const PG_HB=[[5,9,'Early','5–9'],[9,12,'Morning','9–12'],[12,17,'Afternoon','12–17'],[17,21,'Evening','17–21'],[21,24,'Night','21–24'],[0,5,'Late','0–5']];
@@ -18442,12 +18729,12 @@ PG_PK.per=i=>{const w=PG.perW&&PG.perW[+i];if(!w)return null;const e=PG.per==='m
 function pgDueOn(i){
   const t0=sod(Date.now()).getTime(),now=Date.now(),out=[];
   DB.questions.forEach(q=>{const st=DB.stats[q.id];if(!st||!st.srs||!st.srs.due||!attOf(q.id).length)return;const due=st.srs.due;
-    if(i==='now'?due<=now:i==='7'?due>now&&due<t0+7*DAYMS:due>now&&Math.max(0,Math.floor((due-t0)/DAYMS))===+i)out.push(q)});
+    if(i==='now'?due<=now:i==='week'?due>now&&due<t0+7*DAYMS:due>now&&Math.max(0,Math.floor((due-t0)/DAYMS))===+i)out.push(q)});
   return out;
 }
 PG_PK.due=i=>{
   const L=pgDueOn(i),ids=L.map(q=>q.id),t0=sod(Date.now()).getTime();
-  const t=i==='now'?'Due now':i==='7'?'Due in the next 7 days':+i===0?'Due later today':pgDate(t0+(+i)*DAYMS,{weekday:'long',day:'numeric',month:'short'});
+  const t=i==='now'?'Due now':i==='week'?'Due in the next 7 days':+i===0?'Due later today':pgDate(t0+(+i)*DAYMS,{weekday:'long',day:'numeric',month:'short'});
   return{o:'What is coming',t,fig:pgxFig(pgN('px',L.length),L.length===1?'question':'questions'),
     body:pgxP(i==='now'?'The schedule wants these back today. Each right answer sends a question further out; a miss brings it back within days.'
       :'Not due yet. Reviewing early is fine; the schedule simply counts it as one more meeting.')+pgxBySys(L,'By system'),
@@ -24651,12 +24938,9 @@ const BRAND=(function(){
       };
     },
     /* nothing due is not a disabled button, it is no button */
-    review: function () {
-      var d = db();
-      if (!d || !d.questions.some(function (q) { return isDue(q.id); })) return null;
-      return { icon: 'i-review', label: 'Start review', aria: 'Start the due review',
-               run: function () { startDueReview(); } };
-    },
+    /* the screen's own hero carries Start review (v6.85); a floating copy
+       of it would be two primary actions */
+    review: function () { return null; },
     bank: function () {
       return { icon: 'i-note', label: 'Write a question', aria: 'Write a new question',
                run: function () { editQuestion(null); } };

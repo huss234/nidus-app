@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.22** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.23** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1585,6 +1585,37 @@ The quality bar. A surface is done when it *feels* like §2, and:
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
+- **Review** (`Plume 2.23 · review`, v6.85, rebuilt from scratch; markup
+  `#v-review` / `#rv` with `#rvTop`, `#rvBody`; script REVIEW: `renderReview`,
+  `rvData`, `rvTopHTML`, `rvLadderHTML`, `rvAheadHTML`, `rvQueueHTML`,
+  `PG_PK.rvd` / `PG_PK.rvr`). A screen whose job was unclear to the user, so
+  it **says what it is for in its first line** and explains its mechanism with
+  the user's own data rather than an (i) note. Reuse:
+  - **A mechanism drawn as a ladder of the user's own items** (`.rv-lad`,
+    `RV_RUNG`): one step per stage of a process, the step's height is its
+    place in the climb (fixed, rising), its tone deepens with it, its count
+    sits on top and what is due now sits in a pill on the step; each step
+    opens its peek and isolates (`data-pgf`). Under it, the rules as rows with
+    a tonal shape (up in `primary-container`, back down in the second hue).
+    Use it whenever a screen depends on a rule the user may not know.
+  - **The hero is the screen's one main action** (`.rv-hero`): the
+    expressive count, what the first block costs at the user's own pace
+    (`rvPace`, mean question time of the last 200 answers), three tiles that
+    split the count (each a peek) and the 56px filled button with an honest
+    "20 of 384". It replaces the FAB on this screen: a floating copy of a
+    button already on the page is two primary actions. Caught up, it becomes
+    a seal with one tonal action (review ahead); empty, the empty state with
+    Practise new.
+  - **A forecast that hides its counts when columns are too narrow**
+    (`.rv-fcw` is a size container; below 560px the counts above the columns
+    step out of layout and the peek and aria-label carry them). Three-digit
+    counts over 14 columns collided at both 390 and 800px.
+  - **The queue reuses the bank's rows** (`.bk-row`, `.bk-st`, `.bk-mk`,
+    `.bk-pips`) with its own open attribute (`data-rvopen`), so a question
+    looks the same wherever it is listed; a three-way `.pl-seg` swaps the
+    list (the list fades 6px down and the new one rises 12px), Show more
+    appends rows with a short stagger instead of redrawing.
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1619,6 +1650,7 @@ A surface that is not listed here is legacy.
 | Areas chips: the check's slot collapses fully (`minmax(0,0fr)`), its gap inside the slot | 2.13 | 6.71 | From the user: unchosen chips kept the check's space |
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
 | **Bank, whole screen; the question page; the editor** (search with the passage that matched, sort, chips in seven counted groups, the count line with Practise, About your bank with its peeks and Keep it tidy, rows, long-press selection with flag / label / verify / copy / delete / practise; the page layer; the question page with stepping, flag, labels, record, note, ⋮; the editor with sections, the jump strip, Write / Preview, the letter as the answer, lure switches, move / remove / add, table columns, the dock) | 2.22 | 6.84 | Rebuilt from scratch on the user's request; nothing removed. Every legacy filter is a chip (plus Left blank, Due, Has a lure, system, subject, difficulty, your labels); the duplicate scan moved into About your bank. The preview dialog became a page that every screen opens (Home's plate, Images, Review, the duplicates list). New in the editor: things to remember and references are editable, options reorder, topic and source suggest from the bank, unsaved changes are guarded, Ctrl+S saves. The duplicates dialog, the figure blocks (`figHTML`) and the referenced-file buttons inside the pages are still legacy components |
+| **Review, whole screen**: what is due today and Start review, the ladder (how the schedule works, with the user's questions on its steps), the next two weeks, the queue (due now, coming up, keeps slipping) | 2.23 | 6.85 | Rebuilt from scratch on the user's request ("I don't know how to use this tab"). Nothing removed: the due count and line, the leeches (now Keeps slipping, with the read-don't-drill advice and the Memory peek), the upcoming list with due, lapses and accuracy (as pips), every row opening the question. New: Start review and Missed ones first on the screen itself (the old screen had no way to start), the time it will take, the split of what is due, the ladder and its peeks, the forecast, paging. The (i) note's text now lives in the ladder's rules. The screen's FAB is gone (the hero holds the action) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -1743,6 +1775,12 @@ A surface that is not listed here is legacy.
   the bar; a row is one tap target with its buttons above it; a list glides;
   the answer is chosen by its letter; cards are tied to the objects they
   edit, so moves never redraw; a dock says what saving would do.
+
+- **Plume 2.23** (2026-10-15): Review. A screen whose purpose is not
+  obvious says it in its first line and explains its mechanism with the
+  user's own data (the ladder) instead of a note behind an (i); the hero
+  holds the main action, so the screen carries no FAB; counts over narrow
+  columns step aside by container width.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion
