@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.24** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.25** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1652,6 +1652,21 @@ The quality bar. A surface is done when it *feels* like §2, and:
     a verdict), sits on the icon's corner on phones and on the pill's corner
     on the tablet, and its number is in the item's `aria-label`.
   - Tapping the open tab scrolls its screen back to the top.
+- **Rule: the chrome never moves when the content does (2.25).** Bars, the
+  dock and the FAB stay perfectly still through a screen change; only the
+  indicator and the content travel. Anything that slides in from the side
+  starts past the viewport's edge, and on a phone a page wider than the
+  viewport makes the browser zoom out, so every fixed bar drops and rises
+  back. The content column clips sideways (`.main{overflow-x:clip}` on
+  phones and the tablet; `clip`, never `hidden`, so sticky bars still
+  stick). Measure it: per frame through every tab switch, the dock's
+  `getBoundingClientRect().top` and `innerHeight` each take one value and
+  `scrollWidth - clientWidth` stays 0. (v6.86: the dock dropped out of
+  view and rose back on every switch; the user saw it at once.)
+- **A dock is tapped (2.25).** The user's word "swipe between tabs" meant
+  *switch*; the drag along the dock was a literal reading. It stays because
+  the user said to keep it, but don't add gestures a request only seems to
+  name: ask, or build the plain meaning.
 - **Rule: a fixed bar is its own layout root (2.24).** A fixed-size bar
   over the page takes `contain: strict`. Without it, a label's weight
   changing in the dock relaid the whole document: 20ms per tap at 4× CPU on
@@ -1698,6 +1713,7 @@ A surface that is not listed here is legacy.
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
 | **Bank, whole screen; the question page; the editor** (search with the passage that matched, sort, chips in seven counted groups, the count line with Practise, About your bank with its peeks and Keep it tidy, rows, long-press selection with flag / label / verify / copy / delete / practise; the page layer; the question page with stepping, flag, labels, record, note, ⋮; the editor with sections, the jump strip, Write / Preview, the letter as the answer, lure switches, move / remove / add, table columns, the dock) | 2.22 | 6.84 | Rebuilt from scratch on the user's request; nothing removed. Every legacy filter is a chip (plus Left blank, Due, Has a lure, system, subject, difficulty, your labels); the duplicate scan moved into About your bank. The preview dialog became a page that every screen opens (Home's plate, Images, Review, the duplicates list). New in the editor: things to remember and references are editable, options reorder, topic and source suggest from the bank, unsaved changes are guarded, Ctrl+S saves. The duplicates dialog, the figure blocks (`figHTML`) and the referenced-file buttons inside the pages are still legacy components |
 | **Review, whole screen**: what is due today and Start review, the ladder (how the schedule works, with the user's questions on its steps), the next two weeks, the queue (due now, coming up, keeps slipping) | 2.23 | 6.85 | Rebuilt from scratch on the user's request ("I don't know how to use this tab"). Nothing removed: the due count and line, the leeches (now Keeps slipping, with the read-don't-drill advice and the Memory peek), the upcoming list with due, lapses and accuracy (as pips), every row opening the question. New: Start review and Missed ones first on the screen itself (the old screen had no way to start), the time it will take, the split of what is due, the ladder and its peeks, the forecast, paging. The (i) note's text now lives in the ladder's rules. The screen's FAB is gone (the hero holds the action) |
+| Dock fix: stays still through every tab switch (the content column clips the sideways entrance) | 2.25 | 6.87 | From the user: the dock disappeared and reappeared on each switch. Measured static at 360 / 412 / 800px |
 | **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px), the top app bar and the FAB are still legacy |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
@@ -1829,6 +1845,10 @@ A surface that is not listed here is legacy.
   user's own data (the ladder) instead of a note behind an (i); the hero
   holds the main action, so the screen carries no FAB; counts over narrow
   columns step aside by container width.
+
+- **Plume 2.25** (2026-10-15): the chrome never moves when the content does;
+  sideways entrances are clipped by the content column so a phone never
+  zooms the page out under a fixed bar. From the user, on the dock.
 
 - **Plume 2.24** (2026-10-15): the dock. One indicator placed by its
   container's width that a thumb can carry along the bar; filled icons whose

@@ -757,6 +757,16 @@ does) and work in the scratchpad:
   `getAnimations` (68ms). To find a whole-page relayout, time a forced
   `getComputedStyle(...).transform` after one change at a time (a class, a
   custom property): a change inside a contained bar should cost ~2ms.
+- **Log `innerHeight` while filming any transition on a phone.** A
+  transform that pushes content past the right edge widens the page, the
+  mobile browser zooms out, and every fixed bar slides off the bottom with no
+  transform of its own (the v6.86 dock: `innerHeight` 860 → 911 → 860). The
+  emulated context needs `isMobile: true` to show it; desktop Chromium
+  doesn't zoom.
+- **Read a request's words as the user means them.** "A dock that lets you
+  swipe between tabs" meant a tab bar; v6.86 built a drag gesture nobody
+  asked for (kept at the user's word). When a phrase could name a feature or
+  just describe the thing, build the plain meaning or ask.
 - **Judge compositor motion by film, not by rAF samples.** While the screen
   builds, `getComputedStyle` per frame shows the pill frozen; the screencast
   shows it moving. Film the bar strip (`montage -crop`) of a tab switch at
