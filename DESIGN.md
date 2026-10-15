@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.23** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.24** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -835,7 +835,7 @@ goals and rules above win). All follow the touch contract (§6).
 | **Button group / view switcher** | One `--p-well` track, `--p-r-full`, 4px inset, and **one** `primary` indicator that travels between segments on `--p-spatial` and squares a little while pressed. Labels and icons change as it arrives. Content follows its direction (§2). Replaces old segmented controls |
 | **Split button** | Leading action plus trailing chevron. The chevron half turns into a circle and its icon rotates 180° while its menu is open |
 | **FAB / FAB menu** | Only for the screen's hero action, never covering content (§7). FAB menu: the FAB morphs into a close button (rotate and shape morph) while items unfold upward with a stagger, each a `primary-container` pill |
-| **Navigation bar** | `--p-bar`, separated from the page by tone, never a line. The active item has a pill indicator that slides between items and stretches mid-travel. Label weight animates. Icons switch outline → filled |
+| **Navigation bar** | `--p-bar`, separated from the page by tone, never a line. 64px. **One** pill indicator that slides between items and stretches mid-travel; a thumb can drag it along the bar. Label weight animates. Icons switch outline → filled (details become cuts in the pill's colour) and act out their logic on arrival. Icon over label on phones; from 700px the label sits beside the icon inside the pill. Built: the dock, §14 |
 | **Navigation rail / drawer** | Same travelling indicator. The rail can expand into a drawer with a container transform |
 | **Top app bar** | Flat on the page at rest, with a large title that may collapse on scroll. Scrolled: one level up in tone with an effects-spring colour transition. No shadow, no line |
 | **Floating toolbar** | `--p-float`, `--p-r-full` or `--p-r-lx`, Plume shadow. Hides on scroll down and returns on scroll up (`--p-spatial`, translate only) |
@@ -1616,6 +1616,53 @@ The quality bar. A surface is done when it *feels* like §2, and:
     list (the list fades 6px down and the new one rises 12px), Show more
     appends rows with a short stagger instead of redrawing.
 
+- **The dock** (`Plume 2.24 · dock`, v6.86, rebuilt from scratch; markup
+  `#tabbar.tb` with `.tb__row`, `.tb__ind`, `.tb__it` › `.tb__p` › `.tb__g` +
+  `.tb__l`, the badge `.tb__b#dueCntM`; script THE DOCK: `tbMark`, `tbGo`,
+  `tbSwap`, `tbIcon`, `tbBadge`). The navigation bar on phones and the tablet
+  (≤860px). Reuse:
+  - **One indicator placed by the container's own width** (`.tb__row` is an
+    inline-size container; the pill is `translateX(calc(100cqw / n * (i + .5)
+    - w / 2))`, moved by `--i` on a transition): no measuring in script,
+    right at every width, retargets mid-flight. The trip stretches it (a WAAPI
+    `scale` on top, more for a longer trip), and the label and icon it lands on
+    change after `--lag`, scaled by the distance.
+  - **Drag the indicator along a bar** (pointer handlers on the bar, taken
+    after 10px of sideways travel, `touch-action:none` on the bar): it follows
+    the finger 1:1 with squared "held" corners, catching up over 150ms when
+    the finger lands away from it; the item under it lights as it passes with
+    a 5ms tick; past the ends it gives at 0.55× (28px at most); the release
+    projects the last 90ms of velocity 140ms ahead and picks the nearest item.
+    A cancelled or same-item release springs home from where it is.
+  - **Filled icons with cuts** (`.tb-f` fills at the outline's geometry;
+    `.tb-k` details turn the pill's colour; `.tb-ko` strokes exist only when
+    filled, for gaps the outline does not have, such as between Progress's
+    bars and under Bank's lid). Arrival motions: Review's hands turn back an
+    hour while its arrow pushes back and settles; Bank's lid lifts on its
+    hinge and drops; Images' sun rises behind the hills; Progress's bars grow
+    from the base one after another. Home is a noun: its fill alone.
+  - **A tab's screen follows the pill** (`tbSwap`): the tap moves the pill,
+    the build waits a frame, then the old screen is pinned where it stands
+    (`.view.tb-out`, fixed at its rect) and fades 12px the other way over the
+    new one, which enters 24px from the side the pill went (`.tb-in`, 60ms
+    later). The class stays while that screen is open (taking it off would
+    restart the legacy `m3ViewIn`); `go()` clears it everywhere else.
+  - **A count on a tab** grows in and out (`visibility` after the fade),
+    rolls its text (`sxSwap`), is `primary`, never `error` (a due count is not
+    a verdict), sits on the icon's corner on phones and on the pill's corner
+    on the tablet, and its number is in the item's `aria-label`.
+  - Tapping the open tab scrolls its screen back to the top.
+- **Rule: a fixed bar is its own layout root (2.24).** A fixed-size bar
+  over the page takes `contain: strict`. Without it, a label's weight
+  changing in the dock relaid the whole document: 20ms per tap at 4× CPU on
+  Home, 2ms after.
+- **Rule: a control keeps handles to its own animations (2.24).**
+  `Element.getAnimations()` flushes style and walks every animation in the
+  document; on Home it cost 68ms per tap at 4× CPU. Keep the `Animation`
+  objects you start and cancel those. Likewise, read the springs a tap needs
+  (`PL`) once at idle: their first read is a computed-style read of the root
+  and forced a full recalc on the tap frame (113ms).
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1651,6 +1698,7 @@ A surface that is not listed here is legacy.
 | Progress: Areas view, and the measures brought back (memory, like-for-like, sighting ladder, time split, months, weekdays, more session figures); labelled charts as rows | 2.12 | 6.70 | From the user: the first rebuild had fewer statistics than before and no completion by area |
 | **Bank, whole screen; the question page; the editor** (search with the passage that matched, sort, chips in seven counted groups, the count line with Practise, About your bank with its peeks and Keep it tidy, rows, long-press selection with flag / label / verify / copy / delete / practise; the page layer; the question page with stepping, flag, labels, record, note, ⋮; the editor with sections, the jump strip, Write / Preview, the letter as the answer, lure switches, move / remove / add, table columns, the dock) | 2.22 | 6.84 | Rebuilt from scratch on the user's request; nothing removed. Every legacy filter is a chip (plus Left blank, Due, Has a lure, system, subject, difficulty, your labels); the duplicate scan moved into About your bank. The preview dialog became a page that every screen opens (Home's plate, Images, Review, the duplicates list). New in the editor: things to remember and references are editable, options reorder, topic and source suggest from the bank, unsaved changes are guarded, Ctrl+S saves. The duplicates dialog, the figure blocks (`figHTML`) and the referenced-file buttons inside the pages are still legacy components |
 | **Review, whole screen**: what is due today and Start review, the ladder (how the schedule works, with the user's questions on its steps), the next two weeks, the queue (due now, coming up, keeps slipping) | 2.23 | 6.85 | Rebuilt from scratch on the user's request ("I don't know how to use this tab"). Nothing removed: the due count and line, the leeches (now Keeps slipping, with the read-don't-drill advice and the Memory peek), the upcoming list with due, lapses and accuracy (as pips), every row opening the question. New: Start review and Missed ones first on the screen itself (the old screen had no way to start), the time it will take, the split of what is due, the ladder and its peeks, the forecast, paging. The (i) note's text now lives in the ladder's rules. The screen's FAB is gone (the hero holds the action) |
+| **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px), the top app bar and the FAB are still legacy |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -1781,6 +1829,12 @@ A surface that is not listed here is legacy.
   user's own data (the ladder) instead of a note behind an (i); the hero
   holds the main action, so the screen carries no FAB; counts over narrow
   columns step aside by container width.
+
+- **Plume 2.24** (2026-10-15): the dock. One indicator placed by its
+  container's width that a thumb can carry along the bar; filled icons whose
+  details are cuts in the pill's colour; a tab's screen enters from the side
+  the pill went. A fixed bar is its own layout root, and a control keeps
+  handles to its own animations instead of asking the document.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

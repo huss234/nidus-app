@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.85 -->
+<!-- Nidus — Personal Qbank · v6.86 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -895,65 +895,7 @@ body:has(#mask.on) .fabscrim{display:none}
      stays either way, since it says something the bar never did. */
   .view:not(#v-dash) > h2.vt{display:none}
 
-  .tabbar{
-    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:60;
-    height:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom));
-    padding:12px 8px env(safe-area-inset-bottom);
-    background:var(--md-surface-container);
-    align-items:flex-start;
-  }
-  .tabbar button{
-    flex:1;position:relative;display:flex;flex-direction:column;
-    align-items:center;gap:4px;padding:0;height:56px;
-    color:var(--md-on-surface-variant);
-    font-size:12px;line-height:16px;font-weight:500;letter-spacing:.5px;
-    background:none;border-radius:var(--m3-corner-l);
-    transition:color var(--m3-dur-medium) var(--m3-ease-standard),
-               transform var(--m3-spatial) var(--m3-spring-expressive);
-  }
-  /* the pill that slides in behind the active icon */
-  .tabbar button::before{
-    content:"";position:absolute;top:0;left:50%;
-    width:64px;height:32px;margin-left:-32px;
-    border-radius:var(--m3-corner-full);
-    background:var(--md-secondary-container);
-    transform:scaleX(.35);opacity:0;z-index:0;
-    transition:transform var(--m3-spatial) var(--m3-spring-expressive),
-               opacity var(--m3-dur-short2) var(--m3-ease-standard);
-  }
-  .tabbar button.on::before{transform:scaleX(1);opacity:1}
-  /* A navigation item answers the finger in the shape of its own indicator.
-     Washing the whole rectangle *and* throwing a ripple across it read as two
-     unrelated effects landing at once; one pill that swells under the thumb
-     reads as a single gesture. This is why the bar sits outside the shared
-     state-layer and ripple selectors. */
-  .tabbar button::after{
-    content:"";position:absolute;top:0;left:50%;
-    width:64px;height:32px;margin-left:-32px;
-    border-radius:var(--m3-corner-full);
-    background:currentColor;opacity:0;z-index:0;pointer-events:none;
-    transform:scale(.6);
-    transition:opacity var(--m3-dur-short2) var(--m3-ease-standard),
-               transform var(--m3-spatial) var(--m3-spring-expressive);
-  }
-  .tabbar button:active::after{opacity:var(--m3-state-press);transform:scale(1)}
-  @media (hover:hover){
-    .tabbar button:hover::after{opacity:var(--m3-state-hover);transform:scale(1)}
-  }
-  /* the item gives a little under the press and the spring hands it back */
-  .tabbar button:active{transform:scale(.94)}
-  .tabbar button.on:active::before{transform:scaleX(1) scaleY(.88)}
-  .tabbar button .ic{
-    width:24px;height:24px;position:relative;z-index:1;margin-top:4px;
-    transition:stroke-width var(--m3-dur-medium) var(--m3-ease-standard),
-               transform var(--m3-spatial) var(--m3-spring-expressive);
-  }
-  .tabbar button:active .ic{transform:scale(.92)}
-  .tabbar button.on{color:var(--md-on-surface)}
-  .tabbar button.on .ic{stroke-width:2.5;color:var(--md-on-secondary-container)}
-  /* arriving at a destination: the icon is placed, not merely recoloured */
-  .tabbar button.on .ic{animation:m3Key var(--m3-spatial) var(--m3-spring-expressive)}
-  .tabbar button.on{font-weight:600}
+  /* the navigation bar itself is the dock: Plume 2.24 · dock */
 
   /* The FAB sits a thumb's reach above the navigation bar, inset to the same
      16dp gutter the content column uses. The "New" destination in the bar and
@@ -969,15 +911,6 @@ body:has(#mask.on) .fabscrim{display:none}
 }
 @media (min-width:861px){.mobhead{display:none}}
 
-/* badge on a navigation bar item */
-.tbadge{
-  position:absolute;top:2px;left:50%;margin-left:8px;
-  min-width:16px;height:16px;padding:0 4px;
-  font-size:11px;line-height:16px;font-weight:500;letter-spacing:0;
-  text-align:center;
-  background:var(--md-error);color:var(--md-on-error);
-  border-radius:var(--m3-corner-full);z-index:2;
-}
 
 /* ============================================================
    COMMON COMPONENTS
@@ -4097,7 +4030,7 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
   --m3-wash-press:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
 }
 .btn,.tool,.pill,.seg button,.conf button,.calcpad button,.nav button,
-.tabbar button,.navstrip button,.qrow,.pool,.ch,
+.navstrip button,.qrow,.pool,.ch,
 .cday,.esec > .eh,.figplate,.syncbtn,.sync-more,.stat,.figbar button,.ch .x,.plate i{
   position:relative;overflow:hidden;
 }
@@ -7446,6 +7379,147 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
 }
 @media (prefers-reduced-motion:reduce){.rv.is-arrive .rv-in{animation:hmFade 150ms linear backwards}}
 @keyframes rvGrow{from{transform:scaleY(0)}}
+
+/* ============================================================
+   Plume 2.24 · dock
+   The navigation bar on phones and the tablet (≤860px). One indicator
+   travels between the five destinations on --p-spatial, stretching while
+   it moves; the item's icon fills and its label firms up as the pill
+   arrives (--lag, scaled by the distance), and the icon then acts out its
+   own logic. A thumb can drag the pill along the dock: it follows 1:1,
+   the item under it lights up, and the release (position and flick)
+   decides where it lands. The screen it leads to enters from the side the
+   pill went. Script: THE DOCK (tbMark, tbGo, tbSwap, tbBadge).
+   ============================================================ */
+.tb__ind,.tb__b{display:none}
+@media (max-width:860px){
+  :root{--m3-navbar-h:64px}
+  .tabbar.tb{
+    display:block;position:fixed;left:0;right:0;bottom:0;z-index:60;
+    height:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom));
+    padding:0 4px env(safe-area-inset-bottom);
+    background:var(--p-bar);
+    /* the dock never scrolls, so every movement on it is the dock's own */
+    touch-action:none;-webkit-tap-highlight-color:transparent;
+    -webkit-user-select:none;user-select:none;
+    /* its size is its own, so a change inside never lays out the page: a
+       label's weight relaid the whole document (~20ms per tap, 4× CPU) */
+    contain:strict;
+    transition:background-color var(--p-effect-slow-d) var(--p-effect-slow);
+  }
+  .tb__row{
+    --n:5;--i:0;--iw:56px;--ih:32px;--it:6px;
+    position:relative;isolation:isolate;container-type:inline-size;
+    display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));
+    height:var(--m3-navbar-h);max-width:720px;margin:0 auto;
+  }
+  /* centred on column --i: 100cqw is the row's own width */
+  .tb__ind{
+    display:block;position:absolute;z-index:-1;left:0;top:var(--it);
+    width:var(--iw);height:var(--ih);border-radius:calc(var(--ih) / 2);
+    background:var(--md-secondary-container);pointer-events:none;
+    transform:translateX(calc(100cqw / var(--n) * (var(--i) + .5) - var(--iw) / 2));
+    transition:transform var(--p-spatial-d) var(--p-spatial),
+               border-radius var(--p-effect-d) var(--p-effect),
+               scale var(--p-spatial-fast-d) var(--p-spatial-fast),
+               opacity var(--p-effect-d) var(--p-effect),
+               background-color var(--p-effect-slow-d) var(--p-effect-slow);
+  }
+  .tb__row.is-snap .tb__ind{transition:none}
+  /* a screen that is not a destination (Settings, Import, New session) */
+  .tb.is-off .tb__ind{opacity:0;scale:.6}
+  /* pressed under the finger, or carried by it: squeezes, corners square */
+  .tb__row:has(.tb__it.on.is-down) .tb__ind,.tb.is-drag .tb__ind{
+    border-radius:var(--p-r-m);scale:var(--p-press);
+    transition:transform var(--p-spatial-d) var(--p-spatial),
+               border-radius var(--p-effect-fast-d) var(--p-effect-fast),
+               scale var(--p-effect-fast-d) var(--p-effect-fast),
+               opacity var(--p-effect-d) var(--p-effect);
+  }
+  .tb.is-drag .tb__ind{transition-property:border-radius,scale,opacity}
+  /* the finger landed away from the pill: it catches up, then follows 1:1 */
+  .tb.is-drag.is-catch .tb__ind{transition-property:transform,border-radius,scale,opacity;transition-duration:150ms,var(--p-effect-fast-d),var(--p-effect-fast-d),var(--p-effect-d);transition-timing-function:cubic-bezier(.2,0,0,1),var(--p-effect-fast),var(--p-effect-fast),var(--p-effect)}
+
+  .tb__it{
+    position:relative;display:flex;justify-content:center;align-items:flex-start;
+    min-width:0;height:100%;padding:var(--it) 0 0;margin:0;border:0;background:none;
+    color:var(--md-on-surface-variant);cursor:pointer;outline:none;
+    font:inherit;-webkit-tap-highlight-color:transparent;
+    transition:color var(--p-effect-d) var(--p-effect);
+  }
+  .tb__p{
+    position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;
+    transition:scale var(--p-spatial-fast-d) var(--p-spatial-fast);
+  }
+  /* the state layer has the indicator's shape and place */
+  .tb__p::before{
+    content:"";position:absolute;z-index:-1;top:0;left:50%;width:var(--iw);height:var(--ih);
+    translate:-50% 0;border-radius:calc(var(--ih) / 2);background:currentColor;opacity:0;
+    transition:opacity var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect);
+  }
+  .tb__it.is-down .tb__p{scale:var(--p-press);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+  .tb__it.is-down .tb__p::before{opacity:var(--m3-state-press,.1);border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+  @media (hover:hover){.tb__it:hover .tb__p::before{opacity:var(--m3-state-hover,.08)}}
+  .tb.is-drag .tb__p::before{opacity:0}
+  .tb__it:focus-visible .tb__p::before{opacity:var(--m3-state-focus,.1);outline:3px solid var(--md-primary);outline-offset:2px}
+  .tb__g{position:relative;display:grid;place-items:center;width:var(--iw);height:var(--ih)}
+  .tb__l{
+    max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--md-on-surface-variant);
+    font:500 12px/16px var(--m3-font);letter-spacing:.2px;
+    transition:color var(--p-effect-d) var(--p-effect),font-weight var(--p-effect-d) var(--p-effect);
+  }
+  .tb__it.on{color:var(--md-on-secondary-container)}
+  .tb__it.on .tb__l{color:var(--md-on-surface);font-weight:650}
+  .tb__it.on,.tb__it.on .tb__l{transition-delay:var(--lag,0ms)}
+
+  /* icons: an outline at rest, filled when chosen. A filled glyph keeps its
+     inner details as cuts in the indicator's colour (.tb-k). */
+  .tb .ic{width:24px;height:24px;overflow:visible}
+  .tb .ic .tb-f{fill:currentColor;stroke:none;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+  .tb .ic .tb-k{transition:stroke var(--p-effect-d) var(--p-effect)}
+  .tb__it.on .ic .tb-f{opacity:1;transition-delay:var(--lag,0ms)}
+  .tb__it.on .ic .tb-k{stroke:var(--md-secondary-container);transition-delay:var(--lag,0ms)}
+  .tb .ic .tb-ko{stroke:var(--md-secondary-container);stroke-width:1.3;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+  .tb__it.on .ic .tb-ko{opacity:1;transition-delay:var(--lag,0ms)}
+  .tb .ic .tb-pv{transform-box:view-box;transform-origin:12px 12px}
+  .tb .ic .tb-base{transform-box:fill-box;transform-origin:50% 100%}
+  .tb .ic .tb-hinge{transform-box:fill-box;transform-origin:0% 100%}
+
+  /* the count of what is due: a calm badge that grows in and out */
+  .tb__b{
+    display:block;position:absolute;top:-4px;left:calc(50% + 7px);z-index:1;
+    min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+    background:var(--md-primary);color:var(--md-on-primary);
+    font:600 11px/16px var(--m3-font);font-variant-numeric:tabular-nums;letter-spacing:0;text-align:center;
+    pointer-events:none;opacity:0;scale:.4;visibility:hidden;transform-origin:0% 50%;
+    transition:opacity var(--p-effect-d) var(--p-effect),scale var(--p-spatial-fast-d) var(--p-spatial-fast),
+               visibility 0s linear var(--p-effect-d);
+  }
+  .tb__b.is-on{opacity:1;scale:1;visibility:visible;transition-delay:0s}
+}
+/* the tablet (from 700px, where every label fits): the label sits beside
+   its icon inside the pill */
+@media (min-width:700px) and (max-width:860px){
+  .tb__row{--iw:min(calc(100cqw / var(--n) - 16px), 152px);--ih:40px;--it:12px}
+  .tb__p{flex-direction:row;justify-content:center;gap:8px;width:var(--iw);height:var(--ih);padding:0 12px}
+  .tb__p::before{top:0;left:0;translate:none}
+  .tb__g{width:24px;height:24px}
+  .tb__l{font:550 14px/20px var(--m3-font);letter-spacing:.1px}
+  /* on the pill's corner, clear of the label: a count never covers a word */
+  .tb__b{top:-6px;left:auto;right:-6px;transform-origin:100% 50%}
+}
+/* the screen the dock leads to enters from the side the pill went; the one
+   it leaves fades out over it (tbSwap), so no frame is empty */
+.view.tb-out{
+  display:block;position:fixed;z-index:15;margin:0;max-width:none;overflow:hidden;pointer-events:none;
+  top:var(--tb-t);left:var(--tb-l);width:var(--tb-w);height:var(--tb-h);animation:none;
+}
+.view.on.tb-in{animation:tbIn var(--p-spatial-d) var(--p-spatial) 60ms both}
+@keyframes tbIn{from{opacity:0;transform:translate3d(var(--tb-dx,0px),0,0)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .tb__ind{transition-property:opacity,border-radius,scale,background-color}
+  .view.on.tb-in{animation:hmFade 150ms linear both}
+}
 </style>
 </head>
 <body>
@@ -7898,7 +7972,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.85</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.86</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -7954,7 +8028,7 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.85 · sharded store</span>
+        <span class="chip" id="verChip">v6.86 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8200,13 +8274,16 @@ button.pg-hc:focus-visible{outline:3px solid var(--md-primary);outline-offset:1p
   </section>
 </div>
 
-<!-- ============ NAVIGATION BAR (phones) ============ -->
-<nav class="tabbar" id="tabbar">
-  <button data-go="dash"><svg class="ic"><use href="#i-dash"/></svg>Home</button>
-  <button data-go="review"><svg class="ic"><use href="#i-review"/></svg>Review<span class="tbadge" id="dueCntM" style="display:none">0</span></button>
-  <button data-go="bank"><svg class="ic"><use href="#i-bank"/></svg>Bank</button>
-  <button data-go="gallery"><svg class="ic"><use href="#i-gallery"/></svg>Images</button>
-  <button data-go="stats"><svg class="ic"><use href="#i-stats"/></svg>Progress</button>
+<!-- ============ THE DOCK (phones and the tablet) · Plume 2.24 · dock ============ -->
+<nav class="tabbar tb" id="tabbar" aria-label="Main">
+  <div class="tb__row">
+    <span class="tb__ind" aria-hidden="true"></span>
+    <button type="button" class="tb__it pl-press" data-go="dash" data-tb="0"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="tb-f" d="M4 10.35 12 4.1l8 6.25V19.1a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.1z"/><path d="M4 10.35 12 4.1l8 6.25V19.1a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.1z"/><path class="tb-k" d="M9.6 20.6v-6.2h4.8v6.2"/></svg></span><span class="tb__l">Home</span></span></button>
+    <button type="button" class="tb__it pl-press" data-go="review" data-tb="1"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-pv tb-rv-a"><path class="tb-f" d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45z"/><path d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45"/><path d="M20.6 3.9v4.3h-4.3"/></g><path class="tb-pv tb-k tb-rv-h" d="M12 7.7V12l3.3 1.95"/></svg></span><span class="tb__l">Review</span><span class="tb__b" id="dueCntM" aria-hidden="true"></span></span></button>
+    <button type="button" class="tb__it pl-press" data-go="bank" data-tb="2"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-hinge tb-bk-lid"><rect class="tb-f" x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/><rect x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/></g><path class="tb-f" d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path class="tb-ko" d="M5.3 9.2h13.4"/><path class="tb-k" d="M10.2 12.1h3.6"/></svg></span><span class="tb__l">Bank</span></span></button>
+    <button type="button" class="tb__it pl-press" data-go="gallery" data-tb="3"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.4 6.6h.8a3.2 3.2 0 0 1 3.2 3.2v8.4a3.2 3.2 0 0 1-3.2 3.2H9.8a3.2 3.2 0 0 1-3.2-3.2v-.8"/><rect class="tb-f" x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><rect x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><circle class="tb-k tb-base tb-sun" cx="7.1" cy="6.9" r="1.35"/><path class="tb-k" d="m2.8 14.1 4.2-3.7 2.5 2.3 3.2-3.1 4.7 4.5"/></svg></span><span class="tb__l">Images</span></span></button>
+    <button type="button" class="tb__it pl-press" data-go="stats" data-tb="4"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-base tb-pg"><rect class="tb-f" x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/><rect x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/><rect x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/><rect x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/></g><path class="tb-ko" d="M9.12 6v15.6M14.88 6v15.6"/></svg></span><span class="tb__l">Progress</span></span></button>
+  </div>
 </nav>
 
 <!-- ============ SESSION REPORT ============ -->
@@ -8976,8 +9053,8 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
        centre, the way Android draws it for a D-pad press.
      ============================================================ */
   var RIPPLE_SEL = '.btn,.tool,button.pill,.seg button,.conf button,.calcpad button,' +
-    /* .tabbar button is deliberately absent: a navigation item draws its own
-       state layer in the shape of its indicator (see the .tabbar rules). */
+    /* the dock's items are deliberately absent: each draws its own state
+       layer in the shape of the indicator (Plume 2.24 · dock). */
     '.subtabs button,' +
     '.nav button,.navstrip button,.qrow,.pool,.ch,.fab,.fabitem,' +
     '.cday,.esec > .eh,.figplate,button.syncbtn,.sync-more,.figbar button,' +
@@ -9116,7 +9193,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.85';
+const APP_VERSION='6.86';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -11922,9 +11999,10 @@ function go(v){
   let pane=null;
   if(VIEW_ALIAS[v]){pane=VIEW_ALIAS[v][1];v=VIEW_ALIAS[v][0]}
   VIEW=v;
+  $$('.view.tb-in').forEach(s=>{if(s.id!=='v-'+v)s.classList.remove('tb-in')});
   $$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
   $$('#navList button').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
-  $$('#tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
+  tbMark(TB_KEYS.indexOf(v));
   document.body.classList.remove('setdetail');
   window.scrollTo(0,0);
   /* leaking object URLs on a 4 GB tablet is fatal: each one pins a decoded
@@ -11943,6 +12021,185 @@ function go(v){
   else if(window.resetPane)resetPane(v);
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){e.preventDefault();go(b.dataset.go)}});
+
+/* ============================================================
+   THE DOCK  (Plume 2.24 · dock)
+   One indicator for five destinations. A tap moves it on the frame the
+   finger lifts and only then, a frame later, builds the screen; a thumb
+   dragged along the dock carries it, and the release picks the item by
+   where it is and how fast it was going. go() from anywhere calls tbMark,
+   so the dock always shows where the app is.
+   ============================================================ */
+const TB_KEYS=['dash','review','bank','gallery','stats'];
+/* the dock keeps its own animations: Element.getAnimations() flushes style
+   and walks every animation in the document, 68ms per tap on Home (4× CPU) */
+const TB={i:-1,tok:0,swallow:false,out:null,ic:[],st:null,fd:null};
+const tbRow=()=>document.querySelector('#tabbar .tb__row');
+const tbBtns=()=>[...document.querySelectorAll('#tabbar .tb__it')];
+function tbLit(i){tbBtns().forEach((b,k)=>b.classList.toggle('on',k===i))}
+/* the indicator goes to item i, or out (-1) for a screen that is not a tab */
+function tbMark(i,o){
+  const row=tbRow();if(!row)return;
+  o=o||{};const bar=row.parentNode,was=TB.i;
+  if(i===was&&!o.force)return;
+  TB.i=i;
+  tbBtns().forEach((b,k)=>{if(k===i)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  if(i<0){bar.classList.add('is-off');tbLit(-1);return}
+  const ind=row.querySelector('.tb__ind');
+  if(was<0||bar.classList.contains('is-off')){
+    /* coming back from a screen with no tab: it grows in where it belongs */
+    row.classList.add('is-snap');row.style.setProperty('--i',i);row.style.setProperty('--lag','0ms');
+    void ind.offsetWidth;row.classList.remove('is-snap');bar.classList.remove('is-off');
+    tbLit(i);if(was>=0||o.icon)tbIcon(i,0);return;
+  }
+  const d=Math.abs(i-(o.from!=null?o.from:was)),lag=o.lag!=null?o.lag:Math.min(220,70+45*Math.max(0,d-1));
+  row.style.setProperty('--lag',lag+'ms');
+  if(Motion.reduced){
+    /* no travel: the pill fades out where it was and in where it goes */
+    if(TB.fd)TB.fd.cancel();
+    (TB.fd=ind.animate([{opacity:1},{opacity:0}],{duration:80,easing:'linear'})).finished.then(()=>{
+      if(TB.i!==i)return;row.classList.add('is-snap');row.style.setProperty('--i',i);void ind.offsetWidth;row.classList.remove('is-snap');
+      TB.fd=ind.animate([{opacity:0},{opacity:1}],{duration:120,easing:'linear'});
+    },()=>{});
+  }else{
+    row.style.setProperty('--i',i);
+    if(!o.still&&d)tbStretch(ind,d);
+  }
+  tbLit(i);tbIcon(i,lag);
+}
+/* it stretches while it travels, more for a longer trip */
+function tbStretch(ind,d){
+  if(TB.st)TB.st.cancel();
+  const k=(1+Math.min(.5,.14+.1*d)).toFixed(3),sp=PL('spatial');
+  TB.st=ind.animate([{scale:'1 1'},{scale:k+' .94',offset:.32},{scale:'1 1'}],{duration:sp.d*.8,easing:'cubic-bezier(.3,0,.3,1)'});
+}
+/* each icon acts out what it shows when its screen is chosen. Home is a
+   noun with no action: its change is the fill alone. */
+function tbIcon(i,delay){
+  if(Motion.reduced)return;
+  const svg=tbBtns()[i]&&tbBtns()[i].querySelector('svg');if(!svg)return;
+  TB.ic.forEach(a=>a.cancel());TB.ic=[];
+  const at=(sel,kf,o)=>svg.querySelectorAll(sel).forEach((el,n)=>TB.ic.push(el.animate(kf,Object.assign({fill:'backwards'},o,{delay:delay+(o.step||0)*n}))));
+  const sp=PL('spatial'),sf=PL('spatial-fast'),ss=PL('spatial-slow');
+  if(i===1){        /* review: the hands turn back an hour; the arrow pushes back and settles */
+    at('.tb-rv-h',[{transform:'rotate(0deg)'},{transform:'rotate(-360deg)'}],{duration:ss.d*1.1,easing:ss.e});
+    at('.tb-rv-a',[{transform:'none',easing:'cubic-bezier(.3,0,.2,1)'},{transform:'rotate(-38deg)',offset:.35,easing:sp.e},{transform:'none'}],{duration:sp.d+260});
+  }else if(i===2){  /* bank: the lid lifts off the box and drops back on it */
+    at('.tb-bk-lid',[{transform:'none',easing:'cubic-bezier(.2,0,0,1)'},{transform:'translateY(-3px) rotate(-6deg)',offset:.38,easing:sf.e},{transform:'none'}],{duration:sf.d+240});
+  }else if(i===3){  /* images: the sun rises behind the hills */
+    at('.tb-sun',[{transform:'translateY(4px)',opacity:0},{transform:'none',opacity:1}],{duration:sp.d*1.3,easing:sp.e});
+  }else if(i===4){  /* progress: the bars grow from their base, one after another */
+    at('.tb-pg',[{transform:'scaleY(.2)'},{transform:'none'}],{duration:sf.d,easing:sf.e,step:55});
+  }
+}
+/* the due count: grows in, rolls its text, shrinks away at zero */
+function tbBadge(n){
+  const b=document.getElementById('dueCntM');if(!b)return;
+  const t=n>99?'99+':String(n||0),on=b.classList.contains('is-on');
+  if(n>0){if(!on){b.textContent=t;b.classList.add('is-on')}else if(b.textContent!==t)sxSwap(b,t)}
+  else b.classList.remove('is-on');
+  const btn=b.closest('.tb__it');if(btn)btn.setAttribute('aria-label',n>0?'Review, '+n+' due':'Review');
+}
+/* the screen changes once the pill is already moving: the old one is taken
+   out of the flow where it stands and fades over the new one, which comes
+   in from the side the pill went */
+function tbSwap(v,dir){
+  const old=document.querySelector('.main > .view.on'),nv=document.getElementById('v-'+v);
+  if(TB.out){TB.out();TB.out=null}
+  if(old&&old!==nv&&old.getClientRects().length){
+    const r=old.getBoundingClientRect(),st=old.style;
+    st.setProperty('--tb-t',r.top+'px');st.setProperty('--tb-l',r.left+'px');
+    st.setProperty('--tb-w',r.width+'px');st.setProperty('--tb-h',Math.max(0,innerHeight-r.top)+'px');
+    old.classList.add('tb-out');
+    const a=old.animate([{opacity:1,transform:'none'},{opacity:0,transform:Motion.reduced?'none':'translate3d('+(-dir*12)+'px,0,0)'}],
+      {duration:Motion.reduced?120:160,easing:PL_EXIT,fill:'forwards'});
+    const done=TB.out=()=>{a.cancel();old.classList.remove('tb-out');['--tb-t','--tb-l','--tb-w','--tb-h'].forEach(k=>st.removeProperty(k));if(TB.out===done)TB.out=null};
+    a.finished.then(()=>{if(TB.out===done)done()},()=>{});
+  }
+  /* the class stays while the screen is open (taking it off would start
+     the legacy entrance again); go() clears it from every other screen */
+  if(nv){nv.style.setProperty('--tb-dx',(dir*24)+'px');nv.classList.add('tb-in')}
+  go(v);
+}
+function tbGo(i,o){
+  const v=TB_KEYS[i];if(!v)return;
+  if(i===TB.i&&VIEW===v){
+    /* the screen already open: back to its top */
+    window.scrollTo({top:0,behavior:Motion.reduced?'auto':'smooth'});return;
+  }
+  const from=TB.i;
+  tbMark(i,o);
+  try{navigator.vibrate&&navigator.vibrate(6)}catch(_){}
+  const tok=++TB.tok;
+  /* let the indicator's first frame paint before the screen is built */
+  requestAnimationFrame(()=>setTimeout(()=>{if(tok===TB.tok)tbSwap(v,from<0?0:Math.sign(i-from))},0));
+}
+(function(){
+  const bar=document.getElementById('tabbar');if(!bar)return;
+  /* PL() reads the root's computed style the first time each spring is asked
+     for; on a tap that read forced a whole-page recalc (113ms, 4× CPU). The
+     dock's springs are read once, while the app is idle. */
+  (window.requestIdleCallback||setTimeout)(()=>['spatial','spatial-fast','spatial-slow'].forEach(n=>PL(n)));
+  bar.addEventListener('click',e=>{
+    const b=e.target.closest('.tb__it');if(!b)return;
+    e.preventDefault();e.stopPropagation();
+    if(TB.swallow){TB.swallow=false;return}
+    tbGo(+b.dataset.tb);
+  });
+  /* the thumb carries the pill along the dock */
+  let P=null,G=null;
+  const geo=()=>{const row=tbRow(),r=row.getBoundingClientRect(),iw=row.querySelector('.tb__ind').offsetWidth;return {r,iw,col:r.width/TB_KEYS.length}};
+  const at=x=>{const g=G,lo=g.col/2,hi=g.col*(TB_KEYS.length-.5);let c=x-g.r.left;
+    if(c<lo)c=lo-Math.min(28,(lo-c)*.55);else if(c>hi)c=hi+Math.min(28,(c-hi)*.55);return c};
+  const near=c=>Math.max(0,Math.min(TB_KEYS.length-1,Math.round(c/G.col-.5)));
+  const end=commit=>{
+    const p=P;P=null;if(!p||!p.on)return;
+    const ind=tbRow().querySelector('.tb__ind');
+    bar.classList.remove('is-drag','is-catch');ind.style.transform='';
+    TB.swallow=true;setTimeout(()=>{TB.swallow=false},0);
+    /* let go of the finger's transform: the pill springs from where it is */
+    const back=()=>{if(p.from<0)bar.classList.add('is-off');tbLit(p.from)};
+    if(!commit)return back();
+    /* where it is, plus where the flick was taking it */
+    const s=p.s,a=s[0],z=s[s.length-1],vx=z.t>a.t?(z.x-a.x)/(z.t-a.t):0;
+    const k=near(at(z.x+vx*140));
+    if(k===p.from)return back();
+    if(p.from<0)TB.i=k;
+    tbGo(k,{still:1,lag:0,force:1});
+  };
+  bar.addEventListener('pointerdown',e=>{
+    if(e.button>0||!e.isPrimary)return;TB.swallow=false;
+    P={id:e.pointerId,x0:e.clientX,y0:e.clientY,on:false,from:TB.i,hot:TB.i,s:[]};
+  });
+  bar.addEventListener('pointermove',e=>{
+    if(!P||e.pointerId!==P.id)return;
+    if(!P.on){
+      const dx=e.clientX-P.x0,dy=e.clientY-P.y0;
+      if(Math.abs(dx)<10||Math.abs(dx)<Math.abs(dy))return;
+      P.on=true;G=geo();
+      try{bar.setPointerCapture(e.pointerId)}catch(_){}
+      tbBtns().forEach(b=>b.classList.remove('is-down'));
+      const ind=tbRow().querySelector('.tb__ind'),cur=ind.getBoundingClientRect();
+      const far=bar.classList.contains('is-off')||Math.abs(cur.left+cur.width/2-e.clientX)>cur.width/2;
+      if(bar.classList.contains('is-off')){const row=tbRow();row.classList.add('is-snap');row.style.setProperty('--i',near(at(e.clientX)));void ind.offsetWidth;row.classList.remove('is-snap');bar.classList.remove('is-off')}
+      P.catch=far?performance.now()+150:0;
+      bar.classList.add('is-drag');bar.classList.toggle('is-catch',far);
+      tbRow().style.setProperty('--lag','0ms');
+    }
+    const now=performance.now();
+    if(P.catch&&now>P.catch){P.catch=0;bar.classList.remove('is-catch')}
+    P.s.push({t:now,x:e.clientX});while(P.s.length>2&&now-P.s[0].t>90)P.s.shift();
+    const c=at(e.clientX);
+    tbRow().querySelector('.tb__ind').style.transform='translateX('+(c-G.iw/2).toFixed(1)+'px)';
+    const k=near(c);
+    if(k!==P.hot){P.hot=k;tbLit(k);try{navigator.vibrate&&navigator.vibrate(5)}catch(_){}}
+  });
+  bar.addEventListener('pointerup',e=>{if(P&&e.pointerId===P.id)end(true)});
+  bar.addEventListener('pointercancel',e=>{if(P&&e.pointerId===P.id)end(false)});
+  /* only the dock's own capture: a touch starts captured to the icon under
+     it, and that capture is handed over (and lost) when the drag begins */
+  bar.addEventListener('lostpointercapture',e=>{if(e.target===bar&&P&&P.on&&e.pointerId===P.id)end(false)});
+})();
 /* touch devices only apply :active when a touch listener exists — this enables the press animations */
 document.addEventListener('touchstart',()=>{},{passive:true});
 
@@ -12818,7 +13075,7 @@ function renderDash(arrive){
   $('#brandTag').textContent=DB.settings.brand||'Personal Qbank';
   $('#bankCnt').textContent=t.total;$('#dueCnt').textContent=t.due;
   try{galPaintCount()}catch(e){}
-  const dm=$('#dueCntM');dm.textContent=t.due>99?'99+':t.due;dm.style.display=t.due?'block':'none';
+  tbBadge(t.due);
   if(VIEW!=='dash'&&!arrive){HM.stale=true;return}
   HM.stale=false;
   PG.E=null;PG.QS=null;PG.QM=null;

@@ -459,6 +459,19 @@ a recipe.
   days" and "the column 7 days out", so that column opened the wrong peek on
   Progress since v6.74; the week is now `due:week`. Give a special argument a
   word, never a number a series also uses.
+- **The dock** (v6.86, THE DOCK section, `DESIGN.md` §14): `go(v)` calls
+  `tbMark(TB_KEYS.indexOf(v))`, so any route moves the pill (−1 fades it out
+  on Settings, Import, New session). A dock tap goes through `tbGo` (pill now,
+  `tbSwap` → `go` a frame later); never route a dock tap through the
+  document's `[data-go]` handler, which builds on the tap frame. The due badge
+  is `tbBadge(n)`, never `#dueCntM` written by hand. A touch starts captured
+  to the element under it, so a bar that takes the capture hears that
+  element's `lostpointercapture` bubble up: check `e.target === bar` (the
+  first build cancelled every swipe that way).
+- **Hot paths never ask the document.** On a tap or a drag: no
+  `getAnimations()` (keep the handles), no first-time `PL()` (warm it at
+  idle), and a fixed bar gets `contain: strict` so its own changes stay out of
+  page layout. Each was 20–113ms per tap at 4× CPU on Home's 2,800 elements.
 - **Storage:** `nidus_db`, `nidus_base_<kind>`, `nidus_media_budget`,
   `nidus_straggler`, `nidus_gal_view` and `nidus_bank_view` are live keys. Never rename one without migrating the
   saved data. Any change to data shape must keep sync (CLOUD SYNC section)
@@ -737,5 +750,16 @@ does) and work in the scratchpad:
   tab, Show more and a row (the page opens with the list as its steps); then
   push every `srs.due` into the future for the caught-up hero and clear
   `DB.stats` for the empty one.
+- **Profile a tap, don't time it.** `Profiler.start` over CDP, a real
+  `page.touchscreen.tap` under `setCPUThrottlingRate` 4, then total time per
+  function *including children* (walk each sample up its parents). Timing the
+  handler alone said "slow"; the profile named `getPropertyValue` (113ms) and
+  `getAnimations` (68ms). To find a whole-page relayout, time a forced
+  `getComputedStyle(...).transform` after one change at a time (a class, a
+  custom property): a change inside a contained bar should cost ~2ms.
+- **Judge compositor motion by film, not by rAF samples.** While the screen
+  builds, `getComputedStyle` per frame shows the pill frozen; the screencast
+  shows it moving. Film the bar strip (`montage -crop`) of a tab switch at
+  800×1220 with 4× CPU, and a thumb swipe with CDP `touchMove`s 25ms apart.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
