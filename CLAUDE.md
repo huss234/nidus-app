@@ -63,6 +63,16 @@ a recipe.
 - **The flashcard app (engram-app) is a reference for feel, never a
   source.** The user pointed at it to show what they mean; don't copy its
   code, tokens or look into Nidus.
+- **The study session is off limits** (the user, v6.91): the player
+  (`#player`), its session report (`#resultsPanel`) and every dialog opened
+  while either is up were designed on their own and must not change: not
+  the options, not the explanation, nothing inside. A Plume change to a
+  component the player shares (the dialog, figure blocks, `.btn`) is scoped
+  away from it: by container in CSS (`:is(#qp,#qe,#companion,.mask.pl-dlg)`),
+  by `modal()`'s player check for the dialog, and by `PL_FIG_SEL` for the
+  touch contract. Prove it with a pixel diff of the player and its Finish
+  dialog against the previous build (`git show HEAD:index.html` served on a
+  second port); only the shuffled option order may differ.
 - **Motion complaints:** when the user says a motion looks wrong or buggy,
   film it frame by frame on the real trigger first, name exactly what
   happens ("Home vanishes in one frame, then a blank screen, then the
@@ -477,6 +487,14 @@ a recipe.
   route a dock tap through the document's `[data-go]` handler, which builds
   on the tap frame. The due badge is `tbBadge(n)`, never `#dueCntM` written
   by hand. The dock has no drag (removed in v6.90 at the user's word).
+- **The rail** (≥861px, v6.91, `DESIGN.md` §14): `go(v)` calls `rlMark(v)`
+  as it calls `tbMark`; the rail's own `pointerdown` moves the pill first.
+  Never toggle `.on` on `#navList` rows by hand. Its offsets are cached in
+  `RL.y` on first show; a change to the rail's rows must reset `RL.y=null`.
+- **Dialogs** go through `modal(title, body, foot)`; write buttons as legacy
+  `.btn` / `.pri` / `.ghost` / `.danger` and `dlgPlume()` turns them into
+  Plume buttons outside the session (it reads those classes to choose the
+  variant), so the same call stays right inside the player.
 - **`DBREV` is the data's revision.** `save()`, `doSave()` and `reindex()`
   move it; the dock reopens a screen without rebuilding it when it was built
   at the current revision (`tbFresh`). Anything that changes what a dock

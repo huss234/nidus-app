@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.28** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.29** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -836,7 +836,7 @@ goals and rules above win). All follow the touch contract (§6).
 | **Split button** | Leading action plus trailing chevron. The chevron half turns into a circle and its icon rotates 180° while its menu is open |
 | **FAB / FAB menu** | Only for the screen's hero action, never covering content (§7). FAB menu: the FAB morphs into a close button (rotate and shape morph) while items unfold upward with a stagger, each a `primary-container` pill |
 | **Navigation bar** | `--p-bar`, separated from the page by tone, never a line. 64px. **One** pill indicator that slides between items and stretches mid-travel. It is tapped, never dragged (2.28), and switches on the touch itself. Label weight animates. Icons switch outline → filled (details become cuts in the pill's colour) and act out their logic on arrival. Icon over label on phones; from 700px the label sits beside the icon inside the pill. Built: the dock, §14 |
-| **Navigation rail / drawer** | Same travelling indicator. The rail can expand into a drawer with a container transform |
+| **Navigation rail / drawer** | Same travelling indicator. The rail can expand into a drawer with a container transform. Built: the rail (the drawer at ≥861px), §14 |
 | **Top app bar** | Flat on the page at rest, with a large title that may collapse on scroll. Scrolled: one level up in tone with an effects-spring colour transition. No shadow, no line |
 | **Floating toolbar** | `--p-float`, `--p-r-full` or `--p-r-lx`, Plume shadow. Hides on scroll down and returns on scroll up (`--p-spatial`, translate only) |
 | **Hero card** | One per screen at most. `--p-card`, `--p-r-hero`, neutral fill. Its focal element is an expressive number, a shape or a ring; its colour is the one filled action |
@@ -845,7 +845,7 @@ goals and rules above win). All follow the touch contract (§6).
 | **Menus** | `--p-float`, `--p-r-xl`, 4px inner padding, rows `--p-r-m` 48px high, grouped sections with 2px gaps instead of dividers. Grows from its anchor (scale 0.85 + fade, `transform-origin` at the anchor) on `--p-spatial`. Selected row: `secondary-container` with a check |
 | **Peek** (functional interactivity) | A bottom sheet, `--p-float`, at most 640px wide so it stays in thumb reach on the tablet. Overline (where it came from), headline (the figure's name), the figure as an expressive number that counts in with its caption, one or two plain sentences, a mini-tile row of the numbers behind it, labelled rows of what it is made of, and its acts as full-width 56px buttons (the main one filled). Rises on `--p-spatial-slow`, drags down from its head, closes on scrim, ×, Escape and Back. What it holds draws itself (bars grow with a stagger) |
 | **Bottom sheet** | `--p-float`, `--p-r-xl` top corners, a 32×4px drag handle, draggable with velocity and snap points, scrim fade. Rises on `--p-spatial-slow`. Closes on scrim tap, Escape, back gesture, or flick down |
-| **Dialog** | `--p-float`, `--p-r-xl`, 24px padding, actions bottom-right as text or tonal buttons. Arrives with scale 0.9 + fade from the centre (or from its trigger). On compact screens prefer a bottom sheet |
+| **Dialog** | `--p-float`, `--p-r-xl`, 24px padding, actions bottom-right as text or tonal buttons (a destructive one filled in `error`). Arrives with scale 0.9 + fade from the centre (or from its trigger). On compact screens prefer a bottom sheet. Built: the shared dialog, §14 |
 | **Snackbar** | `inverse-surface`, `--p-r-s`, slides up 16px + fade, one optional action, auto-dismiss 4–6s, swipe to dismiss. One at a time; a new one replaces the old with a quick crossfade |
 | **Chips** | 32px, `--p-r-s`. Selected: `secondary-container`, a leading check that draws itself (stroke-dashoffset), and the chip widens smoothly to fit it |
 | **Switch** | 52×32 `--p-well` track. The thumb grows from 16 to 24px when on (28px while pressed), slides on `--p-spatial-fast`, and shows a check icon when on |
@@ -1807,6 +1807,56 @@ The quality bar. A surface is done when it *feels* like §2, and:
     and the name of the step arrives at once with an opacity fade, which the
     compositor carries through the freeze.
 
+- **The rail, the shared dialog and the figure blocks** (`Plume 2.29 · rail`,
+  `· dialog`, `· figure blocks`, v6.91; the last legacy pieces outside the
+  study session, on the user's request). The player, its session report and
+  every dialog opened over them were left exactly as they were, at the
+  user's word: the session was designed on its own and is not to change.
+  - **The rail** (`#navList.rl`, `.rl__it`, `.rl__ind`; script `rlMark` in
+    THE DOCK): the drawer at ≥861px gets the dock's grammar turned on its
+    side. One `secondary-container` indicator travels down the rows on
+    `--p-spatial` (`--y`, a transition, so it retargets) and stretches along
+    its travel (a WAAPI `scale`), the row's label firms and its colour lands
+    after `--lag`; the five tabs carry the dock's own icons, which fill and
+    act out their logic (`tbIcon(i, delay, svg)` now takes the svg), Import
+    and Settings inline sprite copies (`svg[data-ic]`, hydrated at start-up).
+    The pill moves on `pointerdown` (a touch that slides off puts it back);
+    the screen is built by the click. The rows' offsets are read once, the
+    first time the rail is on screen, and never on the dock's widths
+    (`TB.vw`). The ids `dueCnt`, `bankCnt`, `galCnt`, `themeBtn`, `helpBtn`
+    are kept; Theme and Keys are Plume text buttons. The sync control is
+    untouched (2.26).
+  - **The shared dialog** (`#mask.pl-dlg`, `modal()`, `dlgPlume()`): set by
+    `modal()` only when neither `#player` nor `#resultsPanel` is on, or when
+    the question page or the editor is open over them. A float with 28px
+    corners and the Plume shadow, scale 0.9 + fade on `--p-spatial`; at
+    ≤860px a sheet at most 640px wide that rises on `--p-spatial-slow`, as
+    the peek does. The scrim is 32% (50% in dark). `dlgPlume()` swaps every
+    legacy `.btn` for `.pl-btn` (in the actions: `pri` → tonal, `danger` →
+    the new `pl-btn--danger`, filled in `error`, the rest text; in the body:
+    `pri` → filled, `ghost` → text, the rest tonal), and a MutationObserver
+    on `#modal` catches buttons a dialog adds later. The body's legacy
+    classes read as Plume type (`.tiny` is body text, `.card` a well).
+    Keyboard shortcuts are rows with no rules, each key a cap in the well in
+    the UI face (key names are not codes). Possible duplicates is a grouped
+    list (`.dlg-dups` / `.dlg-dup`, 2px gaps, 24px ends).
+  - **Figure blocks where pictures are added** (`figHTML`, `figPlateHTML`,
+    `linkBtns` inside `#qp`, `#qe`, `#companion` and `.mask.pl-dlg`): CSS
+    scoped by container, so the player's identical markup is untouched. An
+    empty slot is a well (16px, inside a card) that is tapped to choose a
+    file, with a 40px tonal leading shape, its ways in (Paste, Gallery) as
+    tonal S buttons in a row under its words and Delete / Not needed as text
+    buttons; a file held over it rings it in `primary`. The add row and the
+    referenced-file buttons are tonal S buttons, a picture's edit buttons
+    float on it (`--p-float`, Plume shadow), the paste box is a ringed well,
+    and `.figsub` is Title S in `on-surface-variant`.
+  - **A legacy element inside a Plume scope takes the touch contract by
+    selector** (`PL_FIG_SEL`, defined in the motion engine): `plumePress`
+    listens for `.pl-press` *or* that selector (`PL_PRESS_SEL`), and the
+    legacy ripple skips whatever matches it. Use it when markup is shared
+    with a surface that must not change (here, the player), so no class can
+    be added to the markup itself.
+
 ## 15. Ledger: surfaces rebuilt under Plume
 
 A surface that is not listed here is legacy.
@@ -1846,6 +1896,7 @@ A surface that is not listed here is legacy.
 | **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px) is still legacy; the top app bar and the FAB followed in 2.26 |
 | **The shared chrome: top bar, its ⋮ menu, the FAB and FAB menu, the sync details** | 2.26 | 6.88 | Rebuilt on the user's request ("the remaining legacy elements"). Kept: every overflow row (Import, Settings, Dark theme, Keyboard shortcuts), the FAB on Home (menu: Drill weakest, Review what's due, Resume, Start a session), Bank (Write a question) and Import's prompt tab (Copy prompt), the collapse on scroll, the snackbar lift, every sync detail (device, last sync, files and photos waiting, peers, requests left, repositories, layout, last pass, the log) and Sync now / Repair / Sync settings. The sync control itself (`.sync-split`: colours, width morph, loading indicator) is untouched at the user's word. The details moved from a dialog into the peek sheet. The rail (≥861px) is still legacy |
 | Dock: tapped, not dragged (the swipe removed); switches on the touch; reopens an unchanged screen instead of rebuilding it; one restyle per tap instead of five; icons on one line on the tablet | 2.28 | 6.90 | From the user: the tablet dock's icons and words were not level, the swipe was an unneeded feature, and a tab took a while to respond before it animated. Measured at 800×1220, 4× CPU: a revisit to Bank 1.1s → 0.5s, Progress 0.9s → 0.55s; every icon within 0.4px of the label's cap centre |
+| **The rail (≥861px), the shared dialog, the figure blocks and referenced-file buttons where pictures are added** (question page, editor, companion, Plume dialogs), Keyboard shortcuts, Possible duplicates | 2.29 | 6.91 | From the user: update the legacy remnants to the new language, and never touch the study session (the player, its options, explanation and everything inside it). Every dialog opened while the player or its report is up keeps the legacy dialog; the player's figure blocks keep their look; a screenshot of the player and its Finish dialog differs from v6.90 by nothing but the shuffled option order. Still legacy outside the session: the inputs and other controls inside a few dialog bodies (sync, storage tools), the session report |
 | **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
@@ -2001,6 +2052,13 @@ A surface that is not listed here is legacy.
   viewport after a write; a screen the dock reopens is kept when nothing it
   shows has changed; a row of icons is centred by what is drawn. From the
   user, on the tablet's dock.
+- **Plume 2.29** (2026-10-16): the rail, the shared dialog and the figure
+  blocks. A drawer takes the dock's grammar on its side; a dialog is a float
+  that grows from the centre, or the peek's sheet on phones and the tablet;
+  a destructive action is a filled `error` button (`pl-btn--danger`); a
+  legacy element inside a Plume scope takes the touch contract by selector
+  (`PL_FIG_SEL`) when its markup is shared with a surface that must not
+  change. From the user: the study session stays exactly as designed.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.90 -->
+<!-- Nidus — Personal Qbank · v6.91 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -558,33 +558,50 @@ html.m-snap .seg button::before{transition:width var(--m3-spatial) var(--m3-spri
   .nx-play *,.nx-hero .chip{animation-delay:0s!important}
 }
 
-/* drawer destinations: 56dp, fully rounded, tonal active indicator */
-.nav{padding:6px 0;flex:1;overflow:auto;overscroll-behavior:contain}
-.nav .navgrp{
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  color:var(--md-on-surface-variant);padding:16px 16px 8px;
+/* Plume 2.29 · rail: the drawer's destinations under one travelling
+   indicator (rlMark), the dock's icons that fill and act out their logic
+   as it arrives, and the touch contract on every row. */
+.rl{--y:0px;--lag:0ms;position:relative;isolation:isolate;flex:1;overflow:auto;overscroll-behavior:contain;padding:6px 0}
+.rl__grp{padding:16px 16px 8px;font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.rl__ind{
+  position:absolute;z-index:-1;left:0;right:0;top:0;height:56px;border-radius:28px;
+  background:var(--md-secondary-container);pointer-events:none;transform:translateY(var(--y));
+  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-d) var(--p-effect),
+             scale var(--p-spatial-fast-d) var(--p-spatial-fast),opacity var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-slow-d) var(--p-effect-slow);
 }
-.nav button{
-  display:flex;align-items:center;gap:12px;width:100%;
-  min-height:56px;padding:0 24px 0 16px;
-  border-radius:var(--m3-corner-full);
-  color:var(--md-on-surface-variant);
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  text-align:left;margin-bottom:4px;
-  transition:background-color var(--m3-dur-medium) var(--m3-ease-standard),
-             color var(--m3-dur-medium) var(--m3-ease-standard);
+.rl.is-snap .rl__ind{transition:none}
+.rl.is-off .rl__ind{opacity:0;scale:.9}
+.rl:has(.rl__it.on.is-down) .rl__ind{border-radius:var(--p-r-m);scale:var(--p-press-card);
+  transition:transform var(--p-spatial-d) var(--p-spatial),border-radius var(--p-effect-fast-d) var(--p-effect-fast),scale var(--p-effect-fast-d) var(--p-effect-fast)}
+.rl__it{
+  position:relative;isolation:isolate;display:flex;align-items:center;gap:12px;width:100%;height:56px;margin:0 0 4px;
+  padding:0 24px 0 16px;border:0;border-radius:28px;background:none;cursor:pointer;text-align:left;
+  color:var(--md-on-surface-variant);font:500 14px/20px var(--m3-font);letter-spacing:.1px;-webkit-tap-highlight-color:transparent;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
 }
-.nav button .ic{width:24px;height:24px;opacity:1}
-.nav button.on{
-  background:var(--md-secondary-container);
-  color:var(--md-on-secondary-container);
-  font-weight:600;
-}
-.nav button .cnt{
-  margin-left:auto;
-  font-size:14px;line-height:20px;font-weight:500;letter-spacing:.1px;
-  color:inherit;font-variant-numeric:tabular-nums;
-}
+.rl__it::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;pointer-events:none;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.rl__it:hover::before{opacity:var(--m3-state-hover)}}
+.rl__it:focus-visible{outline:none}
+.rl__it:focus-visible::before{opacity:var(--m3-state-focus);outline:3px solid var(--md-primary);outline-offset:2px}
+.rl__it.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+.rl__it.is-down::before{opacity:var(--m3-state-press)}
+.rl__it.on{color:var(--md-on-secondary-container);transition-delay:0s,0s,var(--lag)}
+.rl__l{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:font-weight var(--p-effect-d) var(--p-effect)}
+.rl__it.on .rl__l{font-weight:650;transition-delay:var(--lag)}
+.rl__c{flex:none;font:500 14px/20px var(--m3-font);letter-spacing:.1px;font-variant-numeric:tabular-nums;color:inherit}
+.rl__g{flex:none;display:grid;place-items:center;width:24px;height:24px}
+.rl .ic{width:24px;height:24px;overflow:visible}
+.rl .ic .tb-f{fill:currentColor;stroke:none;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.rl .ic .tb-k{transition:stroke var(--p-effect-d) var(--p-effect)}
+.rl__it.on .ic .tb-f{opacity:1;transition-delay:var(--lag)}
+.rl__it.on .ic .tb-k{stroke:var(--md-secondary-container);transition-delay:var(--lag)}
+.rl .ic .tb-ko{stroke:var(--md-secondary-container);stroke-width:1.3;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+.rl__it.on .ic .tb-ko{opacity:1;transition-delay:var(--lag)}
+.rl .ic .tb-pv{transform-box:view-box;transform-origin:12px 12px}
+.rl .ic .tb-base{transform-box:fill-box;transform-origin:50% 100%}
+.rl .ic .tb-hinge{transform-box:fill-box;transform-origin:0% 100%}
+@media (prefers-reduced-motion:reduce){.rl__ind{transition:opacity var(--p-effect-d) var(--p-effect)}}
 
 /* ---------- the sync control ----------
    One split button, the one Engram carries. The main segment says where
@@ -692,7 +709,6 @@ button.syncbtn:active{border-radius:var(--m3-corner-press);transform:scale(.97);
 .sy-log > li.sy-log__none span{color:var(--md-on-surface-variant)}
 .sy-more{margin:8px 0 0 -4px}
 
-.modal .nav{overflow:visible;flex:none;padding:0}
 .railfoot{display:flex;gap:8px;align-items:center;padding:8px 8px 0}
 
 /* in the top bar the control gives way to the screen title, never the
@@ -7667,6 +7683,148 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
 @keyframes imFadeInd{from{opacity:.3}to{opacity:.8}}
 
 /* ============================================================
+   Plume 2.29 · dialog
+   The shared dialog (#mask, modal()) everywhere but the study
+   session: the player and its report keep their own (.pl-dlg is
+   set by modal() only when neither is open). A float with
+   28px corners that grows from the centre on --p-spatial, a
+   sheet on phones and the tablet that rises like the peek, its
+   actions as Plume buttons (modal() swaps .btn for .pl-btn), and
+   the legacy body classes it carries read as Plume type.
+   ============================================================ */
+.mask.pl-dlg{background:color-mix(in oklab,var(--md-scrim) 32%,transparent)}
+[data-theme="dark"] .mask.pl-dlg{background:color-mix(in oklab,var(--md-scrim) 50%,transparent)}
+.mask.pl-dlg.on{animation:plDlgFade var(--p-effect-slow-d) var(--p-effect-slow)}
+.mask.pl-dlg.out{animation:plDlgFadeOut calc(var(--p-effect-slow-d) * .7) var(--p-exit) both}
+.mask.pl-dlg .modal{
+  background:var(--p-float);border-radius:var(--p-r-xl);box-shadow:var(--p-shadow);
+  max-width:560px;color:var(--md-on-surface);overscroll-behavior:contain;
+}
+.mask.pl-dlg.on .modal{animation:plDlgIn var(--p-spatial-d) var(--p-spatial),plDlgFade var(--p-effect-d) var(--p-effect)}
+.mask.pl-dlg.out .modal{animation:plDlgOut calc(var(--p-spatial-d) * .6) var(--p-exit) both}
+.mask.pl-dlg .modal .mh{background:var(--p-float);padding:20px 12px 8px 24px;gap:8px}
+.mask.pl-dlg .modal .mh h3{flex:1;min-width:0;font:450 24px/32px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+.mask.pl-dlg #mClose{margin:-4px 0 -4px auto}
+.mask.pl-dlg .modal .mb{padding:8px 24px 8px;font:400 15px/22px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+.mask.pl-dlg .modal .mf{background:var(--p-float);padding:20px 24px 24px;gap:8px}
+/* the body's legacy classes, read as Plume type: .tiny is body text here,
+   .muted the quieter line, a .card a well in the float */
+.mask.pl-dlg .mb .tiny{font:400 15px/22px var(--m3-font);letter-spacing:.1px}
+.mask.pl-dlg .mb p{margin:0 0 12px;max-width:62ch}
+.mask.pl-dlg .mb .muted{color:var(--md-on-surface-variant)}
+.mask.pl-dlg .mb .card{background:var(--p-well);border:0;border-radius:var(--p-r-l);padding:16px}
+.mask.pl-dlg .mb .card + .card{margin-top:2px}
+.mask.pl-dlg .mb .chip{height:24px;border-radius:var(--p-r-xs);background:var(--p-well);font:500 12px/16px var(--m3-font);letter-spacing:.2px}
+.mask.pl-dlg .mb .chip.mono{font-family:var(--m3-mono);letter-spacing:0}
+.mask.pl-dlg .mb .row{display:flex;flex-wrap:wrap;gap:8px}
+.mask.pl-dlg .pl-btn:disabled{opacity:.38;pointer-events:none}
+.pl-btn--danger{background:var(--md-error);color:var(--md-on-error)}
+.mask.pl-dlg .mb .pl-btn--text{padding:0 12px}
+/* Keyboard shortcuts: rows, never rules; each key a cap in the well */
+.mask.pl-dlg .lab.keys td{border:0;padding:10px 0;vertical-align:top}
+.mask.pl-dlg .lab.keys td:first-child{padding-right:20px}
+.mask.pl-dlg .lab.keys td:last-child{font:400 15px/22px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);padding-top:11px}
+.mask.pl-dlg .kbd{height:28px;min-width:32px;padding:0 10px;border-radius:var(--p-r-s);background:var(--p-well);color:var(--md-on-surface);
+  font:550 13px/20px var(--m3-font);letter-spacing:.1px;font-variant-numeric:tabular-nums}
+/* Possible duplicates: each pair is one row of a grouped list */
+.dlg-dups{display:flex;flex-direction:column;gap:2px}
+.dlg-dup{padding:16px;border-radius:var(--p-r-xs);background:var(--p-well)}
+.dlg-dup:first-child{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+.dlg-dup:last-child{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+.dlg-dup__pc{display:block;margin-bottom:10px;font:550 13px/18px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums}
+.dlg-dup__q{display:flex;gap:10px;align-items:baseline;margin:0 0 8px;font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+.dlg-dup__q .mono{flex:none;font-size:12px;color:var(--md-on-surface-variant)}
+.dlg-dup__acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dlg-dup__acts .pl-btn{--h:40px;padding:0 16px}
+@keyframes plDlgIn{from{transform:scale(.9)}}
+@keyframes plDlgOut{to{opacity:0;transform:scale(.94)}}
+@keyframes plDlgFade{from{opacity:0}}
+@keyframes plDlgFadeOut{to{opacity:0}}
+@keyframes plSheetIn{from{transform:translateY(100%)}}
+@keyframes plSheetOut{to{transform:translateY(100%)}}
+@media (max-width:860px){
+  .mask.pl-dlg .modal{width:min(100%,640px);max-width:none;max-height:min(88dvh,920px);border-radius:var(--p-r-xl) var(--p-r-xl) 0 0}
+  .mask.pl-dlg.on .modal{animation:plSheetIn var(--p-spatial-slow-d) var(--p-spatial-slow)}
+  .mask.pl-dlg.out .modal{animation:plSheetOut calc(var(--p-spatial-slow-d) * .7) var(--p-exit) both}
+  .mask.pl-dlg .modal .mh{padding:28px 12px 8px 24px}
+  .mask.pl-dlg .modal .mh::before{top:10px;background:var(--md-outline);border-radius:var(--p-r-full)}
+  .mask.pl-dlg .modal .mb{padding:8px 24px 8px}
+  .mask.pl-dlg .modal .mf{padding:20px 24px calc(24px + env(safe-area-inset-bottom))}
+}
+.m-reduce .mask.pl-dlg.on .modal{animation:plDlgFade 150ms var(--p-effect)}
+.m-reduce .mask.pl-dlg.out .modal{animation:plDlgFadeOut 120ms var(--p-exit) both}
+@media (prefers-reduced-motion:reduce){
+  .mask.pl-dlg.on .modal{animation:plDlgFade 150ms var(--p-effect)}
+  .mask.pl-dlg.out .modal{animation:plDlgFadeOut 120ms var(--p-exit) both}
+}
+
+/* ============================================================
+   Plume 2.29 · figure blocks
+   The figure blocks (figHTML) and the referenced-file buttons
+   (linkBtns) where pictures are added: the question page, the
+   editor, the companion and a Plume dialog (the figure manager
+   opened from the page). The player keeps its own. An empty slot
+   is a well that is tapped to choose a file, its ways in a row
+   of tonal buttons under its words; a picture's edit buttons
+   float on it. These legacy elements take the touch contract
+   through PL_PRESS_SEL, not a class, and lose the ripple.
+   ============================================================ */
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate{
+  display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;row-gap:14px;align-items:start;
+  border:0;border-radius:var(--p-r-l);background:var(--p-well);background-image:none;padding:16px;
+  color:var(--md-on-surface-variant);cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             box-shadow var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect);
+}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.opt{background:color-mix(in oklab,var(--p-well) 60%,transparent)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.over{background:color-mix(in oklab,var(--md-primary) 12%,var(--p-well));box-shadow:inset 0 0 0 2px var(--md-primary);color:var(--md-on-surface-variant)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi{
+  width:40px;height:40px;flex:none;border-radius:var(--p-r-m);
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect);
+}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi .ic{width:22px;height:22px}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.over .fpi{background:var(--md-primary);color:var(--md-on-primary);border-radius:20px}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt b{font:500 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt .fpd{font:400 14px/20px var(--m3-font);letter-spacing:.1px;margin-top:2px}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fph{font:400 13px/18px var(--m3-font);letter-spacing:.1px;margin-top:8px;color:var(--md-on-surface-variant)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}
+/* the slot's ways in, and every add row, are tonal S buttons */
+:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]){
+  height:40px;padding:0 16px 0 12px;gap:8px;border:0;border-radius:20px;background:var(--md-secondary-container);background-image:none;
+  color:var(--md-on-secondary-container);font:500 14px/20px var(--m3-font);letter-spacing:.1px;box-shadow:none;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]) .ic{width:20px;height:20px}
+/* Delete and Not needed are the quiet ones: text buttons */
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn:is([data-figact="drop"],[data-figact="dismiss"]){background:transparent;color:var(--md-primary);padding:0 12px}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn.arm{background:var(--md-error);color:var(--md-on-error);padding:0 16px 0 12px}
+@media (hover:hover){:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]):hover{background-image:linear-gradient(color-mix(in oklab,currentColor 8%,transparent) 0 100%)}}
+:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]).is-down{
+  transform:scale(var(--p-press));border-radius:var(--p-r-m);background-image:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
+  transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figadds{gap:8px;margin-top:12px}
+/* a picture's own buttons float on it */
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar{top:8px;right:8px;gap:4px;transition:opacity var(--p-effect-d) var(--p-effect)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button{
+  background:var(--p-float);background-image:none;color:var(--md-on-surface);box-shadow:var(--p-shadow);border-radius:20px;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button.arm{background:var(--md-error);color:var(--md-on-error)}
+/* the paste box is a well that waits for the paste, ringed while it does */
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figpad{border:0;border-radius:var(--p-r-m);background:var(--p-well);font:400 14px/20px var(--m3-font);
+  animation:plDlgFade var(--p-effect-d) var(--p-effect);transition:box-shadow var(--p-effect-d) var(--p-effect)}
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figpad:focus{background:var(--p-well);box-shadow:inset 0 0 0 2px var(--md-primary)}
+/* a group heading is Title S in the quieter ink, never a small primary label */
+:is(#qp,#qe,#companion,.mask.pl-dlg) .figsub{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+@media (max-width:420px){
+  :is(#qp,#qe,#companion,.mask.pl-dlg) .figplate{column-gap:12px;padding:16px 14px}
+}
+
+/* ============================================================
    Plume 2.24 · dock
    The navigation bar on phones and the tablet (≤860px). One indicator
    travels between the five destinations on --p-spatial, stretching while
@@ -7880,21 +8038,23 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         <div class="tag" id="brandTag">Personal Qbank</div>
       </div>
     </div>
-    <nav class="nav" id="navList">
-      <div class="navgrp">Study</div>
-      <button data-go="dash"><svg class="ic"><use href="#i-dash"/></svg>Home</button>
-      <button data-go="review"><svg class="ic"><use href="#i-review"/></svg>Review queue<span class="cnt" id="dueCnt">0</span></button>
-      <button data-go="bank"><svg class="ic"><use href="#i-bank"/></svg>Question bank<span class="cnt" id="bankCnt">0</span></button>
-      <button data-go="gallery"><svg class="ic"><use href="#i-gallery"/></svg>Images<span class="cnt" id="galCnt">0</span></button>
-      <button data-go="stats"><svg class="ic"><use href="#i-stats"/></svg>Progress</button>
-      <div class="navgrp">App</div>
-      <button data-go="import"><svg class="ic"><use href="#i-import"/></svg>Import &amp; prompt</button>
-      <button data-go="settings"><svg class="ic"><use href="#i-settings"/></svg>Settings</button>
+    <!-- Plume 2.29 · rail: one indicator travels between the destinations -->
+    <nav class="rl" id="navList" aria-label="Main">
+      <span class="rl__ind" aria-hidden="true"></span>
+      <div class="rl__grp">Study</div>
+      <button type="button" class="rl__it pl-press" data-go="dash"><span class="rl__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="tb-f" d="M4 10.35 12 4.1l8 6.25V19.1a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.1z"/><path d="M4 10.35 12 4.1l8 6.25V19.1a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.1z"/><path class="tb-k" d="M9.6 20.6v-6.2h4.8v6.2"/></svg></span><span class="rl__l">Home</span></button>
+      <button type="button" class="rl__it pl-press" data-go="review"><span class="rl__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-pv tb-rv-a"><path class="tb-f" d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45z"/><path d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45"/><path d="M20.6 3.9v4.3h-4.3"/></g><path class="tb-pv tb-k tb-rv-h" d="M12 7.7V12l3.3 1.95"/></svg></span><span class="rl__l">Review queue</span><span class="rl__c" id="dueCnt">0</span></button>
+      <button type="button" class="rl__it pl-press" data-go="bank"><span class="rl__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-hinge tb-bk-lid"><rect class="tb-f" x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/><rect x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/></g><path class="tb-f" d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path class="tb-ko" d="M5.3 9.2h13.4"/><path class="tb-k" d="M10.2 12.1h3.6"/></svg></span><span class="rl__l">Question bank</span><span class="rl__c" id="bankCnt">0</span></button>
+      <button type="button" class="rl__it pl-press" data-go="gallery"><span class="rl__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.4 6.6h.8a3.2 3.2 0 0 1 3.2 3.2v8.4a3.2 3.2 0 0 1-3.2 3.2H9.8a3.2 3.2 0 0 1-3.2-3.2v-.8"/><rect class="tb-f" x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><rect x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><circle class="tb-k tb-base tb-sun" cx="7.1" cy="6.9" r="1.35"/><path class="tb-k" d="m2.8 14.1 4.2-3.7 2.5 2.3 3.2-3.1 4.7 4.5"/></svg></span><span class="rl__l">Images</span><span class="rl__c" id="galCnt">0</span></button>
+      <button type="button" class="rl__it pl-press" data-go="stats"><span class="rl__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-base tb-pg"><rect class="tb-f" x="3.9" y="11.2" width="4.7" height="7.4" rx="1.5"/><rect x="3.9" y="11.2" width="4.7" height="7.4" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="9.65" y="5.4" width="4.7" height="13.2" rx="1.5"/><rect x="9.65" y="5.4" width="4.7" height="13.2" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="15.4" y="8.4" width="4.7" height="10.2" rx="1.5"/><rect x="15.4" y="8.4" width="4.7" height="10.2" rx="1.5"/></g><path class="tb-ko" d="M9.12 4v15.6M14.88 4v15.6"/></svg></span><span class="rl__l">Progress</span></button>
+      <div class="rl__grp">App</div>
+      <button type="button" class="rl__it pl-press" data-go="import"><span class="rl__g"><svg class="ic" data-ic="i-import"></svg></span><span class="rl__l">Import &amp; prompt</span></button>
+      <button type="button" class="rl__it pl-press" data-go="settings"><span class="rl__g"><svg class="ic" data-ic="i-settings"></svg></span><span class="rl__l">Settings</span></button>
     </nav>
     <div class="syncfoot"><div class="sync-split st-off" data-sync="rail" title="Not connected"><button class="syncbtn" type="button" data-sync-tap aria-label="Sync off. Tap to set up"><span class="sic"><svg class="ic"><use href="#i-cloudoff"/></svg></span><span class="sl">Sync off</span></button></div></div>
     <div class="railfoot">
-      <button class="btn ghost sm" id="themeBtn" title="Switch theme"><svg class="ic"><use href="#i-theme"/></svg>Theme</button>
-      <button class="btn ghost sm" id="helpBtn" title="Keyboard shortcuts"><svg class="ic"><use href="#i-keys"/></svg>Keys</button>
+      <button type="button" class="pl-btn pl-btn--text pl-press" id="themeBtn" title="Switch theme"><svg class="ic" data-ic="i-theme"></svg>Theme</button>
+      <button type="button" class="pl-btn pl-btn--text pl-press" id="helpBtn" title="Keyboard shortcuts"><svg class="ic" data-ic="i-keys"></svg>Keys</button>
     </div>
   </aside>
 
@@ -8308,7 +8468,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.90</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.91</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8364,7 +8524,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.90 · sharded store</span>
+        <span class="chip" id="verChip">v6.91 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -9390,6 +9550,10 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
      · Keyboard activation (Enter / Space) ripples from the
        centre, the way Android draws it for a D-pad press.
      ============================================================ */
+  /* Plume 2.29 · figure blocks: these legacy elements, where pictures are
+     added outside the player, take Plume's touch contract (plumePress) and
+     so never ripple */
+  window.PL_FIG_SEL = ':is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate,.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,.figbar button,:is(.row,.cpq-links) > a.btn[href])';
   var RIPPLE_SEL = '.btn,.tool,button.pill,.seg button,.conf button,.calcpad button,' +
     /* the dock's items are deliberately absent: each draws its own state
        layer in the shape of the indicator (Plume 2.24 · dock). */
@@ -9404,6 +9568,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
   function hostOf(t) {
     var h = t && t.closest && t.closest(RIPPLE_SEL);
     if (!h || h.disabled || h.getAttribute('aria-disabled') === 'true') return null;
+    if (h.matches(window.PL_FIG_SEL)) return null;
     return h;
   }
   function draw(host, cx, cy) {
@@ -9531,7 +9696,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.90';
+const APP_VERSION='6.91';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10154,10 +10319,30 @@ function toast(msg){const t=$('#toast'),was=t.classList.contains('on');t.textCon
   if(was)Motion.pulse(t,.97);
   clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
 function modal(title,bodyHTML,footHTML){
+  /* Plume 2.29 · dialog: everywhere but the study session, which keeps its
+     own dialog (the player and its report); a page or the editor opened
+     over the player is Plume, so its dialogs are too */
+  const m=$('#mask'),pl=!document.querySelector('#player.on,#resultsPanel.on')||plyOpenNow('qp')||plyOpenNow('qe');
+  if(!m.classList.contains('on')||Motion.leaving(m))m.classList.toggle('pl-dlg',pl);
+  $('#mClose').className=m.classList.contains('pl-dlg')?'pl-ib pl-press':'tool';
   $('#mTitle').textContent=title;$('#mBody').innerHTML=bodyHTML;$('#mFoot').innerHTML=footHTML||'<button class="btn" data-close>Close</button>';
+  dlgPlume();
   /* re-opening mid-exit cancels the pending cleanup and replays the entrance */
-  Motion.enter($('#mask'),'on');
+  Motion.enter(m,'on');
 }
+/* a dialog's legacy buttons become Plume buttons: in the actions, the main
+   one tonal, a destructive one filled in error, the rest text; in the body,
+   tonal, a ghost one text. A button a dialog adds later is caught too. */
+function dlgPlume(){
+  const m=$('#mask');if(!m.classList.contains('pl-dlg'))return;
+  m.querySelectorAll('#mBody .btn,#mFoot .btn').forEach(b=>{
+    if(b.matches(window.PL_FIG_SEL))return;
+    const foot=!!b.closest('#mFoot'),c=b.classList;
+    const v=c.contains('danger')?'danger':c.contains('pri')?(foot?'tonal':'filled'):c.contains('ghost')||foot?'text':'tonal';
+    c.remove('btn','pri','ghost','danger','sm');c.add('pl-btn','pl-btn--'+v,'pl-press');
+  });
+}
+new MutationObserver(()=>{if($('#mask').classList.contains('pl-dlg'))dlgPlume()}).observe($('#modal'),{childList:true,subtree:true});
 /* the exit is waited out, not guessed: on phones the dialog leaves as a bottom
    sheet over 250 ms, and the old 150 ms timer tore it off mid-slide */
 function closeModal(){const m=$('#mask');if(!m.classList.contains('on')||Motion.leaving(m))return;
@@ -12343,7 +12528,7 @@ function go(v,keep){
   VIEW=v;
   $$('.view.tb-in').forEach(s=>{if(s.id!=='v-'+v)s.classList.remove('tb-in')});
   $$('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
-  $$('#navList button').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
+  rlMark(v);
   tbMark(TB_KEYS.indexOf(v));
   document.body.classList.remove('setdetail');
   window.scrollTo(0,0);TB.sy=0;
@@ -12422,11 +12607,48 @@ function tbStretch(ind,d){
   const k=(1+Math.min(.5,.14+.1*d)).toFixed(3),sp=PL('spatial');
   TB.st=ind.animate([{scale:'1 1'},{scale:k+' .94',offset:.32},{scale:'1 1'}],{duration:sp.d*.8,easing:'cubic-bezier(.3,0,.3,1)'});
 }
+/* Plume 2.29 · rail (≥861px): the same indicator, travelling down the
+   drawer. The rows never move, so their offsets are read once, the first
+   time the rail is on screen; on a narrower screen (the dock's) it only
+   marks the row, and asks nothing of the layout. */
+const RL={y:null,i:-1,st:null,fd:null};
+function rlMark(v){
+  const nav=document.getElementById('navList');if(!nav)return;
+  const its=[...nav.querySelectorAll('.rl__it')],k=its.findIndex(b=>b.dataset.go===v),was=RL.i;
+  its.forEach((b,n)=>{b.classList.toggle('on',n===k);if(n===k)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  if(TB.vw<=860){RL.i=-1;return}
+  const ind=nav.querySelector('.rl__ind');
+  RL.i=k;
+  if(k<0){nav.classList.add('is-off');return}
+  if(!RL.y)RL.y=its.map(b=>b.offsetTop);
+  if(was<0||nav.classList.contains('is-off')){
+    /* first paint, or back from a screen with no row: it grows in where it belongs */
+    nav.classList.add('is-snap');nav.style.setProperty('--y',RL.y[k]+'px');nav.style.setProperty('--lag','0ms');
+    void ind.offsetWidth;nav.classList.remove('is-snap','is-off');return;
+  }
+  if(k===was)return;
+  const d=Math.abs(k-was);
+  nav.style.setProperty('--lag',Math.min(220,70+45*Math.max(0,d-1))+'ms');
+  if(Motion.reduced){
+    if(RL.fd)RL.fd.cancel();
+    (RL.fd=ind.animate([{opacity:1},{opacity:0}],{duration:80,easing:'linear'})).finished.then(()=>{
+      if(RL.i!==k)return;nav.classList.add('is-snap');nav.style.setProperty('--y',RL.y[k]+'px');void ind.offsetWidth;nav.classList.remove('is-snap');
+      RL.fd=ind.animate([{opacity:0},{opacity:1}],{duration:120,easing:'linear'});
+    },()=>{});
+    return;
+  }
+  nav.style.setProperty('--y',RL.y[k]+'px');
+  /* it stretches along its travel, more for a longer trip */
+  if(RL.st)RL.st.cancel();
+  const sy=(1+Math.min(.4,.12+.07*d)).toFixed(3),sp=PL('spatial');
+  RL.st=ind.animate([{scale:'1 1'},{scale:'.97 '+sy,offset:.32},{scale:'1 1'}],{duration:sp.d*.8,easing:'cubic-bezier(.3,0,.3,1)'});
+  if(k<TB_KEYS.length)tbIcon(k,Math.min(220,70+45*Math.max(0,d-1)),its[k].querySelector('svg'));
+}
 /* each icon acts out what it shows when its screen is chosen. Home is a
    noun with no action: its change is the fill alone. */
-function tbIcon(i,delay){
+function tbIcon(i,delay,svg){
   if(Motion.reduced)return;
-  const svg=tbBtns()[i]&&tbBtns()[i].querySelector('svg');if(!svg)return;
+  svg=svg||(tbBtns()[i]&&tbBtns()[i].querySelector('svg'));if(!svg)return;
   TB.ic.forEach(a=>a.cancel());TB.ic=[];
   const at=(sel,kf,o)=>svg.querySelectorAll(sel).forEach((el,n)=>TB.ic.push(el.animate(kf,Object.assign({fill:'backwards'},o,{delay:delay+(o.step||0)*n}))));
   const sp=PL('spatial'),sf=PL('spatial-fast'),ss=PL('spatial-slow');
@@ -12528,7 +12750,16 @@ function tbGo(i){
     TB.down=0;
   });
   addEventListener('scroll',()=>{TB.sy=scrollY},{passive:true});
-  addEventListener('resize',()=>{TB.vw=innerWidth;TB.sy=scrollY},{passive:true});
+  addEventListener('resize',()=>{TB.vw=innerWidth;TB.sy=scrollY;if(TB.vw>860&&RL.i<0)rlMark(VIEW)},{passive:true});
+  /* the rail's pill moves on the touch, as the dock's does; the screen is
+     built by the click a moment later, and a touch that slides off puts the
+     pill back */
+  const rl=document.getElementById('navList');
+  if(rl){
+    rl.addEventListener('pointerdown',e=>{const it=e.button>0?null:e.target.closest('.rl__it');if(it)rlMark(it.dataset.go)},{passive:true});
+    rl.addEventListener('pointercancel',()=>rlMark(VIEW),{passive:true});
+    rl.addEventListener('pointerup',e=>{if(!e.target.closest('.rl__it'))rlMark(VIEW)},{passive:true});
+  }
 })();
 /* touch devices only apply :active when a touch listener exists — this enables the press animations */
 document.addEventListener('touchstart',()=>{},{passive:true});
@@ -16543,20 +16774,20 @@ function bkSelAct(a,btn){
 })();
 function dupPairRow(p){
   const a=Q_BY_ID[p.a],b=Q_BY_ID[p.b];if(!a||!b)return '';
-  const line=q=>`<div class="tiny" style="margin-bottom:4px"><span class="chip mono">${esc(q.pubId||pubIdOf(q.id))}</span> ${esc((q.stem||'').slice(0,150))}…</div>`;
-  return `<div class="card" style="padding:12px;margin-bottom:10px">
-    <div class="tiny muted mono" style="margin-bottom:6px">${Math.round(p.score*100)}% overlap</div>
+  const line=q=>`<p class="dlg-dup__q"><span class="mono">${esc(q.pubId||pubIdOf(q.id))}</span><span>${esc((q.stem||'').slice(0,150))}…</span></p>`;
+  return `<div class="dlg-dup">
+    <span class="dlg-dup__pc">${Math.round(p.score*100)}% overlap</span>
     ${line(a)}${line(b)}
-    <div class="row" style="margin-top:8px">
-      <button class="btn ghost sm" data-preview="${a.id}">Open first</button>
-      <button class="btn ghost sm" data-preview="${b.id}">Open second</button>
-      <button class="btn sm" data-merge="${a.id}|${b.id}">Keep first, fold in second</button>
-      <button class="btn sm" data-merge="${b.id}|${a.id}">Keep second, fold in first</button>
+    <div class="dlg-dup__acts">
+      <button class="pl-btn pl-btn--text pl-press" data-preview="${a.id}">Open first</button>
+      <button class="pl-btn pl-btn--text pl-press" data-preview="${b.id}">Open second</button>
+      <button class="pl-btn pl-btn--tonal pl-press" data-merge="${a.id}|${b.id}">Keep first, fold in second</button>
+      <button class="pl-btn pl-btn--tonal pl-press" data-merge="${b.id}|${a.id}">Keep second, fold in first</button>
     </div></div>`;
 }
 function showDuplicates(pairs){
   modal('Possible duplicates',
-    pairs.length?`<p class="tiny muted" style="margin-bottom:12px">${pairs.length} pair${pairs.length===1?'':'s'} of questions look like the same item in different wording. Merging keeps one question and moves the other's attempts, notes and schedule onto it — nothing is thrown away.</p>${pairs.slice(0,40).map(dupPairRow).join('')}`
+    pairs.length?`<p class="tiny muted" style="margin-bottom:12px">${pairs.length} pair${pairs.length===1?'':'s'} of questions look like the same item in different wording. Merging keeps one question and moves the other's attempts, notes and schedule onto it — nothing is thrown away.</p><div class="dlg-dups">${pairs.slice(0,40).map(dupPairRow).join('')}</div>`
       :'<p class="tiny muted">Nothing overlapping enough to call a duplicate. Every question in the bank is currently its own item.</p>',
     '<button class="btn" data-close>Close</button>');
 }
@@ -21103,6 +21334,7 @@ function toggleTheme(from,during){
   const src=from&&(from.currentTarget||(from.nodeType===1?from:null));
   return Motion.morph(()=>{applySettings();if(VIEW==='settings')renderSettings();if(typeof during==='function')during()},{from:src}).then(save)}
 $('#themeBtn').onclick=toggleTheme;$('#themeBtnM').onclick=toggleTheme;
+sxHydrate($('.rail'));
 $('#helpBtn').onclick=()=>modal('Keyboard shortcuts',
   `<table class="lab keys"><tbody>
   ${[['1 – 9','Pick an option'],['Enter','Submit, then move on'],['← →','Previous / next question'],['F','Flag this question'],['H','Highlighter on or off'],['N','Open my note'],['G','Figures — attach a photo to this question'],['L','Lab values'],['C','Calculator'],['Y','Copy everything — question, your answer, explanations'],['Shift + Y','Copy the question and its options only'],['R','Fetch the newest copy of this question'],['Shift + F','Focus mode / fullscreen'],[',','Reading settings'],['Esc','Leave the session']]
@@ -21262,13 +21494,14 @@ function plumeAbort(dest){
    finger does, and is let go no sooner than 90 ms after it began, so a quick
    tap still reads as a press. Letting go hands it to the element's own
    release spring in CSS. A finger that slides off cancels it. */
+const PL_PRESS_SEL='.pl-press,'+window.PL_FIG_SEL;
 (function(){
   let el=null,t0=0;
   const up=()=>{if(!el)return;const e=el;el=null;
     e.__pd=setTimeout(()=>e.classList.remove('is-down'),Math.max(0,90-(performance.now()-t0)))};
   document.addEventListener('pointerdown',e=>{
     if(e.button>0)return;
-    const t=e.target.closest&&e.target.closest('.pl-press');
+    const t=e.target.closest&&e.target.closest(PL_PRESS_SEL);
     if(!t||t.disabled)return;
     if(el&&el!==t)el.classList.remove('is-down');
     clearTimeout(t.__pd);el=t;t0=performance.now();t.classList.add('is-down');
@@ -21276,7 +21509,7 @@ function plumeAbort(dest){
   ['pointerup','pointercancel','dragstart'].forEach(k=>document.addEventListener(k,up,{passive:true}));
   document.addEventListener('pointerout',e=>{if(el&&e.target===el&&!el.contains(e.relatedTarget))up()},{passive:true});
   document.addEventListener('keydown',e=>{
-    const t=e.target;if(e.repeat||(e.key!==' '&&e.key!=='Enter')||!t.classList||!t.classList.contains('pl-press'))return;
+    const t=e.target;if(e.repeat||(e.key!==' '&&e.key!=='Enter')||!t.matches||!t.matches(PL_PRESS_SEL))return;
     clearTimeout(t.__pd);t.classList.add('is-down');t.__pd=setTimeout(()=>t.classList.remove('is-down'),110);
   });
 })();
