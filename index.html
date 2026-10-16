@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.93 -->
+<!-- Nidus — Personal Qbank · v6.94 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -2133,7 +2133,7 @@ h3.sec > .ib{vertical-align:-3px}
 .rcol.ok i{background:var(--md-success)}
 .rcol.no i{background:var(--md-error)}
 .rcol.om i{background:color-mix(in oklab,var(--md-on-primary-container) 26%,transparent)}
-.rcol.fl::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--md-warning);flex:0 0 auto}
+.rcol.fl::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--fc,var(--md-warning));flex:0 0 auto}
 .rcol:hover i{opacity:.78}
 .rcol:focus-visible{outline:2px solid var(--md-on-primary-container);outline-offset:2px}
 .rlimit{
@@ -2376,10 +2376,9 @@ body.scrolled .phead{background:var(--md-surface-container)}
 .tmpop .tool:focus-visible .ic{color:var(--md-on-secondary-container)}
 .tmpop .tool.on{background:transparent}
 .tmpop .tool.on .ic{color:var(--md-warning)}
-/* a switch that is on fills its row: flag in the warning tone, the others tonal */
-.tmpop #pFlag.on{background:var(--md-warning-container);color:var(--md-on-warning-container)}
+/* a switch that is on fills its row, tonal (the flag has its own picker, 2.31) */
 .tmpop #pHl.on{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
-.tmpop #pFlag.on .ic,.tmpop #pHl.on .ic{color:inherit}
+.tmpop #pHl.on .ic{color:inherit}
 .tmpop .tml{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* a row that carries its own switch: the switch shows the state, so the row
    stays unfilled, and tapping it leaves the menu open to watch the thumb move */
@@ -2415,7 +2414,7 @@ body.scrolled .phead{background:var(--md-surface-container)}
 .navstrip button.cur{box-shadow:inset 0 0 0 3px var(--md-primary);color:var(--md-on-surface);font-weight:700}
 .navstrip button.flag::after{
   content:"";position:absolute;top:4px;right:4px;width:7px;height:7px;
-  border-radius:50%;background:var(--md-warning);
+  border-radius:50%;background:var(--fc,var(--md-warning));
 }
 .navstrip button:active{border-radius:var(--m3-corner-xs);transition-duration:var(--m3-shape-in)}
 
@@ -3216,6 +3215,7 @@ body.hasmig{padding-bottom:64px}
 .gl-b--n{top:6px;right:6px}
 .gl-b--slot{left:6px;bottom:6px;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis}
 .gl-b--flag{right:6px;bottom:6px;width:22px;padding:0}
+.gl-b--flag[style]{background:var(--fc);color:oklch(from var(--fc) calc(l - .5) .03 h)}
 #v-gallery[data-size="s"] .gl-b--slot{display:none}
 #v-gallery[data-size="s"] .gl-b{top:4px;right:4px;height:20px;padding:0 6px}
 #v-gallery[data-size="s"] .gl-b--flag{top:auto;bottom:4px;width:20px;padding:0}
@@ -3599,8 +3599,50 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
 .qp-flag svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .qp-flag .qp-flag__c{transform-box:fill-box;transform-origin:0 0;transform:translateY(3px) scaleY(.82);fill:transparent;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),fill var(--p-effect-d) var(--p-effect)}
-.qp-flag[aria-pressed="true"]{color:var(--md-warning)}
+.qp-flag[aria-pressed="true"]{color:var(--fc,var(--md-warning))}
 .qp-flag[aria-pressed="true"] .qp-flag__c{transform:none;fill:currentColor}
+.qp-flag{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),color var(--p-effect-d) var(--p-effect)}
+/* Plume 2.31 · flags: seven named colours, one picker everywhere.
+   Each hue is fixed (a red flag is red), its lightness follows primary, so
+   one line serves both themes and every contrast setting. */
+:root{
+  --p-flag-l:clamp(.55,calc(l * .5 + .33),.74);
+  --p-flag-1:oklch(from var(--md-primary) var(--p-flag-l) .19 27);
+  --p-flag-2:oklch(from var(--md-primary) var(--p-flag-l) .16 58);
+  --p-flag-3:oklch(from var(--md-primary) var(--p-flag-l) .16 145);
+  --p-flag-4:oklch(from var(--md-primary) var(--p-flag-l) .16 255);
+  --p-flag-5:oklch(from var(--md-primary) var(--p-flag-l) .19 355);
+  --p-flag-6:oklch(from var(--md-primary) var(--p-flag-l) .12 200);
+  --p-flag-7:oklch(from var(--md-primary) var(--p-flag-l) .17 305);
+}
+.flg-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:10px 16px 2px;font:500 15px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+.flg-say{font:400 13px/18px var(--m3-font);color:var(--md-on-surface-variant);letter-spacing:.2px}
+.flg-pick{display:grid;grid-template-columns:repeat(4,48px);gap:4px 8px;justify-content:center;padding:4px 8px 8px}
+.flg-sw{position:relative;isolation:isolate;display:grid;place-items:center;width:48px;height:48px;border-radius:24px;color:var(--fc,var(--md-on-surface-variant));
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+.flg-sw::before{content:"";position:absolute;inset:2px;z-index:-1;border-radius:inherit;
+  background:color-mix(in oklab,var(--fc,var(--md-on-surface)) 14%,transparent);box-shadow:inset 0 0 0 2px var(--fc,var(--md-outline));
+  opacity:0;scale:.6;transition:opacity var(--p-effect-d) var(--p-effect),scale var(--p-spatial-fast-d) var(--p-spatial-fast)}
+.flg-sw::after{content:"";position:absolute;inset:2px;z-index:-1;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--p-effect-d) var(--p-effect)}
+@media (hover:hover){.flg-sw:hover::after{opacity:var(--m3-state-hover)}}
+.flg-sw:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.flg-sw.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
+.flg-sw.is-down::after{opacity:var(--m3-state-press)}
+.flg-sw[aria-pressed="true"]::before{opacity:1;scale:1}
+.flg-sw svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+/* the cloth hangs low and pale; the chosen one runs up its pole and fills */
+.flg-sw .flg-c{transform-box:fill-box;transform-origin:0 0;transform:translateY(3px) scaleY(.82);fill:color-mix(in oklab,currentColor 45%,transparent);
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),fill var(--p-effect-d) var(--p-effect)}
+.flg-sw[data-flg="0"] .flg-c{fill:transparent}
+.flg-sw[aria-pressed="true"] .flg-c{transform:none;fill:currentColor}
+.flg-sw[data-flg="0"][aria-pressed="true"] .flg-c{fill:transparent}
+.flg-sw .flg-x{stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset var(--p-effect-d) var(--p-effect)}
+@media (prefers-reduced-motion:reduce){.flg-sw .flg-c,.flg-sw::before{transition-property:fill,opacity}}
+/* a flag mark anywhere takes its own colour */
+.bk-mk.is-flag{background:color-mix(in oklab,var(--fc) 16%,var(--p-card));color:var(--md-on-surface)}
+.bk-mk.is-flag svg{color:var(--fc)}
+.flg-dot{display:inline-block;width:10px;height:10px;margin-right:6px;border-radius:50%;background:var(--fc);vertical-align:0}
+#pMorePop .tmfl{padding:2px 0 0}
 .qp-swap{animation:qpSwap var(--p-spatial-d) var(--p-spatial) both}
 @keyframes qpSwap{from{opacity:0;transform:translateX(calc(var(--dir,1) * 24px))}}
 @media (prefers-reduced-motion:reduce){.qp-swap{animation:glFade 150ms both}.qp-att li,.qp-lab{animation:glFade 150ms both}}
@@ -5005,7 +5047,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .sp-grid button.c{background:var(--md-success-container);color:var(--md-on-success-container)}
 .sp-grid button.w{background:var(--md-error-container);color:var(--md-on-error-container)}
 .sp-grid button.cur{background:var(--md-primary);color:var(--md-on-primary);border-radius:var(--m3-corner-full)}
-.sp-grid button.flag::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--md-warning)}
+.sp-grid button.flag::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--fc,var(--md-warning))}
 
 /* ---------- the question ---------- */
 .sp-page{outline:none}
@@ -5966,7 +6008,7 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .cp-q.is-now.is-down{border-radius:var(--p-r-l)}
 .cp-q.is-f::after{
   content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;
-  background:var(--md-tertiary);box-shadow:0 0 0 2px var(--p-card);
+  background:var(--fc,var(--md-tertiary));box-shadow:0 0 0 2px var(--p-card);
 }
 .cp-q.is-c.is-f::after{box-shadow:0 0 0 2px var(--md-success-container)}
 .cp-q.is-w.is-f::after{box-shadow:0 0 0 2px var(--md-error-container)}
@@ -8639,7 +8681,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.93</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.94</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8695,7 +8737,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.93 · sharded store</span>
+        <span class="chip" id="verChip">v6.94 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8748,7 +8790,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
           <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
           <div class="tmpop pl-tm" id="pMorePop" role="menu" aria-labelledby="pMore" hidden inert>
             <div class="ovm__g" role="group">
-              <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag for review</span></button>
+              <div class="tmfl" id="pFlag" title="Flag this question (F flips the last colour)"></div>
               <button class="tool" id="pHl" role="menuitem" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg><span class="tml">Highlighter</span></button>
               <button class="tool" id="pNote" role="menuitem" title="My note on this question (N)"><svg class="ic"><use href="#i-note"/></svg><span class="tml">My note</span></button>
             </div>
@@ -9874,7 +9916,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.93';
+const APP_VERSION='6.94';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10230,6 +10272,26 @@ const DEFAULTS={
 let DB=JSON.parse(JSON.stringify(DEFAULTS));
 function ST(id){if(!DB.stats[id])DB.stats[id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]};
   if(!Array.isArray(DB.stats[id].utags))DB.stats[id].utags=[];return DB.stats[id]}
+/* Flags (v6.94): a question carries one of seven coloured flags or none.
+   stats.flag is false or 1–7 (FLAGS order); a true saved before v6.94 reads
+   as Red. Read it through flagOf(), write it through flagSet(). */
+const FLAGS=['','Red','Orange','Green','Blue','Pink','Turquoise','Purple'];
+function flagOf(s){const f=s&&s.flag;return f===true?1:(f>=1&&f<=7?f|0:0)}
+const flagSay=n=>n?FLAGS[n]+' flag':'No flag';
+const flagFc=n=>n?` style="--fc:var(--p-flag-${n})"`:'';
+let FLAG_LAST=1;   /* F flips this colour: the last one picked, Red at first */
+function flagSet(id,n){n=n|0;const s=ST(id);s.flag=n>=1&&n<=7?n:false;if(n)FLAG_LAST=n;return n}
+/* the picker: no flag and the seven colours, the current one raised on its pole */
+const FLAG_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 21V3.6"/><path class="flg-c" d="M5.5 4.2c2.4-1.3 4.6-1.1 6.7-.1 2 1 4.1 1.2 6.3.2v8.6c-2.2 1-4.3.8-6.3-.2-2.1-1-4.3-1.2-6.7.1z"/></svg>';
+function flagPickHTML(cur,head){
+  return `<div class="flg-head"><b>${esc(head||'Flag')}</b><span class="flg-say">${cur<0?'Mixed':esc(cur?FLAGS[cur]:'None')}</span></div><div class="flg-pick" role="group" aria-label="Flag colour">${FLAGS.map((nm,n)=>
+    `<button type="button" class="flg-sw pl-press" data-flg="${n}" aria-pressed="${n===cur}" aria-label="${flagSay(n)}" title="${flagSay(n)}"${flagFc(n)}>${n?FLAG_SVG:FLAG_SVG.replace('</svg>','<path class="flg-x" pathLength="1" d="M3.5 3.5l17 17"/></svg>')}</button>`).join('')}</div>`;
+}
+/* repaint a picker in place, so the cloth runs up its pole instead of the menu redrawing */
+function flagPickPaint(root,cur){
+  if(!root)return;root.querySelectorAll('.flg-sw').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.flg===cur)));
+  const say=root.querySelector('.flg-say');if(say){const t=cur<0?'Mixed':cur?FLAGS[cur]:'None';if(say.textContent!==t)sxSwap(say,t)}
+}
 const Q_BY_ID={};
 function reindex(){DBREV++;for(const k in Q_BY_ID)delete Q_BY_ID[k];DB.questions.forEach(q=>Q_BY_ID[q.id]=q)}
 
@@ -13271,7 +13333,7 @@ function mergeQuestions(keepId,dropId){
   const ks=ST(keepId),ds=DB.stats[dropId]||{};
   ks.attempts=(ks.attempts||[]).concat(ds.attempts||[]).sort((a,b)=>a.ts-b.ts);
   if(!ks.note&&ds.note)ks.note=ds.note;
-  ks.flag=ks.flag||!!ds.flag;
+  ks.flag=flagOf(ks)||flagOf(ds)||false;
   ks.utags=Array.from(new Set((ks.utags||[]).concat(ds.utags||[])));
   if(!ks.srs&&ds.srs)ks.srs=ds.srs;
   keep.occurrences=(keep.occurrences||[]).concat(drop.occurrences||[]).slice(-50);
@@ -13890,7 +13952,7 @@ function activeFacetCount(){return FACETS.reduce((n,f)=>n+(F.sets[f.key].size?1:
 function poolCounts(){
   const c={all:0,unused:0,incorrect:0,correct:0,omitted:0,flagged:0,due:0,conflict:0,unclassified:0,dupe:0,unverified:0,repeat:0};
   DB.questions.forEach(q=>{c.all++;const st=statusOf(q.id);c[st]=(c[st]||0)+1;
-    if((DB.stats[q.id]||{}).flag)c.flagged++;if(isDue(q.id))c.due++;if(q.keyConflict)c.conflict++;
+    const fl=flagOf(DB.stats[q.id]);if(fl){c.flagged++;c['flag'+fl]=(c['flag'+fl]||0)+1}if(isDue(q.id))c.due++;if(q.keyConflict)c.conflict++;
     if(q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED)c.unclassified++;
     if(q.dupCandidate)c.dupe++;
     if((q.trust||0)<=1)c.unverified++;
@@ -13905,7 +13967,8 @@ function inPool(q){
     case 'incorrect':return st==='incorrect';
     case 'correct':return st==='correct';
     case 'omitted':return st==='omitted';
-    case 'flagged':return !!(DB.stats[q.id]||{}).flag;
+    case 'flagged':return !!flagOf(DB.stats[q.id]);
+    case 'flag1':case 'flag2':case 'flag3':case 'flag4':case 'flag5':case 'flag6':case 'flag7':return flagOf(DB.stats[q.id])===+F.pool.slice(4);
     case 'due':return isDue(q.id);
     case 'conflict':return !!q.keyConflict;
     case 'unclassified':return q.system===UNCLASSIFIED||q.subject===UNCLASSIFIED;
@@ -13963,7 +14026,7 @@ const BS_PRE=[
   {id:'quick',t:'Quick ten', s:'10 \u00b7 untimed',set:{mode:'tutor',count:10,timing:'off'}}
 ];
 const BS_POOLS=[['unused','Unseen'],['incorrect','Incorrect'],['due','Due review'],['flagged','Flagged'],['correct','Correct'],['all','Everything']];
-const BS_POOLS2=[['omitted','Omitted'],['repeat','Seen more than once'],['conflict','Key conflicts'],['unclassified','Needs classifying'],['unverified','Unverified answer'],['dupe','Possible duplicates']];
+const BS_POOLS2=FLAGS.slice(1).map((nm,i)=>['flag'+(i+1),nm+' flag',i+1]).concat([['omitted','Omitted'],['repeat','Seen more than once'],['conflict','Key conflicts'],['unclassified','Needs classifying'],['unverified','Unverified answer'],['dupe','Possible duplicates']]);
 const BS_HINT={tutor:'The answer and its explanation show after each question.',test:'No answers until the block ends, as on test day.'};
 const BS={open:{},poolMore:false,built:false};
 const bsNum=n=>Number(n).toLocaleString();
@@ -13979,7 +14042,7 @@ function bsSw(k,t,s,on){
     '<span class="pl-sw"><input type="checkbox" role="switch" data-bssw="'+k+'"'+(on?' checked':'')+'><span class="pl-sw__t" aria-hidden="true">'+SX_CHECK+'</span></span></label>';
 }
 function bsPoolHTML(p){return '<button type="button" class="bs-pool pl-press" role="radio" aria-checked="false" data-pool="'+p[0]+'">'+
-  '<span class="bs-pool__t">'+esc(p[1])+'</span><span class="bs-pool__n">0</span>'+
+  '<span class="bs-pool__t">'+(p[2]?'<i class="flg-dot"'+flagFc(p[2])+'></i>':'')+esc(p[1])+'</span><span class="bs-pool__n">0</span>'+
   '<span class="bs-pool__ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></button>'}
 function bsFacHTML(f){
   return '<div class="bs-fac" data-fk="'+f.key+'"><button type="button" class="bs-fac__h pl-press" aria-expanded="false" aria-controls="bsF-'+f.key+'">'+
@@ -14240,7 +14303,7 @@ function startSession(label){
 }
 function poolLabel(){
   const parts=[];
-  const names={unused:'Unseen',incorrect:'Incorrect',flagged:'Flagged',due:'Due',correct:'Correct',omitted:'Omitted',all:'All',conflict:'Key conflicts',unclassified:'Needs classifying',unverified:'Unverified',repeat:'Repeats',dupe:'Duplicates'};
+  const names={unused:'Unseen',incorrect:'Incorrect',flagged:'Flagged',flag1:'Red flag',flag2:'Orange flag',flag3:'Green flag',flag4:'Blue flag',flag5:'Pink flag',flag6:'Turquoise flag',flag7:'Purple flag',due:'Due',correct:'Correct',omitted:'Omitted',all:'All',conflict:'Key conflicts',unclassified:'Needs classifying',unverified:'Unverified',repeat:'Repeats',dupe:'Duplicates'};
   parts.push(names[F.pool]||'Custom');
   FACETS.forEach(f=>{const s=F.sets[f.key];if(s.size&&s.size<=2)parts.push(Array.from(s).join(' + '))});
   return parts.slice(0,4).join(' · ');
@@ -14542,8 +14605,8 @@ function renderNav(){
     let cls=i===cur?'cur':'';
     if(S.config.mode==='tutor'&&x.submitted)cls+=' '+(x.correct?'c':'w');
     else if(x.chosen)cls+=' ans';
-    if(st.flag)cls+=' flag';
-    return `<button class="${cls}" data-i="${i}" style="--i:${i}" aria-label="Question ${i+1}">${i+1}</button>`}).join('');
+    const fl=flagOf(st);if(fl)cls+=' flag';
+    return `<button class="${cls}" data-i="${i}" style="--i:${i}${fl?';--fc:var(--p-flag-'+fl+')':''}" aria-label="Question ${i+1}${fl?', '+flagSay(fl):''}">${i+1}</button>`}).join('');
 }
 function navOpen(){return $('#pNav').classList.contains('on')}
 function setNav(open){
@@ -14570,7 +14633,7 @@ function renderQ(){
   renderTrack();renderNav();
   const st=ST(q.id);
   renderMeta();
-  $('#pFlag').classList.toggle('on',!!st.flag);
+  flagPickPaint($('#pFlag'),flagOf(st));
   $('#pHl').classList.toggle('on',hlMode);
   $('#pStem').innerHTML=hlRender(qFmt(q.stem),st.hlStem);
   $('#pLead').innerHTML=hlRender(esc(q.leadIn||''),st.hlLead);
@@ -15163,7 +15226,9 @@ function endSession(){
   exitPlayer();showResults(done);
 }
 /* toolbar */
-$('#pFlag').onclick=()=>{const s=ST(curId());s.flag=!s.flag;$('#pFlag').classList.toggle('on',s.flag);renderNav();save();toast(s.flag?'Flagged for review.':'Flag removed.')};
+function pFlagSet(n){const id=curId();if(!id)return;n=flagSet(id,n);flagPickPaint($('#pFlag'),n);renderNav();save();toast(n?flagSay(n)+' on this question.':'Flag removed.')}
+$('#pFlag').innerHTML=flagPickHTML(0);
+$('#pFlag').onclick=e=>{const b=e.target.closest('[data-flg]');if(b)pFlagSet(+b.dataset.flg)};
 $('#pHl').onclick=()=>{hlMode=!hlMode;$('#pHl').classList.toggle('on',hlMode);toast(hlMode?'Highlighter on — select text. Tap a highlight to remove it.':'Highlighter off.')};
 $('#pNote').onclick=()=>toggleNotes();
 $('#pFig').onclick=()=>{const q=curQ();if(q)openFigManager(q.id)};
@@ -15312,7 +15377,7 @@ function qToMarkdown(q,it,o){
     if(it.timeMs)push('- Question time: '+fmtT(it.timeMs/1000));
     if(att.length>1)push('- History: '+att.filter(a=>a.correct).length+'/'+att.length+' correct across '+att.length+' attempts');
     else if(att.length===1)push('- History: first attempt');
-    if(st.flag)push('- Flagged for review');
+    if(flagOf(st))push('- Flag: '+FLAGS[flagOf(st)]);
     if(mine&&mine.miss){const m=MISS.find(x=>x[0]===mine.miss);if(m)push('- I marked the miss as: '+m[1])}
   }
 
@@ -15455,7 +15520,7 @@ function openTools(){
   if(Motion.reduced){TM_A.push(p.animate([{opacity:0},{opacity:1}],{duration:150,easing:'ease-out'}));return}
   const sp=PL('spatial');
   TM_A.push(p.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e}));
-  p.querySelectorAll('.tool').forEach((r,i)=>TM_A.push(r.animate([{opacity:0,transform:'translate3d(0,-6px,0)'},{opacity:1,transform:'none'}],
+  p.querySelectorAll('.tool,.tmfl').forEach((r,i)=>TM_A.push(r.animate([{opacity:0,transform:'translate3d(0,-6px,0)'},{opacity:1,transform:'none'}],
     {duration:sp.d,delay:30+Math.min(i,5)*25,easing:sp.e,fill:'backwards'})));
 }
 /* Escape folds the menu alone; arrow keys, Home and End walk its rows */
@@ -15464,7 +15529,7 @@ document.addEventListener('keydown',e=>{
   const k=e.key;
   if(k==='Escape'){e.preventDefault();e.stopPropagation();closeTools();return}
   if(k!=='ArrowDown'&&k!=='ArrowUp'&&k!=='Home'&&k!=='End')return;
-  const rows=[...$('#pMorePop').querySelectorAll('.tool')];e.preventDefault();e.stopPropagation();
+  const rows=[...$('#pMorePop').querySelectorAll('.tool,.flg-sw')];e.preventDefault();e.stopPropagation();
   let i=rows.indexOf(document.activeElement);
   i=k==='Home'?0:k==='End'?rows.length-1:(i+(k==='ArrowDown'?1:-1)+rows.length)%rows.length;rows[i].focus();
 },true);
@@ -16064,7 +16129,7 @@ document.addEventListener('keydown',e=>{
     else if(cur<S.order.length-1)next();else endSession();return}
   if(e.key==='ArrowRight'){next()}
   if(e.key==='ArrowLeft'){prev()}
-  if(k==='f'){e.shiftKey?$('#pFull').click():$('#pFlag').click()}
+  if(k==='f'){e.shiftKey?$('#pFull').click():pFlagSet(flagOf(ST(curId()))?0:FLAG_LAST)}
   if(k==='n'){e.preventDefault();toggleNotes()}
   if(k==='h'){$('#pHl').click()}
   if(k==='l'){$('#pLabs').click()}
@@ -16132,7 +16197,8 @@ function showResults(s){
   const aOf=id=>{const it=IT(id);if(!it.chosen)return null;if(it.ansMs!=null)return it.ansMs/1000;
     const m=mineOf(id);return m?(m.timeMs||0)/1000:tOf(id)};
   const tChip=id=>{const a=aOf(id);return `<span class="chip mono" title="Answer time · question time">${a!=null?fmtT(a)+' answer · ':''}${fmtT(tOf(id))} total</span>`};
-  const flagged=id=>!!(DB.stats[id]||{}).flag;
+  const flagged=id=>flagOf(DB.stats[id]);
+  const flagChip=id=>`<span class="chip"><i class="flg-dot"${flagFc(flagged(id))}></i>${flagSay(flagged(id))}</span>`;
   const numOf=id=>ids.indexOf(id)+1;
 
   /* each item against its own record from before this session */
@@ -16165,7 +16231,7 @@ function showResults(s){
   const hPct=t=>Math.round(8+80*Math.min(t,maxT)/maxT);
   const lab={ok:'right',no:'wrong',om:'skipped'};
   const cols=ids.map((id,i)=>{const st=stOf(id);
-    return `<button class="rcol ${st}${flagged(id)?' fl':''}" data-rq="${id}" data-sid="${s.id}" aria-label="Question ${i+1}, ${lab[st]}, ${fmtT(tOf(id))}" title="Q${i+1} · ${lab[st]} · ${fmtT(tOf(id))}"><i style="height:${hPct(tOf(id))}%;animation-delay:${Math.min(i*18,540)}ms"></i></button>`}).join('');
+    return `<button class="rcol ${st}${flagged(id)?' fl':''}"${flagged(id)?flagFc(flagged(id)):''} data-rq="${id}" data-sid="${s.id}" aria-label="Question ${i+1}, ${lab[st]}, ${fmtT(tOf(id))}" title="Q${i+1} · ${lab[st]} · ${fmtT(tOf(id))}"><i style="height:${hPct(tOf(id))}%;animation-delay:${Math.min(i*18,540)}ms"></i></button>`}).join('');
   const say=[`${c} of ${n} right.`];
   if(missed.length)say.push([wr?`${wr} wrong`:'',om?`${om} skipped`:''].filter(Boolean).join(', ')+'.');
   if(hc.fixed)say.push(`You fixed ${hc.fixed} you had missed before.`);
@@ -16218,7 +16284,7 @@ function showResults(s){
       tookLure(q,it)?'<span class="chip amber">Took the lure</span>':'',
       sure?'<span class="chip rose">Was sure</span>':(it.conf?`<span class="chip">${esc(it.conf==='guess'?'Guessed':it.conf==='unsure'?'Unsure':it.conf)}</span>`:''),
       hist[id]==='again'?'<span class="chip amber">Missed before too</span>':hist[id]==='slipped'?'<span class="chip amber">Right last time</span>':'',
-      flagged(id)?'<span class="chip amber">Flagged</span>':'',
+      flagged(id)?flagChip(id):'',
       (q.keyConflict||q.needsReview)?'<span class="chip rose">Disputed key</span>':''
     ].join('');
     return `<div class="rfix ${st}${sure?' sure':''}" data-fix="${id}">
@@ -16293,7 +16359,7 @@ function showResults(s){
       <div><div class="stem">${i+1}. ${esc(rptClean(q.stem,180))}</div>
       <div class="meta"><span class="chip">${esc(q.system||'')}</span>${tChip(id)}
       ${it.conf?`<span class="chip ${it.conf==='sure'&&st!=='ok'?'rose':''}">${esc(it.conf)}</span>`:''}
-      ${flagged(id)?'<span class="chip amber">Flagged</span>':''}</div></div>
+      ${flagged(id)?flagChip(id):''}</div></div>
       <span class="rmark ${st}" aria-label="${lab[st]}">${mark[st]}</span></div>`}).join('');
   const nFl=ids.filter(flagged).length;
   const filt=[['all','All',n],['no','Wrong',wr],['om','Skipped',om],['fl','Flagged',nFl],['ok','Right',c]]
@@ -16526,7 +16592,7 @@ document.addEventListener('keydown',e=>{
   const top=plyOpenNow('qe')?'qe':plyOpenNow('qp')?'qp':null;if(!top)return;
   e.preventDefault();e.stopPropagation();
   const m=$('#'+top+' .ply-menu:not([hidden])');
-  if(m){plyMenu(m,false,$('#qpMore'));return}
+  if(m){if(m.id==='qpMenu')qpMenu(false);else plyMenu(m,false,$('#qpMore'));return}
   if(top==='qe')qeClose();else qpClose();
 },true);
 /* a text field that grows with what is typed, where the browser cannot do it itself */
@@ -16553,7 +16619,9 @@ const BK_T={
   unused:q=>statusOf(q.id)==='unused',
   omitted:q=>statusOf(q.id)==='omitted',
   due:q=>isDue(q.id),
-  flagged:q=>!!(DB.stats[q.id]||{}).flag,
+  flagged:q=>!!flagOf(DB.stats[q.id]),
+  flg1:q=>flagOf(DB.stats[q.id])===1,flg2:q=>flagOf(DB.stats[q.id])===2,flg3:q=>flagOf(DB.stats[q.id])===3,flg4:q=>flagOf(DB.stats[q.id])===4,
+  flg5:q=>flagOf(DB.stats[q.id])===5,flg6:q=>flagOf(DB.stats[q.id])===6,flg7:q=>flagOf(DB.stats[q.id])===7,
   notes:q=>!!((DB.stats[q.id]||{}).note||'').trim(),
   unverified:q=>(q.trust||0)<=1,
   verified:q=>!!q.verified,
@@ -16569,6 +16637,7 @@ const BK_T={
 const BK_CHIPS=[
   {g:'rec',h:'Your record',k:'incorrect',label:'Incorrect'},{g:'rec',k:'correct',label:'Correct'},{g:'rec',k:'unused',label:'Unseen'},
   {g:'rec',k:'omitted',label:'Left blank'},{g:'rec',k:'due',label:'Due for review'},{g:'rec',k:'flagged',label:'Flagged'},{g:'rec',k:'notes',label:'Has notes'},
+  ...FLAGS.slice(1).map((nm,i)=>({g:'flg',h:'Flags',k:'flg'+(i+1),label:nm,fl:i+1})),
   {g:'key',h:'Answer key',k:'unverified',label:'Unverified answer'},{g:'key',k:'verified',label:'Verified by me'},{g:'key',k:'conflict',label:'Key conflicts'},{g:'key',k:'lure',label:'Has a lure'},
   {g:'lib',h:'Library',k:'unclassified',label:'Needs classifying'},{g:'lib',k:'locked',label:'Hand-classified'},{g:'lib',k:'dupe',label:'Possible duplicates'},
   {g:'lib',k:'repeat',label:'Turned up in several imports'},{g:'lib',k:'fignew',label:'Figure not attached yet'},{g:'lib',k:'fighas',label:'Has a photo'}
@@ -16577,7 +16646,7 @@ const BK_FACETS=[['sys','System'],['sub','Subject'],['dif','Difficulty'],['lab',
 const BK_SORTS=[['bank','As imported'],['new','Newest'],['edit','Recently edited'],['miss','Most missed'],['due','Due soonest'],['id','ID']];
 const BK_SORT_SAY={new:'newest first',edit:'recently edited first',miss:'most missed first',due:'due soonest first',id:'by ID'};
 const BK={
-  sets:{rec:new Set(),key:new Set(),lib:new Set(),sys:new Set(),sub:new Set(),dif:new Set(),lab:new Set()},
+  sets:{rec:new Set(),flg:new Set(),key:new Set(),lib:new Set(),sys:new Set(),sub:new Set(),dif:new Set(),lab:new Set()},
   sort:'bank',shown:BK_PAGE,list:[],hay:Object.create(null),frame:0,reset:false,flip:false,typeT:0,
   sel:null,arr:false,sum:false,swallow:false,dirty:false,io:null
 };
@@ -16646,7 +16715,7 @@ function bkChipsHTML(){
   let h='',g0='';
   BK_CHIPS.forEach(c=>{
     if(c.g!==g0){if(g0)h+='</div>';g0=c.g;h+=`<div class="gl-chips__g" role="group" aria-label="${esc(c.h)}"><span class="gl-chips__h">${esc(c.h)}</span>`}
-    h+=`<button type="button" class="pg-chip gl-chip pl-press" aria-pressed="false" data-bkchip="${c.g}|${c.k}">${BK_CK}${esc(c.label)}<em class="gl-chip__n"></em></button>`;
+    h+=`<button type="button" class="pg-chip gl-chip pl-press" aria-pressed="false" data-bkchip="${c.g}|${c.k}">${BK_CK}${c.fl?`<i class="flg-dot"${flagFc(c.fl)}></i>`:''}${esc(c.label)}<em class="gl-chip__n"></em></button>`;
   });
   h+='</div>';
   BK_FACETS.forEach(([g,name])=>{
@@ -16686,7 +16755,7 @@ function bkChipCounts(T){
 /* the words of every chip that is on, for the count line and a session's name */
 function bkOnWords(){
   const w=[];
-  BK_CHIPS.forEach(c=>{if(BK.sets[c.g].has(c.k))w.push(c.label)});
+  BK_CHIPS.forEach(c=>{if(BK.sets[c.g].has(c.k))w.push(c.fl?c.label+' flag':c.label)});
   BK_FACETS.forEach(([g])=>BK.sets[g].forEach(v=>w.push(g==='dif'?bkCap(v):v)));
   return w;
 }
@@ -16721,11 +16790,11 @@ const BK_IC={
 };
 const bkSvg=(k,cls)=>`<svg viewBox="0 0 24 24" aria-hidden="true"${cls?` class="${cls}"`:''} style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round">${BK_IC[k]}</svg>`;
 const BK_STW={correct:'Right last time',incorrect:'Missed last time',omitted:'Left blank last time',unused:'Not seen yet'};
-function bkMk(cls,ic,txt,title){return `<span class="bk-mk${cls?' '+cls:''}"${title?` title="${esc(title)}"`:''}>${ic?bkSvg(ic):''}${esc(txt)}</span>`}
+function bkMk(cls,ic,txt,title,fl){return `<span class="bk-mk${cls?' '+cls:''}"${title?` title="${esc(title)}"`:''}${fl?flagFc(fl):''}>${ic?bkSvg(ic):''}${esc(txt)}</span>`}
 function bkMarks(q,s){
   const m=[];
   if(isDue(q.id))m.push(bkMk('is-due','due','Due'));
-  if(s.flag)m.push(bkMk('is-warn','flag','Flagged'));
+  if(flagOf(s))m.push(bkMk('is-flag','flag',FLAGS[flagOf(s)],flagSay(flagOf(s)),flagOf(s)));
   if((s.note||'').trim())m.push(bkMk('','note','Note'));
   (s.utags||[]).forEach(t=>m.push(bkMk('is-lab','tag',t)));
   if(figNeeds(q))m.push(bkMk('is-warn','img','Photo needed'));else if(figHas(q))m.push(bkMk('','img','Figure'));
@@ -16921,9 +16990,9 @@ function bkSelPaint(){
 }
 function bkSelToggle(id){if(!BK.sel)return;if(BK.sel.has(id))BK.sel.delete(id);else BK.sel.add(id);bkSelPaint()}
 function bkSelMenuHTML(){
-  const ids=[...BK.sel],n=ids.length,allF=ids.every(id=>(DB.stats[id]||{}).flag),allV=ids.every(id=>(Q_BY_ID[id]||{}).verified);
+  const ids=[...BK.sel],n=ids.length,f0=flagOf(DB.stats[ids[0]]),fl=ids.every(id=>flagOf(DB.stats[id])===f0)?f0:-1,allV=ids.every(id=>(Q_BY_ID[id]||{}).verified);
   const it=(a,ic,b,s)=>`<button type="button" class="pl-menu__item pl-press" role="menuitem" data-bksa="${a}">${ic}<span><b>${b}</b>${s?`<small>${s}</small>`:''}</span></button>`;
-  return it(allF?'unflag':'flag',bkSvg('flag','ic'),allF?'Remove the flags':'Flag them')+
+  return `<div class="bk-flg">${flagPickHTML(fl,n===1?'Flag it':'Flag them')}</div>`+
     `<div class="bk-lab-wrap">${it('label',bkSvg('tag','ic'),'Add a label','Pulls them into a session later')}</div>`+
     it(allV?'unverify':'verify',bkSvg('ok','ic'),allV?'Remove verification':'Mark the keys verified')+
     it('copy',sxIc('i-copy'),'Copy as Markdown','Each with its answer and explanations')+
@@ -16959,7 +17028,7 @@ function bkSelAct(a,btn){
     $('#bkLabGo').onclick=go;$('#bkLabIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go()}});$('#bkLabIn').focus();return;
   }
   bkSelMenu(false);
-  if(a==='flag'||a==='unflag'){ids.forEach(id=>{ST(id).flag=a==='flag'});save();toast(a==='flag'?`Flagged ${n} ${w}.`:`Flags removed from ${n} ${w}.`)}
+  if(a.slice(0,3)==='flg'){const f=+a.slice(3);ids.forEach(id=>flagSet(id,f));save();toast(f?`${flagSay(f)} on ${n} ${w}.`:`Flags removed from ${n} ${w}.`)}
   else if(a==='verify'||a==='unverify'){ids.forEach(id=>{const q=Q_BY_ID[id];q.verified=a==='verify';q.trust=trustOf(q)});save();toast(a==='verify'?`Marked ${n} ${w} verified.`:`Verification removed from ${n} ${w}.`)}
   else if(a==='copy'){copyQ(ids.map(id=>qToMarkdown(Q_BY_ID[id],null,Object.assign({},DB.settings.copyOpts,{scope:'full'})).trim()).filter(Boolean).join('\n\n---\n\n'),`${n} ${w} copied with their answers and explanations.`);return}
   bkSoon();
@@ -16985,7 +17054,7 @@ function bkSelAct(a,btn){
   $('#bkSelAll').onclick=()=>{if(!BK.sel)return;const all=BK.list.every(q=>BK.sel.has(q.id));BK.list.forEach(q=>all?BK.sel.delete(q.id):BK.sel.add(q.id));bkSelPaint()};
   $('#bkSelGo').onclick=()=>{const ids=[...BK.sel];if(!ids.length)return;bkSelEnd();startIds(ids,'Bank · '+ids.length+' chosen')};
   $('#bkSelMore').onclick=()=>bkSelMenu($('#bkSelMenu').hidden);
-  $('#bkSelMenu').addEventListener('click',e=>{const b=e.target.closest('[data-bksa]');if(b)bkSelAct(b.dataset.bksa,b)});
+  $('#bkSelMenu').addEventListener('click',e=>{const f=e.target.closest('[data-flg]');if(f){bkSelAct('flg'+f.dataset.flg,f);return}const b=e.target.closest('[data-bksa]');if(b)bkSelAct(b.dataset.bksa,b)});
   document.addEventListener('click',e=>{const m=$('#bkSelMenu');if(!m.hidden&&!e.target.closest('#bkSelMenu,#bkSelMore'))bkSelMenu(false)});
   if('IntersectionObserver' in window){BK.io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting&&!$('#bankMore').hidden&&VIEW==='bank')$('#bankMore').click()})},{rootMargin:'0px 0px 600px 0px'});BK.io.observe($('#bankMore'))}
   const V=$('#v-bank');
@@ -17114,9 +17183,9 @@ function qpLabHTML(t){return `<span class="qp-lab" data-lab="${esc(t)}"><span>${
 /* block 7: the standing record, every attempt with what it chose, how sure, how long */
 function qpRecHTML(q,s){
   const att=attOf(q.id),last=att[att.length-1];
-  if(!att.length)return `<div class="qp-rec"><p class="qp-rec__say">Never attempted.${s.flag?' Flagged.':''}</p><button type="button" class="pl-btn pl-btn--tonal pl-press" data-qpprac>${sxIc('i-play')}Practise this question</button></div>`;
+  if(!att.length)return `<div class="qp-rec"><p class="qp-rec__say">Never attempted.${flagOf(s)?' '+flagSay(flagOf(s))+'.':''}</p><button type="button" class="pl-btn pl-btn--tonal pl-press" data-qpprac>${sxIc('i-play')}Practise this question</button></div>`;
   const right=att.filter(a=>a.correct).length,st=statusOf(q.id);
-  const say=[BK_STW[st]||'',(last&&last.miss)?((MISS.find(x=>x[0]===last.miss)||[])[1]||''):'',s.srs?'next due '+qpDate(s.srs.due):'',s.flag?'flagged':''].filter(Boolean).join(' · ');
+  const say=[BK_STW[st]||'',(last&&last.miss)?((MISS.find(x=>x[0]===last.miss)||[])[1]||''):'',s.srs?'next due '+qpDate(s.srs.due):'',flagOf(s)?FLAGS[flagOf(s)].toLowerCase()+' flag':''].filter(Boolean).join(' · ');
   const rows=att.slice().reverse().slice(0,12).map((a,i)=>{
     const r=a.chosen==null?'Left blank':a.correct?'Right':'Wrong',ms=ansOf(a);
     const conf=a.conf&&CONF_SAY[a.conf]?`<svg class="ic" aria-hidden="true"><use href="#i-${CONF_IC[a.conf]}"/></svg>${esc(bkCap(CONF_SAY[a.conf].replace(/^You (were )?/,'')))}`:'';
@@ -17128,8 +17197,10 @@ function qpRecHTML(q,s){
 }
 function qpPaintBar(){
   const q=Q_BY_ID[QP.id];if(!q)return;const s=DB.stats[q.id]||{};
-  const f=$('#qpFlag'),on=!!s.flag;
-  f.setAttribute('aria-pressed',String(on));f.setAttribute('aria-label',on?'Remove the flag':'Flag this question');
+  const f=$('#qpFlag'),fl=flagOf(s);
+  f.setAttribute('aria-pressed',String(!!fl));f.setAttribute('aria-label',fl?flagSay(fl)+'. Change the flag':'Flag this question');
+  if(fl)f.style.setProperty('--fc','var(--p-flag-'+fl+')');
+  if(!$('#qpMenu').hidden&&$('#qpMenu').dataset.kind==='flag')flagPickPaint($('#qpMenu'),fl);
   $('#qpBarT').textContent=q.topic||'Question';
   const n=QP.seq?QP.seq.length:0;
   $('#qpBarS').textContent=n>1?`${QP.i+1} of ${bsNum(n)}`:(q.pubId||pubIdOf(q.id));
@@ -17154,7 +17225,7 @@ function qpRender(dir){
     body.animate([{opacity:1,transform:'none'},{opacity:0,transform:`translateX(${-dir*12}px)`}],{duration:90,easing:PL_EXIT,fill:'forwards'}).finished.then(draw,draw);
   }else draw();
 }
-function qpSig(q){const s=DB.stats[q.id]||{};return [q.updatedAt||0,(q.images||[]).length,attOf(q.id).length,(s.utags||[]).join(','),!!s.flag,!!q.verified,s.srs?s.srs.due:0].join('|')}
+function qpSig(q){const s=DB.stats[q.id]||{};return [q.updatedAt||0,(q.images||[]).length,attOf(q.id).length,(s.utags||[]).join(','),flagOf(s),!!q.verified,s.srs?s.srs.due:0].join('|')}
 /* data changed while the page is open (a sync, an edit saved): redraw it in place unless a field is being typed in */
 function qpRefresh(){
   if(QP.closing)return;
@@ -17228,7 +17299,15 @@ function qpMenuHTML(){
     it('prac',sxIc('i-play'),'Practise this question','A block of one, at your usual timing')+
     it('del',sxIc('i-trash'),'Delete this question','Its answers and schedule go too');
 }
-function qpMenu(open){const m=$('#qpMenu');if(open)m.innerHTML=qpMenuHTML();plyMenu(m,open,$('#qpMore'))}
+/* one menu holds either the ⋮ actions or the flag picker, grown from the button that opened it */
+function qpMenu(open,kind){
+  const m=$('#qpMenu'),fl=open?kind==='flag':m.dataset.kind==='flag',b=$(fl?'#qpFlag':'#qpMore');
+  $(fl?'#qpMore':'#qpFlag').setAttribute('aria-expanded','false');
+  if(open){m.dataset.kind=fl?'flag':'';m.innerHTML=fl?flagPickHTML(flagOf(DB.stats[QP.id])):qpMenuHTML();
+    const L=$('#qp').getBoundingClientRect(),r=b.getBoundingClientRect();m.style.right=fl?Math.max(8,Math.round(L.right-r.right-4))+'px':''}
+  plyMenu(m,open,b);
+}
+function qpFlagSet(n){n=flagSet(QP.id,n);save();BK.dirty=true;qpPaintBar();QP.sig=qpSig(Q_BY_ID[QP.id]);toast(n?flagSay(n)+' on this question.':'Flag removed.')}
 function qpAct(a,btn){
   const id=QP.id,q=Q_BY_ID[id];if(!q)return;
   if(a==='del'){
@@ -17251,11 +17330,13 @@ function qpAct(a,btn){
   $('#qpX').onclick=()=>qpClose();
   $('#qpPrev').onclick=()=>qpStep(-1);$('#qpNext').onclick=()=>qpStep(1);
   $('#qpEdit').onclick=()=>editQuestion(QP.id);
-  $('#qpMore').onclick=()=>qpMenu($('#qpMenu').hidden);
-  $('#qpFlag').onclick=()=>{const s=ST(QP.id);s.flag=!s.flag;save();BK.dirty=true;qpPaintBar();QP.sig=qpSig(Q_BY_ID[QP.id]);toast(s.flag?'Flagged.':'Flag removed.')};
-  $('#qpMenu').addEventListener('click',e=>{const b=e.target.closest('[data-qpa]');if(b)qpAct(b.dataset.qpa,b)});
+  const qpMenuFor=k=>{const m=$('#qpMenu');if(!m.hidden&&(m.dataset.kind||'')===k)qpMenu(false);else qpMenu(true,k)};
+  $('#qpMore').onclick=()=>qpMenuFor('');
+  $('#qpFlag').setAttribute('aria-haspopup','menu');$('#qpFlag').setAttribute('aria-expanded','false');
+  $('#qpFlag').onclick=()=>qpMenuFor('flag');
+  $('#qpMenu').addEventListener('click',e=>{const f=e.target.closest('[data-flg]');if(f){qpFlagSet(+f.dataset.flg);qpMenu(false);return}const b=e.target.closest('[data-qpa]');if(b)qpAct(b.dataset.qpa,b)});
   L.addEventListener('click',e=>{
-    if(!$('#qpMenu').hidden&&!e.target.closest('#qpMenu,#qpMore'))qpMenu(false);
+    if(!$('#qpMenu').hidden&&!e.target.closest('#qpMenu,#qpMore,#qpFlag'))qpMenu(false);
     let x;
     if((x=e.target.closest('[data-qpid]'))){copy(x.dataset.qpid,'Question ID copied. Search the bank with it to find this question again.');return}
     if((x=e.target.closest('[data-labx]'))){const t=x.dataset.labx,s=ST(QP.id),chip=x.closest('.qp-lab');
@@ -17272,7 +17353,7 @@ function qpAct(a,btn){
   L.addEventListener('keydown',e=>{
     if(e.target.closest('input,textarea,select')||e.ctrlKey||e.metaKey||e.altKey)return;
     if(e.key==='ArrowLeft'){e.preventDefault();qpStep(-1)}else if(e.key==='ArrowRight'){e.preventDefault();qpStep(1)}
-    else if(e.key==='e'){e.preventDefault();editQuestion(QP.id)}else if(e.key==='f'){e.preventDefault();$('#qpFlag').click()}
+    else if(e.key==='e'){e.preventDefault();editQuestion(QP.id)}else if(e.key==='f'){e.preventDefault();qpFlagSet(flagOf(DB.stats[QP.id])?0:FLAG_LAST)}
   },true);
 })();
 /* the question grammar outside the player (the page and the editor's
@@ -17293,7 +17374,7 @@ document.addEventListener('click',e=>{
   if(VIEW==='bank')renderBank(true);
 });
 document.addEventListener('click',e=>{
-  const f=e.target.closest('[data-flagq]');if(f){const s=ST(f.dataset.flagq);s.flag=!s.flag;save();closeModal();toast(s.flag?'Flagged.':'Unflagged.');if(VIEW==='bank')renderBank(true);return}
+  const f=e.target.closest('[data-flagq]');if(f){const n=flagSet(f.dataset.flagq,flagOf(DB.stats[f.dataset.flagq])?0:FLAG_LAST);save();closeModal();toast(n?flagSay(n)+'.':'Unflagged.');if(VIEW==='bank')renderBank(true);return}
   const d=e.target.closest('[data-delq]');if(d){bkDelete([d.dataset.delq]);closeModal();toast('Question deleted.');renderBank(true);return}
   const cp=e.target.closest('[data-copyq]');if(cp){
     const q=Q_BY_ID[cp.dataset.copyq];
@@ -17835,7 +17916,7 @@ const galSlotWord=f=>f.slot==='expl'?'Explanation':figIsCh(f.slot)?'Option '+fig
 function galTerm(){const raw=($('#galSearch')||{}).value||'';return{raw,term:norm(raw),id:figIdTerm(raw)}}
 function galHasFmt(q,S){return (q.resources||[]).some(r=>S.has(r))||(S.has('__other')&&galFormatOf(q)===GAL_OTHER)}
 function galHasSt(q,S){
-  if(S.has('flag')&&(DB.stats[q.id]||{}).flag)return true;
+  if(S.has('flag')&&flagOf(DB.stats[q.id]))return true;
   if(S.has('incorrect')&&statusOf(q.id)==='incorrect')return true;
   if(S.has('unused')&&statusOf(q.id)==='unused')return true;
   return false;
@@ -17891,11 +17972,11 @@ function galTileHTML(e,idx){
   const img=f.media
     ? `<img data-media="${esc(f.media)}" data-mkind="thumb" alt="" draggable="false">`
     : `<img src="${esc(f.src)}" alt="" loading="lazy" draggable="false">`;
-  const flag=e.qs.some(x=>(DB.stats[x.id]||{}).flag);
+  const flag=(e.qs.find(x=>flagOf(DB.stats[x.id]))||{}).id,fl=flag?flagOf(DB.stats[flag]):0;
   const sel=!!(GAL.sel&&GAL.sel.has(e.key));
   const lab=(name||figKind(f))+(q.system?', '+q.system:'')+(e.qids.length>1?', on '+e.qids.length+' questions':'');
   return `<button type="button" class="gl-tile pl-press${sel?' is-sel':''}" data-gk="${esc(e.key)}" data-galidx="${idx}" style="--ar:${ar.toFixed(3)}" aria-label="${esc(lab)}"${GAL.sel?` aria-pressed="${sel}"`:''}>
-    <span class="gl-ph">${img}${e.qids.length>1?`<span class="gl-b gl-b--n">×${e.qids.length}</span>`:''}${f.slot==='stem'?'':`<span class="gl-b gl-b--slot">${galSlotWord(f)}</span>`}${flag?`<span class="gl-b gl-b--flag">${sxIc('i-flag')}</span>`:''}<span class="gl-ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="m6.5 12.4 3.7 3.7 7.3-7.6"/></svg></span></span>
+    <span class="gl-ph">${img}${e.qids.length>1?`<span class="gl-b gl-b--n">×${e.qids.length}</span>`:''}${f.slot==='stem'?'':`<span class="gl-b gl-b--slot">${galSlotWord(f)}</span>`}${fl?`<span class="gl-b gl-b--flag"${flagFc(fl)}>${sxIc('i-flag')}</span>`:''}<span class="gl-ck" aria-hidden="true"><svg viewBox="0 0 24 24"><path pathLength="1" d="m6.5 12.4 3.7 3.7 7.3-7.6"/></svg></span></span>
     <span class="gl-cap"><b>${esc(name||figKind(f))}</b><em>${esc(q.system||'')}</em></span>
   </button>`;
 }
@@ -21609,7 +21690,7 @@ $('#themeBtn').onclick=toggleTheme;$('#themeBtnM').onclick=toggleTheme;
 sxHydrate($('.rail'));
 $('#helpBtn').onclick=()=>modal('Keyboard shortcuts',
   `<table class="lab keys"><tbody>
-  ${[['1 – 9','Pick an option'],['Enter','Submit, then move on'],['← →','Previous / next question'],['F','Flag this question'],['H','Highlighter on or off'],['N','Open my note'],['G','Figures — attach a photo to this question'],['L','Lab values'],['C','Calculator'],['Y','Copy everything — question, your answer, explanations'],['Shift + Y','Copy the question and its options only'],['R','Fetch the newest copy of this question'],['Shift + F','Focus mode / fullscreen'],[',','Reading settings'],['Esc','Leave the session']]
+  ${[['1 – 9','Pick an option'],['Enter','Submit, then move on'],['← →','Previous / next question'],['F','Flag or unflag, in the last colour picked'],['H','Highlighter on or off'],['N','Open my note'],['G','Figures — attach a photo to this question'],['L','Lab values'],['C','Calculator'],['Y','Copy everything — question, your answer, explanations'],['Shift + Y','Copy the question and its options only'],['R','Fetch the newest copy of this question'],['Shift + F','Focus mode / fullscreen'],[',','Reading settings'],['Esc','Leave the session']]
   .map(r=>`<tr><td><span class="kbd">${esc(r[0])}</span></td><td>${esc(r[1])}</td></tr>`).join('')}
   </tbody></table><p class="tiny muted" style="margin-top:12px">Cross options out with the ✕ on the right of each row — struck options stay struck while you think.</p>`);
 
@@ -21862,9 +21943,9 @@ function compDrawIndex(){
     else if(it.chosen){c.push('is-a');say=', answered'}
     if(!Q_BY_ID[id]){c.push('is-x');say+=', not on this device yet'}
     if(i===now)c.push('is-now');
-    if(sst.flag){c.push('is-f');say+=', flagged'}
+    const fl=flagOf(sst);if(fl){c.push('is-f');say+=', '+flagSay(fl).toLowerCase()}
     /* tiles arrive on a diagonal, a beat apart, the first rows leading */
-    return `<button class="${c.join(' ')}" type="button" data-compq="${i}" style="--d:${Math.min(i%6+Math.floor(i/6),10)}"${i===now?' aria-current="true"':''} aria-label="Question ${i+1}${say}">${i+1}</button>`;
+    return `<button class="${c.join(' ')}" type="button" data-compq="${i}" style="--d:${Math.min(i%6+Math.floor(i/6),10)}${fl?';--fc:var(--p-flag-'+fl+')':''}"${i===now?' aria-current="true"':''} aria-label="Question ${i+1}${say}">${i+1}</button>`;
   }).join('');
   body.innerHTML=`
     <section class="cp-hero cp-in" style="--i:0">
@@ -22854,7 +22935,7 @@ const SYNC=(function(){
     if(kind==='bank')return {prompt:o.prompt===undefined?null:o.prompt,tombstones:Object.assign({},o.tombstones||{})};
     const s={},src=o.stats||{};
     Object.keys(src).forEach(k=>{const x=src[k]||{};
-      s[k]={note:x.note||'',flag:!!x.flag,utags:(x.utags||[]).slice(),
+      s[k]={note:x.note||'',flag:flagOf(x)||false,utags:(x.utags||[]).slice(),
         hlStem:hlCopy(x.hlStem),hlLead:hlCopy(x.hlLead)}});
     return {stats:s,settings:Object.assign({},o.settings||{})};
   }
@@ -22893,7 +22974,7 @@ const SYNC=(function(){
     }
     let n=0,a=0;const s=o.stats||{};
     Object.keys(s).forEach(k=>{const x=s[k]||{},at=x.attempts||[];a+=at.length;
-      n=(n+hn(k+'|'+at.length+'|'+(at.length?at[at.length-1].ts:0)+'|'+(x.note||'')+'|'+(x.flag?1:0)+'|'+((x.utags||[]).join(','))+'|'+hlFp(x.hlStem)+'|'+hlFp(x.hlLead)))>>>0});
+      n=(n+hn(k+'|'+at.length+'|'+(at.length?at[at.length-1].ts:0)+'|'+(x.note||'')+'|'+flagOf(x)+'|'+((x.utags||[]).join(','))+'|'+hlFp(x.hlStem)+'|'+hlFp(x.hlLead)))>>>0});
     let sn=0;(o.sessions||[]).forEach(x=>{let d=0;const it=x.items||{};for(const i in it)if(it[i]&&it[i].submitted)d++;
       sn=(sn+hn(x.id+'|'+(x.status||'')+'|'+(x.heart||0)+'|'+Math.round((x.elapsed||0))+'|'+d))>>>0});
     return Object.keys(s).length+'|'+a+'|'+n+'|'+(o.sessions||[]).length+'|'+sn+'|'+hn(JSON.stringify(o.settings||{}))+'|'+hn(JSON.stringify(o.dataRules||null));
@@ -23072,7 +23153,7 @@ const SYNC=(function(){
       .map(a=>tm[uk(a)]!=null&&(a.studyMs==null||tm[uk(a)]>a.studyMs)?Object.assign({},a,{studyMs:tm[uk(a)]}):a)
       .sort((x,y)=>(x.ts||0)-(y.ts||0));
     s.note=mNote(b.note,m.note,t.note);
-    s.flag=!!m3(!!b.flag,!!m.flag,!!t.flag);
+    s.flag=m3(flagOf(b),flagOf(m),flagOf(t))||false;
     s.utags=mSet(b.utags,m.utags,t.utags);
     s.hlStem=m3(b.hlStem===undefined?null:b.hlStem,m.hlStem===undefined?null:m.hlStem,t.hlStem===undefined?null:t.hlStem);
     s.hlLead=m3(b.hlLead===undefined?null:b.hlLead,m.hlLead===undefined?null:m.hlLead,t.hlLead===undefined?null:t.hlLead);
@@ -23670,7 +23751,7 @@ const V3=(function(){
   }
   function fpStat(x){
     x=x||{};
-    return (x.note||'')+'|'+(x.flag?1:0)+'|'+((x.utags||[]).join(','))+'|'
+    return (x.note||'')+'|'+flagOf(x)+'|'+((x.utags||[]).join(','))+'|'
       +(x.hlStem?JSON.stringify(x.hlStem):'')+'|'+(x.hlLead?JSON.stringify(x.hlLead):'')+'|'
       +(x.srs?(x.srs.reps+':'+x.srs.int+':'+Math.round((x.srs.ease||0)*100)+':'+(x.srs.due||0)):'');
   }
@@ -23705,7 +23786,7 @@ const V3=(function(){
     (ix?(ix.s[sh]||[]):Object.keys(DB.stats||{})).forEach(id=>{
       if(!ix&&SH(id)!==sh)return;
       const x=DB.stats[id]||{};
-      const row={note:x.note||'',flag:!!x.flag,utags:(x.utags||[]).slice(),
+      const row={note:x.note||'',flag:flagOf(x)||false,utags:(x.utags||[]).slice(),
         hlStem:x.hlStem===undefined?null:x.hlStem,hlLead:x.hlLead===undefined?null:x.hlLead,
         srs:x.srs||null};
       /* an untouched question is not a row: 7,000 empty objects is 700 KB of
@@ -23928,7 +24009,7 @@ const V3=(function(){
     ids.forEach(id=>{
       const live=DB.stats[id];
       const t=T[id];
-      if(!t){if(live)nextBase[id]={note:live.note||'',flag:!!live.flag,utags:(live.utags||[]).slice(),hlStem:M().hlCopy(live.hlStem),hlLead:M().hlCopy(live.hlLead)};return}
+      if(!t){if(live)nextBase[id]={note:live.note||'',flag:flagOf(live)||false,utags:(live.utags||[]).slice(),hlStem:M().hlCopy(live.hlStem),hlLead:M().hlCopy(live.hlLead)};return}
       const m=live||{note:'',flag:false,utags:[],hlStem:null,hlLead:null,attempts:[],srs:null};
       const merged=M().mergeStat(base[id],
         {note:m.note,flag:m.flag,utags:m.utags,hlStem:m.hlStem,hlLead:m.hlLead,attempts:[],srs:m.srs},
@@ -23937,7 +24018,7 @@ const V3=(function(){
       dst.note=merged.note;dst.flag=merged.flag;dst.utags=merged.utags;
       dst.hlStem=merged.hlStem;dst.hlLead=merged.hlLead;
       if(!dst.srs&&merged.srs)dst.srs=merged.srs;         /* attempts decide srs; this is only a seed */
-      nextBase[id]={note:dst.note||'',flag:!!dst.flag,utags:(dst.utags||[]).slice(),
+      nextBase[id]={note:dst.note||'',flag:flagOf(dst)||false,utags:(dst.utags||[]).slice(),
         hlStem:M().hlCopy(dst.hlStem),hlLead:M().hlCopy(dst.hlLead)};
     });
     fps['@base:'+P.state(sh)]=nextBase;

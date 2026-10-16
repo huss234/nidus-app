@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.30** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.31** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1641,6 +1641,25 @@ The quality bar. A surface is done when it *feels* like §2, and:
   - **A section strip that follows the scroll** (`.qe-jump`, `qeSpyMark`).
   - **The flag runs up its pole** (`.qp-flag`): the cloth rises and fills
     when flagged, and drops and empties when not.
+- **Flags** (`Plume 2.31 · flags`, v6.94): seven named colours,
+  `--p-flag-1…7`. A flag colour is a name (a red flag is red), so its hue is
+  fixed, but its lightness is derived from `--md-primary`
+  (`oklch(from var(--md-primary) var(--p-flag-l) C H)`), so one line serves
+  both themes and every contrast setting. They are the only fixed hues in
+  Plume, and only for flags: never use them as data or verdict colours.
+  - **The flag picker** (`.flg-head` + `.flg-pick` of `.flg-sw`, built by
+    `flagPickHTML`): a head with the current colour's name, then No flag and
+    the seven colours in two rows of four 48px targets. Every cloth hangs
+    low and pale; the chosen one runs up its pole and fills (the same motion
+    as `.qp-flag`, one icon, one motion), and a tonal ring of its colour
+    scales in behind it. No flag carries a slash. Changing it repaints in
+    place (`flagPickPaint`), never redraws the menu. Used in every menu that
+    sets a flag.
+  - **A flag mark takes its colour** through `--fc`: the session strips'
+    dots, the report's columns and chips (`.flg-dot` + the colour's name),
+    the companion's tiles, the bank row's mark (`.bk-mk.is-flag`), the
+    gallery badge (filled with the colour, ink derived from it), the question
+    page's flag button.
 - **A held caption says so in the viewer** ("The caption shows once you
   answer"), rather than leaving a blank card.
 
@@ -1960,6 +1979,7 @@ A surface that is not listed here is legacy.
 | **The rail (≥861px), the shared dialog, the figure blocks and referenced-file buttons where pictures are added** (question page, editor, companion, Plume dialogs), Keyboard shortcuts, Possible duplicates | 2.29 | 6.91 | From the user: update the legacy remnants to the new language, and never touch the study session (the player, its options, explanation and everything inside it). Every dialog opened while the player or its report is up keeps the legacy dialog; the player's figure blocks keep their look; a screenshot of the player and its Finish dialog differs from v6.90 by nothing but the shuffled option order. Still legacy outside the session: the inputs and other controls inside a few dialog bodies (sync, storage tools), the session report |
 | **The study session adopted as Plume (the question grammar)**; the question page and the editor's Preview drawn with it; the session's ⋮ menu, bar buttons, clock warning, every dialog over it (Leave, Finish, Tags, Lab values, Calculator, Reading settings, Figures) and its figure blocks; the session report | 2.30 | 6.92 | From the user: the session was the first redesign, made before Plume had a name, and is not legacy; adopt its elements without changing them, change only what screams legacy (the windows), make viewing an MCQ in the bank, the page or the editor's Preview consistent with the session, fix the broken bold in the options' reasoning. The player's options, verdict, chips, dock and teaching are pixel-identical to v6.91 apart from the bold fix. The page keeps every block it had (record, references and older-format sections on new-format items, the add-figure rows); its disputed card, explanation and objective are now the session's. Nothing in the report removed |
 | **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
+| Flags in seven colours: the picker (player ⋮ menu, question page, bank selection), coloured marks everywhere a flag shows, the bank's Flags chips | 2.31 | 6.94 | From the user: one flag was not enough; wanted red, green and other colours as in the flashcard app (its feel, not its code) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -2194,3 +2214,7 @@ were built under which version.
   From the user: the top bar, the ⋮ menu, the FAB and the sync details were
   the last legacy pieces on every screen, and the sync control's look and
   motion were to stay exactly as they are.
+- **Plume 2.31** (2026-10-16): flags. Seven named colours as tokens whose
+  hue is fixed and whose lightness follows primary; one flag picker for
+  every menu that sets a flag, the chosen cloth running up its pole. From
+  the user: a single flag could not tell a red flag from a green one.

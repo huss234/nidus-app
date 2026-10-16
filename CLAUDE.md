@@ -519,6 +519,20 @@ a recipe.
   itself, or the screen comes back stale. A new dock screen whose view
   depends on something else (like Progress's sub-view) adds that check to
   `tbFresh`.
+- **Flags are colours** (v6.94, the user: "a red flag, a green flag, and
+  other types of flags", as in the flashcard app). `stats.flag` is `false` or
+  1–7, in `FLAGS` order (Red, Orange, Green, Blue, Pink, Turquoise, Purple).
+  A `true` saved before v6.94 reads as Red. Always read it with `flagOf(s)`
+  and write it with `flagSet(id, n)`; never `!!s.flag` into stored data, or
+  sync squashes every colour back to `true` (the merge, the base, the shard
+  rows and the fingerprints all go through `flagOf`). Picking a colour is
+  one picker everywhere, `flagPickHTML(cur, head)` (`cur` -1 = mixed), with
+  `data-flg` buttons, repainted in place by `flagPickPaint`: the player's ⋮
+  menu (`#pFlag`), the question page's flag button (`#qpMenu` with
+  `dataset.kind='flag'`), the bank's selection menu. F flips the last colour
+  picked (`FLAG_LAST`). Every flag mark takes its colour through `--fc`
+  (`flagFc(n)`). Filters: the bank's Flags chip group (`flg1…7`), the
+  builder's colour pools (`flag1…7` under More); "Flagged" still means any.
 - **Parse a labelled line by its own markers** (v6.92). `whyHTML` splits
   "Wrong: … Right in: …"; its old pattern took `\**` on both sides of the
   label and so ate the `**` that opened a bold first word ("Lateral**
