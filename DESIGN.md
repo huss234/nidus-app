@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.27** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.28** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -835,7 +835,7 @@ goals and rules above win). All follow the touch contract (§6).
 | **Button group / view switcher** | One `--p-well` track, `--p-r-full`, 4px inset, and **one** `primary` indicator that travels between segments on `--p-spatial` and squares a little while pressed. Labels and icons change as it arrives. Content follows its direction (§2). Replaces old segmented controls |
 | **Split button** | Leading action plus trailing chevron. The chevron half turns into a circle and its icon rotates 180° while its menu is open |
 | **FAB / FAB menu** | Only for the screen's hero action, never covering content (§7). FAB menu: the FAB morphs into a close button (rotate and shape morph) while items unfold upward with a stagger, each a `primary-container` pill |
-| **Navigation bar** | `--p-bar`, separated from the page by tone, never a line. 64px. **One** pill indicator that slides between items and stretches mid-travel; a thumb can drag it along the bar. Label weight animates. Icons switch outline → filled (details become cuts in the pill's colour) and act out their logic on arrival. Icon over label on phones; from 700px the label sits beside the icon inside the pill. Built: the dock, §14 |
+| **Navigation bar** | `--p-bar`, separated from the page by tone, never a line. 64px. **One** pill indicator that slides between items and stretches mid-travel. It is tapped, never dragged (2.28), and switches on the touch itself. Label weight animates. Icons switch outline → filled (details become cuts in the pill's colour) and act out their logic on arrival. Icon over label on phones; from 700px the label sits beside the icon inside the pill. Built: the dock, §14 |
 | **Navigation rail / drawer** | Same travelling indicator. The rail can expand into a drawer with a container transform |
 | **Top app bar** | Flat on the page at rest, with a large title that may collapse on scroll. Scrolled: one level up in tone with an effects-spring colour transition. No shadow, no line |
 | **Floating toolbar** | `--p-float`, `--p-r-full` or `--p-r-lx`, Plume shadow. Hides on scroll down and returns on scroll up (`--p-spatial`, translate only) |
@@ -1619,7 +1619,7 @@ The quality bar. A surface is done when it *feels* like §2, and:
 - **The dock** (`Plume 2.24 · dock`, v6.86, rebuilt from scratch; markup
   `#tabbar.tb` with `.tb__row`, `.tb__ind`, `.tb__it` › `.tb__p` › `.tb__g` +
   `.tb__l`, the badge `.tb__b#dueCntM`; script THE DOCK: `tbMark`, `tbGo`,
-  `tbSwap`, `tbIcon`, `tbBadge`). The navigation bar on phones and the tablet
+  `tbSwap`, `tbFresh`, `tbIdle`, `tbIcon`, `tbBadge`). The navigation bar on phones and the tablet
   (≤860px). Reuse:
   - **One indicator placed by the container's own width** (`.tb__row` is an
     inline-size container; the pill is `translateX(calc(100cqw / n * (i + .5)
@@ -1627,13 +1627,19 @@ The quality bar. A surface is done when it *feels* like §2, and:
     right at every width, retargets mid-flight. The trip stretches it (a WAAPI
     `scale` on top, more for a longer trip), and the label and icon it lands on
     change after `--lag`, scaled by the distance.
-  - **Drag the indicator along a bar** (pointer handlers on the bar, taken
-    after 10px of sideways travel, `touch-action:none` on the bar): it follows
-    the finger 1:1 with squared "held" corners, catching up over 150ms when
-    the finger lands away from it; the item under it lights as it passes with
-    a 5ms tick; past the ends it gives at 0.55× (28px at most); the release
-    projects the last 90ms of velocity 140ms ahead and picks the nearest item.
-    A cancelled or same-item release springs home from where it is.
+  - **Switch on the touch** (2.28): `pointerdown` on an item calls `tbGo`;
+    the click that follows is ignored for a second, and a click with no
+    touch before it (keyboard, screen reader) still switches. There is no
+    drag: the user had it removed as a feature a dock does not need.
+  - **Reopen a screen as it was left** (`tbFresh`): `go(v, keep)` skips the
+    build when the screen was built at the current `DBREV` (moved by
+    `save`, `doSave` and `reindex`), the same width and day, under five
+    minutes ago, the bank not `BK.dirty`, Progress on its first view. Only
+    the dock passes `keep`; every other route builds as before.
+  - **Icons sit on one line**: each glyph's drawn box is centred on the
+    viewBox's middle (y 12), so icons line up with each other and with the
+    label beside them on the tablet. Progress's bars sat 2px low until
+    2.28; measure a new glyph with `getBBox()` before adding it.
   - **Filled icons with cuts** (`.tb-f` fills at the outline's geometry;
     `.tb-k` details turn the pill's colour; `.tb-ko` strokes exist only when
     filled, for gaps the outline does not have, such as between Progress's
@@ -1643,7 +1649,8 @@ The quality bar. A surface is done when it *feels* like §2, and:
     from the base one after another. Home is a noun: its fill alone.
   - **A tab's screen follows the pill** (`tbSwap`): the tap moves the pill,
     the build waits a frame, then the old screen is pinned where it stands
-    (`.view.tb-out`, fixed at its rect) and fades 12px the other way over the
+    (`.view.tb-out`, fixed at the rect `tbIdle` read while the app was idle,
+    set as inline `top`/`left`/`width`/`height`) and fades 12px the other way over the
     new one, which enters 24px from the side the pill went (`.tb-in`, 60ms
     later). The class stays while that screen is open (taking it off would
     restart the legacy `m3ViewIn`); `go()` clears it everywhere else.
@@ -1663,10 +1670,21 @@ The quality bar. A surface is done when it *feels* like §2, and:
   `getBoundingClientRect().top` and `innerHeight` each take one value and
   `scrollWidth - clientWidth` stays 0. (v6.86: the dock dropped out of
   view and rose back on every switch; the user saw it at once.)
-- **A dock is tapped (2.25).** The user's word "swipe between tabs" meant
-  *switch*; the drag along the dock was a literal reading. It stays because
-  the user said to keep it, but don't add gestures a request only seems to
-  name: ask, or build the plain meaning.
+- **A dock is tapped (2.25, 2.28).** The user's word "swipe between tabs"
+  meant *switch*; the drag along the dock was a literal reading, and in 2.28
+  the user had it removed: a dock needs no gesture, and every gesture it
+  listens for is work on each touch. Don't add gestures a request only
+  seems to name: ask, or build the plain meaning.
+- **Rule: a tap path reads before it writes, and never asks the viewport
+  after a write (2.28).** `innerWidth`, `innerHeight` and `scrollY` each
+  force a full restyle when anything is dirty, like `getClientRects` and
+  `getComputedStyle`: four or five of them on one dock tap cost 250–500ms
+  each at 4× CPU, the delay the user saw on the tablet before any motion
+  began. Read them first, or keep them from their events (`TB.vw`,
+  `TB.sy`); cache what is measured once (the FAB's label widths); read
+  geometry for the next tap at idle (`tbIdle`). Never pin or move a big
+  subtree with custom properties: they inherit, so setting one on a screen
+  restyled all of its 1,200 elements. Motion stays; only waiting goes.
 - **Rule: a fixed bar is its own layout root (2.24).** A fixed-size bar
   over the page takes `contain: strict`. Without it, a label's weight
   changing in the dock relaid the whole document: 20ms per tap at 4× CPU on
@@ -1827,6 +1845,7 @@ A surface that is not listed here is legacy.
 | Dock fix: stays still through every tab switch (the content column clips the sideways entrance) | 2.25 | 6.87 | From the user: the dock disappeared and reappeared on each switch. Measured static at 360 / 412 / 800px |
 | **The dock (navigation bar, phones and tablet)**: one travelling, stretching indicator; drag along the dock to switch; filled icons that act out their logic; the screen enters from the side the pill went; the due badge; tap the open tab to go to the top | 2.24 | 6.86 | Rebuilt from scratch on the user's request ("legacy… update it to the new design language"). Kept: the five destinations, their order, the due count, hiding in the player and the report. New: the swipe, horizontal pills from 700px, 64px height (FAB, snackbar, builder dock and gallery bar follow `--m3-navbar-h`). The rail (≥861px) is still legacy; the top app bar and the FAB followed in 2.26 |
 | **The shared chrome: top bar, its ⋮ menu, the FAB and FAB menu, the sync details** | 2.26 | 6.88 | Rebuilt on the user's request ("the remaining legacy elements"). Kept: every overflow row (Import, Settings, Dark theme, Keyboard shortcuts), the FAB on Home (menu: Drill weakest, Review what's due, Resume, Start a session), Bank (Write a question) and Import's prompt tab (Copy prompt), the collapse on scroll, the snackbar lift, every sync detail (device, last sync, files and photos waiting, peers, requests left, repositories, layout, last pass, the log) and Sync now / Repair / Sync settings. The sync control itself (`.sync-split`: colours, width morph, loading indicator) is untouched at the user's word. The details moved from a dialog into the peek sheet. The rail (≥861px) is still legacy |
+| Dock: tapped, not dragged (the swipe removed); switches on the touch; reopens an unchanged screen instead of rebuilding it; one restyle per tap instead of five; icons on one line on the tablet | 2.28 | 6.90 | From the user: the tablet dock's icons and words were not level, the swipe was an unneeded feature, and a tab took a while to respond before it animated. Measured at 800×1220, 4× CPU: a revisit to Bank 1.1s → 0.5s, Progress 0.9s → 0.55s; every icon within 0.4px of the label's cap centre |
 | **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
@@ -1976,6 +1995,12 @@ A surface that is not listed here is legacy.
   a step is painted before a blocking pass starts, and what must keep moving
   through it moves on the compositor. From the user: importing froze, then
   everything appeared at once.
+
+- **Plume 2.28** (2026-10-16): a dock is tapped, never dragged, and switches
+  on the touch; a tap path reads before it writes and never asks the
+  viewport after a write; a screen the dock reopens is kept when nothing it
+  shows has changed; a row of icons is centred by what is drawn. From the
+  user, on the tablet's dock.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

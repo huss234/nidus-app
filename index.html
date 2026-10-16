@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.89 -->
+<!-- Nidus — Personal Qbank · v6.90 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -7672,10 +7672,9 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
    travels between the five destinations on --p-spatial, stretching while
    it moves; the item's icon fills and its label firms up as the pill
    arrives (--lag, scaled by the distance), and the icon then acts out its
-   own logic. A thumb can drag the pill along the dock: it follows 1:1,
-   the item under it lights up, and the release (position and flick)
-   decides where it lands. The screen it leads to enters from the side the
-   pill went. Script: THE DOCK (tbMark, tbGo, tbSwap, tbBadge).
+   own logic. The dock is only tapped (2.28): it acts on the touch itself,
+   with no gesture to wait for. The screen it leads to enters from the side
+   the pill went. Script: THE DOCK (tbMark, tbGo, tbSwap, tbBadge).
    ============================================================ */
 .tb__ind,.tb__b{display:none}
 @media (max-width:860px){
@@ -7685,7 +7684,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
     height:calc(var(--m3-navbar-h) + env(safe-area-inset-bottom));
     padding:0 4px env(safe-area-inset-bottom);
     background:var(--p-bar);
-    /* the dock never scrolls, so every movement on it is the dock's own */
+    /* nothing on the dock pans or zooms, so a touch is a tap at once */
     touch-action:none;-webkit-tap-highlight-color:transparent;
     -webkit-user-select:none;user-select:none;
     /* its size is its own, so a change inside never lays out the page: a
@@ -7714,17 +7713,14 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
   .tb__row.is-snap .tb__ind{transition:none}
   /* a screen that is not a destination (Settings, Import, New session) */
   .tb.is-off .tb__ind{opacity:0;scale:.6}
-  /* pressed under the finger, or carried by it: squeezes, corners square */
-  .tb__row:has(.tb__it.on.is-down) .tb__ind,.tb.is-drag .tb__ind{
+  /* pressed under the finger: squeezes, corners square */
+  .tb__row:has(.tb__it.on.is-down) .tb__ind{
     border-radius:var(--p-r-m);scale:var(--p-press);
     transition:transform var(--p-spatial-d) var(--p-spatial),
                border-radius var(--p-effect-fast-d) var(--p-effect-fast),
                scale var(--p-effect-fast-d) var(--p-effect-fast),
                opacity var(--p-effect-d) var(--p-effect);
   }
-  .tb.is-drag .tb__ind{transition-property:border-radius,scale,opacity}
-  /* the finger landed away from the pill: it catches up, then follows 1:1 */
-  .tb.is-drag.is-catch .tb__ind{transition-property:transform,border-radius,scale,opacity;transition-duration:150ms,var(--p-effect-fast-d),var(--p-effect-fast-d),var(--p-effect-d);transition-timing-function:cubic-bezier(.2,0,0,1),var(--p-effect-fast),var(--p-effect-fast),var(--p-effect)}
 
   .tb__it{
     position:relative;display:flex;justify-content:center;align-items:flex-start;
@@ -7746,7 +7742,6 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
   .tb__it.is-down .tb__p{scale:var(--p-press);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
   .tb__it.is-down .tb__p::before{opacity:var(--m3-state-press,.1);border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d)}
   @media (hover:hover){.tb__it:hover .tb__p::before{opacity:var(--m3-state-hover,.08)}}
-  .tb.is-drag .tb__p::before{opacity:0}
   .tb__it:focus-visible .tb__p::before{opacity:var(--m3-state-focus,.1);outline:3px solid var(--md-primary);outline-offset:2px}
   .tb__g{position:relative;display:grid;place-items:center;width:var(--iw);height:var(--ih)}
   .tb__l{
@@ -7797,8 +7792,10 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
 /* the screen the dock leads to enters from the side the pill went; the one
    it leaves fades out over it (tbSwap), so no frame is empty */
 .view.tb-out{
+  /* top, left, width and height are set inline by tbSwap: plain properties,
+     because a custom property inherits and restyled the whole screen */
   display:block;position:fixed;z-index:15;margin:0;max-width:none;overflow:hidden;pointer-events:none;
-  top:var(--tb-t);left:var(--tb-l);width:var(--tb-w);height:var(--tb-h);animation:none;
+  animation:none;
 }
 .view.on.tb-in{animation:tbIn var(--p-spatial-d) var(--p-spatial) 60ms both}
 /* The entering screen starts 24px to the side, past the right edge. On a
@@ -8311,7 +8308,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.89</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.90</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8367,7 +8364,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.89 · sharded store</span>
+        <span class="chip" id="verChip">v6.90 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8623,7 +8620,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
     <button type="button" class="tb__it pl-press" data-go="review" data-tb="1"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-pv tb-rv-a"><path class="tb-f" d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45z"/><path d="M20.5 12a8.5 8.5 0 1 1-2.95-6.45"/><path d="M20.6 3.9v4.3h-4.3"/></g><path class="tb-pv tb-k tb-rv-h" d="M12 7.7V12l3.3 1.95"/></svg></span><span class="tb__l">Review</span><span class="tb__b" id="dueCntM" aria-hidden="true"></span></span></button>
     <button type="button" class="tb__it pl-press" data-go="bank" data-tb="2"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-hinge tb-bk-lid"><rect class="tb-f" x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/><rect x="3.4" y="4.4" width="17.2" height="3.9" rx="1.1"/></g><path class="tb-f" d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path d="M4.9 8.3h14.2v10.3a1.6 1.6 0 0 1-1.6 1.6H6.5a1.6 1.6 0 0 1-1.6-1.6z"/><path class="tb-ko" d="M5.3 9.2h13.4"/><path class="tb-k" d="M10.2 12.1h3.6"/></svg></span><span class="tb__l">Bank</span></span></button>
     <button type="button" class="tb__it pl-press" data-go="gallery" data-tb="3"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.4 6.6h.8a3.2 3.2 0 0 1 3.2 3.2v8.4a3.2 3.2 0 0 1-3.2 3.2H9.8a3.2 3.2 0 0 1-3.2-3.2v-.8"/><rect class="tb-f" x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><rect x="2.6" y="2.6" width="14.8" height="14.8" rx="3.2"/><circle class="tb-k tb-base tb-sun" cx="7.1" cy="6.9" r="1.35"/><path class="tb-k" d="m2.8 14.1 4.2-3.7 2.5 2.3 3.2-3.1 4.7 4.5"/></svg></span><span class="tb__l">Images</span></span></button>
-    <button type="button" class="tb__it pl-press" data-go="stats" data-tb="4"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-base tb-pg"><rect class="tb-f" x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/><rect x="3.9" y="13.2" width="4.7" height="7.4" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/><rect x="9.65" y="7.4" width="4.7" height="13.2" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/><rect x="15.4" y="10.4" width="4.7" height="10.2" rx="1.5"/></g><path class="tb-ko" d="M9.12 6v15.6M14.88 6v15.6"/></svg></span><span class="tb__l">Progress</span></span></button>
+    <button type="button" class="tb__it pl-press" data-go="stats" data-tb="4"><span class="tb__p"><span class="tb__g"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><g class="tb-base tb-pg"><rect class="tb-f" x="3.9" y="11.2" width="4.7" height="7.4" rx="1.5"/><rect x="3.9" y="11.2" width="4.7" height="7.4" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="9.65" y="5.4" width="4.7" height="13.2" rx="1.5"/><rect x="9.65" y="5.4" width="4.7" height="13.2" rx="1.5"/></g><g class="tb-base tb-pg"><rect class="tb-f" x="15.4" y="8.4" width="4.7" height="10.2" rx="1.5"/><rect x="15.4" y="8.4" width="4.7" height="10.2" rx="1.5"/></g><path class="tb-ko" d="M9.12 4v15.6M14.88 4v15.6"/></svg></span><span class="tb__l">Progress</span></span></button>
   </div>
 </nav>
 
@@ -9534,7 +9531,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.89';
+const APP_VERSION='6.90';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -9833,7 +9830,10 @@ const whenIdle=fn=>{try{return window.requestIdleCallback?requestIdleCallback(fn
    whether this pass is allowed to wait ninety seconds. That is real work, and
    it does not have to happen in the same frame as the edit that triggered it.
    The timer it sets is measured in seconds; a frame of slack costs nothing. */
-function save(){clearTimeout(saveT);saveT=setTimeout(()=>{doSave();
+/* every change to the data moves DBREV, so a screen built at the current
+   revision still shows the truth (tbFresh keeps it instead of rebuilding) */
+let DBREV=0;
+function save(){DBREV++;clearTimeout(saveT);saveT=setTimeout(()=>{doSave();
   if(window.SYNC)whenIdle(()=>{try{window.SYNC.schedule()}catch(e){}})},350)}
 /* v5.9 — a save arriving while another was in flight used to start a second
    structured clone of the entire DB on top of the first. One write at a time
@@ -9843,6 +9843,7 @@ function save(){clearTimeout(saveT);saveT=setTimeout(()=>{doSave();
    the call, so the state the caller wanted saved has reached disk. */
 let saveRun=null, saveAgain=false;
 function doSave(){
+  DBREV++;
   saveAgain=true;
   if(saveRun)return saveRun;
   saveRun=(async()=>{
@@ -9887,7 +9888,7 @@ let DB=JSON.parse(JSON.stringify(DEFAULTS));
 function ST(id){if(!DB.stats[id])DB.stats[id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]};
   if(!Array.isArray(DB.stats[id].utags))DB.stats[id].utags=[];return DB.stats[id]}
 const Q_BY_ID={};
-function reindex(){for(const k in Q_BY_ID)delete Q_BY_ID[k];DB.questions.forEach(q=>Q_BY_ID[q.id]=q)}
+function reindex(){DBREV++;for(const k in Q_BY_ID)delete Q_BY_ID[k];DB.questions.forEach(q=>Q_BY_ID[q.id]=q)}
 
 /* ---------- the study ledger: which answers count ----------
    One predicate, consulted by one accessor, used by everything that reads
@@ -12336,7 +12337,7 @@ let VIEW='dash';
    still route, so every existing link, deep link and keyboard shortcut in the
    app keeps working; they simply land on the right tab instead. */
 const VIEW_ALIAS={history:['stats','sess'],prompt:['import','prompt']};
-function go(v){
+function go(v,keep){
   let pane=null;
   if(VIEW_ALIAS[v]){pane=VIEW_ALIAS[v][1];v=VIEW_ALIAS[v][0]}
   VIEW=v;
@@ -12345,10 +12346,13 @@ function go(v){
   $$('#navList button').forEach(b=>b.classList.toggle('on',b.dataset.go===v));
   tbMark(TB_KEYS.indexOf(v));
   document.body.classList.remove('setdetail');
-  window.scrollTo(0,0);
+  window.scrollTo(0,0);TB.sy=0;
   /* leaking object URLs on a 4 GB tablet is fatal: each one pins a decoded
      bitmap of several megabytes. Anything no longer on screen is released. */
   try{MEDIA.sweep()}catch(e){}
+  /* keep: the dock reopens a screen exactly as it was left (tbFresh), so
+     the tap costs a slide, not a rebuild */
+  if(keep){if(v!=='bank'&&typeof BK!=='undefined'&&BK.sel)bkSelEnd();tbIdle();return}
   if(v==='dash')renderDash(true);
   if(v==='build')renderBuild();
   if(v==='review')renderReview();
@@ -12360,29 +12364,33 @@ function go(v){
   if(v==='import')renderPrompt();
   if(pane&&window.showPane)showPane(v,pane);
   else if(window.resetPane)resetPane(v);
+  TB.built[v]={r:DBREV,w:TB.vw,d:new Date().toDateString(),t:Date.now()};
+  tbIdle();
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){e.preventDefault();go(b.dataset.go)}});
 
 /* ============================================================
    THE DOCK  (Plume 2.24 · dock)
-   One indicator for five destinations. A tap moves it on the frame the
-   finger lifts and only then, a frame later, builds the screen; a thumb
-   dragged along the dock carries it, and the release picks the item by
-   where it is and how fast it was going. go() from anywhere calls tbMark,
-   so the dock always shows where the app is.
+   One indicator for five destinations. The touch itself moves it (no
+   gesture to wait for: the dock is only tapped, 2.28) and only then, a
+   frame later, builds the screen, or reopens it as it was left when
+   nothing it shows has changed. go() from anywhere calls tbMark, so the
+   dock always shows where the app is.
    ============================================================ */
 const TB_KEYS=['dash','review','bank','gallery','stats'];
 /* the dock keeps its own animations: Element.getAnimations() flushes style
    and walks every animation in the document, 68ms per tap on Home (4× CPU) */
-const TB={i:-1,tok:0,swallow:false,out:null,ic:[],st:null,fd:null};
+/* the viewport's width and scroll are kept from their events: read after a
+   change to the page, innerWidth and scrollY each forced a full restyle */
+const TB={i:-1,tok:0,out:null,ic:[],st:null,fd:null,built:{},at:null,sy:scrollY,vw:innerWidth,idle:0,down:0};
 const tbRow=()=>document.querySelector('#tabbar .tb__row');
 const tbBtns=()=>[...document.querySelectorAll('#tabbar .tb__it')];
 function tbLit(i){tbBtns().forEach((b,k)=>b.classList.toggle('on',k===i))}
 /* the indicator goes to item i, or out (-1) for a screen that is not a tab */
-function tbMark(i,o){
+function tbMark(i){
   const row=tbRow();if(!row)return;
-  o=o||{};const bar=row.parentNode,was=TB.i;
-  if(i===was&&!o.force)return;
+  const bar=row.parentNode,was=TB.i;
+  if(i===was)return;
   TB.i=i;
   tbBtns().forEach((b,k)=>{if(k===i)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
   if(i<0){bar.classList.add('is-off');tbLit(-1);return}
@@ -12391,9 +12399,9 @@ function tbMark(i,o){
     /* coming back from a screen with no tab: it grows in where it belongs */
     row.classList.add('is-snap');row.style.setProperty('--i',i);row.style.setProperty('--lag','0ms');
     void ind.offsetWidth;row.classList.remove('is-snap');bar.classList.remove('is-off');
-    tbLit(i);if(was>=0||o.icon)tbIcon(i,0);return;
+    tbLit(i);if(was>=0)tbIcon(i,0);return;
   }
-  const d=Math.abs(i-(o.from!=null?o.from:was)),lag=o.lag!=null?o.lag:Math.min(220,70+45*Math.max(0,d-1));
+  const d=Math.abs(i-was),lag=Math.min(220,70+45*Math.max(0,d-1));
   row.style.setProperty('--lag',lag+'ms');
   if(Motion.reduced){
     /* no travel: the pill fades out where it was and in where it goes */
@@ -12404,7 +12412,7 @@ function tbMark(i,o){
     },()=>{});
   }else{
     row.style.setProperty('--i',i);
-    if(!o.still&&d)tbStretch(ind,d);
+    if(d)tbStretch(ind,d);
   }
   tbLit(i);tbIcon(i,lag);
 }
@@ -12447,14 +12455,18 @@ function tbBadge(n){
 function tbSwap(v,dir){
   const old=document.querySelector('.main > .view.on'),nv=document.getElementById('v-'+v);
   if(TB.out){TB.out();TB.out=null}
-  if(old&&old!==nv&&old.getClientRects().length){
-    const r=old.getBoundingClientRect(),st=old.style;
-    st.setProperty('--tb-t',r.top+'px');st.setProperty('--tb-l',r.left+'px');
-    st.setProperty('--tb-w',r.width+'px');st.setProperty('--tb-h',Math.max(0,innerHeight-r.top)+'px');
+  /* every read comes before the first write. Where the open screen stands
+     was read at idle (tbIdle): read here, it forced a layout of the whole
+     page on the tap path (530ms at 4× CPU) */
+  const keep=tbFresh(v),ih=innerHeight;
+  const m=TB.at&&TB.at.el===old&&TB.at.iw===TB.vw?TB.at:null;
+  if(old&&old!==nv&&(m||old.getClientRects().length)){
+    const r=m?{top:m.t-TB.sy,left:m.l,width:m.w}:old.getBoundingClientRect(),st=old.style;
+    st.top=r.top+'px';st.left=r.left+'px';st.width=r.width+'px';st.height=Math.max(0,ih-r.top)+'px';
     old.classList.add('tb-out');
     const a=old.animate([{opacity:1,transform:'none'},{opacity:0,transform:Motion.reduced?'none':'translate3d('+(-dir*12)+'px,0,0)'}],
       {duration:Motion.reduced?120:160,easing:PL_EXIT,fill:'forwards'});
-    const done=TB.out=()=>{a.cancel();old.classList.remove('tb-out');['--tb-t','--tb-l','--tb-w','--tb-h'].forEach(k=>st.removeProperty(k));if(TB.out===done)TB.out=null};
+    const done=TB.out=()=>{a.cancel();old.classList.remove('tb-out');['top','left','width','height'].forEach(k=>st.removeProperty(k));if(TB.out===done)TB.out=null};
     a.finished.then(()=>{if(TB.out===done)done()},()=>{});
   }
   /* the class stays while the screen is open (taking it off would start
@@ -12462,16 +12474,34 @@ function tbSwap(v,dir){
   if(nv){nv.style.setProperty('--tb-dx',(dir*24)+'px');nv.classList.add('tb-in')}
   /* the top bar's name follows the pill too (mhTitle) */
   TB.dir=dir;
-  go(v);
+  go(v,keep);
 }
-function tbGo(i,o){
+/* a screen can be reopened as it was left while nothing it shows can have
+   changed: the same data revision, width and day, the bank not marked
+   dirty, Progress on its first view, and not older than five minutes */
+function tbFresh(v){
+  const k=TB.built[v];
+  if(!k||k.r!==DBREV||k.w!==TB.vw||Date.now()-k.t>300000||k.d!==new Date().toDateString())return false;
+  if(BK.dirty&&(v==='bank'||v==='dash'))return false;
+  if(v==='stats'&&PG.view!=='form')return false;
+  return true;
+}
+/* read the open screen's place once the app is idle, for the next tap */
+function tbIdle(){
+  cancelAnimationFrame(TB.idle);
+  TB.idle=requestAnimationFrame(()=>(window.requestIdleCallback||setTimeout)(()=>{
+    const o=document.querySelector('.main > .view.on');if(!o||o.classList.contains('tb-out'))return;
+    const r=o.getBoundingClientRect();TB.at={el:o,t:r.top+scrollY,l:r.left,w:r.width,iw:TB.vw};
+  }));
+}
+function tbGo(i){
   const v=TB_KEYS[i];if(!v)return;
   if(i===TB.i&&VIEW===v){
     /* the screen already open: back to its top */
     window.scrollTo({top:0,behavior:Motion.reduced?'auto':'smooth'});return;
   }
   const from=TB.i;
-  tbMark(i,o);
+  tbMark(i);
   try{navigator.vibrate&&navigator.vibrate(6)}catch(_){}
   const tok=++TB.tok;
   /* let the indicator's first frame paint before the screen is built */
@@ -12483,65 +12513,22 @@ function tbGo(i,o){
      for; on a tap that read forced a whole-page recalc (113ms, 4× CPU). The
      dock's springs are read once, while the app is idle. */
   (window.requestIdleCallback||setTimeout)(()=>['spatial','spatial-fast','spatial-slow'].forEach(n=>PL(n)));
+  /* the touch itself switches: waiting for the finger to lift (the click)
+     held every tab back by the length of the tap */
+  bar.addEventListener('pointerdown',e=>{
+    if(e.button>0||!e.isPrimary)return;
+    const b=e.target.closest('.tb__it');if(b){TB.down=performance.now();tbGo(+b.dataset.tb)}
+  });
+  /* the click that follows a touch was handled on pointerdown; one from the
+     keyboard or a screen reader still switches */
   bar.addEventListener('click',e=>{
     const b=e.target.closest('.tb__it');if(!b)return;
     e.preventDefault();e.stopPropagation();
-    if(TB.swallow){TB.swallow=false;return}
-    tbGo(+b.dataset.tb);
+    if(performance.now()-(TB.down||-1e9)>1000)tbGo(+b.dataset.tb);
+    TB.down=0;
   });
-  /* the thumb carries the pill along the dock */
-  let P=null,G=null;
-  const geo=()=>{const row=tbRow(),r=row.getBoundingClientRect(),iw=row.querySelector('.tb__ind').offsetWidth;return {r,iw,col:r.width/TB_KEYS.length}};
-  const at=x=>{const g=G,lo=g.col/2,hi=g.col*(TB_KEYS.length-.5);let c=x-g.r.left;
-    if(c<lo)c=lo-Math.min(28,(lo-c)*.55);else if(c>hi)c=hi+Math.min(28,(c-hi)*.55);return c};
-  const near=c=>Math.max(0,Math.min(TB_KEYS.length-1,Math.round(c/G.col-.5)));
-  const end=commit=>{
-    const p=P;P=null;if(!p||!p.on)return;
-    const ind=tbRow().querySelector('.tb__ind');
-    bar.classList.remove('is-drag','is-catch');ind.style.transform='';
-    TB.swallow=true;setTimeout(()=>{TB.swallow=false},0);
-    /* let go of the finger's transform: the pill springs from where it is */
-    const back=()=>{if(p.from<0)bar.classList.add('is-off');tbLit(p.from)};
-    if(!commit)return back();
-    /* where it is, plus where the flick was taking it */
-    const s=p.s,a=s[0],z=s[s.length-1],vx=z.t>a.t?(z.x-a.x)/(z.t-a.t):0;
-    const k=near(at(z.x+vx*140));
-    if(k===p.from)return back();
-    if(p.from<0)TB.i=k;
-    tbGo(k,{still:1,lag:0,force:1});
-  };
-  bar.addEventListener('pointerdown',e=>{
-    if(e.button>0||!e.isPrimary)return;TB.swallow=false;
-    P={id:e.pointerId,x0:e.clientX,y0:e.clientY,on:false,from:TB.i,hot:TB.i,s:[]};
-  });
-  bar.addEventListener('pointermove',e=>{
-    if(!P||e.pointerId!==P.id)return;
-    if(!P.on){
-      const dx=e.clientX-P.x0,dy=e.clientY-P.y0;
-      if(Math.abs(dx)<10||Math.abs(dx)<Math.abs(dy))return;
-      P.on=true;G=geo();
-      try{bar.setPointerCapture(e.pointerId)}catch(_){}
-      tbBtns().forEach(b=>b.classList.remove('is-down'));
-      const ind=tbRow().querySelector('.tb__ind'),cur=ind.getBoundingClientRect();
-      const far=bar.classList.contains('is-off')||Math.abs(cur.left+cur.width/2-e.clientX)>cur.width/2;
-      if(bar.classList.contains('is-off')){const row=tbRow();row.classList.add('is-snap');row.style.setProperty('--i',near(at(e.clientX)));void ind.offsetWidth;row.classList.remove('is-snap');bar.classList.remove('is-off')}
-      P.catch=far?performance.now()+150:0;
-      bar.classList.add('is-drag');bar.classList.toggle('is-catch',far);
-      tbRow().style.setProperty('--lag','0ms');
-    }
-    const now=performance.now();
-    if(P.catch&&now>P.catch){P.catch=0;bar.classList.remove('is-catch')}
-    P.s.push({t:now,x:e.clientX});while(P.s.length>2&&now-P.s[0].t>90)P.s.shift();
-    const c=at(e.clientX);
-    tbRow().querySelector('.tb__ind').style.transform='translateX('+(c-G.iw/2).toFixed(1)+'px)';
-    const k=near(c);
-    if(k!==P.hot){P.hot=k;tbLit(k);try{navigator.vibrate&&navigator.vibrate(5)}catch(_){}}
-  });
-  bar.addEventListener('pointerup',e=>{if(P&&e.pointerId===P.id)end(true)});
-  bar.addEventListener('pointercancel',e=>{if(P&&e.pointerId===P.id)end(false)});
-  /* only the dock's own capture: a touch starts captured to the icon under
-     it, and that capture is handed over (and lost) when the drag begins */
-  bar.addEventListener('lostpointercapture',e=>{if(e.target===bar&&P&&P.on&&e.pointerId===P.id)end(false)});
+  addEventListener('scroll',()=>{TB.sy=scrollY},{passive:true});
+  addEventListener('resize',()=>{TB.vw=innerWidth;TB.sy=scrollY},{passive:true});
 })();
 /* touch devices only apply :active when a touch listener exists — this enables the press animations */
 document.addEventListener('touchstart',()=>{},{passive:true});
@@ -25677,8 +25664,11 @@ const BRAND=(function(){
     go = function (v) {
       _go.apply(this, arguments);
       mhTitle(v);
+      /* the browser chrome changes colour only if the bar was raised: the
+         read behind it restyled the whole page on every route */
+      var raised = document.body.classList.contains('scrolled');
       document.body.classList.remove('scrolled');
-      paintBrowserChrome();
+      if (raised) paintBrowserChrome();
     };
   }
 
@@ -25686,7 +25676,7 @@ const BRAND=(function(){
      wordmark (Home) and the title share one slot; a new name slides in from
      the side the dock's pill went (TB.dir, set by tbSwap) while the old one
      steps out the other way, and a change from anywhere else rises in. */
-  var MH = { v: null, a: [] };
+  var MH = { v: null, a: [], mq: matchMedia('(max-width:860px)') };
   function mhTitle(v) {
     var bar = document.querySelector('.mobhead'), h = document.getElementById('barTitle');
     if (!bar || !h) return;
@@ -25696,7 +25686,9 @@ const BRAND=(function(){
     var first = MH.v === null, wasHome = bar.classList.contains('is-home');
     MH.v = v;
     if (home === wasHome && (home || h.textContent === text)) return;
-    var live = !first && !(window.Motion && Motion.reduced) && bar.getClientRects().length > 0;
+    /* shown on phones and the tablet while the shell is: asked of layout
+       (getClientRects) it forced a full restyle on every dock tap */
+    var live = !first && !(window.Motion && Motion.reduced) && MH.mq.matches && document.getElementById('shell').style.display !== 'none';
     MH.a.forEach(function (a) { a.cancel(); });
     MH.a = [];
     Array.prototype.forEach.call(bar.querySelectorAll('.mh-ghost'), function (g) { g.remove(); });
@@ -26044,7 +26036,11 @@ const BRAND=(function(){
   meas.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;white-space:nowrap;' +
                        'pointer-events:none;contain:layout style';
   document.body.appendChild(meas);
+  /* each label is measured once: the read restyled and laid out the page
+     on every route change (cleared when a web font arrives, in fit) */
+  var WF = {};
   function widthFor(label) {
+    if (WF[label]) return WF[label];
     try {
       var cs = getComputedStyle(fab);
       meas.style.font = cs.font;
@@ -26053,13 +26049,13 @@ const BRAND=(function(){
       meas.textContent = label;
       var w = meas.getBoundingClientRect().width;
       /* 16 lead + 24 icon + 12 gap + label + 20 tail */
-      if (w > 0) return Math.ceil(16 + 24 + 12 + w + 20);
+      if (w > 0) return (WF[label] = Math.ceil(16 + 24 + 12 + w + 20));
     } catch (e) {}
     return 184;
   }
   function curW() { return parseFloat(fab.style.getPropertyValue('--fab-w')) || 184; }
   function setW(w) { fab.style.setProperty('--fab-w', w + 'px'); }
-  function fit() { if (cur && !A.swap.length) setW(widthFor(txt.textContent)); }
+  function fit() { WF = {}; if (cur && !A.swap.length) setW(widthFor(txt.textContent)); }
   /* a web font arriving late changes the label's width */
   try { if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); } catch (e) {}
 
@@ -26248,7 +26244,8 @@ const BRAND=(function(){
     var s = resolve(v);
     var key = s ? v + '/' + s.label + (s.menu ? '/m' : '') : 'none', was = lastKey;
     close();
-    lastY = window.scrollY || 0;
+    /* the dock's tracked scroll: window.scrollY here forced a full restyle */
+    lastY = (typeof TB === 'object' && TB) ? TB.sy : (window.scrollY || 0);
     travel = 0;
     cur = s;
     if (key === was) return;

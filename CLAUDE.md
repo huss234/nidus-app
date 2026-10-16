@@ -472,13 +472,18 @@ a recipe.
   word, never a number a series also uses.
 - **The dock** (v6.86, THE DOCK section, `DESIGN.md` §14): `go(v)` calls
   `tbMark(TB_KEYS.indexOf(v))`, so any route moves the pill (−1 fades it out
-  on Settings, Import, New session). A dock tap goes through `tbGo` (pill now,
-  `tbSwap` → `go` a frame later); never route a dock tap through the
-  document's `[data-go]` handler, which builds on the tap frame. The due badge
-  is `tbBadge(n)`, never `#dueCntM` written by hand. A touch starts captured
-  to the element under it, so a bar that takes the capture hears that
-  element's `lostpointercapture` bubble up: check `e.target === bar` (the
-  first build cancelled every swipe that way).
+  on Settings, Import, New session). A dock tap goes through `tbGo` on
+  `pointerdown` (pill now, `tbSwap` → `go(v, keep)` a frame later); never
+  route a dock tap through the document's `[data-go]` handler, which builds
+  on the tap frame. The due badge is `tbBadge(n)`, never `#dueCntM` written
+  by hand. The dock has no drag (removed in v6.90 at the user's word).
+- **`DBREV` is the data's revision.** `save()`, `doSave()` and `reindex()`
+  move it; the dock reopens a screen without rebuilding it when it was built
+  at the current revision (`tbFresh`). Anything that changes what a dock
+  screen shows without going through one of those three must bump `DBREV`
+  itself, or the screen comes back stale. A new dock screen whose view
+  depends on something else (like Progress's sub-view) adds that check to
+  `tbFresh`.
 - **Hot paths never ask the document.** On a tap or a drag: no
   `getAnimations()` (keep the handles), no first-time `PL()` (warm it at
   idle), and a fixed bar gets `contain: strict` so its own changes stay out of
@@ -775,6 +780,13 @@ does) and work in the scratchpad:
   tab, Show more and a row (the page opens with the list as its steps); then
   push every `srs.due` into the future for the caught-up hero and clear
   `DB.stats` for the empty one.
+- **Trace forced restyles with their stacks.** CDP `Tracing.start` with
+  `devtools.timeline,disabled-by-default-devtools.timeline,disabled-by-default-devtools.timeline.stack`
+  around a real tap under 4× CPU; list every `UpdateLayoutTree` and `Layout`
+  over 30ms with `elementCount` and `beginData.stackTrace`. A CPU profile
+  blamed `tbFresh` and `go` for time spent in restyles that `innerWidth` and
+  `scrollY` forced (v6.90); the trace names the line. A healthy dock tap
+  shows one big restyle (the new screen), not five.
 - **Profile a tap, don't time it.** `Profiler.start` over CDP, a real
   `page.touchscreen.tap` under `setCPUThrottlingRate` 4, then total time per
   function *including children* (walk each sample up its parents). Timing the
@@ -790,7 +802,7 @@ does) and work in the scratchpad:
   doesn't zoom.
 - **Read a request's words as the user means them.** "A dock that lets you
   swipe between tabs" meant a tab bar; v6.86 built a drag gesture nobody
-  asked for (kept at the user's word). When a phrase could name a feature or
+  asked for (the user had it removed in v6.90). When a phrase could name a feature or
   just describe the thing, build the plain meaning or ask.
 - **Judge compositor motion by film, not by rAF samples.** While the screen
   builds, `getComputedStyle` per frame shows the pill frozen; the screencast
