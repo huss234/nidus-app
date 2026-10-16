@@ -103,6 +103,15 @@ a recipe.
   figures last). Any other surface that copies a question from a session
   (the companion does) calls the same function, so the copies stay
   identical. Change copy behaviour there, never per surface.
+- **Every copied block is its own switch.** Each block `qToMarkdown()`
+  writes has a key in `COPYFIELDS` (Settings › Copying), so any mix,
+  down to the explanation alone, is possible. A new block gets a new key
+  there plus in both copyOpts defaults (`DEFAULTS.settings` and
+  `applySettings`), never an always-on line. "Question only" forces
+  `stem` and `options` on. Copy buttons go through `copyQ()`, which
+  stops an empty copy and words the toast honestly when parts are off.
+  (Lesson: v6.92 left stem, options, key and explanation always on, so an
+  explanation-only copy could not be set up.)
 - **Confidence travels with the answer.** The "How sure are you?" control
   hides once the answer is submitted, so every place that reports an
   answer (block 7) also reports its confidence (`it.conf`): the verdict's

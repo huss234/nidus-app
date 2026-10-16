@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.92 -->
+<!-- Nidus — Personal Qbank · v6.93 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -8639,7 +8639,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.92</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.93</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8695,7 +8695,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.92 · sharded store</span>
+        <span class="chip" id="verChip">v6.93 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -9874,7 +9874,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.92';
+const APP_VERSION='6.93';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10225,7 +10225,7 @@ const DEFAULTS={
   recovery:null,
   settings:{name:'',brand:'Personal Qbank',goal:40,examDate:'',font:17,autoNext:false,showClock:true,theme:'dark',lastFilters:null,
     efont:15.5,lh:1.72,width:'comfortable',family:'sans',explLayout:'inline',explOpen:true,
-    copyOpts:{meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true}}
+    copyOpts:{meta:true,stem:true,options:true,links:true,key:true,mine:true,dispute:true,choiceExpl:true,expl:true,objective:true,remember:true,note:true,refs:true}}
 };
 let DB=JSON.parse(JSON.stringify(DEFAULTS));
 function ST(id){if(!DB.stats[id])DB.stats[id]={flag:false,note:'',hlStem:null,hlLead:null,attempts:[],srs:null,utags:[]};
@@ -15207,10 +15207,13 @@ function figSaysMD(f,txt){
   return !!n&&(norm(f.caption)===n||norm(f.alt)===n);
 }
 function qToMarkdown(q,it,o){
-  o=Object.assign({meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true,expl:true,scope:'full'},o||{});
+  o=Object.assign({meta:true,stem:true,options:true,links:true,key:true,mine:true,dispute:true,choiceExpl:true,expl:true,objective:true,remember:true,note:true,refs:true,scope:'full'},o||{});
   /* scope 'ask' stops after block 5: the question exactly as it is being read,
      with nothing that answers it. Everything below that line is skipped. */
   const ask=o.scope==='ask';
+  /* every block is its own switch in Settings › Copying, so a copy can be the
+     explanation alone; "Question only" is the stem and options by definition */
+  if(ask)o.stem=o.options=true;
   const st=DB.stats[q.id]||{};
   const done=!!(it&&it.submitted);
   /* What is withheld is now decided by the scope, not by whether an attempt
@@ -15225,19 +15228,21 @@ function qToMarkdown(q,it,o){
   const L=[],push=(...a)=>a.forEach(x=>L.push(x));
   const disp=l=>{const i=order.indexOf(String(l).trim());return i>=0?(LETTERS[i]||l):l};
 
-  push('## Question');
+  if(o.stem||o.meta)push('## Question');
   if(o.meta){
     const bits=[q.system,q.subject,q.difficulty,
       (q.source&&q.source.exam)?q.source.exam+(q.source.number?' #'+q.source.number:''):null].filter(Boolean);
     if(bits.length)push('','_'+bits.join(' · ')+'_');
   }
+  if(o.stem){
   push('',T(q.stem));
   figsIn(q,'stem').forEach(f=>push('',figLineMD(f,T)));
   if((q.hasImage||figsIn(q,'stem').length>0)&&q.imageDescription&&!figsIn(q,'stem').some(f=>figSaysMD(f,q.imageDescription)))
     push('','> **Figure.** '+T(q.imageDescription));
   if(q.leadIn)push('','**'+T(q.leadIn)+'**');
+  }
 
-  push('','### Options','');
+  if(o.options)push('','### Options','');
   const marksOf=(c,lab)=>{
     const marks=[];
     if(!ask&&reveal&&c.isCorrect)marks.push('correct');
@@ -15249,8 +15254,9 @@ function qToMarkdown(q,it,o){
   /* an option picture: its caption only where the key may be read */
   const picMD=c=>chPics(q,c.label).map(f=>{const n=figCapSplit(figCapPair(f).cap);
     return '_[picture'+(reveal&&(n.name||n.line)?': '+T(n.name||n.line):'')+(figFilled(f)?'':', not attached')+']_'}).join(' ');
-  const cols=chCols(q);
-  if(cols){
+  const cols=o.options&&chCols(q);
+  if(!o.options);
+  else if(cols){
     /* an option table is copied as the table the paper printed, one row per
        option; the reasoning follows it, letter by letter */
     const cell=v=>T(v).replace(/\|/g,'\\|').replace(/\n/g,' ');
@@ -15287,7 +15293,7 @@ function qToMarkdown(q,it,o){
   if(ask){pushLinks();return L.join('\n').replace(/\n{3,}/g,'\n\n').trim()+'\n'}
 
   /* ---- block 6 — the correct answer ---- */
-  if(reveal){
+  if(reveal&&o.key){
     const key=q.correctAnswer||(q.correctAnswers||[]).join(', ');
     const keyTxt=key?String(key).split(/\s*,\s*/).map(k=>{
       const d=disp(k);return d===k?'**'+d+'**':'**'+d+'** _(source label '+k+')_';}).join(', '):'—';
@@ -15311,15 +15317,16 @@ function qToMarkdown(q,it,o){
   }
 
   /* ---- block 8 ---- */
-  if(q.keyConflict||q.needsReview){
+  if(o.dispute&&(q.keyConflict||q.needsReview)){
     push('','### Disputed item','');
     if(q.paperAnswer)push('- The paper key says **'+T(q.paperAnswer)+'**; the extractor answered **'+T(q.correctAnswer||'—')+'**.');
     if(q.conflictNote)push('- '+T(q.conflictNote));
     push('- Treat the stated answer with suspicion and tell me which one you think is right.');
   }
 
-  /* grouped layout: every choice's reasoning collected after the options, as shown on screen */
-  if(o.choiceExpl&&!inline&&reveal){
+  /* grouped layout: every choice's reasoning collected after the options, as shown on screen.
+     With the options switched off there is nothing to sit under, so it is grouped either way */
+  if(o.choiceExpl&&(!inline||!o.options)&&reveal){
     const rows=order.map((lab,i)=>{
       const c=(q.choices||[]).find(x=>x.label===lab);
       return (c&&c.explanation)?{i,lab,c}:null;
@@ -15337,8 +15344,8 @@ function qToMarkdown(q,it,o){
   if(!o.figsLast)pushExplFigs();
   /* ---- block 11 ---- */
   if(o.expl&&q.explanation)push('','### Explanation','',T(q.explanation));
-  if(o.expl&&q.educationalObjective)push('','### Educational objective','',T(q.educationalObjective));
-  if(o.expl&&q.thingsToRemember&&q.thingsToRemember.length){
+  if(o.objective&&q.educationalObjective)push('','### Educational objective','',T(q.educationalObjective));
+  if(o.remember&&q.thingsToRemember&&q.thingsToRemember.length){
     push('','### Things to remember','');q.thingsToRemember.forEach(t=>push('- '+T(t)));
   }
   if(o.refs&&q.references&&q.references.length){
@@ -15358,6 +15365,13 @@ function qToMarkdown(q,it,o){
 /* the session screen shows no tags above the stem (they sit behind ⋮ › Tags),
    so neither of its copies writes the tags line. The companion copies a
    question of a running session too, so it takes these same options. */
+/* a copy with parts switched off says so instead of promising everything,
+   and one with every part off copies nothing */
+function copyQ(md,msg,ask){
+  if(!md.trim())return toast('Nothing to copy: every part is switched off in Settings › Copying.');
+  const o=DB.settings.copyOpts||{};
+  copy(md,!ask&&COPYFIELDS.some(f=>f[0]!=='@'&&o[f[0]]===false)?'Copied the parts switched on in Settings › Copying.':msg);
+}
 function sessCopyOpts(scope){
   return Object.assign({},DB.settings.copyOpts||{},{meta:false},scope==='ask'?{scope:'ask'}:{scope:'full',figsLast:true});
 }
@@ -15366,10 +15380,10 @@ function copyCurrentQ(scope){
   if(!q)return toast('Nothing to copy.');
   const ask=scope==='ask';
   const o=sessCopyOpts(scope);
-  copy(qToMarkdown(q,it,o),
+  copyQ(qToMarkdown(q,it,o),
     ask?'Question and options copied — nothing that answers it.'
        :((it&&it.submitted)?'Copied with your answer, the explanations and everything attached.'
-                           :'Copied with the key and explanations — you have not answered it yet, so no answer of yours is included.'));
+                           :'Copied with the key and explanations — you have not answered it yet, so no answer of yours is included.'),ask);
 }
 $('#pCopy').onclick=()=>copyCurrentQ('full');
 $('#pCopyAsk').onclick=()=>copyCurrentQ('ask');
@@ -15524,11 +15538,18 @@ const FAMS={sans:'var(--sans)',serif:'var(--serif)',mono:'var(--mono)'};
 const COPYFIELDS=[
   ['@','The question'],
   ['meta','System, subject and source','The chips above the stem'],
+  ['stem','Question stem','The case, its figures and the lead-in'],
+  ['options','Options','The choices and their marks; Question only keeps them'],
   ['links','Referenced files','Telegram posts, recordings and scans attached to the question'],
-  ['@','Your attempt'],
+  ['@','The answer'],
+  ['key','Correct answer','The key'],
   ['mine','My answer, result and history','Written only once you have answered — never before'],
+  ['dispute','Disputed item','Only when the paper key and the extractor disagree'],
   ['@','The teaching'],
   ['choiceExpl','Per-choice reasoning','Why each option is right or wrong'],
+  ['expl','Explanation','The main explanation and its figures'],
+  ['objective','Educational objective',''],
+  ['remember','Things to remember',''],
   ['@','Attached to it'],
   ['refs','References','Citations carried on the question'],
   ['note','My own note','']
@@ -16940,7 +16961,7 @@ function bkSelAct(a,btn){
   bkSelMenu(false);
   if(a==='flag'||a==='unflag'){ids.forEach(id=>{ST(id).flag=a==='flag'});save();toast(a==='flag'?`Flagged ${n} ${w}.`:`Flags removed from ${n} ${w}.`)}
   else if(a==='verify'||a==='unverify'){ids.forEach(id=>{const q=Q_BY_ID[id];q.verified=a==='verify';q.trust=trustOf(q)});save();toast(a==='verify'?`Marked ${n} ${w} verified.`:`Verification removed from ${n} ${w}.`)}
-  else if(a==='copy'){copy(ids.map(id=>qToMarkdown(Q_BY_ID[id],null,Object.assign({},DB.settings.copyOpts,{scope:'full'}))).join('\n\n---\n\n'),`${n} ${w} copied with their answers and explanations.`);return}
+  else if(a==='copy'){copyQ(ids.map(id=>qToMarkdown(Q_BY_ID[id],null,Object.assign({},DB.settings.copyOpts,{scope:'full'})).trim()).filter(Boolean).join('\n\n---\n\n'),`${n} ${w} copied with their answers and explanations.`);return}
   bkSoon();
 }
 /* ---- wiring ---- */
@@ -17220,7 +17241,7 @@ function qpAct(a,btn){
     qpClose();return;
   }
   qpMenu(false);
-  if(a==='ask'||a==='all'){const ask=a==='ask';copy(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.');return}
+  if(a==='ask'||a==='all'){const ask=a==='ask';copyQ(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.',ask);return}
   if(a==='ver'){q.verified=!q.verified;q.trust=trustOf(q);save();BK.dirty=true;toast(q.verified?'Marked as verified.':'Verification removed.');qpRefresh();return}
   if(a==='prac'){plyClose('qp',{instant:true});startIds([id],'Bank · '+(q.pubId||pubIdOf(id)));return}
 }
@@ -17277,8 +17298,8 @@ document.addEventListener('click',e=>{
   const cp=e.target.closest('[data-copyq]');if(cp){
     const q=Q_BY_ID[cp.dataset.copyq];
     const ask=cp.dataset.copyscope==='ask';
-    if(q)copy(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),
-      ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.');
+    if(q)copyQ(qToMarkdown(q,null,Object.assign({},DB.settings.copyOpts,{scope:ask?'ask':'full'})),
+      ask?'Question and options copied — nothing that answers it.':'Question copied with its answer and explanations.',ask);
     return}
   const ed=e.target.closest('[data-editq]');if(ed){editQuestion(ed.dataset.editq);return}
 });
@@ -21422,7 +21443,7 @@ function renderSettings(){
 }
 function applySettings(){
   const s=DB.settings,R=document.documentElement.style;
-  s.copyOpts=Object.assign({meta:true,links:true,mine:true,choiceExpl:true,note:true,refs:true},s.copyOpts||{});
+  s.copyOpts=Object.assign({meta:true,stem:true,options:true,links:true,key:true,mine:true,dispute:true,choiceExpl:true,expl:true,objective:true,remember:true,note:true,refs:true},s.copyOpts||{});
   R.setProperty('--qfont',(s.font||17)+'px');
   R.setProperty('--efont',(s.efont||15.5)+'px');
   R.setProperty('--qbase',(s.font||17)+'px');R.setProperty('--ebase',(s.efont||15.5)+'px');
@@ -22057,7 +22078,7 @@ function cpqPaint(s,id,q){
   const cIt={order:ord,chosen:it.chosen||null,struck:it.struck||[],conf:it.conf||null,
              timeMs:it.timeMs||0,ansMs:it.ansMs!=null?it.ansMs:null,correct:!!it.correct,submitted:!!it.submitted};
   COMP.copy={
-    all:()=>copy(qToMarkdown(q,cIt,sessCopyOpts('full')),
+    all:()=>copyQ(qToMarkdown(q,cIt,sessCopyOpts('full')),
       it.submitted?'Copied with the answer given over there and every explanation.'
                   :'Copied with the key and explanations — that question has not been answered yet.'),
     ask:()=>copy(qToMarkdown(q,cIt,sessCopyOpts('ask')),
