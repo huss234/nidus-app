@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Nidus — Personal Qbank · v6.91 -->
+<!-- Nidus — Personal Qbank · v6.92 -->
 <!-- ============================================================
      THE QUESTION SPINE  (v4.8)
      ------------------------------------------------------------
@@ -60,6 +60,11 @@
 
      qToMarkdown() is the written form of this list. If a block
      moves, it moves in all five places at once.
+
+     v6.92: the player and the question page draw the ask and the
+     teaching with the same builders (spOptHTML, spTeachHTML), and
+     there the explanation's figures close the teaching, as the
+     session's reveal and its copy (sessCopyOpts) always placed them.
      ============================================================ -->
 <html lang="en" data-theme="dark">
 <head>
@@ -3535,26 +3540,22 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
 .qp-labadd > span{overflow:hidden;min-width:0}
 .qp-labadd input{width:180px;height:32px;padding:0 12px 0 0;border:0;background:none;box-shadow:none;outline:none;color:var(--md-on-surface);font:400 14px/20px var(--m3-font)}
 .qp-labadd.is-open{grid-template-columns:auto minmax(0,1fr);background:var(--p-card);box-shadow:inset 0 0 0 2px var(--md-primary)}
-/* the ask */
-.qp-stem{font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh);letter-spacing:.15px;color:var(--md-on-surface);white-space:pre-wrap;overflow-wrap:break-word;max-width:var(--measure)}
-.qp-lead{margin:14px 0 0;font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh);font-weight:600;color:var(--md-on-surface);max-width:var(--measure)}
+/* Plume 2.30 · the ask and the teaching are the session's own (.spq: the
+   question grammar outside the player): stem, the tonal lead-in, the option
+   cards revealed, the reasoning under each, then the teaching group. Only
+   the spacing that fits a page is set here; every look is the session's. */
+.spq{--sp-oin:16px;--sp-ro:calc(var(--m3-corner-l) + 4px);--sp-r:var(--m3-corner-xl)}
+@media (max-width:520px){.spq{--sp-oin:14px}}
+@media (min-width:600px) and (pointer:coarse){.spq{--sp-oin:18px}}
+.qp-ask{padding:24px 0 4px}
+.qp-ask .sp-stem{max-width:var(--measure)}
 .qp-ask .figs{margin-top:12px}
-.qp-opts{display:flex;flex-direction:column;gap:2px;margin-top:16px}
-.qp-opt{display:grid;grid-template-columns:32px minmax(0,1fr);column-gap:14px;align-items:start;padding:14px 16px 14px 12px;border-radius:var(--p-r-xs);background:var(--p-well);color:var(--md-on-surface);
-  font-family:var(--qfam);font-size:var(--qfont);line-height:var(--qlh)}
-.qp-opt:first-child,.qp-opt.chx-th + .qp-opt{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
-.qp-opt:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
-.qp-opt.is-key{background:color-mix(in oklab,var(--md-success) 12%,var(--p-card));box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-success) 42%,transparent)}
+.qp-ask .sp-ask{margin-top:20px}
+.qp-ask .sp-opts{margin-top:16px}
+.qp-expl{margin-top:0;max-width:none}
+.qp-still *{animation:none!important}
 .qp-k{width:32px;height:32px;display:grid;place-items:center;border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--md-outline);
   font:600 14px/1 var(--m3-font);color:var(--md-on-surface-variant);margin-top:calc((var(--qlh) * 1em - 32px) / 2)}
-.qp-opt.is-key .qp-k{border-radius:var(--p-r-m);background:var(--md-success);color:var(--md-on-success);box-shadow:none}
-.qp-t{min-width:0;overflow-wrap:break-word}
-.qp-tags{display:inline-flex;gap:6px;flex-wrap:wrap;vertical-align:middle}
-.qp-key{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;background:var(--md-success);color:var(--md-on-success);font:600 11px/16px var(--m3-font);letter-spacing:.2px}
-.qp-why{grid-column:2;margin-top:8px;font-size:var(--efont);line-height:var(--qlh);color:var(--md-on-surface-variant)}
-.qp-why .ebody{color:inherit;font-size:inherit}
-.qp-opt.chx-th{padding-block:0 4px;background:transparent;box-shadow:none;align-items:end}
-.qp-opt.chx-th .qp-k{visibility:hidden;height:0;box-shadow:none;margin:0}
 /* the verdict and the record */
 .qp-ans{display:flex;align-items:center;gap:14px}
 .qp-ans .qp-k{flex:none;margin:0;border-radius:var(--p-r-m);background:var(--md-success);color:var(--md-on-success);box-shadow:none;width:40px;height:40px;font-size:16px}
@@ -3577,16 +3578,6 @@ body.bk-selecting .fabdock{opacity:0;pointer-events:none}
 .qp-att em{font:500 13px/18px var(--m3-font);font-style:normal;color:var(--md-on-surface-variant);font-variant-numeric:tabular-nums;white-space:nowrap}
 .qp-att small .ic{display:inline-block;width:14px;height:14px;margin:0 2px 0 0;vertical-align:-2px}
 .qp-rec .pl-btn{margin-top:16px}
-.qp-disp{box-shadow:inset 0 0 0 1.5px color-mix(in oklab,var(--md-error) 42%,transparent);background:color-mix(in oklab,var(--md-error) 7%,var(--p-card))}
-.qp-disp .ply-h{color:var(--md-error)}
-.qp-disp p{margin:0;font:400 14px/21px var(--m3-font)}
-.qp-disp p + p{margin-top:6px}
-.qp-teach > * + *{margin-top:20px}
-.qp-teach .ply-h{margin-bottom:8px}
-.qp-call{padding:16px 18px;border-radius:var(--p-r-l);background:var(--p-well)}
-.qp-call .ply-h{margin-bottom:6px}
-.qp-call .ebody{font-size:calc(var(--efont) - .5px)}
-.qp-refs{margin:0;padding-left:1.2em;font:400 13px/19px var(--m3-font);color:var(--md-on-surface-variant)}
 /* the note: a filled field on the card's well that saves itself */
 .qp-note{display:flex;flex-direction:column;gap:2px;padding:10px 16px 12px;border-radius:var(--p-r-l);background:var(--p-well);cursor:text;transition:box-shadow var(--p-effect-d) var(--p-effect)}
 .qp-note:focus-within{box-shadow:inset 0 0 0 2px var(--md-primary)}
@@ -5030,14 +5021,14 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .sp-meta .chip{animation:spIn var(--m3-dur-medium) var(--m3-ease-emphasized-decel) backwards}
 /* no top margin: the tags row it used to clear is gone, so the stem starts
    right under the bar's own gap; when warning chips show, their row keeps 16px */
-.sp .sp-stem{margin-top:0;max-width:var(--measure)}
+:is(.sp,.spq) .sp-stem{margin-top:0;max-width:var(--measure)}
 .sp-ask{margin-top:24px;max-width:var(--measure)}
-.sp .sp-lead{
+:is(.sp,.spq) .sp-lead{
   margin:0;padding:18px 20px 18px 22px;border-radius:var(--sp-r);
   background:var(--md-secondary-container);color:var(--md-on-secondary-container);
   font-weight:600;letter-spacing:.1px;max-width:none;position:relative;
 }
-.sp .sp-lead:empty{display:none}
+:is(.sp,.spq) .sp-lead:empty{display:none}
 
 /* ---------- answer cards ---------- */
 .sp-opts{margin-top:20px;display:flex;flex-direction:column;gap:8px;max-width:var(--measure)}
@@ -5563,16 +5554,8 @@ html.m-snap .pl-seg__ind,html.m-snap .sx-seeds__ring{transition:transform var(--
 .sp-expl .esec > .eh .lic .ic{width:20px;height:20px}
 .sp-expl .esec.key > .eh .lic{background:var(--md-primary-container);color:var(--md-on-primary-container)}
 .sp-expl .esec > .eh .n{padding:4px 10px;border-radius:var(--m3-corner-full);background:var(--md-surface-container-high)}
-/* a figure still to attach: in the session column its controls drop under the text instead of
-   squeezing it into a strip, and inside the Figure card it loses the outline and the icon the
-   card's own header already carries, so it reads as the card's content rather than a box in a box */
-.sp .figplate{flex-wrap:wrap}
-.sp .figplate .fpt{flex-basis:calc(100% - 64px)}
-.sp .figplate .fpa{flex-direction:row;flex-wrap:wrap;flex-basis:100%;padding-left:64px}
-.sp-expl .esec .figplate{border-color:transparent;background:var(--md-surface-container);padding:16px 20px}
-.sp-expl .esec .figplate .fpi{display:none}
-.sp-expl .esec .figplate .fpt{flex-basis:100%}
-.sp-expl .esec .figplate .fpa{padding-left:0;margin-left:-12px}
+/* a figure still to attach is the Plume figure block (2.29, the player
+   joined its scope in 2.30): a well with its ways in under its words */
 .sp-expl .esec > .ec{padding:0 20px 20px}
 .sp-expl .esec.shut > .ec{padding-bottom:0}
 .sp-expl .esec > .eh:not(:has(.n)) .cv{margin-left:auto}
@@ -7762,67 +7745,255 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
    Plume 2.29 · figure blocks
    The figure blocks (figHTML) and the referenced-file buttons
    (linkBtns) where pictures are added: the question page, the
-   editor, the companion and a Plume dialog (the figure manager
-   opened from the page). The player keeps its own. An empty slot
+   editor, the companion, every dialog and, since 2.30, the player
+   (the session is Plume now). An empty slot
    is a well that is tapped to choose a file, its ways in a row
    of tonal buttons under its words; a picture's edit buttons
    float on it. These legacy elements take the touch contract
    through PL_PRESS_SEL, not a class, and lose the ripple.
    ============================================================ */
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate{
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate{
   display:grid;grid-template-columns:40px minmax(0,1fr);column-gap:16px;row-gap:14px;align-items:start;
   border:0;border-radius:var(--p-r-l);background:var(--p-well);background-image:none;padding:16px;
   color:var(--md-on-surface-variant);cursor:pointer;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
              box-shadow var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect);
 }
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.opt{background:color-mix(in oklab,var(--p-well) 60%,transparent)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.over{background:color-mix(in oklab,var(--md-primary) 12%,var(--p-well));box-shadow:inset 0 0 0 2px var(--md-primary);color:var(--md-on-surface-variant)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi{
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate.opt{background:color-mix(in oklab,var(--p-well) 60%,transparent)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate.over{background:color-mix(in oklab,var(--md-primary) 12%,var(--p-well));box-shadow:inset 0 0 0 2px var(--md-primary);color:var(--md-on-surface-variant)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi{
   width:40px;height:40px;flex:none;border-radius:var(--p-r-m);
   background:var(--md-secondary-container);color:var(--md-on-secondary-container);
   transition:background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect),border-radius var(--p-effect-d) var(--p-effect);
 }
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi .ic{width:22px;height:22px}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate.over .fpi{background:var(--md-primary);color:var(--md-on-primary);border-radius:20px}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt b{font:500 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt .fpd{font:400 14px/20px var(--m3-font);letter-spacing:.1px;margin-top:2px}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fph{font:400 13px/18px var(--m3-font);letter-spacing:.1px;margin-top:8px;color:var(--md-on-surface-variant)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpi .ic{width:22px;height:22px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate.over .fpi{background:var(--md-primary);color:var(--md-on-primary);border-radius:20px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt b{font:500 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpt .fpd{font:400 14px/20px var(--m3-font);letter-spacing:.1px;margin-top:2px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fph{font:400 13px/18px var(--m3-font);letter-spacing:.1px;margin-top:8px;color:var(--md-on-surface-variant)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa{grid-column:2;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}
 /* the slot's ways in, and every add row, are tonal S buttons */
-:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]){
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]){
   height:40px;padding:0 16px 0 12px;gap:8px;border:0;border-radius:20px;background:var(--md-secondary-container);background-image:none;
   color:var(--md-on-secondary-container);font:500 14px/20px var(--m3-font);letter-spacing:.1px;box-shadow:none;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
 }
-:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]) .ic{width:20px;height:20px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]) .ic{width:20px;height:20px}
 /* Delete and Not needed are the quiet ones: text buttons */
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn:is([data-figact="drop"],[data-figact="dismiss"]){background:transparent;color:var(--md-primary);padding:0 12px}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn.arm{background:var(--md-error);color:var(--md-on-error);padding:0 16px 0 12px}
-@media (hover:hover){:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]):hover{background-image:linear-gradient(color-mix(in oklab,currentColor 8%,transparent) 0 100%)}}
-:is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]).is-down{
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn:is([data-figact="drop"],[data-figact="dismiss"]){background:transparent;color:var(--md-primary);padding:0 12px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate .fpa .btn.arm{background:var(--md-error);color:var(--md-on-error);padding:0 16px 0 12px}
+@media (hover:hover){:is(#player,#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]):hover{background-image:linear-gradient(color-mix(in oklab,currentColor 8%,transparent) 0 100%)}}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,:is(.row,.cpq-links) > a.btn[href]).is-down{
   transform:scale(var(--p-press));border-radius:var(--p-r-m);background-image:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
   transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figadds{gap:8px;margin-top:12px}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figadds{gap:8px;margin-top:12px}
 /* a picture's own buttons float on it */
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar{top:8px;right:8px;gap:4px;transition:opacity var(--p-effect-d) var(--p-effect)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button{
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figbar{top:8px;right:8px;gap:4px;transition:opacity var(--p-effect-d) var(--p-effect)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figbar button{
   background:var(--p-float);background-image:none;color:var(--md-on-surface);box-shadow:var(--p-shadow);border-radius:20px;
   transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
 }
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figbar button.arm{background:var(--md-error);color:var(--md-on-error)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figbar button.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);transition-duration:var(--p-effect-fast-d);transition-timing-function:var(--p-effect-fast)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figbar button.arm{background:var(--md-error);color:var(--md-on-error)}
 /* the paste box is a well that waits for the paste, ringed while it does */
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figpad{border:0;border-radius:var(--p-r-m);background:var(--p-well);font:400 14px/20px var(--m3-font);
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figpad{border:0;border-radius:var(--p-r-m);background:var(--p-well);font:400 14px/20px var(--m3-font);
   animation:plDlgFade var(--p-effect-d) var(--p-effect);transition:box-shadow var(--p-effect-d) var(--p-effect)}
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figpad:focus{background:var(--p-well);box-shadow:inset 0 0 0 2px var(--md-primary)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figpad:focus{background:var(--p-well);box-shadow:inset 0 0 0 2px var(--md-primary)}
 /* a group heading is Title S in the quieter ink, never a small primary label */
-:is(#qp,#qe,#companion,.mask.pl-dlg) .figsub{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+:is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figsub{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
 @media (max-width:420px){
-  :is(#qp,#qe,#companion,.mask.pl-dlg) .figplate{column-gap:12px;padding:16px 14px}
+  :is(#player,#qp,#qe,#companion,.mask.pl-dlg) .figplate{column-gap:12px;padding:16px 14px}
 }
+
+/* ============================================================
+   Plume 2.30 · study session
+   The session was redesigned (6.15) before Plume had a name, and its
+   way of drawing a question is now Plume's own: the question
+   grammar (§14). What stayed legacy around it moves here: the ⋮
+   menu becomes the top bar's grouped float menu, the bar's icon
+   buttons take the touch contract, the per-question clock no longer
+   pulses (nothing loops), and the dialogs opened over the session
+   are the shared Plume dialog, with their own bodies (tags, lab
+   values, calculator) set in Plume type, wells and buttons.
+   ============================================================ */
+#pMorePop.pl-tm{
+  display:flex;flex-direction:column;gap:2px;padding:0;
+  top:calc(100% + 2px);right:4px;width:max-content;min-width:min(252px,calc(100vw - 20px));max-width:min(320px,calc(100vw - 24px));
+  background:none;border-radius:0;box-shadow:none;animation:none;transform-origin:calc(100% - 24px) 0;overflow:visible;max-height:none;
+}
+#pMorePop.pl-tm[hidden]{display:none}
+#pMorePop .ovm__g{animation:none}
+#pMorePop .tool{
+  isolation:isolate;height:auto;min-height:48px;gap:14px;padding:0 12px 0 14px;border-radius:var(--p-r-xs);
+  font:500 15px/20px var(--m3-font);letter-spacing:.1px;color:inherit;animation:none;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+             background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect);
+}
+#pMorePop .ovm__g > .tool:first-child{border-top-left-radius:var(--p-r-l);border-top-right-radius:var(--p-r-l)}
+#pMorePop .ovm__g > .tool:last-child{border-bottom-left-radius:var(--p-r-l);border-bottom-right-radius:var(--p-r-l)}
+#pMorePop .ovm__g:not(:first-child) > .tool:first-child{border-top-left-radius:var(--p-r-xs);border-top-right-radius:var(--p-r-xs)}
+#pMorePop .ovm__g:not(:last-child) > .tool:last-child{border-bottom-left-radius:var(--p-r-xs);border-bottom-right-radius:var(--p-r-xs)}
+#pMorePop .tool::after{z-index:-1;transition:opacity var(--p-effect-d) var(--p-effect)}
+#pMorePop .tool:active{border-radius:var(--p-r-xs)}
+#pMorePop .tool:active::after{opacity:0}
+#pMorePop .tool.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);
+  transition:transform var(--p-effect-fast-d) var(--p-effect-fast),border-radius var(--p-effect-fast-d) var(--p-effect-fast)}
+#pMorePop .tool.is-down::after{opacity:var(--m3-state-press)}
+#pMorePop .tool:focus-visible{background:transparent;color:inherit}
+#pMorePop .tool:focus-visible::after{opacity:var(--m3-state-focus)}
+#pMorePop .tool .ic{width:22px;height:22px;flex:0 0 22px}
+#pMorePop .tool:focus-visible .ic{color:var(--md-on-surface-variant)}
+#pMorePop .tmsw{padding-right:12px}
+#pMorePop .tmsw .pl-sw{margin-left:8px}
+#pMorePop .tmsw .pl-sw input[type=checkbox]{position:absolute;z-index:auto}
+/* the ⋮ anchors the open menu: it holds a squared tonal fill (as the top bar's) */
+#pMore{position:relative;isolation:isolate}
+#pMore::before{content:"";position:absolute;inset:4px;z-index:-1;border-radius:20px;background:var(--md-secondary-container);opacity:0;scale:.8;
+  transition:opacity var(--p-effect-d) var(--p-effect),scale var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect)}
+#pMore[aria-expanded="true"]{background:transparent;color:var(--md-on-secondary-container)}
+#pMore[aria-expanded="true"]::before{opacity:1;scale:1;border-radius:var(--p-r-m)}
+/* the bar's icon buttons: the touch contract, in place of the ripple */
+#player .sp-top .tool:active{transform:none;border-radius:calc(var(--m3-touch) / 2)}
+#player .sp-top .tool.is-down{transform:scale(var(--p-press-sm));border-radius:var(--p-r-m);
+  background-image:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
+  transition:transform var(--p-effect-fast-d) var(--p-effect-fast),border-radius var(--p-effect-fast-d) var(--p-effect-fast)}
+@media (hover:hover){#player .sp-top .tool:hover{background-image:linear-gradient(color-mix(in oklab,currentColor 8%,transparent) 0 100%)}}
+#player .sp-top .tool{transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),
+  background-color var(--p-effect-d) var(--p-effect),color var(--p-effect-d) var(--p-effect)}
+#player .sp-top .tool:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+/* the per-question clock's warning: a tint, never a pulse */
+.sp-timer.warn{animation:none}
+/* Tags: groups by space, each name Title S in the quieter ink */
+.mask.pl-dlg .tgset{gap:10px}
+.mask.pl-dlg .tgset + .tgset{margin-top:24px}
+.mask.pl-dlg .tgl{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+.mask.pl-dlg .tgc .chip{height:32px;padding:0 12px;border:0;border-radius:var(--p-r-s);background:var(--p-well);color:var(--md-on-surface);font:500 13px/18px var(--m3-font)}
+.mask.pl-dlg .tgc .chip.acc{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.mask.pl-dlg .tgc .chip.amber{background:color-mix(in oklab,var(--md-warning) 18%,var(--p-float))}
+.mask.pl-dlg .tgc .chip.rose{background:color-mix(in oklab,var(--md-error) 14%,var(--p-float))}
+.mask.pl-dlg .tgc .chip.jade{background:color-mix(in oklab,var(--md-success) 16%,var(--p-float))}
+/* Lab values: a full-pill search on the well, then rows with no rules; a
+   value is a count, so the UI face with tabular figures, not mono */
+.mask.pl-dlg #labFind{height:48px;width:100%;margin:0 0 12px!important;padding:0 20px;border:0;border-radius:24px;background:var(--p-well);box-shadow:none;
+  font:400 16px/24px var(--m3-font);color:var(--md-on-surface);transition:box-shadow var(--p-effect-d) var(--p-effect)}
+.mask.pl-dlg #labFind:focus{outline:none;box-shadow:inset 0 0 0 2px var(--md-primary)}
+.mask.pl-dlg table.lab:not(.keys){border-collapse:separate;border-spacing:0 2px}
+.mask.pl-dlg table.lab:not(.keys) td{border:0;padding:12px 16px;background:var(--p-well);font:400 15px/22px var(--m3-font);letter-spacing:.1px}
+.mask.pl-dlg table.lab:not(.keys) td:first-child{border-radius:var(--p-r-xs) 0 0 var(--p-r-xs)}
+.mask.pl-dlg table.lab:not(.keys) td:last-child{border-radius:0 var(--p-r-xs) var(--p-r-xs) 0;font:500 14px/20px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+.mask.pl-dlg table.lab:not(.keys) tr:first-child td:first-child{border-top-left-radius:var(--p-r-l)}
+.mask.pl-dlg table.lab:not(.keys) tr:first-child td:last-child{border-top-right-radius:var(--p-r-l)}
+.mask.pl-dlg table.lab:not(.keys) tr:last-child td:first-child{border-bottom-left-radius:var(--p-r-l)}
+.mask.pl-dlg table.lab:not(.keys) tr:last-child td:last-child{border-bottom-right-radius:var(--p-r-l)}
+/* Calculator: the display is an expressive number in the well; digits are
+   tonal keys, operators secondary, = the one filled key; every key presses */
+.mask.pl-dlg .calcdisp{padding:16px 20px;border-radius:var(--p-r-card);background:var(--p-well);
+  font:500 44px/52px var(--m3-font);font-variation-settings:"wdth" 115,"ROND" 100;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mask.pl-dlg .calcpad{gap:8px;margin-top:16px}
+.mask.pl-dlg .calcpad button{position:relative;isolation:isolate;overflow:hidden;height:60px;border-radius:30px;background:var(--p-well);color:var(--md-on-surface);
+  font:500 22px/1 var(--m3-font);font-variant-numeric:tabular-nums;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+.mask.pl-dlg .calcpad button.op{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+.mask.pl-dlg .calcpad button[data-k="="]{background:var(--md-primary);color:var(--md-on-primary)}
+.mask.pl-dlg .calcpad button[data-k="C"],.mask.pl-dlg .calcpad button[data-k="DEL"]{font-size:17px;font-weight:550;color:var(--md-primary)}
+.mask.pl-dlg .calcpad button:active{border-radius:30px}
+.mask.pl-dlg .calcpad button.is-down{transform:scale(var(--p-press));border-radius:var(--p-r-m);
+  background-image:linear-gradient(color-mix(in oklab,currentColor 10%,transparent) 0 100%);
+  transition:transform var(--p-effect-fast-d) var(--p-effect-fast),border-radius var(--p-effect-fast-d) var(--p-effect-fast)}
+.mask.pl-dlg .calcpad button:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+@media (max-width:420px){.mask.pl-dlg .calcpad button{height:56px;border-radius:28px}}
+
+/* ============================================================
+   Plume 2.30 · session report
+   The debrief after a block (v6.3) keeps its running order and
+   every figure: how it went, what to fix, where the points went,
+   the confidence check, against your history, every question. It
+   is re-set in Plume around the session's own grammar: the hero is
+   a neutral lit card with an expressive score and 56px actions
+   (colour on the action and the run of the block, never the whole
+   card); a miss is tagged with the session's own "What went wrong?"
+   chips; the grouping is a button group with a travelling
+   indicator; the bars are one ink; every list is a grouped list.
+   ============================================================ */
+#resultsPanel{background:var(--p-page)}
+#resultsPanel .phead{background:var(--p-page)}
+#resultsPanel .ptop .qn{font:450 22px/28px var(--m3-font);letter-spacing:0;color:var(--md-on-surface)}
+#resultsPanel .ptop .tools .pl-btn{margin-right:-4px}
+#resultsPanel .rhead h2.vt{font:450 32px/40px var(--m3-font);letter-spacing:-.01em;color:var(--md-on-surface);margin-bottom:12px}
+#resultsPanel .chip{height:28px;padding:0 10px;border:0;border-radius:var(--p-r-s);background:var(--p-well);color:var(--md-on-surface);
+  font:500 12.5px/16px var(--m3-font);letter-spacing:.1px;font-variant-numeric:tabular-nums}
+#resultsPanel .chip.mono{font-family:var(--m3-font)}
+#resultsPanel .chip.acc{background:var(--md-secondary-container);color:var(--md-on-secondary-container)}
+#resultsPanel .chip.amber{background:color-mix(in oklab,var(--md-warning) 18%,var(--p-card));color:var(--md-on-surface)}
+#resultsPanel .chip.rose{background:color-mix(in oklab,var(--md-error) 14%,var(--p-card));color:var(--md-on-surface)}
+#resultsPanel .rhead .chip{background:var(--p-card)}
+/* the hero: lit and neutral, its focal element the score */
+#resultsPanel .rhero{display:flex;flex-direction:column;gap:24px;padding:28px 24px 24px;border-radius:var(--p-r-hero);background:var(--p-card);color:var(--md-on-surface);
+  animation:spIn var(--p-spatial-slow-d) var(--p-spatial-slow) backwards}
+#resultsPanel .rhero .num{font:520 72px/1.02 var(--m3-font);font-variation-settings:"wdth" 115,"ROND" 100;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--md-on-surface)}
+#resultsPanel .rhero .num small{font-size:.42em;font-variation-settings:"wdth" 100;letter-spacing:0;margin-left:.08em;color:var(--md-on-surface-variant)}
+#resultsPanel .rhero .rsay{font:400 16px/24px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant);opacity:1}
+#resultsPanel .rfacts{gap:12px 28px}
+#resultsPanel .rfacts b{font:540 24px/30px var(--m3-font);font-variation-settings:"wdth" 110,"ROND" 100;letter-spacing:-.02em;color:var(--md-on-surface)}
+#resultsPanel .rfacts span{font:500 12px/16px var(--m3-font);letter-spacing:.2px;color:var(--md-on-surface-variant);opacity:1}
+#resultsPanel .rcol.om i{background:color-mix(in oklab,var(--md-on-surface) 24%,transparent)}
+#resultsPanel .rcol:focus-visible{outline:3px solid var(--md-primary)}
+#resultsPanel .rlimit{border-top-color:color-mix(in oklab,var(--md-on-surface) 45%,transparent)}
+#resultsPanel .rstripfoot{color:var(--md-on-surface-variant);opacity:1}
+#resultsPanel .rhero .racts{gap:8px}
+@media (max-width:420px){#resultsPanel .rhero .racts .pl-btn{flex:1 1 100%}}
+/* sections: Title L, separated by space */
+#resultsPanel .rsechead{margin:36px 0 12px}
+#resultsPanel .rsechead h3.sec{font:500 22px/28px var(--m3-font);letter-spacing:0;color:var(--md-on-surface);text-transform:none}
+#resultsPanel .rsechead .tiny,#resultsPanel .rnote{font:400 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface-variant)}
+/* what to fix and every question: grouped lists of lit cards */
+#resultsPanel :is(.rfix,.qrow){background:var(--p-card);border:0;box-shadow:none;border-radius:var(--p-r-xs);margin:0 0 2px}
+#resultsPanel .rnote + .rfix,#resultsPanel #rAll > .qrow.is-first{border-top-left-radius:var(--p-r-card);border-top-right-radius:var(--p-r-card)}
+#resultsPanel .rfix:not(:has(+ .rfix)),#resultsPanel #rAll > .qrow.is-last{border-bottom-left-radius:var(--p-r-card);border-bottom-right-radius:var(--p-r-card)}
+#resultsPanel .rfix .ropen{padding:18px 20px 12px}
+#resultsPanel .rfix .ropen:hover{background:color-mix(in oklab,var(--md-on-surface) 4%,transparent)}
+#resultsPanel .rfix .ropen:focus-visible{outline:3px solid var(--md-primary)}
+#resultsPanel .rnum{min-width:32px;height:32px;border-radius:var(--p-r-m);font:550 13px/1 var(--m3-font);font-variant-numeric:tabular-nums;
+  background:color-mix(in oklab,var(--md-error) 16%,var(--p-card));color:var(--md-on-surface)}
+#resultsPanel .rfix.sure .rnum{background:var(--md-error);color:var(--md-on-error)}
+#resultsPanel .rfix.om .rnum{background:var(--p-well);color:var(--md-on-surface-variant)}
+#resultsPanel .rstem{font:400 16px/24px var(--m3-font);letter-spacing:.1px}
+#resultsPanel .rpick .l{font:600 13px/20px var(--m3-font);letter-spacing:.2px}
+#resultsPanel .rfix .missrow{padding:4px 20px 18px 66px;gap:8px}
+@media (max-width:560px){#resultsPanel .rfix .missrow{padding-left:20px}}
+#resultsPanel .qrow{grid-template-columns:minmax(0,1fr) auto;align-items:start;padding:16px 16px 16px 20px;cursor:pointer;
+  transition:transform var(--p-spatial-fast-d) var(--p-spatial-fast),border-radius var(--p-effect-d) var(--p-effect),background-color var(--p-effect-d) var(--p-effect)}
+#resultsPanel :is(.qrow,.rfix .ropen):active{border-radius:inherit}
+#resultsPanel .qrow.is-down{transform:scale(var(--p-press-card));border-radius:var(--p-r-m);background-image:linear-gradient(color-mix(in oklab,currentColor 6%,transparent) 0 100%);transition-duration:var(--p-effect-fast-d)}
+#resultsPanel .rfix .ropen.is-down{background:color-mix(in oklab,var(--md-on-surface) 8%,transparent)}
+@media (hover:hover){#resultsPanel .qrow:hover{background-image:linear-gradient(color-mix(in oklab,currentColor 4%,transparent) 0 100%)}}
+#resultsPanel .qrow .stem{font:400 15px/22px var(--m3-font);letter-spacing:.1px}
+#resultsPanel .qrow:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+#resultsPanel .rmark{width:32px;height:32px;border-radius:var(--p-r-m);background:var(--p-well);color:var(--md-on-surface-variant);font:600 15px/1 var(--m3-font)}
+#resultsPanel .rmark .ic{width:20px;height:20px}
+#resultsPanel .rmark.ok{background:var(--md-success);color:var(--md-on-success)}
+#resultsPanel .rmark.no{background:color-mix(in oklab,var(--md-error) 16%,var(--p-card));color:var(--md-error)}
+#resultsPanel .rfilt{gap:8px;margin-bottom:12px}
+#resultsPanel .rfilt .sp-chip .n{margin-left:2px;font-variant-numeric:tabular-nums;opacity:.75}
+/* where the points went: a card of labelled rows in one ink */
+#resultsPanel #rGroupSeg{flex:1 1 280px;max-width:360px}
+#resultsPanel .card{background:var(--p-card);border:0;border-radius:var(--p-r-card);padding:20px;box-shadow:none}
+#resultsPanel .bar .track{background:var(--p-well);border-radius:var(--p-r-xs)}
+#resultsPanel .bar .fill{border-radius:var(--p-r-xs)}
+#resultsPanel .bar .val{font:500 13px/20px var(--m3-font);font-variant-numeric:tabular-nums;color:var(--md-on-surface-variant)}
+#resultsPanel .bar .name{font:400 14px/20px var(--m3-font);color:var(--md-on-surface)}
+/* the confidence and history tiles: lit cards with expressive figures */
+#resultsPanel .statgrid{gap:8px}
+#resultsPanel .stat{background:var(--p-card);border-radius:var(--p-r-card);padding:20px}
+#resultsPanel .stat:active{border-radius:var(--p-r-card)}
+#resultsPanel .stat .v{font:520 40px/1.05 var(--m3-font);font-variation-settings:"wdth" 115,"ROND" 100;letter-spacing:-.03em}
+#resultsPanel .stat .v small{font-size:.45em;font-variation-settings:"wdth" 100;letter-spacing:0;color:var(--md-on-surface-variant);opacity:1}
+#resultsPanel .stat .k{font:500 14px/20px var(--m3-font);letter-spacing:.1px;color:var(--md-on-surface);margin-top:6px}
+#resultsPanel .stat .x{font:400 13px/18px var(--m3-font);letter-spacing:.1px;opacity:1}
+#resultsPanel .rgo.card .spread{gap:12px 16px;flex-wrap:wrap}
+#resultsPanel .rgo.card .tiny{font:400 14px/20px var(--m3-font);color:var(--md-on-surface)}
 
 /* ============================================================
    Plume 2.24 · dock
@@ -8468,7 +8639,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         </div>
         <h4 class="sx-sub">This device</h4>
         <div class="sx-grp">
-          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.91</span></div>
+          <div class="sx-item"><span class="sx-tx"><span class="sx-t">Build</span></span><span class="sx-val" id="buildChip">v6.92</span></div>
           <div class="sx-item sx-note"><span class="sx-s" id="ghDetail"></span></div>
         </div>
       </div>
@@ -8524,7 +8695,7 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
       <div class="nx-hero" id="nxHero" title="Nidus">
         <svg class="nx-icon nx-play" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nxTile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" class="nx-s-lift"/><stop offset="1" class="nx-s-deep"/></linearGradient><radialGradient id="nxGlow" cx="44.5" cy="19.5" r="30" gradientUnits="userSpaceOnUse"><stop offset="0" class="nx-s-seed" stop-opacity=".42"/><stop offset=".45" class="nx-s-seed" stop-opacity=".08"/><stop offset="1" class="nx-s-seed" stop-opacity="0"/></radialGradient><linearGradient id="nxInk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="nx-s-ink-a"/><stop offset="1" class="nx-s-ink-b"/></linearGradient><clipPath id="nxClip"><rect width="64" height="64" rx="15"/></clipPath></defs><g class="nx-tile"><rect width="64" height="64" rx="15" fill="url(#nxTile)"/><g clip-path="url(#nxClip)"><rect class="nx-glow" width="64" height="64" fill="url(#nxGlow)"/><g class="nx-rings"><circle class="nx-ring" style="--i:0" cx="44.5" cy="19.5" r="9" stroke-opacity=".22"/><circle class="nx-ring" style="--i:1" cx="44.5" cy="19.5" r="15" stroke-opacity=".13"/><circle class="nx-ring" style="--i:2" cx="44.5" cy="19.5" r="22" stroke-opacity=".08"/><circle class="nx-ring" style="--i:3" cx="44.5" cy="19.5" r="30" stroke-opacity=".05"/></g></g><rect class="nx-edge" x=".5" y=".5" width="63" height="63" rx="14.5"/></g><path class="nx-shade" pathLength="1" d="M18.5 46V18.5L44.5 46V31"/><path class="nx-ink" pathLength="1" d="M18.5 46V18.5L44.5 46V31" stroke="url(#nxInk)"/><circle class="nx-seed" cx="44.5" cy="19.5" r="4.3"/><circle class="nx-ripple" cx="44.5" cy="19.5" r="4.3"/></svg>
         <svg class="nx-wm nx-play" viewBox="0 4 136 40" role="img" aria-label="Nidus"><path style="--i:0" pathLength="1" d="M4 40V8L27 40V8"/><path style="--i:1" pathLength="1" d="M39 40V18"/><path style="--i:2" pathLength="1" d="M71 8V29A11 11 0 0 0 49 29A11 11 0 0 0 71 29V40"/><path style="--i:3" pathLength="1" d="M83 18V29A11 11 0 0 0 105 29"/><path style="--i:4" pathLength="1" d="M105 18V40"/><path style="--i:5" pathLength="1" d="M131 21.5C128 18 116.5 16.8 116.5 23.2C116.5 29.6 131.5 27.4 131.5 34.2C131.5 41.4 118.5 41.6 115 37.2"/><circle class="nx-seed" cx="39" cy="8.6" r="3.9"/><circle class="nx-ripple" cx="39" cy="8.6" r="3.9"/></svg>
-        <span class="chip" id="verChip">v6.91 · sharded store</span>
+        <span class="chip" id="verChip">v6.92 · sharded store</span>
       </div>
         <div class="sx-grp">
           <div class="sx-item" id="installRow"><span class="sx-ld"><svg class="ic" data-ic="i-import"></svg></span><span class="sx-tx"><span class="sx-t">Install app</span><span class="sx-s" id="installSub">Add Nidus to the home screen</span></span><button class="pl-btn pl-btn--tonal pl-press" id="installBtn">Install</button></div>
@@ -8575,21 +8746,26 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
         <button class="tool" id="pCopy" title="Copy everything as Markdown — the question, your answer if you have given one, and every explanation (Y)" aria-label="Copy everything"><svg class="ic"><use href="#i-copy"/></svg></button>
         <div class="tmwrap">
           <button class="tool" id="pMore" title="More tools" aria-label="More tools" aria-haspopup="menu" aria-expanded="false"><svg class="ic"><use href="#i-morev"/></svg></button>
-          <div class="tmpop" id="pMorePop" role="menu" aria-labelledby="pMore">
-            <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag for review</span></button>
-            <button class="tool" id="pHl" role="menuitem" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg><span class="tml">Highlighter</span></button>
-            <button class="tool" id="pNote" role="menuitem" title="My note on this question (N)"><svg class="ic"><use href="#i-note"/></svg><span class="tml">My note</span></button>
-            <div class="tmdiv" role="separator"></div>
-            <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span></button>
-            <button class="tool" id="pEdit" role="menuitem" title="Edit this question"><svg class="ic"><use href="#i-text"/></svg><span class="tml">Edit question</span></button>
-            <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span></button>
-            <div class="tmdiv" role="separator"></div>
-            <button class="tool" id="pTags" role="menuitem" title="Tags on this question — system, subject, topic, difficulty, source"><svg class="ic"><use href="#i-info"/></svg><span class="tml">Tags</span></button>
-            <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span></button>
-            <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span></button>
-            <div class="tmdiv" role="separator"></div>
-            <label class="tool tmsw" id="pClock" title="Show or hide the clock. It keeps running either way"><svg class="ic"><use href="#i-clock"/></svg><span class="tml">Show clock</span><input type="checkbox" id="pClockSw" role="switch" aria-label="Show clock" checked></label>
-            <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span></button>
+          <div class="tmpop pl-tm" id="pMorePop" role="menu" aria-labelledby="pMore" hidden inert>
+            <div class="ovm__g" role="group">
+              <button class="tool" id="pFlag" role="menuitem" title="Flag this question for review (F)"><svg class="ic"><use href="#i-flag"/></svg><span class="tml">Flag for review</span></button>
+              <button class="tool" id="pHl" role="menuitem" title="Highlighter (H)"><svg class="ic"><use href="#i-highlight"/></svg><span class="tml">Highlighter</span></button>
+              <button class="tool" id="pNote" role="menuitem" title="My note on this question (N)"><svg class="ic"><use href="#i-note"/></svg><span class="tml">My note</span></button>
+            </div>
+            <div class="ovm__g" role="group">
+              <button class="tool" id="pFig" role="menuitem" title="Figures — attach a photo to this question (G)"><svg class="ic"><use href="#i-imageadd"/></svg><span class="tml">Figures</span></button>
+              <button class="tool" id="pEdit" role="menuitem" title="Edit this question"><svg class="ic"><use href="#i-text"/></svg><span class="tml">Edit question</span></button>
+              <button class="tool" id="pCopyAsk" role="menuitem" title="Copy the question and its options only — nothing that answers it (Shift+Y)"><svg class="ic"><use href="#i-copy"/></svg><span class="tml">Copy question only</span></button>
+            </div>
+            <div class="ovm__g" role="group">
+              <button class="tool" id="pTags" role="menuitem" title="Tags on this question — system, subject, topic, difficulty, source"><svg class="ic"><use href="#i-info"/></svg><span class="tml">Tags</span></button>
+              <button class="tool" id="pLabs" role="menuitem" title="Lab values (L)"><svg class="ic"><use href="#i-labs"/></svg><span class="tml">Lab values</span></button>
+              <button class="tool" id="pCalc" role="menuitem" title="Calculator (C)"><svg class="ic"><use href="#i-calc"/></svg><span class="tml">Calculator</span></button>
+            </div>
+            <div class="ovm__g" role="group">
+              <label class="tool tmsw" id="pClock" title="Show or hide the clock. It keeps running either way"><svg class="ic"><use href="#i-clock"/></svg><span class="tml">Show clock</span><span class="pl-sw"><input type="checkbox" id="pClockSw" role="switch" aria-label="Show clock" checked><span class="pl-sw__t"><svg viewBox="0 0 24 24"><path pathLength="1" d="M6.5 12.5l3.6 3.6 7.4-8"/></svg></span></span></label>
+              <button class="tool" id="pSet" role="menuitem" title="Reading settings — text size, typeface, layout (,)"><svg class="ic"><use href="#i-tune"/></svg><span class="tml">Reading settings</span></button>
+            </div>
           </div>
         </div>
       </div>
@@ -8788,10 +8964,10 @@ button.im-tile:focus-visible{outline:3px solid var(--md-primary);outline-offset:
 <div class="player" id="resultsPanel">
   <div class="phead">
   <div class="ptop">
-    <button class="tool" id="rClose" title="Close"><svg class="ic"><use href="#i-back"/></svg></button>
+    <button class="pl-ib pl-press" id="rClose" title="Close" aria-label="Close the report"><svg class="ic" data-ic="i-back"></svg></button>
     <span class="qn">Session report</span>
     <div class="tools">
-      <button class="btn ghost sm" id="rReviewAll">Review all</button>
+      <button class="pl-btn pl-btn--text pl-press" id="rReviewAll">Review all</button>
     </div>
   </div>
   </div>
@@ -9551,9 +9727,11 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
        centre, the way Android draws it for a D-pad press.
      ============================================================ */
   /* Plume 2.29 · figure blocks: these legacy elements, where pictures are
-     added outside the player, take Plume's touch contract (plumePress) and
+     added (the player too, since 2.30), take Plume's touch contract (plumePress) and
      so never ripple */
-  window.PL_FIG_SEL = ':is(#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate,.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,.figbar button,:is(.row,.cpq-links) > a.btn[href])';
+  window.PL_FIG_SEL = ':is(#player,#qp,#qe,#companion,.mask.pl-dlg) :is(.figplate,.figplate .fpa .btn,.figadds .btn,.chx-acts .btn,.figbar button,:is(.row,.cpq-links) > a.btn[href])' +
+    /* Plume 2.30 · the session's bar buttons, its ⋮ rows and the calculator's keys */
+    ',#player .sp-top .tool,#pMorePop .tool,.mask.pl-dlg .calcpad button,#resultsPanel .qrow,#resultsPanel .rfix .ropen';
   var RIPPLE_SEL = '.btn,.tool,button.pill,.seg button,.conf button,.calcpad button,' +
     /* the dock's items are deliberately absent: each draws its own state
        layer in the shape of the indicator (Plume 2.24 · dock). */
@@ -9696,7 +9874,7 @@ If the bank carries pictures, runs to more than a handful of items, or if the us
    fallback, so a device that never reaches this line still shows
    the truth rather than a stale number.
    ------------------------------------------------------------ */
-const APP_VERSION='6.91';
+const APP_VERSION='6.92';
 const APP_BUILD='v'+APP_VERSION;
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
@@ -10319,11 +10497,11 @@ function toast(msg){const t=$('#toast'),was=t.classList.contains('on');t.textCon
   if(was)Motion.pulse(t,.97);
   clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2600)}
 function modal(title,bodyHTML,footHTML){
-  /* Plume 2.29 · dialog: everywhere but the study session, which keeps its
-     own dialog (the player and its report); a page or the editor opened
-     over the player is Plume, so its dialogs are too */
-  const m=$('#mask'),pl=!document.querySelector('#player.on,#resultsPanel.on')||plyOpenNow('qp')||plyOpenNow('qe');
-  if(!m.classList.contains('on')||Motion.leaving(m))m.classList.toggle('pl-dlg',pl);
+  /* Plume 2.29 · dialog, everywhere since 2.30: the study session's own
+     dialogs (Leave, Finish, Tags, labs, calculator, reading settings,
+     figures) were the last legacy windows, and the session is Plume now */
+  const m=$('#mask');
+  if(!m.classList.contains('on')||Motion.leaving(m))m.classList.add('pl-dlg');
   $('#mClose').className=m.classList.contains('pl-dlg')?'pl-ib pl-press':'tool';
   $('#mTitle').textContent=title;$('#mBody').innerHTML=bodyHTML;$('#mFoot').innerHTML=footHTML||'<button class="btn" data-close>Close</button>';
   dlgPlume();
@@ -14435,10 +14613,16 @@ function renderQ(){
 /* "Wrong: … Right in: …" — the new format's distractor line, split into its two halves */
 function whyHTML(c){
   const t=String(c.explanation||'').trim();if(!t)return '';
-  const m=/^\**\s*Wrong\s*:?\s*\**\s*([\s\S]*?)\s*(?:\**\s*Right in\s*:?\s*\**\s*([\s\S]*))?$/i.exec(t);
-  if(m&&m[1]!=null&&/^\**\s*Wrong/i.test(t)){
-    return `<div class="sp-wr"><span class="sp-wlc"><span class="sp-wl">Not here</span></span><span>${aFmt(m[1])}</span></div>`+
-      (m[2]?`<div class="sp-wr rin"><span class="sp-wlc"><span class="sp-wl">Right in</span></span><span>${aFmt(m[2])}</span></div>`:'');
+  /* the labels come as "Wrong:", "**Wrong:**" or "**Wrong**:". Only a label's
+     own pair of asterisks is taken: the old pattern (\** either side) also
+     ate the opening ** of a bold first word, leaving "Lateral** leads" (v6.92) */
+  const w=/^(?:\*\*\s*Wrong\s*:?\s*\*\*\s*:?|Wrong\b\s*:?)\s*/i.exec(t);
+  if(w){
+    const rest=t.slice(w[0].length);
+    const r=/\s*(?:\*\*\s*Right in\s*:?\s*\*\*\s*:?|\bRight in\s*:)\s*/i.exec(rest);
+    const a=r?rest.slice(0,r.index):rest,b=r?rest.slice(r.index+r[0].length):'';
+    return `<div class="sp-wr"><span class="sp-wlc"><span class="sp-wl">Not here</span></span><span>${aFmt(a)}</span></div>`+
+      (b?`<div class="sp-wr rin"><span class="sp-wlc"><span class="sp-wl">Right in</span></span><span>${aFmt(b)}</span></div>`:'');
   }
   return `<div class="ebody">${mdFmt(t)}</div>`;
 }
@@ -14556,6 +14740,37 @@ function chFpText(c,raws){
   if(!f)return '';
   return 'pic:'+(String(f.media||'')||String(f.src||'').slice(-64)||String(f.caption||''));
 }
+/* Plume 2.30 · the question grammar. One option card, as the session draws
+   it: the player calls it live, and the question page and the editor's
+   Preview call it revealed (done, nothing struck), so an option looks the
+   same wherever it is read. o: done, chosen, struck, inline (each option's
+   reasoning under it), nf, hist (the "% of your tries" line), pic (the
+   option's picture markup, which differs by surface), yours (the tag's
+   words), still (no radio role: a card that is read, not answered). */
+function spOptHTML(q,c,i,o){
+  const lab=c.label,done=!!o.done,struck=o.struck||[];
+  let cls='sp-opt';
+  if(struck.includes(lab))cls+=' struck';
+  if(!done&&o.chosen===lab)cls+=' sel';
+  if(done)cls+=c.isCorrect?' ok':(o.chosen===lab?' no':' dim');
+  if(done&&isLure(c))cls+=' lure';
+  const hist=o.hist?personalPick(q.id,lab):'';
+  let tag='';
+  if(done&&o.chosen===lab)tag=`<span class="pl-inl"><span class="sp-tag">${o.yours||'your answer'}</span></span>`;
+  if(done&&isLure(c))tag+=lureTag();
+  let why='';
+  if(done&&o.inline){
+    if(c.explanation)why=`<div class="sp-why">${whyHTML(c)}</div>`;
+    else if(c.isCorrect&&o.nf&&q.explanation)why=`<button class="sp-jump" data-jump><svg class="ic"><use href="#i-next"/></svg>Why it's right</button>`;
+  }
+  const role=o.still?'':` role="radio" aria-checked="${!done&&o.chosen===lab}" tabindex="${done?-1:0}"`;
+  return `<div class="${cls}" data-lab="${lab}"${role} style="--i:${i}">
+      <span class="sp-k"><svg class="sp-ks" viewBox="-20 -20 40 40" aria-hidden="true"><path d="${SP_SH.o}"/></svg><span class="sp-kl">${LETTERS[i]}</span><svg class="ic"><use href="#i-${c.isCorrect?'check':'close'}"/></svg></span>
+      <span class="sp-t">${chLine(q,c,'sp-tline')}${o.pic||''}${tag}</span>
+      ${!done?`<button class="sp-x" data-strike="${lab}" title="Cross out" aria-label="Cross out ${LETTERS[i]}"><svg class="ic"><use href="#i-close"/></svg></button>`:'<span></span>'}
+      ${hist?`<span class="sp-pct">${hist}</span>`:''}${why}
+    </div>`;
+}
 function renderChoices(anim){
   const q=curQ(),it=curIt(),tutor=S.config.mode==='tutor',done=tutor&&it.submitted;
   const order=it.order&&it.order.length?it.order:q.choices.map(c=>c.label);
@@ -14584,26 +14799,8 @@ function renderChoices(anim){
   box.classList.toggle('chx-tiles',!cols&&q.choices.every(c=>chPics(q,c.label).length>0));
   box.innerHTML=head+order.map((lab,i)=>{
     const c=q.choices.find(x=>x.label===lab);if(!c)return '';
-    let cls='sp-opt';
-    if(it.struck.includes(lab))cls+=' struck';
-    if(!done&&it.chosen===lab)cls+=' sel';
-    if(done)cls+=c.isCorrect?' ok':(it.chosen===lab?' no':' dim');
-    if(done&&isLure(c))cls+=' lure';
-    const hist=done?personalPick(q.id,lab):'';
-    let tag='';
-    if(done&&it.chosen===lab)tag=`<span class="pl-inl"><span class="sp-tag">your answer</span></span>`;
-    if(done&&isLure(c))tag+=lureTag();
-    let why='';
-    if(done&&inline){
-      if(c.explanation)why=`<div class="sp-why">${whyHTML(c)}</div>`;
-      else if(c.isCorrect&&nf&&q.explanation)why=`<button class="sp-jump" data-jump><svg class="ic"><use href="#i-next"/></svg>Why it's right</button>`;
-    }
-    return `<div class="${cls}" data-lab="${lab}" role="radio" aria-checked="${!done&&it.chosen===lab}" tabindex="${done?-1:0}" style="--i:${i}">
-      <span class="sp-k"><svg class="sp-ks" viewBox="-20 -20 40 40" aria-hidden="true"><path d="${SP_SH.o}"/></svg><span class="sp-kl">${LETTERS[i]}</span><svg class="ic"><use href="#i-${c.isCorrect?'check':'close'}"/></svg></span>
-      <span class="sp-t">${chLine(q,c,'sp-tline')}${chPicHTML(q,c,{cap:done})}${tag}</span>
-      ${!done?`<button class="sp-x" data-strike="${lab}" title="Cross out" aria-label="Cross out ${LETTERS[i]}"><svg class="ic"><use href="#i-close"/></svg></button>`:'<span></span>'}
-      ${hist?`<span class="sp-pct">${hist}</span>`:''}${why}
-    </div>`}).join('');
+    return spOptHTML(q,c,i,{done,chosen:it.chosen,struck:it.struck,inline,nf,hist:done,pic:chPicHTML(q,c,{cap:done})});
+  }).join('');
   box.classList.toggle('done',done);
   box.classList.remove('anim','reveal');void box.offsetWidth;
   if(anim)box.classList.add('anim');
@@ -14843,6 +15040,48 @@ function nfTeach(md){
    the icons are the ones on the "How sure are you?" control */
 const CONF_IC={sure:'check',unsure:'help',guess:'dice'};
 const CONF_SAY={sure:'You were sure',unsure:'You were unsure',guess:'You guessed'};
+/* Plume 2.30 · the question grammar. Everything the session's reveal draws
+   after the verdict: the disputed item, "Choice by choice" in the grouped
+   layout, the teaching (pivot, reasoning, takeaway; or an older item's
+   sections), the note and the explanation's figures, closing the panel.
+   Shared by the player and the question page (and so the editor's Preview),
+   so the teaching reads the same wherever a question is opened.
+   o: order (display order of the labels), chosen, note (text, or none for a
+   surface that edits the note itself), figs (the figure block's markup). */
+function spTeachHTML(q,o){
+  const order=o.order,nf=isNewFmt(q);let h='';
+  if(q.keyConflict||q.needsReview){
+    h+=`<div class="sp-card sp-warn"><div class="sp-eyebrow">Disputed item</div>
+      ${q.paperAnswer?`<p>Your paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</p>`:''}
+      ${q.conflictNote?`<p>${aFmt(q.conflictNote)}</p>`:''}
+      <p style="opacity:.8">Decide this one yourself, then edit the question if the key is wrong.</p></div>`;
+  }
+  /* grouped layout gathers every choice's reasoning here instead of under the options */
+  if((DB.settings.explLayout||'inline')==='grouped'){
+    const rows=order.map((lab,i)=>{const c=q.choices.find(x=>x.label===lab);return (c&&c.explanation)?{i,lab,c}:null}).filter(Boolean);
+    if(rows.length)h+=esec('choices','Choice by choice',rows.length+' options',
+      rows.map(r=>`<div class="echoice ${r.c.isCorrect?'c':(o.chosen===r.lab?'w':'')}">
+        <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${chSay(q,r.c)}${isLure(r.c)?lureTag():''}</span>
+        <div class="ebody">${nf?whyHTML(r.c):mdFmt(r.c.explanation)}</div></div>`).join(''));
+  }
+  if(nf){if(q.explanation)h+=nfTeach(q.explanation)}
+  else{
+    if(q.explanation)h+=esec('expl','Explanation','',`<div class="ebody">${mdFmt(q.explanation)}</div>`,'key');
+    if(q.educationalObjective)h+=esec('obj','Educational objective','',`<div class="ecall"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
+    if(q.thingsToRemember&&q.thingsToRemember.length)
+      h+=esec('ttr','Things to remember',q.thingsToRemember.length+' points',
+        `<div class="ttr" style="margin:0"><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`);
+    if(q.references&&q.references.length)
+      h+=esec('refs','References',q.references.length+'',`<div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`);
+  }
+  if(o.note)h+=`<div class="sp-card"><div class="sp-eyebrow">My note</div><div class="ebody">${mdFmt(o.note)}</div></div>`;
+  /* the referenced files are block 16 and are drawn below this panel, at the
+     foot of the body, so they are not repeated inside it */
+  /* figures that belong to the teaching close it, after everything written */
+  const n=figsIn(q,'expl').length;
+  if(o.figs)h+=esec('figs',n===1?'Figure':'Figures',n>1?n+' images':'',o.figs);
+  return h;
+}
 function renderExpl(){
   const q=curQ(),it=curIt(),s=ST(q.id);
   /* `mine` is the answer just given and is written back to (the miss tag), so
@@ -14870,37 +15109,7 @@ function renderExpl(){
   if(!it.correct&&mine){
     h+=`<div class="sp-card"><div class="sp-eyebrow">What went wrong?</div><div class="sp-chips">${MISS.map(([k,l])=>`<button class="sp-chip${mine.miss===k?' on':''}" data-miss="${k}"><svg class="ic"><use href="#i-check"/></svg>${l}</button>`).join('')}</div></div>`;
   }
-  if(q.keyConflict||q.needsReview){
-    h+=`<div class="sp-card sp-warn"><div class="sp-eyebrow">Disputed item</div>
-      ${q.paperAnswer?`<p>Your paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</p>`:''}
-      ${q.conflictNote?`<p>${aFmt(q.conflictNote)}</p>`:''}
-      <p style="opacity:.8">Decide this one yourself, then edit the question if the key is wrong.</p></div>`;
-  }
-  /* grouped layout gathers every choice's reasoning here instead of under the options */
-  if((DB.settings.explLayout||'inline')==='grouped'){
-    const rows=order.map((lab,i)=>{const c=q.choices.find(x=>x.label===lab);return (c&&c.explanation)?{i,lab,c}:null}).filter(Boolean);
-    if(rows.length)h+=esec('choices','Choice by choice',rows.length+' options',
-      rows.map(r=>`<div class="echoice ${r.c.isCorrect?'c':(it.chosen===r.lab?'w':'')}">
-        <span class="lb">${LETTERS[r.i]||esc(r.lab)}</span><span class="ct">${chSay(q,r.c)}${isLure(r.c)?lureTag():''}</span>
-        <div class="ebody">${nf?whyHTML(r.c):mdFmt(r.c.explanation)}</div></div>`).join(''));
-  }
-  if(nf){if(q.explanation)h+=nfTeach(q.explanation)}
-  else{
-    if(q.explanation)h+=esec('expl','Explanation','',`<div class="ebody">${mdFmt(q.explanation)}</div>`,'key');
-    if(q.educationalObjective)h+=esec('obj','Educational objective','',`<div class="ecall"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`);
-    if(q.thingsToRemember&&q.thingsToRemember.length)
-      h+=esec('ttr','Things to remember',q.thingsToRemember.length+' points',
-        `<div class="ttr" style="margin:0"><div class="ebody"><ul>${q.thingsToRemember.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`);
-    if(q.references&&q.references.length)
-      h+=esec('refs','References',q.references.length+'',`<div class="ebody tiny muted"><ul>${q.references.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`);
-  }
-  if(s.note)h+=`<div class="sp-card"><div class="sp-eyebrow">My note</div><div class="ebody">${mdFmt(s.note)}</div></div>`;
-  /* the referenced files are block 16 and are drawn by #pLinks below this
-     panel, at the foot of the body, so they are not repeated inside it */
-  /* figures that belong to the teaching close it, after everything written */
-  const efigs=figsIn(q,'expl');
-  if(efigs.length)h+=esec('figs',efigs.length>1?'Figures':'Figure',
-    efigs.length>1?efigs.length+' images':'',figHTML(q.id,'expl',{play:true}));
+  h+=spTeachHTML(q,{order,chosen:it.chosen,note:s.note,figs:figsIn(q,'expl').length?figHTML(q.id,'expl',{play:true}):''});
   /* the session's actions (copy, note, edit, figures, reading) live in the bar
      and its ⋮ menu, so the panel ends with the teaching */
   h+=`</section>`;
@@ -15207,32 +15416,44 @@ $('#pEdit').onclick=()=>{const id=S&&curId();if(id)editQuestion(id)};
    and Copy everything, which sit beside it in the bar. They keep their original ids
    and handlers; only where they sit on screen has changed, so the keyboard
    shortcuts still reach them while the popover is closed. */
-let toolsT=null,toolsSettleT=null;
-function toolsOpen(){const p=$('#pMorePop');return p.classList.contains('on')&&!p.classList.contains('out')}
+/* Plume 2.30 · session menu: the grouped float menu of the top bar's ⋮
+   (2.26), grown out of the button on --p-spatial with its rows on a 25ms
+   beat, folding back toward it on the exit curve and hidden only once the
+   fold has finished. The animations are kept and cancelled by hand (2.24). */
+let TM_A=[];
+function tmStop(){TM_A.forEach(a=>a.cancel());TM_A=[]}
+function toolsOpen(){return $('#pMorePop').classList.contains('on')}
 function closeTools(){
   const p=$('#pMorePop');
-  if(!p.classList.contains('on')||p.classList.contains('out'))return;
-  clearTimeout(toolsT);clearTimeout(toolsSettleT);
-  /* it leaves on the accelerate curve, collapsing back toward the button it
-     grew out of, exactly as the home overflow does */
-  Motion.leave(p,{drop:['on','out','settled']});
-  $('#pMore').classList.remove('act');
+  if(!p.classList.contains('on'))return;
+  p.classList.remove('on');tmStop();p.inert=true;
   $('#pMore').setAttribute('aria-expanded','false');
+  if(p.contains(document.activeElement))$('#pMore').focus({preventScroll:true});
+  const a=p.animate([{opacity:1,transform:'none'},{opacity:0,transform:'scale(.9)'}],
+    {duration:Motion.reduced?120:Math.round(PL('spatial').d*.45),easing:PL_EXIT,fill:'forwards'});
+  TM_A.push(a);
+  a.finished.then(()=>{if(!p.classList.contains('on')){p.hidden=true;tmStop()}},()=>{});
 }
 function openTools(){
   const p=$('#pMorePop');
-  clearTimeout(toolsT);clearTimeout(toolsSettleT);Motion.cancel(p);
-  /* clear the classes and force a reflow, so re-opening during the close
-     replays the entrance instead of leaving the menu sitting there */
-  p.classList.remove('on','out','settled');
-  void p.offsetWidth;
-  p.classList.add('on');
-  $('#pMore').classList.add('act');
+  tmStop();p.hidden=false;p.inert=false;p.classList.add('on');
   $('#pMore').setAttribute('aria-expanded','true');
-  /* once the rows have landed the stagger switches off, so a repaint while
-     the menu is open just updates the row */
-  toolsSettleT=setTimeout(()=>p.classList.add('settled'),300);
+  if(Motion.reduced){TM_A.push(p.animate([{opacity:0},{opacity:1}],{duration:150,easing:'ease-out'}));return}
+  const sp=PL('spatial');
+  TM_A.push(p.animate([{opacity:0,transform:'scale(.85)'},{opacity:1,transform:'none'}],{duration:sp.d,easing:sp.e}));
+  p.querySelectorAll('.tool').forEach((r,i)=>TM_A.push(r.animate([{opacity:0,transform:'translate3d(0,-6px,0)'},{opacity:1,transform:'none'}],
+    {duration:sp.d,delay:30+Math.min(i,5)*25,easing:sp.e,fill:'backwards'})));
 }
+/* Escape folds the menu alone; arrow keys, Home and End walk its rows */
+document.addEventListener('keydown',e=>{
+  if(!toolsOpen()||$('#mask').classList.contains('on'))return;
+  const k=e.key;
+  if(k==='Escape'){e.preventDefault();e.stopPropagation();closeTools();return}
+  if(k!=='ArrowDown'&&k!=='ArrowUp'&&k!=='Home'&&k!=='End')return;
+  const rows=[...$('#pMorePop').querySelectorAll('.tool')];e.preventDefault();e.stopPropagation();
+  let i=rows.indexOf(document.activeElement);
+  i=k==='Home'?0:k==='End'?rows.length-1:(i+(k==='ArrowDown'?1:-1)+rows.length)%rows.length;rows[i].focus();
+},true);
 $('#pMore').onclick=e=>{e.stopPropagation();toolsOpen()?closeTools():openTools()};
 $('#pMorePop').addEventListener('click',e=>{if(e.target.closest('.tmsw'))return;setTimeout(closeTools,0)});
 /* the clock switch writes the same preference as Settings → Session */
@@ -15906,7 +16127,7 @@ function showResults(s){
 
   if(!n){
     $('#rBody').innerHTML=`<div class="empty" style="margin-top:24px"><h4>No questions in this session</h4><p class="tiny">There is nothing to report. Start a new block from Home.</p></div>
-      <div class="row rgo"><button class="btn ghost" id="rClose2">Back to Home</button></div>`;
+      <div class="row rgo"><button class="pl-btn pl-btn--tonal pl-btn--m pl-press" id="rClose2">Back to Home</button></div>`;
     $('#rClose2').onclick=closeResults;
     $('#rReviewAll').style.display='none';
     $('#shell').style.display='none';$('#tabbar').style.display='none';$('#resultsPanel').classList.add('on');
@@ -15929,7 +16150,7 @@ function showResults(s){
   if(hc.fixed)say.push(`You fixed ${hc.fixed} you had missed before.`);
   const anyFlag=ids.some(flagged);
   const hero=`
-    <div class="bigstat rhero">
+    <div class="rhero">
       <div class="rtop">
         <div><div class="num">${p}<small>%</small></div><div class="rsay">${say.join(' ')}</div></div>
         <div class="rfacts">
@@ -15946,7 +16167,7 @@ function showResults(s){
           <div class="rkey">
             ${c?'<span><b style="background:var(--md-success)"></b>Right</span>':''}
             ${wr?'<span><b style="background:var(--md-error)"></b>Wrong</span>':''}
-            ${om?'<span><b style="background:color-mix(in oklab,var(--md-on-primary-container) 26%,transparent)"></b>Skipped</span>':''}
+            ${om?'<span><b style="background:color-mix(in oklab,var(--md-on-surface) 24%,transparent)"></b>Skipped</span>':''}
             ${anyFlag?'<span><b style="background:var(--md-warning);border-radius:50%;width:6px;height:6px"></b>Flagged</span>':''}
             ${secs?'<span><b style="background:none;border-top:1.5px dashed currentColor;height:0;border-radius:0"></b>Time limit</span>':''}
           </div>
@@ -15954,8 +16175,8 @@ function showResults(s){
         </div>
       </div>
       ${missed.length?`<div class="racts">
-        <button class="btn pri" id="rAgainWrong">Retry the ${missed.length} missed</button>
-        <button class="btn" id="rReviewWrong">Review the ${missed.length} missed</button>
+        <button class="pl-btn pl-btn--filled pl-btn--m pl-press" id="rAgainWrong">${sxIc('i-play')}Retry the ${missed.length} missed</button>
+        <button class="pl-btn pl-btn--tonal pl-btn--m pl-press" id="rReviewWrong">Review the ${missed.length} missed</button>
       </div>`:''}
     </div>`;
 
@@ -15991,7 +16212,7 @@ function showResults(s){
           <div class="meta">${chips}</div>
         </div>
       </div>
-      ${mine?`<div class="missrow" role="group" aria-label="Why did you miss question ${numOf(id)}?">${MISS.map(([k,l])=>`<button class="pill${mine.miss===k?' on':''}" data-rmiss="${k}">${l}</button>`).join('')}</div>`:''}
+      ${mine?`<div class="missrow sp-chips" role="group" aria-label="Why did you miss question ${numOf(id)}?">${MISS.map(([k,l])=>`<button class="sp-chip${mine.miss===k?' on':''}" data-rmiss="${k}"><svg class="ic"><use href="#i-check"/></svg>${l}</button>`).join('')}</div>`:''}
     </div>`};
   const tagged=()=>missed.filter(id=>{const m=mineOf(id);return m&&m.miss}).length;
   const taggable=missed.filter(id=>mineOf(id)).length;
@@ -16007,12 +16228,13 @@ function showResults(s){
   const drawBars=()=>{
     const g={};ids.forEach(id=>{const q=Q_BY_ID[id];if(!q)return;const k=GROUPS[RPT_GROUP](q);g[k]=g[k]||{c:0,n:0};g[k].n++;if(stOf(id)==='ok')g[k].c++});
     const rows=Object.keys(g).map(k=>({k,c:g[k].c,n:g[k].n,p:g[k].c/g[k].n*100})).sort((a,b)=>a.p-b.p||b.n-a.n);
-    return rows.length?rows.map(r=>barRow(r.k,r.p,`${r.c}/${r.n}`,accCol(r.p))).join(''):'<span class="tiny muted">—</span>';
+    /* data is one ink (Plume 2.11): a weak area is found by its rank, never painted red */
+    return rows.length?rows.map(r=>barRow(r.k,r.p,`${r.c}/${r.n}`,'var(--md-primary)')).join(''):'<span class="tiny muted">—</span>';
   };
   if(!GROUPS[RPT_GROUP])RPT_GROUP='system';
   const leak=`
     <div class="rsechead"><h3 class="sec">Where the points went</h3>
-      <div class="seg" id="rGroupSeg">${[['system','System'],['subject','Subject'],['difficulty','Difficulty']].map(([k,l])=>`<button data-rg="${k}" class="${RPT_GROUP===k?'on':''}">${l}</button>`).join('')}</div></div>
+      <div id="rGroupSeg">${sxSegHTML({k:'rgroup',label:'Group the points by',opts:[['system','System'],['subject','Subject'],['difficulty','Difficulty']]},RPT_GROUP)}</div></div>
     <p class="tiny muted rnote">Weakest first.</p>
     <div class="card"><div class="bars" id="rBars">${drawBars()}</div></div>`;
 
@@ -16028,7 +16250,7 @@ function showResults(s){
   const conf=(cf.sure.n+cf.unsure.n+cf.guess.n)?`
     <div class="rsechead"><h3 class="sec">Confidence check</h3></div>
     <div class="statgrid">${confTile('sure','Sure')}${confTile('unsure','Unsure')}${confTile('guess','Guessed')}</div>
-    ${shaky.length?`<div class="card rgo"><div class="spread"><span class="tiny">${shaky.length} right answer${shaky.length===1?' was':'s were'} a guess or a maybe. Those are the next ones to go wrong.</span><button class="btn sm" id="rRetryShaky">Retry the ${shaky.length} shaky</button></div></div>`:''}`:'';
+    ${shaky.length?`<div class="card rgo"><div class="spread"><span class="tiny">${shaky.length} right answer${shaky.length===1?' was':'s were'} a guess or a maybe. Those are the next ones to go wrong.</span><button class="pl-btn pl-btn--tonal pl-press" id="rRetryShaky">Retry the ${shaky.length} shaky</button></div></div>`:''}`:'';
 
   /* ---- 5 · against each item's own history ---- */
   const histTile=(v,k,x,cls)=>`<div class="stat"><div class="v">${v}</div><div class="k">${k}</div><div class="x${v&&cls?' '+cls:''}">${x}</div></div>`;
@@ -16043,7 +16265,7 @@ function showResults(s){
     </div>`:'';
 
   /* ---- 6 · everything ---- */
-  const mark={ok:'✓',no:'✕',om:'–'};
+  const mark={ok:'<svg class="ic" aria-hidden="true"><use href="#i-check"/></svg>',no:'<svg class="ic" aria-hidden="true"><use href="#i-close"/></svg>',om:'–'};
   const allRows=ids.map((id,i)=>{
     const q=Q_BY_ID[id],it=IT(id);if(!q)return '';const st=stOf(id);
     return `<div class="qrow" role="button" tabindex="0" data-rq="${id}" data-sid="${s.id}" data-rst="${st}"${flagged(id)?' data-rfl="1"':''} style="cursor:pointer">
@@ -16054,10 +16276,10 @@ function showResults(s){
       <span class="rmark ${st}" aria-label="${lab[st]}">${mark[st]}</span></div>`}).join('');
   const nFl=ids.filter(flagged).length;
   const filt=[['all','All',n],['no','Wrong',wr],['om','Skipped',om],['fl','Flagged',nFl],['ok','Right',c]]
-    .filter(f=>f[0]==='all'||f[2]).map(f=>`<button class="pill${f[0]==='all'?' on':''}" data-rf="${f[0]}">${f[1]} <span class="n">${f[2]}</span></button>`).join('');
+    .filter(f=>f[0]==='all'||f[2]).map(f=>`<button class="sp-chip${f[0]==='all'?' on':''}" data-rf="${f[0]}"><svg class="ic"><use href="#i-check"/></svg>${f[1]} <span class="n">${f[2]}</span></button>`).join('');
   const every=`
     <div class="rsechead"><h3 class="sec">Every question</h3></div>
-    <div class="rfilt" id="rFilt">${filt}</div>
+    <div class="rfilt sp-chips" id="rFilt">${filt}</div>
     <div id="rAll">${allRows}</div>`;
 
   const when=new Date(s.ts).toLocaleString([], {dateStyle:'medium',timeStyle:'short'});
@@ -16067,7 +16289,7 @@ function showResults(s){
       <div class="meta"><span class="chip">${esc(when)}</span><span class="chip ${s.config.mode==='test'?'acc':''}">${s.config.mode==='test'?'Exam':'Tutor'}</span><span class="chip">${n} question${n===1?'':'s'}</span>${secs?`<span class="chip">${fmtT(secs)} per question</span>`:''}${blockChip(s)}</div>
     </div>
     ${hero}${fix}${leak}${conf}${history}${every}
-    <div class="row rgo" style="margin-top:28px"><button class="btn ghost" id="rClose2">Back to Home</button></div>`;
+    <div class="row rgo" style="margin-top:28px"><button class="pl-btn pl-btn--tonal pl-btn--m pl-press" id="rClose2">Back to Home</button></div>`;
 
   /* wiring */
   if($('#rAgainWrong'))$('#rAgainWrong').onclick=()=>rptRetry(s,missed,'Retry: ','incorrect');
@@ -16082,22 +16304,28 @@ function showResults(s){
       row.querySelectorAll('[data-rmiss]').forEach(x=>x.classList.toggle('on',x.dataset.rmiss===mine.miss));
       const tc=$('#rTagCount');if(tc)tc.textContent=`${tagged()} of ${taggable} tagged`;
       save();return}
-    const g=e.target.closest('[data-rg]');
-    if(g){RPT_GROUP=g.dataset.rg;$$('#rGroupSeg button').forEach(x=>x.classList.toggle('on',x===g));$('#rBars').innerHTML=drawBars();return}
+    const g=e.target.closest('#rGroupSeg [data-v]');
+    if(g){if(g.dataset.v===RPT_GROUP)return;RPT_GROUP=g.dataset.v;sxSegMark(g.closest('.pl-seg'),RPT_GROUP);
+      /* the indicator moves on the tap; the bars crossfade a frame later */
+      requestAnimationFrame(()=>sxSwap($('#rBars'),drawBars()));return}
     const f=e.target.closest('[data-rf]');
     if(f){const k=f.dataset.rf;$$('#rFilt [data-rf]').forEach(x=>x.classList.toggle('on',x===f));
-      $$('#rAll .qrow').forEach(r=>{r.style.display=(k==='all'||(k==='fl'?r.dataset.rfl:r.dataset.rst===k))?'':'none'});return}
+      $$('#rAll .qrow').forEach(r=>{r.style.display=(k==='all'||(k==='fl'?r.dataset.rfl:r.dataset.rst===k))?'':'none'});rptEnds();return}
   };
   $('#rBody').onkeydown=e=>{
     if(e.key!=='Enter'&&e.key!==' ')return;
     const r=e.target.closest('[role="button"][data-rq]');if(!r||r!==e.target)return;
     e.preventDefault();r.click();
   };
+  rptEnds();
   $('#shell').style.display='none';$('#tabbar').style.display='none';$('#resultsPanel').classList.add('on');
   window.scrollTo(0,0);
 }
+/* the grouped list's rounded ends follow the rows a filter leaves showing */
+function rptEnds(){const v=$$('#rAll .qrow').filter(r=>r.style.display!=='none');
+  $$('#rAll .qrow').forEach(r=>r.classList.remove('is-first','is-last'));if(v.length){v[0].classList.add('is-first');v[v.length-1].classList.add('is-last')}}
 function closeResults(){$('#resultsPanel').classList.remove('on');$('#shell').style.display='';$('#tabbar').style.display='';go('dash')}
-$('#rClose').onclick=closeResults;
+$('#rClose').onclick=closeResults;sxHydrate($('#resultsPanel .ptop'));
 document.addEventListener('click',e=>{const r=e.target.closest('[data-rq]');if(!r)return;
   const s=DB.sessions.find(x=>x.id===r.dataset.sid);if(!s)return;
   $('#resultsPanel').classList.remove('on');reviewSession(s,false,s.order.indexOf(r.dataset.rq))});
@@ -16833,22 +17061,33 @@ function qpHTML(q,o){
   const head=`<header class="qp-hero"><p class="qp-over">${[q.system,q.subject].filter(Boolean).map(v=>`<span${unc(v)}>${esc(v)}</span>`).join(' · ')}</p>
     <h2 class="qp-h" id="qpH">${esc(q.topic||'Question')}</h2><div class="qp-chips">${chips}</div>${labs}</header>`;
   const pic=c=>page?chPicHTML(q,c,{cap:true,add:true}):(chPics(q,c.label).length?figHTML(qid,figChSlot(c.label),{ch:true,cap:true}):'');
-  const opts=(q.choices||[]).map(c=>`<div class="qp-opt${c.isCorrect?' is-key':''}"><span class="qp-k">${esc(c.label)}</span><span class="qp-t">${chLine(q,c)}${pic(c)}${c.isCorrect||isLure(c)?` <span class="qp-tags">${c.isCorrect?'<span class="pl-inl"><span class="qp-key">Correct</span></span>':''}${isLure(c)?lureTag():''}</span>`:''}</span>${c.explanation?`<div class="qp-why"><div class="ebody">${mdFmt(c.explanation)}</div></div>`:''}</div>`).join('');
-  const ask=`<section class="ply-card qp-ask"><div class="qp-stem">${qFmt(q.stem||'')}</div>${figHTML(qid,'stem',{add:page})}${q.leadIn?`<p class="qp-lead">${esc(q.leadIn)}</p>`:''}
-    <div class="qp-opts${cols?' chx-host':''}" data-cols="${cols?cols.length:''}">${chHeadRow(q,row=>`<div class="qp-opt chx-th" aria-hidden="true"><span class="qp-k"></span><span class="qp-t">${row}</span></div>`)}${opts}</div></section>`;
+  /* Plume 2.30 · the question grammar: the ask and the teaching are drawn by
+     the session's own builders, revealed, so a question reads the same here
+     as in the session. The page marks the last answer on its card, as the
+     session marks yours. */
+  const order=(q.choices||[]).map(c=>c.label),nf=isNewFmt(q),inline=(DB.settings.explLayout||'inline')==='inline';
+  const att=page?attOf(q.id):[],last=att[att.length-1],chosen=(last&&last.chosen)||null;
+  const tiles=!cols&&(q.choices||[]).length>0&&q.choices.every(c=>chPics(q,c.label).length>0);
+  const opts=(q.choices||[]).map((c,i)=>spOptHTML(q,c,i,{done:true,chosen,inline,nf,hist:page,still:true,yours:'your last answer',pic:pic(c)})).join('');
+  const ask=`<section class="spq qp-ask"><div class="qtext sp-stem">${qFmt(q.stem||'')}</div>${figHTML(qid,'stem',{add:page})}${q.leadIn?`<div class="sp-ask"><div class="leadin sp-lead">${esc(q.leadIn)}</div></div>`:''}
+    <div class="sp-opts done${cols?' chx-host':''}${tiles?' chx-tiles':''}" data-cols="${cols?cols.length:''}">${chHeadRow(q,row=>`<div class="sp-opt chx-th" aria-hidden="true"><span class="sp-k"></span><span class="sp-t">${row}</span><span></span></div>`)}${opts}</div></section>`;
   const keys=(q.choices||[]).filter(c=>c.isCorrect),keyL=(q.correctAnswer||(q.correctAnswers||[]).join(', '))||keys.map(c=>c.label).join(', ')||'—';
   const verdict=`<section class="ply-card qp-verdict"><h3 class="ply-h">Answer</h3><div class="qp-ans"><span class="qp-k">${esc(keyL)}</span><div class="qp-ans__t">${keys.map(c=>esc(chPlain(q,c))).join('<br>')||'No option is marked correct yet.'}</div></div>${page?qpRecHTML(q,s):''}</section>`;
-  const disp=(q.keyConflict||q.needsReview)?`<section class="ply-card qp-disp"><h3 class="ply-h">Disputed item</h3>${q.paperAnswer?`<p>The paper's key says <b>${esc(q.paperAnswer)}</b>; the extractor answered <b>${esc(q.correctAnswer||'')}</b>.</p>`:''}${q.conflictNote?`<p>${aFmt(q.conflictNote)}</p>`:''}</section>`:'';
-  const ttr=(q.thingsToRemember||[]).filter(Boolean),refs=(q.references||[]).filter(Boolean);
-  const teach=[figHTML(qid,'expl',{add:page}),
-    q.explanation?`<div><h3 class="ply-h">Explanation</h3><div class="ebody">${mdFmt(q.explanation)}</div></div>`:'',
-    q.educationalObjective?`<div class="qp-call"><h3 class="ply-h">Objective</h3><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`:'',
-    ttr.length?`<div class="qp-call"><h3 class="ply-h">Things to remember</h3><div class="ebody"><ul>${ttr.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`:'',
-    refs.length?`<div><h3 class="ply-h">References</h3><ul class="qp-refs">${refs.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`:''
-  ].filter(x=>x&&(x.replace(/<[^>]+>/g,'').trim()||/<img|data-figadd|data-figpaste/.test(x))).join('');
+  const efig=figHTML(qid,'expl',{add:page});
+  let teach=spTeachHTML(q,{order,chosen,figs:(figsIn(q,'expl').length||/data-figadd|data-figpaste/.test(efig))?efig:''});
+  /* the session leaves an item's references and any older-format sections
+     out of a new-format reveal; the page keeps every block it had */
+  if(nf){
+    const ttr=(q.thingsToRemember||[]).filter(Boolean),refs=(q.references||[]).filter(Boolean),f=teach.search(/<div class="esec [^"]*" data-sec="figs">/);
+    const more=(q.educationalObjective?esec('obj','Educational objective','',`<div class="ecall"><div class="ebody">${mdFmt(q.educationalObjective)}</div></div>`):'')+
+      (ttr.length?esec('ttr','Things to remember',ttr.length+' points',`<div class="ttr" style="margin:0"><div class="ebody"><ul>${ttr.map(t=>`<li>${mdFmt(t).replace(/^<p(?: class="[^"]*")?>/,'').replace(/<\/p>$/,'')}</li>`).join('')}</ul></div></div>`):'')+
+      (refs.length?esec('refs','References',refs.length+'',`<div class="ebody tiny muted"><ul>${refs.map(r=>`<li>${aFmt(r)}</li>`).join('')}</ul></div>`):'');
+    teach=f>=0?teach.slice(0,f)+more+teach.slice(f):teach+more;
+  }
+  const expl=teach?`<section class="spq sp-expl qp-expl ${nf?'nf':'of'}">${teach}</section>`:'';
   const mine=page?`<section class="ply-card qp-mine"><label class="qp-note"><span><b>Your note</b><em id="qpNoteS">Kept with this question everywhere</em></span><textarea id="pvNote" rows="3" placeholder="Anything you want beside this question the next time it comes up.">${esc(s.note||'')}</textarea></label>${linksHTML(q)}</section>`
     :(linksOf(q).length?`<section class="ply-card">${linksHTML(q)}</section>`:'');
-  return head+ask+verdict+disp+(teach?`<section class="ply-card qp-teach">${teach}</section>`:'')+mine;
+  return head+ask+verdict+expl+mine;
 }
 function qpLabHTML(t){return `<span class="qp-lab" data-lab="${esc(t)}"><span>${esc(t)}</span><button type="button" class="pl-press" data-labx="${esc(t)}" aria-label="Remove the label ${esc(t)}">${sxIc('i-close')}</button></span>`}
 /* block 7: the standing record, every attempt with what it chose, how sure, how long */
@@ -16882,6 +17121,7 @@ function qpRender(dir){
   const draw=()=>{
     if(tok!==QP.tok)return;
     delete PG.prev.qpr;
+    body.classList.remove('qp-still');
     body.innerHTML=qpHTML(q,{qid:q.id,mode:'page'});QP.sig=qpSig(q);
     sxHydrate(body);pgAlive(body);plyGrow(body);qpWire();
     sc.scrollTop=0;$('#qp').classList.remove('is-scrolled','is-titled');$('#qpStep').classList.remove('is-tuck');
@@ -16902,6 +17142,8 @@ function qpRefresh(){
   qpPaintBar();
   if(qpSig(q)===QP.sig||$('#qp').contains(document.activeElement)&&document.activeElement.matches('textarea,input'))return;
   const sc=$('#qpScroll'),y=sc.scrollTop,body=$('#qpBody');
+  /* a redraw in place is not an arrival: nothing rises in again */
+  body.classList.add('qp-still');
   body.innerHTML=qpHTML(q,{qid:q.id,mode:'page'});QP.sig=qpSig(q);sxHydrate(body);pgAlive(body);plyGrow(body);qpWire();sc.scrollTop=y;
 }
 function qpWire(){
@@ -17012,6 +17254,15 @@ function qpAct(a,btn){
     else if(e.key==='e'){e.preventDefault();editQuestion(QP.id)}else if(e.key==='f'){e.preventDefault();$('#qpFlag').click()}
   },true);
 })();
+/* the question grammar outside the player (the page and the editor's
+   Preview): a section's header folds it, remembered with the session's own
+   memory, and "Why it's right" scrolls to the teaching */
+document.addEventListener('click',e=>{
+  const h=e.target.closest('.spq .esec > .eh');
+  if(h){const sec=h.parentElement;sec.classList.toggle('shut');EXPLSHUT[sec.dataset.sec]=sec.classList.contains('shut');return}
+  const j=e.target.closest('.spq [data-jump]');
+  if(j){const root=j.closest('#qpBody,#qePrev'),x=root&&root.querySelector('.sp-teach');if(x)x.scrollIntoView({behavior:Motion.reduced?'auto':'smooth',block:'start'})}
+});
 /* the legacy dialog buttons, kept for any surface that still carries them */
 document.addEventListener('click',e=>{
   const v=e.target.closest('[data-verq]');if(!v)return;

@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.29** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.30** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -1521,6 +1521,65 @@ The quality bar. A surface is done when it *feels* like §2, and:
     splits a link; a dropped part beats a wrapped one.
   - *A label repeated on every tile is noise.* The slot label shows only
     when it is not the usual case (explanation, option).
+- **The question grammar** (`Plume 2.30 · study session`, v6.92). The study
+  session was redesigned (6.15) before Plume had a name; its way of drawing
+  a question is Plume's own, and the reference for every surface that shows
+  an MCQ. Don't redesign it; draw a question with it. Its parts:
+  - **Option cards** (`spOptHTML(q, c, i, o)`, `.sp-opts` / `.sp-opt`): big
+    tonal cards, the key a drawn polar shape (`SP_SH`: circle, cookie when
+    chosen, 12-ray sun for the key, clover for a wrong pick) that morphs and
+    turns on the reveal; the card itself carries the verdict (`ok` success
+    container, `no` a 9% error veil with a thin edge, `dim` steps back), the
+    "your answer" tag and the lure tag, "% of your tries", and each option's
+    reasoning under a hairline (`.sp-why`).
+  - **Not here / Right in** (`whyHTML`): a distractor's line split into two
+    rows sharing one label column (`.sp-wr`, `.sp-wlc`).
+  - **The teaching** (`spTeachHTML(q, o)`): the disputed item, "Choice by
+    choice" in the grouped layout, then a new-format item's three roles as
+    one connected group (`nfTeach`: pivot, reasoning with chains, groups,
+    term labels and fact tiles, takeaway with its turning cookie), or an
+    older item's sections as folding cards (`esec`), the note, and the
+    explanation's figures closing it.
+  - **The verdict** (`.sp-verdict`) is the player's alone: it answers what
+    you just did.
+  - **Outside the player** the same builders run revealed and still (no
+    radio role) inside `.spq`, which carries the card variables the player's
+    `.sp` sets: the question page and the editor's Preview (`qpHTML`) draw
+    stem, tonal lead-in, cards and teaching exactly as the session does, the
+    page marking the last answer on its card ("your last answer"). A
+    redraw in place adds `.qp-still` so nothing rises in twice; section
+    headers fold and "Why it's right" scrolls through one document handler
+    for `.spq`. A new surface that shows a question calls these builders;
+    never a per-surface copy of an option or an explanation.
+- **What stayed legacy around the session became Plume (2.30):** the ⋮ menu
+  is the top bar's grouped float menu (`#pMorePop.pl-tm`: `.ovm__g` groups,
+  the Plume switch for Show clock, grown from the ⋮ on `--p-spatial` with
+  its rows on a 25ms beat, folded on the exit curve and hidden on
+  `finished`; Escape and arrow keys; the ⋮ holds a squared tonal fill while
+  open); the bar's icon buttons, the menu's rows and the calculator's keys
+  take the touch contract through `PL_FIG_SEL`; the per-question clock's
+  warning is a tint, never a pulse; every dialog is the shared Plume dialog
+  (`modal()` no longer checks for the player), with Tags as groups of well
+  chips, Lab values as a pill search over a grouped list (values in the UI
+  face, tabular), and the calculator as an expressive display over tonal
+  keys with one filled `=`; the figure blocks in the player joined the 2.29
+  scope. The session's options, verdict, chips, dock and teaching are
+  unchanged.
+- **The session report** (`Plume 2.30 · session report`): the debrief keeps
+  its order and every figure. The hero is a lit neutral card (`--p-r-hero`)
+  with an expressive score, its facts as expressive figures, the run of the
+  block in verdict colours (one bar per question, which is a verdict), and
+  56px Retry (filled) / Review (tonal); a miss is tagged with the session's
+  own `.sp-chip`s, the filters are `.sp-chip`s with counts; the grouping is
+  a `.pl-seg` (`sxSegHTML`, the bars crossfade a frame after the indicator
+  moves); the bars are one ink; misses and every question are grouped lists
+  of lit cards whose rounded ends follow the rows a filter leaves
+  (`rptEnds`); tiles are lit cards with expressive figures.
+- **Rule: a label's markers are its own (2.30).** When parsing a labelled
+  line ("**Wrong:** …"), take only the label's own pair of asterisks. The
+  old `\**` on either side of "Wrong:" also ate the opening `**` of a bold
+  first word, so "**Lateral** leads" showed as "Lateral** leads" in every
+  option's reasoning. Test a parser on a field that starts with a mark.
 - **Rule: a stagger variable never borrows a component's own variable
   (2.19).** The arrival stagger set `--i` on every child of the screen, and
   the Pictures / Waiting switch, a `.pl-seg`, reads `--i` as its position:
@@ -1812,6 +1871,8 @@ The quality bar. A surface is done when it *feels* like §2, and:
   study session, on the user's request). The player, its session report and
   every dialog opened over them were left exactly as they were, at the
   user's word: the session was designed on its own and is not to change.
+  (Since 2.30 the session is Plume itself, and its dialogs, menu, figure
+  blocks and report followed: see the question grammar above.)
   - **The rail** (`#navList.rl`, `.rl__it`, `.rl__ind`; script `rlMark` in
     THE DOCK): the drawer at ≥861px gets the dock's grammar turned on its
     side. One `secondary-container` indicator travels down the rows on
@@ -1827,8 +1888,8 @@ The quality bar. A surface is done when it *feels* like §2, and:
     are kept; Theme and Keys are Plume text buttons. The sync control is
     untouched (2.26).
   - **The shared dialog** (`#mask.pl-dlg`, `modal()`, `dlgPlume()`): set by
-    `modal()` only when neither `#player` nor `#resultsPanel` is on, or when
-    the question page or the editor is open over them. A float with 28px
+    `modal()` on every dialog since 2.30 (until then not over the player or
+    its report). A float with 28px
     corners and the Plume shadow, scale 0.9 + fade on `--p-spatial`; at
     ≤860px a sheet at most 640px wide that rises on `--p-spatial-slow`, as
     the peek does. The scrim is 32% (50% in dark). `dlgPlume()` swaps every
@@ -1897,6 +1958,7 @@ A surface that is not listed here is legacy.
 | **The shared chrome: top bar, its ⋮ menu, the FAB and FAB menu, the sync details** | 2.26 | 6.88 | Rebuilt on the user's request ("the remaining legacy elements"). Kept: every overflow row (Import, Settings, Dark theme, Keyboard shortcuts), the FAB on Home (menu: Drill weakest, Review what's due, Resume, Start a session), Bank (Write a question) and Import's prompt tab (Copy prompt), the collapse on scroll, the snackbar lift, every sync detail (device, last sync, files and photos waiting, peers, requests left, repositories, layout, last pass, the log) and Sync now / Repair / Sync settings. The sync control itself (`.sync-split`: colours, width morph, loading indicator) is untouched at the user's word. The details moved from a dialog into the peek sheet. The rail (≥861px) is still legacy |
 | Dock: tapped, not dragged (the swipe removed); switches on the touch; reopens an unchanged screen instead of rebuilding it; one restyle per tap instead of five; icons on one line on the tablet | 2.28 | 6.90 | From the user: the tablet dock's icons and words were not level, the swipe was an unneeded feature, and a tab took a while to respond before it animated. Measured at 800×1220, 4× CPU: a revisit to Bank 1.1s → 0.5s, Progress 0.9s → 0.55s; every icon within 0.4px of the label's cap centre |
 | **The rail (≥861px), the shared dialog, the figure blocks and referenced-file buttons where pictures are added** (question page, editor, companion, Plume dialogs), Keyboard shortcuts, Possible duplicates | 2.29 | 6.91 | From the user: update the legacy remnants to the new language, and never touch the study session (the player, its options, explanation and everything inside it). Every dialog opened while the player or its report is up keeps the legacy dialog; the player's figure blocks keep their look; a screenshot of the player and its Finish dialog differs from v6.90 by nothing but the shuffled option order. Still legacy outside the session: the inputs and other controls inside a few dialog bodies (sync, storage tools), the session report |
+| **The study session adopted as Plume (the question grammar)**; the question page and the editor's Preview drawn with it; the session's ⋮ menu, bar buttons, clock warning, every dialog over it (Leave, Finish, Tags, Lab values, Calculator, Reading settings, Figures) and its figure blocks; the session report | 2.30 | 6.92 | From the user: the session was the first redesign, made before Plume had a name, and is not legacy; adopt its elements without changing them, change only what screams legacy (the windows), make viewing an MCQ in the bank, the page or the editor's Preview consistent with the session, fix the broken bold in the options' reasoning. The player's options, verdict, chips, dock and teaching are pixel-identical to v6.91 apart from the bold fix. The page keeps every block it had (record, references and older-format sections on new-format items, the add-figure rows); its disputed card, explanation and objective are now the session's. Nothing in the report removed |
 | **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
@@ -2059,6 +2121,12 @@ A surface that is not listed here is legacy.
   legacy element inside a Plume scope takes the touch contract by selector
   (`PL_FIG_SEL`) when its markup is shared with a surface that must not
   change. From the user: the study session stays exactly as designed.
+- **Plume 2.30** (2026-10-16): the study session joins Plume as the
+  question grammar: one option card and one teaching builder shared by the
+  player, the question page and the editor's Preview, so an MCQ reads the
+  same everywhere. Its legacy surroundings move to Plume (the ⋮ menu, bar
+  buttons, the dialogs over it, the report). A label's markers are its own
+  when parsing. From the user: the session is not legacy, adopt it.
 
 Version rules: a clarification or a new component spec bumps the minor
 version (1.0 → 1.1). A change of direction (palette philosophy, motion

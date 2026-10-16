@@ -63,16 +63,20 @@ a recipe.
 - **The flashcard app (engram-app) is a reference for feel, never a
   source.** The user pointed at it to show what they mean; don't copy its
   code, tokens or look into Nidus.
-- **The study session is off limits** (the user, v6.91): the player
-  (`#player`), its session report (`#resultsPanel`) and every dialog opened
-  while either is up were designed on their own and must not change: not
-  the options, not the explanation, nothing inside. A Plume change to a
-  component the player shares (the dialog, figure blocks, `.btn`) is scoped
-  away from it: by container in CSS (`:is(#qp,#qe,#companion,.mask.pl-dlg)`),
-  by `modal()`'s player check for the dialog, and by `PL_FIG_SEL` for the
-  touch contract. Prove it with a pixel diff of the player and its Finish
-  dialog against the previous build (`git show HEAD:index.html` served on a
-  second port); only the shuffled option order may differ.
+- **The study session is Plume: the question grammar** (the user, v6.92).
+  The player (`#player`) was redesigned in 6.15, before Plume had a name,
+  and it is not legacy: its options, verdict, chips, dock and teaching are
+  the reference for drawing a question (`DESIGN.md` §14, the question
+  grammar). Don't redesign them. Anything that draws an MCQ uses its
+  builders: `spOptHTML` for an option card, `spTeachHTML` for everything
+  after the verdict, `whyHTML` for a distractor's line, inside `.spq` when
+  outside the player. Change the look there, once, for every surface. Prove
+  a change to those builders with a pixel diff of the player (before and
+  after Submit, both themes) against the previous build
+  (`git show HEAD:index.html` served on a second port, the clock hidden).
+  v6.91 had walled the session off from Plume entirely (dialogs, figure
+  blocks, report); in v6.92 the user asked to adopt it instead and to move
+  only what "screams legacy" around it (the windows) to Plume.
 - **Motion complaints:** when the user says a motion looks wrong or buggy,
   film it frame by frame on the real trigger first, name exactly what
   happens ("Home vanishes in one frame, then a blank screen, then the
@@ -451,7 +455,11 @@ a recipe.
     (the ids of the list it came from) turns on stepping. It closes an open
     dialog first, since the page sits under `#mask`. `qpHTML(q, {qid, mode})`
     draws a question in spine order and is shared with the editor's Preview
-    (`qid:'@edit'`); change the page there, never twice.
+    (`qid:'@edit'`); change the page there, never twice. Since v6.92 it
+    draws the ask and the teaching with the session's builders (revealed,
+    `still`), so a question in the bank looks as it does in the session; it
+    adds only the page's own blocks (record, references and older sections
+    on new-format items, the add-figure rows, the note).
   - `editQuestion(id|null)` opens the editor. Its option cards are tied to
     their choice objects (`QE.card`) and `qeSync()` writes each card into its
     own choice, keeping any other field the choice carries. Anything that
@@ -493,8 +501,8 @@ a recipe.
   `RL.y` on first show; a change to the rail's rows must reset `RL.y=null`.
 - **Dialogs** go through `modal(title, body, foot)`; write buttons as legacy
   `.btn` / `.pri` / `.ghost` / `.danger` and `dlgPlume()` turns them into
-  Plume buttons outside the session (it reads those classes to choose the
-  variant), so the same call stays right inside the player.
+  Plume buttons (it reads those classes to choose the variant). Since v6.92
+  every dialog is Plume, the session's included.
 - **`DBREV` is the data's revision.** `save()`, `doSave()` and `reindex()`
   move it; the dock reopens a screen without rebuilding it when it was built
   at the current revision (`tbFresh`). Anything that changes what a dock
@@ -502,6 +510,12 @@ a recipe.
   itself, or the screen comes back stale. A new dock screen whose view
   depends on something else (like Progress's sub-view) adds that check to
   `tbFresh`.
+- **Parse a labelled line by its own markers** (v6.92). `whyHTML` splits
+  "Wrong: … Right in: …"; its old pattern took `\**` on both sides of the
+  label and so ate the `**` that opened a bold first word ("Lateral**
+  leads"). Any parser that strips a label takes only the label's own pair
+  of marks; seed a field that starts with `**bold**` and one with `*italic*`
+  when testing.
 - **Hot paths never ask the document.** On a tap or a drag: no
   `getAnimations()` (keep the handles), no first-time `PL()` (warm it at
   idle), and a fixed bar gets `contain: strict` so its own changes stay out of
@@ -842,5 +856,12 @@ does) and work in the scratchpad:
   and `SYNC.log(text)`; `SYNCUI.expand()` shows the details chevron. Seeding
   `nidus_sync_cfg` before load instead starts a real pass and shows the
   storage-upgrade banner.
+- **Seed real ARCHIVIST items for the question grammar:** a schema-2 item
+  whose explanation has a pivot, an arrow chain with a bolded step, a
+  "Term:" list, a table, a fact and a bold takeaway, with "**Wrong:** **Bold**
+  …" / "Right in:" lines and a lure; a schema-1 item with an objective and
+  things to remember. Then shoot the player submitted, `previewQuestion` and
+  the editor's Preview (`editQuestion(id)` then `qeMode('prev')`) full
+  length side by side.
 - **Check copies:** replace `window.copy` with a function that records the
   text, then click the copy buttons and compare the strings.
