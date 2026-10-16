@@ -1,6 +1,6 @@
 # Plume — the Nidus design language
 
-**Version: Plume 2.31** · Base: Material 3 Expressive, and past it
+**Version: Plume 2.32** · Base: Material 3 Expressive, and past it
 
 This file defines how Nidus should look, move and feel. It is the target, not
 a description of the app as it is today. Most of the current UI was built
@@ -183,6 +183,16 @@ themes.** Recessed things are darker than what holds them.
     lands on the holder the same way.
   - Measure it: a well on the page and in a card must be |ΔL| ≥ 0.05 from
     its holder, in both themes, at every contrast setting (§13).
+- **Rule: a tile set inside a pane clears it by |ΔL| ≥ 0.05 (2.32).** A
+  box that holds reading text inside another surface (the reasoning's fact
+  tile) is either clearly its own tile or not a box at all; one neutral
+  step up (`surface-container` on `surface-container-low`, ΔL 0.018 dark,
+  −0.012 light) reads as a smudge. The user: "not enough to make this box
+  distinct… and it's not totally transparent, so it is not special
+  anymore." The fact tile is now a primary veil, 11% into its pane, with a
+  1.5px inset edge of primary at 34% (ΔL +0.07 dark, −0.058 light), the
+  same veil-and-edge shape as a graded option. Measure it composited over
+  the pane, in both themes.
 - **Minimum gap** between page and card: **ΔL ≥ 0.035 in light, ≥ 0.06 in
   dark**, measured on computed colours. Below that, cards dissolve.
 - The page is **never pure white** in light. White is reserved for what
@@ -1980,6 +1990,7 @@ A surface that is not listed here is legacy.
 | **The study session adopted as Plume (the question grammar)**; the question page and the editor's Preview drawn with it; the session's ⋮ menu, bar buttons, clock warning, every dialog over it (Leave, Finish, Tags, Lab values, Calculator, Reading settings, Figures) and its figure blocks; the session report | 2.30 | 6.92 | From the user: the session was the first redesign, made before Plume had a name, and is not legacy; adopt its elements without changing them, change only what screams legacy (the windows), make viewing an MCQ in the bank, the page or the editor's Preview consistent with the session, fix the broken bold in the options' reasoning. The player's options, verdict, chips, dock and teaching are pixel-identical to v6.91 apart from the bold fix. The page keeps every block it had (record, references and older-format sections on new-format items, the add-figure rows); its disputed card, explanation and objective are now the session's. Nothing in the report removed |
 | **Import, whole screen**: the two views (Import, Extractor prompt) as a button group, the drop well, Choose files, Paste JSON with a live read-out and From clipboard, the update switch, the run (one row per file with its step, count and bar, then its results as tiles that open peeks), the run's head with Practise the new ones, backup and export as grouped rows, the prompt view (Edit, Copy schema only, Restore default, the stale-prompt note, the prompt, the editor) | 2.27 | 6.89 | Rebuilt from scratch on the user's request ("completely redesign… right now it doesn't show anything… freezing"). Kept: choosing several files, pasting, update on or off, every report figure (added, updated, repeat sightings, left untouched, unreadable with item numbers, pictures attached and failed, old format with Export for re-run, needs classifying, figure fill and tag fix counts, notes), the error advice, all seven exports and restore, both notes, the prompt editor and its gap check, the FAB's Copy prompt. New: drag and drop, progress per file through each step, a live read-out of the paste, From clipboard, peeks behind the counts, Practise the new ones. Dropped: "Every question now carries a system…" when nothing needs classifying (not news, 2.21) |
 | Flags in seven colours: the picker (player ⋮ menu, question page, bank selection), coloured marks everywhere a flag shows, the bank's Flags chips | 2.31 | 6.94 | From the user: one flag was not enough; wanted red, green and other colours as in the flashcard app (its feel, not its code) |
+| Question grammar: the reasoning's fact tile made a distinct primary veil with an edge | 2.32 | 6.95 | From the user: the box inside the explanation was neither distinct nor transparent. ΔL on its pane 0.018 → 0.07 (dark), −0.012 → −0.058 (light) |
 | Progress, whole screen (Form, Habit, Gaps, Sessions; replaces Overview, Habit, Mastery, Memory, Sessions) | 2.11 | 6.69 | Rebuilt from scratch, logic included (see `CLAUDE.md`, Progress). The session report it opens and the Study data section its ledger note links to are unchanged |
 
 ## 16. Language changelog
@@ -2218,3 +2229,7 @@ were built under which version.
   hue is fixed and whose lightness follows primary; one flag picker for
   every menu that sets a flag, the chosen cloth running up its pole. From
   the user: a single flag could not tell a red flag from a green one.
+- **Plume 2.32** (2026-10-16): a tile inside a pane clears it by
+  |ΔL| ≥ 0.05; the reasoning's fact tile became a primary veil with a thin
+  edge. From the user: the box in the explanation was too faint to mean
+  anything.
